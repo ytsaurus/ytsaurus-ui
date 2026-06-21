@@ -1,0 +1,6 @@
+{
+  "placeholder_filter-by-name": "Filter by name...",
+  "alert_schema-empty": "Schema is empty.",
+  "alert_failed-to-load-true-path": "Failed to load true path",
+  "title_external-column": "External {{column}}"
+}

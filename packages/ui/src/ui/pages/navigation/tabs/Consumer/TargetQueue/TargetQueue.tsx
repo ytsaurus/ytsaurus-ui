@@ -17,6 +17,8 @@ import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import {type Item, SelectSingle} from '../../../../../components/Select/Select';
 import {changeConsumerFilters} from '../../../../../store/actions/navigation/tabs/consumer/filters';
 
+import i18n from './i18n';
+
 import './TargetQueue.scss';
 
 const block = cn('target-queue');
@@ -40,7 +42,9 @@ export default function TargetQueue() {
 
     return (
         <div className={block()}>
-            <div className="elements-heading elements-heading_size_xs">Target queue</div>
+            <div className="elements-heading elements-heading_size_xs">
+                {i18n('title_target-queue')}
+            </div>
             <ConsumerQueueSelector>
                 {queue && (
                     <Link theme="secondary" url={clusterQueueUrl} routed>
@@ -114,7 +118,7 @@ export function ConsumerQueueSelector({className, children}: ConsumerQueueSelect
                         renderItem={renderItem}
                         width="auto"
                         onChange={handleSelect}
-                        placeholder="Select queue... "
+                        placeholder={i18n('action_select-queue')}
                     />
                 </>
             ) : (

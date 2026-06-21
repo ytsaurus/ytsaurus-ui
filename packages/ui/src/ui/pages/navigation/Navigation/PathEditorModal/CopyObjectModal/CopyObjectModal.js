@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import PathEditorModal from '../PathEditorModal';
+import i18n from './i18n';
 
 import {CLOSE_COPY_OBJECT_POPUP} from '../../../../../constants/navigation/modals/copy-object';
 import {
@@ -77,14 +78,14 @@ class CopyObjectModal extends Component {
         const {popupVisible, copying, copyPath, showError, errorMessage, error, multipleMode} =
             this.props;
 
-        const modalTitle = 'Copy';
+        const modalTitle = i18n('title_copy');
         const title = multipleMode
-            ? 'Enter a destination path for copied objects.'
-            : 'Enter a destination path for the copied object.';
+            ? i18n('title_enter-destination-multiple')
+            : i18n('title_enter-destination');
         const description = multipleMode
-            ? 'Objects will be copied with the specified path.'
-            : 'The object will be copied with the specified path.';
-        const placeholder = 'Enter a destination path for the copied object...';
+            ? i18n('confirm_objects-will-be-copied')
+            : i18n('confirm_object-will-be-copied');
+        const placeholder = i18n('field_destination-path');
 
         return (
             <PathEditorModal
@@ -109,9 +110,11 @@ class CopyObjectModal extends Component {
     renderOptions() {
         return (
             <Flex direction="column" gap={2}>
-                <Checkbox onUpdate={this.onUpdatePreserveAccount}>Preserve account</Checkbox>
+                <Checkbox onUpdate={this.onUpdatePreserveAccount}>
+                    {i18n('field_preserve-account')}
+                </Checkbox>
                 <Checkbox onUpdate={this.onUpdateRecursiveCopy}>
-                    Create intermediate directories as required
+                    {i18n('action_create-intermediate-dirs')}
                 </Checkbox>
             </Flex>
         );

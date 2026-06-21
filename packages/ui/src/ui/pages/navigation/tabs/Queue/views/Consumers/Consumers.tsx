@@ -30,14 +30,19 @@ import {
 import {CreateConsumerDialog} from './CreateConsumerDialog';
 import {UnregisterConsumerDialog} from './UnregisterConsumerDialog';
 import {RegisterConsumerDialog} from './RegisterConsumerDialog';
+import i18n from './i18n';
 
 import './Consumers.scss';
 
 const block = cn('queue-consumers');
 
 const readRateName: Record<QUEUE_RATE_MODE, string> = {
-    [QUEUE_RATE_MODE.ROWS]: 'Read rate',
-    [QUEUE_RATE_MODE.DATA_WEIGHT]: 'Read rate',
+    get [QUEUE_RATE_MODE.ROWS]() {
+        return i18n('field_read-rate');
+    },
+    get [QUEUE_RATE_MODE.DATA_WEIGHT]() {
+        return i18n('field_read-rate');
+    },
 };
 const readRateGetter: Record<QUEUE_RATE_MODE, (row: SelectedConsumer) => TPerformanceCounters> = {
     [QUEUE_RATE_MODE.ROWS]: (x) => x.read_row_count_rate,
@@ -47,15 +52,15 @@ const readRateGetter: Record<QUEUE_RATE_MODE, (row: SelectedConsumer) => TPerfor
 const getColumns = createSelector(
     [selectQueueRateMode, selectQueueTimeWindow],
     (rateMode, timeWindow): Array<Column<SelectedConsumer>> => [
-        ypath<SelectedConsumer>('Consumer', (x) => x.consumer),
-        error<SelectedConsumer>('Error', (x) => x.error),
+        ypath<SelectedConsumer>(i18n('field_consumer'), (x) => x.consumer),
+        error<SelectedConsumer>(i18n('field_error'), (x) => x.error),
         multimeter<SelectedConsumer>(
             readRateName[rateMode],
             readRateGetter[rateMode],
             timeWindow,
             rateMode === QUEUE_RATE_MODE.ROWS ? format.RowsPerSecond : format.BytesPerSecond,
         ),
-        bool<SelectedConsumer>('Vital', (x) => x.vital),
+        bool<SelectedConsumer>(i18n('field_vital'), (x) => x.vital),
         {
             name: 'actions',
             render: (value) => {

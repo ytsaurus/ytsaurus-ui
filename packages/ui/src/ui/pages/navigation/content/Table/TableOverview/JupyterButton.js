@@ -5,6 +5,8 @@ import {useSelector} from '../../../../../store/redux-hooks';
 import Button from '../../../../../components/Button/Button';
 import Logo from '../../../../../assets/img/svg/jupyter-logo.svg';
 
+import i18n from './i18n';
+
 import {selectPath} from '../../../../../store/selectors/navigation';
 import {selectCluster} from '../../../../../store/selectors/global';
 import {selectNavigationPathAttributesLoadState} from '../../../../../store/selectors/navigation/navigation';
@@ -34,7 +36,7 @@ function JupyterButton({block}) {
                 href={url}
                 view="action"
                 target="_blank"
-                title="Open in Jupyter"
+                title={i18n('title_open-in-jupyter')}
                 disabled={!loaded}
             >
                 <span className={block('jupyter-content')}>

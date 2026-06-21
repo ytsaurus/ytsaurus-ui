@@ -9,6 +9,7 @@ import {type ErrorsInfoMap, determineErrorCode} from '../../../../containers/Pre
 import ypath from '../../../../common/thor/ypath';
 
 import {RequestPermission} from './RequestPermission';
+import i18n from './i18n';
 
 const block = cn('navigation-error');
 
@@ -25,11 +26,15 @@ const ErrorsInfo: ErrorsInfoMap = {
         getTitle: ({username, permissions, path}) => {
             const permission = permissions?.map((perm) => ypath.getValue(perm)).join(' | ');
             const permissionsStr = permission ? `"${permission}"` : '';
-            return `User ${username} does not have ${permissionsStr} access to node "${path}"`;
+            return i18n('alert_no-permission-access', {
+                username,
+                permissions: permissionsStr,
+                path,
+            });
         },
     },
     500: {
-        getTitle: ({path}) => `Path "${path}" does not exist`,
+        getTitle: ({path}) => i18n('alert_path-not-exist', {path}),
     },
 };
 

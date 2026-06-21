@@ -1,0 +1,17 @@
+{
+  "action_apply": "Apply",
+  "field_recursive": "Recursive",
+  "field_path-regexp": "Path regexp...",
+  "field_user-regexp": "User regexp...",
+  "value_only-attributes": "Only attributes",
+  "value_skip-attributes": "Skip attributes",
+  "field_attributes": "Attributes",
+  "value_by-user": "By User",
+  "field_distinct": "Distinct",
+  "field_columns": "Columns",
+  "field_method-group-all": "Method group: All",
+  "field_user-type-all": "User type: All",
+  "field_scope-all": "Scope: All",
+  "title_available-range": "Available range:",
+  "context_wait-for-range": "Please wait until the range is loaded"
+}

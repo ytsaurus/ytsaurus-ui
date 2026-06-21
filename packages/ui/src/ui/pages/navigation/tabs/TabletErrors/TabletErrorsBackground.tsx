@@ -3,6 +3,8 @@ import {type ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
+import i18n from './i18n';
+
 import capitalize_ from 'lodash/capitalize';
 import isEmpty_ from 'lodash/isEmpty';
 import map_ from 'lodash/map';
@@ -58,14 +60,14 @@ function TabletErrors(props: ConnectedProps<typeof connector>) {
             ) : (
                 <div className={block({loading: initialLoading})}>
                     <TabletErrorsCountNotice />
-                    <CollapsibleSection name="Tablet errors">
+                    <CollapsibleSection name={i18n('title_tablet-errors')}>
                         <TabletErrorsBlock
                             cluster={cluster}
                             items={tablet_errors}
                             sectionClassName={block('section')}
                         />
                     </CollapsibleSection>
-                    <CollapsibleSection name="Replication errors">
+                    <CollapsibleSection name={i18n('title_replication-errors')}>
                         <ReplicationErrorsBlock cluster={cluster} data={replicationErrors} />
                     </CollapsibleSection>
                 </div>
@@ -153,17 +155,13 @@ function TabletErrorsCountNotice() {
     if (!visible) {
         return null;
     }
-    return (
-        <div className={block('count-notice')}>
-            Only limited number of errors is displayed. See Tablets tab for the complete list.
-        </div>
-    );
+    return <div className={block('count-notice')}>{i18n('alert_limited-errors-displayed')}</div>;
 }
 
 function TabletErrorsHeader({id, cluster}: {id: string; cluster: string}) {
     return (
         <React.Fragment>
-            Errors of tablet <Link url={`/${cluster}/tablet/${id}`}>{id}</Link>
+            {i18n('title_errors-of-tablet')} <Link url={`/${cluster}/tablet/${id}`}>{id}</Link>
         </React.Fragment>
     );
 }
@@ -182,8 +180,8 @@ function ReplicaErrorHeader({id}: {id: string}) {
         <React.Fragment>
             {id}{' '}
             <Secondary>
-                ({mode ? `${mode} replica to ` : 'Replica to '}
-                {capitalize_(cluster)}, table path {link})
+                ({mode ? i18n('title_mode-replica-to', {mode}) : i18n('title_replica-to')}{' '}
+                {capitalize_(cluster)}, {i18n('title_table-path')} {link})
             </Secondary>
         </React.Fragment>
     );

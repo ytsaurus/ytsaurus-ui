@@ -30,13 +30,19 @@ import {
     selectQueueTimeWindow,
 } from '../../../../../../store/selectors/navigation/tabs/queue';
 
+import i18n from './i18n';
+
 import './Partitions.scss';
 
 const block = cn('queue-partitions');
 
 const writeRateName: Record<QUEUE_RATE_MODE, string> = {
-    [QUEUE_RATE_MODE.ROWS]: 'Write rate',
-    [QUEUE_RATE_MODE.DATA_WEIGHT]: 'Write rate',
+    get [QUEUE_RATE_MODE.ROWS]() {
+        return i18n('field_write-rate');
+    },
+    get [QUEUE_RATE_MODE.DATA_WEIGHT]() {
+        return i18n('field_write-rate');
+    },
 };
 
 const writeRateGetter: Record<QUEUE_RATE_MODE, (row: SelectedPartition) => TPerformanceCounters> = {

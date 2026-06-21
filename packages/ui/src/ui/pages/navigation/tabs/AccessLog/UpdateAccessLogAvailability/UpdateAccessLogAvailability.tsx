@@ -26,7 +26,7 @@ export function UpdateAccessLogAvailability() {
             {
                 toasterName: 'update-access-log-availability',
                 skipSuccessToast: true,
-                errorContent: i18n('fail-content'),
+                errorContent: i18n('alert_check-availability-error'),
             },
         );
     }, [isAdmin, cluster, dispatch]);

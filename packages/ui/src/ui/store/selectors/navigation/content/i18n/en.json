@@ -1,0 +1,20 @@
+{
+  "field_chooser": "Chooser",
+  "field_date": "Date",
+  "field_name": "Name",
+  "field_locks": "Locks",
+  "field_account": "Account",
+  "field_modification_time": "Modification time",
+  "field_creation_time": "Creation time",
+  "field_disk-space": "Disk space",
+  "field_data-weight": "Data weight",
+  "field_chunk-count": "Chunk count",
+  "field_node-count": "Node count",
+  "field_row-count": "Row count",
+  "field_tablet-st": "Tablet st.",
+  "context_tablet-static-memory": "Tablet static memory",
+  "field_master-mem": "Master mem.",
+  "context_master-memory": "Master memory",
+  "field_tablet-count": "Tablet count",
+  "value_unknown": "Unknown"
+}

@@ -20,6 +20,7 @@ import {type RemoteCopyParams} from '../../../../@types/types';
 import {type AxiosError} from 'axios';
 import {docsUrl} from '../../../config';
 import UIFactory from '../../../UIFactory';
+import i18n from './RemoteCopyModal/i18n';
 
 type Values = Omit<RemoteCopyParams, 'input_table_paths'> & {
     input_table_paths: Array<{title: string}>;
@@ -82,7 +83,7 @@ function RemoteCopyModal() {
             onAdd={handleAdd}
             onClose={handleClose}
             headerProps={{
-                title: 'Remote copy',
+                title: i18n('title_remote-copy'),
             }}
             initialValues={{
                 cluster_name: cluster,
@@ -95,7 +96,7 @@ function RemoteCopyModal() {
                 {
                     name: 'cluster_name',
                     type: 'cluster',
-                    caption: 'Source cluster',
+                    caption: i18n('field_source-cluster'),
                     extras: {
                         disabled: true,
                         width: 'max',
@@ -104,7 +105,8 @@ function RemoteCopyModal() {
                 {
                     name: 'input_table_paths',
                     type: 'editable-list',
-                    caption: paths.length > 1 ? 'Input paths' : 'Input path',
+                    caption:
+                        paths.length > 1 ? i18n('field_input-paths') : i18n('field_input-path'),
                     extras: {
                         frozen: true,
                     },
@@ -112,7 +114,7 @@ function RemoteCopyModal() {
                 {
                     name: 'dstCluster',
                     type: 'cluster',
-                    caption: 'Destination cluster',
+                    caption: i18n('field_destination-cluster'),
                     required: true,
                     extras: {
                         excludeClusters: [cluster],
@@ -122,36 +124,36 @@ function RemoteCopyModal() {
                 {
                     name: 'output_table_path',
                     type: 'text',
-                    caption: 'Output path',
+                    caption: i18n('field_output-path'),
                     required: true,
                 },
                 {
                     name: 'override',
                     type: 'tumbler',
-                    caption: 'Override output',
+                    caption: i18n('field_override-output'),
                 },
                 {
                     name: 'copy_attributes',
                     type: 'tumbler',
-                    caption: 'Copy user attributes',
+                    caption: i18n('field_copy-user-attributes'),
                 },
                 {
                     name: 'schema_inference_mode',
                     type: 'yt-select-single',
-                    caption: 'Schema inference',
+                    caption: i18n('field_schema-inference'),
                     extras: {
                         items: [
                             {
                                 value: 'auto',
-                                text: 'Auto',
+                                text: i18n('value_auto'),
                             },
                             {
                                 value: 'from_input',
-                                text: 'From input',
+                                text: i18n('value_from-input'),
                             },
                             {
                                 value: 'from_output',
-                                text: 'From output',
+                                text: i18n('value_from-output'),
                             },
                         ],
                         width: 'max',
@@ -160,14 +162,14 @@ function RemoteCopyModal() {
                 {
                     name: 'pool',
                     type: 'pool',
-                    caption: 'Pool',
+                    caption: i18n('field_pool'),
                     warning: (
                         <>
-                            pool must have specified{' '}
+                            {i18n('context_pool-must-have-limits')}{' '}
                             {docsUrl(
                                 makeLink(
                                     UIFactory.docsUrls['operations:remote_copy'],
-                                    'limits',
+                                    i18n('action_limits'),
                                     true,
                                 ),
                             )}
@@ -188,7 +190,7 @@ function RemoteCopyModal() {
                     extras: ({dstCluster}: Values) => {
                         return {
                             cluster: dstCluster,
-                            placeholder: `(cluster: ${dstCluster}) pool name`,
+                            placeholder: i18n('field_pool-placeholder', {dstCluster}),
                             calculateValueOnPoolsLoaded,
                             allowEphemeral: true,
                         };

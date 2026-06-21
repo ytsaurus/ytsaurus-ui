@@ -7,6 +7,7 @@ import {selectLinkToModalState} from '../../../store/selectors/navigation/modals
 import {createLink, hideLinkToModal} from '../../../store/actions/navigation/modals/link-to-modal';
 import {type LinkToState} from '../../../store/reducers/navigation/modals/link-to-modal';
 import {ytApiV3} from '../../../rum/rum-wrap-api';
+import i18n from './i18n';
 
 const block = cn('table-sort-modal');
 
@@ -50,7 +51,7 @@ export default function LinkToModal() {
             className={block()}
             visible={true}
             headerProps={{
-                title: 'Create link',
+                title: i18n('title_create-link'),
             }}
             onAdd={handleAdd}
             onClose={handleClose}
@@ -62,18 +63,18 @@ export default function LinkToModal() {
                 {
                     name: 'path',
                     type: 'path',
-                    caption: 'Link path',
+                    caption: i18n('field_link-path'),
                     required: true,
                     validator: async (path: string) => {
                         try {
                             const res = await ytApiV3.exists({path});
                             if (res) {
-                                return 'Link path already exists';
+                                return i18n('alert_link-path-exists');
                             }
                             return undefined;
                         } catch (err) {
                             const e = err as Error;
-                            return e?.message || 'Unexpected type of error: ' + typeof e;
+                            return e?.message || i18n('alert_unexpected-error', {type: typeof e});
                         }
                     },
                     extras: {
@@ -83,18 +84,18 @@ export default function LinkToModal() {
                 {
                     name: 'target',
                     type: 'path',
-                    caption: 'Target path',
+                    caption: i18n('field_target-path'),
                     required: true,
                     validator: async (path: string) => {
                         try {
                             const res = await ytApiV3.exists({path});
                             if (!res) {
-                                return 'Target path should exist';
+                                return i18n('alert_target-path-not-exists');
                             }
                             return undefined;
                         } catch (err) {
                             const e = err as Error;
-                            return e?.message || 'Unexpected type of error: ' + typeof e;
+                            return e?.message || i18n('alert_unexpected-error', {type: typeof e});
                         }
                     },
                 },

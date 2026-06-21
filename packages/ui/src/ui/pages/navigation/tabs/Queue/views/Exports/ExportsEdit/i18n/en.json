@@ -1,0 +1,4 @@
+{
+  "title_delete-export": "Delete export",
+  "confirm_delete-export": "Are you sure you want to delete {{exportName}}?"
+}

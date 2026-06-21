@@ -31,13 +31,19 @@ import {
     selectTargetQueue,
 } from '../../../../../../store/selectors/navigation/tabs/consumer';
 
+import i18n from './i18n';
+
 import './Partitions.scss';
 
 const block = cn('consumer-partitions');
 
 const readRateName: Record<CONSUMER_RATE_MODE, string> = {
-    [CONSUMER_RATE_MODE.ROWS]: 'Read rate',
-    [CONSUMER_RATE_MODE.DATA_WEIGHT]: 'Read rate',
+    get [CONSUMER_RATE_MODE.ROWS]() {
+        return i18n('field_read-rate');
+    },
+    get [CONSUMER_RATE_MODE.DATA_WEIGHT]() {
+        return i18n('field_read-rate');
+    },
 };
 const readRateGetter: Record<CONSUMER_RATE_MODE, (row: SelectedPartition) => TPerformanceCounters> =
     {
@@ -92,8 +98,8 @@ const Partitions: React.VFC<PropsFromRedux> = ({
     if (!queue) {
         return (
             <NoContent
-                hint={'Please select a queue'}
-                warning={"You don't have any selected queues"}
+                hint={i18n('alert_select-queue')}
+                warning={i18n('alert_no-selected-queues')}
             />
         );
     }

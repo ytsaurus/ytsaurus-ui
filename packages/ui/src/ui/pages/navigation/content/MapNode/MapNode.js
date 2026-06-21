@@ -1,27 +1,16 @@
-import {DropdownMenu} from '@gravity-ui/uikit';
+import cn from 'bem-cn-lite';
+import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import PropTypes from 'prop-types';
-import cn from 'bem-cn-lite';
+import {useSelector} from '../../../../store/redux-hooks';
 
-import map_ from 'lodash/map';
-
-import {getConfigUploadTable} from '../../../../config/index';
-
-import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
-import RadioButton from '../../../../components/RadioButton/RadioButton';
-import Button from '../../../../components/Button/Button';
-import Filter from '../../../../components/Filter/Filter';
-import {SelectSingle} from '../../../../components/Select/Select';
-import {YTErrorBlock} from '../../../../containers/Block/Block';
-import Icon from '../../../../components/Icon/Icon';
 import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
-import TTLInfo from '../../../../components/TTLInfo/TTLInfo';
-import CreateTableModal from '../../modals/CreateTableModal/CreateTableModal';
+import {YTErrorBlock} from '../../../../containers/Block/Block';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import {selectIsCreateTableModalVisible} from '../../../../store/selectors/navigation/modals/create-table';
+import CreateTableModal from '../../modals/CreateTableModal/CreateTableModal';
 
-import MapNodesTable from './MapNodesTable';
+import MapNodesTable from './MapNodesTable/MapNodesTable';
 
 import {openCreateTableModal} from '../../../../store/actions/navigation/modals/create-table';
 import {selectPath, selectTransaction} from '../../../../store/selectors/navigation';
@@ -31,42 +20,28 @@ import {
     selectContentMode,
     selectError,
     selectFilterState,
-    selectIsRootNode,
     selectLoadState,
-    selectMapNodeResourcesLoading,
     selectMediumType,
 } from '../../../../store/selectors/navigation/content/map-node';
 
-import {OPEN_CREATE_DIRECTORY_POPUP} from '../../../../constants/navigation/modals/create-directory';
 import {LOADING_STATUS} from '../../../../constants/index';
-import {ContentMode} from '../../../../constants/navigation';
 
-import {openEditingPopup} from '../../../../store/actions/navigation/modals/path-editing-popup';
+import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
+import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {
     fetchNodes,
     setContentMode,
     setFilter,
     setMediumType,
-    updateResourceUsage,
 } from '../../../../store/actions/navigation/content/map-node';
-import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
-import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
+import {openEditingPopup} from '../../../../store/actions/navigation/modals/path-editing-popup';
 
-import hammer from '../../../../common/hammer';
-import UploadManagerCreate from '../Table/UploadManager/UploadManagerCreate';
-import NodesTypes from './NodesTypes/NodesTypes';
-
-import {NoWrap} from '@ytsaurus/components';
-import {showLinkToModal} from '../../../../store/actions/navigation/modals/link-to-modal';
 import {openCreateACOModal} from '../../../../store/actions/navigation/modals/create-aco';
-import NavigationExtraActions from '../../../../containers/NavigationExtraActions/NavigationExtraActions';
-import UIFactory from '../../../../UIFactory';
+import {showLinkToModal} from '../../../../store/actions/navigation/modals/link-to-modal';
 import {selectCluster} from '../../../../store/selectors/global';
-import {UploadFileManagerWithClose} from '../../UploadFileManager';
-import {CurrentPathActions} from '../../components/CurrentPathActions/CurrentPathActions';
 
 import './MapNode.scss';
-import {MapNodeUserSettings} from './MapNodeUserSettings';
+import {MapNodeToolbar} from './MapNodeToolbar/MapNodeToolbar';
 
 const block = cn('map-node');
 const tbBlock = cn('elements-toolbar');
@@ -74,12 +49,9 @@ const tbBlock = cn('elements-toolbar');
 class MapNode extends Component {
     static TYPE = 'map_node';
 
-    static CONTENT_MODE_OPTIONS = [ContentMode.DEFAULT, ContentMode.RESOURCES];
-
     static propTypes = {
         error: PropTypes.object,
         loadState: PropTypes.string,
-        contentMode: PropTypes.oneOf(MapNode.CONTENT_MODE_OPTIONS),
         path: PropTypes.string.isRequired,
         transaction: PropTypes.string,
         mediumList: PropTypes.arrayOf(PropTypes.string),
@@ -126,7 +98,7 @@ class MapNode extends Component {
                 {({stickyTopClassName}) => (
                     <React.Fragment>
                         <div className={tbBlock({sticky: false}, stickyTopClassName)}>
-                            <MapNodeToolbarConnected />
+                            <MapNodeToolbar />
                         </div>
                         <div className={block('content')}>
                             <MapNodesTable />
@@ -195,199 +167,3 @@ export default function MapNodeWithRum() {
     });
     return <MapNodeConnected />;
 }
-
-class MapNodeToolbar extends React.PureComponent {
-    uploadXlsRef = React.createRef();
-    uploadFileRef = React.createRef();
-
-    createDirectoryButtonClick = () => {
-        const {path, openEditingPopup} = this.props;
-        openEditingPopup(null, path + '/', OPEN_CREATE_DIRECTORY_POPUP);
-    };
-
-    createTableButtonClick = () => {
-        const {path} = this.props;
-        this.props.openCreateTableModal(path);
-    };
-
-    uploadTableButtonClick = () => {
-        if (this.uploadXlsRef.current) {
-            this.uploadXlsRef.current.handleShow();
-        }
-    };
-
-    uploadFileButtonClick = () => {
-        if (this.uploadFileRef.current) {
-            this.uploadFileRef.current.handleShow();
-        }
-    };
-
-    createLinkButtonClick = () => {
-        const {path} = this.props;
-        this.props.showLinkToModal({path: `${path}/new_link`});
-    };
-
-    createACOButtonClick = () => {
-        const {path} = this.props;
-
-        this.props.openCreateACOModal({path, namespace: 'queries'});
-    };
-
-    render() {
-        const {
-            setFilter,
-            contentMode,
-            setContentMode,
-            mediumList,
-            mediumType,
-            setMediumType,
-            filterState,
-            path,
-            attributes,
-            showACOCreateButton,
-            cluster,
-        } = this.props;
-
-        const {uploadTableExcelBaseUrl} = getConfigUploadTable({cluster});
-
-        const {menuItems, renderModals} = UIFactory.getMapNodeExtraCreateActions([
-            {
-                action: this.createTableButtonClick,
-                text: <NoWrap>Table</NoWrap>,
-                iconStart: <Icon awesome={'table'} face={'solid'} />,
-            },
-            {
-                action: this.createDirectoryButtonClick,
-                text: <NoWrap>Directory</NoWrap>,
-                iconStart: <Icon awesome={'folder'} face={'solid'} />,
-            },
-            {
-                action: this.createLinkButtonClick,
-                text: <NoWrap>Link</NoWrap>,
-                iconStart: <Icon awesome={'link'} />,
-            },
-            showACOCreateButton && {
-                action: this.createACOButtonClick,
-                text: <NoWrap>ACO</NoWrap>,
-                iconStart: <Icon awesome={'acl-object'} />,
-            },
-            ...(!uploadTableExcelBaseUrl
-                ? []
-                : [
-                      {
-                          action: this.uploadTableButtonClick,
-                          text: <NoWrap>Upload xlsx</NoWrap>,
-                          iconStart: <Icon awesome={'upload'} />,
-                      },
-                  ]),
-            {
-                action: this.uploadFileButtonClick,
-                text: <NoWrap>Upload file</NoWrap>,
-                iconStart: <Icon awesome={'upload'} />,
-            },
-        ]);
-
-        return (
-            <div className={block('toolbar')}>
-                <div className={tbBlock('container')}>
-                    <div className={block('filter', tbBlock('component'))}>
-                        <Filter
-                            size="m"
-                            key={path}
-                            debounce={300}
-                            value={filterState}
-                            onChange={setFilter}
-                            qa="map-node-filter"
-                        />
-                    </div>
-
-                    <TTLInfo attributes={attributes} size={'m'} className={tbBlock('component')} />
-
-                    <div className={tbBlock('component')}>
-                        <MapNodeUserSettings />
-                    </div>
-
-                    <div className={block('content-mode', tbBlock('component'))}>
-                        <RadioButton
-                            size="m"
-                            name="navigation-map-node-content-mode"
-                            value={contentMode}
-                            items={map_(
-                                MapNode.CONTENT_MODE_OPTIONS,
-                                RadioButton.prepareSimpleValue,
-                            )}
-                            onChange={(event) => setContentMode(event.target.value)}
-                        />
-                    </div>
-
-                    <div className={block('show-resources', tbBlock('component'))}>
-                        <ShowResourcesButton />
-                    </div>
-
-                    {mediumList?.length && (
-                        <div className={block('medium-type', tbBlock('component'))}>
-                            <SelectSingle
-                                label="Medium:"
-                                placeholder="All"
-                                value={mediumType}
-                                items={map_(mediumList, (type) => ({
-                                    value: type,
-                                    text: hammer.format['ReadableField'](type),
-                                }))}
-                                onChange={setMediumType}
-                                width="max"
-                                hideFilter={true}
-                            />
-                        </div>
-                    )}
-
-                    <NavigationExtraActions
-                        className={block('copy-to-remote', tbBlock('component'))}
-                    />
-
-                    <div className={block('create-object', tbBlock('component'))}>
-                        <DropdownMenu
-                            menuSize={'n'}
-                            popupClass={block('create-popup')}
-                            items={menuItems}
-                            renderSwitcher={(props) => (
-                                <Button {...props} size="m" title="Create object">
-                                    Create object
-                                </Button>
-                            )}
-                        />
-                    </div>
-                    <div>
-                        <CurrentPathActions />
-                    </div>
-                </div>
-                <div className="nodes-types">
-                    <NodesTypes />
-                </div>
-                <UploadManagerCreate ref={this.uploadXlsRef} />
-                <UploadFileManagerWithClose ref={this.uploadFileRef} title={'Upload file'} />
-                {renderModals()}
-            </div>
-        );
-    }
-}
-
-function ShowResourcesButton() {
-    const dispatch = useDispatch();
-    const isRoot = useSelector(selectIsRootNode);
-    const loading = useSelector(selectMapNodeResourcesLoading);
-    return (
-        <Button
-            size="m"
-            title="Show all nodes resource usage [Shift+S]"
-            disabled={isRoot}
-            loading={loading}
-            onClick={() => dispatch(updateResourceUsage())}
-            hotkey={[{keys: 'shift+s', handler: updateResourceUsage, scope: 'all'}]}
-        >
-            Show resources
-        </Button>
-    );
-}
-
-const MapNodeToolbarConnected = connect(mapStateToProps, mapDispatchToProps)(MapNodeToolbar);

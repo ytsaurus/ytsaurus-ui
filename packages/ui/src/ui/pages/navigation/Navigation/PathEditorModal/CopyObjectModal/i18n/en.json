@@ -1,0 +1,10 @@
+{
+  "title_copy": "Copy",
+  "title_enter-destination": "Enter a destination path for the copied object.",
+  "title_enter-destination-multiple": "Enter a destination path for copied objects.",
+  "confirm_object-will-be-copied": "The object will be copied with the specified path.",
+  "confirm_objects-will-be-copied": "Objects will be copied with the specified path.",
+  "field_destination-path": "Enter a destination path for the copied object...",
+  "field_preserve-account": "Preserve account",
+  "action_create-intermediate-dirs": "Create intermediate directories as required"
+}

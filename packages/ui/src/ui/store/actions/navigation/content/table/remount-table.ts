@@ -6,6 +6,7 @@ import {updateView} from '../..';
 
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
 import {ytApiV4} from '../../../../../rum/rum-wrap-api';
+import i18n from './i18n';
 
 type AsyncAction<R = void> = ThunkAction<R, RootState, unknown, UnknownAction>;
 
@@ -16,7 +17,7 @@ export function remountTable(): AsyncAction<Promise<void>> {
 
         return wrapApiPromiseByToaster(ytApiV4.remountTable({path}), {
             toasterName: 'remount_tabe',
-            errorTitle: 'Failed to remount table',
+            errorTitle: i18n('alert_failed-to-remount'),
             skipSuccessToast: true,
         }).finally(() => {
             dispatch(updateView());

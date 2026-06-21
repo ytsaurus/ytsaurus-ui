@@ -2,6 +2,8 @@ import React from 'react';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
+import i18n from './i18n';
+
 import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import SimplePagination from '../../../../../components/Pagination/SimplePagination';
 import Select from '../../../../../components/Select/Select';
@@ -97,7 +99,7 @@ export function TabletErrorsRequestToolbar({className}: {className: string}) {
                                         }),
                                     );
                                 }}
-                                placeholder="Tablet Id filter..."
+                                placeholder={i18n('field_tablet-id-filter')}
                             />
                         ),
                     },
@@ -105,7 +107,7 @@ export function TabletErrorsRequestToolbar({className}: {className: string}) {
                         node: (
                             <Select
                                 multiple
-                                label="Methods:"
+                                label={i18n('field_methods')}
                                 value={methodsFilter}
                                 items={allMethods?.map((value) => {
                                     return {value, text: value};
@@ -117,7 +119,7 @@ export function TabletErrorsRequestToolbar({className}: {className: string}) {
                                         }),
                                     )
                                 }
-                                placeholder="Select..."
+                                placeholder={i18n('action_select')}
                                 hasClear
                                 maxVisibleValuesTextLength={80}
                             />

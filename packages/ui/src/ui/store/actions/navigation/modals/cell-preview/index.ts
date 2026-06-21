@@ -2,6 +2,7 @@ import {type CancelTokenSource} from 'axios';
 import {batch} from 'react-redux';
 
 import {selectPath} from '../../../../selectors/navigation';
+import i18n from './i18n';
 import {getDefaultRequestOutputFormat} from '../../../../../utils/navigation/content/table/table';
 import {CELL_PREVIEW, PREVIEW_LIMIT} from '../../../../../constants/modals/cell-preview';
 import {isCancelled} from '../../../../../utils/cancel-helper';
@@ -166,8 +167,8 @@ export const onCellPreview = ({
             }
 
             const noticeText = isIncomplete
-                ? 'Unable to load content more than 16MiB. Please use the command bellow to load it locally.'
-                : 'You could use the command bellow to load it locally.';
+                ? i18n('alert_content-too-large')
+                : i18n('alert_use-command-to-load');
 
             if (dataHandler) {
                 dataHandler.onSuccess({columnName, rowIndex, data: loadedData});

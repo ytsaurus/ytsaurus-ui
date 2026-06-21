@@ -3,6 +3,8 @@ import {type ConnectedProps, connect} from 'react-redux';
 
 import PathEditorModal from '../PathEditorModal';
 
+import i18n from './i18n';
+
 import {CLOSE_CREATE_DIRECTORY_POPUP} from '../../../../../constants/navigation/modals/create-directory';
 import {
     abortRequests,
@@ -28,10 +30,10 @@ class CreateDirectoryModal extends React.Component<ReduxProps> {
     render() {
         const {popupVisible, creating, creatingPath, showError, errorMessage, error} = this.props;
 
-        const modalTitle = 'Create Directory';
-        const title = 'Enter a name for the new directory.';
-        const description = 'The new object will be created at the specified path.';
-        const placeholder = 'Enter a new directory path...';
+        const modalTitle = i18n('title_create-directory');
+        const title = i18n('title_enter-name');
+        const description = i18n('context_new-object-path');
+        const placeholder = i18n('context_enter-directory-path');
 
         return (
             <PathEditorModal
@@ -50,7 +52,7 @@ class CreateDirectoryModal extends React.Component<ReduxProps> {
                 onApply={this.handleApply}
                 options={
                     <Checkbox checked={this.state.recursive} onUpdate={this.onRecursiveUpdate}>
-                        Make parent directories as needed
+                        {i18n('action_make-parent-dirs')}
                     </Checkbox>
                 }
             />

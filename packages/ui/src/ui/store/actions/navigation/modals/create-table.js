@@ -13,6 +13,7 @@ import Link from '../../../../containers/Link/Link';
 import {genNavigationUrl} from '../../../../utils/navigation/navigation';
 import {selectCluster} from '../../../selectors/global';
 import {toaster} from '../../../../utils/toaster';
+import i18n from './i18n';
 
 export function openCreateTableModal(parentDirectory) {
     return (dispatch) => {
@@ -40,7 +41,7 @@ export function createTable(path, attributes) {
             attributes,
         };
 
-        const what = attributes.dynamic ? 'Dynamic table' : 'Static table';
+        const what = attributes.dynamic ? i18n('value_dynamic-table') : i18n('value_static-table');
         const cluster = selectCluster(getState());
 
         return yt.v3
@@ -51,11 +52,11 @@ export function createTable(path, attributes) {
                     name: path,
                     timeout: 10000,
                     theme: 'success',
-                    title: 'Table created',
+                    title: i18n('title_table-created'),
                     content: (
                         <React.Fragment>
                             {what} <Link url={genNavigationUrl({cluster, path})}>{path}</Link>{' '}
-                            successfully created
+                            {i18n('alert_table-created')}
                         </React.Fragment>
                     ),
                 });
@@ -74,10 +75,10 @@ export function createTable(path, attributes) {
                         timeout: 10000,
                         theme: 'danger',
                         content: `[code ${code}] ${message}`,
-                        title: 'Table creation failure',
+                        title: i18n('title_table-creation-failure'),
                         actions: [
                             {
-                                label: ' view',
+                                label: i18n('action_view'),
                                 onClick: () => showErrorPopup(data),
                             },
                         ],

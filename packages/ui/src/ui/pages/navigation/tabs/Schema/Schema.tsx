@@ -31,6 +31,8 @@ import {selectCluster} from '../../../../store/selectors/global';
 import {selectPrimitiveTypesMap} from '../../../../store/selectors/global/supported-features';
 import hammer from '../../../../common/hammer';
 
+import i18n from './i18n';
+
 import './Schema.scss';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
@@ -171,7 +173,7 @@ class Schema extends Component<SchemaProps> {
         if (externalSchema) {
             (['title', 'description'] as const).forEach((column) => {
                 const {columns} = UIFactory.externalSchemaDescriptionSetup;
-                const caption = columns?.[column] ?? `External ${column}`;
+                const caption = columns?.[column] ?? i18n('title_external-column', {column});
                 preparedItems[column] = {
                     caption,
                     sort: false,
@@ -225,7 +227,7 @@ class Schema extends Component<SchemaProps> {
             {
                 skipSuccessToast: true,
                 toasterName: 'get_true_path',
-                errorTitle: 'Failed to load true path',
+                errorTitle: i18n('alert_failed-to-load-true-path'),
             },
         );
 
@@ -252,7 +254,7 @@ class Schema extends Component<SchemaProps> {
         return (
             <Fragment>
                 <Filter
-                    placeholder="Filter by name..."
+                    placeholder={i18n('placeholder_filter-by-name')}
                     className={block('filter')}
                     onChange={updateFilter}
                     value={column ?? ''}
@@ -267,7 +269,7 @@ class Schema extends Component<SchemaProps> {
     renderPlaceholder() {
         return (
             <div className={elementsBlock({theme: 'warning'})}>
-                <p className={elementsBlock('paragraph')}>Schema is empty.</p>
+                <p className={elementsBlock('paragraph')}>{i18n('alert_schema-empty')}</p>
             </div>
         );
     }

@@ -1,0 +1,10 @@
+{
+  "action_trash": "trash",
+  "action_go-to-scheduling": "go to scheduling",
+  "action_view-link": "view link",
+  "action_go-to-flow": "go to flow",
+  "context_locks": {
+    "one": "{{count}} lock",
+    "other": "{{count}} locks"
+  }
+}

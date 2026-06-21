@@ -7,6 +7,7 @@ import {getEditMode} from '../../../store/reducers/navigation/description';
 import Icon from '../../../components/Icon/Icon';
 
 import {useDescriptionActions} from './hooks/use-description-actions';
+import i18n from './i18n';
 
 export function EditButtons({readonly}: {readonly?: boolean}) {
     const editMode = useSelector(getEditMode);
@@ -16,10 +17,10 @@ export function EditButtons({readonly}: {readonly?: boolean}) {
     return editMode ? (
         <Flex gap={1}>
             <Button view={'action'} onClick={save} loading={isLoading || isSaving}>
-                Save
+                {i18n('action_save')}
             </Button>
             <Button view={'flat'} onClick={cancel} disabled={isSaving}>
-                Cancel
+                {i18n('action_cancel')}
             </Button>
         </Flex>
     ) : readonly ? null : (

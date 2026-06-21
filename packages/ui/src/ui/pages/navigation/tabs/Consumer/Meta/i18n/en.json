@@ -1,0 +1,10 @@
+{
+  "title_meta": "Meta",
+  "field_owner": "Owner",
+  "field_vital": "Vital",
+  "value_true": "True",
+  "value_false": "False",
+  "field_partition-count": "Partition count",
+  "field_data-weight-read-rate": "Data weight read rate",
+  "field_rows-read-rate": "Rows read rate"
+}

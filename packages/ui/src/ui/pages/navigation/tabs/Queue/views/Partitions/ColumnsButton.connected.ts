@@ -5,51 +5,74 @@ import ColumnsButton from '../../../../../../pages/navigation/tabs/Queue/Columns
 import {setSettingsNavigationQueuePartitionsVisibility} from '../../../../../../store/actions/settings/settings';
 import {type RootState} from '../../../../../../store/reducers';
 import {selectSettingsNavigationQueuePartitionsVisibility} from '../../../../../../store/selectors/settings/settings-ts';
+import i18n from './i18n';
 
 const allColumns = [
     {
         key: 'partition_index',
-        name: 'Partition idx',
+        get name() {
+            return i18n('field_partition-idx');
+        },
     },
     {
         key: 'error',
-        name: 'Error',
+        get name() {
+            return i18n('field_error');
+        },
     },
     {
         key: 'host',
-        name: 'Tablet cell host',
+        get name() {
+            return i18n('field_host');
+        },
     },
     {
         key: 'cell_id',
-        name: 'Tablet cell ID',
+        get name() {
+            return i18n('field_cell-id');
+        },
     },
     {
         key: 'read_rate',
-        name: 'Read rate',
+        get name() {
+            return i18n('field_read-rate');
+        },
     },
     {
         key: 'write_rate',
-        name: 'Write rate',
+        get name() {
+            return i18n('field_write-rate');
+        },
     },
     {
         key: 'lower_row_index',
-        name: 'Lower row index',
+        get name() {
+            return i18n('field_lower-row-idx');
+        },
     },
     {
         key: 'upper_row_index',
-        name: 'Upper row index',
+        get name() {
+            return i18n('field_upper-row-idx');
+        },
     },
     {
         key: 'available_row_count',
-        name: 'Available row count',
+        get name() {
+            return i18n('field_available-rows');
+        },
     },
     {
         key: 'commit_idle_time',
-        name: 'Commit idle time, ms',
+        get name() {
+            return i18n('field_commit-idle-time');
+        },
     },
     {
         key: 'last_row_commit_time',
-        name: 'Last row commit time',
+        get name() {
+            return i18n('field_last-row-commit-time');
+        },
     },
 ];
 

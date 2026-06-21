@@ -9,6 +9,7 @@ import {
 } from '../../../../../store/actions/navigation/content/table/table';
 import Icon from '../../../../../components/Icon/Icon';
 import {selectColumnsPresetHash} from '../../../../../store/selectors/navigation/content/table-ts';
+import i18n from './i18n';
 
 type Props = Required<Pick<ButtonProps, 'view' | 'disabled'>>;
 
@@ -20,7 +21,7 @@ function SharePresetButton(props: Props) {
     }, [dispatch]);
 
     return (
-        <Tooltip content={'Share current set of columns for the table'}>
+        <Tooltip content={i18n('context_share-columns')}>
             <Button
                 {...props}
                 pin={'clear-round'}
@@ -41,7 +42,7 @@ function SavePresetButton(props: Props) {
     }, [dispatch]);
 
     return (
-        <Tooltip content={'Remember columns for the table'}>
+        <Tooltip content={i18n('context_remember-columns')}>
             <Button {...props} pin={'clear-round'} onClick={handleClick}>
                 <Icon awesome={'save'} />
             </Button>

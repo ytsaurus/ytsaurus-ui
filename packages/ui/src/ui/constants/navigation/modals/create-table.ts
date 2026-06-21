@@ -1,11 +1,16 @@
 import {createPrefix} from '../../utils';
 import {Page} from '../../index';
+import i18n from './i18n';
 
 const PREFIX = createPrefix(Page.NAVIGATION);
 
 export const CREATE_TABLE_MODAL_DATA_FIELDS = PREFIX + 'CREATE_TABLE_MODAL_DATA_FIELDS';
 
-export const ERROR_DUPLICATE_COLUMN_NAME = 'The name must be unique';
+export const ERROR_DUPLICATE_COLUMN_NAME = {
+    get value() {
+        return i18n('alert_name-must-be-unique');
+    },
+};
 
 // Select cannot handle empty string as value it suppose it as a missing value.
 export const SELECT_EMPTY_VALUE = '_';

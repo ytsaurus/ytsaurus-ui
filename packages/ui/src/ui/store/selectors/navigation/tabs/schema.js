@@ -1,29 +1,25 @@
 import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
-import pick_ from 'lodash/pick';
 import reduce_ from 'lodash/reduce';
 
 import ypath from '../../../../common/thor/ypath';
 import hammer from '../../../../common/hammer';
 import {createSelector} from 'reselect';
 import {selectAttributes} from '../../../../store/selectors/navigation';
+import i18n from './i18n';
 
-const TABLE_ATTRIBUTES_FOR_META = ['schema_mode'];
 const EXCLUDED_COLUMNS = {sort_order: null};
 
 const selectColumn = (state) => state.navigation.tabs.schema.column;
 
 export const selectSchemaMeta = createSelector([selectAttributes], (attributes) => {
     const schemaAttributes = ypath.getValue(attributes, '/schema/@');
-    const tableAttributes = pick_(attributes, TABLE_ATTRIBUTES_FOR_META);
 
-    const tableMeta = map_(tableAttributes, (value, key) => ({value, key}));
-    const schemaMeta = map_(schemaAttributes, (value, key) => ({
-        value,
-        key,
-    }));
-
-    return [...tableMeta, ...schemaMeta];
+    return [
+        {key: 'schema_mode', label: i18n('field_schema-mode'), value: attributes.schema_mode},
+        {key: 'strict', label: i18n('field_strict'), value: schemaAttributes.strict},
+        {key: 'unique_keys', label: i18n('field_unique-keys'), value: schemaAttributes.unique_keys},
+    ];
 });
 
 export const selectSchema = createSelector([selectAttributes], (attributes) => {

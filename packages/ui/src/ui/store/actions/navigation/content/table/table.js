@@ -76,6 +76,7 @@ import {loadColumnPresetIfDefined, saveColumnPreset, setTablePresetHash} from '.
 import {makeTableRumId} from './table-rum-id';
 import {readStaticTable} from './readStaticTable';
 import {readDynamicTable} from './readDynamicTable';
+import i18n from './i18n';
 
 const requests = new CancelHelper();
 
@@ -664,7 +665,7 @@ export function mountUnmountTable(action) {
                 toaster.add({
                     name: `${action} table`,
                     theme: 'success',
-                    title: `Success ${action}ing table`,
+                    title: i18n(`alert_success-${action}`),
                 });
                 return dispatch(updateView());
             })
@@ -674,9 +675,9 @@ export function mountUnmountTable(action) {
                 toaster.add({
                     name: `${action} table`,
                     theme: 'danger',
-                    title: `Could not ${action} table.`,
-                    content: err?.message || 'Oops, something went wrong',
-                    actions: [{label: ' view', onClick: () => showErrorPopup(err)}],
+                    title: i18n(`alert_could-not-${action}`),
+                    content: err?.message || i18n('alert_something-went-wrong'),
+                    actions: [{label: i18n('action_view'), onClick: () => showErrorPopup(err)}],
                 });
             });
     };

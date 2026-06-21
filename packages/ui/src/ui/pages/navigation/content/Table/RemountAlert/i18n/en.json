@@ -1,0 +1,6 @@
+{
+  "title_settings-not-applied": "Some table settings are not applied to tablets",
+  "alert_remount-needed": "Table should be remounted to apply new settings. This action will not cause any downtime. See Mount config tab for details.",
+  "alert_remount-needed-with-diff": "Table should be remounted to apply new settings ({{remountNeededTabletCount}} of {{tabletCount}} tablets pending). This action will not cause any downtime. See Mount config tab for details.",
+  "action_remount": "Remount"
+}

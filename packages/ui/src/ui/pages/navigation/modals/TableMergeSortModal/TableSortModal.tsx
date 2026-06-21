@@ -25,6 +25,7 @@ import {type ColumnSortByInfo} from './TableSortByControl';
 import {docsUrl} from '../../../../config';
 import UIFactory from '../../../../UIFactory';
 import {WaitForDefaultPoolTree} from '../../../../hooks/global-pool-trees';
+import i18n from './i18n';
 
 const block = cn('table-sort-modal');
 
@@ -87,7 +88,7 @@ export default function TableSortModal() {
         [dispatch],
     );
 
-    const title = paths?.length > 1 ? 'Sort tables' : 'Sort table';
+    const title = paths?.length > 1 ? i18n('title_sort-tables') : i18n('title_sort-table');
     const outputPath = paths?.length === 1 ? paths[0] : undefined;
 
     const errorFields: Array<DialogField<FormValues>> = [];
@@ -131,32 +132,28 @@ export default function TableSortModal() {
                         {
                             name: 'paths',
                             type: 'editable-path-list',
-                            caption: 'Input paths',
+                            caption: i18n('field_input-paths'),
                             required: true,
                             onChange: handlePathsChange,
                             extras: {
-                                placeholder: 'Enter a path to add',
+                                placeholder: i18n('context_enter-path-to-add'),
                             },
                         },
                         {
                             name: 'outputPath',
                             type: 'output-path',
-                            caption: 'Output path',
+                            caption: i18n('field_output-path'),
                             required: true,
                             validator: isPathStaticTable,
                             extras: {
-                                placeholder: 'Enter path for output',
+                                placeholder: i18n('context_enter-path-for-output'),
                             },
-                            tooltip: (
-                                <span>
-                                    If the path is not exists then started operation will be failed
-                                </span>
-                            ),
+                            tooltip: <span>{i18n('context_output-path-not-exists')}</span>,
                         },
                         {
                             name: 'columns',
                             type: 'table-sort-by',
-                            caption: 'Sort by columns',
+                            caption: i18n('field_sort-by-columns'),
                             required: true,
                             extras: {
                                 suggestColumns,
@@ -166,7 +163,7 @@ export default function TableSortModal() {
                         {
                             name: 'poolTree',
                             type: 'pool-tree',
-                            caption: 'Pool tree',
+                            caption: i18n('field_pool-tree'),
                             extras: {
                                 multiple: true,
                             },
@@ -174,7 +171,7 @@ export default function TableSortModal() {
                         {
                             name: 'pool',
                             type: 'pool',
-                            caption: 'Pool',
+                            caption: i18n('field_pool'),
                             tooltip: docsUrl(
                                 makeLink(
                                     UIFactory.docsUrls[

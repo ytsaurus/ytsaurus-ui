@@ -49,6 +49,8 @@ import {inTrash} from '../../../utils/navigation/restore-object';
 import {makeNavigationLink} from '../../../utils/app-url';
 import {decodeEscapedAbsPath} from '../../../utils/navigation';
 
+import i18n from './i18n';
+
 import './NavigationTopRowContent.scss';
 
 const block = cn('navigation-top-row-content');
@@ -100,7 +102,7 @@ function NavigationPathToClipboard() {
         <span className={block('to-clipboard')}>
             <ClipboardButton
                 text={path}
-                title="Copy to clipboard [Shift+P]"
+                title={i18n('action_copy-to-clipboard')}
                 className={'navigation__instruments-control'}
                 hotkey="shift+p"
                 onCopy={onCopyToClipboard}
@@ -290,7 +292,7 @@ function Transaction() {
                 <Button
                     size="m"
                     view="flat-secondary"
-                    title="Clear transaction"
+                    title={i18n('action_clear-transaction')}
                     onClick={handleClearTransaction}
                 >
                     <Icon awesome="times" size={13} />
@@ -304,13 +306,18 @@ function Transaction() {
                 scope="transaction-editor"
                 visible={true}
                 value={transaction}
-                placeholder="Enter id..."
+                placeholder={i18n('context_enter-id')}
                 onApply={handleEdit}
                 onCancel={toggleEditMode}
                 cancelOnBlur
             />
         ) : (
-            <Button view="flat-secondary" size="m" title="Set transaction" onClick={toggleEditMode}>
+            <Button
+                view="flat-secondary"
+                size="m"
+                title={i18n('action_set-transaction')}
+                onClick={toggleEditMode}
+            >
                 <Icon awesome="code-branch" size={13} />
             </Button>
         );
@@ -329,7 +336,7 @@ function RefreshButton() {
         <Button
             size="s"
             view="flat-secondary"
-            title={'Refresh page [Shift+R]'}
+            title={i18n('action_refresh-page')}
             hotkey={[{keys: 'shift+r', handler: handleClick, scope: 'all'}]}
             onClick={handleClick}
         >
@@ -351,7 +358,7 @@ function RestoreButton() {
         <span className={block('restore')}>
             <Button view="action" size="s" onClick={handleRestore}>
                 <Icon awesome="undo" size={13} />
-                &nbsp;Restore
+                &nbsp;{i18n('action_restore')}
             </Button>
         </span>
     );

@@ -13,6 +13,8 @@ import Icon from '../../../../components/Icon/Icon';
 import {OpenQueryButtons} from '../../../../containers/OpenQueryButtons/OpenQueryButtons';
 import {CurrentPathActions} from '../../components/CurrentPathActions/CurrentPathActions';
 
+import i18n from './i18n';
+
 import './DocumentBody.scss';
 
 const block = cn('yt-document-body');
@@ -29,7 +31,7 @@ const EditButton: FC<Pick<Props, 'onEditClick'>> = ({onEditClick}) => {
     return (
         <Button onClick={onEditClick}>
             <Icon awesome={'pencil'} />
-            Edit
+            {i18n('action_edit')}
         </Button>
     );
 };
@@ -54,12 +56,14 @@ function DocumentBody({attributes, settings, onEditClick, document = null, query
 
     return (
         <Fragment>
-            <MetaTable items={[main(attributes), [{key: 'type', value: type}]]} />
+            <MetaTable
+                items={[main(attributes), [{key: 'type', label: i18n('field_type'), value: type}]]}
+            />
             {document === null ? (
                 <Alert
                     layout="horizontal"
                     theme="info"
-                    message="Document is empty."
+                    message={i18n('alert_document-is-empty')}
                     actions={<EditButton onEditClick={onEditClick} />}
                 />
             ) : (

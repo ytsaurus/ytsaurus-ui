@@ -18,14 +18,14 @@ import {type YTError} from '../../../../../../../types';
 import {type ExportConfigUtility} from '../Exports';
 
 import {
-    outputTableNamePatternTooltip,
     prepareInitialValues,
     prepareUpdateValues,
-    useUpperBoundForTableNamesTooltip,
     validate,
     validateExportDirectory,
     validateExportPeriod,
 } from './utils';
+
+import i18n from './i18n';
 
 interface DialogProps {
     type: 'edit' | 'create';
@@ -40,35 +40,51 @@ const fields = [
     {
         type: 'text' as const,
         name: 'export_name',
-        caption: 'Export name',
+        get caption() {
+            return i18n('field_export-name');
+        },
         required: true,
     },
     {
         type: 'path' as const,
         name: 'export_directory',
-        caption: 'Export directory',
+        get caption() {
+            return i18n('field_export-directory');
+        },
         required: true,
         validator: validateExportDirectory,
     },
     {
         type: 'time-duration' as const,
         name: 'export_period',
-        caption: 'Export period',
+        get caption() {
+            return i18n('field_export-period');
+        },
         required: true,
-        tooltip: 'Export period mask will be converted to milliseconds',
+        get tooltip() {
+            return i18n('context_export-period-mask');
+        },
         validator: validateExportPeriod,
     },
     {
         type: 'time-duration' as const,
         name: 'export_ttl',
         caption: 'TTL',
-        tooltip: 'TTL mask will be converted to milliseconds',
+        get tooltip() {
+            return i18n('context_ttl-mask');
+        },
     },
     {
         type: 'text' as const,
         name: 'output_table_name_pattern',
-        caption: 'Output table name pattern',
-        tooltip: <Text whiteSpace={'break-spaces'}>{outputTableNamePatternTooltip}</Text>,
+        get caption() {
+            return i18n('field_output-table-name-pattern');
+        },
+        get tooltip() {
+            return (
+                <Text whiteSpace={'break-spaces'}>{i18n('context_output-table-name-pattern')}</Text>
+            );
+        },
         extras: {
             placeholder: '%UNIX_TS-%PERIOD',
         },
@@ -76,8 +92,16 @@ const fields = [
     {
         type: 'tumbler' as const,
         name: 'use_upper_bound_for_table_names',
-        caption: 'Use upper bound for table names',
-        tooltip: <Text whiteSpace={'break-spaces'}>{useUpperBoundForTableNamesTooltip}</Text>,
+        get caption() {
+            return i18n('field_use-upper-bound-for-table-names');
+        },
+        get tooltip() {
+            return (
+                <Text whiteSpace={'break-spaces'}>
+                    {i18n('context_use-upper-bound-for-table-names')}
+                </Text>
+            );
+        },
     },
 ];
 
@@ -111,7 +135,9 @@ export function ExportsEditDialog(props: DialogProps) {
             visible={visible}
             onClose={onClose}
             size="l"
-            headerProps={{title: type === 'create' ? 'Create export' : 'Edit export'}}
+            headerProps={{
+                title: type === 'create' ? i18n('title_create-export') : i18n('title_edit-export'),
+            }}
             initialValues={initialValues}
             fields={[...fields, ...makeErrorFields([error as YTError])]}
             isApplyDisabled={(state) => {

@@ -1,0 +1,4 @@
+{
+  "alert_content-too-large": "Unable to load content more than 16MiB. Please use the command bellow to load it locally.",
+  "alert_use-command-to-load": "You could use the command bellow to load it locally."
+}

@@ -3,6 +3,7 @@ import React, {useMemo} from 'react';
 
 import Button from '../../../../../components/Button/Button';
 import ColumnSelectorModal from '../../../../../components/ColumnSelectorModal/ColumnSelectorModal';
+import i18n from './i18n';
 
 export interface Props {
     allColumns: Array<{key: string; name: string}>;
@@ -45,7 +46,7 @@ const ColumnsButton: React.VFC<Props> = ({allColumns, selectedColumns, onChange}
 
     return (
         <>
-            <Button onClick={toggleVisibility}>Columns</Button>
+            <Button onClick={toggleVisibility}>{i18n('action_columns')}</Button>
             <ColumnSelectorModal
                 isVisible={visible}
                 onCancel={handleClose}

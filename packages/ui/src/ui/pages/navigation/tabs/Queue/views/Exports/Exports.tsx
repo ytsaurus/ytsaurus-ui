@@ -13,6 +13,7 @@ import {makeNavigationLink} from '../../../../../../utils/app-url';
 
 import {ExportsEdit} from './ExportsEdit/ExportsEdit';
 import {useExports} from './use-exports';
+import i18n from './i18n';
 
 export type ExportConfigUtility = {
     id: string;
@@ -25,32 +26,44 @@ const columns: Array<Column<ExportConfigColumns>> = [
     {
         name: 'export_name',
         render: Value,
-        header: 'Export name',
+        get header() {
+            return i18n('field_export-name');
+        },
     },
     {
         name: 'export_directory',
         render: Path,
-        header: 'Export directory',
+        get header() {
+            return i18n('field_export-directory');
+        },
     },
     {
         name: 'export_period',
         render: Time,
-        header: 'Export period',
+        get header() {
+            return i18n('field_export-period');
+        },
     },
     {
         name: 'export_ttl',
         render: Time,
-        header: 'Export TTL',
+        get header() {
+            return i18n('field_export-ttl');
+        },
     },
     {
         name: 'output_table_name_pattern',
         render: Value,
-        header: 'Output table name pattern',
+        get header() {
+            return i18n('field_output-table-name-pattern');
+        },
     },
     {
         name: 'use_upper_bound_for_table_names',
         render: Value,
-        header: 'Use upper bound for table names',
+        get header() {
+            return i18n('field_use-upper-bound-for-table-names');
+        },
     },
     {
         name: '',
@@ -88,7 +101,8 @@ function Time({value}: {value?: unknown}) {
                     content={
                         <Flex gap={2} alignItems={'center'}>
                             <ClipboardButton text={String(value)} />
-                            {String(value)}, ms
+                            {String(value)}
+                            {i18n('context_ms-suffix')}
                         </Flex>
                     }
                 >

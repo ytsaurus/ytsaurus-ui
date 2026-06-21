@@ -10,6 +10,7 @@ import {ytApiV3} from '../../../../rum/rum-wrap-api';
 import {selectCluster} from '../../../../store/selectors/global';
 import Link from '../../../../containers/Link/Link';
 import {toaster} from '../../../../utils/toaster';
+import i18n from './i18n';
 
 type LinkToModalThunkAction<R = any> = ThunkAction<R, RootState, unknown, LinkToModalAction>;
 
@@ -50,7 +51,7 @@ export function createLink(params: Pick<LinkToState, 'path' | 'target'>): LinkTo
                 toaster.add({
                     name: 'create-link',
                     theme: 'success',
-                    title: 'Link created',
+                    title: i18n('alert_link-created'),
                     content: <Link url={`/${cluster}/navigation?path=${path}`}>{path}</Link>,
                 });
             });
