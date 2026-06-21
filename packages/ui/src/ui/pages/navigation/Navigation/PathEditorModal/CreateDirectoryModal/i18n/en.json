@@ -1,0 +1,7 @@
+{
+  "title_create-directory": "Create Directory",
+  "title_enter-name": "Enter a name for the new directory.",
+  "context_new-object-path": "The new object will be created at the specified path.",
+  "context_enter-directory-path": "Enter a new directory path...",
+  "action_make-parent-dirs": "Make parent directories as needed"
+}

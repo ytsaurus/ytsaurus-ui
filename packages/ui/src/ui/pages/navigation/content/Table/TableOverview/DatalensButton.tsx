@@ -13,6 +13,7 @@ import {LOADING_STATUS} from '../../../../../constants';
 import {docsUrl} from '../../../../../config';
 import {uiSettings} from '../../../../../config/ui-settings';
 import UIFactory from '../../../../../UIFactory';
+import i18n from './i18n';
 
 export default function DataLensButton({className}: {className: string}) {
     const loaded = useSelector(selectNavigationPathAttributesLoadState) === LOADING_STATUS.LOADED;
@@ -36,7 +37,7 @@ export default function DataLensButton({className}: {className: string}) {
             href={url}
             view={'action'}
             target="_blank"
-            title="Create dataset in DataLens"
+            title={i18n('action_create-dataset-in-datalens')}
             disabled={!loaded || showTooltip}
         >
             <Icon awesome={'chart-bar'} />
@@ -51,12 +52,14 @@ export default function DataLensButton({className}: {className: string}) {
         <Tooltip
             content={
                 <Warning>
-                    {isEmptySchema && <div>Please make sure that the table has schema.</div>}
+                    {isEmptySchema && <div>{i18n('alert_empty-schema')}</div>}
                     {enableDynamicStoreRedRequired && (
                         <div>
-                            Please make sure that the table has enabled{' '}
-                            <Secondary>enable_dynamic_store_read</Secondary> attribute.
-                            {linkUrl !== '' && docsUrl(<Link url={linkUrl}> Help </Link>)}
+                            {i18n('alert_dynamic-store-read-required-prefix')}{' '}
+                            <Secondary>enable_dynamic_store_read</Secondary>{' '}
+                            {i18n('alert_dynamic-store-read-required-suffix')}
+                            {linkUrl !== '' &&
+                                docsUrl(<Link url={linkUrl}>{i18n('action_help')}</Link>)}
                         </div>
                     )}
                 </Warning>

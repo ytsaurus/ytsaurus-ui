@@ -21,9 +21,10 @@ import {ContentMode, NAVIGATION_MAP_NODE_TABLE_ID} from '../../../../constants/n
 import {Node} from '../../../../utils/navigation/content/map-nodes/node';
 import {MediumType} from '../../../../constants/index';
 import Chooser from '../../../../pages/navigation/content/MapNode/Chooser';
-import MultipleActions from '../../../../pages/navigation/content/MapNode/MultipleActions';
+import MultipleActions from '../../../../pages/navigation/content/MapNode/Actions/MultipleActions/MultipleActions';
 import {DYN_TABLES_ALLOWED_ACTIONS_BY_STATE} from './map-node-ts';
 import {formatDateForTableSort} from '../../../../utils/format-date-for-table-sort';
+import i18n from './i18n';
 
 export const selectFilterState = (state) => state.navigation.content.mapNode.filter;
 export const selectMediumType = (state) => state.navigation.content.mapNode.mediumType;
@@ -36,6 +37,9 @@ const selectTableColumns = createSelector(
             sort: false,
             align: 'center',
             renderHeader: () => <Chooser />,
+            get caption() {
+                return i18n('field_chooser');
+            },
         },
         icon: {
             sort: false,
@@ -44,26 +48,38 @@ const selectTableColumns = createSelector(
         },
         name: {
             sort: (node) => node.titleUnquoted,
-            caption: () => {
-                return customSort === 'date' ? 'Date' : 'Name';
+            get caption() {
+                return customSort === 'date' ? i18n('field_date') : i18n('field_name');
             },
             align: 'left',
         },
         locks: {
             sort: (node) => node.locks,
             align: 'center',
+            get caption() {
+                return i18n('field_locks');
+            },
         },
         account: {
             sort: (node) => node.account,
             align: 'left',
+            get caption() {
+                return i18n('field_account');
+            },
         },
         modification_time: {
             sort: (node) => formatDateForTableSort(node.modified),
             align: 'right',
+            get caption() {
+                return i18n('field_modification_time');
+            },
         },
         creation_time: {
             sort: (node) => formatDateForTableSort(node.created),
             align: 'right',
+            get caption() {
+                return i18n('field_creation_time');
+            },
         },
         disk_space: {
             get: (node) => {
@@ -71,38 +87,57 @@ const selectTableColumns = createSelector(
             },
             sort: true,
             align: 'right',
+            get caption() {
+                return i18n('field_disk-space');
+            },
         },
         data_weight: {
             get: (node) => node.dataWeight,
             sort: true,
             align: 'right',
+            get caption() {
+                return i18n('field_data-weight');
+            },
         },
         chunk_count: {
             get: (node) => node.chunks,
             sort: true,
             align: 'right',
+            get caption() {
+                return i18n('field_chunk-count');
+            },
         },
         node_count: {
             get: (node) => node.nodes,
             sort: true,
             align: 'right',
+            get caption() {
+                return i18n('field_node-count');
+            },
         },
         row_count: {
             get: (node) => node.chunkRows,
             sort: true,
             align: 'right',
+            get caption() {
+                return i18n('field_row-count');
+            },
         },
         tablet_static_memory: {
             get: (node) => node.tabletStaticMemory,
-            caption: 'Tablet st.',
-            title: 'Tablet static memory',
+            get caption() {
+                return i18n('field_tablet-st');
+            },
+            title: i18n('context_tablet-static-memory'),
             sort: true,
             align: 'right',
         },
         master_memory: {
             get: (node) => node.masterMemory,
-            caption: 'Master mem.',
-            title: 'Master memory',
+            get caption() {
+                return i18n('field_master-mem');
+            },
+            title: i18n('context_master-memory'),
             sort: true,
             align: 'right',
         },
@@ -110,6 +145,9 @@ const selectTableColumns = createSelector(
             get: (node) => node.tablets,
             sort: true,
             align: 'right',
+            get caption() {
+                return i18n('field_tablet-count');
+            },
         },
         actions: {
             sort: false,
@@ -130,7 +168,6 @@ export const selectPreparedTableColumns = createSelector(selectTableColumns, (co
             preparedColumns[name] = {
                 ...column,
                 name,
-                caption: typeof column.caption === 'function' ? column.caption() : column.caption,
             };
         },
         {},
@@ -275,7 +312,7 @@ export const selectNodesInfo = createSelector(selectSortedNodes, (nodes) => {
 
     return map_(Object.entries(sumNodesType), (keyValue) => {
         const [key, value] = keyValue;
-        const type = key === 'undefined' ? 'Unknown' : key;
+        const type = key === 'undefined' ? i18n('value_unknown') : key;
         return {
             type: hammer.format['Readable'](type),
             count: value,

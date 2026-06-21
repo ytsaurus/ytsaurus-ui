@@ -14,6 +14,7 @@ import {genAccountsAclLink} from '../../../utils/accounts/accounts';
 import {selectCluster} from '../../../store/selectors/global';
 import Link from '../../../containers/Link/Link';
 
+import i18n from './i18n';
 import './NavigationPermissionsNotice.scss';
 const block = cn('navigation-permissions-notice');
 
@@ -26,7 +27,12 @@ export function NavigationPermissionsNotice() {
     const cluster = useSelector(selectCluster);
 
     if (checkPermissionsError) {
-        return <YTErrorBlock error={checkPermissionsError} message={'Check permissions error'} />;
+        return (
+            <YTErrorBlock
+                error={checkPermissionsError}
+                message={i18n('alert_check-permissions-error')}
+            />
+        );
     }
 
     const accountAclLink = genAccountsAclLink(cluster, account);
@@ -36,9 +42,9 @@ export function NavigationPermissionsNotice() {
             type={'alert'}
             message={
                 <div className={block()}>
-                    You cannot modify <span className={block('path')}> {path} </span> since you have
-                    no permission <span className={block('use')}> use </span> to the corresponding
-                    account
+                    {i18n('context_cannot-modify')} <span className={block('path')}> {path} </span>{' '}
+                    {i18n('context_no-use-permission')} <span className={block('use')}> use </span>{' '}
+                    {i18n('context_to-corresponding-account')}
                     <Link routed url={accountAclLink}>
                         {' '}
                         {account}

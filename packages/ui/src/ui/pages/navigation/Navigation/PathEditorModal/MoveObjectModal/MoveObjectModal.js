@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 
 import PathEditorModal from '../PathEditorModal';
 
+import i18n from './i18n';
+
 import {CLOSE_MOVE_OBJECT_POPUP} from '../../../../../constants/navigation/modals/move-object';
 import {
     abortRequests,
@@ -95,14 +97,14 @@ class MoveObjectModal extends Component {
         const {popupVisible, renaming, movedPath, showError, errorMessage, error, multipleMode} =
             this.props;
 
-        const modalTitle = 'Move';
+        const modalTitle = i18n('title_move');
         const title = multipleMode
-            ? 'Enter a new path for objects.'
-            : 'Enter a new path for the object.';
+            ? i18n('title_enter-path-objects')
+            : i18n('title_enter-path-object');
         const description = multipleMode
-            ? 'Objects will be moved with the specified path.'
-            : 'The object will be moved with the specified path.';
-        const placeholder = 'Enter a new object path...';
+            ? i18n('confirm_objects-moved')
+            : i18n('confirm_object-moved');
+        const placeholder = i18n('action_enter-path');
 
         return (
             <PathEditorModal
@@ -127,11 +129,11 @@ class MoveObjectModal extends Component {
     renderOptions() {
         return (
             <Checkbox
-                title={'Preserve account'}
+                title={i18n('action_preserve-account')}
                 checked={this.state.preserve_account}
                 onUpdate={this.onUpdatePreserveAccount}
             >
-                Preserve account
+                {i18n('action_preserve-account')}
             </Checkbox>
         );
     }

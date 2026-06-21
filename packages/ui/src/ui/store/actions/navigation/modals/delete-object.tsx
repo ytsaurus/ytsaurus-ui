@@ -7,6 +7,8 @@ import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
 import Link from '../../../../containers/Link/Link';
 
+import i18n from './i18n';
+
 import {selectIsTrashPath, selectRawPath} from '../../../../store/selectors/navigation';
 import {showErrorPopup, wrapBatchPromise} from '../../../../utils/utils';
 import {navigateParent, updateView} from '../../../../store/actions/navigation';
@@ -123,11 +125,11 @@ export function getRealPath({path, type}: {path: string; type: string}) {
                     theme: 'danger',
                     name: 'real path',
                     autoHiding: 10000,
-                    title: 'Could not open delete dialog.',
+                    title: i18n('title_cannot-open-delete-dialog'),
                     content: error.message,
                     actions: [
                         {
-                            label: ' view',
+                            label: i18n('action_view'),
                             onClick: () => showErrorPopup(error),
                         },
                     ],
@@ -195,11 +197,11 @@ export function getRealPaths(items: {path: string}[]) {
                     theme: 'danger',
                     name: 'real path',
                     autoHiding: 10000,
-                    title: 'Could not open delete dialog.',
+                    title: i18n('title_cannot-open-delete-dialog'),
                     content: error.message,
                     actions: [
                         {
-                            label: ' view',
+                            label: i18n('action_view'),
                             onClick: () => showErrorPopup(error),
                         },
                     ],
@@ -227,7 +229,7 @@ function deleteCurrentObject(path: string, restorePath: string) {
                     theme: 'success',
                     name: 'delete object',
                     autoHiding: 10000,
-                    title: 'Object has been permanently deleted.',
+                    title: i18n('title_object-permanently-deleted'),
                 });
             });
         } else {
@@ -259,11 +261,13 @@ function deleteCurrentObject(path: string, restorePath: string) {
                         theme: 'success',
                         name: 'delete object',
                         autoHiding: 10000,
-                        title: 'Object moved',
+                        title: i18n('title_object-moved-to-trash'),
                         content: (
                             <div>
-                                Object has been moved to{' '}
-                                <Link url={`navigation?path=${destinationPath}`}>trash</Link>
+                                {i18n('alert_object-moved-to-trash')}{' '}
+                                <Link url={`navigation?path=${destinationPath}`}>
+                                    {i18n('action_trash')}
+                                </Link>
                             </div>
                         ),
                     });
@@ -290,7 +294,7 @@ export function deleteObject() {
                 theme: 'danger',
                 name: 'delete object',
                 autoHiding: 10000,
-                title: 'Could not delete the object within transaction.',
+                title: i18n('title_cannot-delete-in-transaction'),
             });
         }
 
@@ -319,11 +323,11 @@ export function deleteObject() {
                     theme: 'danger',
                     name: 'delete object',
                     autoHiding: 10000,
-                    title: 'Could not delete the node.',
+                    title: i18n('title_cannot-delete-node'),
                     content: error.message,
                     actions: [
                         {
-                            label: ' view',
+                            label: i18n('action_view'),
                             onClick: () => showErrorPopup(error),
                         },
                     ],
@@ -354,7 +358,7 @@ function permanentlyDeleteObjects(multipleInfo: MulipleInfoItem[], transaction: 
                 theme: 'success',
                 name: 'delete objects',
                 autoHiding: 10000,
-                title: 'Objects have been permanently deleted.',
+                title: i18n('title_objects-permanently-deleted'),
             });
         });
 }
@@ -415,10 +419,10 @@ function moveObjectsIntoTrash(multipleInfo: MulipleInfoItem[], transaction: stri
                 theme: 'success',
                 name: 'delete objects',
                 autoHiding: 10000,
-                title: 'Objects moved',
+                title: i18n('title_objects-moved-to-trash'),
                 content: (
                     <div>
-                        Objects have been moved to the trash, they might be found at
+                        {i18n('alert_objects-moved-to-trash')}
                         <br />
                         <Link url={'navigation?path=//tmp/trash/by-account/'}>
                             {'//tmp/trash/by-account/...'}
@@ -443,7 +447,7 @@ export function deleteObjects() {
                 theme: 'danger',
                 name: 'delete object',
                 autoHiding: 10000,
-                title: 'Could not delete the object within transaction.',
+                title: i18n('title_cannot-delete-in-transaction'),
             });
         }
 
@@ -474,11 +478,11 @@ export function deleteObjects() {
                     theme: 'danger',
                     name: 'delete objects',
                     autoHiding: 10000,
-                    title: 'Could not delete the nodes.',
+                    title: i18n('title_cannot-delete-nodes'),
                     content: error.message,
                     actions: [
                         {
-                            label: ' view',
+                            label: i18n('action_view'),
                             onClick: () => showErrorPopup(error),
                         },
                     ],

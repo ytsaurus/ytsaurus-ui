@@ -1,6 +1,5 @@
 import React from 'react';
 
-import capitalize_ from 'lodash/capitalize';
 import map_ from 'lodash/map';
 
 import cn from 'bem-cn-lite';
@@ -19,6 +18,8 @@ import {
 import {type DynTablesStateModalState} from '../../../store/reducers/navigation/modals/dyn-tables-state-modal';
 import {Warning} from '@ytsaurus/components';
 import {type YTError} from '../../../types';
+
+import i18n from './i18n';
 
 import './DynTablesStateModal.scss';
 
@@ -73,7 +74,7 @@ export default function DynTablesStateModal() {
             onClose={onClose}
             pristineSubmittable={true}
             headerProps={{
-                title: capitalize_(action),
+                title: action ? i18n(`value_${action}`) : '',
             }}
             initialValues={{
                 paths: pathsValues,
@@ -82,7 +83,7 @@ export default function DynTablesStateModal() {
                 {
                     name: 'paths',
                     type: 'editable-list',
-                    caption: paths.length > 1 ? 'Paths' : 'Path',
+                    caption: paths.length > 1 ? i18n('field_paths') : i18n('field_path'),
                     extras: {
                         frozen: true,
                         className: block('path-list'),
@@ -115,13 +116,12 @@ export default function DynTablesStateModal() {
     );
 }
 
-const WARN_TEXT: {[action: string]: string} = {
-    unmount:
-        'Unmounted table will become inaccessible for reads and writes. Operation may take a while (usually up to 30 seconds). Do you want to proceed?',
-    freeze: 'Frozen table will become read-only. Operation may take a while (usually up to 30 seconds). Do you want to proceed?',
+const WARN_KEYS: {[action: string]: Parameters<typeof i18n>[0]} = {
+    unmount: 'context_unmount-warning',
+    freeze: 'context_freeze-warning',
 };
 
 function renderWarning(action: DynTablesStateModalState['action']) {
-    const text = WARN_TEXT[action || ''];
-    return !text ? null : <Warning>{text}</Warning>;
+    const key = WARN_KEYS[action || ''];
+    return !key ? null : <Warning>{i18n(key)}</Warning>;
 }

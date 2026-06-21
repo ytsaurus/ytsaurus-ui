@@ -1,0 +1,9 @@
+{
+  "title_move": "Move",
+  "title_enter-path-objects": "Enter a new path for objects.",
+  "title_enter-path-object": "Enter a new path for the object.",
+  "confirm_objects-moved": "Objects will be moved with the specified path.",
+  "confirm_object-moved": "The object will be moved with the specified path.",
+  "action_enter-path": "Enter a new object path...",
+  "action_preserve-account": "Preserve account"
+}

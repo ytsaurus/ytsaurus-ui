@@ -1,0 +1,11 @@
+{
+  "alert_count-limit-exceeded": "A maximum of 10000 errors can be displayed for the selected time period. To view more, please adjust the time range",
+  "field_tablet-id": "Tablet id",
+  "field_method": "Method",
+  "field_host": "Host",
+  "field_date": "Date",
+  "field_error-message": "Error message",
+  "field_tablet-id-filter": "Tablet ID filter...",
+  "field_methods": "Methods:",
+  "action_select": "Select..."
+}

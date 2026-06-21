@@ -1,0 +1,9 @@
+{
+  "field_read-rate": "Read rate",
+  "alert_select-queue": "Please select a queue",
+  "alert_no-selected-queues": "You don't have any selected queues",
+  "value_rows": "Rows",
+  "value_data-weight": "Data weight",
+  "action_columns": "Columns",
+  "field_partition-index": "Partition index..."
+}

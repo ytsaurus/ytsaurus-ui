@@ -5,6 +5,8 @@ import slice_ from 'lodash/slice';
 
 import {splitBatchResults} from '../../../../../shared/utils/error';
 
+import i18n from './i18n';
+
 import CancelHelper from '../../../../utils/cancel-helper';
 import {prepareRequest} from '../../../../utils/navigation';
 import {selectPath, selectTransaction} from '../../../../store/selectors/navigation';
@@ -45,7 +47,7 @@ function getTransactions(rowLocks) {
             .then((data) => {
                 const {error, results: transactions} = splitBatchResults(
                     data,
-                    'Failed to get transactions',
+                    i18n('alert_failed-to-get-transactions'),
                 );
                 if (error) {
                     return Promise.reject(error);

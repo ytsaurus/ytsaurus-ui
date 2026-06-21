@@ -4,6 +4,7 @@ import {type DialogControlProps} from '../../../../containers/Dialog/Dialog.type
 import Suggest from '../../../../components/Suggest/Suggest';
 import format from '../../../../common/hammer/format';
 import {parseBytes} from '../../../../utils/parse/parse-bytes';
+import i18n from './i18n';
 
 import './TableChunkSize.scss';
 
@@ -16,7 +17,7 @@ function asPrettyNumber(value: string): string {
 
     const asNumber = parseBytes(value);
     if (isNaN(asNumber)) {
-        return 'Cannot parse as bytes';
+        return i18n('alert_cannot-parse-as-bytes');
     }
 
     return format['Bytes'](asNumber);
@@ -39,7 +40,7 @@ export function TableChunkSize(props: Props) {
                 apply={(item) => onChange('string' === typeof item ? item : item.value)}
                 filter={getItems}
                 items={getItems()}
-                placeholder={placeholder || 'Chunk size...'}
+                placeholder={placeholder || i18n('context_chunk-size-placeholder')}
                 popupPlacement={['top']}
             />
             <div className={block('pretty')}>

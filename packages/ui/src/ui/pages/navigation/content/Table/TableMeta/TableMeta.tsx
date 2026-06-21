@@ -27,6 +27,7 @@ import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
 
 import './TableMeta.scss';
 import {useTableAccessMetaItem} from '../table-hooks/useTableAccessMetaItem';
+import i18n from './i18n';
 
 const block = cn('navigation-meta-table');
 
@@ -84,7 +85,7 @@ function TableMeta({
     ]);
 
     return (
-        <CollapsibleSection name="Metadata" size={UI_COLLAPSIBLE_SIZE}>
+        <CollapsibleSection name={i18n('title_metadata')} size={UI_COLLAPSIBLE_SIZE}>
             <MetaTable className={block()} items={items} />
             {remountNeeded && <RemountAlert />}
         </CollapsibleSection>

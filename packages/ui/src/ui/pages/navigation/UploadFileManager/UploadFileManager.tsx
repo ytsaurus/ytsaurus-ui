@@ -5,12 +5,13 @@ import {Button} from '@gravity-ui/uikit';
 
 import Link from '../../../containers/Link/Link';
 import Modal from '../../../components/Modal/Modal';
-import withVisible, {type WithVisibleProps} from '../../../hocs/withVisible';
 import FileDropZone from '../../../components/FileDropZone/FileDropZone';
 import FileUploadProgress from '../../../components/FileUploadProgress/FileUploadProgress';
 
 import UploadFileManagerFileSettingsForm from './UploadFileManagerFileSettingsForm';
 import {useUploadFileManager} from '../../../containers/UploadFileManager';
+
+import i18n from './i18n';
 
 import {toaster} from '../../../utils/toaster';
 
@@ -18,18 +19,21 @@ import './UploadFileManager.scss';
 
 const block = cn('yt-upload-file-manager');
 
-interface UploadFileManagerProps extends WithVisibleProps {
+interface UploadFileManagerProps {
     title: string;
+
+    visible: boolean;
+    onClose: () => void;
 }
 
 export const UploadFileManager: React.FC<UploadFileManagerProps> = (props) => {
     const uploadSettings = useUploadFileManager({
         onSuccess: ({filePath}) => {
-            props.handleClose();
+            props.onClose();
 
             toaster.add({
                 name: 'upload_file_manager',
-                title: 'Upload complete',
+                title: i18n('alert_upload-complete'),
                 content: <Link url={`${location.pathname}?path=${filePath}`}>{filePath}</Link>,
                 theme: 'success',
                 autoHiding: 10000,
@@ -39,7 +43,7 @@ export const UploadFileManager: React.FC<UploadFileManagerProps> = (props) => {
     const isUploadButtonDisabled = uploadSettings.isProgress || !uploadSettings.file;
 
     const handleClose = () => {
-        props.handleClose();
+        props.onClose();
         uploadSettings.cancelUpload();
         uploadSettings.onReset();
     };
@@ -85,20 +89,20 @@ export const UploadFileManager: React.FC<UploadFileManagerProps> = (props) => {
                 extraProps={{
                     form: uploadSettings.formId,
                 }}
-                title="Upload"
+                title={i18n('action_upload')}
                 type="submit"
             >
-                Upload
+                {i18n('action_upload')}
             </Button>
         );
     };
 
     const renderFooterContent = () => {
         return uploadSettings.isProgress ? (
-            <Button onClick={uploadSettings.cancelUpload}>Cancel upload</Button>
+            <Button onClick={uploadSettings.cancelUpload}>{i18n('action_cancel-upload')}</Button>
         ) : (
             <Button type="reset" onClick={uploadSettings.onReset}>
-                Reset
+                {i18n('action_reset')}
             </Button>
         );
     };
@@ -107,11 +111,11 @@ export const UploadFileManager: React.FC<UploadFileManagerProps> = (props) => {
         return (
             <Button
                 size="m"
-                title="Close"
+                title={i18n('action_close')}
                 disabled={uploadSettings.isProgress}
                 onClick={handleClose}
             >
-                Close
+                {i18n('action_close')}
             </Button>
         );
     };
@@ -124,7 +128,7 @@ export const UploadFileManager: React.FC<UploadFileManagerProps> = (props) => {
                 title={props.title}
                 visible={props.visible}
                 onCancel={handleClose}
-                confirmText="Upload"
+                confirmText={i18n('action_upload')}
                 content={renderContent()}
                 footerContent={uploadSettings.file ? renderFooterContent() : null}
                 renderCustomConfirm={renderConfirm}
@@ -134,7 +138,3 @@ export const UploadFileManager: React.FC<UploadFileManagerProps> = (props) => {
         </React.Fragment>
     );
 };
-
-export const UploadFileManagerWithClose = withVisible(UploadFileManager);
-
-export default UploadFileManager;

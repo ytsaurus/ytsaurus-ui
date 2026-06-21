@@ -8,6 +8,8 @@ import {useSelector} from '../../../../store/redux-hooks';
 import {main} from '../../../../components/MetaTable/presets';
 import {MetaTable} from '@ytsaurus/components';
 
+import i18n from './i18n';
+
 import {selectAttributes, selectLoadState} from '../../../../store/selectors/navigation';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
@@ -25,8 +27,8 @@ function Link({attributes}) {
                 items={[
                     main(attributes),
                     [
-                        {key: 'target_path', value: targetPath},
-                        {key: 'broken', value: broken},
+                        {key: 'target-path', label: i18n('field_target-path'), value: targetPath},
+                        {key: 'broken', label: i18n('field_broken'), value: broken},
                     ],
                 ]}
             />

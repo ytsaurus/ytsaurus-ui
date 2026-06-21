@@ -4,7 +4,6 @@ import hammer from '../../common/hammer';
 import cn from 'bem-cn-lite';
 import React from 'react';
 
-import keys_ from 'lodash/keys';
 import map_ from 'lodash/map';
 
 import {
@@ -80,8 +79,8 @@ function Histogram(props) {
                 <Select
                     value={[activeHistogram]}
                     onUpdate={(values) => handleHistogramChange(values[0])}
-                    options={map_(keys_(histogramItems), (value) => {
-                        return {value, content: value};
+                    options={map_(histogramItems, ({title}, key) => {
+                        return {value: key, content: title ?? key};
                     })}
                     width="max"
                 />

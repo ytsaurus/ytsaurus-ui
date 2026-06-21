@@ -1,0 +1,11 @@
+{
+  "alert_directory-created": "Directory was successfully created",
+  "alert_name-must-be-unique": "The name must be unique",
+  "alert_path-already-exists": "Object with the same path already exists. Please, try another one",
+  "alert_incorrect-path": "This path is not correct",
+  "alert_network-error": "Network error. Please, try again later",
+  "alert_access-denied": "Access denied",
+  "alert_mount-error": "Cannot move / copy dynamic table since not all tablets are unmounted",
+  "alert_node-count-limit": "Account is over Cypress node count limit",
+  "alert_unknown-error": "Oops! something went wrong"
+}

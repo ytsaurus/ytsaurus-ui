@@ -7,6 +7,7 @@ import {useSelector} from '../../../../../../store/redux-hooks';
 import ErrorBoundary from '../../../../../../containers/ErrorBoundary/ErrorBoundary';
 import {NoContent} from '../../../../../../components/NoContent';
 import UIFactory from '../../../../../../UIFactory';
+import i18n from './i18n';
 
 export default function ConsumerMetrics() {
     const path = useSelector(selectPath);
@@ -16,14 +17,14 @@ export default function ConsumerMetrics() {
     const MetricsComponent = UIFactory.getComponentForConsumerMetrics()!;
 
     if (!MetricsComponent) {
-        return <NoContent warning={'Metrics are not supported for the installation'} />;
+        return <NoContent warning={i18n('alert_metrics-not-supported')} />;
     }
 
     if (!queue) {
         return (
             <NoContent
-                hint={'Please select a queue'}
-                warning={"You don't have any selected queues"}
+                hint={i18n('context_select-queue')}
+                warning={i18n('alert_no-selected-queues')}
             />
         );
     }

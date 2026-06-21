@@ -26,6 +26,7 @@ import Dropdown from '../../../../../../components/Dropdown/Dropdown';
 
 import './PartitionsExtraControls.scss';
 import {type PartitionColumn} from '../../../../../../store/reducers/navigation/tabs/consumer/filters';
+import i18n from './i18n';
 
 const block = cn('consumer-partitions');
 
@@ -34,11 +35,15 @@ interface Props extends PropsFromRedux {}
 const rateItems: React.ComponentProps<typeof RadioButton>['items'] = [
     {
         value: CONSUMER_RATE_MODE.ROWS,
-        text: 'Rows',
+        get text() {
+            return i18n('value_rows');
+        },
     },
     {
         value: CONSUMER_RATE_MODE.DATA_WEIGHT,
-        text: 'Data weight',
+        get text() {
+            return i18n('value_data-weight');
+        },
     },
 ];
 
@@ -70,7 +75,7 @@ export function CompactColumnSelector<Names>({items, onChange}: CompactColumnSel
             button={
                 <Button pin={'round-round'}>
                     <Icon awesome="table" face="light" />
-                    Columns
+                    {i18n('action_columns')}
                 </Button>
             }
             template={
@@ -101,7 +106,7 @@ const PartitionsExtraControls: React.VFC<Props> = ({
                 className={block('filter')}
                 value={consumerPartitionIndex}
                 onChange={changeConsumerPartitionIndex}
-                placeholder="Partition index..."
+                placeholder={i18n('field_partition-index')}
             />
             <div className={block('divider')} />
             <RadioButton

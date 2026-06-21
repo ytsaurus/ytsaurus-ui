@@ -1,8 +1,9 @@
-import capitalize_ from 'lodash/capitalize';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
 import {type ThunkAction} from 'redux-thunk';
+
+import i18n from './i18n';
 import {
     type DynTablesStateModalAction,
     type DynTablesStateModalState,
@@ -75,22 +76,22 @@ export function dynTablesChangeState(
 
         return wrapApiPromiseByToaster(
             executeBatchWithRetries(YTApiId.navigationDynTableState, requests, {
-                errorTitle: 'Failed to change dynamic table(s) state',
+                errorTitle: i18n('alert_failed-to-change-dyn-table-state'),
             }),
             {
                 toasterName: 'dyn_tables_change_state_to_' + action,
                 successContent: '',
                 batchType: 'v3',
                 skipSuccessToast: true,
-                errorTitle: `Cannot perform ${action} action`,
+                errorTitle: i18n(`alert_cannot-perform-${action}`),
             },
         )
             .then(() => {
                 return wrapApiPromiseByToaster(waitWhileThereIsTransient(paths, action), {
                     toasterName: 'dyn_tables_wait_while_transient_' + action,
-                    successContent: `${capitalize_(action)} completed`,
+                    successContent: i18n(`alert_${action}-completed`),
                     batchType: 'v3',
-                    errorTitle: `Cannot perform ${action} action`,
+                    errorTitle: i18n(`alert_cannot-perform-${action}`),
                 });
             })
             .then(() => {
@@ -113,17 +114,17 @@ function waitWhileThereIsTransient(
     const res = delayed(
         () =>
             executeBatchWithRetries<string>(YTApiId.navigationGetTabletState, requests, {
-                errorTitle: 'Failed to get tablet state',
+                errorTitle: i18n('alert_failed-to-get-tablet-state'),
             }),
         3000,
     );
 
     return wrapApiPromiseByToaster(res, {
         toasterName: 'dyn_tables_wait_while_transient_' + action,
-        successContent: `${capitalize_(action)} completed`,
+        successContent: i18n(`alert_${action}-completed`),
         skipSuccessToast: true,
         batchType: 'v3',
-        errorTitle: `Cannot perform ${action} action`,
+        errorTitle: i18n(`alert_cannot-perform-${action}`),
     }).then((results) => {
         const toRecheck = reduce_(
             results,

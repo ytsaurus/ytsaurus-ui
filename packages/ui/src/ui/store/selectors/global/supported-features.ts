@@ -9,6 +9,7 @@ import {type RootState} from '../../../store/reducers';
 import {selectCluster} from './index';
 import {type SelectWithSubItemsProps} from '../../../containers/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
 import {type OperationStatisticInfo} from '../../../store/reducers/global/supported-features';
+import i18n from './i18n';
 
 const selectSupportedFeaturesRaw = (state: RootState) => state.supportedFeatures.features;
 const selectSupportedFeaturesCluster = (state: RootState) =>
@@ -23,7 +24,17 @@ const RECOMMENDED_COMPRESSION_CODECS: Record<string, string> = {
     lzma_: '6',
 };
 
-const RECOMMENDED = ' (recommended)';
+const COMPRESSION_LABELS = {
+    get recommended() {
+        return i18n('value_recommended');
+    },
+    get faster() {
+        return i18n('value_faster');
+    },
+    get slowerAndSmaller() {
+        return i18n('value_slower-and-smaller');
+    },
+};
 
 const selectSupportedFeatures = createSelector(
     [selectCluster, selectSupportedFeaturesCluster, selectSupportedFeaturesRaw],
@@ -80,7 +91,7 @@ function prepareItemsSubitems(arr: Array<string> = []): CompressionCodecs {
     const res: CompressionCodecs = {
         items: [],
         subItemsMap: {},
-        labels: ['Codec:', 'level:'],
+        labels: [i18n('label_codec') + ':', i18n('label_level') + ':'],
     };
 
     const {items, subItemsMap} = res;
@@ -126,15 +137,15 @@ function prepareItemsSubitems(arr: Array<string> = []): CompressionCodecs {
             if (subItems2) {
                 const first = subItems2[0];
                 const last = subItems2[subItems2.length - 1];
-                first.content = first.value + ' (faster)';
-                last.content = last.value + ' (slower & smaller)';
+                first.content = first.value + ' ' + COMPRESSION_LABELS.faster;
+                last.content = last.value + ' ' + COMPRESSION_LABELS.slowerAndSmaller;
 
                 const item = subItems2.find(({value}) => value === recommended);
                 if (item) {
-                    item.content = item.value + RECOMMENDED;
+                    item.content = item.value + ' ' + COMPRESSION_LABELS.recommended;
                 }
             } else {
-                items[index].content += RECOMMENDED;
+                items[index].content += ' ' + COMPRESSION_LABELS.recommended;
             }
         }
     });

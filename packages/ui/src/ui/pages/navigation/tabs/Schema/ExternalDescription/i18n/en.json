@@ -1,0 +1,6 @@
+{
+  "alert_type-mismatch": "There might be a type mismatch",
+  "alert_no-description": "no description",
+  "field_type": "type",
+  "field_external-type": "external type"
+}

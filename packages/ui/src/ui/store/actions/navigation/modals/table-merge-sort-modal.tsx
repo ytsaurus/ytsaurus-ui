@@ -1,6 +1,8 @@
 import React from 'react';
 import {type Action} from 'redux';
 
+import i18n from './i18n';
+
 import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
 import sortBy_ from 'lodash/sortBy';
@@ -84,10 +86,7 @@ export function tableSortModalLoadColumns(
         return ytApiV3Id
             .executeBatch(YTApiId.navigationTableSortLoadColumns, {requests})
             .then((results: Array<any>) => {
-                const error = getBatchError(
-                    results,
-                    'Column names cannot be loaded, autocompletion might not work properly',
-                );
+                const error = getBatchError(results, i18n('alert_columns-load-error'));
                 if (error) {
                     dispatch(setModalPartial({error}));
                     return;
@@ -144,8 +143,8 @@ export function runTableSort(spec: SortParams): TableMergeSortThunkAction {
                     </AppStoreProvider>
                 );
             },
-            successTitle: 'Sort operation is started',
-            errorTitle: 'Sort operation is failed',
+            successTitle: i18n('alert_sort-started'),
+            errorTitle: i18n('alert_sort-failed'),
             autoHide: false,
         });
     };
@@ -170,7 +169,7 @@ export const loadStorageAttributes =
             }),
             {
                 toasterName: 'get_table_attributes',
-                errorTitle: 'Get table attributes request is failed',
+                errorTitle: i18n('alert_get-attributes-failed'),
                 autoHide: false,
                 skipSuccessToast: true,
                 ...USE_SKIP_ERROR_FN_NODE_DOES_NOT_EXIST,
@@ -211,8 +210,8 @@ export function runTableMerge(spec: MergeParams): TableMergeSortThunkAction {
                     </AppStoreProvider>
                 );
             },
-            successTitle: 'Merge operation is started',
-            errorTitle: 'Merge operation is failed',
+            successTitle: i18n('alert_merge-started'),
+            errorTitle: i18n('alert_merge-failed'),
             autoHide: false,
         });
     };
@@ -239,13 +238,13 @@ export function isPathStaticTable(path: string) {
             const type = ypath.getValue(d, '/@type');
             const isDynamic = ypath.getValue(d, '/@dynamic');
             return type !== CypressNodeTypes.TABLE || isDynamic
-                ? 'Please make sure the destination is an existing static table'
+                ? i18n('alert_destination-not-static-table')
                 : undefined;
         })
         .catch((e: any) => {
             if (axios.isCancel(e)) {
                 return undefined;
             }
-            return e?.message || 'Cannot get type of node';
+            return e?.message || i18n('alert_cannot-get-node-type');
         });
 }

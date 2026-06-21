@@ -1,0 +1,13 @@
+{
+  "action_copy-pivot-key": "Copy Pivot Key",
+  "context_filter-placeholder": "Filter by Tablet Id/Cell Id/State/Host...",
+  "value_default": "Default",
+  "value_data": "Data",
+  "value_data-by-nodes": "Data by nodes",
+  "value_data-by-cells": "Data by cells",
+  "value_structure": "Structure",
+  "value_performance": "Performance",
+  "title_histogram": "Histogram",
+  "title_tablets": "Tablets",
+  "context_total-count": "(total {{count}})"
+}

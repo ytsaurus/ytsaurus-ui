@@ -23,6 +23,8 @@ import {
 import {type ArrayElement} from '../../../../../types';
 import {Tooltip} from '@ytsaurus/components';
 
+import i18n from './i18n';
+
 import './CreateTableTabField.scss';
 
 const block = cn('create-table-tab-field');
@@ -143,16 +145,16 @@ class ColumnsWrapper extends React.Component<Props & CWProps, CWState> {
 
         const {icon, title} = (
             !current
-                ? {icon: 'sort-alt', title: 'Unordered'}
+                ? {icon: 'sort-alt', title: i18n('value_unordered')}
                 : current === DESCENDING
-                  ? {icon: 'sort-amount-up', title: 'Descending'}
-                  : {icon: 'sort-amount-down-alt', title: 'Ascending'}
+                  ? {icon: 'sort-amount-up', title: i18n('value_descending')}
+                  : {icon: 'sort-amount-down-alt', title: i18n('value_ascending')}
         ) as {icon: IconName; title: string};
 
         return (
             <React.Fragment>
                 {node}
-                <Tooltip content={'Clone'}>
+                <Tooltip content={i18n('action_clone')}>
                     <Button view={'flat'} onClick={this.onCloneColumn}>
                         <Icon awesome={'clone'} />
                     </Button>
@@ -162,19 +164,19 @@ class ColumnsWrapper extends React.Component<Props & CWProps, CWState> {
                         {
                             iconStart: <Icon awesome={'sort-alt'} />,
                             active: !current,
-                            text: 'Unordered',
+                            text: i18n('value_unordered'),
                             action: () => this.toggleKeyColumn(item, undefined),
                         },
                         {
                             iconStart: <Icon awesome={'sort-amount-up'} />,
                             active: current === DESCENDING,
-                            text: 'Descending',
+                            text: i18n('value_descending'),
                             action: () => this.toggleKeyColumn(item, DESCENDING),
                         },
                         {
                             iconStart: <Icon awesome={'sort-amount-down-alt'} />,
                             active: current === ASCENDING,
-                            text: 'Ascending',
+                            text: i18n('value_ascending'),
                             action: () => this.toggleKeyColumn(item, ASCENDING),
                         },
                     ]}
@@ -239,10 +241,10 @@ export default class CreateTableTabField extends React.Component<Props> {
     renderAddColumnRow() {
         return (
             <div className={block('add-column')}>
-                <span className={block('add-column-label')}>Columns</span>
+                <span className={block('add-column-label')}>{i18n('title_columns')}</span>
                 <Button onClick={() => this.onAddColumn()}>
                     <Icon awesome={'plus'} />
-                    Add
+                    {i18n('action_add')}
                 </Button>
             </div>
         );

@@ -8,6 +8,7 @@ import {MetaTable} from '@ytsaurus/components';
 
 import {type RootState} from '../../../../../../store/reducers';
 import {selectDownloadTableInfo} from '../../../../../../store/selectors/navigation/content/download-manager';
+import i18n from './i18n';
 
 const block = b('download-short-info');
 
@@ -37,12 +38,14 @@ export function DownloadShortInfo({id, filename}: Props) {
             className={block()}
             items={[
                 {
-                    key: 'Filename',
+                    key: 'filename',
+                    label: i18n('field_filename'),
                     value: filename,
                     visible: Boolean(filename),
                 },
                 {
-                    key: 'Duration',
+                    key: 'duration',
+                    label: i18n('field_duration'),
                     value: format.TimeDuration(diff),
                     visible: Boolean(format.TimeDuration(diff)),
                 },

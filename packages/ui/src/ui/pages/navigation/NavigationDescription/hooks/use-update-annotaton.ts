@@ -7,6 +7,8 @@ import {selectPath} from '../../../../store/selectors/navigation';
 
 import {prepareRequest} from '../../../../utils/navigation';
 
+import i18n from './i18n';
+
 export function useUpdateAnnotation() {
     const [update, rest] = useUpdateBatchMutation<string>();
     const path = useSelector(selectPath);
@@ -25,11 +27,11 @@ export function useUpdateAnnotation() {
                     },
                 ],
             },
-            errorTitle: 'Failed to update annotation',
+            errorTitle: i18n('alert_failed-to-update-annotation'),
             toaster: {
                 toasterName: 'update_annotation',
-                successTitle: 'Annotation saved',
-                errorTitle: 'Failed to save annotation',
+                successTitle: i18n('alert_annotation-saved'),
+                errorTitle: i18n('alert_failed-to-save-annotation'),
             },
         });
 

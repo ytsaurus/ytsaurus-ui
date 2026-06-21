@@ -1,0 +1,18 @@
+{
+  "title_remote-copy": "Remote copy",
+  "field_source-cluster": "Source cluster",
+  "field_input-path": "Input path",
+  "field_input-paths": "Input paths",
+  "field_destination-cluster": "Destination cluster",
+  "field_output-path": "Output path",
+  "field_override-output": "Override output",
+  "field_copy-user-attributes": "Copy user attributes",
+  "field_schema-inference": "Schema inference",
+  "value_auto": "Auto",
+  "value_from-input": "From input",
+  "value_from-output": "From output",
+  "field_pool": "Pool",
+  "context_pool-must-have-limits": "pool must have specified",
+  "action_limits": "limits",
+  "field_pool-placeholder": "(cluster: {{dstCluster}}) pool name"
+}

@@ -1,0 +1,8 @@
+{
+  "field_error": "Error",
+  "field_read-rate": "Read rate",
+  "field_next-row-idx": "Next row idx",
+  "field_unread-rows": "Unread rows",
+  "field_processing-lag": "Processing lag",
+  "field_next-row-commit-time": "Next row commit time"
+}

@@ -5,6 +5,7 @@ import {Switch} from '@gravity-ui/uikit';
 import StatusBulb from '../../../../../components/StatusBulb/StatusBulb';
 import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../../containers/Dialog';
 import {type YTError} from '../../../../../types';
+import i18n from './i18n';
 
 export interface Props {
     value?: boolean;
@@ -35,7 +36,7 @@ function AutomaticModeSwitchEditor({value, onEdit, onClose}: Props & {onClose: (
         <YTDFDialog<FormValues>
             pristineSubmittable={true}
             headerProps={{
-                title: 'Edit',
+                title: i18n('title_edit'),
             }}
             onAdd={handleAdd}
             onClose={onClose}
@@ -47,11 +48,11 @@ function AutomaticModeSwitchEditor({value, onEdit, onClose}: Props & {onClose: (
                 {
                     name: 'value',
                     type: 'radio',
-                    caption: 'Automatic mode switch',
+                    caption: i18n('field_automatic-mode-switch'),
                     extras: {
                         options: [
-                            {value: 'enabled', label: 'Enabled'},
-                            {value: 'disabled', label: 'Disabled'},
+                            {value: 'enabled', label: i18n('value_enabled')},
+                            {value: 'disabled', label: i18n('value_disabled')},
                         ],
                     },
                 },
@@ -78,7 +79,7 @@ function AutomaticModeSwitch({value, onEdit}: Props) {
                 <Switch
                     checked={value}
                     onUpdate={handleShow}
-                    title={value ? 'Enabled' : 'Disabled'}
+                    title={value ? i18n('value_enabled') : i18n('value_disabled')}
                 />
                 {showEditor && (
                     <AutomaticModeSwitchEditor

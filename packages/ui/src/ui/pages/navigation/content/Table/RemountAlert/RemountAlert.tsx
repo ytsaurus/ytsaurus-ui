@@ -7,6 +7,8 @@ import ypath from '../../../../../common/thor/ypath';
 import {remountTable} from '../../../../../store/actions/navigation/content/table/remount-table';
 import {selectAttributesWithTypes} from '../../../../../store/selectors/navigation';
 
+import i18n from './i18n';
+
 import './RemountAlert.scss';
 
 const block = b('remount-alert');
@@ -28,16 +30,16 @@ export function RemountAlert() {
     ]);
 
     const showDiffInfo = remountNeededTabletCount !== tabletCount;
-    const diffInfo = ` (${remountNeededTabletCount} of ${tabletCount} tablets pending)`;
 
-    const message = `Table should be remounted to apply new settings${showDiffInfo ? diffInfo : ''}. 
-                 This action will not cause any downtime. See Mount config tab for details.`;
+    const message = showDiffInfo
+        ? i18n('alert_remount-needed-with-diff', {remountNeededTabletCount, tabletCount})
+        : i18n('alert_remount-needed');
 
     return (
         <Alert
             theme="warning"
             layout="horizontal"
-            title="Some table settings are not applied to tablets"
+            title={i18n('title_settings-not-applied')}
             message={message}
             className={block()}
             actions={
@@ -48,7 +50,7 @@ export function RemountAlert() {
                     view="normal-contrast"
                     size="s"
                 >
-                    Remount
+                    {i18n('action_remount')}
                 </Button>
             }
         ></Alert>

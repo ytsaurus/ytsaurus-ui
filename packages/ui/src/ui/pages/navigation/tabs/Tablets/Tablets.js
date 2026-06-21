@@ -63,6 +63,7 @@ import {useSerieColor} from '../../../../hooks/use-serie-color';
 
 import './Tablets.scss';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';
+import i18n from './i18n';
 
 const block = cn('navigation-tablets');
 
@@ -175,7 +176,7 @@ class Tablets extends Component {
 
     static renderIndex(item, columnName) {
         if (Tablets.isTopLevel(item) && item.childrenCount) {
-            return `(total ${item.childrenCount})`;
+            return i18n('context_total-count', {count: item.childrenCount});
         }
         if (Tablets)
             if (item.index === 'aggregation') {
@@ -264,7 +265,7 @@ class Tablets extends Component {
                     text={text}
                     view="flat-secondary"
                     size="s"
-                    title="Copy Pivot Key"
+                    title={i18n('action_copy-pivot-key')}
                 />
             </div>
         ) : (
@@ -529,7 +530,7 @@ class Tablets extends Component {
                     size="m"
                     value={tabletsFilter}
                     onChange={changeTabletsFilter}
-                    placeholder="Filter by Tablet Id/Cell Id/State/Host..."
+                    placeholder={i18n('context_filter-placeholder')}
                     className={block('tablets-filter')}
                 />
 
@@ -541,27 +542,39 @@ class Tablets extends Component {
                     items={[
                         {
                             value: 'default',
-                            text: 'Default',
+                            get text() {
+                                return i18n('value_default');
+                            },
                         },
                         {
                             value: 'data',
-                            text: 'Data',
+                            get text() {
+                                return i18n('value_data');
+                            },
                         },
                         {
                             value: 'by_host',
-                            text: 'Data by nodes',
+                            get text() {
+                                return i18n('value_data-by-nodes');
+                            },
                         },
                         {
                             value: 'by_cell',
-                            text: 'Data by cells',
+                            get text() {
+                                return i18n('value_data-by-cells');
+                            },
                         },
                         {
                             value: 'structure',
-                            text: 'Structure',
+                            get text() {
+                                return i18n('value_structure');
+                            },
                         },
                         {
                             value: 'performance',
-                            text: 'Performance',
+                            get text() {
+                                return i18n('value_performance');
+                            },
                         },
                     ]}
                 />
@@ -583,7 +596,7 @@ class Tablets extends Component {
         return (
             <Fragment>
                 <CollapsibleSection
-                    name="Histogram"
+                    name={i18n('title_histogram')}
                     collapsed={histogramCollapsed}
                     onToggle={toggleHistogram}
                     size={collapsibleSize}
@@ -596,7 +609,7 @@ class Tablets extends Component {
                     />
                 </CollapsibleSection>
 
-                <CollapsibleSection name="Tablets" size={collapsibleSize}>
+                <CollapsibleSection name={i18n('title_tablets')} size={collapsibleSize}>
                     <WithStickyToolbar
                         toolbar={this.renderOverview()}
                         content={

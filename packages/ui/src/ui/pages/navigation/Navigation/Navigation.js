@@ -59,6 +59,8 @@ import {CellPreviewModal} from '../../../containers/CellPreviewModal/CellPreview
 import {OpenQueryButtonsContent} from '../../../containers/OpenQueryButtons/OpenQueryButtons';
 import {UpdateAccessLogAvailability} from '../../../pages/navigation/tabs/AccessLog/UpdateAccessLogAvailability/UpdateAccessLogAvailability';
 
+import i18n from './i18n';
+
 import './Navigation.scss';
 
 const block = cn('navigation');
@@ -199,11 +201,11 @@ class Navigation extends Component {
                 <Button
                     size="m"
                     className={block('edit-metadata-btn')}
-                    title={'Edit metadata'}
+                    title={i18n('action_edit-metadata')}
                     onClick={this.onEditButtonClick}
                 >
                     <Icon awesome={'pencil'} size={13} />
-                    Edit metadata
+                    {i18n('action_edit-metadata')}
                 </Button>
             </div>
         );
@@ -225,12 +227,11 @@ class Navigation extends Component {
             <div className="navigation__warning elements-message elements-message_theme_warning">
                 {mode === Tab.CONTENT ? (
                     <p className="elements-message__paragraph">
-                        Viewing node of type <strong>{type}</strong> is not supported in navigator.
+                        {i18n('alert_node-type-not-supported', {type})}
                     </p>
                 ) : (
                     <p className="elements-message__paragraph">
-                        Viewing node attribute <strong>{mode}</strong> is not supported in
-                        navigator.
+                        {i18n('alert_node-attribute-not-supported', {mode})}
                     </p>
                 )}
             </div>

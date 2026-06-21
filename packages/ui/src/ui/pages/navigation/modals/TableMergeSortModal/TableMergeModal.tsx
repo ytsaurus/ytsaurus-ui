@@ -24,6 +24,7 @@ import {parseBytes} from '../../../../utils/parse/parse-bytes';
 import {docsUrl} from '../../../../config';
 import UIFactory from '../../../../UIFactory';
 import {WaitForDefaultPoolTree} from '../../../../hooks/global-pool-trees';
+import i18n from './i18n';
 
 export default function TableMergeModal() {
     const login = useSelector(selectCurrentUserName);
@@ -103,7 +104,7 @@ export default function TableMergeModal() {
                 <YTDFDialog<FormValues>
                     visible={visible}
                     headerProps={{
-                        title: 'Merge',
+                        title: i18n('title_merge'),
                     }}
                     pristineSubmittable={true}
                     onAdd={handleAdd}
@@ -121,47 +122,42 @@ export default function TableMergeModal() {
                         {
                             name: 'mode',
                             type: 'radio',
-                            caption: 'Mode',
+                            caption: i18n('field_mode'),
                             tooltip: docsUrl(makeLink(UIFactory.docsUrls['operations:merge'])),
                             extras: {
                                 options: [
-                                    {value: 'unordered', label: 'Unordered'},
-                                    {value: 'sorted', label: 'Sorted'},
-                                    {value: 'ordered', label: 'Ordered'},
+                                    {value: 'unordered', label: i18n('value_unordered')},
+                                    {value: 'sorted', label: i18n('value_sorted')},
+                                    {value: 'ordered', label: i18n('value_ordered')},
                                 ],
                             },
                         },
                         {
                             name: 'paths',
                             type: 'editable-path-list',
-                            caption: 'Input paths',
+                            caption: i18n('field_input-paths'),
                             required: true,
                             onChange: handlePathsChange,
                             extras: {
-                                placeholder: 'Enter a path to add',
+                                placeholder: i18n('context_enter-path-to-add'),
                             },
                         },
                         {
                             name: 'outputPath',
                             type: 'output-path',
-                            caption: 'Output path',
+                            caption: i18n('field_output-path'),
                             required: true,
                             validator: isPathStaticTable,
                             touched: true,
                             extras: {
-                                placeholder: 'Enter path for output',
+                                placeholder: i18n('context_enter-path-for-output'),
                             },
-                            tooltip: (
-                                <span>
-                                    If the path is not an exist then started operation will be
-                                    failed
-                                </span>
-                            ),
+                            tooltip: <span>{i18n('context_output-path-not-exists')}</span>,
                         },
                         {
                             name: 'columns',
                             type: 'table-sort-by',
-                            caption: 'Merge by columns',
+                            caption: i18n('field_merge-by-columns'),
                             extras: {
                                 suggestColumns,
                             },
@@ -169,17 +165,17 @@ export default function TableMergeModal() {
                         {
                             name: 'chunkSize',
                             type: 'table-chunk-size',
-                            caption: 'Chunk size',
+                            caption: i18n('field_chunk-size'),
                         },
                         {
                             name: 'combine_chunks',
                             type: 'tumbler',
-                            caption: 'Combine chunks',
+                            caption: i18n('field_combine-chunks'),
                         },
                         {
                             name: 'poolTree',
                             type: 'pool-tree',
-                            caption: 'Pool tree',
+                            caption: i18n('field_pool-tree'),
                             extras: {
                                 multiple: true,
                             },
@@ -187,7 +183,7 @@ export default function TableMergeModal() {
                         {
                             name: 'pool',
                             type: 'pool',
-                            caption: 'Pool',
+                            caption: i18n('field_pool'),
                             tooltip: docsUrl(
                                 makeLink(
                                     UIFactory.docsUrls[
@@ -206,7 +202,7 @@ export default function TableMergeModal() {
                         {
                             name: 'force_transform',
                             type: 'tumbler',
-                            caption: 'Force transform',
+                            caption: i18n('field_force-transform'),
                         },
                         ...(!error
                             ? []

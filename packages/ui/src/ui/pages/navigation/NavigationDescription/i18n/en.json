@@ -1,0 +1,10 @@
+{
+  "action_show-more": "Show more",
+  "action_hide-more": "Hide more",
+  "alert_no-description-found": "No {{serviceName}} description found",
+  "action_create-with": "Create with {{serviceName}}",
+  "value_external": "External",
+  "title_description": "Description",
+  "action_save": "Save",
+  "action_cancel": "Cancel"
+}

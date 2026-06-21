@@ -1,0 +1,22 @@
+{
+  "alert_success-mount": "Success mounting table",
+  "alert_success-unmount": "Success unmounting table",
+  "alert_success-freeze": "Success freezeing table",
+  "alert_success-unfreeze": "Success unfreezeing table",
+  "alert_could-not-mount": "Could not mount table.",
+  "alert_could-not-unmount": "Could not unmount table.",
+  "alert_could-not-freeze": "Could not freeze table.",
+  "alert_could-not-unfreeze": "Could not unfreeze table.",
+  "alert_something-went-wrong": "Oops, something went wrong",
+  "action_view": "view",
+  "alert_failed-to-get-preset": "Failed to get preset of columns",
+  "alert_failed-to-save-preset": "Failed to save preset of columns",
+  "action_details": "Details",
+  "alert_unexpected-download-error": "An unexpected error occurred while downloading the file",
+  "title_downloading": "Downloading",
+  "title_success": "Success",
+  "title_failure": "Failure",
+  "alert_failed-to-download": "Failed to download file",
+  "action_show-details": "Details",
+  "alert_failed-to-remount": "Failed to remount table"
+}

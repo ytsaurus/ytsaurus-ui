@@ -15,6 +15,7 @@ import {copyFileToClipboard} from '../../../../../utils/copy-file-to-clipboard';
 import {showErrorPopup} from '../../../../../utils/utils';
 import {type YTError} from '../../../../../types';
 import {toaster} from '../../../../../utils/toaster';
+import i18n from './i18n';
 
 const requestDownloadFile = async (url: string) =>
     axios({
@@ -27,7 +28,9 @@ const requestDownloadFile = async (url: string) =>
 const HIDING_TIMING = 5000;
 
 const fallbackError = {
-    message: 'An unexpected error occurred while downloading the file',
+    get message() {
+        return i18n('alert_unexpected-download-error');
+    },
 };
 
 export const downloadFile = (
@@ -78,7 +81,7 @@ const updateToaster = (
 ) => {
     if (status === 'loading') {
         toaster.add({
-            title: 'Downloading',
+            title: i18n('title_downloading'),
             name: `downloadingFile_${id}`,
             theme: 'info',
             content: <DownloadShortInfo id={id} filename={options?.filename || ''} />,
@@ -88,7 +91,7 @@ const updateToaster = (
 
     if (status === 'success') {
         toaster.update(`downloadingFile_${id}`, {
-            title: 'Success',
+            title: i18n('title_success'),
             theme: 'success',
             autoHiding: HIDING_TIMING,
         });
@@ -96,13 +99,13 @@ const updateToaster = (
 
     if (status === 'failure') {
         toaster.update(`downloadingFile_${id}`, {
-            title: 'Failure',
+            title: i18n('title_failure'),
             theme: 'danger',
-            content: <Text>{options?.error?.message || 'Failed to download file'}</Text>,
+            content: <Text>{options?.error?.message || i18n('alert_failed-to-download')}</Text>,
             autoHiding: false,
             actions: [
                 {
-                    label: 'Details',
+                    label: i18n('action_show-details'),
                     onClick: () =>
                         showErrorPopup(options?.error || fallbackError, {
                             hideOopsMsg: true,

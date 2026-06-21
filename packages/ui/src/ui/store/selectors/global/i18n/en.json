@@ -1,0 +1,7 @@
+{
+  "label_codec": "Codec",
+  "label_level": "level",
+  "value_recommended": "(recommended)",
+  "value_faster": "(faster)",
+  "value_slower-and-smaller": "(slower & smaller)"
+}

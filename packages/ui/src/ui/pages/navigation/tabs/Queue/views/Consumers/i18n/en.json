@@ -1,0 +1,21 @@
+{
+  "field_cluster": "Cluster",
+  "field_consumer": "Consumer",
+  "field_error": "Error",
+  "field_path": "Path",
+  "field_read-rate": "Read rate",
+  "field_vital": "Vital",
+  "alert_parent-path-not-directory": "Parent path should be a directory",
+  "alert_consumer-name-empty": "Consumer name should not be empty",
+  "alert_path-already-exists": "Path should not exist",
+  "alert_unexpected-error": "Unexpected type of error: {{type}}",
+  "title_unregister-consumer": "Unregister consumer",
+  "confirm_unregister-consumer": "Are you sure you want to unregister consumer?",
+  "context_consumer-name-placeholder": "Consumer name...",
+  "context_consumer-path-placeholder": "Path to consumer node...",
+  "value_rows": "Rows",
+  "value_data-weight": "Data weight",
+  "action_create-consumer": "Create consumer",
+  "action_docs": "Docs",
+  "action_register-consumer": "Register consumer"
+}

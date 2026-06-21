@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {type DFDialogProps, YTDFDialog, makeFormSubmitError} from '../../../containers/Dialog';
+import i18n from './i18n';
 
 export type UploadFileManagerFileFormValues = {
     name?: string;
@@ -44,12 +45,12 @@ export const UploadFileManagerFileSettingsForm: React.FC<FileSettingsFormProps> 
             fields={[
                 {
                     name: 'path',
-                    caption: 'Parent folder',
+                    caption: i18n('field_parent-folder'),
                     type: 'plain',
                 },
                 {
                     name: 'name',
-                    caption: 'Name',
+                    caption: i18n('field_name'),
                     type: 'text',
                     required: true,
                     extras: {
@@ -58,7 +59,7 @@ export const UploadFileManagerFileSettingsForm: React.FC<FileSettingsFormProps> 
                 },
                 {
                     name: 'size',
-                    caption: 'Size',
+                    caption: i18n('field_size'),
                     type: 'plain',
                 },
             ]}

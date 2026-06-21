@@ -8,6 +8,7 @@ import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
 import {type ActionD} from '../../../../../types';
 import {type TPerformanceCounters} from './types';
 import {type PartitionColumn} from '../consumer/filters';
+import i18n from './i18n';
 
 export interface QueueFiltersState {
     queueMode: QUEUE_MODE;
@@ -25,15 +26,60 @@ export type QueuePartitionsColumns = (typeof QUEUE_PARTITIONS_COLUMNS)[number]['
 
 const QUEUE_PARTITIONS_COLUMNS = [
     {id: 'partition_index', caption: '#'},
-    {id: 'error', caption: 'Error'},
-    {id: 'host', caption: 'Tablet cell host'},
-    {id: 'cell_id', caption: 'Tablet cell ID'},
-    {id: 'write_rate', caption: 'Write rate'},
-    {id: 'lower_row_index', caption: 'Lower row idx'},
-    {id: 'upper_row_index', caption: 'Upper row idx'},
-    {id: 'available_row_count', caption: 'Available rows'},
-    {id: 'commit_idle_time', caption: 'Commit idle time, ms'},
-    {id: 'last_row_commit_time', caption: 'Last row commit time'},
+    {
+        id: 'error',
+        get caption() {
+            return i18n('field_error');
+        },
+    },
+    {
+        id: 'host',
+        get caption() {
+            return i18n('field_host');
+        },
+    },
+    {
+        id: 'cell_id',
+        get caption() {
+            return i18n('field_cell-id');
+        },
+    },
+    {
+        id: 'write_rate',
+        get caption() {
+            return i18n('field_write-rate');
+        },
+    },
+    {
+        id: 'lower_row_index',
+        get caption() {
+            return i18n('field_lower-row-idx');
+        },
+    },
+    {
+        id: 'upper_row_index',
+        get caption() {
+            return i18n('field_upper-row-idx');
+        },
+    },
+    {
+        id: 'available_row_count',
+        get caption() {
+            return i18n('field_available-rows');
+        },
+    },
+    {
+        id: 'commit_idle_time',
+        get caption() {
+            return i18n('field_commit-idle-time');
+        },
+    },
+    {
+        id: 'last_row_commit_time',
+        get caption() {
+            return i18n('field_last-row-commit-time');
+        },
+    },
 ] as const;
 
 export const initialState: QueueFiltersState = {

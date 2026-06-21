@@ -41,6 +41,7 @@ import {downloadFile} from '../../../../../store/actions/navigation/content/tabl
 
 import './DownloadManager.scss';
 import {docsUrl, getExportTableBaseUrl} from '../../../../../config';
+import i18n from './i18n';
 import SeparatorInput, {prepareSeparatorValue} from './SeparatorInput';
 import UIFactory from '../../../../../UIFactory';
 import {makeDirectDownloadPath} from '../../../../../utils/navigation';
@@ -246,7 +247,7 @@ export class DownloadManager extends React.Component<Props, State> {
             error:
                 errors.length === 0
                     ? undefined
-                    : {inner_errors: errors, message: 'There are some values with errors'},
+                    : {inner_errors: errors, message: i18n('alert_output-format-errors')},
         };
     }
 
@@ -327,29 +328,27 @@ export class DownloadManager extends React.Component<Props, State> {
             dsv: {
                 name: 'dsv' as const,
                 caption: 'TSKV',
-                description:
-                    'Tab-separated key-value format. ' +
-                    'Please note that this format erases type information due to string conversion.',
+                get description() {
+                    return i18n('context_dsv-description');
+                },
                 doc: this.makeDocsUrl('#dsv'),
                 show: true,
             },
             schemaful_dsv: {
                 name: 'schemaful_dsv' as const,
                 caption: 'Schemaful DSV',
-                description: [
-                    'Tab-separated format with fixed, ordered set of columns.',
-                    'Please note that this format erases type information due to string conversion.',
-                ].join(' '),
+                get description() {
+                    return i18n('context_schemaful-dsv-description');
+                },
                 doc: this.makeDocsUrl('#schemaful_dsv'),
                 show: true,
             },
             csv: {
                 name: 'csv' as const,
                 caption: 'CSV',
-                description: [
-                    'Comma-separated format with fixed, ordered set of columns.',
-                    'Please note that this format erases type information due to string conversion.',
-                ].join(' '),
+                get description() {
+                    return i18n('context_csv-description');
+                },
                 doc: this.makeDocsUrl('#schemaful_dsv'),
                 show: true,
             },
@@ -363,8 +362,9 @@ export class DownloadManager extends React.Component<Props, State> {
             json: {
                 name: 'json' as const,
                 caption: 'JSON Lines',
-                description:
-                    'JSON Lines text format, also called newline-delimited JSON (JavaScript Serialized Object Notation).',
+                get description() {
+                    return i18n('context_json-description');
+                },
                 doc: this.makeDocsUrl('#json'),
                 show: true,
             },
@@ -510,7 +510,7 @@ export class DownloadManager extends React.Component<Props, State> {
 
         return (
             <div className={block('filename-form')}>
-                <div className={block('filename-form__label')}>Filename</div>
+                <div className={block('filename-form__label')}>{i18n('field_filename')}</div>
                 <TextInput size="m" value={filename} onUpdate={this.changeFilename} />
             </div>
         );
@@ -521,7 +521,7 @@ export class DownloadManager extends React.Component<Props, State> {
 
         return (
             <React.Fragment>
-                <div className="elements-form__label">Rows</div>
+                <div className="elements-form__label">{i18n('field_rows')}</div>
                 <SegmentedRadioGroup
                     size="m"
                     className="elements-form__field"
@@ -529,20 +529,32 @@ export class DownloadManager extends React.Component<Props, State> {
                     name="download-manager-row-mode"
                     onUpdate={(value) => this.changeRowsMode(value)}
                     options={[
-                        {value: 'all', content: 'All'},
-                        {value: 'range', content: 'Range'},
+                        {
+                            value: 'all',
+                            get content() {
+                                return i18n('value_all');
+                            },
+                        },
+                        {
+                            value: 'range',
+                            get content() {
+                                return i18n('value_range');
+                            },
+                        },
                     ]}
                 />
 
                 {rowsMode === 'range' && (
                     <div className={block('rows')}>
                         <div className="elements-form__field">
-                            <div className="elements-form__label">Start row</div>
+                            <div className="elements-form__label">{i18n('field_start-row')}</div>
                             {this.renderPaginator()}
                         </div>
 
                         <div className="elements-form__field">
-                            <div className="elements-form__label">Number of rows</div>
+                            <div className="elements-form__label">
+                                {i18n('field_number-of-rows')}
+                            </div>
                             <Filter
                                 qa="download-manager_number-of-rows"
                                 autofocus={false}
@@ -566,7 +578,7 @@ export class DownloadManager extends React.Component<Props, State> {
 
         return (
             <React.Fragment>
-                <div className="elements-form__label">Columns</div>
+                <div className="elements-form__label">{i18n('field_columns')}</div>
                 <SegmentedRadioGroup
                     size="m"
                     className="elements-form__field"
@@ -574,8 +586,18 @@ export class DownloadManager extends React.Component<Props, State> {
                     name="download-manager-columns-mode"
                     onUpdate={(value) => this.changeColumnsMode(value)}
                     options={[
-                        {value: 'all', content: 'All'},
-                        {value: 'custom', content: 'Custom'},
+                        {
+                            value: 'all',
+                            get content() {
+                                return i18n('value_all');
+                            },
+                        },
+                        {
+                            value: 'custom',
+                            get content() {
+                                return i18n('value_custom');
+                            },
+                        },
                     ]}
                 />
 
@@ -601,34 +623,51 @@ export class DownloadManager extends React.Component<Props, State> {
         return (
             <div className={block('schemaful-dsv')}>
                 <div className="elements-form__field">
-                    <div className="elements-form__label">Missing value mode</div>
+                    <div className="elements-form__label">{i18n('field_missing-value-mode')}</div>
                     <SegmentedRadioGroup
                         size="m"
                         value={schemafulDsvMissingMode}
                         name="download-manager-schemaful-dsv-mode"
                         onUpdate={(value) => this.changeSchemafulDsvMissingMode(value)}
                         options={[
-                            {value: 'fail', content: 'Fail'},
-                            {value: 'skip_row', content: 'Skip row'},
-                            {value: 'print_sentinel', content: 'Print sentinel'},
+                            {
+                                value: 'fail',
+                                get content() {
+                                    return i18n('value_fail');
+                                },
+                            },
+                            {
+                                value: 'skip_row',
+                                get content() {
+                                    return i18n('value_skip-row');
+                                },
+                            },
+                            {
+                                value: 'print_sentinel',
+                                get content() {
+                                    return i18n('value_print-sentinel');
+                                },
+                            },
                         ]}
                     />
                 </div>
 
                 {schemafulDsvMissingMode === 'print_sentinel' && (
                     <div className="elements-form__field">
-                        <div className="elements-form__label">Missing value sentinel</div>
+                        <div className="elements-form__label">
+                            {i18n('field_missing-value-sentinel')}
+                        </div>
                         <TextInput
                             size="m"
                             value={valueSentinel}
                             onUpdate={this.changeValueSentinel}
-                            placeholder="Please note that sentinels that coerce to number or boolean are not supported"
+                            placeholder={i18n('context_sentinel-placeholder')}
                         />
                     </div>
                 )}
 
                 <Checkbox size="l" checked={withHeaders} onChange={this.toggleWithHeaders}>
-                    Prepend with column names header
+                    {i18n('context_prepend-column-names-header')}
                 </Checkbox>
                 {this.renderSeparatorEditors({fixedSeparators})}
             </div>
@@ -645,7 +684,9 @@ export class DownloadManager extends React.Component<Props, State> {
             <div className={block('dsv-separators')}>
                 {showKeyValueSeparator && (
                     <div className={block('dsv-separators-item')}>
-                        <div className={'elements-form__label'}>Key-value separator</div>
+                        <div className={'elements-form__label'}>
+                            {i18n('field_key-value-separator')}
+                        </div>
                         <SeparatorInput
                             value={keyValue}
                             onChange={this.setKeyValueSeparator}
@@ -654,7 +695,7 @@ export class DownloadManager extends React.Component<Props, State> {
                     </div>
                 )}
                 <div className={block('dsv-separators-item')}>
-                    <div className={'elements-form__label'}>Field separator</div>
+                    <div className={'elements-form__label'}>{i18n('field_field-separator')}</div>
                     <SeparatorInput
                         value={field}
                         onChange={this.setFieldSeparator}
@@ -662,7 +703,7 @@ export class DownloadManager extends React.Component<Props, State> {
                     />
                 </div>
                 <div className={block('dsv-separators-item')}>
-                    <div className={'elements-form__label'}>Record separator</div>
+                    <div className={'elements-form__label'}>{i18n('field_record-separator')}</div>
                     <SeparatorInput
                         value={record}
                         onChange={this.setRecordSeparator}
@@ -699,16 +740,31 @@ export class DownloadManager extends React.Component<Props, State> {
 
         return (
             <div className={block('yson')}>
-                <div className="elements-form__label">Format</div>
+                <div className="elements-form__label">{i18n('field_format')}</div>
                 <SegmentedRadioGroup
                     size="m"
                     value={ysonFormat}
                     name="download-manager-yson-format"
                     onUpdate={(value) => this.changeYsonFormat(value)}
                     options={[
-                        {value: 'text', content: 'Text'},
-                        {value: 'pretty', content: 'Pretty'},
-                        {value: 'binary', content: 'Binary'},
+                        {
+                            value: 'text',
+                            get content() {
+                                return i18n('value_text');
+                            },
+                        },
+                        {
+                            value: 'pretty',
+                            get content() {
+                                return i18n('value_pretty');
+                            },
+                        },
+                        {
+                            value: 'binary',
+                            get content() {
+                                return i18n('value_binary');
+                            },
+                        },
                     ]}
                 />
             </div>
@@ -721,7 +777,7 @@ export class DownloadManager extends React.Component<Props, State> {
         return (
             <div className={block('json')}>
                 <Checkbox size="l" checked={encodeUtf} onChange={this.toggleEncodeUtf}>
-                    Encode as UTF8
+                    {i18n('context_encode-utf8')}
                 </Checkbox>
             </div>
         );
@@ -731,15 +787,30 @@ export class DownloadManager extends React.Component<Props, State> {
         const {number_precision_mode: excelNumberPrecisionMode} = this.state;
         return (
             <React.Fragment>
-                <div className="elements-form__label">Number precision mode</div>
+                <div className="elements-form__label">{i18n('field_number-precision-mode')}</div>
                 <SegmentedRadioGroup
                     size="m"
                     value={excelNumberPrecisionMode}
                     onUpdate={(v) => this.setState({number_precision_mode: v})}
                     options={[
-                        {value: 'string' as const, content: 'String'},
-                        {value: 'error' as const, content: 'Error'},
-                        {value: 'lose' as const, content: 'Lose'},
+                        {
+                            value: 'string' as const,
+                            get content() {
+                                return i18n('value_string');
+                            },
+                        },
+                        {
+                            value: 'error' as const,
+                            get content() {
+                                return i18n('value_error');
+                            },
+                        },
+                        {
+                            value: 'lose' as const,
+                            get content() {
+                                return i18n('value_lose');
+                            },
+                        },
                     ]}
                 />
             </React.Fragment>
@@ -758,15 +829,17 @@ export class DownloadManager extends React.Component<Props, State> {
         return (
             <div className={block('content')}>
                 <div className={messageBlock({theme: 'warning'})}>
-                    Please note that download error if any is appended at the end of the file and is
-                    marked with special delimiters.{' '}
-                    {docsUrl(<>See our {faqLink} for more details.</>)}
+                    {i18n('alert_download-error-appended')}{' '}
+                    {docsUrl(
+                        <>
+                            {i18n('alert_see-faq-for-details')} {faqLink}{' '}
+                            {i18n('alert_see-faq-for-details-after')}
+                        </>,
+                    )}
                 </div>
                 <div className={messageBlock({theme: 'warning'})}>
-                    Please note that this is not a production-ready tool. For production usecases we
-                    highly recommend using yt read command from our {docsUrl(cliLink, 'CLI')}{' '}
-                    instead as it provides advanced features like error detection, download retries,
-                    and more.
+                    {i18n('alert_not-production-ready')} {docsUrl(cliLink, 'CLI')}{' '}
+                    {i18n('alert_not-production-ready-after')}
                 </div>
 
                 <div className={block('manager')}>
@@ -819,7 +892,7 @@ export class DownloadManager extends React.Component<Props, State> {
             <ConfirmButton
                 filename={filename}
                 href={url}
-                title="Download to clipboard"
+                title={i18n('action_download-to-clipboard')}
                 disabled={Boolean(error)}
                 qa="download-to-clipboard-static-table"
                 onClick={this.props.downloadToClipboard}
@@ -836,7 +909,7 @@ export class DownloadManager extends React.Component<Props, State> {
                 className={classNameConfirm}
                 filename={filename}
                 href={url}
-                title="Download"
+                title={i18n('action_download')}
                 disabled={Boolean(error)}
                 view="action"
                 qa="download-static-table"
@@ -860,22 +933,22 @@ export class DownloadManager extends React.Component<Props, State> {
             <div className={block(null, className)}>
                 <Button
                     size="m"
-                    title="download"
+                    title={i18n('action_download')}
                     disabled={loading}
                     onClick={this.showDialog}
                     qa={'show-download-static-table'}
                 >
                     <Icon awesome="download" />
-                    &nbsp; Download
+                    &nbsp; {i18n('action_download')}
                 </Button>
 
                 {visible && (
                     <Modal
                         size="l"
-                        title="Download"
+                        title={i18n('title_download')}
                         visible={visible}
                         onCancel={handleClose}
-                        confirmText="Download"
+                        confirmText={i18n('action_download')}
                         content={this.renderContent()}
                         footerContent={this.renderModalCopyButton.bind(this)()}
                         renderCustomConfirm={this.renderModalConfirmButton.bind(this)}

@@ -9,6 +9,7 @@ import {useSelector} from '../../../store/redux-hooks';
 import {selectCluster} from '../../../store/selectors/global';
 import {selectPath} from '../../../store/selectors/navigation';
 import UIFactory from '../../../UIFactory';
+import i18n from './i18n';
 
 type Props = {
     annotation?: string;
@@ -38,7 +39,7 @@ export const AnnotationWithPartial: FC<Props> = ({annotation, expanded, onToggle
             <Markdown text={expanded ? value : text} />
             {isFullText ? null : (
                 <ClickableText color={'secondary'} onClick={onToggle}>
-                    {expanded ? 'Hide more' : 'Show more'}
+                    {expanded ? i18n('action_hide-more') : i18n('action_show-more')}
                 </ClickableText>
             )}
         </>
@@ -55,15 +56,19 @@ function ExternalAnnotationFallback() {
             <NotFound height={85} width={85} />
             <Flex direction={'column'} gap={3}>
                 <Text variant={'subheader-2'}>
-                    No {UIFactory?.externalAnnotationSetup?.externalServiceName || 'external'}{' '}
-                    description found
+                    {i18n('alert_no-description-found', {
+                        serviceName:
+                            UIFactory?.externalAnnotationSetup?.externalServiceName || 'external',
+                    })}
                 </Text>
                 {createUrl ? (
                     <Button view={'action'} size={'l'} href={createUrl} target="_blank">
                         <Text>
-                            Create with{' '}
-                            {UIFactory?.externalAnnotationSetup?.externalServiceName ||
-                                'external service'}
+                            {i18n('action_create-with', {
+                                serviceName:
+                                    UIFactory?.externalAnnotationSetup?.externalServiceName ||
+                                    'external service',
+                            })}
                         </Text>
                         <Icon awesome={'external-link'} size={16} />
                     </Button>

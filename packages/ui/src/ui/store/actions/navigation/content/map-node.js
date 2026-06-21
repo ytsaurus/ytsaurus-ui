@@ -42,6 +42,7 @@ import {GENERIC_ERROR_MESSAGE} from '../../../../constants';
 import {waitForFontFamilies} from '../../../../store/actions/global/fonts';
 import UIFactory from '../../../../UIFactory';
 import {toaster} from '../../../../utils/toaster';
+import i18n from './i18n';
 
 function getList(path, transaction, cluster) {
     const id = new RumWrapper(cluster, RumMeasureTypes.NAVIGATION_CONTENT_MAP_NODE);
@@ -120,7 +121,8 @@ export function fetchNodes() {
                     dispatch({
                         type: FETCH_NODES.FAILURE,
                         data: {
-                            message: 'Could not load list. ' + GENERIC_ERROR_MESSAGE,
+                            message:
+                                i18n('alert_could-not-load-list') + ' ' + GENERIC_ERROR_MESSAGE,
                             details: error,
                         },
                     });
@@ -208,7 +210,10 @@ export function updateResourceUsage() {
                     dispatch({
                         type: UPDATE_RESOURCE_USAGE.FAILURE,
                         data: {
-                            message: 'Failed to load resources. ' + GENERIC_ERROR_MESSAGE,
+                            message:
+                                i18n('alert_failed-to-load-resources') +
+                                ' ' +
+                                GENERIC_ERROR_MESSAGE,
                             details: error,
                         },
                     });
@@ -216,11 +221,11 @@ export function updateResourceUsage() {
                         theme: 'danger',
                         name: 'map_node_update_resources',
                         timeout: 500000,
-                        title: 'Resource loading error',
+                        title: i18n('alert_resource-loading-error'),
                         content: error ? error.message : hammer.format.NO_VALUE,
                         actions: [
                             {
-                                label: ' view',
+                                label: i18n('action_view'),
                                 onClick: () => showErrorPopup(error),
                             },
                         ],

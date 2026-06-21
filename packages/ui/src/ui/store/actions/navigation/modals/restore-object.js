@@ -18,6 +18,7 @@ import React from 'react';
 
 import map_ from 'lodash/map';
 
+import i18n from './i18n';
 import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
 import {toaster} from '../../../../utils/toaster';
@@ -42,9 +43,9 @@ export function restoreObjects(items) {
 
                 return wrapBatchPromise(
                     executeBatchWithRetries(YTApiId.navigationRestorePath, requests, {
-                        errorTitle: 'Failed to get restore path',
+                        errorTitle: i18n('alert_failed-to-get-restore-path'),
                     }),
-                    'Failed to get restore path',
+                    i18n('alert_failed-to-get-restore-path'),
                 )
                     .then(() => yt.v3.commitTransaction({transaction_id: id}))
                     .catch((err) =>
@@ -61,8 +62,8 @@ export function restoreObjects(items) {
                     theme: 'success',
                     name: 'restore objects',
                     timeout: 10000,
-                    title: 'Objects restored',
-                    content: 'Objects have been successfully restored',
+                    title: i18n('title_objects-restored'),
+                    content: i18n('alert_objects-restored'),
                 });
             })
             .catch((err) => {
@@ -72,9 +73,9 @@ export function restoreObjects(items) {
                     name: 'restore objects',
                     theme: 'danger',
                     autoHiding: false,
-                    title: 'Could not restore objects.',
-                    content: err?.message || 'Oops, something went wrong',
-                    actions: [{label: ' view', onClick: () => showErrorPopup(err)}],
+                    title: i18n('title_objects-restore-failed'),
+                    content: err?.message || i18n('alert_something-went-wrong'),
+                    actions: [{label: i18n('action_view'), onClick: () => showErrorPopup(err)}],
                 });
             });
     };
@@ -100,11 +101,13 @@ export function restoreObject(objectPath, restorePath, onSuccess) {
                     theme: 'success',
                     name: 'restore object',
                     timeout: 10000,
-                    title: 'Object restored',
+                    title: i18n('title_object-restored'),
                     content: (
                         <div>
-                            Object has been successfully{' '}
-                            <Link url={`navigation?path=${restorePath}`}>restored</Link>
+                            {i18n('alert_object-restored')}{' '}
+                            <Link url={`navigation?path=${restorePath}`}>
+                                {i18n('action_restored')}
+                            </Link>
                         </div>
                     ),
                 });

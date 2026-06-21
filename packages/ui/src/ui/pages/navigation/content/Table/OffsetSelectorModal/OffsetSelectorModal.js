@@ -23,6 +23,8 @@ import {
     moveOffset,
 } from '../../../../../store/actions/navigation/content/table/pagination';
 
+import i18n from './i18n';
+
 import './OffsetSelectorModal.scss';
 
 const block = cn('offset-selector');
@@ -103,7 +105,7 @@ class OffsetSelectorModal extends Component {
             <TextInput
                 theme="normal"
                 size="s"
-                placeholder="Search..."
+                placeholder={i18n('placeholder_search')}
                 onUpdate={this._changeFilter}
                 text={this.state.filter}
                 hasClear={true}
@@ -157,10 +159,10 @@ class OffsetSelectorModal extends Component {
         return (
             <Modal
                 size="m"
-                title="Keys"
+                title={i18n('title_keys')}
                 borderless={true}
                 visible={isOffsetSelectorOpen}
-                confirmText="Confirm"
+                confirmText={i18n('action_confirm')}
                 onConfirm={this._handleCONFIRMButtonClick}
                 onCancel={this._handleCANCELButtonClick}
                 content={this.renderContent()}

@@ -3,6 +3,8 @@ import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 
 import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
+import i18n from './i18n';
+
 import {getConfigData} from '../../../../config/ui-settings';
 import {updateTabletErrorsViewMode} from '../../../../store/actions/navigation/tabs/tablet-errors/tablet-errors-background';
 import {tabletErrorsByPathActions} from '../../../../store/reducers/navigation/tabs/tablet-errors/tablet-errors-by-path';
@@ -39,10 +41,10 @@ export default function TabletErrors() {
                     value={viewMode}
                     onUpdate={(v) => dispatch(updateTabletErrorsViewMode(v))}
                     options={[
-                        {value: 'request_errors', content: 'Request errors'},
+                        {value: 'request_errors', content: i18n('value_request-errors')},
                         {
                             value: 'background_errors',
-                            content: `Background errors ${backgroundErrorCount}`,
+                            content: i18n('value_background-errors', {count: backgroundErrorCount}),
                         },
                     ]}
                 />

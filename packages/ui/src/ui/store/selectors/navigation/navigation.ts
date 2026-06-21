@@ -4,6 +4,8 @@ import map_ from 'lodash/map';
 
 import {createSelector} from 'reselect';
 
+import i18n from './i18n';
+
 import unipika from '../../../common/thor/unipika';
 import ypath from '../../../common/thor/ypath';
 import {getConfigData} from '../../../config/ui-settings';
@@ -195,7 +197,8 @@ export const selectTabs = createSelector(
         }[] = [
             {
                 value: Tab.CONSUMER,
-                title: 'Go to consumer [Alt+R]',
+                title: i18n('title_go-to-consumer'),
+                text: i18n('title_consumer'),
                 hotkey: [
                     {
                         keys: 'alt+r',
@@ -206,8 +209,8 @@ export const selectTabs = createSelector(
             },
             {
                 value: Tab.CONTENT,
-                title: 'Go to content [Alt+C]',
-                text: isACO ? 'Principal ACL' : undefined,
+                title: i18n('title_go-to-content'),
+                text: isACO ? i18n('title_principal-acl') : i18n('title_content'),
                 hotkey: [
                     {
                         keys: 'alt+c',
@@ -218,7 +221,8 @@ export const selectTabs = createSelector(
             },
             {
                 value: Tab.QUEUE,
-                title: 'Go to queue [Alt+Q]',
+                title: i18n('title_go-to-queue'),
+                text: i18n('title_queue'),
                 hotkey: [
                     {
                         keys: 'alt+q',
@@ -229,7 +233,8 @@ export const selectTabs = createSelector(
             },
             {
                 value: Tab.ATTRIBUTES,
-                title: 'Go to attributes [Alt+A]',
+                title: i18n('title_go-to-attributes'),
+                text: i18n('title_attributes'),
                 hotkey: [
                     {
                         keys: 'alt+a',
@@ -237,11 +242,11 @@ export const selectTabs = createSelector(
                         scope: 'all',
                     },
                 ],
-                caption: 'Attributes',
             },
             {
                 value: Tab.USER_ATTRIBUTES,
-                title: 'Go to user attributes [Alt+U]',
+                title: i18n('title_go-to-user-attributes'),
+                text: i18n('title_user-attributes'),
                 hotkey: [
                     {
                         keys: 'alt+u',
@@ -249,11 +254,11 @@ export const selectTabs = createSelector(
                         scope: 'all',
                     },
                 ],
-                caption: 'User Attributes',
             },
             {
                 value: Tab.MOUNT_CONFIG,
-                title: 'Go to mount config',
+                title: i18n('title_go-to-mount-config'),
+                text: i18n('title_mount-config'),
                 hotkey: [
                     {
                         keys: 'alt+m',
@@ -264,7 +269,8 @@ export const selectTabs = createSelector(
             },
             {
                 value: Tab.ACL,
-                title: 'Go to ACL [Alt+P]',
+                title: i18n('title_go-to-acl'),
+                text: 'ACL',
                 hotkey: [
                     {
                         keys: 'alt+p',
@@ -272,16 +278,16 @@ export const selectTabs = createSelector(
                         scope: 'all',
                     },
                 ],
-                caption: 'ACL',
             },
             {
                 value: Tab.ACCESS_LOG,
-                title: 'Access log',
+                title: i18n('title_access-log'),
+                text: i18n('title_access-log'),
             },
             {
                 value: Tab.FLOW,
-                title: 'Go to content [Alt+F]',
-                text: 'Flow',
+                title: i18n('title_go-to-flow'),
+                text: i18n('title_flow'),
                 hotkey: [
                     {
                         keys: 'alt+f',
@@ -292,7 +298,8 @@ export const selectTabs = createSelector(
             },
             {
                 value: Tab.LOCKS,
-                title: 'Go to locks [Alt+L]',
+                title: i18n('title_go-to-locks'),
+                text: i18n('title_locks'),
                 hotkey: [
                     {
                         keys: 'alt+l',
@@ -304,7 +311,8 @@ export const selectTabs = createSelector(
             },
             {
                 value: Tab.ANNOTATION,
-                title: 'Go to annotation [Alt+N]',
+                title: i18n('title_go-to-annotation'),
+                text: i18n('title_annotation'),
                 hotkey: [
                     {
                         keys: 'alt+n',
@@ -312,11 +320,11 @@ export const selectTabs = createSelector(
                         scope: 'all',
                     },
                 ],
-                caption: 'Annotation',
             },
             {
                 value: Tab.SCHEMA,
-                title: 'Go to schema [Alt+S]',
+                title: i18n('title_go-to-schema'),
+                text: i18n('title_schema'),
                 hotkey: [
                     {
                         keys: 'alt+s',
@@ -327,7 +335,8 @@ export const selectTabs = createSelector(
             },
             {
                 value: Tab.TABLETS,
-                title: 'Go to tablets [Alt+T]',
+                title: i18n('title_go-to-tablets'),
+                text: i18n('title_tablets'),
                 hotkey: [
                     {
                         keys: 'alt+t',
@@ -338,12 +347,14 @@ export const selectTabs = createSelector(
             },
             {
                 value: Tab.TABLET_ERRORS,
-                title: 'Go to tablets errors',
+                title: i18n('title_go-to-tablet-errors'),
+                text: i18n('title_tablet-errors'),
                 counter: tabletErrorsCount > 0 ? tabletErrorsCount : undefined,
             },
             {
                 value: Tab.ORIGINATING_QUEUE,
-                title: 'Originating queue',
+                title: i18n('title_originating-queue'),
+                text: i18n('title_originating-queue'),
                 url: `${window.location.origin}/${cluster}/navigation?path=${originatingQueuePath}`,
                 external: true,
                 routed: false,

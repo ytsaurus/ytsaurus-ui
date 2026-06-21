@@ -1,0 +1,10 @@
+{
+  "field_parent-folder": "Parent folder",
+  "field_name": "Name",
+  "field_size": "Size",
+  "alert_upload-complete": "Upload complete",
+  "action_upload": "Upload",
+  "action_cancel-upload": "Cancel upload",
+  "action_reset": "Reset",
+  "action_close": "Close"
+}

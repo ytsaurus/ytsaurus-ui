@@ -1,5 +1,6 @@
 import {createPrefix} from '../../utils';
 import {Page} from '../../index';
+import i18n from './i18n';
 
 const PREFIX = createPrefix(Page.NAVIGATION);
 
@@ -17,12 +18,25 @@ export const NetworkCode = {
 };
 
 export const ErrorMessage = {
-    [NetworkCode.EXIST]: 'Object with the same path already exists. Please, try another one',
-    [NetworkCode.INCORRECT_PATH]: 'This path is not correct',
-    [NetworkCode.NETWORK_ERROR]: 'Network error. Please, try again later',
-    [NetworkCode.ACCESS_DENIED]: 'Access denied',
-    [NetworkCode.MOUNT_ERROR]:
-        'Cannot move / copy dynamic table since not all tablets are unmounted',
-    [NetworkCode.NODE_COUNT_LIMIT]: 'Account is over Cypress node count limit',
-    DEFAULT: 'Oops! something went wrong',
+    get [NetworkCode.EXIST]() {
+        return i18n('alert_path-already-exists');
+    },
+    get [NetworkCode.INCORRECT_PATH]() {
+        return i18n('alert_incorrect-path');
+    },
+    get [NetworkCode.NETWORK_ERROR]() {
+        return i18n('alert_network-error');
+    },
+    get [NetworkCode.ACCESS_DENIED]() {
+        return i18n('alert_access-denied');
+    },
+    get [NetworkCode.MOUNT_ERROR]() {
+        return i18n('alert_mount-error');
+    },
+    get [NetworkCode.NODE_COUNT_LIMIT]() {
+        return i18n('alert_node-count-limit');
+    },
+    get DEFAULT() {
+        return i18n('alert_unknown-error');
+    },
 };

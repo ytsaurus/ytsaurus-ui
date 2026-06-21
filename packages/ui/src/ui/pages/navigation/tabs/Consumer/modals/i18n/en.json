@@ -1,0 +1,6 @@
+{
+  "title_register-consumer-to-queue": "Register consumer to queue",
+  "field_cluster": "Cluster",
+  "field_path": "Path",
+  "field_path-to-queue": "Path to queue..."
+}

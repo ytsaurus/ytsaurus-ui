@@ -10,6 +10,8 @@ import {ColumnSelector} from '../../../../components/common/ColumnSelector';
 import {type DialogControlProps} from '../../../../containers/Dialog/Dialog.types';
 import Icon from '../../../../components/Icon/Icon';
 
+import i18n from './i18n';
+
 import './TableSortByControl.scss';
 
 const block = cn('table-sort-by-control');
@@ -60,7 +62,7 @@ export function TableSortByControl(props: TableSortByControlProps) {
                         {allowDescending && (
                             <span
                                 className={block('item-icon')}
-                                title={desc ? 'Descending' : 'Ascending'}
+                                title={desc ? i18n('value_descending') : i18n('value_ascending')}
                                 onClick={() => {
                                     const newMap = {...descendingMap};
                                     if (descendingMap[name]) {

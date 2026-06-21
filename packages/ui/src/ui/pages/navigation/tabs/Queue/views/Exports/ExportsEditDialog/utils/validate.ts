@@ -6,10 +6,11 @@ import {type BatchApiResults} from '../../../../../../../../store/api/yt/execute
 import {type QueueExport} from '../../../../../../../../types/navigation/queue/queue';
 
 import {type ExportsFormValues} from '../ExportsEditDialog';
+import i18n from '../i18n';
 
 export function validateExportPeriod(period?: {value?: number; error?: string}) {
     return !period?.value || period?.value % 1000 !== 0
-        ? 'Export period should be a multiple of 1000ms'
+        ? i18n('alert_export-period-multiple')
         : undefined;
 }
 
@@ -29,17 +30,17 @@ export async function validateExportDirectory(path: string) {
         });
 
         if (res[0].error) {
-            return 'Target path should exist';
+            return i18n('alert_target-path-not-exist');
         }
 
         if (ypath.getValue(res[0].output, '/type') !== 'map_node') {
-            return 'Target path should be a directory';
+            return i18n('alert_target-path-not-directory');
         }
 
         return undefined;
     } catch (err) {
         const e = err as Error;
-        return e?.message || 'Unexpected type of error: ' + typeof e;
+        return e?.message || i18n('alert_unexpected-error-type', {type: typeof e});
     }
 }
 
@@ -67,13 +68,13 @@ export function validate(
         type === 'create'
     ) {
         return {
-            export_name: 'Export with the same name already exists',
+            export_name: i18n('alert_export-name-duplicate'),
         };
     }
 
     if (paths.has(values.export_directory) && type === 'create') {
         return {
-            export_directory: 'Export with the same export_directory already exists',
+            export_directory: i18n('alert_export-directory-duplicate'),
         };
     }
 
