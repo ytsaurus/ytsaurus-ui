@@ -18,6 +18,7 @@ export type NavigationTableSchema = {
     required: boolean;
     sort_order?: string;
     type: string;
+    type_v3?: unknown;
 };
 
 export type NavigationTableMeta = MetaTableItem;

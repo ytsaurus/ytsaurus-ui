@@ -2,16 +2,18 @@ import React, {FC, useMemo} from 'react';
 import cn from 'bem-cn-lite';
 import {Button, Icon} from '@gravity-ui/uikit';
 import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-from-square.svg';
-import {LogErrorFn, NavigationTableData} from '../../types';
-import type {UnipikaSettings} from '../../internal/Yson/StructuredYson/StructuredYsonTypes';
+import {LogErrorFn, NavigationTableData} from '../../../types';
+import type {UnipikaSettings} from '../../../internal/Yson/StructuredYson/StructuredYsonTypes';
 import i18n from './i18n';
-import {DataTableYT} from '../../components';
-import {prepareColumns} from './prepareColumns';
-import type {SchemaDataTypePrimitiveTypes, TypeArray} from '../../components/SchemaDataType';
-import './PreviewTab.scss';
-import type {ErrorBoundaryProps} from '../../internal/DefaultErrorBoundary';
+import {DataTableYT} from '../../../components';
+import {prepareColumns} from '../helpers/prepareColumns';
+import type {SchemaDataTypePrimitiveTypes} from '../../../components/SchemaDataType';
+import './NavigationPreviewTab.scss';
+import type {ErrorBoundaryProps} from '../../../internal/DefaultErrorBoundary';
 
 const b = cn('navigation-table-preview-tab');
+
+const previewTableSettings = {sortable: false as const};
 
 type PreviewTabProps = {
     table: NavigationTableData;
@@ -22,7 +24,7 @@ type PreviewTabProps = {
     ErrorBoundaryComponent?: React.ComponentType<ErrorBoundaryProps>;
 };
 
-export const PreviewTab: FC<PreviewTabProps> = ({
+export const NavigationPreviewTab: FC<PreviewTabProps> = ({
     table,
     onEditorInsert,
     ysonSettings,
@@ -33,31 +35,16 @@ export const PreviewTab: FC<PreviewTabProps> = ({
     const onShowPreview = () => {};
     const columns = useMemo(() => {
         return prepareColumns({
-            columns: table.columns.map((i) => ({name: i})),
-            keyColumns: [],
-            yqlTypes: table.yqlTypes as TypeArray[] | null,
+            table,
             ysonSettings,
-            useRawStrings: undefined,
-            schemaByName: table.schema.reduce<
-                Record<
-                    string,
-                    {
-                        name: string;
-                        required: boolean;
-                        sort_order?: string;
-                        type: string;
-                    }
-                >
-            >((acc, item) => {
-                acc[item.name] = item;
-                return acc;
-            }, {}),
             onShowPreview,
             primitiveTypes,
             logError,
             ErrorBoundaryComponent,
         });
     }, [table, ysonSettings, primitiveTypes]);
+
+    if (!table) return null;
 
     return (
         <div className={b()}>
@@ -67,7 +54,13 @@ export const PreviewTab: FC<PreviewTabProps> = ({
                     {i18n('action_insert-select')}
                 </Button>
             ) : null}
-            <DataTableYT className={b()} columns={columns} data={table.rows} useThemeYT />
+            <DataTableYT
+                className={b()}
+                columns={columns}
+                data={table.rows}
+                settings={previewTableSettings}
+                useThemeYT
+            />
         </div>
     );
 };

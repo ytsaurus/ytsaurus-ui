@@ -2,6 +2,7 @@ export {
     NavigationTable,
     type NavigationTableInitialTab,
     type NavigationTableProps,
-    SchemaTab,
-    PreviewTab,
+    NavigationSchemaTab,
+    NavigationPreviewTab,
+    NavigationMetaTab,
 } from './NavigationTable';

@@ -29,7 +29,7 @@ import '@gravity-ui/uikit/styles/styles.css';
 | Импорт | Назначение |
 |--------|------------|
 | **`@ytsaurus/components`** | Компоненты (`ColumnCell`, `MetaTable`, …), типы, хуки (`useNavigationTableData`), **HTTP-API** для навигации (см. ниже). |
-| **`@ytsaurus/components/modules`** | Оболочка **`NavigationTable`** и вкладки **`SchemaTab`**, **`PreviewTab`** (типы `NavigationTableProps` и т.д.). |
+| **`@ytsaurus/components/modules`** | Оболочка **`NavigationTable`** и вкладки **`NavigationSchemaTab`**, **`NavigationPreviewTab`**, **`NavigationMetaTab`** (типы `NavigationTableProps` и т.д.). |
 
 Корневой entry реэкспортирует модуль **`src/api`**: удобная точка для загрузки данных таблицы и обёртки над YT API.
 
@@ -66,7 +66,9 @@ import {
 import { NavigationTable } from '@ytsaurus/components/modules';
 ```
 
-Компонент **презентационный**: ему передают уже загруженные данные (`table`), опционально фильтр по колонкам схемы, колбэки и настройки YSON для превью. Пустое `table` — показывается `emptyMessage`.
+Компонент **презентационный**: ему передают уже загруженные данные (`table`), опциональный фильтр схемы (`filter`), колбэки и настройки YSON для превью. Пустое `table` — показывается `emptyMessage`.
+
+Вкладки можно использовать отдельно: импортируйте **`NavigationSchemaTab`**, **`NavigationPreviewTab`** или **`NavigationMetaTab`** из той же точки входа.
 
 ### Простой пример
 
@@ -86,7 +88,7 @@ const TABLE_PATH = '//home/my_cluster/my_table';
 
 export function TableExplorer() {
     const [table, setTable] = useState<LoadedNavigationTable | null>(null);
-    const [filter, setFilter] = useState('');
+    const [schemaFilter, setSchemaFilter] = useState('');
     const [error, setError] = useState<string | null>(null);
 
     const load = useCallback(async () => {
@@ -123,8 +125,8 @@ export function TableExplorer() {
             {error && <p>{error}</p>}
             <NavigationTable
                 table={table}
-                filter={filter}
-                onFilterChange={setFilter}
+                filter={schemaFilter}
+                onFilterChange={setSchemaFilter}
                 emptyMessage="Выберите таблицу или загрузите данные"
             />
         </ThemeProvider>

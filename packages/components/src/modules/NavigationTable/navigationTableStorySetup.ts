@@ -4,7 +4,7 @@ import type {NavigationTableData} from '../../types';
 
 import type {NavigationTableInitialTab} from './NavigationTable';
 
-/** Extra provider settings for stories/tests (SchemaTab uses `ysonSettings` from `NavigationTable`). */
+/** Extra provider settings for stories/tests (NavigationSchemaTab uses `ysonSettings` from `NavigationTable`). */
 export const navigationTableStoryUnipikaForProvider = {
     showDecoded: true,
     asHTML: false as const,
