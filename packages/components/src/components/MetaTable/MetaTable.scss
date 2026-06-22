@@ -1,6 +1,8 @@
 @use '../../styles/mixins';
 
 .meta-table {
+    --yt-meta-table-columns: repeat(2, auto);
+
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
@@ -43,7 +45,7 @@
     $item-height: 22px;
 
     display: grid;
-    grid-template-columns: repeat(2, auto);
+    grid-template-columns: var(--yt-meta-table-columns);
     grid-gap: 3px 20px;
 
     &_row-gap_4 {

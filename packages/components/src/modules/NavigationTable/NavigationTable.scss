@@ -6,12 +6,6 @@
         overflow-x: auto;
     }
 
-    &__meta {
-        .meta-table-item {
-            grid-template-columns: 140px auto;
-        }
-    }
-
     .data-table__value {
         position: relative;
     }

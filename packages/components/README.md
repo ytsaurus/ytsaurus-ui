@@ -29,7 +29,7 @@ import '@gravity-ui/uikit/styles/styles.css';
 | Import | Purpose |
 |--------|---------|
 | **`@ytsaurus/components`** | Components (`ColumnCell`, `MetaTable`, …), types, hooks (`useNavigationTableData`), **HTTP helpers** for navigation (see below). |
-| **`@ytsaurus/components/modules`** | **`NavigationTable`** shell plus **`SchemaTab`**, **`PreviewTab`** (and types such as `NavigationTableProps`). |
+| **`@ytsaurus/components/modules`** | **`NavigationTable`** shell plus **`NavigationSchemaTab`**, **`NavigationPreviewTab`**, **`NavigationMetaTab`** (and types such as `NavigationTableProps`). |
 
 The root entry re-exports **`src/api`**: a single place for loading table data and the YT API wrapper.
 
@@ -66,7 +66,9 @@ Implementation: **`src/modules/NavigationTable`**. From npm:
 import { NavigationTable } from '@ytsaurus/components/modules';
 ```
 
-The component is **presentational**: you pass loaded data (`table`), optional schema-column filter, callbacks, and YSON settings for preview. When `table` is null, `emptyMessage` is shown.
+The component is **presentational**: you pass loaded data (`table`), optional schema filter (`filter`), callbacks, and YSON settings for preview. When `table` is null, `emptyMessage` is shown.
+
+Tabs can also be used on their own: import **`NavigationSchemaTab`**, **`NavigationPreviewTab`**, or **`NavigationMetaTab`** from the same entry point.
 
 ### Minimal example
 
@@ -86,7 +88,7 @@ const TABLE_PATH = '//home/my_cluster/my_table';
 
 export function TableExplorer() {
     const [table, setTable] = useState<LoadedNavigationTable | null>(null);
-    const [filter, setFilter] = useState('');
+    const [schemaFilter, setSchemaFilter] = useState('');
     const [error, setError] = useState<string | null>(null);
 
     const load = useCallback(async () => {
@@ -123,8 +125,8 @@ export function TableExplorer() {
             {error && <p>{error}</p>}
             <NavigationTable
                 table={table}
-                filter={filter}
-                onFilterChange={setFilter}
+                filter={schemaFilter}
+                onFilterChange={setSchemaFilter}
                 emptyMessage="Pick a table or load data"
             />
         </ThemeProvider>

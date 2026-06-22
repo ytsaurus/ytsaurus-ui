@@ -3,5 +3,6 @@ export {
     type NavigationTableInitialTab,
     type NavigationTableProps,
 } from './NavigationTable';
-export {SchemaTab} from './SchemaTab';
-export {PreviewTab} from './PreviewTab';
+export {NavigationMetaTab} from './NavigationMetaTab';
+export {NavigationSchemaTab} from './NavigationSchemaTab';
+export {NavigationPreviewTab} from './NavigationPreviewTab';

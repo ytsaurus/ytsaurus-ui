@@ -1,4 +1,4 @@
-import React, {FC, useMemo, useState} from 'react';
+import React, {FC, useState} from 'react';
 import cn from 'bem-cn-lite';
 import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 import {
@@ -9,14 +9,12 @@ import {
 } from '../../types';
 import type {UnipikaSettings} from '../../internal/Yson/StructuredYson/StructuredYsonTypes';
 import type {SchemaDataTypeProps} from '../../components';
-import {MetaTable} from '../../components';
 import i18n from './i18n';
-import {SchemaTab} from './SchemaTab';
-import {PreviewTab} from './PreviewTab';
+import {NavigationSchemaTab} from './NavigationSchemaTab';
+import {NavigationPreviewTab} from './NavigationPreviewTab';
 import './NavigationTable.scss';
 import type {ErrorBoundaryProps} from '../../internal/DefaultErrorBoundary';
-import {sortColumnsBySchema} from './helpers/sortColumnsBySchema';
-import {filterSchema} from './helpers/filterSchema';
+import {NavigationMetaTab} from './NavigationMetaTab';
 
 const b = cn('navigation-table');
 
@@ -44,10 +42,11 @@ export type NavigationTableProps = {
     ysonSettings?: UnipikaSettings;
     emptyMessage?: React.ReactNode;
     primitiveTypes?: SchemaDataTypeProps['primitiveTypes'];
+    /** Custom schema tab. Filter state resets when the table changes. */
     renderSchemaTab?: (props: {
         schema: NavigationTableSchema[];
-        filter: string;
-        onFilterChange: (value: string) => void;
+        filter?: string;
+        onFilterChange?: (value: string) => void;
         ysonSettings?: UnipikaSettings;
     }) => React.ReactNode;
     renderPreviewTab?: (props: {
@@ -65,8 +64,8 @@ export type NavigationTableProps = {
 export const NavigationTable: FC<NavigationTableProps> = ({
     table,
     initialActiveTab,
-    filter: controlledFilter,
-    onFilterChange: controlledOnFilterChange,
+    filter,
+    onFilterChange,
     onInsertTableSelect,
     ysonSettings,
     emptyMessage,
@@ -81,41 +80,33 @@ export const NavigationTable: FC<NavigationTableProps> = ({
     const [activeTab, setActiveTab] = useState<TableTab>(() =>
         initialActiveTab ? TABLE_TAB_FROM_INITIAL[initialActiveTab] : TableTab.Schema,
     );
-    const [internalFilter, setInternalFilter] = useState('');
-    const filter = controlledFilter ?? internalFilter;
-    const setFilter = controlledOnFilterChange ?? setInternalFilter;
-
-    const normalizedTable = useMemo(() => {
-        if (!table) return null;
-
-        return {
-            ...table,
-            columns: sortColumnsBySchema(table.columns, table.schema),
-        };
-    }, [table]);
-
-    const filteredSchema = useMemo(
-        () => (normalizedTable ? filterSchema(normalizedTable.schema, filter) : []),
-        [normalizedTable, filter],
-    );
 
     const handleChangeTab = (id: string) => {
         setActiveTab(id as TableTab);
     };
 
-    if (!normalizedTable) {
+    const handleFilterChange = (value: string) => {
+        onFilterChange?.(value);
+    };
+
+    if (!table) {
         return (
             <div className={b(null, className)}>{emptyMessage ?? i18n('context_empty-data')}</div>
         );
     }
 
-    const schemaData = {schema: filteredSchema, filter, onFilterChange: setFilter, ysonSettings};
+    const schemaData = {
+        schema: table.schema,
+        filter,
+        onFilterChange: handleFilterChange,
+        ysonSettings,
+    };
     const schemaContent =
         activeTab === TableTab.Schema &&
-        (renderSchemaTab ? renderSchemaTab(schemaData) : <SchemaTab {...schemaData} />);
+        (renderSchemaTab ? renderSchemaTab(schemaData) : <NavigationSchemaTab {...schemaData} />);
 
     const previewData = {
-        table: normalizedTable,
+        table,
         onEditorInsert: onInsertTableSelect,
         ysonSettings,
         primitiveTypes,
@@ -125,7 +116,7 @@ export const NavigationTable: FC<NavigationTableProps> = ({
         (renderPreviewTab ? (
             renderPreviewTab(previewData)
         ) : (
-            <PreviewTab
+            <NavigationPreviewTab
                 {...previewData}
                 logError={logError}
                 ErrorBoundaryComponent={ErrorBoundaryComponent}
@@ -135,9 +126,9 @@ export const NavigationTable: FC<NavigationTableProps> = ({
     const metaContent =
         activeTab === TableTab.Meta &&
         (renderMetaTab ? (
-            renderMetaTab({items: normalizedTable.meta})
+            renderMetaTab({items: table.meta})
         ) : (
-            <MetaTable className={b('meta')} items={normalizedTable.meta} />
+            <NavigationMetaTab metadata={table.meta} />
         ));
 
     return (
