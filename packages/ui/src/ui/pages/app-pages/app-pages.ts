@@ -1,8 +1,8 @@
-import {registerPageIcon} from './constants/slideoutMenu';
-import {type UIFactoryClusterPageInfo} from './UIFactory';
+import {registerPageIcon} from '.../../constants/slideoutMenu';
+import {type UIFactoryClusterPageInfo} from '../../UIFactory';
 
 // TODO: use { Page } from constants/index.js
-import {Page} from './constants';
+import {Page} from '../../constants';
 
 export interface HeaderItem {
     id: string;
