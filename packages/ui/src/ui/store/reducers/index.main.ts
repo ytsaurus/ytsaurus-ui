@@ -34,7 +34,7 @@ import chaosCellBundleEditor from './chaos_cell_bundles/tablet-cell-bundle-edito
 import {manageTokens} from './manage-tokens';
 import executeBatch from '../../store/reducers/execute-batch';
 import UIFactory, {type UIFactoryClusterPageInfo} from '../../UIFactory';
-import {registerExtraPage} from '../../pages';
+import {registerExtraPage} from '../../pages/app-pages/app-pages';
 import {registerLocationParameters} from '../../store/location';
 import {registerHeaderLink} from '../../containers/ClustersMenu/header-links-items';
 import {queryTracker} from './query-tracker';
