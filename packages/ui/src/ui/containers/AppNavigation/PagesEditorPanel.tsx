@@ -44,7 +44,6 @@ export function PagesEditorPanel() {
             renderItem={(item) => <PagesEditorListItem {...item} onClick={handleClick} />}
             itemHeight={40}
             onSortEnd={handleSort}
-            virtualized
         />
     );
 }
