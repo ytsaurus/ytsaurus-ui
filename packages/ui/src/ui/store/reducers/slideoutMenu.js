@@ -2,7 +2,7 @@ import forEach_ from 'lodash/forEach';
 
 import hammer from '../../common/hammer';
 import {JOIN_MENU_ITEMS, SPLIT_MENU_ITEMS} from '../../constants';
-import pages from '../../pages';
+import {APP_PAGES} from '../../pages/app-pages/app-pages';
 
 function prepareClusters(clustersObj) {
     const sortByClusterName = (clusterA, clusterB) => {
@@ -15,7 +15,7 @@ function prepareClusters(clustersObj) {
 
 export const initialState = {
     pages: {
-        all: pages,
+        all: APP_PAGES,
         recent: [],
         rest: [],
     },
