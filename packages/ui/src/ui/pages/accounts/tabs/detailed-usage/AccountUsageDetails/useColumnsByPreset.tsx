@@ -33,20 +33,21 @@ import {getIconNameForType} from '../../../../../utils/navigation/path-editor';
 
 import {assert} from '../../../../../../shared/utils/toolkit';
 import {AccountActionsField, type AccountRequestData} from '../AccountActionsField';
-import {useGetVersionedFieldValue} from './useGetVersionedFieldValue';
 import {DetailTableCell} from '../DetailTableCell';
 import i18n from '../i18n';
 
+import {useGetVersionedFieldValue} from './useGetVersionedFieldValue';
 import {Header} from './Header';
 import {PathHeader} from './PathHeader';
+import {UsageHeader} from './UsageHeader';
 import {block, getIconNameForViewType} from './utils';
 
 export const useColumnsByPreset = (mediums: AccountUsageMediumKey[]) => {
     const dispatch = useDispatch();
 
+    const cluster = useSelector(selectCluster);
     const availableColumns = useSelector(selectAccountUsageAvailableColumns);
     const visibleColumns = useSelector(selectAccountUsageVisibleDataColumns);
-    const cluster = useSelector(selectCluster);
 
     const viewType = useSelector(selectAccountUsageViewType);
     assert(viewType, 'viewType must be defined');
@@ -80,6 +81,7 @@ export const useColumnsByPreset = (mediums: AccountUsageMediumKey[]) => {
             },
             width: 50,
         });
+
         res.set('path', {
             name: 'path',
             header: <PathHeader />,
@@ -128,13 +130,13 @@ export const useColumnsByPreset = (mediums: AccountUsageMediumKey[]) => {
 
         res.set('disk_space', {
             name: 'disk_space',
-            header: <Header column={'disk_space'} />,
+            header: <UsageHeader column="disk_space" />,
             sortable: false,
             render(item) {
                 return (
                     <DetailTableCell
                         value={item.row.disk_space}
-                        additionalValue={getVersionedFieldValue(item.row, 'disk_space')}
+                        versionedValue={getVersionedFieldValue(item.row, 'disk_space')}
                         viewType={viewType}
                         formatType="bytes"
                     />
@@ -146,13 +148,13 @@ export const useColumnsByPreset = (mediums: AccountUsageMediumKey[]) => {
 
         res.set('master_memory', {
             name: 'Master mem',
-            header: <Header column={'master_memory'} />,
+            header: <UsageHeader column="master_memory" />,
             sortable: false,
             render(item) {
                 return (
                     <DetailTableCell
                         value={item.row.master_memory}
-                        additionalValue={getVersionedFieldValue(item.row, 'master_memory')}
+                        versionedValue={getVersionedFieldValue(item.row, 'master_memory')}
                         viewType={viewType}
                         formatType="bytes"
                     />
@@ -164,7 +166,7 @@ export const useColumnsByPreset = (mediums: AccountUsageMediumKey[]) => {
 
         res.set('owner', {
             name: 'Owner',
-            header: <Header column={'owner'} />,
+            header: <Header column="owner" />,
             sortable: false,
             render(item) {
                 return item.row.owner ? <SubjectCard name={item.row.owner} /> : format.NO_VALUE;
@@ -177,13 +179,13 @@ export const useColumnsByPreset = (mediums: AccountUsageMediumKey[]) => {
 
             res.set(name, {
                 name,
-                header: <Header column={name} />,
+                header: <UsageHeader column={name} />,
                 sortable: false,
                 render(item) {
                     return (
                         <DetailTableCell
                             value={Number(item.row[name])}
-                            additionalValue={getVersionedFieldValue(item.row, name)}
+                            versionedValue={getVersionedFieldValue(item.row, name)}
                             viewType={viewType}
                             formatType="bytes"
                         />
@@ -201,7 +203,7 @@ export const useColumnsByPreset = (mediums: AccountUsageMediumKey[]) => {
 
             res.set(field, {
                 name: field,
-                header: <Header column={field} />,
+                header: <UsageHeader column={field} />,
                 sortable: false,
                 render(item) {
                     const value = item.row[field];
@@ -218,7 +220,7 @@ export const useColumnsByPreset = (mediums: AccountUsageMediumKey[]) => {
                         return (
                             <DetailTableCell
                                 value={Number(value)}
-                                additionalValue={getVersionedFieldValue(item.row, field)}
+                                versionedValue={getVersionedFieldValue(item.row, field)}
                                 viewType={viewType}
                                 formatType="number"
                             />
