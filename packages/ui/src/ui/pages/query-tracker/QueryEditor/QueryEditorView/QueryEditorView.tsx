@@ -11,7 +11,7 @@ import {
 } from '../../../../store/selectors/query-tracker/query';
 import {selectIsSupportedQtACO} from '../../../../store/selectors/query-tracker/queryAco';
 import {loadCliqueByCluster, runQuery} from '../../../../store/actions/query-tracker/query';
-import {Button, Flex, Icon, Text} from '@gravity-ui/uikit';
+import {Button, Flex, Icon} from '@gravity-ui/uikit';
 import playIcon from '../../../../assets/img/svg/play.svg';
 import {QueryEngine} from '../../../../../shared/constants/engines';
 import {QueryACOSelect} from '../../QueryACO/QueryACOSelect';
@@ -19,7 +19,7 @@ import cn from 'bem-cn-lite';
 import '../QueryEditorView.scss';
 import {QueryEditorMonaco} from '../QueryEditorMonaco';
 import i18n from './i18n';
-import TriangleExclamationIcon from '@gravity-ui/icons/svgs/triangle-exclamation.svg';
+import {CliqueDisabledBlock} from './CliqueDisabledBlock';
 
 const b = cn('yt-qt-query-editor-view');
 
@@ -110,7 +110,7 @@ export const QueryEditorView = memo<Props>(function QueryEditorView({
             <QueryEditorMonaco pathNavigation={pathNavigation} />
             <div className={b('actions')}>
                 <div className="query-run-action">
-                    <Flex gap={1} alignItems="center">
+                    <Flex gap={2} alignItems="center">
                         <Button
                             qa="qt-run"
                             view="action"
@@ -121,14 +121,7 @@ export const QueryEditorView = memo<Props>(function QueryEditorView({
                             {i18n('action_run')}
                         </Button>
 
-                        {runButtonDisabled && (
-                            <>
-                                <Text color="danger">
-                                    <Icon data={TriangleExclamationIcon} size={16} />
-                                </Text>
-                                <span>{i18n('tooltip_clique_inactive')}</span>
-                            </>
-                        )}
+                        {runButtonDisabled && <CliqueDisabledBlock />}
                     </Flex>
 
                     {isRunButtonActive && (

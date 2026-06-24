@@ -20,6 +20,7 @@ import {selectQueryResults} from './queryResult';
 import {selectDefaultQueryACO, selectIsMultipleAco} from './queryAco';
 import {QueryEngine, QueryEnginesNames} from '../../../../shared/constants/engines';
 import {selectClusterSupportedEngines} from '../global';
+import isEmpty_ from 'lodash/isEmpty';
 
 const QT_STAGE = getQueryTrackerStage();
 const selectQueryState = (state: RootState) => state.queryTracker.query;
@@ -73,6 +74,10 @@ export const selectIsQueryButtonActive = createSelector(
         const {clique, cluster} = settings;
         if (!clique || !cluster) return true;
 
+        if (isEmpty_(cliqueMap)) {
+            return true;
+        }
+
         if (cluster in cliqueMap) {
             const chytList = cliqueMap[cluster]?.chyt;
             if (!chytList) {
@@ -82,7 +87,7 @@ export const selectIsQueryButtonActive = createSelector(
             const currentClique = chytList.find((i) => i.alias === clique);
             if (!currentClique) return false;
 
-            return currentClique.state === 'active';
+            return currentClique.state === 'active' && currentClique.health === 'good';
         }
 
         return false;
