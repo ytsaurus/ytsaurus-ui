@@ -1,4 +1,5 @@
 import {type Action} from 'redux';
+import {produce} from 'immer';
 import {type YTError} from '../../../../@types/types';
 import {type CheckPermissionResult} from '../../../../shared/utils/check-permission';
 import {
@@ -123,7 +124,12 @@ export default (state = initialState, action: AclAction) => {
             });
 
         case ACL_LOAD_DATA.REQUEST:
-            return modifyFieldState(state, action.idmKind, {loading: true});
+            return produce(state, (draft) => {
+                if (draft[action.idmKind].path !== action.data.path) {
+                    draft[action.idmKind] = {...aclDefaults};
+                }
+                draft[action.idmKind].loading = true;
+            });
 
         case ACL_LOAD_DATA.SUCCESS: {
             return modifyFieldState(state, action.idmKind, {
@@ -179,8 +185,12 @@ export default (state = initialState, action: AclAction) => {
 export type HasIdmKind = {idmKind: IdmKindType};
 
 export type AclActionType =
-    | Action<typeof ACL_LOAD_DATA.REQUEST | typeof ACL_LOAD_DATA.CANCELLED>
-    | ActionD<typeof ACL_LOAD_DATA.FAILURE, {error: AclKindState['errorData']}>
+    | Action<typeof ACL_LOAD_DATA.CANCELLED>
+    | ActionD<typeof ACL_LOAD_DATA.REQUEST, Pick<AclKindState, 'path'>>
+    | ActionD<
+          typeof ACL_LOAD_DATA.FAILURE,
+          {path: AclKindState['path']; error: AclKindState['errorData']}
+      >
     | ActionD<
           typeof ACL_LOAD_DATA.SUCCESS,
           Pick<
