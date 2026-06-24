@@ -439,10 +439,10 @@ export const selectAllColumnGroupsActual = createSelector(
     },
 );
 
-export const selectAllRowGroups = (state: RootState, idmKind: IdmKindType) =>
+const selectAllRowGroupsRaw = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].rowGroups;
-export const selectAllRowGroupsActual = createSelector([selectAllRowGroups], (rowGroups) => {
-    return rowGroups;
+export const selectAllRowGroupsActual = createSelector([selectAllRowGroupsRaw], (rowGroups) => {
+    return sortBy_(rowGroups, 'name');
 });
 
 function OrderByRoleStatus<
