@@ -162,6 +162,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [`/*/${Page.SCHEDULING}/details`, [schedulingOverviewParams]],
     [`/*/${Page.SCHEDULING}/${SchedulingTab.ACL}`, [schedulingAclParams]],
     [`/*/${Page.SCHEDULING}`, [schedulingParams]],
+    [`/*/${Page.SCHEDULING}/*`, [schedulingParams]],
     [`/*/${Page.SCHEDULING}/monitoring`, [schedulingMonitoringParams]],
     [`/*/${Page.SCHEDULING}/${SchedulingExtraTabs.PROMETHEUS_DASHBOARD}`, [schedulingMonitoringParams]],
 
