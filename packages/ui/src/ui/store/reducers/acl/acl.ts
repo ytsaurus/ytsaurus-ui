@@ -2,9 +2,9 @@ import {type Action} from 'redux';
 import {type YTError} from '../../../../@types/types';
 import {type CheckPermissionResult} from '../../../../shared/utils/check-permission';
 import {
+    ACL_LOAD_DATA,
     DELETE_PERMISSION,
     IdmObjectType,
-    LOAD_DATA,
     REQUEST_PERMISSION,
     UPDATE_ACL,
 } from '../../../constants/acl';
@@ -122,10 +122,10 @@ export default (state = initialState, action: AclAction) => {
                 deletionError: action.data,
             });
 
-        case LOAD_DATA.REQUEST:
+        case ACL_LOAD_DATA.REQUEST:
             return modifyFieldState(state, action.idmKind, {loading: true});
 
-        case LOAD_DATA.SUCCESS: {
+        case ACL_LOAD_DATA.SUCCESS: {
             return modifyFieldState(state, action.idmKind, {
                 ...action.data,
                 loading: false,
@@ -134,14 +134,14 @@ export default (state = initialState, action: AclAction) => {
             });
         }
 
-        case LOAD_DATA.FAILURE:
+        case ACL_LOAD_DATA.FAILURE:
             return modifyFieldState(state, action.idmKind, {
                 loading: false,
                 error: true,
                 errorData: action.data.error,
             });
 
-        case LOAD_DATA.CANCELLED:
+        case ACL_LOAD_DATA.CANCELLED:
             return modifyFieldState(state, action.idmKind, {loading: false});
 
         case REQUEST_PERMISSION.REQUEST:
@@ -179,10 +179,10 @@ export default (state = initialState, action: AclAction) => {
 export type HasIdmKind = {idmKind: IdmKindType};
 
 export type AclActionType =
-    | Action<typeof LOAD_DATA.REQUEST | typeof LOAD_DATA.CANCELLED>
-    | ActionD<typeof LOAD_DATA.FAILURE, {error: AclKindState['errorData']}>
+    | Action<typeof ACL_LOAD_DATA.REQUEST | typeof ACL_LOAD_DATA.CANCELLED>
+    | ActionD<typeof ACL_LOAD_DATA.FAILURE, {error: AclKindState['errorData']}>
     | ActionD<
-          typeof LOAD_DATA.SUCCESS,
+          typeof ACL_LOAD_DATA.SUCCESS,
           Pick<
               AclKindState,
               | 'path'

@@ -5,9 +5,9 @@ import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
 
 import {
+    ACL_LOAD_DATA,
     DELETE_PERMISSION,
     IdmObjectType,
-    LOAD_DATA,
     REQUEST_PERMISSION,
     UPDATE_ACL,
 } from '../../constants/acl';
@@ -84,7 +84,7 @@ export function loadAclData(
         const state = getState();
         const {login, cluster = ''} = state.global;
 
-        dispatch({type: LOAD_DATA.REQUEST, idmKind});
+        dispatch({type: ACL_LOAD_DATA.REQUEST, idmKind});
 
         const poolTree =
             idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
@@ -116,7 +116,7 @@ export function loadAclData(
                 }),
             ]).then(([acl, userPermissions, responsible]) => {
                 dispatch({
-                    type: LOAD_DATA.SUCCESS,
+                    type: ACL_LOAD_DATA.SUCCESS,
                     data: {
                         path,
                         version: responsible.version,
@@ -137,7 +137,7 @@ export function loadAclData(
             });
         } catch (error: any) {
             dispatch({
-                type: LOAD_DATA.FAILURE,
+                type: ACL_LOAD_DATA.FAILURE,
                 data: {
                     error,
                 },
