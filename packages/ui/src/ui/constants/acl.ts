@@ -4,7 +4,7 @@ import {type IdmKindType} from '../utils/acl/acl-types';
 
 const PREFIX = createPrefix('MANAGE_ACL');
 
-export const LOAD_DATA = createActionTypes(`${PREFIX}LOAD_DATA`);
+export const ACL_LOAD_DATA = createActionTypes(`${PREFIX}LOAD_DATA`);
 export const DELETE_PERMISSION = createActionTypes(`${PREFIX}DELETE_PERMISSION`);
 export const REQUEST_PERMISSION = createActionTypes(`${PREFIX}REQUEST_PERMISSION`);
 export const UPDATE_ACL = createActionTypes(`${PREFIX}UPDATE_ACL`);
