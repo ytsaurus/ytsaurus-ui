@@ -1,0 +1,9 @@
+{
+  "alert_replication-card-id-empty": "/@replication_card_id is empty",
+  "alert_could-not-load-list": "Could not load list.",
+  "alert_failed-to-load-resources": "Failed to load resources.",
+  "alert_resource-loading-error": "Resource loading error",
+  "action_view": "view",
+  "alert_failed-to-save-document": "Failed to save document",
+  "alert_document-saved": "Document successfully saved"
+}

@@ -1,0 +1,11 @@
+.map-node-toolbar {
+    &__filter {
+        width: 30%;
+        min-width: 200px;
+        flex-shrink: 1;
+    }
+
+    &__medium-type {
+        width: 160px;
+    }
+}

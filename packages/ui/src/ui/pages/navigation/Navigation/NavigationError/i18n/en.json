@@ -1,0 +1,4 @@
+{
+  "alert_no-permission-access": "User {{username}} does not have {{permissions}} access to node \"{{path}}\"",
+  "alert_path-not-exist": "Path \"{{path}}\" does not exist"
+}

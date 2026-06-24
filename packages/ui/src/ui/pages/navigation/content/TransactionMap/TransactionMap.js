@@ -33,6 +33,8 @@ import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
 
+import i18n from './i18n';
+
 import './TransactionMap.scss';
 
 const block = cn('navigation-transaction-map');
@@ -152,7 +154,9 @@ class TransactionMap extends Component {
                                                 debounce={300}
                                                 className={block('filter')}
                                                 onChange={this.handleFilterChange}
-                                                placeholder="Filter transactions..."
+                                                placeholder={i18n(
+                                                    'placeholder_filter-transactions',
+                                                )}
                                             />
                                         ),
                                     },

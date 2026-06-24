@@ -1,9 +1,7 @@
 import React from 'react';
-import {compose} from 'redux';
 import axios, {type AxiosProgressEvent} from 'axios';
 import cn from 'bem-cn-lite';
 
-import withVisible, {type WithVisibleProps} from '../../../../../hocs/withVisible';
 import Button from '../../../../../components/Button/Button';
 import Modal from '../../../../../components/Modal/Modal';
 
@@ -15,6 +13,8 @@ import {Alert} from '@gravity-ui/uikit';
 
 import hammer from '../../../../../common/hammer';
 import format from '../../../../../common/hammer/format';
+
+import i18n from './i18n';
 
 import './UploadManager.scss';
 import {updateView} from '../../../../../store/actions/navigation';
@@ -33,9 +33,10 @@ import FileDropZone from '../../../../../components/FileDropZone/FileDropZone';
 
 const block = cn('upload-manager');
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & WithVisibleProps;
+type Props = ConnectedProps<typeof connector> & {
+    visible: boolean;
+    onClose: () => void;
+};
 
 function trimXLSX(fileName = '') {
     for (const i of ['.xlsx', '.xls']) {
@@ -72,7 +73,7 @@ const getExcelBaseUrl = (payload: {cluster: string}) => {
     return getConfigUploadTable(payload);
 };
 
-class UploadManagerCreate extends React.Component<Props, State> {
+class UploadManagerCreateImpl extends React.Component<Props, State> {
     state: State = {
         name: '',
         file: null,
@@ -93,12 +94,7 @@ class UploadManagerCreate extends React.Component<Props, State> {
                     {file ? this.renderFileContent(file) : null}
                 </FileDropZone>
                 {error && <YTErrorBlock error={error} />}
-                {nameAlreadyUsed && (
-                    <Alert
-                        theme="info"
-                        message="If you want to supplement the table, go to it and use the upload dialog."
-                    />
-                )}
+                {nameAlreadyUsed && <Alert theme="info" message={i18n('alert_supplement-table')} />}
             </React.Fragment>
         );
     }
@@ -142,19 +138,19 @@ class UploadManagerCreate extends React.Component<Props, State> {
                 fields={[
                     {
                         name: 'path',
-                        caption: 'Parent folder',
+                        caption: i18n('field_parent-folder'),
                         type: 'plain',
                     },
                     {
                         name: 'name',
-                        caption: 'Name',
+                        caption: i18n('field_name'),
                         type: 'text',
                         required: true,
                         extras: {
                             disabled: inProgress,
                             ...(this.state.nameAlreadyUsed && {
                                 validationState: 'invalid',
-                                errorMessage: 'Node with this name already exists',
+                                errorMessage: i18n('alert_name-already-exists'),
                             }),
                         },
                         onChange: (name: string | Array<string> | undefined) => {
@@ -163,13 +159,13 @@ class UploadManagerCreate extends React.Component<Props, State> {
                     },
                     {
                         name: 'size',
-                        caption: 'Size',
+                        caption: i18n('field_size'),
                         type: 'plain',
                     },
                     {
                         name: 'fileType',
                         type: 'yt-select-single',
-                        caption: 'Type',
+                        caption: i18n('field_type'),
                         extras: {
                             items: FILE_TYPES,
                             hideFilter: true,
@@ -180,8 +176,8 @@ class UploadManagerCreate extends React.Component<Props, State> {
                     {
                         name: 'firstRowAsNames',
                         type: 'tumbler',
-                        caption: 'Column names',
-                        tooltip: 'Interpret first row as column names',
+                        caption: i18n('field_column-names'),
+                        tooltip: i18n('context_first-row-as-names'),
                         onChange: (firstRowAsNames: boolean) => {
                             this.setState({firstRowAsNames});
                         },
@@ -192,8 +188,8 @@ class UploadManagerCreate extends React.Component<Props, State> {
                     {
                         name: 'secondRowAsTypes',
                         type: 'tumbler',
-                        caption: 'Types',
-                        tooltip: 'There is row with types right before data-rows',
+                        caption: i18n('field_types'),
+                        tooltip: i18n('context_second-row-as-types'),
                         onChange: (secondRowAsTypes: boolean) => {
                             this.setState({secondRowAsTypes});
                         },
@@ -216,12 +212,12 @@ class UploadManagerCreate extends React.Component<Props, State> {
         }
         return inProgress ? (
             <React.Fragment>
-                <Button onClick={this.cancelUpload}>Cancel upload</Button>
+                <Button onClick={this.cancelUpload}>{i18n('action_cancel-upload')}</Button>
                 <span className={block('help-link')}>{helpLink}</span>
             </React.Fragment>
         ) : (
             <React.Fragment>
-                <Button onClick={this.onReset}>Reset</Button>
+                <Button onClick={this.onReset}>{i18n('action_reset')}</Button>
                 <span className={block('help-link')}>{helpLink}</span>
             </React.Fragment>
         );
@@ -273,7 +269,7 @@ class UploadManagerCreate extends React.Component<Props, State> {
                 className={block('confirm')}
                 size="m"
                 view="action"
-                title="Upload"
+                title={i18n('action_upload')}
                 disabled={
                     Boolean(fileError) ||
                     Boolean(this.state.error) ||
@@ -282,14 +278,14 @@ class UploadManagerCreate extends React.Component<Props, State> {
                 }
                 onClick={this.onXlsxUpload}
             >
-                Upload
+                {i18n('action_upload')}
             </Button>
         );
     };
 
     checkFile(file: State['file']): string | null {
         if (!file) {
-            return 'file is not selected';
+            return i18n('alert_file-not-selected');
         }
 
         const {cluster} = this.props;
@@ -297,9 +293,9 @@ class UploadManagerCreate extends React.Component<Props, State> {
         const UPLOAD_CONFIG = getExcelBaseUrl({cluster});
 
         if (file.size > UPLOAD_CONFIG.uploadTableMaxSize) {
-            return `File size must not be greater than ${format.Bytes(
-                UPLOAD_CONFIG.uploadTableMaxSize,
-            )}`;
+            return i18n('alert_file-size-exceeded', {
+                maxSize: format.Bytes(UPLOAD_CONFIG.uploadTableMaxSize),
+            });
         }
 
         return null;
@@ -315,11 +311,11 @@ class UploadManagerCreate extends React.Component<Props, State> {
             <Button
                 className={block('confirm', className)}
                 size="m"
-                title="Close"
+                title={i18n('action_close')}
                 disabled={this.inProgress()}
                 onClick={this.handleClose}
             >
-                Close
+                {i18n('action_close')}
             </Button>
         );
     };
@@ -339,7 +335,7 @@ class UploadManagerCreate extends React.Component<Props, State> {
         this.setState({progress: {inProgress: false}});
         if (!error) {
             this.props.updateView();
-            this.props.handleClose();
+            this.props.onClose();
         } else if (!axios.isCancel(error) && (!error || error.code !== 'cancelled')) {
             error = error.response?.data || error;
             this.setState({error});
@@ -388,8 +384,8 @@ class UploadManagerCreate extends React.Component<Props, State> {
                     }),
                     {
                         toasterName: 'upload_xlsx' + path,
-                        successTitle: 'Table is created',
-                        errorTitle: 'Failed to create table',
+                        successTitle: i18n('alert_table-created'),
+                        errorTitle: i18n('alert_failed-to-create-table'),
                         successContent: (
                             <Link url={`/${cluster}/navigation?path=${path}`}>{path}</Link>
                         ),
@@ -405,7 +401,7 @@ class UploadManagerCreate extends React.Component<Props, State> {
             },
             (e) => {
                 this.onStopUpload({
-                    message: `${readyUrl} responded with error`,
+                    message: i18n('alert_ready-url-error', {url: readyUrl}),
                     inner_errors: [e],
                 });
             },
@@ -416,7 +412,7 @@ class UploadManagerCreate extends React.Component<Props, State> {
         if (this.inProgress()) {
             return;
         }
-        this.props.handleClose();
+        this.props.onClose();
     };
 
     render() {
@@ -426,10 +422,10 @@ class UploadManagerCreate extends React.Component<Props, State> {
                 {visible && (
                     <Modal
                         size="m"
-                        title="Create table from xlsx"
+                        title={i18n('title_create-table-from-xlsx')}
                         visible={visible}
                         onCancel={this.handleClose}
-                        confirmText="Upload"
+                        confirmText={i18n('action_upload')}
                         content={this.renderContent()}
                         footerContent={this.renderFooterContent()}
                         renderCustomConfirm={this.renderConfirm}
@@ -458,4 +454,4 @@ const mapDispatchToProps = {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(withVisible, connector)(UploadManagerCreate);
+export const UploadManagerCreate = connector(UploadManagerCreateImpl);

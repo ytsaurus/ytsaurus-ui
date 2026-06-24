@@ -1,0 +1,6 @@
+{
+  "title_restore": "Restore",
+  "title_object-already-exists": "Object with the same path is already exists.",
+  "context_restore-description": "The object will be restored using a new path or you can change path to what you want.",
+  "action_enter-restored-path": "Enter restored object path..."
+}

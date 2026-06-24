@@ -16,6 +16,7 @@ import {type YTError} from '../../../../types';
 import {type WithAttrs} from '../../../../utils/cypress-attributes';
 import {ClickableText} from '../../../../components/ClickableText/ClickableText';
 import {toaster} from '../../../../utils/toaster';
+import i18n from './i18n';
 
 type RemoteCopyThunkAction = ThunkAction<any, RootState, any, RemoteCopyModalStateAction>;
 
@@ -41,12 +42,14 @@ export function showRemoteCopyModal(paths: Array<string>): RemoteCopyThunkAction
                 errorContent(e: YTError) {
                     return (
                         <span>
-                            Failed to load attributes
-                            <ClickableText onClick={() => showErrorPopup(e)}>Details</ClickableText>
+                            {i18n('alert_failed-to-load-attributes')}
+                            <ClickableText onClick={() => showErrorPopup(e)}>
+                                {i18n('action_details')}
+                            </ClickableText>
                         </span>
                     );
                 },
-                errorTitle: 'Failed to load attributes',
+                errorTitle: i18n('alert_failed-to-load-attributes'),
                 batchType: 'v3',
             },
         )
@@ -86,10 +89,11 @@ export function remoteCopy(params: RemoteCopyParams): RemoteCopyThunkAction {
                 theme: 'success',
                 name: 'remoteCopyStarted',
                 autoHiding: 500000,
-                title: 'Remote copy',
+                title: i18n('title_remote-copy'),
                 content: (
                     <span>
-                        <Link url={`/${dstCluster}/operations/${id}`}>{id}</Link> operation started
+                        <Link url={`/${dstCluster}/operations/${id}`}>{id}</Link>{' '}
+                        {i18n('alert_operation-started')}
                     </span>
                 ),
             });

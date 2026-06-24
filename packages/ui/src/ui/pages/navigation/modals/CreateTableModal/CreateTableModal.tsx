@@ -51,14 +51,15 @@ import './CreateTableModal.scss';
 import {ASCENDING, DESCENDING} from './CreateTableTabField/CreateTableTabField';
 import {type FIX_MY_TYPE} from '../../../../types';
 import UIFactory from '../../../../UIFactory';
+import i18n from './i18n';
 
 const block = cn('create-table-modal');
 
 function getNoSuggestionsMsg() {
-    return 'There is no any suggestions yet';
+    return i18n('alert_no-suggestions-yet');
 }
 
-export function makeLink(url: string, label = 'Help', inline = false) {
+export function makeLink(url: string, label = i18n('action_help'), inline = false) {
     const link = (
         <Link target={'_blank'} url={url}>
             {label}
@@ -73,9 +74,14 @@ enum TableType {
     STATIC = 'static',
 }
 
-const AGGREGATE_CHOICES = [{value: SELECT_EMPTY_VALUE, text: 'default'}].concat(
-    map_(AggrTypes, (i) => ({value: i, text: i})),
-);
+const AGGREGATE_CHOICES = [
+    {
+        value: SELECT_EMPTY_VALUE,
+        get text() {
+            return i18n('value_default');
+        },
+    },
+].concat(map_(AggrTypes, (i) => ({value: i, text: i})));
 
 interface WithVisibilityCondition {
     visibilityCondition: {
@@ -319,19 +325,19 @@ class CreateTableModalContentImpl extends React.Component<Props> {
 
         if (dataType === ColumnDataTypes.ANY || dataType === ColumnDataTypes.YSON) {
             if (tableType === TableType.DYNAMIC && this.isOrderedColumn(columnData)) {
-                return `Key-column should not be of type [${dataType}]`;
+                return i18n('alert_key-column-wrong-type', {dataType});
             }
             if (!optional) {
-                return `Column with type [${dataType}] should be optional.`;
+                return i18n('alert_column-must-be-optional', {dataType});
             }
         }
 
         if (tableType === TableType.QUEUE && this.isSortedColumn(columnData)) {
-            return 'Queue must not have any sorted columns';
+            return i18n('alert_queue-no-sorted-columns');
         }
 
         if (tableType === TableType.DYNAMIC && this.isDescendingColumn(columnData)) {
-            return "Dynamic tables do not support 'Descending' order";
+            return i18n('alert_dynamic-tables-no-descending-order');
         }
 
         return undefined;
@@ -345,12 +351,12 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                 type !== ColumnDataTypes.UINT64 &&
                 type !== ColumnDataTypes.DOUBLE
             ) {
-                return `[${aggr}] aggregate might be only applied to a column of type int64/uint64/double`;
+                return i18n('alert_aggregate-invalid-type', {aggr});
             }
         }
 
         if (aggr === AggrTypes.XDELTA && type !== ColumnDataTypes.STRING) {
-            return `[${aggr}] aggregate might be only applied to a column of type string`;
+            return i18n('alert_aggregate-xdelta-invalid-type', {aggr});
         }
         return undefined;
     }
@@ -359,7 +365,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
         const ordered = this.isOrderedColumn(columnData);
         const {lock} = columnData || {};
         if (lock && ordered) {
-            return 'Lock cannot be set on a key-column';
+            return i18n('alert_lock-cannot-be-set-on-key-column');
         }
         return undefined;
     }
@@ -385,10 +391,10 @@ class CreateTableModalContentImpl extends React.Component<Props> {
         const v = Number(str);
         // @ts-ignore
         if (str != v || v !== Math.round(v)) {
-            return 'The value must be defined as a valid integer number';
+            return i18n('alert_replicas-count-must-be-integer');
         }
         if (v < 0 || v > 10) {
-            return 'The value must be in range [0; 10]';
+            return i18n('alert_replicas-count-out-of-range');
         }
         return undefined;
     }
@@ -396,7 +402,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
     validateTableName = (value: string) => {
         const {parentDirectory} = this.props;
         if (value === parentDirectory + '/' || value === parentDirectory) {
-            return 'The name must not match to parent directory name';
+            return i18n('alert_name-matches-parent-directory');
         }
         return undefined;
     };
@@ -433,18 +439,17 @@ class CreateTableModalContentImpl extends React.Component<Props> {
         }
 
         if (tableType === TableType.DYNAMIC && (!hasOrderedColumn || !hasUnorderedColumn)) {
-            res.tableType =
-                'Dynamic table must have at least one sorted column and one unsorted column';
+            res.tableType = i18n('alert_dynamic-table-must-have-sorted-and-unsorted');
         }
 
         if (tableType === TableType.QUEUE && hasOrderedColumn) {
-            res.tableType = 'Queue must not have any sorted columns';
+            res.tableType = i18n('alert_queue-no-sorted-columns');
         }
 
         if (tableType === TableType.DYNAMIC && !res.tableType) {
             const hasDescendingColumns = some_(this.keyColumns, (value) => -1 === value);
             if (hasDescendingColumns) {
-                res.tableType = 'Dynamic tables do not support descending-sorted columns';
+                res.tableType = i18n('alert_dynamic-tables-no-descending-columns');
             }
         }
 
@@ -454,7 +459,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
         }
 
         if (uniqueKeys && !hasOrderedColumn) {
-            res.uniqueKeys = 'The table must contain at least one sorted column.';
+            res.uniqueKeys = i18n('alert_unique-keys-needs-sorted-column');
         }
 
         return isEmpty_(res) ? null : res;
@@ -502,7 +507,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                     set_(
                         errors,
                         `${COLUMNS}[${index}].name`,
-                        'The column with this name already exists',
+                        i18n('alert_column-name-already-exists'),
                     );
                 });
             }
@@ -553,7 +558,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                 size={'l'}
                 visible={showModal}
                 headerProps={{
-                    title: 'Create Table',
+                    title: i18n('title_create-table'),
                 }}
                 isApplyDisabled={() => {
                     return !isEmpty_(this.lastValidationResult);
@@ -581,45 +586,42 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                     {
                         name: TABLE_SETTINGS,
                         type: 'yt-create-table-tab',
-                        title: 'Table settings',
+                        title: i18n('title_table-settings'),
                         fields: [
                             {
                                 name: 'name',
                                 type: 'text',
-                                caption: 'Table name',
+                                caption: i18n('field_table-name'),
                             },
                             {
                                 name: 'tableType',
                                 type: 'radio',
-                                caption: 'Table type',
+                                caption: i18n('field_table-type'),
                                 tooltip: (
                                     <div className={block('tooltip')}>
-                                        Data rows of
+                                        {i18n('context_data-rows-of')}
                                         {docsUrl(
                                             makeLink(
                                                 UIFactory.docsUrls['storage:static_tables'],
-                                                ' Static tables ',
+                                                i18n('value_static-tables-link'),
                                                 true,
                                             ),
-                                            ' Static tables ',
+                                            i18n('value_static-tables-link'),
                                         )}
-                                        nearly impossible to modify, but they might be removed or
-                                        merged, also new data rows might be appended to the end of a
-                                        table. As the opposite of the above described restrictions
-                                        there are
+                                        {i18n('context_static-tables-description')}
                                         {docsUrl(
                                             makeLink(
                                                 UIFactory.docsUrls['dynamic-tables:overview'],
-                                                ' Dynamic tables ',
+                                                i18n('value_dynamic-tables-link'),
                                                 true,
                                             ),
-                                            ' Dynamic tables ',
+                                            i18n('value_dynamic-tables-link'),
                                         )}
-                                        which allow to modify data rows by key.
+                                        {i18n('context_dynamic-tables-allow-modify')}
                                         <div className={block('alert-text')}>
-                                            Before using Dynamic tables in production environment
-                                            with <b>heavy load or strict SLA </b>
-                                            you have to consult with development team.
+                                            {i18n('context_before-using-dynamic-tables')}{' '}
+                                            <b>{i18n('context_heavy-load-or-strict-sla')} </b>
+                                            {i18n('context_consult-with-dev-team')}
                                         </div>
                                     </div>
                                 ),
@@ -627,15 +629,15 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                     options: [
                                         {
                                             value: TableType.STATIC,
-                                            label: 'Static table',
+                                            label: i18n('value_static-table'),
                                         },
                                         {
                                             value: TableType.DYNAMIC,
-                                            label: 'Dynamic table',
+                                            label: i18n('value_dynamic-table'),
                                         },
                                         {
                                             value: TableType.QUEUE,
-                                            label: 'Queue table',
+                                            label: i18n('value_queue-table'),
                                         },
                                     ],
                                 },
@@ -646,21 +648,21 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                             {
                                 name: 'optimize_for',
                                 type: 'radio',
-                                caption: 'Optimize for',
+                                caption: i18n('field_optimize-for'),
                                 tooltip: docsUrl(
                                     makeLink(UIFactory.docsUrls['storage:chunks#optimize_for']),
                                 ),
                                 extras: {
                                     options: [
-                                        {value: 'scan', label: 'Scan'},
-                                        {value: 'lookup', label: 'Lookup'},
+                                        {value: 'scan', label: i18n('value_scan')},
+                                        {value: 'lookup', label: i18n('value_lookup')},
                                     ],
                                 },
                             },
                             {
                                 name: 'compressionCodec',
                                 type: 'select-with-subitems',
-                                caption: 'Compression',
+                                caption: i18n('field_compression'),
                                 tooltip: docsUrl(
                                     makeLink(
                                         UIFactory.docsUrls[
@@ -676,7 +678,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                             {
                                 name: 'storageOption',
                                 type: 'radio',
-                                caption: 'Storage options',
+                                caption: i18n('field_storage-options'),
                                 tooltip: docsUrl(
                                     makeLink(UIFactory.docsUrls['storage:replication#replication']),
                                 ),
@@ -684,11 +686,11 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                     options: [
                                         {
                                             value: StorageOptions.REPLICATION,
-                                            label: 'Replication',
+                                            label: i18n('value_replication'),
                                         },
                                         {
                                             value: StorageOptions.ERASURE,
-                                            label: 'Erasure encoding',
+                                            label: i18n('value_erasure-encoding'),
                                         },
                                     ],
                                 },
@@ -696,7 +698,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                             {
                                 name: 'replicasCount',
                                 type: 'text',
-                                caption: 'Number of replicas',
+                                caption: i18n('field_number-of-replicas'),
                                 visibilityCondition: {
                                     when: `${TABLE_SETTINGS}.storageOption`,
                                     isActive: (value: string) =>
@@ -706,12 +708,10 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                             {
                                 name: 'erasureCodec',
                                 type: 'yt-select-single',
-                                caption: 'Erasure codec',
+                                caption: i18n('field_erasure-codec'),
                                 tooltip: (
                                     <div className={block('tooltip')}>
-                                        Erasure encoding allows to minimize disk space allocated for
-                                        the table comparing with Replication, but it requires more
-                                        CPU time during data access.
+                                        {i18n('context_erasure-encoding-description')}
                                         {docsUrl(
                                             makeLink(
                                                 UIFactory.docsUrls['storage:replication#erasure'],
@@ -737,19 +737,19 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                 name: 'schemaSettings',
                                 extras: {
                                     children: (
-                                        <span className={block('title')}>Schema settings</span>
+                                        <span className={block('title')}>
+                                            {i18n('title_schema-settings')}
+                                        </span>
                                     ),
                                 },
                             },
                             ...deactivateFieldByVisibilityCondition({
                                 name: 'uniqueKeys',
                                 type: 'tumbler' as const,
-                                caption: 'Unique keys',
+                                caption: i18n('field_unique-keys'),
                                 tooltip: (
                                     <div className={block('tooltip')}>
-                                        The parameter is actual only for static tables, for all
-                                        dynamic tables it is always automatically enabled regardless
-                                        of its value.
+                                        {i18n('context_unique-keys-description')}
                                         {docsUrl(
                                             makeLink(
                                                 UIFactory.docsUrls[
@@ -781,7 +781,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                         e.stopPropagation();
                                     }}
                                 >
-                                    <Icon awesome={'trash-alt'} /> Delete column
+                                    <Icon awesome={'trash-alt'} /> {i18n('action_delete-column')}
                                 </Button>
                             );
                         },
@@ -789,19 +789,19 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                             {
                                 name: 'name',
                                 type: 'text',
-                                caption: 'Column name',
+                                caption: i18n('field_column-name'),
                                 required: true,
                             },
                             {
                                 name: 'dataType',
                                 type: 'yt-select-single',
-                                caption: 'Data type',
+                                caption: i18n('field_data-type'),
                                 tooltip: docsUrl(
                                     makeLink(UIFactory.docsUrls['storage:data_types#schema']),
                                 ),
                                 extras: {
                                     items: primitiveTypes,
-                                    placeholder: 'Select type',
+                                    placeholder: i18n('action_select-type'),
                                     width: 'max',
                                     hideClear: true,
                                 },
@@ -810,12 +810,10 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                             {
                                 name: 'optional',
                                 type: 'tumbler',
-                                caption: 'Optional',
+                                caption: i18n('field_optional'),
                                 tooltip: (
                                     <div className={block('tooltip')}>
-                                        If the parameter is enabled the value might be defined as
-                                        null. For dynamic tables all key-columns are required
-                                        regardless of this value.
+                                        {i18n('context_optional-description')}
                                         {docsUrl(
                                             makeLink(
                                                 UIFactory.docsUrls[
@@ -829,11 +827,10 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                             {
                                 name: 'group',
                                 type: 'create-table-group-suggest',
-                                caption: 'Column group name',
+                                caption: i18n('field_column-group-name'),
                                 tooltip: (
                                     <div className={block('tooltip')}>
-                                        When columns have the same group name then the data of such
-                                        columns will be placed in the same blocks.
+                                        {i18n('context_same-group-same-block')}
                                         {docsUrl(
                                             makeLink(
                                                 UIFactory.docsUrls[
@@ -871,12 +868,10 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                             {
                                 name: 'lock',
                                 type: 'create-table-lock-suggest',
-                                caption: 'Lock',
+                                caption: i18n('field_lock'),
                                 tooltip: (
                                     <div className={block('tooltip')}>
-                                        By default locking is applied to all columns of row. This
-                                        parameter allows to improve granularity of locking by
-                                        defining groups of columns to lock.
+                                        {i18n('context_lock-description')}
                                         {docsUrl(
                                             makeLink(
                                                 UIFactory.docsUrls[
@@ -905,7 +900,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                             {
                                 name: 'aggregate',
                                 type: 'yt-select-single',
-                                caption: 'Aggregate',
+                                caption: i18n('field_aggregate'),
                                 tooltip: docsUrl(
                                     makeLink(
                                         UIFactory.docsUrls[
@@ -915,7 +910,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                 ),
                                 extras: {
                                     items: AGGREGATE_CHOICES,
-                                    placeholder: 'Select aggregation',
+                                    placeholder: i18n('action_select-aggregation'),
                                     width: 'max',
                                     hideFilter: true,
                                 },

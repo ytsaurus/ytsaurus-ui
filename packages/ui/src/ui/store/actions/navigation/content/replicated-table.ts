@@ -23,6 +23,7 @@ import {
     type ReplicatedTableAction,
 } from '../../../reducers/navigation/content/replicated-table';
 import {setSettingByKey} from '../../settings/settings-base';
+import i18n from './i18n';
 import {selectReplicatedTableSortSettings} from '../../../selectors/navigation/content/replicated-table';
 import {
     nextSortOrderValue,
@@ -149,7 +150,7 @@ export function updateEnableReplicatedTableTracker({
                 .then((replication_card_id) => {
                     if (!replication_card_id) {
                         return Promise.reject({
-                            message: `/@replication_card_id is empty`,
+                            message: i18n('alert_replication-card-id-empty'),
                             attributes: {path: attrPath},
                         });
                     }

@@ -1,9 +1,11 @@
 {
   "field_state": "State",
   "field_unmerged-row-count": "Unmerged Row Count",
+  "field_unmerged-rows": "Unmerged rows",
   "field_uncompressed-data-size": "Uncompressed Data Size",
   "field_compressed-data-size": "Compressed Data Size",
   "field_store-count": "Store Count",
+  "field_stores": "Stores",
   "field_sample-key-count": "Sample Key Count",
   "field_pivot-key": "Pivot Key",
   "field_id": "Id",

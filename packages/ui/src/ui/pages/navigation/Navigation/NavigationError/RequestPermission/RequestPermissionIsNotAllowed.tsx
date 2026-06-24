@@ -3,6 +3,7 @@ import cn from 'bem-cn-lite';
 
 import hammer from '../../../../../common/hammer';
 import {Info} from '../../../../../components/Info/Info';
+import i18n from './i18n';
 
 import './RequestPermission.scss';
 
@@ -17,9 +18,9 @@ export function RequestPermissionIsNotAllowed(props: Props) {
 
     return (
         <Info className={block()}>
-            It is not possible to request access to the{' '}
-            {hammer.format['Readable'](objectType, {caps: 'none'})}. Please request access to the
-            parent directory.
+            {i18n('context_not-possible-to-request-access', {
+                objectType: hammer.format['Readable'](objectType, {caps: 'none'}),
+            })}
         </Info>
     );
 }

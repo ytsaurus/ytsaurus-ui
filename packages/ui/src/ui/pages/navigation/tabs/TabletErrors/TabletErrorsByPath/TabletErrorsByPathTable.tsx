@@ -3,6 +3,8 @@ import {useSelector} from '../../../../../store/redux-hooks';
 import moment from 'moment';
 import cn from 'bem-cn-lite';
 
+import i18n from './i18n';
+
 import ypath from '../../../../../common/thor/ypath';
 
 import {Alert, Button, Flex, Link, Text} from '@gravity-ui/uikit';
@@ -28,8 +30,11 @@ import {showErrorPopup} from '../../../../../utils/utils';
 
 const block = cn('yt-tablet-errors-by-path-table');
 
-const countLimitExceededMessage =
-    'A maximum of 10000 errors can be displayed for the selected time period. To view more, please adjust the time range';
+const MESSAGES = {
+    get countLimitExceeded() {
+        return i18n('alert_count-limit-exceeded');
+    },
+};
 
 export function TabletErrorsByPathTable({className}: {className?: string}) {
     const {columns, data, loading, loaded, countLimitExceeded} = useTableColumnsAndData();
@@ -38,7 +43,7 @@ export function TabletErrorsByPathTable({className}: {className?: string}) {
         <div className={className}>
             {Boolean(error) && <YTErrorBlock error={error} />}
             {Boolean(countLimitExceeded) && (
-                <Alert theme={'info'} message={countLimitExceededMessage} />
+                <Alert theme={'info'} message={MESSAGES.countLimitExceeded} />
             )}
             <DataTableYT
                 loading={loading}
@@ -75,8 +80,8 @@ function useTableColumnsAndData() {
                 name: 'tablet_id',
                 header: (
                     <ColumnHeader
-                        column="Tablet Id"
-                        title="Tablet ID"
+                        column="Tablet id"
+                        title={i18n('field_tablet-id')}
                         loading={loading}
                         pageIndex={page}
                         pageCount={pageCount}
@@ -95,28 +100,28 @@ function useTableColumnsAndData() {
             },
             {
                 name: 'method',
-                header: <ColumnHeader column="Method" />,
+                header: <ColumnHeader column={i18n('field_method')} />,
                 render({row: {method}}) {
                     return method;
                 },
             },
             {
                 name: 'host',
-                header: <ColumnHeader column="Host" />,
+                header: <ColumnHeader column={i18n('field_host')} />,
                 render({row: {host}}) {
                     return <Host address={host} asTabletNode inlineMargins />;
                 },
             },
             {
                 name: 'date',
-                header: <ColumnHeader column="Date" />,
+                header: <ColumnHeader column={i18n('field_date')} />,
                 render({row: {timestamp}}) {
                     return moment(timestamp * 1000).format('YYYY-MM-DD HH:mm:ss');
                 },
             },
             {
                 name: 'error_message',
-                header: <ColumnHeader column="Error message" />,
+                header: <ColumnHeader column={i18n('field_error-message')} />,
                 className: block('cell-error-msg'),
                 render({row: {error}}) {
                     return (

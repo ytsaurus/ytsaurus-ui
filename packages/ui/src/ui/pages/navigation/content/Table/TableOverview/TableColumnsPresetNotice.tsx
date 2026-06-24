@@ -14,6 +14,7 @@ import {Yson} from '../../../../../components/Yson/Yson';
 import {YTErrorBlock} from '../../../../../containers/Block/Block';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 
+import i18n from './i18n';
 import './TableColumnsPresetNotice.scss';
 
 const block = cn('table-columns-preset-notice');
@@ -31,18 +32,14 @@ function TableColumnsPresetNotice() {
         return (
             <YTErrorBlock
                 error={error.response?.data || error}
-                message={'Cannot load preset of columns'}
+                message={i18n('alert_cannot-load-preset')}
             />
         );
     }
 
     return (
         <Warning className={block()}>
-            <CollapsibleSection
-                name={'The table is opened with preset of columns'}
-                size={'unset'}
-                collapsed
-            >
+            <CollapsibleSection name={i18n('title_preset-of-columns')} size={'unset'} collapsed>
                 {!columns?.length ? null : (
                     <span>
                         {map_(columns, (item, index) => {

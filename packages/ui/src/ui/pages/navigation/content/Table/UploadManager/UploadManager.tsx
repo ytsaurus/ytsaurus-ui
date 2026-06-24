@@ -22,6 +22,8 @@ import {type DialogField, YTDFDialog} from '../../../../../containers/Dialog';
 
 import hammer from '../../../../../common/hammer';
 
+import i18n from './i18n';
+
 import './UploadManager.scss';
 import {updateView} from '../../../../../store/actions/navigation';
 import {selectSchema} from '../../../../../store/selectors/navigation/tabs/schema';
@@ -117,7 +119,7 @@ class UploadManager extends React.Component<Props, State> {
                 <FileDropZone isDropable={!this.inProgress()} isEmpty={!file} onFile={this.onFile}>
                     {file ? this.renderFileContent(file) : null}
                 </FileDropZone>
-                {error && <YTErrorBlock error={error} message={'The file upload has failed'} />}
+                {error && <YTErrorBlock error={error} message={i18n('alert_upload-failed')} />}
             </React.Fragment>
         );
     }
@@ -154,19 +156,19 @@ class UploadManager extends React.Component<Props, State> {
                 fields={[
                     {
                         name: 'name',
-                        caption: 'Name',
+                        caption: i18n('field_name'),
                         type: 'plain',
                     },
                     {
                         name: 'size',
-                        caption: 'Size',
+                        caption: i18n('field_size'),
                         type: 'plain',
                     },
                     {
                         name: 'append',
-                        caption: 'Append',
+                        caption: i18n('field_append'),
                         type: 'tumbler',
-                        tooltip: 'Append content of the file to the end of the destination',
+                        tooltip: i18n('context_append-to-end'),
                         extras: {
                             disabled: inProgress,
                         },
@@ -177,7 +179,7 @@ class UploadManager extends React.Component<Props, State> {
                     {
                         name: 'fileType',
                         type: 'yt-select-single',
-                        caption: 'Type',
+                        caption: i18n('field_type'),
                         extras: {
                             items: getFileTypes({cluster}),
                             hideFilter: true,
@@ -206,8 +208,8 @@ class UploadManager extends React.Component<Props, State> {
                     {
                         name: 'firstRowAsNames',
                         type: 'tumbler',
-                        caption: 'Column names',
-                        tooltip: 'Interpret first row as column names',
+                        caption: i18n('field_column-names'),
+                        tooltip: i18n('context_first-row-as-names'),
                         onChange: (firstRowAsNames: boolean) => {
                             this.setState({firstRowAsNames});
                         },
@@ -215,8 +217,8 @@ class UploadManager extends React.Component<Props, State> {
                     {
                         name: 'secondRowAsTypes',
                         type: 'tumbler',
-                        caption: 'Types',
-                        tooltip: 'There is row with types right before data-rows',
+                        caption: i18n('field_types'),
+                        tooltip: i18n('context_second-row-as-types'),
                         onChange: (secondRowAsTypes: boolean) => {
                             this.setState({secondRowAsTypes});
                         },
@@ -245,12 +247,12 @@ class UploadManager extends React.Component<Props, State> {
         }
         return inProgress ? (
             <React.Fragment>
-                <Button onClick={this.cancelUpload}>Cancel upload</Button>
+                <Button onClick={this.cancelUpload}>{i18n('action_cancel-upload')}</Button>
                 <span className={block('help-link')}>{helpLink}</span>
             </React.Fragment>
         ) : (
             <React.Fragment>
-                <Button onClick={this.onReset}>Reset</Button>
+                <Button onClick={this.onReset}>{i18n('action_reset')}</Button>
                 <span className={block('help-link')}>{helpLink}</span>
             </React.Fragment>
         );
@@ -307,18 +309,18 @@ class UploadManager extends React.Component<Props, State> {
                 className={block('confirm')}
                 size="m"
                 view="action"
-                title="Upload"
+                title={i18n('action_upload')}
                 disabled={Boolean(fileError) || this.inProgress()}
                 onClick={this.onConfirm}
             >
-                Upload
+                {i18n('action_upload')}
             </Button>
         );
     };
 
     checkFile(file: State['file']): string | null {
         if (!file) {
-            return 'file is not selected';
+            return i18n('alert_file-not-selected');
         }
 
         const {cluster} = this.props;
@@ -326,9 +328,9 @@ class UploadManager extends React.Component<Props, State> {
         const uploadConfig = getConfigUploadTable({cluster});
 
         if (file.size > uploadConfig.uploadTableMaxSize) {
-            return `File size must not be greater than ${format.Bytes(
-                uploadConfig.uploadTableMaxSize,
-            )}`;
+            return i18n('alert_file-size-exceeded', {
+                maxSize: format.Bytes(uploadConfig.uploadTableMaxSize),
+            });
         }
 
         return null;
@@ -339,11 +341,11 @@ class UploadManager extends React.Component<Props, State> {
             <Button
                 className={block('close', className)}
                 size="m"
-                title="Close"
+                title={i18n('action_close')}
                 disabled={this.inProgress()}
                 onClick={this.handleClose}
             >
-                Close
+                {i18n('action_close')}
             </Button>
         );
     };
@@ -498,7 +500,7 @@ class UploadManager extends React.Component<Props, State> {
             },
             (e) => {
                 this.onStopUpload({
-                    message: `${readyUrl} responded with error`,
+                    message: i18n('alert_ready-url-error', {url: readyUrl}),
                     inner_errors: [e],
                 });
             },
@@ -521,15 +523,10 @@ class UploadManager extends React.Component<Props, State> {
         return !showOverwriteConfirmation ? null : (
             <Modal
                 size={'s'}
-                title={'Overwrite confirmation'}
+                title={i18n('title_overwrite-confirmation')}
                 visible={true}
-                confirmText={'Overwrite'}
-                content={
-                    <div>
-                        Are you sure you want to overwrite all existing data rows with the ones from
-                        the uploading file?
-                    </div>
-                }
+                confirmText={i18n('action_overwrite')}
+                content={<div>{i18n('confirm_overwrite-data')}</div>}
                 onConfirm={() => {
                     this.setOverwriteConfirmationVisible(false);
                     this.onConfirmImpl();
@@ -545,18 +542,18 @@ class UploadManager extends React.Component<Props, State> {
         const {visible, handleShow} = this.props;
         return (
             <React.Fragment>
-                <Button size="m" title="Upload" onClick={handleShow}>
+                <Button size="m" title={i18n('action_upload')} onClick={handleShow}>
                     <Icon awesome="upload" />
-                    &nbsp; Upload
+                    &nbsp; {i18n('action_upload')}
                 </Button>
 
                 {visible && (
                     <Modal
                         size="m"
-                        title="Upload"
+                        title={i18n('action_upload')}
                         visible={visible}
                         onCancel={this.handleClose}
-                        confirmText="Upload"
+                        confirmText={i18n('action_upload')}
                         content={this.renderContent()}
                         footerContent={this.renderFooterContent()}
                         renderCustomConfirm={this.renderConfirm}

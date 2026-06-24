@@ -7,6 +7,7 @@ import Icon from '../../../../../components/Icon/Icon';
 
 import {toggleFullScreen} from '../../../../../store/actions/navigation/content/table/table';
 import {isFullScreenAllowed} from '../../../../../components/FullScreen/FullScreen';
+import i18n from './i18n';
 
 FullScreenButton.propTypes = {
     // from parent
@@ -27,7 +28,11 @@ function FullScreenButton({block, toggleFullScreen, isFullScreen}) {
     return (
         isFullScreenAllowed() && (
             <div className={block('fs-button', {fullscreen: isFullScreen})}>
-                <Button size="m" title="Toggle full screen" onClick={toggleFullScreen}>
+                <Button
+                    size="m"
+                    title={i18n('action_toggle-full-screen')}
+                    onClick={toggleFullScreen}
+                >
                     <Icon awesome={isFullScreen ? 'compress' : 'expand'} />
                 </Button>
             </div>

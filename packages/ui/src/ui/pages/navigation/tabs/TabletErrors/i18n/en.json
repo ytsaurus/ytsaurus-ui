@@ -1,0 +1,11 @@
+{
+  "value_request-errors": "Request errors",
+  "value_background-errors": "Background errors {{count}}",
+  "title_tablet-errors": "Tablet errors",
+  "title_replication-errors": "Replication errors",
+  "alert_limited-errors-displayed": "Only limited number of errors is displayed. See Tablets tab for the complete list.",
+  "title_errors-of-tablet": "Errors of tablet",
+  "title_replica-to": "Replica to",
+  "title_mode-replica-to": "{{mode}} replica to",
+  "title_table-path": "table path"
+}

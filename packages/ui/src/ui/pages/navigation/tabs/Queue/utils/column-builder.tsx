@@ -15,6 +15,7 @@ import {genNavigationUrl} from '../../../../../utils/navigation/navigation';
 import {ClickableText} from '../../../../../components/ClickableText/ClickableText';
 import {showErrorPopup} from '../../../../../utils/utils';
 import {formatDateForTableSort} from '../../../../../utils/format-date-for-table-sort';
+import i18n from './i18n';
 
 const DISPLAY_FORMAT = 'DD-MM-YYYY HH:mm:ss';
 
@@ -22,7 +23,12 @@ export function bool<T>(name: string, getter: (row: T) => boolean): Column<T> {
     return {
         name,
         render({row}) {
-            return <Label theme="default" text={getter(row) ? 'True' : 'False'} />;
+            return (
+                <Label
+                    theme="default"
+                    text={getter(row) ? i18n('value_true') : i18n('value_false')}
+                />
+            );
         },
         sortAccessor: getter,
     };
@@ -59,7 +65,7 @@ export function error<T>(
                     color="danger"
                     hoverContent={<HoverContent error={error} />}
                 >
-                    Error
+                    {i18n('alert_error')}
                 </WarningIcon>
             );
         },
@@ -70,8 +76,10 @@ export function error<T>(
 function HoverContent({error}: {error: YTError}) {
     return (
         <span>
-            {error.message ?? 'Error'}{' '}
-            <ClickableText onClick={() => showErrorPopup(error)}>Details</ClickableText>
+            {error.message ?? i18n('alert_error')}{' '}
+            <ClickableText onClick={() => showErrorPopup(error)}>
+                {i18n('action_details')}
+            </ClickableText>
         </span>
     );
 }

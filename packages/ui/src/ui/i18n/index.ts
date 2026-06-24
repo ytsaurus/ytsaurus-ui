@@ -1,6 +1,7 @@
 import moment from 'moment';
 
 import {I18N, type KeyData, type KeysData} from '@gravity-ui/i18n';
+import {setLang as ytsaurusSomponentsSetLang} from '@ytsaurus/components';
 
 import {type AppLang} from '../../shared/constants/settings-types';
 import {configure} from './configure';
@@ -13,6 +14,7 @@ ytSetLang('en');
 
 export function ytSetLang(lang: AppLang) {
     i18n.setLang(lang);
+    ytsaurusSomponentsSetLang(lang);
     configure({lang});
     configureUnipika({lang});
 

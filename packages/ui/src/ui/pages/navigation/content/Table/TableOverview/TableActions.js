@@ -3,8 +3,9 @@ import {connect} from 'react-redux';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import PropTypes from 'prop-types';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
-import hammer from '../../../../../common/hammer';
 import {compose} from 'redux';
+
+import i18n from './i18n';
 
 import DownloadManager from '../../../../../pages/navigation/content/Table/DownloadManager/DownloadManager';
 import Button from '../../../../../components/Button/Button';
@@ -45,7 +46,7 @@ function DynamicActions(props) {
     return (
         <Fragment>
             <Button size="m" onClick={onClick}>
-                {hammer.format['Readable'](action)}
+                {i18n(`action_${action}`)}
             </Button>
         </Fragment>
     );

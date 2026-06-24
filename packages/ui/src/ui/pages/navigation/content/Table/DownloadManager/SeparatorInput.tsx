@@ -2,6 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import {TextInput} from '@gravity-ui/uikit';
 import {Yson} from '../../../../../components/Yson/Yson';
+import i18n from './i18n';
 import './SeparatorInput.scss';
 
 const block = cn('separator-input');
@@ -53,7 +54,7 @@ export function prepareSeparatorValue(v?: string) {
     // getting size in bytes `new Blob(['ы']).size !== 'ы'.length`
     const {size} = new Blob([res]);
     if (size !== 1) {
-        error = `Expected string of length 1 but found of length ${size}`;
+        error = i18n('alert_expected-length-1', {size});
     }
     return {value: res, error};
 }

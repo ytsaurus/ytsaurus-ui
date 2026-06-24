@@ -1,0 +1,14 @@
+{
+  "action_table": "Table",
+  "action_directory": "Directory",
+  "action_link": "Link",
+  "action_upload-xlsx": "Upload xlsx",
+  "action_upload-file": "Upload file",
+  "action_create-object": "Create object",
+  "action_show-resources": "Show resources",
+  "title_default": "Default",
+  "title_resources": "Resources",
+  "field_medium": "Medium",
+  "value_all": "All",
+  "context_show-resources": "Show resources"
+}

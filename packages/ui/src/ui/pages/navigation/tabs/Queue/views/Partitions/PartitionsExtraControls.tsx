@@ -28,6 +28,7 @@ import {
 } from '../../../../../../store/selectors/navigation/tabs/queue';
 
 import './PartitionsExtraControls.scss';
+import i18n from './i18n';
 
 const block = cn('queue-partitions');
 
@@ -36,11 +37,15 @@ interface Props extends PropsFromRedux {}
 const rateItems: React.ComponentProps<typeof RadioButton>['items'] = [
     {
         value: QUEUE_RATE_MODE.ROWS,
-        text: 'Rows',
+        get text() {
+            return i18n('value_rows');
+        },
     },
     {
         value: QUEUE_RATE_MODE.DATA_WEIGHT,
-        text: 'Data weight',
+        get text() {
+            return i18n('value_data-weight');
+        },
     },
 ];
 
@@ -65,19 +70,19 @@ const PartitionsExtraControls: React.VFC<Props> = ({
                 className={block('filter')}
                 value={queuePartitionIndex}
                 onChange={changeQueuePartitionIndex}
-                placeholder="Partition index..."
+                placeholder={i18n('field_partition-index')}
             />
             <Filter
                 className={block('filter')}
                 value={queueTabletCellHost}
                 onChange={changeQueueTabletCellHost}
-                placeholder="Tablet cell host..."
+                placeholder={i18n('field_tablet-cell-host')}
             />
             <Filter
                 className={block('filter')}
                 value={queueTabletCellId}
                 onChange={changeQueueTabletCellId}
-                placeholder="Tablet cell ID..."
+                placeholder={i18n('field_tablet-cell-id')}
             />
             <div className={block('divider')} />
             <RadioButton value={queueRateMode} onChange={changeQueueRateMode} items={rateItems} />

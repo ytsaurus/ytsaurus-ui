@@ -3,6 +3,7 @@ import React from 'react';
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import Link from '../../../../containers/Link/Link';
+import i18n from './i18n';
 
 import {MOVE_OBJECT} from '../../../../constants/navigation/modals/move-object';
 import {showErrorInModal} from '../../../../store/actions/navigation/modals/path-editing-popup';
@@ -90,10 +91,10 @@ function moveObjects(
 
         return wrapBatchPromise(
             executeBatchWithRetries(YTApiId.navigationMove, moveRequests, {
-                errorTitle: 'Failed to move the object(s)',
+                errorTitle: i18n('alert_failed-to-move-objects'),
                 saveCancelSourceCb: requests.saveCancelToken,
             }),
-            'Failed to move the object(s)',
+            i18n('alert_failed-to-move-objects'),
         )
             .then(() => yt.v3.commitTransaction({transaction_id: id}))
             .catch((err) =>
@@ -149,7 +150,7 @@ export function moveObject(
                     name: 'move',
                     autoHiding: 10000,
                     theme: 'success',
-                    title: `Object${multipleMode ? 's' : ''} was successfully moved`,
+                    title: multipleMode ? i18n('title_objects-moved') : i18n('title_object-moved'),
                     content: <Link url={`navigation?path=${result}`}>{result}</Link>,
                 });
                 return result;

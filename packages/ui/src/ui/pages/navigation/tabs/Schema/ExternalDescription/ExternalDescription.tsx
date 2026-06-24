@@ -4,6 +4,7 @@ import {MetaTable, Tooltip} from '@ytsaurus/components';
 import Icon from '../../../../../components/Icon/Icon';
 import {MarkdownLinePreview} from '../../../../../components/MarkdownLinePreview/MarkdownLinePreview';
 import cn from 'bem-cn-lite';
+import i18n from './i18n';
 
 import './ExternalDescription.scss';
 
@@ -32,17 +33,19 @@ export function ExternalDescription({type, data, column}: Props) {
         <>
             <Text color={'warning'}>
                 <Icon awesome="exclamation-triangle" face="solid" />
-                There might be a type mismatch
+                {i18n('alert_type-mismatch')}
             </Text>
             <MetaTable
                 className={block('meta')}
                 items={[
                     {
                         key: 'type',
+                        label: i18n('field_type'),
                         value: type,
                     },
                     {
                         key: 'external type',
+                        label: i18n('field_external-type'),
                         value: data.type,
                     },
                 ]}
@@ -71,7 +74,7 @@ export function ExternalDescription({type, data, column}: Props) {
                 />
             ) : (
                 <Text className={block('preview')} color={'hint'} ellipsis>
-                    {'no description'}
+                    {i18n('alert_no-description')}
                 </Text>
             )}
         </div>

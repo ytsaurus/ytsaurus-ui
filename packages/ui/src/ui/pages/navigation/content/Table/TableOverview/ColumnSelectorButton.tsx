@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
+import i18n from './i18n';
+
 import Icon from '../../../../../components/Icon/Icon';
 import Button from '../../../../../components/Button/Button';
 
@@ -55,7 +57,7 @@ function ColumnSelectorButton({
             <Button
                 size="m"
                 disabled={!allowPickColumns}
-                title="Choose columns"
+                title={i18n('context_choose-columns')}
                 onClick={openColumnSelectorModal}
                 view={view}
                 pin={allowUserColumnPresets ? 'round-brick' : 'round-round'}
@@ -63,7 +65,7 @@ function ColumnSelectorButton({
                 qa="table-columns-button"
             >
                 <Icon awesome="filter" face="solid" />
-                Columns
+                {i18n('action_columns')}
                 <Secondary disabled={!showAllColumns}>
                     {' '}
                     {visibleColumns.length + '/' + allColumns.length}

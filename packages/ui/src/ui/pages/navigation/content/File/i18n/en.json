@@ -1,0 +1,7 @@
+{
+  "action_download": "Download",
+  "action_download-link": "download",
+  "alert_file-empty": "File is empty.",
+  "alert_file-too-big": "The file is too big to be fully shown here. You can",
+  "alert_file-too-big-suffix": "it."
+}

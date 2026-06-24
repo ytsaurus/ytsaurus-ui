@@ -63,6 +63,7 @@ import {docsUrl} from '../../../config';
 
 import './AttributesEditor.scss';
 import UIFactory from '../../../UIFactory';
+import i18n from './i18n';
 
 const block = cn('navigation-attributes-editor');
 
@@ -282,7 +283,6 @@ function AttributesEditorLoaded() {
         [dispatch, initialValues, setErr],
     );
 
-    const forEachStaticTable = !hasStaticTables ? '' : ' for each static table ';
     const mergeNoticeAndError: Array<DialogField<FormValues>> = [];
 
     if (hasStaticTables) {
@@ -295,11 +295,7 @@ function AttributesEditorLoaded() {
             },
             extras: {
                 children: (
-                    <span className={block('run-notice')}>
-                        Do not forget to run merge-operation manually
-                        {forEachStaticTable}
-                        to completely apply changes of storage attributes.
-                    </span>
+                    <span className={block('run-notice')}>{i18n('alert_run-merge-manually')}</span>
                 ),
             },
         });
@@ -334,7 +330,7 @@ function AttributesEditorLoaded() {
         annotationTab.push({
             name: 'description',
             type: 'tab-vertical',
-            title: 'Description',
+            title: i18n('title_description'),
             fields,
         });
     }
@@ -342,12 +338,12 @@ function AttributesEditorLoaded() {
     const inMemoryModeField: DialogField = {
         name: 'in_memory_mode', // the attribute is not inheritable, so we do not need to display for map-nodes
         type: 'radio' as const,
-        caption: 'In memory mode',
+        caption: i18n('field_in-memory-mode'),
         extras: {
             options: [
-                {value: InMemoryMode.NONE, label: 'None'},
-                {value: InMemoryMode.COMPRESSED, label: 'Compressed'},
-                {value: InMemoryMode.UNCOMPRESSED, label: 'Uncompressed'},
+                {value: InMemoryMode.NONE, label: i18n('value_none')},
+                {value: InMemoryMode.COMPRESSED, label: i18n('value_compressed')},
+                {value: InMemoryMode.UNCOMPRESSED, label: i18n('value_uncompressed')},
             ],
         },
         tooltip: docsUrl(makeLink(UIFactory.docsUrls['dynamic-tables:overview#in_memory'])),
@@ -356,12 +352,12 @@ function AttributesEditorLoaded() {
     const optimizeForField: DialogField = {
         name: 'optimize_for',
         type: 'radio',
-        caption: 'Optimize for',
+        caption: i18n('field_optimize-for'),
         tooltip: docsUrl(makeLink(UIFactory.docsUrls['storage:chunks#optimize_for'])),
         extras: {
             options: [
-                {value: 'scan', label: 'Scan'},
-                {value: 'lookup', label: 'Lookup'},
+                {value: 'scan', label: i18n('value_scan')},
+                {value: 'lookup', label: i18n('value_lookup')},
             ],
         },
     };
@@ -378,19 +374,19 @@ function AttributesEditorLoaded() {
             size={'l'}
             validate={validateForm}
             headerProps={{
-                title: 'Edit attributes',
+                title: i18n('title_edit-attributes'),
             }}
             initialValues={initialValues}
             fields={[
                 {
                     name: 'general',
-                    title: 'General',
+                    title: i18n('title_general'),
                     type: 'tab-vertical',
                     fields: [
                         {
                             name: 'path',
                             type: 'editable-list',
-                            caption: 'Path',
+                            caption: i18n('field_path'),
                             extras: {
                                 frozen: true,
                                 className: block('path-list'),
@@ -399,19 +395,19 @@ function AttributesEditorLoaded() {
                         {
                             name: 'account',
                             type: 'usable-account',
-                            caption: 'Account',
+                            caption: i18n('field_account'),
                             tooltip: docsUrl(makeLink(UIFactory.docsUrls['storage:accounts'])),
                             extras: {
-                                placeholder: 'Enter account name...',
+                                placeholder: i18n('context_account-placeholder'),
                             },
                         },
                         {
                             name: 'primary_medium',
                             type: 'yt-select-single',
-                            caption: 'Primary medium',
+                            caption: i18n('field_primary-medium'),
                             tooltip: docsUrl(makeLink(UIFactory.docsUrls['storage:media#primary'])),
                             extras: {
-                                placeholder: 'Select primary medium',
+                                placeholder: i18n('context_primary-medium-placeholder'),
                                 items: mediumList.map((value: string) => {
                                     return {value, text: value};
                                 }),
@@ -424,7 +420,7 @@ function AttributesEditorLoaded() {
                                   {
                                       name: 'tablet_cell_bundle',
                                       type: 'tablet-cell-bundle' as const,
-                                      caption: 'Tablet cell bundle',
+                                      caption: i18n('field_tablet-cell-bundle'),
                                       tooltip: docsUrl(
                                           makeLink(
                                               UIFactory.docsUrls[
@@ -433,7 +429,9 @@ function AttributesEditorLoaded() {
                                           ),
                                       ),
                                       extras: {
-                                          placeholder: 'Select tablet cell bundle',
+                                          placeholder: i18n(
+                                              'context_tablet-cell-bundle-placeholder',
+                                          ),
                                       },
                                   },
                               ]),
@@ -441,7 +439,7 @@ function AttributesEditorLoaded() {
                         {
                             name: 'expiration_time',
                             type: 'datepicker',
-                            caption: 'Expiration time',
+                            caption: i18n('field_expiration-time'),
                             tooltip: docsUrl(makeLink(UIFactory.docsUrls['cypress:ttl'])),
                             extras: {
                                 format: 'yyyy-MM-dd HH:mm',
@@ -451,7 +449,7 @@ function AttributesEditorLoaded() {
                         {
                             name: 'expiration_timeout',
                             type: 'time-duration',
-                            caption: 'Expiration timeout',
+                            caption: i18n('field_expiration-timeout'),
                             tooltip: docsUrl(makeLink(UIFactory.docsUrls['cypress:ttl'])),
                         },
                         ...mergeNoticeAndError,
@@ -460,12 +458,12 @@ function AttributesEditorLoaded() {
                 {
                     name: 'storage',
                     type: 'tab-vertical',
-                    title: 'Storage',
+                    title: i18n('title_storage'),
                     fields: [
                         {
                             name: 'path',
                             type: 'editable-list',
-                            caption: 'Path',
+                            caption: i18n('field_path'),
                             extras: {
                                 frozen: true,
                                 className: block('path-list'),
@@ -475,7 +473,7 @@ function AttributesEditorLoaded() {
                         {
                             name: 'compression_codec',
                             type: 'select-with-subitems' as const,
-                            caption: 'Compression',
+                            caption: i18n('field_compression'),
                             tooltip: docsUrl(
                                 makeLink(
                                     UIFactory.docsUrls['storage:compression#compression_codecs'],
@@ -489,7 +487,7 @@ function AttributesEditorLoaded() {
                         {
                             name: '_storageOption',
                             type: 'radio',
-                            caption: 'Storage options',
+                            caption: i18n('field_storage-options'),
                             tooltip: docsUrl(
                                 makeLink(UIFactory.docsUrls['storage:replication#replication']),
                             ),
@@ -497,11 +495,11 @@ function AttributesEditorLoaded() {
                                 options: [
                                     {
                                         value: StorageOptions.REPLICATION,
-                                        label: 'Replication',
+                                        label: i18n('value_replication'),
                                     },
                                     {
                                         value: StorageOptions.ERASURE,
-                                        label: 'Erasure encoding',
+                                        label: i18n('value_erasure-encoding'),
                                     },
                                 ],
                             },
@@ -509,7 +507,7 @@ function AttributesEditorLoaded() {
                         {
                             name: 'replication_factor',
                             type: 'text',
-                            caption: 'Number of replicas',
+                            caption: i18n('field_number-of-replicas'),
                             touched: true,
                             visibilityCondition: {
                                 when: 'storage._storageOption',
@@ -522,7 +520,7 @@ function AttributesEditorLoaded() {
                         {
                             name: 'erasure_codec',
                             type: 'yt-select-single',
-                            caption: 'Erasure codec',
+                            caption: i18n('field_erasure-codec'),
                             tooltip: docsUrl(
                                 makeLink(UIFactory.docsUrls['storage:replication#erasure']),
                             ),
@@ -542,14 +540,8 @@ function AttributesEditorLoaded() {
                                   {
                                       name: 'runMerge',
                                       type: 'tumbler' as const,
-                                      caption: 'Run merge operation',
-                                      tooltip: (
-                                          <span>
-                                              Merge operation is required to completely apply
-                                              changes of storage attributes, it will be started with
-                                              enabled force transform flag.
-                                          </span>
-                                      ),
+                                      caption: i18n('field_run-merge-operation'),
+                                      tooltip: <span>{i18n('context_run-merge-tooltip')}</span>,
                                   },
                               ]),
                         ...mergeNoticeAndError,
@@ -583,8 +575,8 @@ function CreateExternalDescriptionButton() {
                     <Button view={'outlined'} size={'l'}>
                         <Flex alignItems={'center'} gap={1}>
                             {UIFactory?.externalAnnotationSetup?.externalServiceName ||
-                                'Create external description'}{' '}
-                            (Recommended)
+                                i18n('action_create-external-description')}{' '}
+                            {i18n('context_recommended')}
                             <ArrowUpRightFromSquare />
                         </Flex>
                     </Button>
@@ -610,7 +602,7 @@ function validateReplicationFactor(str: string): string | undefined {
         return undefined;
     }
 
-    return 'The value must be an integer in range [1; 20]';
+    return i18n('alert_replication-factor-invalid');
 }
 
 function validateStorage(storage: any) {

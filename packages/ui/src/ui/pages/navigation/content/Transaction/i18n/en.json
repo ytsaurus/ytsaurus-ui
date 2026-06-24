@@ -1,0 +1,7 @@
+{
+  "action_abort": "Abort",
+  "confirm_abort-transaction": "About to abort transaction {{id}}",
+  "field_title": "Title",
+  "field_start-time": "Start time",
+  "field_timeout": "Timeout"
+}

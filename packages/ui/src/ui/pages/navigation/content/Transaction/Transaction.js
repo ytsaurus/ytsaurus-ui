@@ -21,6 +21,7 @@ import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
 import {Yson} from '../../../../components/Yson/Yson';
+import i18n from './i18n';
 
 const block = cn('navigation-transaction');
 
@@ -53,7 +54,7 @@ function Transaction({visible, handleClose, handleShow}) {
 
     const modalContent = (
         <LoadDataHandler loaded={false} error={error} errorData={errorData}>
-            About to abort transaction <span className="elements-monospace">{id}</span>
+            {i18n('confirm_abort-transaction', {id})}
         </LoadDataHandler>
     );
 
@@ -65,16 +66,19 @@ function Transaction({visible, handleClose, handleShow}) {
                     [
                         {
                             key: 'title',
+                            label: i18n('field_title'),
                             value: <Yson value={title} />,
                             visible: Boolean(title),
                         },
                         {
-                            key: 'start_time',
+                            key: 'start-time',
+                            label: i18n('field_start-time'),
                             value: startTime,
                             visible: Boolean(startTime),
                         },
                         {
                             key: 'timeout',
+                            label: i18n('field_timeout'),
                             value: timeout,
                             visible: Boolean(timeout),
                         },
@@ -82,13 +86,13 @@ function Transaction({visible, handleClose, handleShow}) {
                 ]}
             />
 
-            <Button onClick={handleShow}>Abort</Button>
+            <Button onClick={handleShow}>{i18n('action_abort')}</Button>
             <Modal
-                title="Abort"
+                title={i18n('action_abort')}
                 visible={visible}
                 loading={loading}
                 confirmTheme="danger"
-                confirmText="Abort"
+                confirmText={i18n('action_abort')}
                 content={modalContent}
                 onConfirm={handleTransactionAbort}
                 onCancel={handleModalClose}

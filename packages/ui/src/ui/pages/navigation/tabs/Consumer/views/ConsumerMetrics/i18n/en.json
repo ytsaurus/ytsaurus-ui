@@ -1,0 +1,5 @@
+{
+  "alert_metrics-not-supported": "Metrics are not supported for the installation",
+  "context_select-queue": "Please select a queue",
+  "alert_no-selected-queues": "You don't have any selected queues"
+}

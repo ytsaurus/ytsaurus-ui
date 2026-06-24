@@ -39,6 +39,8 @@ import CustomRadioButton from '../../../../components/RadioButton/RadioButton';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 
+import i18n from './i18n';
+
 import './Locks.scss';
 
 const block = cn('navigation-locks');
@@ -83,16 +85,18 @@ class Locks extends Component {
             <MetaTable
                 qa="lock-meta-table"
                 items={[
-                    {key: 'id', value: item.id, className: block('id')},
-                    {key: 'mode', value: item.mode},
-                    {key: 'state', value: item.state},
+                    {key: 'id', label: i18n('field_id'), value: item.id, className: block('id')},
+                    {key: 'mode', label: i18n('field_mode'), value: item.mode},
+                    {key: 'state', label: i18n('field_state'), value: item.state},
                     {
                         key: 'child_key',
+                        label: i18n('field_child-key'),
                         value: item.child_key,
                         visible: Boolean(item.child_key),
                     },
                     {
                         key: 'attribute_key',
+                        label: i18n('field_attribute-key'),
                         value: item.attribute_key,
                         visible: Boolean(item.attribute_key),
                     },
@@ -122,10 +126,12 @@ class Locks extends Component {
                 lock: {
                     sort: false,
                     align: 'left',
+                    caption: i18n('field_lock'),
                 },
                 transaction: {
                     sort: false,
                     align: 'left',
+                    caption: i18n('field_transaction'),
                 },
             },
             sets: {
@@ -156,6 +162,7 @@ class Locks extends Component {
                 items={[
                     {
                         key: 'id',
+                        label: i18n('field_id'),
                         value: (
                             <FormattedLink
                                 text={transaction.id}
@@ -169,6 +176,7 @@ class Locks extends Component {
                     },
                     {
                         key: 'title',
+                        label: i18n('field_title'),
                         value: (
                             <Tooltip
                                 content={<Yson value={transaction.title} />}
@@ -185,6 +193,7 @@ class Locks extends Component {
                     },
                     {
                         key: 'start_time',
+                        label: i18n('field_start-time'),
                         value: (
                             <TemplateTime time={transaction.start_time} valueFormat="DateTime" />
                         ),
@@ -193,6 +202,7 @@ class Locks extends Component {
                     },
                     {
                         key: 'operation_id',
+                        label: i18n('field_operation-id'),
                         value: <Link url={operationIdUrl}>{operationId}</Link>,
                         visible: Boolean(operationId) || Boolean(clusterId),
                     },
@@ -213,8 +223,7 @@ class Locks extends Component {
         return (
             <div className={messageBlock({theme: 'info'})}>
                 <p className="elements-message__paragraph">
-                    Transaction information was only loaded for first {MAX_TRANSACTIONS_REQUESTS}{' '}
-                    locks.
+                    {i18n('alert_partial-load', {count: MAX_TRANSACTIONS_REQUESTS})}
                 </p>
             </div>
         );
@@ -240,19 +249,19 @@ class Locks extends Component {
                                 value={modeFilter}
                                 items={[
                                     {
-                                        text: 'All',
+                                        text: i18n('value_all'),
                                         value: '',
                                     },
                                     {
-                                        text: 'Exclusive',
+                                        text: i18n('value_exclusive'),
                                         value: 'exclusive',
                                     },
                                     {
-                                        text: 'Shared',
+                                        text: i18n('value_shared'),
                                         value: 'shared',
                                     },
                                     {
-                                        text: 'Snapshot',
+                                        text: i18n('value_snapshot'),
                                         value: 'snapshot',
                                     },
                                 ]}

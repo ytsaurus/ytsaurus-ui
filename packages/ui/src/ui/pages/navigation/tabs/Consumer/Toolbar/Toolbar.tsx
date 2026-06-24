@@ -11,6 +11,8 @@ import {toggleRegisterDialog} from '../../../../../store/reducers/navigation/tab
 import {type RootState} from '../../../../../store/reducers';
 import {selectConsumerMode} from '../../../../../store/selectors/navigation/tabs/consumer';
 
+import i18n from './i18n';
+
 import './Toolbar.scss';
 
 const block = cn('consumer-toolbar');
@@ -22,11 +24,15 @@ interface Props extends PropsFromRedux {
 const tabItems: React.ComponentProps<typeof RadioButton>['items'] = [
     {
         value: CONSUMER_MODE.METRICS,
-        text: 'Metrics',
+        get text() {
+            return i18n('value_metrics');
+        },
     },
     {
         value: CONSUMER_MODE.PARTITIONS,
-        text: 'Partitions',
+        get text() {
+            return i18n('value_partitions');
+        },
     },
 ];
 
@@ -39,7 +45,7 @@ const Toolbar: React.VFC<Props> = ({extras: Extras, consumerMode, changeConsumer
             <RadioButton value={consumerMode} onChange={changeConsumerMode} items={tabItems} />
             <Extras />
             <Button view={'outlined'} onClick={openRegisterDialog}>
-                Register to queue
+                {i18n('action_register-to-queue')}
             </Button>
         </div>
     );

@@ -164,7 +164,7 @@ export default class Columns {
         Columns.sortColumns(Columns.getKeyColumns(meta), keyColumns, 'name');
         columns = keyColumns.concat(regularColumns);
 
-        // if storedColumns is not exist that make visible first *defaultTableColumnLimit* columns
+        // if storedColumns does not exist that make visible first *defaultTableColumnLimit* columns
         if (!storedColumns) {
             let column = 0;
 

@@ -13,6 +13,7 @@ import {
 } from '../../../store/selectors/navigation/modals/table-erase-modal';
 import {docsUrl} from '../../../config';
 import UIFactory from '../../../UIFactory';
+import i18n from './i18n';
 
 interface FormValues {
     path: string;
@@ -58,7 +59,7 @@ export default function TableEraseModal() {
         <YTDFDialog<FormValues>
             visible={visible}
             headerProps={{
-                title: 'Erase table rows',
+                title: i18n('title_erase-table-rows'),
             }}
             onAdd={handleAdd}
             onClose={handleClose}
@@ -70,19 +71,18 @@ export default function TableEraseModal() {
                 {
                     name: 'path',
                     type: 'plain',
-                    caption: 'Path',
+                    caption: i18n('field_path'),
                 },
                 {
                     name: 'range',
                     type: 'text',
-                    caption: 'Range',
+                    caption: i18n('field_range'),
                     tooltip: (
                         <span>
                             {docsUrl(makeLink(UIFactory.docsUrls['operations:erase']))}
-                            Leave empty to erase all rows. Or use two numbers separated by colon.
-                            Each number might be skipped.
+                            {i18n('context_range-tooltip')}
                             <br />
-                            Examples: &quot;10:20&quot;, &quot;10:&quot;, &quot;:20&quot;
+                            {i18n('context_range-examples')}
                         </span>
                     ),
                     validator: validateRange,
@@ -93,7 +93,7 @@ export default function TableEraseModal() {
                 {
                     name: 'combine_chunks',
                     type: 'tumbler',
-                    caption: 'Combine chunks',
+                    caption: i18n('field_combine-chunks'),
                 },
                 ...(!error
                     ? []
@@ -118,5 +118,5 @@ function validateRange(value: string) {
         return undefined;
     }
 
-    return 'Enter two numbers separated by colon, like "10:20" or ":20" or "10:"';
+    return i18n('alert_range-invalid');
 }

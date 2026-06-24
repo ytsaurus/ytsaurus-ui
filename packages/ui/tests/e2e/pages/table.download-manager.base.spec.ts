@@ -13,7 +13,7 @@ test('Download manager: downloaded file should be equal to ideal', async ({page}
     const firstRow = page.locator('.data-table__table-wrapper tr:nth-child(1) td:nth-child(2) :text("key0")');
     await firstRow.waitFor();
 
-    const downloadButton = page.locator('.navigation-table-overview__download-manager [title="download"]');
+    const downloadButton = page.locator('.navigation-table-overview__download-manager [title="Download"]');
     await downloadButton.waitFor();
     await downloadButton.click();
 

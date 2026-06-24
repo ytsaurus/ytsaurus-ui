@@ -10,6 +10,7 @@ import {YTApiId} from '../../../../../rum/rum-wrap-api';
 import {useCheckPermissionQuery} from '../../../../../store/api/yt/checkPermissions';
 import {useGetQuery} from '../../../../../store/api/yt/get';
 import UIFactory from '../../../../../UIFactory';
+import i18n from './i18n';
 
 type UseTableAccessMetaItemParams = {
     path: string;
@@ -34,12 +35,12 @@ export function useTableAccessMetaItem({path, user, transaction_id}: UseTableAcc
 
     if (fullReadPermission.error || hasRls.error) {
         const error = {
-            message: 'Failed to check row level access.',
+            message: i18n('alert_failed-to-check-row-level-access'),
             inner_errors: compact_([fullReadPermission.error, hasRls.error]),
         };
         return {
             key: 'access',
-            label: 'Access',
+            label: i18n('field_access'),
             value: <YTErrorInline error={error} />,
         };
     }
@@ -51,7 +52,7 @@ export function useTableAccessMetaItem({path, user, transaction_id}: UseTableAcc
 
     return {
         key: 'access',
-        label: 'Access',
+        label: i18n('field_access'),
         value: (
             <Label theme="warning">
                 <Flex gap={1} alignItems="center">
@@ -59,12 +60,12 @@ export function useTableAccessMetaItem({path, user, transaction_id}: UseTableAcc
                     <Tooltip
                         content={
                             <>
-                                You can see subset of rows according to your subset of permissions.{' '}
+                                {i18n('context_row-level-access-limited')}{' '}
                                 <HelpLink url={UIFactory.docsUrls['acl:row-level-security']} />,
                             </>
                         }
                     >
-                        Limited
+                        {i18n('value_limited')}
                     </Tooltip>
                 </Flex>
             </Label>

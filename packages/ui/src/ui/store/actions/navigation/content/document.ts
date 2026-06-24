@@ -11,6 +11,7 @@ import {type ThunkAction} from 'redux-thunk';
 import {type RootState} from '../../../reducers';
 import {type NavigationDocumentAction} from '../../../reducers/navigation/content/document';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
+import i18n from './i18n';
 
 const requests = new CancelHelper();
 
@@ -56,8 +57,8 @@ export const saveDocument =
         try {
             await wrapApiPromiseByToaster(yt.v3.set({path}, document), {
                 toasterName: 'navigation-save-document',
-                errorTitle: 'Failed to save document',
-                successTitle: 'Document successfully saved',
+                errorTitle: i18n('alert_failed-to-save-document'),
+                successTitle: i18n('alert_document-saved'),
             });
 
             dispatch({type: SET_DOCUMENT_EDIT_MODE, data: false});

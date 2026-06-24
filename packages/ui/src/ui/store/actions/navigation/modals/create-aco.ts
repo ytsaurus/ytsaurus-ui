@@ -5,6 +5,7 @@ import {type RootState} from '../../../reducers';
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
 import {updateView} from '../index';
 import {toaster} from '../../../../utils/toaster';
+import i18n from './i18n';
 
 type CreateAcoModalThunkAction<R = any> = ThunkAction<R, RootState, unknown, CreateACOModalAction>;
 
@@ -47,7 +48,7 @@ export function createACO(params: CreateACOActionParams): CreateAcoModalThunkAct
                 toaster.add({
                     name: 'create-aco',
                     theme: 'success',
-                    title: 'ACO created',
+                    title: i18n('title_aco-created'),
                     content: '',
                 });
             });

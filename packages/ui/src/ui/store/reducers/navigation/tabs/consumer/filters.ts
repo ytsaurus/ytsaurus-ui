@@ -7,6 +7,7 @@ import {type TPerformanceCounters} from '../../../../../store/reducers/navigatio
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
 import {type ActionD} from '../../../../../types';
 import {type ConsumerQueueInfo} from './status';
+import i18n from './i18n';
 
 export interface PartitionColumn<Names> {
     name: Names;
@@ -18,12 +19,42 @@ export interface PartitionColumn<Names> {
 
 const CONSUMER_PARTITIONS_COLUMNS = [
     {id: 'partition_index', caption: '#'},
-    {id: 'error', caption: 'Error'},
-    {id: 'read_rate', caption: 'Read rate'},
-    {id: 'next_row_index', caption: 'Next row idx'},
-    {id: 'unread_row_count', caption: 'Unread rows'},
-    {id: 'processing_lag', caption: 'Processing lag'},
-    {id: 'next_row_commit_time', caption: 'Next row commit time'},
+    {
+        id: 'error',
+        get caption() {
+            return i18n('field_error');
+        },
+    },
+    {
+        id: 'read_rate',
+        get caption() {
+            return i18n('field_read-rate');
+        },
+    },
+    {
+        id: 'next_row_index',
+        get caption() {
+            return i18n('field_next-row-idx');
+        },
+    },
+    {
+        id: 'unread_row_count',
+        get caption() {
+            return i18n('field_unread-rows');
+        },
+    },
+    {
+        id: 'processing_lag',
+        get caption() {
+            return i18n('field_processing-lag');
+        },
+    },
+    {
+        id: 'next_row_commit_time',
+        get caption() {
+            return i18n('field_next-row-commit-time');
+        },
+    },
 ] as const;
 
 export type ConsumerPartitionsColumns = (typeof CONSUMER_PARTITIONS_COLUMNS)[number]['id'];

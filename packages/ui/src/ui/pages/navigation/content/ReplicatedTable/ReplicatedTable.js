@@ -48,6 +48,7 @@ import {
 
 import './ReplicatedTable.scss';
 import {CypressNodeTypes} from '../../../../utils/cypress-attributes';
+import i18n from './i18n';
 
 const block = cn('navigation-replicated-table');
 
@@ -105,6 +106,9 @@ class ReplicatedTable extends Component {
             get(replica) {
                 return ypath.getValue(replica, '');
             },
+            get caption() {
+                return i18n('field_id-path');
+            },
         },
         cluster: {
             align: 'left',
@@ -112,6 +116,9 @@ class ReplicatedTable extends Component {
             allowUnordered: true,
             get(replica) {
                 return ypath.getValue(replica, '/@cluster_name');
+            },
+            get caption() {
+                return i18n('field_cluster');
             },
         },
         content_type: {
@@ -121,6 +128,9 @@ class ReplicatedTable extends Component {
             get(replica) {
                 return ypath.getValue(replica, '/@content_type');
             },
+            get caption() {
+                return i18n('field_content-type');
+            },
         },
         mode: {
             align: 'left',
@@ -129,14 +139,19 @@ class ReplicatedTable extends Component {
             get(replica) {
                 return ypath.getValue(replica, '/@mode');
             },
+            get caption() {
+                return i18n('field_mode');
+            },
         },
         error_count: {
             align: 'center',
-            caption: 'Error count',
             sort: true,
             allowUnordered: true,
             get(replica) {
                 return ypath.getValue(replica, '/@error_count');
+            },
+            get caption() {
+                return i18n('field_error-count');
             },
         },
         errors: {
@@ -146,6 +161,9 @@ class ReplicatedTable extends Component {
             get(replica) {
                 return ypath.getValue(replica, '/@errors');
             },
+            get caption() {
+                return i18n('field_errors');
+            },
         },
         replication_lag_time: {
             align: 'right',
@@ -153,6 +171,9 @@ class ReplicatedTable extends Component {
             allowUnordered: true,
             get(replica) {
                 return ypath.getValue(replica, '/@replication_lag_time');
+            },
+            get caption() {
+                return i18n('field_replication-lag-time');
             },
         },
         state: {
@@ -162,15 +183,20 @@ class ReplicatedTable extends Component {
             get(replica) {
                 return ypath.getValue(replica, '/@state');
             },
+            get caption() {
+                return i18n('field_state');
+            },
         },
         automatic_mode_switch: {
             align: 'center',
-            caption: 'Replicated table tracker',
             sort: true,
             allowUnordered: true,
             get(replica) {
                 const flag = ypath.getValue(replica, '/@replicated_table_tracker_enabled');
                 return flag === 'true' || flag === true;
+            },
+            get caption() {
+                return i18n('field_replicated-table-tracker');
             },
         },
         actions: {
@@ -203,8 +229,12 @@ class ReplicatedTable extends Component {
         const attributes = ypath.getValue(replica, '/@');
         const [path, cluster] = ypath.getValues(attributes, ['/replica_path', '/cluster_name']);
         const copy = {
-            pathTitle: 'Copy replica path',
-            idTitle: 'Copy replica id',
+            get pathTitle() {
+                return i18n('action_copy-replica-path');
+            },
+            get idTitle() {
+                return i18n('action_copy-replica-id');
+            },
         };
 
         const replicaLink = <Link url={`/${cluster}/${Page.NAVIGATION}?path=${path}`}>{path}</Link>;
@@ -228,7 +258,7 @@ class ReplicatedTable extends Component {
                         size="s"
                         title={copy.pathTitle}
                     />{' '}
-                    Path {replicaLink}
+                    {i18n('field_path')} {replicaLink}
                 </span>
             </div>
         );
@@ -247,9 +277,11 @@ class ReplicatedTable extends Component {
     static renderAutomaticModeSwitch(enableTableTracker, item, columnName) {
         const value = ReplicatedTable.tableItems[columnName].get(item);
         const theme = !enableTableTracker ? 'unknown' : value ? 'enabled' : 'disabled';
-        const title = value ? 'Enabled' : 'Disabled';
+        const title = value ? i18n('value_enabled') : i18n('value_disabled');
         return (
-            <Tooltip content={enableTableTracker ? title : 'Disabled by table settings'}>
+            <Tooltip
+                content={enableTableTracker ? title : i18n('context_disabled-by-table-settings')}
+            >
                 <StatusBulb theme={theme} className={block('auto-switch', {})} />
                 {!enableTableTracker && (
                     <Icon
@@ -307,16 +339,16 @@ class ReplicatedTable extends Component {
             <ColumnHeader
                 column={isSortedByPath ? 'replica_path' : 'cluster_name'}
                 order={isSorted ? order : undefined}
-                title="Id / Path"
+                title={i18n('field_id-path')}
                 options={[
                     {
                         column: 'cluster_name',
-                        title: 'Replica ID',
+                        title: i18n('field_replica-id'),
                         allowUnordered: true,
                     },
                     {
                         column: 'replica_path',
-                        title: 'Replica Path',
+                        title: i18n('field_replica-path'),
                         allowUnordered: true,
                     },
                 ]}

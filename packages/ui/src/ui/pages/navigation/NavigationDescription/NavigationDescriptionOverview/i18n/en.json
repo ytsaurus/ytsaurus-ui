@@ -1,4 +1,5 @@
 {
-  "inherited": "Inherited",
-  "readonly": "Readonly"
+  "field_source-path": "Source path",
+  "value_inherited": "Inherited",
+  "value_readonly": "Readonly"
 }

@@ -45,7 +45,7 @@ export function NavigationDescriptionOverview() {
             )}
             {readonly && (
                 <Text>
-                    <Label>{i18n('readonly')}</Label>
+                    <Label>{i18n('value_readonly')}</Label>
                 </Text>
             )}
             {inheritedPath ? (
@@ -66,7 +66,8 @@ function SourcePath({path}: {path: string}) {
                     alignItems="baseline"
                     items={[
                         {
-                            key: 'Source path',
+                            key: 'source-path',
+                            label: i18n('field_source-path'),
                             value: (
                                 <Flex alignItems="baseline">
                                     <YTLink theme="secondary" url={url} routed>
@@ -83,7 +84,7 @@ function SourcePath({path}: {path: string}) {
             <Label>
                 <Flex alignItems={'center'} gap={1}>
                     <YTLink theme="secondary" url={url} routed>
-                        {i18n('inherited')}
+                        {i18n('value_inherited')}
                     </YTLink>{' '}
                     <Icon data={CircleQuestion} size={14} style={{marginBottom: '-2px'}} />
                 </Flex>

@@ -50,6 +50,7 @@ import {isFinalLoadingStatus} from '../../../../utils/utils';
 import './Table.scss';
 import TableColumnsPresetNotice from './TableOverview/TableColumnsPresetNotice';
 import {makeTableRumId} from '../../../../store/actions/navigation/content/table/table-rum-id';
+import i18n from './i18n';
 
 const block = cn('navigation-table');
 
@@ -159,7 +160,7 @@ const renderTable = (props) => {
                 settings={tableSettings}
                 columns={visibleColumns}
                 isFullScreen={isFullScreen}
-                emptyDataMessage="No items to show"
+                emptyDataMessage={i18n('alert_no-items-to-show')}
                 startIndex={!isDynamic ? offsetValue : undefined}
             />
         </LoadDataHandler>

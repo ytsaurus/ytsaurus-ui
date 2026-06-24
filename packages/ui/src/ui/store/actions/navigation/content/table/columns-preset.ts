@@ -22,6 +22,7 @@ import {type RootState} from '../../../../../store/reducers';
 import {YTApiId} from '../../../../../rum/rum-wrap-api';
 import {makeTableRumId} from './table-rum-id';
 import {toaster} from '../../../../../utils/toaster';
+import i18n from './i18n';
 
 const getColumnPresetEndpoint = (cluster: string) => `/api/table-column-preset/${cluster}`;
 
@@ -69,11 +70,11 @@ export function loadColumnPresetIfDefined(): ColumnPresetThunkAction {
                 toaster.add({
                     theme: 'danger',
                     name: 'loadColumnPreset',
-                    title: 'Failed to get preset of columns',
+                    title: i18n('alert_failed-to-get-preset'),
                     content: error.message,
                     actions: [
                         {
-                            label: ' Details',
+                            label: i18n('action_details'),
                             onClick() {
                                 showErrorPopup(error?.response?.data || error);
                             },
@@ -98,7 +99,7 @@ export function saveColumnPreset(columnsEncoded: Array<string>, cluster: string)
         {
             skipSuccessToast: true,
             toasterName: 'saveColumnPreset',
-            errorContent: 'Failed to save preset of columns',
+            errorContent: i18n('alert_failed-to-save-preset'),
         },
     ).then((res) => {
         const hash = res.data;

@@ -1,0 +1,7 @@
+{
+  "field_id": "Id",
+  "field_title": "Title",
+  "field_operation-id": "Operation Id",
+  "field_operation-title": "Operation title",
+  "field_parent": "Parent"
+}

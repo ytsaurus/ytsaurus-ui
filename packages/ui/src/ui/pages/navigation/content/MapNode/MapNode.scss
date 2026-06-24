@@ -30,16 +30,6 @@
         justify-content: center;
     }
 
-    &__medium-type {
-        width: 160px;
-    }
-
-    &__filter {
-        width: 30%;
-        min-width: 200px;
-        flex-shrink: 1;
-    }
-
     &_resources__table {
         min-width: 1200px;
 
@@ -161,13 +151,6 @@
                     width: 0;
                 }
             }
-        }
-    }
-
-    &__create-popup {
-        .icon {
-            height: unset;
-            margin-right: 0.5ex;
         }
     }
 }
