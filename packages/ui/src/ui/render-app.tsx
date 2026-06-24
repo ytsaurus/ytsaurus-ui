@@ -14,7 +14,6 @@ import {createMainEntryStore} from './store/store.main';
 
 import App from './containers/App/App';
 
-import '@gravity-ui/uikit/styles/fonts.css';
 import '@gravity-ui/uikit/styles/styles.css';
 
 import '@gravity-ui/unipika/styles/unipika.scss';
