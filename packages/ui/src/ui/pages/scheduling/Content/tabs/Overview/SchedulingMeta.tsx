@@ -309,7 +309,7 @@ function renderOperationsProgress(
                                                   marginRight
                                                   color="var(--default-color)"
                                               />
-                                              {i18n('operations-running-lightweigh')}
+                                              {i18n('operations-running-lightweight')}
                                           </span>
                                       ),
                                       value: lightweightStr,

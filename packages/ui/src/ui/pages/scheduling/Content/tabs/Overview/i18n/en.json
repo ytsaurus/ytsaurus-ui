@@ -14,7 +14,7 @@
   "operations": "Operations",
   "operations-pending": "Pending operations",
   "operations-running": "Running operations",
-  "operations-running-lightweigh": "Running lightweigh operations",
+  "operations-running-lightweight": "Running lightweight operations",
   "operations-running-max": "Max running operations",
   "meta_configured-guarantee": "Configured guarantee",
   "meta_effective-guarantee": "Effective guarantee",
