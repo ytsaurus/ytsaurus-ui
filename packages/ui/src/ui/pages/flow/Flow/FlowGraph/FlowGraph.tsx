@@ -1,5 +1,10 @@
+import React from 'react';
+import cn from 'bem-cn-lite';
+import partition_ from 'lodash/partition';
+
 import {
     ECameraScaleLevel,
+    type Graph,
     type TAnchor,
     type TBlock,
     type TBlockId,
@@ -9,16 +14,15 @@ import ClockIcon from '@gravity-ui/icons/svgs/clock.svg';
 import FileCodeIcon from '@gravity-ui/icons/svgs/file-code.svg';
 import ReceiptIcon from '@gravity-ui/icons/svgs/receipt.svg';
 import {Flex} from '@gravity-ui/uikit';
-import {type SVGIconSvgrData} from '../../../../types/uikit';
-import cn from 'bem-cn-lite';
-import partition_ from 'lodash/partition';
-import React from 'react';
+
 import {
     type FlowComputationStreamType,
     type FlowComputationType,
     type FlowSink,
     type FlowStream,
 } from '../../../../../shared/yt-types';
+import {type SVGIconSvgrData} from '../../../../types/uikit';
+
 import Loader from '../../../../components/Loader/Loader';
 import {NoContent} from '../../../../components/NoContent';
 import Select from '../../../../components/Select/Select';
@@ -41,7 +45,8 @@ import {
     selectFlowZoomToNode,
 } from '../../../../store/selectors/flow/filters';
 import {selectCluster} from '../../../../store/selectors/global/cluster';
-import './FlowGraph.scss';
+
+import {type FlowConnection, FlowConnectionPortal} from './FlowConnectionPortal';
 import i18n from './i18n';
 import {Computation} from './renderers/Computation';
 import {ComputationCanvasBlock} from './renderers/ComputationCanvas';
@@ -52,6 +57,8 @@ import {SinkCanvasBlock} from './renderers/SinkCanvas';
 import {Stream} from './renderers/Stream';
 import {StreamCanvasBlock} from './renderers/StreamCanvas';
 import {FlowGroupBlock} from './utils/FlowGroupBlock';
+
+import './FlowGraph.scss';
 
 const block = cn('yt-flow-graph');
 
@@ -90,6 +97,7 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
 
     const zoomTo = useSelector(selectFlowZoomToNode);
     const [zoomToState, setZoomToState] = React.useState<string>();
+    const [graphInstance, setGraphInstance] = React.useState<Graph | null>(null);
     React.useEffect(() => {
         setZoomToState(zoomTo);
     }, [zoomTo]);
@@ -104,7 +112,7 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
         {useDefaultConnection: !useGroups},
     );
 
-    const {isEmpty, isLoading, data, groups, groupBlocks} = useFlowGraphData({
+    const {isEmpty, isLoading, data, groups, groupBlocks, blockById} = useFlowGraphData({
         pipeline_path,
     });
 
@@ -116,6 +124,8 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
         return <NoContent warning="The graph is empty" />;
     }
 
+    const activeData = useGroups && !zoomToState ? groups : data;
+
     return (
         <div className={block()}>
             <FlowGraphToolbar blocks={data.blocks} zoomToNode={zoomTo} />
@@ -123,7 +133,7 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
                 className={block('graph')}
                 setScale={setScale}
                 {...config}
-                data={useGroups && !zoomToState ? groups : data}
+                data={activeData}
                 renderBlock={({className, style, data}) => {
                     return (
                         <Flex className={block('item-container', className)} style={style}>
@@ -141,7 +151,15 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
                 customGroups={groupBlocks}
                 zoomToNode={zoomToState}
                 onZoomToFinished={() => setZoomToState(undefined)}
+                onGraph={setGraphInstance}
             />
+            {graphInstance && (
+                <FlowConnectionPortal
+                    graph={graphInstance}
+                    connections={activeData.connections as FlowConnection[]}
+                    blockById={blockById}
+                />
+            )}
         </div>
     );
 }
@@ -222,6 +240,12 @@ const COMPUTATION_SIZE = {width: 320, height: 130};
 const STREAM_SIZE = {width: 240, height: 100};
 const SINK_SIZE = {width: 200, height: 80};
 
+type FlowExtendedStream = {
+    backpressure_detected?: boolean;
+    drained?: boolean;
+    stream_graph_entity_id?: string;
+};
+
 function useFlowGraphLoadedData({pipeline_path}: {pipeline_path: string}) {
     const cluster = useSelector(selectCluster);
     return useFlowExecuteQuery<'describe-pipeline'>({
@@ -233,172 +257,198 @@ function useFlowGraphLoadedData({pipeline_path}: {pipeline_path: string}) {
 function useFlowGraphData(params: {pipeline_path: string}) {
     const {data: loadedData} = useFlowGraphLoadedData(params);
 
-    type FlowData = YTGraphData<FlowGraphBlock, TConnection>;
+    type FlowData = YTGraphData<FlowGraphBlock, FlowConnection>;
+    type RawGraphData = {
+        data: FlowData;
+        groups: FlowData;
+        groupById: Map<string, FlowGroupBlock>;
+    };
 
-    const data: {data: FlowData; groups: FlowData; groupById: Map<string, FlowGroupBlock>} =
-        React.useMemo(() => {
-            const {computations = {}, streams = {}, sinks = {}, sources = {}} = loadedData ?? {};
+    const {rawGraphData} = React.useMemo(() => {
+        const {computations = {}, streams = {}, sinks = {}, sources = {}} = loadedData ?? {};
 
-            const res: typeof data = {
-                data: {blocks: [], connections: []},
-                groups: {blocks: [], connections: []},
-                groupById: new Map<string, FlowGroupBlock>(),
+        const res: RawGraphData = {
+            data: {blocks: [], connections: []},
+            groups: {blocks: [], connections: []},
+            groupById: new Map<string, FlowGroupBlock>(),
+        };
+
+        const blockById: Map<TBlockId, FlowGraphBlock> = new Map();
+        const portStateByStreamId = getPortStateByStreamId(Object.values(computations));
+
+        function addConnection<AnchorType extends string>(
+            connections: FlowData['connections'],
+            sourceBlockId: string,
+            targetBlockId: string,
+            {
+                anchorType,
+                portState,
+            }: {anchorType?: AnchorType; portState?: FlowConnection['portState']} = {},
+        ) {
+            const srcBlock = blockById.get(sourceBlockId);
+            const dstBlock = blockById.get(targetBlockId);
+            const streamBlockId =
+                srcBlock?.is === 'stream'
+                    ? sourceBlockId
+                    : dstBlock?.is === 'stream'
+                      ? targetBlockId
+                      : undefined;
+
+            const c: (typeof connections)[number] = {
+                sourceBlockId,
+                targetBlockId,
+                streamBlockId,
+                portState,
             };
+            connections.push(c);
+            if (anchorType) {
+                const src = blockById.get(sourceBlockId)!;
+                const dst = blockById.get(targetBlockId)!;
 
-            const blockById: Map<TBlockId, FlowGraphBlock> = new Map();
+                makeTimerAnchors(anchorType, src, dst, c);
+            }
+        }
 
-            function addConnection<AnthorType extends string>(
-                connections: FlowData['connections'],
-                sourceBlockId: string,
-                targetBlockId: string,
-                {anchorType}: {anchorType?: AnthorType} = {},
+        // Collect streams
+        Object.values(streams).forEach((stream) => {
+            const streamBlock = makeBlock('stream', stream, {
+                name: stream.name,
+                ...STREAM_SIZE,
+            });
+
+            blockById.set(streamBlock.id, streamBlock);
+            res.data.blocks.push(streamBlock);
+        });
+
+        // Collect computations and their groups
+        Object.entries(computations).forEach(([_name, computation]) => {
+            const groupId = `\n\n__group(${computation.id})__\n\n`;
+
+            const groupBlock = new FlowGroupBlock({
+                id: groupId,
+                computation,
+                streamSize: STREAM_SIZE,
+                computationSize: COMPUTATION_SIZE,
+                backgroundTheme: STATUS_TO_BG_THEME[computation.status],
+            });
+
+            res.groups.blocks.push(groupBlock);
+            res.groupById.set(groupId, groupBlock);
+
+            const computationBlock: RawGraphData['data']['blocks'][number] = makeBlock(
+                'computation',
+                computation,
+                {
+                    name: computation.name ?? computation.id,
+                    groupId,
+                    backgroundTheme: STATUS_TO_BG_THEME[computation.status],
+                    ...COMPUTATION_SIZE,
+                },
+            );
+            blockById.set(computationBlock.id, computationBlock);
+            res.data.blocks.push(computationBlock);
+
+            function collectStreams<K extends FlowComputationStreamType>(
+                key: K,
+                options?: {groupId: string},
             ) {
-                const c: (typeof connections)[number] = {sourceBlockId, targetBlockId};
-                connections.push(c);
-                if (anchorType) {
-                    const src = blockById.get(sourceBlockId)!;
-                    const dst = blockById.get(targetBlockId)!;
+                const streams = computation[key] ?? [];
 
-                    makeTimerAnchors(anchorType, src, dst, c);
-                }
+                streams.forEach((id) => {
+                    const portState = portStateByStreamId.get(id);
+
+                    if (key === 'input_streams' || key === 'source_streams') {
+                        addConnection(res.data.connections, id, computation.id, {portState});
+                    } else if (key === 'output_streams') {
+                        addConnection(res.data.connections, computation.id, id, {portState});
+                    } else if (key === 'timer_streams') {
+                        addConnection(res.data.connections, computation.id, id, {
+                            anchorType: key,
+                            portState,
+                        });
+                        addConnection(res.data.connections, id, computation.id, {
+                            anchorType: key,
+                            portState,
+                        });
+                    }
+
+                    if (options?.groupId) {
+                        Object.assign(blockById.get(id)!, {
+                            stream_type: key,
+                            ...options,
+                            ...ICON_BY_TYPE[key],
+                        });
+                    }
+                });
             }
 
-            // Collect streams
-            Object.values(streams).forEach((stream) => {
-                const streamBlock = makeBlock('stream', stream, {
-                    name: stream.name,
-                    ...STREAM_SIZE,
-                });
+            collectStreams('input_streams');
+            collectStreams('output_streams', {groupId});
+            collectStreams('source_streams', {groupId});
+            collectStreams('timer_streams', {groupId});
+        });
 
-                blockById.set(streamBlock.id, streamBlock);
-                res.data.blocks.push(streamBlock);
-            });
+        // Collect sinks
+        Object.entries(sinks).forEach(([_key, item]) => {
+            const sink = makeBlock('sink', item, {...SINK_SIZE, icon: ReceiptIcon});
+            addConnection(res.data.connections, item.stream_id, item.id);
+            blockById.set(sink.id, sink);
 
-            // Collect computations and their groups
-            Object.entries(computations).forEach(([_name, computation]) => {
-                const groupId = `\n\n__group(${computation.id})__\n\n`;
+            res.data.blocks.push(sink);
+            res.groups.blocks.push(sink);
+        });
 
-                const groupBlock = new FlowGroupBlock({
-                    id: groupId,
-                    computation,
-                    streamSize: STREAM_SIZE,
-                    computationSize: COMPUTATION_SIZE,
-                    backgroundTheme: STATUS_TO_BG_THEME[computation.status],
-                });
+        // Collect sources
+        Object.entries(sources).forEach(([_key, item]) => {
+            const source = makeBlock('sink', item, {...SINK_SIZE, icon: FileCodeIcon});
+            addConnection(res.data.connections, item.id, item.stream_id);
+            blockById.set(item.id, source);
 
-                res.groups.blocks.push(groupBlock);
-                res.groupById.set(groupId, groupBlock);
+            res.data.blocks.push(source);
+            res.groups.blocks.push(source);
+        });
 
-                const computationBlock: (typeof res)['data']['blocks'][number] = makeBlock(
-                    'computation',
-                    computation,
-                    {
-                        name: computation.name ?? computation.id,
-                        groupId,
-                        backgroundTheme: STATUS_TO_BG_THEME[computation.status],
-                        ...COMPUTATION_SIZE,
-                    },
-                );
-                blockById.set(computationBlock.id, computationBlock);
-                res.data.blocks.push(computationBlock);
+        // Transform connections to group connections
+        const connectionIds = new Set<string>();
+        res.data.connections.forEach((item) => {
+            const {sourceBlockId, targetBlockId} = item;
+            const src = blockById.get(sourceBlockId!)!;
+            const dst = blockById.get(targetBlockId!)!;
 
-                function collectStreams<K extends FlowComputationStreamType>(
-                    key: K,
-                    options?: {groupId: string},
-                ) {
-                    const streams = computation[key] ?? [];
+            let source: string | undefined;
+            let target: string | undefined;
 
-                    streams.forEach((id) => {
-                        if (key === 'input_streams' || key === 'source_streams') {
-                            addConnection(res.data.connections, id, computation.id);
-                        } else if (key === 'output_streams') {
-                            addConnection(res.data.connections, computation.id, id);
-                        } else if (key === 'timer_streams') {
-                            addConnection(res.data.connections, computation.id, id, {
-                                anchorType: key,
-                            });
-                            addConnection(res.data.connections, id, computation.id, {
-                                anchorType: key,
-                            });
-                        }
-
-                        if (options?.groupId) {
-                            Object.assign(blockById.get(id)!, {
-                                stream_type: key,
-                                ...options,
-                                ...ICON_BY_TYPE[key],
-                            });
-                        }
-                    });
-                }
-
-                collectStreams('input_streams');
-                collectStreams('output_streams', {groupId});
-                collectStreams('source_streams', {groupId});
-                collectStreams('timer_streams', {groupId});
-            });
-
-            // Collect sinks
-            Object.entries(sinks).forEach(([_key, item]) => {
-                const sink = makeBlock('sink', item, {...SINK_SIZE, icon: ReceiptIcon});
-                addConnection(res.data.connections, item.stream_id, item.id);
-                blockById.set(sink.id, sink);
-
-                res.data.blocks.push(sink);
-                res.groups.blocks.push(sink);
-            });
-
-            // Collect sources
-            Object.entries(sources).forEach(([_key, item]) => {
-                const source = makeBlock('sink', item, {...SINK_SIZE, icon: FileCodeIcon});
-                addConnection(res.data.connections, item.id, item.stream_id);
-                blockById.set(item.id, source);
-
-                res.data.blocks.push(source);
-                res.groups.blocks.push(source);
-            });
-
-            // Transform connections to group connections
-            const connectionIds = new Set<string>();
-            res.data.connections.forEach((item) => {
-                const {sourceBlockId, targetBlockId} = item;
-                const src = blockById.get(sourceBlockId!)!;
-                const dst = blockById.get(targetBlockId!)!;
-
-                let source: string | undefined;
-                let target: string | undefined;
-
-                if (src.groupId && dst.groupId) {
-                    if (src.groupId !== dst.groupId) {
-                        source = src.groupId;
-                        target = dst.groupId;
-                    }
-                } else if (src.groupId) {
+            if (src.groupId && dst.groupId) {
+                if (src.groupId !== dst.groupId) {
                     source = src.groupId;
-                    target = dst.id;
-                } else if (dst.groupId) {
-                    source = src.id;
                     target = dst.groupId;
                 }
+            } else if (src.groupId) {
+                source = src.groupId;
+                target = dst.id;
+            } else if (dst.groupId) {
+                source = src.id;
+                target = dst.groupId;
+            }
 
-                if (source && target) {
-                    const id = `_${source}->${target}_`;
-                    if (!connectionIds.has(id)) {
-                        connectionIds.add(id);
-                        addConnection(res.groups.connections, source, target);
-                    }
+            if (source && target) {
+                const id = `_${source}->${target}_`;
+                if (!connectionIds.has(id)) {
+                    connectionIds.add(id);
+                    addConnection(res.groups.connections, source, target);
                 }
-            });
+            }
+        });
 
-            return res;
-        }, [loadedData]);
+        return {rawGraphData: res, blockById};
+    }, [loadedData]);
 
-    const elkRes = useElkLayout(data.groups);
+    const elkRes = useElkLayout(rawGraphData.groups);
     const res = React.useMemo(() => {
         const {blocks, connections} = elkRes.data;
 
         blocks.forEach(({id, x, y}) => {
-            const group = data.groupById.get(id);
+            const group = rawGraphData.groupById.get(id);
             if (group) {
                 Object.assign(group, {x, y});
             }
@@ -406,42 +456,101 @@ function useFlowGraphData(params: {pipeline_path: string}) {
 
         const [_groups, other] = partition_(blocks, ({is}) => is === 'computation-group');
 
+        const layoutBlocks = [
+            ...rawGraphData.data.blocks.map((item) => {
+                const group = rawGraphData.groupById.get(item.groupId!);
+                if (!group) {
+                    return item;
+                }
+
+                if (item.is === 'computation') {
+                    return group.updateBlockPosition('computation', item);
+                }
+
+                if (item.stream_type) {
+                    return group.updateBlockPosition(item.stream_type, item);
+                }
+                return item;
+            }),
+            ...other,
+        ];
+
+        const finalBlockById = new Map<string, FlowGraphBlock>();
+        layoutBlocks.forEach((b) => finalBlockById.set(b.id, b));
+
         return {
             data: {
-                blocks: [
-                    ...data.data.blocks.map((item) => {
-                        const group = data.groupById.get(item.groupId!);
-                        if (!group) {
-                            return item;
-                        }
-
-                        if (item.is === 'computation') {
-                            return group.updateBlockPosition('computation', item);
-                        }
-
-                        if (item.stream_type) {
-                            return group.updateBlockPosition(item.stream_type, item);
-                        }
-                        return item;
-                    }),
-                    ...other,
-                ],
-                connections: data.data.connections,
+                blocks: layoutBlocks,
+                connections: rawGraphData.data.connections,
             },
             groups: {
                 blocks,
                 connections,
             },
             groupBlocks: blocks.filter(({is}) => is === 'computation-group'),
+            blockById: finalBlockById,
         };
-    }, [elkRes.isLoading, elkRes.data, data]);
+    }, [elkRes.isLoading, elkRes.data, rawGraphData]);
 
     return {
-        isEmpty: !data.data.blocks.length,
+        isEmpty: !rawGraphData.data.blocks.length,
         ...elkRes,
         ...res,
         messages: loadedData?.messages,
     };
+}
+
+function getPortStateByStreamId(computations: Array<FlowComputationType>) {
+    const res = new Map<string, FlowConnection['portState']>();
+    const streamTypes: Array<FlowComputationStreamType> = [
+        'input_streams',
+        'output_streams',
+        'source_streams',
+        'timer_streams',
+    ];
+
+    computations.forEach((computation) => {
+        streamTypes.forEach((key) => {
+            getExtendedStreams(computation, key).forEach((item, id) => {
+                const portState = getPortState(item);
+                if (portState) {
+                    res.set(id, portState);
+                }
+            });
+        });
+    });
+
+    return res;
+}
+
+function getExtendedStreams(
+    computation: FlowComputationType,
+    key: FlowComputationStreamType,
+): Map<string, FlowExtendedStream> {
+    const extendedKey = `extended_${key}` as const;
+    const extendedStreams = (computation as Record<string, unknown>)[extendedKey];
+
+    if (!Array.isArray(extendedStreams)) {
+        return new Map();
+    }
+
+    return new Map(
+        extendedStreams
+            .filter((item): item is FlowExtendedStream => Boolean(item?.stream_graph_entity_id))
+            .map((item) => [item.stream_graph_entity_id!, item]),
+    );
+}
+
+function getPortState(item?: FlowExtendedStream): FlowConnection['portState'] {
+    if (item?.backpressure_detected) {
+        return 'backpressure';
+    }
+
+    if (item?.drained) {
+        return 'drain';
+    }
+
+    return undefined;
 }
 
 function makeBlock<
