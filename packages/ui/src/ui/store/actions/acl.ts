@@ -84,7 +84,7 @@ export function loadAclData(
         const state = getState();
         const {login, cluster = ''} = state.global;
 
-        dispatch({type: ACL_LOAD_DATA.REQUEST, idmKind});
+        dispatch({type: ACL_LOAD_DATA.REQUEST, idmKind, data: {path}});
 
         const poolTree =
             idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
@@ -140,6 +140,7 @@ export function loadAclData(
                 type: ACL_LOAD_DATA.FAILURE,
                 data: {
                     error,
+                    path,
                 },
                 idmKind,
             });
