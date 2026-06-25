@@ -30,7 +30,6 @@ export const selectLastUserChoiceYqlVersion = createSelector(
         return data[`local::${settings?.cluster}::queryTracker::lastYqlVersion`];
     },
 );
-
 export const selectQueryTokens = createSelector([selectSettingsData], (data) => {
     return data['global::queryTracker::tokens'] || [];
 });

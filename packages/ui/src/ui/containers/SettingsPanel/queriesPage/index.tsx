@@ -86,6 +86,16 @@ export const queriesPage = ({cluster, hasQuerySuggestions}: Props) => {
                       ),
                   ]
                 : []),
+            makeItem(
+                'global::queryTracker::disableCliqueReadinessCheck',
+                i18n('field_disable-clique-readiness-check'),
+                'top',
+                <BooleanSettingItem
+                    settingKey="global::queryTracker::disableCliqueReadinessCheck"
+                    description={i18n('context_disable-clique-readiness-check-description')}
+                    oneLine
+                />,
+            ),
             makeItem('addQtTokenForm', i18n('title_query-token'), 'top', <LazyAddQueryTokenForm />),
             makeItem('existingQtTokenList', '', 'top', <LazyQueryTokenList />),
         ]),

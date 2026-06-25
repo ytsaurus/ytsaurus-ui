@@ -153,6 +153,7 @@ interface QueryTrackerSettings {
     'global::queryTracker::useNewGraphView': boolean;
     'global::queryTracker::graphAutoCenter': boolean;
     'global::queryTracker::suggestions': boolean;
+    'global::queryTracker::disableCliqueReadinessCheck': boolean;
     'global::queryTracker::lastEngine': QueryEngine;
     'global::queryTracker::tokens': QueryToken[];
 }

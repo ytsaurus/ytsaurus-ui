@@ -38,6 +38,10 @@ export const selectSettingsQueryTrackerGraphAutoCenter = createSelector(
     },
 );
 
+export const selectDisableCliqueReadinessCheck = createSelector(selectSettingsData, (data) => {
+    return data['global::queryTracker::disableCliqueReadinessCheck'] || false;
+});
+
 export const selectSettingsEditorVimMode = createSelector(selectSettingsData, (data) => {
     return data['global::editor::vimMode'] || false;
 });
