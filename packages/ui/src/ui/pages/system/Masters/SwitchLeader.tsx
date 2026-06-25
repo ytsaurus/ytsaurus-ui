@@ -6,6 +6,7 @@ import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {YTDFDialog, makeErrorFields} from '../../../containers/Dialog';
 import {SwitchLeaderShortInfo} from '../../../pages/components/SwitchLeaderShortInfo/SwitchLeaderShortInfo';
 import {AppStoreProvider} from '../../../containers/App/AppStoreProvider';
+import i18n from './i18n/index-switch-leader';
 
 type SwitchLeaderDialogProps = {
     cancel: () => void;
@@ -37,7 +38,7 @@ const SwitchLeaderDialog = (props: SwitchLeaderDialogProps) => {
         <YTDFDialog<FormValues>
             visible={props.visible}
             headerProps={{
-                title: `Switch leader for ${props.cellId}`,
+                title: i18n('title_switch-leader-for', {cellId: props.cellId}),
             }}
             initialValues={{
                 leading_primary_master: leaderPath ? [leaderPath] : [],
@@ -45,12 +46,12 @@ const SwitchLeaderDialog = (props: SwitchLeaderDialogProps) => {
             fields={[
                 {
                     type: 'select',
-                    caption: ' Leading primary master',
+                    caption: i18n('field_leading-primary-master'),
                     name: 'leading_primary_master',
                     required: true,
                     extras: {
                         options: selectLeadingHostOptions,
-                        placeholder: 'New leading primary master',
+                        placeholder: i18n('context_new-leading-primary-master'),
                         width: 'max',
                         filterable: true,
                     },
@@ -58,7 +59,7 @@ const SwitchLeaderDialog = (props: SwitchLeaderDialogProps) => {
                 ...makeErrorFields([error]),
             ]}
             footerProps={{
-                textApply: 'Switch leader',
+                textApply: i18n('action_switch-leader'),
             }}
             onAdd={(form) => {
                 const {leading_primary_master} = form.getState().values;
@@ -110,7 +111,7 @@ export const SwitchLeaderButton = ({cellId, hosts, className}: SwitchLeaderButto
                     </AppStoreProvider>
                 );
             },
-            successTitle: 'Leader switch initiated',
+            successTitle: i18n('alert_leader-switch-initiated'),
             autoHide: false,
         });
 
@@ -128,7 +129,7 @@ export const SwitchLeaderButton = ({cellId, hosts, className}: SwitchLeaderButto
                 view="flat-secondary"
                 onClick={handleClick}
                 withTooltip
-                tooltipProps={{content: 'Switch leader'}}
+                tooltipProps={{content: i18n('action_switch-leader')}}
             >
                 <Icon awesome="crowndiamond" />
             </Button>

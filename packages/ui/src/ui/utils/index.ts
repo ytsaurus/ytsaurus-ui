@@ -102,6 +102,7 @@ export function formatCounterName(name: string): string {
             alerts: 'alrt',
             decommissioned: 'dec',
             full: 'full',
+            total: 'Total',
         }[name] || name;
     return format['Readable'](caption, {delimiter: '-'});
 }

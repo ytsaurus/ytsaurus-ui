@@ -11,6 +11,8 @@ import {type RootState} from '../../../store/reducers';
 
 import {formatCounterName} from '../../../utils/index';
 
+import i18n from './i18n';
+
 import './SystemCounters.scss';
 
 const b = block('system');
@@ -23,6 +25,7 @@ export type SystemCountersProps<Flags extends string> = {
         states?: Partial<Record<string, number | undefined>>;
         flags?: Partial<Record<Flags, number | undefined>>;
         total?: number;
+        titles?: Record<string, string>;
     };
     stateThemeMappings?: Partial<Record<string, SystemCounterTheme>>;
     renderLinks?: boolean;
@@ -33,6 +36,21 @@ export type SystemCountersProps<Flags extends string> = {
 };
 
 export type SystemCounterTheme = 'warning' | 'danger' | undefined;
+
+const COUNTER_TITLES = {
+    get total() {
+        return i18n('title_total');
+    },
+    get online() {
+        return i18n('title_online');
+    },
+    get offline() {
+        return i18n('title_offline');
+    },
+    get banned() {
+        return i18n('title_banned');
+    },
+};
 
 class SystemCounters<Flags extends string> extends React.Component<SystemCountersProps<Flags>> {
     static defaultProps = {
@@ -52,12 +70,12 @@ class SystemCounters<Flags extends string> extends React.Component<SystemCounter
     }
 
     renderCounter({
-        caption,
+        name,
         params,
         value,
         theme,
     }: {
-        caption: string;
+        name: string;
         params: Record<string, string>;
         value?: number;
         theme?: SystemCounterTheme;
@@ -66,7 +84,9 @@ class SystemCounters<Flags extends string> extends React.Component<SystemCounter
             return null;
         }
 
-        const {renderLinks} = this.props;
+        const {renderLinks, counters} = this.props;
+        const titles = Object.assign({}, COUNTER_TITLES, counters?.titles);
+        const caption = titles?.[name] ?? formatCounterName(name);
 
         const url = renderLinks ? this.prepareUrl(params) : undefined;
 
@@ -99,7 +119,7 @@ class SystemCounters<Flags extends string> extends React.Component<SystemCounter
             return (
                 <li key={flagName} className={'counter_flag'}>
                     {this.renderCounter({
-                        caption: formatCounterName(flagName),
+                        name: flagName,
                         params: {[flagName]: 'enabled'},
                         theme: stateThemeMappings?.[flagName],
                         value: flag,
@@ -116,7 +136,7 @@ class SystemCounters<Flags extends string> extends React.Component<SystemCounter
             return (
                 <li key={stateName} className={'counter_state'}>
                     {this.renderCounter({
-                        caption: formatCounterName(stateName),
+                        name: stateName,
                         params: {state: stateName},
                         theme: stateThemeMappings?.[stateName],
                         value: state,
@@ -132,7 +152,7 @@ class SystemCounters<Flags extends string> extends React.Component<SystemCounter
         return (
             <li key={'total'} className={'counter_total'}>
                 {this.renderCounter({
-                    caption: formatCounterName('total'),
+                    name: 'total',
                     params: {},
                     value: counters?.total,
                 })}

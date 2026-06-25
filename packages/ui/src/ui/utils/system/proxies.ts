@@ -26,6 +26,7 @@ export function extractRoleGroups(proxies: Array<RoleGroupItemInfo>): Array<Role
                         states: {},
                         effectiveStates: {},
                         flags: {},
+                        titles: {},
                     },
                 };
             }
@@ -69,6 +70,7 @@ export function extractProxyCounters(proxies: Array<RoleGroupItemInfo>) {
         states: {},
         effectiveStates: {},
         flags: {},
+        titles: {},
     };
 
     each_(proxies, (proxy) => {

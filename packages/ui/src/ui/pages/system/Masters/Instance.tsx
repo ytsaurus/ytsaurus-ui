@@ -14,6 +14,8 @@ import {type MasterInstance} from '../../../store/selectors/system/masters';
 import './MasterGroup.scss';
 import {changeMasterMaintenance} from '../../../store/actions/system/masters';
 import {type CypressNode} from '../../../../shared/yt-types';
+import i18n from './i18n/index-instance';
+import {InstanceState} from './InstanceState/InstanceState';
 
 const b = block('master-group');
 
@@ -49,7 +51,9 @@ export const Instance: FC<Props> = ({instance, hostType, allowVoting, allowServi
     >['$attributes'];
     const address = hostType === 'host' ? $address : $physicalAddress;
     const maintenance = instance.getMaintenance();
-    const maintenanceMessage = maintenance ? instance.getMaintenanceMessage() || 'Maintenance' : '';
+    const maintenanceMessage = maintenance
+        ? instance.getMaintenanceMessage() || i18n('value_maintenance')
+        : '';
     const {voting} = attributes ?? {};
     // do not use `!voting` cause `voting === undefined` is the same as `voting === true`
     const denyVoting = allowVoting && voting === false;
@@ -71,7 +75,7 @@ export const Instance: FC<Props> = ({instance, hostType, allowVoting, allowServi
                 <NodeQuad theme={theme} />
             </div>
             <div className={b('role')}>
-                <span>{hammer.format['ReadableField'](state ? state : 'unknown')}</span>
+                <InstanceState state={state} />
             </div>
             <div className={b('icon')}>
                 {maintenanceMessage && (
@@ -80,12 +84,12 @@ export const Instance: FC<Props> = ({instance, hostType, allowVoting, allowServi
                     </Tooltip>
                 )}
                 {attributes?.read_only && (
-                    <span className={b('icon-glyph')} title="Read only">
+                    <span className={b('icon-glyph')} title={i18n('value_read-only')}>
                         <ReadOnlyIcon width={14} height={14} />
                     </span>
                 )}
                 {attributes?.warming_up && (
-                    <span className={b('icon-glyph')} title="Warming up">
+                    <span className={b('icon-glyph')} title={i18n('value_warming-up')}>
                         <WarmUpIcon width={14} height={14} />
                     </span>
                 )}
@@ -101,7 +105,7 @@ export const Instance: FC<Props> = ({instance, hostType, allowVoting, allowServi
                     <ChangeMaintenanceButton
                         className={b('host-btn', {hidden: !allowService})}
                         path={instance.getPath()}
-                        title={`Edit ${addressWithoutPort}`}
+                        title={i18n('title_edit-address', {address: addressWithoutPort})}
                         host={$physicalAddress}
                         container={$address}
                         maintenance={maintenance}
@@ -109,7 +113,7 @@ export const Instance: FC<Props> = ({instance, hostType, allowVoting, allowServi
                         onMaintenanceChange={handleOnMaintenanceChange}
                     />
                     <Text className={b('nonvoting', {hidden: !denyVoting})} color="secondary">
-                        [nonvoting]
+                        {i18n('value_nonvoting')}
                     </Text>
                 </Flex>
             </div>

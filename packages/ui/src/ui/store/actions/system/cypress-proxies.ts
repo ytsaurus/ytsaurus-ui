@@ -3,6 +3,7 @@ import {type ThunkAction, type UnknownAction} from '@reduxjs/toolkit';
 import {Toaster} from '@gravity-ui/uikit';
 
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
+import i18n from './i18n';
 import {getBatchError} from '../../../../shared/utils/error';
 import ypath from '../../../common/thor/ypath';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
@@ -64,7 +65,7 @@ export function loadSystemCypressProxies(): CypressProxiesThunkAction<
                 ],
             })
             .then((result) => {
-                const error = getBatchError(result, 'Failed to load CypressProxies');
+                const error = getBatchError(result, i18n('alert_failed-to-load-cypress-proxies'));
                 if (error) {
                     throw error;
                 }
@@ -91,11 +92,11 @@ export function loadSystemCypressProxies(): CypressProxiesThunkAction<
                     name: 'load/system/cypress-proxies',
                     autoHiding: false,
                     theme: 'danger',
-                    content: `[code ${code}] ${message}`,
-                    title: 'Could not load Cypress-Proxies',
+                    content: i18n('alert_load-cypress-proxies-error-content', {code, message}),
+                    title: i18n('title_load-cypress-proxies-error'),
                     actions: [
                         {
-                            label: ' view',
+                            label: i18n('action_view'),
                             onClick: () => showErrorPopup(error),
                         },
                     ],

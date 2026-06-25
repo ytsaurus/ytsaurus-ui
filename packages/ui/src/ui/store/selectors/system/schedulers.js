@@ -6,6 +6,7 @@ import {createSelector} from 'reselect';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {VisibleHostType} from '../../../constants/system/masters';
 import {selectMastersHostType} from '../../../store/selectors/settings';
+import i18n from './i18n';
 
 export const selectSystemSchedulers = (state) => state.system.schedulersAndAgents.schedulers;
 export const selectSystemSchedulerAlerts = (state) =>
@@ -25,7 +26,8 @@ export const selectSystemSchedulersWithState = createSelector(
                 physicalHost: ypath.getValue(sheduler.host, '/@annotations/physical_host'),
                 maintenanceMessage: !ypath.getValue(sheduler, '/host/@maintenance')
                     ? undefined
-                    : ypath.getValue(sheduler, '/host/@maintenance_message') || 'Maintenance',
+                    : ypath.getValue(sheduler, '/host/@maintenance_message') ||
+                      i18n('value_maintenance'),
             };
         });
     },
@@ -43,7 +45,8 @@ export const selectSystemAgentsWithState = createSelector(
                 physicalHost: ypath.getValue(agent.host, '/@annotations/physical_host'),
                 maintenanceMessage: !ypath.getValue(agent, '/host/@maintenance')
                     ? undefined
-                    : ypath.getValue(agent, '/host/@maintenance_message') || 'Maintenance',
+                    : ypath.getValue(agent, '/host/@maintenance_message') ||
+                      i18n('value_maintenance'),
             };
         });
     },

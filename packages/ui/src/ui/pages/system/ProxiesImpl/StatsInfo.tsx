@@ -5,6 +5,8 @@ import React from 'react';
 import {addProgressStackSpacers} from '../../../utils/progress';
 import Link from '../../../containers/Link/Link';
 
+import i18n from './i18n';
+
 import './StatsInfo.scss';
 
 const block = cn('stats-info');
@@ -76,12 +78,17 @@ export const StatsInfo = ({
                 <CountUrl count={count} url={url} variant="body-2" />
             </div>
             <Text className={block('text')} variant="body-short" color="secondary">
-                {status}
+                {i18n(`value_${status}`)}
             </Text>
             <Progress className={block('progress')} stack={stack ?? []} size="xs" />
 
-            <TextCountUrl text="ALERT" count={alertNumber} color="primary" url={alertsUrl} />
-            <TextCountUrl text="DEC" count={decNumber} color="primary" url={decUrl} />
+            <TextCountUrl
+                text={i18n('value_alert')}
+                count={alertNumber}
+                color="primary"
+                url={alertsUrl}
+            />
+            <TextCountUrl text={i18n('value_dec')} count={decNumber} color="primary" url={decUrl} />
         </div>
     );
 };
@@ -103,6 +110,7 @@ function TextCountUrl({
                 color={count !== 0 ? color : 'hint'}
                 className={block('subtext')}
                 variant="body-short"
+                ellipsis
             >
                 {text}
             </Text>

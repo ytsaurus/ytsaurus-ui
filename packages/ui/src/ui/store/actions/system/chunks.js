@@ -11,41 +11,97 @@ import {showErrorPopup} from '../../../utils/utils';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 import {toaster} from '../../../utils/toaster';
+import i18n from './i18n';
 
 export const FETCH_CHUNKS = createActionTypes('CHUNKS');
 
 const chunkTypes = [
-    {name: 'chunks'},
-    {name: 'foreign_chunks'},
-    {name: 'overreplicated_chunks'},
-    {name: 'underreplicated_chunks'},
+    {
+        name: 'chunks',
+        get caption() {
+            return i18n('field_chunks');
+        },
+    },
+    {
+        name: 'foreign_chunks',
+        get caption() {
+            return i18n('field_foreign');
+        },
+    },
+    {
+        name: 'overreplicated_chunks',
+        get title() {
+            return i18n('field_overreplicated');
+        },
+        get caption() {
+            return i18n('field_overreplicated-short');
+        },
+    },
+    {
+        name: 'underreplicated_chunks',
+        get title() {
+            return i18n('field_underreplicated');
+        },
+        get caption() {
+            return i18n('field_underreplicated-short');
+        },
+    },
     {
         name: 'quorum_missing_chunks',
+        get caption() {
+            return i18n('field_quorum-missing');
+        },
         label(count) {
             return count > 0 && 'danger';
         },
     },
     {
         name: 'data_missing_chunks',
+        get caption() {
+            return i18n('field_data-missing');
+        },
         label(count) {
             return count > 0 && 'warning';
         },
     },
     {
         name: 'parity_missing_chunks',
+        get caption() {
+            return i18n('field_parity-missing');
+        },
         label(count) {
             return count > 0 && 'warning';
         },
     },
-    {name: 'lost_chunks'},
+    {
+        name: 'lost_chunks',
+        get caption() {
+            return i18n('field_lost');
+        },
+        label(count) {
+            return count > 0 && 'danger';
+        },
+    },
     {
         name: 'lost_vital_chunks',
+        get caption() {
+            return i18n('field_lost-vital-short');
+        },
+        get title() {
+            return i18n('field_lost-vital');
+        },
         label(count) {
             return count > 0 && 'danger';
         },
     },
     {
         name: 'unsafely_placed_chunks',
+        get title() {
+            return i18n('field_unsafely-placed');
+        },
+        get caption() {
+            return i18n('field_unsafely-placed-short');
+        },
         label(count) {
             return count > 0 && 'warning';
         },
@@ -178,11 +234,11 @@ export function loadChunks() {
                         name: 'load/system/chunks',
                         autoHiding: false,
                         theme: 'danger',
-                        content: `[code ${code}] ${message}`,
-                        title: 'Could not load Chunks',
+                        content: i18n('alert_load-chunks-error-content', {code, message}),
+                        title: i18n('title_load-chunks-error'),
                         actions: [
                             {
-                                label: ' view',
+                                label: i18n('action_view'),
                                 onClick: () => showErrorPopup(error),
                             },
                         ],

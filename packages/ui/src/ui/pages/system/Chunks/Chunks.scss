@@ -1,7 +1,6 @@
 .system {
     &__chunks {
         margin-bottom: 20px;
-        z-index: -1;
         position: relative;
     }
 
@@ -43,5 +42,9 @@
                 }
             }
         }
+    }
+
+    .elements-table-wrapper_sticky_bottom {
+        z-index: unset;
     }
 }

@@ -7,12 +7,14 @@ import {
 import {type RootState} from '../../reducers';
 import {getPathByMasterType} from '../../actions/system/masters';
 
+export type MasterInstanceState = MasterAddress['state'] | MasterDataItem['state'];
+
 export class MasterInstance {
     $attributes: {
         read_only?: boolean;
         voting?: boolean;
         warming_up?: boolean;
-        state?: MasterAddress['state'] | MasterDataItem['state'];
+        state?: MasterInstanceState;
         automaton_version?: string;
         committed_version?: string;
     };

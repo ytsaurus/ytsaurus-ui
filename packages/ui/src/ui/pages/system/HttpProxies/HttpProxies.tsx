@@ -4,6 +4,8 @@ import isEmpty_ from 'lodash/isEmpty';
 
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
+import i18n from './i18n';
+
 import {loadSystemProxies} from '../../../store/actions/system/proxies';
 import {selectCluster} from '../../../store/selectors/global';
 import {selectSettingsSystemHttpProxiesCollapsed} from '../../../store/selectors/settings/settings-ts';
@@ -39,7 +41,7 @@ class Proxies extends Component<ReduxProps> {
 
         return (
             <ProxiesImpl
-                name={'HTTP Proxies'}
+                name={i18n('title_http-proxies')}
                 overview={overview}
                 onToggleCollapsed={this.onToggle}
                 roleGroups={roleGroups}
