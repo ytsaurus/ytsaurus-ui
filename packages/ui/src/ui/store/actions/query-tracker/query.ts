@@ -84,7 +84,10 @@ import {
     resetQueryTabs,
 } from '../../reducers/query-tracker/queryTabsSlice';
 import {updateQueryTabs} from './queryTabs/queryTabs';
-import {selectSpytDefaultSettings} from '../../selectors/query-tracker/queryTrackerEnginesInfo';
+import {
+    selectAvailableSpytConnect,
+    selectSpytDefaultSettings,
+} from '../../selectors/query-tracker/queryTrackerEnginesInfo';
 
 type AsyncAction = ThunkAction<void, RootState, unknown, any>;
 
@@ -127,6 +130,7 @@ export const setUserLastChoice =
         const lastClique = selectLastUserChoiceQueryChytClique(state);
         const lastVersion = selectLastUserChoiceYqlVersion(state);
         const defaultYqlVersion = selectDefaultYqlVersion(state);
+        const isSpytConnectAvailable = selectAvailableSpytConnect(state);
 
         const newSettings = {...settings};
         if (clearProps) {
@@ -134,7 +138,7 @@ export const setUserLastChoice =
             delete newSettings.clique;
         }
 
-        if (engine === QueryEngine.SPYT && lastPath) {
+        if (engine === QueryEngine.SPYT && lastPath && !isSpytConnectAvailable) {
             newSettings.discovery_group = lastPath;
         }
 
