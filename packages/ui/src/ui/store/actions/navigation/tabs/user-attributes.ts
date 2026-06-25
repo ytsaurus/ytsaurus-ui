@@ -24,11 +24,13 @@ export function requestUserAttributes(): AsyncAction<Promise<void>> {
 
         return ytApiV3Id
             .get(YTApiId.navigationUserAttributes, {
-                parameters: prepareRequest('/@user_attributes', {
-                    path,
-                    transaction,
-                }),
-                output_format: TYPED_OUTPUT_FORMAT,
+                parameters: {
+                    ...prepareRequest('/@user_attributes', {
+                        path,
+                        transaction,
+                    }),
+                    output_format: TYPED_OUTPUT_FORMAT,
+                },
                 cancellation: requests.saveCancelToken,
             })
             .then((attributes) => {
