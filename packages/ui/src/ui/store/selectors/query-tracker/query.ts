@@ -9,6 +9,7 @@ import {
     isSingleProgress,
 } from '../../../types/query-tracker/api';
 import {
+    selectDisableCliqueReadinessCheck,
     selectSettingQueryTrackerStage,
     selectSettingQueryTrackerYQLAgentStage,
 } from '../settings/settings-ts';
@@ -66,10 +67,17 @@ export const selectIsQueryExecuted = (state: RootState): boolean => {
 export const selectCurrentQuery = (state: RootState) => selectQueryState(state).queryItem;
 
 export const selectIsQueryButtonActive = createSelector(
-    [selectQueryEngine, selectQueryDraftSettings, selectCliqueMap],
-    (engine, settings, cliqueMap) => {
+    [
+        selectQueryEngine,
+        selectQueryDraftSettings,
+        selectCliqueMap,
+        selectDisableCliqueReadinessCheck,
+    ],
+    (engine, settings, cliqueMap, disableCliqueReadinessCheck) => {
         const isChyt = engine === QueryEngine.CHYT;
         if (!isChyt) return true;
+
+        if (disableCliqueReadinessCheck) return true;
 
         const {clique, cluster} = settings;
         if (!clique || !cluster) return true;

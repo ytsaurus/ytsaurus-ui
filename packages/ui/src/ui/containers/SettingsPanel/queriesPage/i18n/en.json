@@ -14,5 +14,7 @@
   "context_query-assistant-description": "Use query assistant to autocomplete",
   "context_tab-accept-suggestion": "[Tab] - accept suggestion",
   "context_esc-decline-suggestion": "[Esc] - decline suggestion",
+  "field_disable-clique-readiness-check": "Disable clique readiness check",
+  "context_disable-clique-readiness-check-description": "The system will not block query execution even if the clique is inactive",
   "title_query-token": "Request tokens"
 }
