@@ -1,43 +1,29 @@
-import {type Column} from '@gravity-ui/react-data-table';
-import {ClipboardButton, Flex, Icon, Loader} from '@gravity-ui/uikit';
-import {Tooltip} from '@ytsaurus/components';
+import {Flex, Loader} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import compact_ from 'lodash/compact';
 import React, {Component, Fragment} from 'react';
-import aclInheritedSvg from '../../assets/img/svg/acl-inherited.svg';
-import hammer from '../../common/hammer';
-import {DataTableYT} from '../../components/DataTableYT';
-import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
-import {ExpandButton} from '../../components/ExpandButton';
-import Label from '../../components/Label';
-import LoadDataHandler from '../../containers/LoadDataHandler/LoadDataHandler';
 import {
     SegmentControl,
     type SegmentControlItem,
 } from '../../components/SegmentControl/SegmentControl';
-import {SubjectCard} from '../../components/SubjectLink/SubjectLink';
-import WithStickyToolbar from '../../components/WithStickyToolbar/WithStickyToolbar';
 import {isIdmAclAvailable} from '../../config';
 import {AclMode, IdmObjectType} from '../../constants/acl';
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
+import LoadDataHandler from '../../containers/LoadDataHandler/LoadDataHandler';
 import withVisible, {type WithVisibleProps} from '../../hocs/withVisible';
-import {
-    type ObjectPermissionRowWithExpand,
-    type PreparedApprover,
-} from '../../store/selectors/acl/acl';
 import UIFactory, {type AclRoleActionsType} from '../../UIFactory';
 import {type PreparedRole, isGranted} from '../../utils/acl';
-import {type PreparedAclSubject} from '../../utils/acl/acl-types';
 import {type ACLReduxProps} from './ACL-connect-helpers';
+import {type ApproverRow, type PermissionsRow} from './ACL-types';
 import './ACL.scss';
 import {AclActions} from './AclActions/AclActions';
-import {AclColumnsCell} from './AclColumnsCell';
 import {AclModeControl} from './AclModeControl';
+import {AclTableWithToolbar} from './AclTableWithToolbar/AclTableWithToolbar';
 import ApproversFilters from './ApproversFilters/ApproversFilters';
 import ColumnGroups from './ColumnGroups/ColumnGroups';
 import DeletePermissionModal from './DeletePermissionModal/DeletePermissionModal';
+import {getAclColumns} from './hooks/use-acl-columns/use-acl-columns';
 import i18n from './i18n';
-import i18nPermissionValues from './i18n-permission-values';
-import {InheritanceMessage} from './InheritanceMessage/InheritanceMessage';
 import {MyPermissions} from './MyPermissinos/MyPermissions';
 import ObjectPermissionsFilters from './ObjectPermissionsFilters/ObjectPermissionsFilters';
 import {RowGroups} from './RowGroups/RowGroups';
@@ -45,15 +31,6 @@ import {RowGroups} from './RowGroups/RowGroups';
 const block = cn('navigation-acl');
 
 type Props = ACLReduxProps & WithVisibleProps & {className?: string};
-
-type ApproverRow = PreparedApprover & {
-    aggregated_row_access_predicates?: Array<string>;
-    expanded?: boolean;
-};
-type PermissionsRow = ObjectPermissionRowWithExpand & {
-    aggregated_row_access_predicates?: Array<string>;
-    expanded?: boolean;
-};
 
 class ACL extends Component<Props> {
     static tableColumns = {
@@ -106,67 +83,6 @@ class ACL extends Component<Props> {
         },
     };
 
-    // eslint-disable-next-line react/sort-comp
-    static renderSubjectLink(item: PreparedAclSubject | PreparedApprover | PermissionsRow) {
-        const {internal} = item;
-        if (internal) {
-            const [subject] = item.subjects;
-            const [type] = item.types ?? [];
-            return (
-                <SubjectCard
-                    name={subject!}
-                    type={type === 'group' ? 'group' : 'user'}
-                    internal
-                    showIcon
-                />
-            );
-        }
-
-        if (item.subjectType === 'user') {
-            const {subjectUrl} = item;
-            const username = item.subjects[0];
-            return <SubjectCard url={subjectUrl} name={username as string} showIcon />;
-        }
-
-        if (item.subjectType === 'tvm') {
-            const tvmId = item.subjects[0];
-            const {name} = item.tvmInfo ?? {};
-
-            const text = `${name} (${tvmId})`;
-            return (
-                <div className={block('subject-with-tvm')}>
-                    <SubjectCard url={item.subjectUrl} name={text} type="tvm" showIcon />
-                    <Label text="TVM" />
-                </div>
-            );
-        }
-
-        const {name, url, group} = item.groupInfo || {};
-        const {group_type} = item;
-        return (
-            <Tooltip
-                content={
-                    group && (
-                        <React.Fragment>
-                            idm-group:{group}
-                            <span className={block('copy-idm-group')}>
-                                <ClipboardButton text={`idm-group:${group}`} size="s" />
-                            </span>
-                        </React.Fragment>
-                    )
-                }
-            >
-                <SubjectCard
-                    name={name ?? group!}
-                    url={url}
-                    type="group"
-                    groupType={group_type}
-                    showIcon
-                />
-            </Tooltip>
-        );
-    }
-
     state = {
         deleteItem: {} as {key?: string},
     };
@@ -186,171 +102,6 @@ class ACL extends Component<Props> {
         }
     }
 
-    getColumnsTemplates<T extends ApproverRow | PermissionsRow>({
-        hasInherited,
-        mode,
-    }: {
-        hasInherited?: boolean;
-        mode: 'responsible' | 'permissions';
-    }) {
-        const openDeleteModal = this.handleDeletePermissionClick;
-        const {idmKind, toggleExpandAclSubject} = this.props;
-        return {
-            expand: {
-                name: '',
-                align: 'right',
-                className: block('table-item', {type: 'expand'}),
-                render({row}) {
-                    const expanded = 'expanded' in row ? row.expanded : undefined;
-                    return expanded === undefined ? null : (
-                        <ExpandButton
-                            inline
-                            expanded={expanded}
-                            toggleExpanded={() => {
-                                toggleExpandAclSubject(row.subjects[0]);
-                            }}
-                            qa="acl-expand"
-                        />
-                    );
-                },
-                width: 36,
-            } as Column<T>,
-            subjects: {
-                name: i18n('field_subjects'),
-                align: 'left',
-                className: block('table-item', {type: 'subjects'}),
-                render({row}) {
-                    const {requestPermissionsFlags = {}} = UIFactory.getAclApi();
-
-                    const {inheritedFrom} = row;
-
-                    const level = 'level' in row ? row.level : undefined;
-                    return (
-                        <Flex className={block('subject', {level: String(level)})} wrap gap={1}>
-                            {Boolean(hasInherited) && (
-                                <Tooltip
-                                    content={<InheritanceMessage data={inheritedFrom} />}
-                                    placement={['top-start']}
-                                >
-                                    <div className={block('inherited', {hidden: !row.inherited})}>
-                                        <Icon
-                                            className={block('inherited-icon')}
-                                            data={aclInheritedSvg}
-                                            size={16}
-                                        />
-                                    </div>
-                                </Tooltip>
-                            )}
-                            <Flex grow wrap gap={1}>
-                                {ACL.renderSubjectLink(row)}
-                            </Flex>
-                            {Object.keys(requestPermissionsFlags).map((key, index) => {
-                                const flagInfo = requestPermissionsFlags[key];
-                                return (
-                                    <React.Fragment key={index}>
-                                        {flagInfo.renderIcon(row)}
-                                    </React.Fragment>
-                                );
-                            })}
-                        </Flex>
-                    );
-                },
-            } as Column<T>,
-            permissions: {
-                name: i18n('field_permissions'),
-                align: 'left',
-                className: block('table-item', {type: 'permissions'}),
-                render({row}) {
-                    const action = row.action === 'deny' ? 'deny' : 'allow';
-                    const theme = action === 'deny' ? 'danger' : 'success';
-
-                    return (
-                        <div className={block('permissions', {type: row.action})}>
-                            <Label className={block('action-label')} theme={theme}>
-                                {i18nPermissionValues(`action_${action}`)}
-                            </Label>
-                            <AclColumnsCell
-                                withQoutes
-                                items={row.permissions?.map((item) =>
-                                    i18nPermissionValues(`value_${item}`),
-                                )}
-                                expanadable={'expanded' in row}
-                            />
-                        </div>
-                    );
-                },
-            } as Column<T>,
-            inheritance_mode: {
-                name: i18n('field_inheritance-mode'),
-                render({row}) {
-                    const {inheritance_mode: mode} = row;
-                    return mode === undefined
-                        ? hammer.format.NO_VALUE
-                        : i18nPermissionValues(`inheritance_mode_${mode}`);
-                },
-                align: 'left',
-                className: block('table-item', {type: 'inheritance-mode'}),
-            } as Column<T>,
-            actions: {
-                name: 'actions',
-                header: '',
-                align: 'right',
-                className: block('table-item', {type: 'actions'}),
-                render({row}) {
-                    const expanded = 'expanded' in row ? row.expanded : undefined;
-                    const RoleActions = UIFactory.getComponentForAclRoleActions();
-                    return expanded !== undefined
-                        ? null
-                        : RoleActions !== undefined && (
-                              <RoleActions
-                                  mode={mode}
-                                  role={row}
-                                  idmKind={idmKind}
-                                  onDelete={openDeleteModal}
-                              />
-                          );
-                },
-            } as Column<T>,
-            approve_type: {
-                name: i18n('field_type'),
-                align: 'left',
-                className: block('table-item', {type: 'approve-type'}),
-                render({row}) {
-                    return hammer.format['Readable'](row.type);
-                },
-            } as Column<T>,
-            columns: {
-                name: i18n('field_private-columns'),
-                align: 'left',
-                className: block('table-item', {type: 'columns'}),
-                render({row}) {
-                    return <AclColumnsCell items={row.columns} expanadable={'expanded' in row} />;
-                },
-            } as Column<T>,
-            row_access_predicate: {
-                name: i18n('field_row-access-predicate'),
-                align: 'left',
-                className: block('table-item', {type: 'row-access-predicate'}),
-                render({row}) {
-                    const expandable = 'expanded' in row;
-                    const {row_access_predicate, aggregated_row_access_predicates} = row;
-                    return (
-                        <AclColumnsCell
-                            items={
-                                expandable
-                                    ? aggregated_row_access_predicates
-                                    : row_access_predicate
-                                      ? [row_access_predicate]
-                                      : []
-                            }
-                            expanadable={expandable}
-                        />
-                    );
-                },
-            } as Column<T>,
-        };
-    }
-
     handleDeletePermissionClick = (deleteItem: AclRoleActionsType) => {
         const {handleShow} = this.props;
         this.setState({deleteItem}, handleShow);
@@ -361,58 +112,28 @@ class ACL extends Component<Props> {
         this.setState({deleteItem: {}}, handleClose);
     };
 
-    rowClassNameByFlags<T extends ApproverRow | PermissionsRow>(item: T) {
-        const {
-            isUnrecognized: unrecognized,
-            isDepriving: depriving,
-            isRequested: requested,
-            isApproved: approved,
-            isMissing: missing,
-        } = item;
-        return block('row', {
-            unrecognized: unrecognized || missing,
-            depriving,
-            requested,
-            approved,
-        });
-    }
-
     renderApprovers() {
-        const {hasApprovers, approversFiltered, loaded} = this.props;
-        const tableColumns = (['subjects', 'approve_type', 'actions'] as const).map(
-            (name) =>
-                this.getColumnsTemplates<ApproverRow>({hasInherited: true, mode: 'responsible'})[
-                    name
-                ],
-        );
+        const {hasApprovers, approversFiltered, loaded, idmKind, toggleExpandAclSubject} =
+            this.props;
+
+        const tableColumns = getAclColumns<ApproverRow>(['subjects', 'approve_type', 'actions'], {
+            idmKind,
+            mode: 'responsible',
+            hasInherited: true,
+            onDeletePermission: this.handleDeletePermissionClick,
+            onExpandAclSubject: toggleExpandAclSubject,
+        });
         return (
             hasApprovers && (
-                <ErrorBoundary>
-                    <div className={block('approvers')}>
-                        <div className="elements-heading elements-heading_size_xs">
-                            {i18n('title_responsibles')}
-                        </div>
-                        <WithStickyToolbar
-                            topMargin="none"
-                            toolbar={<ApproversFilters />}
-                            bottomMargin="regular"
-                            content={
-                                <DataTableYT
-                                    data={approversFiltered}
-                                    loaded={loaded}
-                                    noItemsText={i18n('alert_no-responsibles')}
-                                    columns={tableColumns}
-                                    theme={'yt-borderless'}
-                                    rowClassName={this.rowClassNameByFlags}
-                                    settings={{
-                                        sortable: false,
-                                        displayIndices: false,
-                                    }}
-                                />
-                            }
-                        />
-                    </div>
-                </ErrorBoundary>
+                <AclTableWithToolbar
+                    className={block('approvers')}
+                    title={i18n('title_responsibles')}
+                    toolbar={<ApproversFilters />}
+                    noItemsText={i18n('alert_no-responsibles')}
+                    items={approversFiltered}
+                    loaded={loaded}
+                    columns={tableColumns}
+                />
             )
         );
     }
@@ -457,15 +178,7 @@ class ACL extends Component<Props> {
     }
 
     renderObjectPermissions() {
-        const {
-            aclMode,
-            loaded,
-            loading,
-            idmKind,
-            columnsFilter,
-            updateAclFilters,
-            userPermissionsAccessColumns,
-        } = this.props;
+        const {loaded, loading, idmKind, toggleExpandAclSubject} = this.props;
 
         const {
             title,
@@ -474,47 +187,42 @@ class ACL extends Component<Props> {
             noItemsText,
         } = this.getObjectPermissionsDetails();
 
-        const tableColumns: Array<Column<PermissionsRow>> = columns.map(
-            (name) =>
-                this.getColumnsTemplates<PermissionsRow>({hasInherited, mode: 'permissions'})[name],
-        );
+        const tableColumns = getAclColumns<PermissionsRow>(columns, {
+            idmKind,
+            hasInherited,
+            mode: 'permissions',
+            onDeletePermission: this.handleDeletePermissionClick,
+            onExpandAclSubject: toggleExpandAclSubject,
+        });
 
         return (
-            <ErrorBoundary>
-                <div className={block('object-permissions')}>
-                    <div className="elements-heading elements-heading_size_xs">{title}</div>
-                    <WithStickyToolbar
-                        topMargin="none"
-                        bottomMargin="regular"
-                        toolbar={
-                            <ObjectPermissionsFilters
-                                {...{
-                                    aclMode,
-                                    idmKind,
-                                    columnsFilter,
-                                    updateAclFilters,
-                                    userPermissionsAccessColumns,
-                                }}
-                            />
-                        }
-                        content={
-                            <DataTableYT
-                                noItemsText={noItemsText}
-                                data={items}
-                                loading={loading}
-                                loaded={loaded}
-                                columns={tableColumns}
-                                theme={'yt-borderless'}
-                                rowClassName={this.rowClassNameByFlags}
-                                settings={{
-                                    sortable: false,
-                                    displayIndices: false,
-                                }}
-                            />
-                        }
-                    />
-                </div>
-            </ErrorBoundary>
+            <AclTableWithToolbar
+                className={block('object-permissions')}
+                title={title}
+                noItemsText={noItemsText}
+                items={items}
+                loading={loading}
+                loaded={loaded}
+                columns={tableColumns}
+                toolbar={this.renderObjectPermissionsToolbar()}
+            />
+        );
+    }
+
+    renderObjectPermissionsToolbar() {
+        const {aclMode, idmKind, columnsFilter, updateAclFilters, userPermissionsAccessColumns} =
+            this.props;
+
+        return (
+            <ObjectPermissionsFilters
+                {...{
+                    aclMode,
+                    idmKind,
+                    columnsFilter,
+                    updateAclFilters,
+                    userPermissionsAccessColumns,
+                }}
+            />
         );
     }
 
