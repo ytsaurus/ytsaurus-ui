@@ -9,7 +9,7 @@ import './AclTableWithToolbar.scss';
 const block = cn('yt-acl-table-with-toolbar');
 
 type Props<T> = {
-    className: string;
+    className?: string;
     title: string;
     noItemsText: string;
     items: Array<T>;
