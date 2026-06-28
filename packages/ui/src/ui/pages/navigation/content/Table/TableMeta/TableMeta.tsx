@@ -22,6 +22,7 @@ import {type Props as AutomaticModeSwitchProps} from './AutomaticModeSwitch';
 
 import {type RootState} from '../../../../../store/reducers';
 import {selectCluster, selectCurrentUserName} from '../../../../../store/selectors/global';
+import {getMediumList} from '../../../../../store/selectors/thor';
 
 import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
 
@@ -92,7 +93,7 @@ function TableMeta({
 }
 
 const mapStateToProps = (state: RootState) => {
-    const {mediumList} = state.global;
+    const mediumList = getMediumList(state);
 
     const isDynamic = selectIsDynamic(state);
     const tableType = selectTableType(state);

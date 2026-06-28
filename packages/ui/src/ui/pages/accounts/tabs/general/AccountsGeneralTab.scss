@@ -47,6 +47,11 @@ $elements-table: '.elements-table';
             }
         }
 
+        &-tooltip {
+            width: 100%;
+            display: block;
+        }
+
         &-medium-type {
             width: 140px;
             padding-right: 8px;

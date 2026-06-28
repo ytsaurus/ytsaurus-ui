@@ -29,6 +29,7 @@ import StoresDialog from './StoresDialog';
 import {makeComponentsNodesUrl} from '../../../utils/app-url';
 import {type YTErrorRaw} from '../../../../@types/types';
 import i18n from './i18n';
+import {getMediumList} from '../../../store/selectors/thor';
 
 type ReplicationErrors = Record<string, YTErrorRaw>;
 
@@ -123,7 +124,8 @@ function Overview({id, block}: Props) {
         unorderedDynamicTable,
     } = useSelector((state) => state.tablet.tablet);
 
-    const {mediumList, cluster} = useSelector((state) => state.global);
+    const mediumList = useSelector(getMediumList);
+    const cluster = useSelector((state) => state.global.cluster);
     const [errors, setErrorsVisibility] = useState<YTErrorRaw[]>([]);
     const [replicaErrors, setReplicationErrorsVisibility] = useState<ReplicationErrors>({});
 

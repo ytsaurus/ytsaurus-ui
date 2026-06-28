@@ -46,7 +46,11 @@ import {
     getContentModeOptions,
     makeReadableItems,
 } from '../../../../utils/accounts';
-import {getMediumList} from '../../../../store/selectors/thor';
+import {
+    getMediumList,
+    getSystemReservedDiskSpaceByMedium,
+    getUncommittedDiskSpaceByMedium,
+} from '../../../../store/selectors/thor';
 import {
     changeContentFilter,
     changeMediumFilter,
@@ -190,6 +194,7 @@ class AccountsGeneralTab extends Component {
         activeAccountAggregation: PropTypes.object,
         dashboardVisibilityMode: PropTypes.string,
         favouriteAccountsSet: PropTypes.object.isRequired,
+        uncommittedDiskSpacePerMedium: PropTypes.object,
 
         changeNameFilter: PropTypes.func.isRequired,
         changeContentFilter: PropTypes.func.isRequired,
@@ -223,6 +228,8 @@ class AccountsGeneralTab extends Component {
             mediumList,
             collapsibleSize,
             activeAccount,
+            systemReservedDiskSpacePerMedium,
+            uncommittedDiskSpacePerMedium,
         } = this.props;
         const isLoaded = wasLoaded && loadNodes && loadTotals;
 
@@ -238,6 +245,8 @@ class AccountsGeneralTab extends Component {
                                 clusterTotalsUsage={clusterTotalsUsage}
                                 accounts={accounts}
                                 mediumList={mediumList}
+                                systemReservedDiskSpacePerMedium={systemReservedDiskSpacePerMedium}
+                                uncommittedDiskSpacePerMedium={uncommittedDiskSpacePerMedium}
                             />
                         )}
                     </CollapsibleSection>
@@ -804,8 +813,13 @@ const makeMapStateToProps = () => {
             ? selectFilteredAccountsOfDashboard(state)
             : selectFilteredAccounts(state);
 
+        const systemReservedDiskSpacePerMedium = getSystemReservedDiskSpaceByMedium(state);
+        const uncommittedDiskSpacePerMedium = getUncommittedDiskSpaceByMedium(state);
+
         return {
             ...accounts,
+            systemReservedDiskSpacePerMedium,
+            uncommittedDiskSpacePerMedium,
             activeContentModeFilter: selectAccountsContentMode(state),
 
             clusterUiConfig: selectClusterUiConfig(state),

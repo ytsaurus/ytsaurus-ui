@@ -5,7 +5,7 @@ import block from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
-import {Progress} from '@gravity-ui/uikit';
+import {Flex, Progress} from '@gravity-ui/uikit';
 
 import WarningIcon from '../../../../components/WarningIcon/WarningIcon';
 import {
@@ -14,7 +14,11 @@ import {
     getDiskSpace,
     getNodesChunksTotals,
 } from '../../../../utils/accounts/accountsTotal';
+import {type TooltipInfoItem} from '../../../../utils/diskSpaceProgress';
 import i18n from './i18n';
+import {Tooltip} from '@ytsaurus/components';
+import {ColorCircle} from '../../../../components/ColorCircle/ColorCircle';
+import {MetaTable, type MetaTableItem} from '@ytsaurus/components';
 
 const b = block('accounts');
 
@@ -23,6 +27,8 @@ interface Props {
     clusterTotalsUsage: ClusterTotalsUsage;
     nodesData: NodesData;
     mediumList: string[];
+    systemReservedDiskSpacePerMedium?: Record<string, number>;
+    uncommittedDiskSpacePerMedium?: Record<string, number>;
 }
 
 export default class AccountsTotal extends Component<Props> {
@@ -32,7 +38,28 @@ export default class AccountsTotal extends Component<Props> {
         clusterTotalsUsage: PropTypes.object,
         nodesData: PropTypes.object,
         mediumList: PropTypes.array,
+        systemReservedDiskSpacePerMedium: PropTypes.object,
+        uncommittedDiskSpacePerMedium: PropTypes.object,
     };
+
+    renderTooltipContent(tooltipItems: TooltipInfoItem[]) {
+        const items: MetaTableItem[] = tooltipItems.map((item) => {
+            return {
+                key: item.title || '',
+                label: item.isTotal ? (
+                    <span>{item.title}</span>
+                ) : (
+                    <Flex gap={2} alignItems="center">
+                        <ColorCircle theme={item.theme} color={item.color} />
+                        <span>{item.title}</span>
+                    </Flex>
+                ),
+                value: item.value,
+            };
+        });
+
+        return <MetaTable items={items} />;
+    }
 
     renderNodesChunksTotals() {
         const {clusterTotalsUsage} = this.props;
@@ -61,8 +88,23 @@ export default class AccountsTotal extends Component<Props> {
     }
 
     renderNewTotals() {
-        const {accounts, clusterTotalsUsage, nodesData, mediumList} = this.props;
-        const diskSpace = getDiskSpace(accounts, clusterTotalsUsage, nodesData, mediumList);
+        const {
+            accounts,
+            clusterTotalsUsage,
+            nodesData,
+            mediumList,
+            systemReservedDiskSpacePerMedium,
+            uncommittedDiskSpacePerMedium,
+        } = this.props;
+
+        const diskSpace = getDiskSpace(
+            accounts,
+            clusterTotalsUsage,
+            nodesData,
+            mediumList,
+            systemReservedDiskSpacePerMedium,
+            uncommittedDiskSpacePerMedium,
+        );
 
         return (
             <Fragment>
@@ -103,11 +145,18 @@ export default class AccountsTotal extends Component<Props> {
                                             {hammer.format['ReadableField'](item.mediumType)}
                                         </td>
                                         <td className={b('disk-space-cluster-usage')}>
-                                            <Progress
-                                                value={item.clusterUsage.progress}
-                                                text={item.clusterUsage.text}
-                                                theme={'success'}
-                                            />
+                                            <Tooltip
+                                                className={b('disk-space-tooltip')}
+                                                placement={'bottom'}
+                                                content={this.renderTooltipContent(
+                                                    item.clusterUsage.tooltipInfo,
+                                                )}
+                                            >
+                                                <Progress
+                                                    stack={item.clusterUsage.stack}
+                                                    text={item.clusterUsage.text}
+                                                />
+                                            </Tooltip>
                                         </td>
                                         <td className={b('disk-space-hardware-limit')}>
                                             {hammer.format['Bytes'](item.hardwareLimit)}
