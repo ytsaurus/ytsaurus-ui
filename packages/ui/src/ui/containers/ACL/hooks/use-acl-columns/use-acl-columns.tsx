@@ -10,7 +10,6 @@ import Label from '../../../../components/Label';
 import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
 import {useMemoizedIfEqual} from '../../../../hooks';
 import UIFactory, {type AclRoleActionsType} from '../../../../UIFactory';
-import {type IdmKindType} from '../../../../utils/acl/acl-types';
 import {type ApproverRow, type PermissionsRow} from '../../ACL-types';
 import {AclColumnsCell} from '../../AclColumnsCell';
 import i18nPermissionValues from '../../i18n-permission-values';
@@ -32,11 +31,9 @@ export function useAclColumns<T extends ApproverRow | PermissionsRow>(
 }
 
 export type UseAclColumnParams = {
-    idmKind: IdmKindType;
+    renderRoleActions: (params: {row: AclRoleActionsType}) => React.ReactNode;
     hasInherited?: boolean;
-    mode: 'responsible' | 'permissions';
-    onDeletePermission: (item: AclRoleActionsType) => void;
-    onExpandAclSubject: (item?: string | number) => void;
+    onExpandAclSubject?: (item?: string | number) => void;
 };
 
 export function getAclColumns<T extends ApproverRow | PermissionsRow>(
@@ -50,10 +47,8 @@ export function getAclColumns<T extends ApproverRow | PermissionsRow>(
 export type AclColumnName = keyof ReturnType<typeof getColumnsTemplates>;
 
 function getColumnsTemplates<T extends ApproverRow | PermissionsRow>({
-    mode,
-    idmKind,
+    renderRoleActions,
     hasInherited,
-    onDeletePermission,
     onExpandAclSubject,
 }: UseAclColumnParams) {
     return {
@@ -62,6 +57,10 @@ function getColumnsTemplates<T extends ApproverRow | PermissionsRow>({
             align: 'right',
             className: block('table-item', {type: 'expand'}),
             render({row}) {
+                if (!onExpandAclSubject) {
+                    return null;
+                }
+
                 const expanded = 'expanded' in row ? row.expanded : undefined;
                 return expanded === undefined ? null : (
                     <ExpandButton
@@ -158,18 +157,7 @@ function getColumnsTemplates<T extends ApproverRow | PermissionsRow>({
             align: 'right',
             className: block('table-item', {type: 'actions'}),
             render({row}) {
-                const expanded = 'expanded' in row ? row.expanded : undefined;
-                const RoleActions = UIFactory.getComponentForAclRoleActions();
-                return expanded !== undefined
-                    ? null
-                    : RoleActions !== undefined && (
-                          <RoleActions
-                              mode={mode}
-                              role={row}
-                              idmKind={idmKind}
-                              onDelete={onDeletePermission}
-                          />
-                      );
+                return renderRoleActions({row});
             },
         } as Column<T>,
         approve_type: {

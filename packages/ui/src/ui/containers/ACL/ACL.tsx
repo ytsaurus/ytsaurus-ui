@@ -113,15 +113,12 @@ class ACL extends Component<Props> {
     };
 
     renderApprovers() {
-        const {hasApprovers, approversFiltered, loaded, idmKind, toggleExpandAclSubject} =
-            this.props;
+        const {hasApprovers, approversFiltered, loaded, toggleExpandAclSubject} = this.props;
 
         const tableColumns = getAclColumns<ApproverRow>(['subjects', 'approve_type', 'actions'], {
-            idmKind,
-            mode: 'responsible',
             hasInherited: true,
-            onDeletePermission: this.handleDeletePermissionClick,
             onExpandAclSubject: toggleExpandAclSubject,
+            renderRoleActions: this.renderRoleActions.bind(this, 'responsible'),
         });
         return (
             hasApprovers && (
@@ -178,7 +175,7 @@ class ACL extends Component<Props> {
     }
 
     renderObjectPermissions() {
-        const {loaded, loading, idmKind, toggleExpandAclSubject} = this.props;
+        const {loaded, loading, toggleExpandAclSubject} = this.props;
 
         const {
             title,
@@ -188,11 +185,9 @@ class ACL extends Component<Props> {
         } = this.getObjectPermissionsDetails();
 
         const tableColumns = getAclColumns<PermissionsRow>(columns, {
-            idmKind,
             hasInherited,
-            mode: 'permissions',
-            onDeletePermission: this.handleDeletePermissionClick,
             onExpandAclSubject: toggleExpandAclSubject,
+            renderRoleActions: this.renderRoleActions.bind(this, 'permissions'),
         });
 
         return (
@@ -208,6 +203,22 @@ class ACL extends Component<Props> {
             />
         );
     }
+
+    renderRoleActions = (mode: 'responsible' | 'permissions', {row}: {row: AclRoleActionsType}) => {
+        const {idmKind} = this.props;
+        const expanded = 'expanded' in row ? row.expanded : undefined;
+        const RoleActions = UIFactory.getComponentForAclRoleActions();
+        return expanded !== undefined
+            ? null
+            : RoleActions !== undefined && (
+                  <RoleActions
+                      mode={mode}
+                      role={row}
+                      idmKind={idmKind}
+                      onDelete={this.handleDeletePermissionClick}
+                  />
+              );
+    };
 
     renderObjectPermissionsToolbar() {
         const {aclMode, idmKind, columnsFilter, updateAclFilters, userPermissionsAccessColumns} =
