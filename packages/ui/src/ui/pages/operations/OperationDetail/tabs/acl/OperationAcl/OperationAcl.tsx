@@ -9,6 +9,7 @@ import {useSelector} from '../../../../../../store/redux-hooks';
 import {selectOperationAcl} from '../../../../../../store/selectors/operations/operation-acl';
 import {splitSubjects} from '../../../../../../utils/acl';
 import {internalAclWithTypes} from '../../../../../../utils/acl/acl-api';
+import {OperationAclToolbar} from './OperationAclToolbar/OperationAclToolbar';
 
 export function OperationAcl() {
     const {items = [], loading, error} = useOperationAcl();
@@ -27,7 +28,7 @@ export function OperationAcl() {
             loading={loading}
             loaded={!loading}
             columns={columns}
-            toolbar={<div />}
+            toolbar={<OperationAclToolbar />}
         />
     );
 }

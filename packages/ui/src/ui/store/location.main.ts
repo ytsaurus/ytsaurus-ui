@@ -107,6 +107,7 @@ import {
 } from './reducers/flow/url-mapping';
 
 import {FlowTab} from './reducers/flow/filters';
+import {operationAclFiltersParams} from './reducers/operations/url-mapping';
 
 // prettier-ignore
 export const getMainLocations = (): Array<[string, PathParameters]> => [
@@ -137,6 +138,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     ],
     [`/*/${Page.OPERATIONS}/*/${OperationTab.JOBS}`, [jobsParams, getJobsPreparedState]],
     [`/*/${Page.OPERATIONS}/*/${OperationTab.JOBS_MONITOR}`, [prometheusDashboardParams]],
+    [`/*/${Page.OPERATIONS}/*/${OperationTab.ACL}`, [operationAclFiltersParams]],
 
     [`/*/${Page.ACCOUNTS}/${AccountsTab.GENERAL}`, [accountsParams, getAccountsPreparedState]],
     [`/*/${Page.ACCOUNTS}/${AccountsTab.USAGE}`, [accountUsageParams, getAccountsUsageState]],
