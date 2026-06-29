@@ -201,3 +201,17 @@ export function splitSubjects<T extends {subjects: Array<unknown>}>(items: Array
     });
     return res;
 }
+
+export const permissionsFilterPredicate = (
+    item: {permissions?: Array<YTPermissionTypeUI>},
+    filter: Set<YTPermissionTypeUI>,
+) => {
+    const {permissions} = item;
+    let foundCount = 0;
+    return permissions?.some((p) => {
+        if (filter.has(p)) {
+            foundCount++;
+        }
+        return foundCount >= filter.size;
+    });
+};

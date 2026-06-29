@@ -5,14 +5,18 @@ import {AclTableWithToolbar} from '../../../../../../containers/ACL/AclTableWith
 import {useAclColumns} from '../../../../../../containers/ACL/hooks/use-acl-columns/use-acl-columns';
 import {YTErrorBlock} from '../../../../../../containers/Block/Block';
 import {useMemoizedIfEqual} from '../../../../../../hooks';
+import {
+    getPermissionsFilter,
+    getSubjectFilter,
+} from '../../../../../../store/reducers/operations/acl-filters';
 import {useSelector} from '../../../../../../store/redux-hooks';
 import {selectOperationAcl} from '../../../../../../store/selectors/operations/operation-acl';
-import {splitSubjects} from '../../../../../../utils/acl';
+import {permissionsFilterPredicate, splitSubjects} from '../../../../../../utils/acl';
 import {internalAclWithTypes} from '../../../../../../utils/acl/acl-api';
 import {OperationAclToolbar} from './OperationAclToolbar/OperationAclToolbar';
 
 export function OperationAcl() {
-    const {items = [], loading, error} = useOperationAcl();
+    const {items = [], loading, error, noItemsText} = useOperationAcl();
 
     const columns = useAclColumns(['subjects', 'permissions', 'actions'], {
         renderRoleActions: () => null,
@@ -23,7 +27,7 @@ export function OperationAcl() {
     ) : (
         <AclTableWithToolbar
             title={'Operation permissions'}
-            noItemsText={'No data to display'}
+            noItemsText={noItemsText ?? 'No data to display'}
             items={items}
             loading={loading}
             loaded={!loading}
@@ -59,5 +63,41 @@ function useOperationAcl() {
         );
     }, [aclMemo]);
 
-    return result;
+    const items = useFilteredItems(result.items ?? []);
+    const filtered = items.length < (result.items?.length ?? 0);
+
+    return {
+        ...result,
+        items,
+        noItemsText: filtered ? 'No data to display due to filters' : undefined,
+    };
+}
+
+function useFilteredItems(items: Array<PermissionsRow>) {
+    const subjectFilter = useSelector(getSubjectFilter);
+    const permissionsFilter = useSelector(getPermissionsFilter);
+
+    const predicates = React.useMemo(() => {
+        const predicates: Array<(item: PermissionsRow) => boolean> = [];
+
+        if (subjectFilter) {
+            predicates.push((item) => {
+                const [first] = item.subjects;
+                return String(first).toLowerCase().includes(subjectFilter.toLowerCase());
+            });
+        }
+
+        if (permissionsFilter.length) {
+            const permissionsFilterSet = new Set(permissionsFilter);
+            predicates.push(
+                (item) => permissionsFilterPredicate(item, permissionsFilterSet) ?? false,
+            );
+        }
+
+        return predicates;
+    }, [subjectFilter, permissionsFilter]);
+
+    return React.useMemo(() => {
+        return items?.filter((item) => predicates.every((predicate) => predicate(item)));
+    }, [items, predicates]);
 }

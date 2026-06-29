@@ -25,7 +25,7 @@ import UIFactory from '../../../UIFactory';
 import {type RootState} from '../../../store/reducers';
 import {type IdmKindType, type PreparedAclSubject} from '../../../utils/acl/acl-types';
 import {type YTPermissionTypeUI} from '../../../utils/acl/acl-api';
-import {HasSplitted, splitSubjects, type PreparedRole} from '../../../utils/acl';
+import {HasSplitted, permissionsFilterPredicate, splitSubjects, type PreparedRole} from '../../../utils/acl';
 import {calculateLoadingStatus} from '../../../utils/utils';
 
 export type PreparedAclSubjectColumn = Omit<PreparedAclSubject, 'type'> & {type: 'columns'};
@@ -116,17 +116,6 @@ function FilterBySubject<
     const lowerNameFilter = subjectFilter.toLowerCase();
     return filter_(items, (item) => subjectFilterPredicate(item, lowerNameFilter));
 }
-
-const permissionsFilterPredicate = (item: PreparedAclSubject, filter: Set<YTPermissionTypeUI>) => {
-    const {permissions} = item;
-    let foundCount = 0;
-    return permissions?.some((p) => {
-        if (filter.has(p)) {
-            foundCount++;
-        }
-        return foundCount >= filter.size;
-    });
-};
 
 type ObjectPermissionsRow = PreparedAclSubject & HasSplitted;
 
