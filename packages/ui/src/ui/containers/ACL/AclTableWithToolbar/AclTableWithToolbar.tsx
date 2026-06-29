@@ -4,6 +4,7 @@ import React from 'react';
 import {DataTableYT} from '../../../components/DataTableYT';
 import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
+import {AclFlags} from '../../../utils/acl/acl-types';
 import './AclTableWithToolbar.scss';
 
 const block = cn('yt-acl-table-with-toolbar');
@@ -58,14 +59,6 @@ export function AclTableWithToolbar<T extends AclFlags>({
         </ErrorBoundary>
     );
 }
-
-type AclFlags = {
-    isUnrecognized?: boolean;
-    isDepriving?: boolean;
-    isRequested?: boolean;
-    isApproved?: boolean;
-    isMissing?: boolean;
-};
 
 function rowClassNameByFlags(item: AclFlags) {
     const {
