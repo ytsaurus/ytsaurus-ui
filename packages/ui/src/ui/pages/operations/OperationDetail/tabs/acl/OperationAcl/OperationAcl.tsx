@@ -1,6 +1,6 @@
 import React from 'react';
-import {YTError} from '../../../../../../../@types/types';
-import {PermissionsRow} from '../../../../../../containers/ACL/ACL-types';
+import {type YTError} from '../../../../../../../@types/types';
+import {type PermissionsRow} from '../../../../../../containers/ACL/ACL-types';
 import {AclTableWithToolbar} from '../../../../../../containers/ACL/AclTableWithToolbar/AclTableWithToolbar';
 import {useAclColumns} from '../../../../../../containers/ACL/hooks/use-acl-columns/use-acl-columns';
 import {YTErrorBlock} from '../../../../../../containers/Block/Block';
@@ -13,6 +13,7 @@ import {useSelector} from '../../../../../../store/redux-hooks';
 import {selectOperationAcl} from '../../../../../../store/selectors/operations/operation-acl';
 import {permissionsFilterPredicate, splitSubjects} from '../../../../../../utils/acl';
 import {internalAclWithTypes} from '../../../../../../utils/acl/acl-api';
+import {getOperationAclSplitted} from '../../../../../../utils/acl/acl-operation';
 import {OperationAclToolbar} from './OperationAclToolbar/OperationAclToolbar';
 
 export function OperationAcl() {
@@ -53,7 +54,7 @@ function useOperationAcl() {
         }
 
         setResult({loading: true});
-        internalAclWithTypes(splitSubjects(aclMemo)).then(
+        getOperationAclSplitted(aclMemo).then(
             (items) => {
                 setResult({items});
             },
@@ -78,10 +79,10 @@ function useFilteredItems(items: Array<PermissionsRow>) {
     const permissionsFilter = useSelector(getPermissionsFilter);
 
     const predicates = React.useMemo(() => {
-        const predicates: Array<(item: PermissionsRow) => boolean> = [];
+        const res: Array<(item: PermissionsRow) => boolean> = [];
 
         if (subjectFilter) {
-            predicates.push((item) => {
+            res.push((item) => {
                 const [first] = item.subjects;
                 return String(first).toLowerCase().includes(subjectFilter.toLowerCase());
             });
@@ -89,12 +90,10 @@ function useFilteredItems(items: Array<PermissionsRow>) {
 
         if (permissionsFilter.length) {
             const permissionsFilterSet = new Set(permissionsFilter);
-            predicates.push(
-                (item) => permissionsFilterPredicate(item, permissionsFilterSet) ?? false,
-            );
+            res.push((item) => permissionsFilterPredicate(item, permissionsFilterSet) ?? false);
         }
 
-        return predicates;
+        return res;
     }, [subjectFilter, permissionsFilter]);
 
     return React.useMemo(() => {

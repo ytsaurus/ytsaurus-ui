@@ -10,17 +10,19 @@ import {
     setSubjectFilter,
 } from '../../../../../../../store/reducers/operations/acl-filters';
 import {useDispatch, useSelector} from '../../../../../../../store/redux-hooks';
+import UIFactory from '../../../../../../../UIFactory';
+import {OperationAclAddButton} from '../OperationAclAddButton/OperationAclAddButton';
 import './OperationAclToolbar.scss';
 
 const block = cn('yt-operation-acl-toolbar');
-
-const OPERATION_PERMISSIONS = ['read', 'manage', 'administer'] as const;
 
 export function OperationAclToolbar() {
     const dispatch = useDispatch();
 
     const subjectFilter = useSelector(getSubjectFilter);
     const permissionsFilter = useSelector(getPermissionsFilter);
+
+    const {permissionTypes} = UIFactory.getAclPermissionsSettings()['operation'];
 
     return (
         <Toolbar
@@ -47,11 +49,12 @@ export function OperationAclToolbar() {
                             onUpdate={(value) => {
                                 dispatch(setPermissionsFilter({permissionsFilter: value}));
                             }}
-                            permissionList={OPERATION_PERMISSIONS}
+                            permissionList={permissionTypes}
                         />
                     ),
                     width: 400,
                 },
+                {node: <OperationAclAddButton />},
             ]}
         />
     );

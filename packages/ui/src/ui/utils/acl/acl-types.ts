@@ -8,7 +8,8 @@ export type IdmKindType =
     | 'account'
     | 'pool'
     | 'tablet_cell_bundle'
-    | 'access_control_object';
+    | 'access_control_object'
+    | 'operation';
 
 export interface Group {
     members?: Array<Subject>;

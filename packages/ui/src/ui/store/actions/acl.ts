@@ -56,6 +56,7 @@ async function getPathToCheckPermissions(
     poolTree?: string,
 ) {
     switch (idmKind) {
+        case IdmObjectType.OPERATION:
         case IdmObjectType.ACCESS_CONTROL_OBJECT:
         case IdmObjectType.UI_EFFECTIVE_ACL:
         case IdmObjectType.PATH:

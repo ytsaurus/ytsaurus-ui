@@ -69,6 +69,7 @@ export interface Props extends WithVisibleProps {
     columnGroups?: Array<AclColumnGroup>;
     rowGroups?: Array<AclRowGroup>;
     aclMode?: AclMode;
+    fields?: ReadonlyArray<RequestPermissionsFieldsNames>;
 }
 
 type FormValues = {
@@ -110,6 +111,7 @@ function RequestPermissions(props: Props) {
         columnGroups,
         rowGroups,
         buttonProps,
+        fields,
         /*denyColumns,*/
     } = props;
 
@@ -271,7 +273,7 @@ function RequestPermissions(props: Props) {
 
     const dialogFields = useMemo(() => {
         let flagsIndex = -1;
-        const res = requestPermissionsFields.reduce(
+        const res = (fields ?? requestPermissionsFields).reduce(
             (acc, field) => {
                 let allowField;
                 switch (aclMode) {
