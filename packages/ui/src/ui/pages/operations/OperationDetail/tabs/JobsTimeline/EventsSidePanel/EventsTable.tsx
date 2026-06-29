@@ -20,7 +20,7 @@ const PhaseNameCell: FC<{state: string; phase: string}> = ({state, phase}) => {
 };
 
 const getDateTime = (timestamp: number) =>
-    hammer.format['DateTime'](new Date(timestamp).toString());
+    hammer.format['DateTime'](new Date(timestamp).toISOString());
 
 type Props = {
     events: JobEvent[];
