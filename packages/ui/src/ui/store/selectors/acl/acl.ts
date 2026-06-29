@@ -25,7 +25,7 @@ import UIFactory from '../../../UIFactory';
 import {type RootState} from '../../../store/reducers';
 import {type IdmKindType, type PreparedAclSubject} from '../../../utils/acl/acl-types';
 import {type YTPermissionTypeUI} from '../../../utils/acl/acl-api';
-import {type PreparedRole} from '../../../utils/acl';
+import {HasSplitted, splitSubjects, type PreparedRole} from '../../../utils/acl';
 import {calculateLoadingStatus} from '../../../utils/utils';
 
 export type PreparedAclSubjectColumn = Omit<PreparedAclSubject, 'type'> & {type: 'columns'};
@@ -90,26 +90,6 @@ export const selectObjectPermissionsTypesList = (idmKind: IdmKindType) => {
         },
     );
 };
-
-type HasSplitted = {
-    isSplitted?: boolean;
-    subjectIndex?: number;
-};
-
-function splitSubjects<T extends {subjects: Array<unknown>}>(items: Array<T>) {
-    const res: Array<T & HasSplitted> = [];
-    forEach_(items, (item) => {
-        const {subjects} = item;
-        if (subjects && subjects.length > 1) {
-            forEach_(subjects, (subject, index) => {
-                res.push({...item, subjects: [subject], isSplitted: true, subjectIndex: index});
-            });
-        } else {
-            res.push(item);
-        }
-    });
-    return res;
-}
 
 function subjectFilterPredicate<
     T extends {subjectType?: unknown; groupInfo?: unknown; subjects: Array<unknown>},

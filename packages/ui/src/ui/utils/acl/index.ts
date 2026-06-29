@@ -1,3 +1,4 @@
+import forEach_ from 'lodash/forEach';
 import {type YTPermissionType} from '../../../shared/yt-types';
 import {
     IdmObjectType,
@@ -179,4 +180,24 @@ export function convertFromUIPermission(permission: YTPermissionTypeUI): {
 
 export function isGranted(role: boolean | PreparedRole | undefined) {
     return 'boolean' === typeof role ? role : role?.state === 'granted';
+}
+
+export type HasSplitted = {
+    isSplitted?: boolean;
+    subjectIndex?: number;
+};
+
+export function splitSubjects<T extends {subjects: Array<unknown>}>(items: Array<T>) {
+    const res: Array<T & HasSplitted> = [];
+    forEach_(items, (item) => {
+        const {subjects} = item;
+        if (subjects && subjects.length > 1) {
+            forEach_(subjects, (subject, index) => {
+                res.push({...item, subjects: [subject], isSplitted: true, subjectIndex: index});
+            });
+        } else {
+            res.push(item);
+        }
+    });
+    return res;
 }
