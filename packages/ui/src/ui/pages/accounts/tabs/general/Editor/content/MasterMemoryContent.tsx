@@ -9,6 +9,7 @@ import {AccountResourceName} from '../../../../../../constants/accounts/accounts
 import {selectAccountMasterMemoryMedia} from '../../../../../../store/selectors/accounts/accounts-ts';
 import {useSelector} from '../../../../../../store/redux-hooks';
 import AccountTransferQuotaMessage from '../AccountTransferQuotaMessage';
+import {ResourceWarning} from './ResourceWarning';
 
 interface Props {
     account: {
@@ -22,6 +23,7 @@ export default function MasterMemoryContent(props: Props) {
 
     return (
         <div className="elements-section">
+            <ResourceWarning accountName={account.name} />
             <AccountTransferQuotaMessage />
             {map_(media, (medium) => {
                 return (

@@ -4,6 +4,7 @@ import AccountQuota from '../../../../AccountQuota/AccountQuota';
 import {AccountResourceName} from '../../../../../../constants/accounts/accounts';
 import AccountTransferQuotaMessage from '../AccountTransferQuotaMessage';
 import i18n from './i18n';
+import {ResourceWarning} from './ResourceWarning';
 
 interface Props {
     account: {
@@ -17,6 +18,7 @@ export default class NodesContent extends Component<Props> {
 
         return (
             <div className="elements-section">
+                <ResourceWarning accountName={account.name} />
                 <AccountTransferQuotaMessage />
                 <AccountQuota
                     title={i18n('field_nodes')}

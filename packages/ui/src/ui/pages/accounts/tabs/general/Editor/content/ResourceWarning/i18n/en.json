@@ -1,0 +1,5 @@
+{
+  "context_system-account-quota": "This is a system account for bundle snapshots and changelogs. Its quota is updated automatically and should not be edited manually unless bundle controller is turned off.",
+  "context_cluster-admin-edit-bundle": "If you are a cluster administrator, edit bundle attribute to increase account resource limits. The default multiplier is 1.",
+  "context_regular-user-contact-support": "If you are a regular user and you notice that the resource limits are violated, please contact the support."
+}
