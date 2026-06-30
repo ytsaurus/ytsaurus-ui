@@ -12,6 +12,7 @@ import AccountQuota from '../../../../AccountQuota/AccountQuota';
 import {AccountResourceName} from '../../../../../../constants/accounts/accounts';
 import AccountTransferQuotaMessage from '../AccountTransferQuotaMessage';
 import i18n from './i18n';
+import {ResourceWarning} from './ResourceWarning';
 
 const block = cn('accounts-medium-content-tab');
 
@@ -71,6 +72,7 @@ class MediumContent extends Component<Props> {
         }
         return (
             <div className={block()}>
+                <ResourceWarning accountName={account.name} />
                 <AccountTransferQuotaMessage />
                 {this.renderMediums(account, defined)}
                 {showAllText && (
