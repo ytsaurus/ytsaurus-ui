@@ -22,7 +22,6 @@ import {
     UPDATE_QUERY_ITEM,
 } from './query-tracker-contants';
 import {cleanupQueryForDraft} from '../../../types/query-tracker/query';
-import {DEFAULT_QUERY_ACO} from '../../selectors/query-tracker/query';
 import {type ChytInfo} from '../chyt/list';
 
 export interface QueryState {
@@ -53,8 +52,6 @@ const initialQueryDraftState: QueryState['draft'] = {
     files: [],
     secrets: [],
     settings: {},
-    access_control_object: DEFAULT_QUERY_ACO, // deprecated parameter
-    access_control_objects: [DEFAULT_QUERY_ACO],
 };
 
 const initState: QueryState = {

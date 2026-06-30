@@ -207,11 +207,10 @@ export const selectCurrentQueryACO = (state: RootState) => {
     return getAco(defaultACO, selectIsMultipleAco(state), state.queryTracker.query?.queryItem);
 };
 
-export const selectCurrentDraftQueryACO = (state: RootState) => {
-    const defaultACO = selectDefaultQueryACO(state);
-
-    return getAco(defaultACO, selectIsMultipleAco(state), state.queryTracker.query?.draft);
-};
+export const selectCurrentDraftQueryACO = createSelector(
+    [selectDefaultQueryACO, selectIsMultipleAco, selectQueryDraft],
+    (defaultACO, isMultipleAco, draft) => getAco(defaultACO, isMultipleAco, draft),
+);
 
 export const selectQuerySingleProgress = createSelector([selectQueryProgress], (progress) => {
     if (!isSingleProgress(progress)) return {};
