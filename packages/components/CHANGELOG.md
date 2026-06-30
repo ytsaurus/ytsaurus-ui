@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v0.2.5...components-v1.0.0) (2026-06-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* **Components:** rename SchemaTab/PreviewTab to NavigationSchemaTab/ NavigationPreviewTab; replace NavigationTable `filter` with `initialFilter`.
+
+### Features
+
+* **Components:** extract navigation tabs [YTFRONT-5875] ([d01c601](https://github.com/ytsaurus/ytsaurus-ui/commit/d01c601672c407b3e40540c9d739f1190a73171d))
+
 ## [0.2.5](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v0.2.4...components-v0.2.5) (2026-06-19)
 
 
