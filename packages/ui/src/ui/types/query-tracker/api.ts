@@ -50,7 +50,7 @@ export interface DraftQuery {
         execution_mode?: 'validate' | 'optimize';
     } & Record<string, unknown>;
     error?: unknown;
-    access_control_object: string;
+    access_control_object?: string;
     access_control_objects?: string[];
 }
 

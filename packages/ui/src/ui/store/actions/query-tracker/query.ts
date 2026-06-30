@@ -18,6 +18,7 @@ import {
 import {requestQueriesList} from './queriesList';
 import {
     SHARED_QUERY_ACO,
+    selectCurrentDraftQueryACO,
     selectCurrentQuery,
     selectQuery,
     selectQueryDraft,
@@ -474,7 +475,6 @@ export function createEmptyQuery(
     return (dispatch, getState) => {
         const state = getState();
         const lastEngine = selectLastUserChoiceQueryEngine(state);
-        const defaultQueryACO = selectDefaultQueryACO(state);
         const defaultSpytSettings = selectSpytDefaultSettings(state);
 
         const initialEngine = engine || lastEngine || QueryEngine.YQL;
@@ -486,8 +486,6 @@ export function createEmptyQuery(
             type: SET_QUERY,
             data: {
                 initialQuery: {
-                    access_control_object: defaultQueryACO,
-                    access_control_objects: [defaultQueryACO],
                     query: query || '',
                     engine: initialEngine,
                     settings: querySettings,
@@ -507,12 +505,16 @@ export function runQuery(
     return async (dispatch, getState) => {
         const state = getState();
         const query = selectQueryDraft(state);
+        const isMultipleAco = selectIsMultipleAco(state);
+        const effectiveACO = selectCurrentDraftQueryACO(state).filter(
+            (i) => i !== SHARED_QUERY_ACO,
+        );
 
         const newQuery = {...query};
-        if ('access_control_objects' in newQuery) {
-            newQuery.access_control_objects = newQuery.access_control_objects?.filter(
-                (i) => i !== SHARED_QUERY_ACO,
-            );
+        if (isMultipleAco) {
+            newQuery.access_control_objects = effectiveACO;
+        } else {
+            newQuery.access_control_object = effectiveACO[0];
         }
 
         dispatch({
