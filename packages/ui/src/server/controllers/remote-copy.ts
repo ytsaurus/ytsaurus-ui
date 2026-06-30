@@ -12,7 +12,7 @@ import {getClustersFromConfig} from '../components/utils';
 
 const yt = ytLib();
 
-export async function handleRemoteCopy(req: Request, res: Response) {
+export async function handleRemoteCopy(req: Request, res: Response): Promise<void> {
     await req.ctx.call(`RemoteCopy ${req.id}`, async (ctx) => {
         function sendErrorAndLog(title: string, error: Error, statusCode: number | null = null) {
             ctx.logError(title || 'Error', error);
@@ -20,6 +20,7 @@ export async function handleRemoteCopy(req: Request, res: Response) {
         }
 
         ctx.log('Begin', req.body);
+
         try {
             const body: RemoteCopyParams = req.body || {};
 
@@ -74,42 +75,46 @@ export async function handleRemoteCopy(req: Request, res: Response) {
                 proxy: `${dstClusterConfig.proxy}`,
             };
 
-            const existPromise = override
-                ? Promise.resolve(false)
-                : yt.v3.exists({setup, parameters: {path: body.output_table_path}});
+            if (!override) {
+                const isPathExists = await yt.v3.exists({
+                    setup,
+                    parameters: {path: body.output_table_path},
+                });
 
-            return existPromise.then((value: boolean) => {
-                if (value) {
+                if (isPathExists) {
                     return sendErrorAndLog(
                         `Path already exists.`,
                         new Error(`"${body.output_table_path}" path already exist.`),
                         409,
                     );
                 }
+            }
 
-                return yt.v3
-                    .remoteCopy({
-                        setup,
-                        parameters: {
-                            spec: {
-                                ...spec,
-                                output_table_path: {
-                                    $value: body.output_table_path,
-                                    $attributes: {create: true},
-                                },
+            await yt.v3
+                .remoteCopy({
+                    setup,
+                    parameters: {
+                        spec: {
+                            ...spec,
+                            output_table_path: {
+                                $value: body.output_table_path,
+                                $attributes: {create: true},
                             },
                         },
-                    })
-                    .then((response: string) => {
-                        res.status(200).send(response);
-                    })
-                    .catch((e: Error) => {
-                        sendErrorAndLog('Error in yt.v3.remoteCopy', e);
-                    });
-            });
-        } catch (e) {
-            sendErrorAndLog('Unexpected error', e as Error);
+                    },
+                })
+                .then((response: string) => {
+                    res.status(200).send(response);
+                })
+                .catch((error: Error) => {
+                    sendErrorAndLog('Error in yt.v3.remoteCopy', error);
+                });
+        } catch (error) {
+            sendErrorAndLog('Unexpected error', error as Error);
         }
+
         ctx.log('End');
+
+        return undefined;
     });
 }
