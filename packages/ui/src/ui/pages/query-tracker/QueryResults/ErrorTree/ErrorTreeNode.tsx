@@ -16,7 +16,7 @@ import ChevronDownIcon from '@gravity-ui/icons/svgs/chevron-down.svg';
 import unipika from '../../../../common/thor/unipika';
 import {Yson} from '../../../../components/Yson/Yson';
 import {ClickableText} from '../../../../components/ClickableText/ClickableText';
-import {isInfoNode} from './helpers/isInfoNode';
+import {getNodeSeverityType} from './helpers/getNodeSeverityType';
 
 const block = cn('yt-error-tree-node');
 
@@ -43,7 +43,7 @@ export const ErrorTreeNode: FC<Props> = ({
     const [expandedAttributes, toggleExpandedAttributes] = useToggle(false);
     const hasIssues = error.inner_errors && error.inner_errors.length > 0;
     const position = getIssuePosition(error);
-    const isInfo = isInfoNode(error);
+    const nodeType = getNodeSeverityType(error);
 
     const handleIssueClick = useCallback(() => {
         if (error.attributes?.start_position) {
@@ -52,7 +52,13 @@ export const ErrorTreeNode: FC<Props> = ({
     }, [error.attributes.start_position, onErrorClick]);
 
     return (
-        <div className={block({leaf: !hasIssues, info: isInfo})}>
+        <div
+            className={block({
+                leaf: !hasIssues,
+                info: nodeType.isInfo,
+                warning: nodeType.isWarning,
+            })}
+        >
             <div className={block('error-body')}>
                 <div className={block('line')}>
                     {hasIssues && (
@@ -69,10 +75,12 @@ export const ErrorTreeNode: FC<Props> = ({
                     <span className={block('header')}>
                         <Icon
                             className={block('icon')}
-                            data={isInfo ? CircleInfoFillIcon : errorIcon}
+                            data={nodeType.isInfo ? CircleInfoFillIcon : errorIcon}
                             size={16}
                         />
-                        <span className={block('title')}>{isInfo ? 'Info' : 'Error'}</span>
+                        <span className={block('title')}>
+                            {error.attributes?.severity || 'Error'}
+                        </span>
                         <Button view="flat-secondary" onClick={toggleExpandedAttributes}>
                             Attributes{' '}
                             <Icon
