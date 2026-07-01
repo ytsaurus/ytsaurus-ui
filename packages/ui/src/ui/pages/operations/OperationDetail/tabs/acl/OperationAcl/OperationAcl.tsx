@@ -10,8 +10,9 @@ import {
     getSubjectFilter,
 } from '../../../../../../store/reducers/operations/acl-filters';
 import {useSelector} from '../../../../../../store/redux-hooks';
+import {selectCluster} from '../../../../../../store/selectors/global/cluster';
 import {selectOperationAcl} from '../../../../../../store/selectors/operations/operation-acl';
-import {permissionsFilterPredicate} from '../../../../../../utils/acl';
+import {permissionsFilterPredicate, subjectFilterPredicate} from '../../../../../../utils/acl';
 import {getOperationAclSplitted} from '../../../../../../utils/acl/acl-operation';
 import {OperationAclDeleteButton} from './OperationAclDeleteButton/OperationAclDeleteButton';
 import {OperationAclToolbar} from './OperationAclToolbar/OperationAclToolbar';
@@ -39,6 +40,7 @@ export function OperationAcl() {
 }
 
 function useOperationAcl() {
+    const cluster = useSelector(selectCluster);
     const acl = useSelector(selectOperationAcl);
 
     const [aclMemo] = useMemoizedIfEqual(acl);
@@ -54,7 +56,7 @@ function useOperationAcl() {
         }
 
         setResult({loading: true});
-        getOperationAclSplitted(aclMemo).then(
+        getOperationAclSplitted(cluster, aclMemo).then(
             (items) => {
                 setResult({items});
             },
@@ -82,10 +84,7 @@ function useFilteredItems(items: Array<PermissionsRow>) {
         const res: Array<(item: PermissionsRow) => boolean> = [];
 
         if (subjectFilter) {
-            res.push((item) => {
-                const [first] = item.subjects;
-                return String(first).toLowerCase().includes(subjectFilter.toLowerCase());
-            });
+            res.push((item) => subjectFilterPredicate(item, subjectFilter));
         }
 
         if (permissionsFilter.length) {

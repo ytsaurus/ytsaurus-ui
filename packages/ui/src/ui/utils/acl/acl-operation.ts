@@ -1,12 +1,52 @@
 import isEqual_ from 'lodash/isEqual';
 import {type YTPermissionType} from '../../../shared/yt-types';
+import {SubjectCardProps} from '../../components/SubjectLink/SubjectLink';
 import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
+import UIFactory from '../../UIFactory';
 import {internalAclWithTypes} from './acl-api';
-import {type ACE, type AclFlags, type PreparedAclSubject} from './acl-types';
+import {TypedAclSubject, type ACE, type AclFlags, type PreparedAclSubject} from './acl-types';
 import {splitSubjects} from './index';
 
-export async function getOperationAclSplitted(acl: Array<ACE & AclFlags>) {
-    return internalAclWithTypes(splitSubjects(acl, {addAclIndex: true}));
+export async function getOperationAclSplitted(cluster: string, acl: Array<ACE & AclFlags>) {
+    return internalAclWithTypes(acl).then(async (acl) => {
+        const subjects = acl.reduce(
+            (acc, item) => {
+                item.subjects.forEach((s, index) => {
+                    const type = item.types[index];
+                    acc.push({name: s, type});
+                });
+                return acc;
+            },
+            [] as Array<Pick<SubjectCardProps, 'name' | 'type'>>,
+        );
+
+        const titles = await UIFactory.fetchSubejectNames({cluster, subjects});
+        return splitSubjects(acl, {addAclIndex: true}).map((item) => {
+            const {title, url, internal, isTvm} = titles.get(item.subjects[0]) ?? {};
+
+            if (!title) {
+                return item;
+            }
+
+            const {
+                subjects: [subject],
+                types: [type],
+            } = item;
+            let aclSubject: TypedAclSubject;
+            if (isTvm) {
+                aclSubject = {subjectType: 'tvm', tvmInfo: {name: title}, subjectUrl: url};
+            } else if (type === 'group') {
+                aclSubject = {subjectType: 'group', groupInfo: {name: title, group: subject, url}};
+            } else {
+                aclSubject = {subjectType: 'user', subjectUrl: url};
+            }
+            return {
+                ...item,
+                ...aclSubject,
+                internal: internal ?? item.internal,
+            };
+        });
+    });
 }
 
 export async function addOperationAcl({

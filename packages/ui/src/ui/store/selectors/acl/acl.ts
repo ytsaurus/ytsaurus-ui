@@ -7,7 +7,6 @@ import forEach_ from 'lodash/forEach';
 import isEqual_ from 'lodash/isEqual';
 import map_ from 'lodash/map';
 import partition_ from 'lodash/partition';
-import some_ from 'lodash/some';
 import sortBy_ from 'lodash/sortBy';
 import uniq_ from 'lodash/uniq';
 
@@ -25,7 +24,13 @@ import UIFactory from '../../../UIFactory';
 import {type RootState} from '../../../store/reducers';
 import {type IdmKindType, type PreparedAclSubject} from '../../../utils/acl/acl-types';
 import {type YTPermissionTypeUI} from '../../../utils/acl/acl-api';
-import {HasSplitted, permissionsFilterPredicate, splitSubjects, type PreparedRole} from '../../../utils/acl';
+import {
+    HasSplitted,
+    permissionsFilterPredicate,
+    splitSubjects,
+    subjectFilterPredicate,
+    type PreparedRole,
+} from '../../../utils/acl';
 import {calculateLoadingStatus} from '../../../utils/utils';
 
 export type PreparedAclSubjectColumn = Omit<PreparedAclSubject, 'type'> & {type: 'columns'};
@@ -90,24 +95,6 @@ export const selectObjectPermissionsTypesList = (idmKind: IdmKindType) => {
         },
     );
 };
-
-function subjectFilterPredicate<
-    T extends {subjectType?: unknown; groupInfo?: unknown; subjects: Array<unknown>},
->(item: T, filter: string) {
-    const {subjectType, groupInfo} = item;
-    if (subjectType === 'group') {
-        return some_(Object.entries(groupInfo ?? {}), ([key, value]) => {
-            let str: string | undefined = String(value);
-            if (key === 'url') {
-                if (str[str.length - 1] === '/') str = str.slice(0, -1);
-                str = str.split('/').pop();
-            }
-            return -1 !== str?.toLowerCase().indexOf(filter);
-        });
-    }
-    const value = String(item.subjects[0] ?? '');
-    return -1 !== value.toLowerCase().indexOf(filter);
-}
 
 function FilterBySubject<
     T extends {subjectType?: unknown; groupInfo?: unknown; subjects: Array<unknown>},
