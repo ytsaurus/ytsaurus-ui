@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.0.0...components-v1.1.0) (2026-07-01)
+
+
+### Features
+
+* **Components/Text:** support 'as' and 'ref' props [YTFRONT-5888] ([a0a2e3d](https://github.com/ytsaurus/ytsaurus-ui/commit/a0a2e3dc6afd8120f20394af0b361ba7300f0d59))
+
 ## [1.0.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v0.2.5...components-v1.0.0) (2026-06-30)
 
 
