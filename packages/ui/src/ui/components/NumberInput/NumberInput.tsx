@@ -37,6 +37,20 @@ export function formatValue(
     return res === hammer.format.NO_VALUE ? '' : res;
 }
 
+function formatBoundForError(bound: number, props: NumberInputWithErrorProps) {
+    const {format, decimalPlaces, formatFn} = props;
+    const formatted = formatFn
+        ? formatFn(bound)
+        : formatValue(bound, format, {digits: decimalPlaces});
+    const raw = String(bound);
+
+    if (!formatted || formatted === raw) {
+        return raw;
+    }
+
+    return `${raw} (${formatted})`;
+}
+
 function toRawValue(value: NumberInputProps['value']) {
     return value === undefined ? '' : value;
 }
@@ -146,11 +160,15 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
         }
 
         if (min !== undefined && value < min) {
-            return i18n('error_must-be-gte', {min});
+            return i18n('error_must-be-gte', {
+                min: formatBoundForError(min, props),
+            });
         }
 
         if (max !== undefined && value > max) {
-            return i18n('error_must-be-lte', {max});
+            return i18n('error_must-be-lte', {
+                max: formatBoundForError(max, props),
+            });
         }
 
         return undefined;
