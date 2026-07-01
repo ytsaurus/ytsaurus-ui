@@ -1,7 +1,7 @@
 import React, {type FC} from 'react';
 import {type ErrorPosition, type QueryError} from '../../../../types/query-tracker/api';
 import {ErrorCloud} from './ErrorCloud';
-import {isInfoNode} from './helpers/isInfoNode';
+import {getNodeSeverityType} from './helpers/getNodeSeverityType';
 
 type Props = {
     errors: QueryError[];
@@ -30,7 +30,7 @@ export const ErrorList: FC<Props> = ({
                     level={level}
                     disableCloud={disableCloud && !(errors.length > 1)}
                     error={error}
-                    initialExpanded={isInfoNode(error) ? false : expanded}
+                    initialExpanded={getNodeSeverityType(error).isInfo ? false : expanded}
                     onErrorClick={onErrorClick}
                     onShowParent={onShowParent}
                     fromCloud={fromCloud}

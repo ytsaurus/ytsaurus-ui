@@ -11,6 +11,12 @@
         }
     }
 
+    &_warning {
+        #{$self}__icon {
+            color: var(--g-color-text-warning);
+        }
+    }
+
     &__errors {
         padding-left: 28px;
     }
