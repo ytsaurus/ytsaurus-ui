@@ -11,16 +11,16 @@ import {
 } from '../../../../../../store/reducers/operations/acl-filters';
 import {useSelector} from '../../../../../../store/redux-hooks';
 import {selectOperationAcl} from '../../../../../../store/selectors/operations/operation-acl';
-import {permissionsFilterPredicate, splitSubjects} from '../../../../../../utils/acl';
-import {internalAclWithTypes} from '../../../../../../utils/acl/acl-api';
+import {permissionsFilterPredicate} from '../../../../../../utils/acl';
 import {getOperationAclSplitted} from '../../../../../../utils/acl/acl-operation';
+import {OperationAclDeleteButton} from './OperationAclDeleteButton/OperationAclDeleteButton';
 import {OperationAclToolbar} from './OperationAclToolbar/OperationAclToolbar';
 
 export function OperationAcl() {
     const {items = [], loading, error, noItemsText} = useOperationAcl();
 
     const columns = useAclColumns(['subjects', 'permissions', 'actions'], {
-        renderRoleActions: () => null,
+        renderRoleActions: ({row}) => <OperationAclDeleteButton row={row} />,
     });
 
     return error ? (

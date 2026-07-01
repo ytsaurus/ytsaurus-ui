@@ -187,16 +187,26 @@ export type HasSplitted = {
     subjectIndex?: number;
 };
 
-export function splitSubjects<T extends {subjects: Array<unknown>}>(items: Array<T>) {
+export function splitSubjects<T extends {subjects: Array<unknown>}>(
+    items: Array<T>,
+    {addAclIndex}: {addAclIndex?: boolean} = {},
+) {
     const res: Array<T & HasSplitted> = [];
-    forEach_(items, (item) => {
+    forEach_(items, (item, aclIndex) => {
+        const commonPart = addAclIndex ? {aclIndex} : {};
         const {subjects} = item;
         if (subjects && subjects.length > 1) {
             forEach_(subjects, (subject, index) => {
-                res.push({...item, subjects: [subject], isSplitted: true, subjectIndex: index});
+                res.push({
+                    ...item,
+                    subjects: [subject],
+                    isSplitted: true,
+                    subjectIndex: index,
+                    ...commonPart,
+                });
             });
         } else {
-            res.push(item);
+            res.push({...item, ...commonPart});
         }
     });
     return res;

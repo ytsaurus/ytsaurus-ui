@@ -149,6 +149,13 @@ export function loadAclData(
     };
 }
 
+export type DeletePemissionsParams = {
+    idmKind: IdmKindType;
+    path: string;
+    roleKey: string;
+    itemToDelete: PreparedAclSubject;
+};
+
 export function deletePermissions(
     {
         roleKey,
