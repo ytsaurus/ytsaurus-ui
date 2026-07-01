@@ -1,4 +1,4 @@
-import React, {HTMLAttributes} from 'react';
+import React from 'react';
 import cn from 'bem-cn-lite';
 import unipika from '../../utils/unipika';
 import './Text.scss';
@@ -14,63 +14,15 @@ export const UNIPIKA_ESCAPED_SETTINGS = {
 
 const block = cn('yt-text');
 
-interface Props {
+type Props = {
     className?: string;
     children: React.ReactNode;
-}
+};
 
-export function Secondary({children, disabled}: Props & {disabled?: boolean}) {
-    return (
-        <YTText color="secondary" disabled={disabled}>
-            {children}
-        </YTText>
-    );
-}
+type TextTag = keyof React.JSX.IntrinsicElements;
 
-export function Bold({children}: Props) {
-    return <YTText bold>{children}</YTText>;
-}
-
-export function SecondaryBold({children}: Props) {
-    return (
-        <YTText color="secondary" bold>
-            {children}
-        </YTText>
-    );
-}
-
-export function Warning({children, className}: Props) {
-    return (
-        <YTText className={className} color="warning">
-            {children}
-        </YTText>
-    );
-}
-
-export function WarningLight({children, className}: Props) {
-    return (
-        <YTText className={className} color="warning-light">
-            {children}
-        </YTText>
-    );
-}
-
-export function NoWrap({children}: Props) {
-    return <YTText noWrap>{children}</YTText>;
-}
-
-export function Escaped({text, onClick}: {text: string; onClick?: (e: React.MouseEvent) => void}) {
-    const textNode = unipika.prettyprint(text, {
-        ...UNIPIKA_ESCAPED_SETTINGS,
-        asHTML: true,
-    });
-    return <YTText escaped onClick={onClick} dangerouslySetInnerHTML={{__html: textNode}} />;
-}
-
-export type TextProps = Pick<
-    HTMLAttributes<HTMLSpanElement>,
-    'className' | 'onClick' | 'role' | 'dangerouslySetInnerHTML' | 'children'
-> & {
+type TextOwnProps<T extends TextTag> = {
+    as?: T;
     ellipsis?: boolean;
     color?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'warning-light' | 'danger';
     disabled?: boolean;
@@ -80,37 +32,110 @@ export type TextProps = Pick<
     capitalize?: boolean;
 };
 
-export function YTText({
-    className,
-    color,
-    ellipsis,
-    disabled,
-    bold,
-    noWrap,
-    escaped,
-    capitalize,
-    children,
-    ...rest
-}: TextProps) {
+type TextRef<T extends TextTag> = React.ComponentPropsWithRef<T>['ref'];
+
+export type TextProps<T extends TextTag = 'span'> = TextOwnProps<T> &
+    Omit<React.ComponentPropsWithoutRef<T>, keyof TextOwnProps<T>>;
+
+export const YTText = React.forwardRef(
+    <T extends TextTag = 'span'>(
+        {
+            as,
+            className,
+            color,
+            ellipsis,
+            disabled,
+            bold,
+            noWrap,
+            escaped,
+            capitalize,
+            children,
+            ...rest
+        }: TextProps<T>,
+        ref: TextRef<T>,
+    ) => {
+        const Tag = (as || 'span') as React.ElementType;
+
+        return (
+            <Tag
+                ref={ref}
+                className={block(
+                    {
+                        color,
+                        ellipsis,
+                        bold,
+                        disabled,
+                        'no-wrap': noWrap,
+                        escaped,
+                        clickable: Boolean(rest.onClick),
+                        capitalize,
+                    },
+                    className,
+                )}
+                role={rest.onClick ? 'button' : rest.role}
+                {...rest}
+            >
+                {children}
+            </Tag>
+        );
+    },
+) as (<T extends TextTag = 'span'>(
+    props: TextProps<T> & {ref?: TextRef<T>},
+) => React.ReactElement) & {displayName: string};
+
+YTText.displayName = 'YTText';
+
+export const Secondary = ({children, disabled}: Props & {disabled?: boolean}) => {
     return (
-        <span
-            className={block(
-                {
-                    color,
-                    ellipsis,
-                    bold,
-                    disabled,
-                    'no-wrap': noWrap,
-                    escaped,
-                    clickable: Boolean(rest.onClick),
-                    capitalize,
-                },
-                className,
-            )}
-            role={rest.onClick ? 'button' : rest.role}
-            {...rest}
-        >
+        <YTText color="secondary" disabled={disabled}>
             {children}
-        </span>
+        </YTText>
     );
-}
+};
+
+export const Bold = ({children}: Props) => {
+    return <YTText bold>{children}</YTText>;
+};
+
+export const SecondaryBold = ({children}: Props) => {
+    return (
+        <YTText color="secondary" bold>
+            {children}
+        </YTText>
+    );
+};
+
+export const Warning = ({children, className}: Props) => {
+    return (
+        <YTText className={className} color="warning">
+            {children}
+        </YTText>
+    );
+};
+
+export const WarningLight = ({children, className}: Props) => {
+    return (
+        <YTText className={className} color="warning-light">
+            {children}
+        </YTText>
+    );
+};
+
+export const NoWrap = ({children}: Props) => {
+    return <YTText noWrap>{children}</YTText>;
+};
+
+export const Escaped = ({
+    text,
+    onClick,
+}: {
+    text: string;
+    onClick?: (e: React.MouseEvent) => void;
+}) => {
+    const textNode = unipika.prettyprint(text, {
+        ...UNIPIKA_ESCAPED_SETTINGS,
+        asHTML: true,
+    });
+
+    return <YTText escaped onClick={onClick} dangerouslySetInnerHTML={{__html: textNode}} />;
+};

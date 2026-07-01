@@ -10,6 +10,10 @@ const meta = {
     tags: ['autodocs'],
     args: textStoryDefaultArgs,
     argTypes: {
+        as: {
+            control: 'select',
+            options: [undefined, 'span', 'div'],
+        },
         children: {control: 'text'},
         color: {
             control: 'select',

@@ -5,8 +5,9 @@ import type {TextProps} from './Text';
 /** Default Storybook args; shared with Playwright visual tests. */
 export const textStoryDefaultArgs: Pick<
     TextProps,
-    'children' | 'color' | 'bold' | 'noWrap' | 'ellipsis' | 'disabled' | 'capitalize'
+    'as' | 'children' | 'color' | 'bold' | 'noWrap' | 'ellipsis' | 'disabled' | 'capitalize'
 > = {
+    as: undefined,
     children: 'YTsaurus UI text',
     color: undefined,
     bold: false,
