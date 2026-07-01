@@ -19,7 +19,7 @@
             "env": { "node": true }
         },
         {
-            "files": ["**/*.spec.js", "**/*.spec.ts"],
+            "files": ["**/*.spec.{js,ts,tsx}"],
             "env": { "jest": true }
         }
     ]

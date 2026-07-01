@@ -6,6 +6,9 @@ module.exports = {
     setupFilesAfterEnv: ['jest-extended'],
     testMatch: ['<rootDir>/src/**/?(*.)spec.{js,jsx,ts,tsx}'],
     modulePathIgnorePatterns: ['build'],
+    moduleNameMapper: {
+        '\\.(css|scss)$': 'identity-obj-proxy',
+    },
     transform: {
         '^.+\\.tsx?$': [
             'ts-jest',
