@@ -24,6 +24,7 @@ export type RepoNavigationState = {
     cluster: string | undefined;
     filter: string;
     nodes: NavigationNode[];
+    pathTargetNode?: Pick<NavigationNode, 'type' | 'dynamic'>;
     table?: NavigationTable;
     error?: YTError;
 };
@@ -61,6 +62,9 @@ const queryNavigationSlice = createSlice({
         setNodes(state, {payload}: PayloadAction<any>) {
             state.nodes = payload;
         },
+        setPathTargetNode(state, {payload}: PayloadAction<RepoNavigationState['pathTargetNode']>) {
+            state.pathTargetNode = payload;
+        },
         setTable(state, {payload}: PayloadAction<NavigationTable>) {
             state.table = payload;
         },
@@ -77,6 +81,7 @@ export const {
     setPath,
     setNodeType,
     setNodes,
+    setPathTargetNode,
     setTable,
     setError,
 } = queryNavigationSlice.actions;
