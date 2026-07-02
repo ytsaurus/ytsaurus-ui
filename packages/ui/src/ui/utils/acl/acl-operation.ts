@@ -36,7 +36,10 @@ export async function getOperationAclSplitted(cluster: string, acl: Array<ACE & 
             if (isTvm) {
                 aclSubject = {subjectType: 'tvm', tvmInfo: {name: title}, subjectUrl: url};
             } else if (type === 'group') {
-                aclSubject = {subjectType: 'group', groupInfo: {name: title, group: subject, url}};
+                aclSubject = {
+                    subjectType: 'group',
+                    groupInfo: {name: title, group: subject, url},
+                };
             } else {
                 aclSubject = {subjectType: 'user', subjectUrl: url};
             }

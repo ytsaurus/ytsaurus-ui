@@ -13,15 +13,26 @@ import {useSelector} from '../../../../../../store/redux-hooks';
 import {selectCluster} from '../../../../../../store/selectors/global/cluster';
 import {selectOperationAcl} from '../../../../../../store/selectors/operations/operation-acl';
 import {permissionsFilterPredicate, subjectFilterPredicate} from '../../../../../../utils/acl';
+import {aggregateBySubject} from '../../../../../../utils/acl/acl-aggregate';
 import {getOperationAclSplitted} from '../../../../../../utils/acl/acl-operation';
 import {OperationAclDeleteButton} from './OperationAclDeleteButton/OperationAclDeleteButton';
 import {OperationAclToolbar} from './OperationAclToolbar/OperationAclToolbar';
 
 export function OperationAcl() {
-    const {items = [], loading, error, noItemsText} = useOperationAcl();
+    const {expandedItems, onExpandAclSubject} = useExpandedItems();
+    const {items = [], hasExpandable, loading, error, noItemsText} = useOperationAcl(expandedItems);
 
-    const columns = useAclColumns(['subjects', 'permissions', 'actions'], {
+    const columnNames = React.useMemo(() => {
+        if (hasExpandable) {
+            return ['expand', 'subjects', 'permissions', 'actions'] as const;
+        } else {
+            return ['subjects', 'permissions', 'actions'] as const;
+        }
+    }, [hasExpandable]);
+
+    const columns = useAclColumns(columnNames, {
         renderRoleActions: ({row}) => <OperationAclDeleteButton row={row} />,
+        onExpandAclSubject,
     });
 
     return error ? (
@@ -39,7 +50,28 @@ export function OperationAcl() {
     );
 }
 
-function useOperationAcl() {
+function useExpandedItems() {
+    const [expandedItems, setExpandedItems] = React.useState(new Set<string | number>());
+    const onExpandAclSubject = React.useCallback(
+        (subject?: string | number) => {
+            if (!subject) {
+                return;
+            }
+            const newItems = new Set(expandedItems);
+
+            if (expandedItems.has(subject)) {
+                newItems.delete(subject);
+            } else {
+                newItems.add(subject);
+            }
+            setExpandedItems(newItems);
+        },
+        [expandedItems],
+    );
+    return {expandedItems, onExpandAclSubject};
+}
+
+function useOperationAcl(expandedItems: Set<string | number>) {
     const cluster = useSelector(selectCluster);
     const acl = useSelector(selectOperationAcl);
 
@@ -71,7 +103,7 @@ function useOperationAcl() {
 
     return {
         ...result,
-        items,
+        ...aggregateBySubject(items, expandedItems),
         noItemsText: filtered ? 'No data to display due to filters' : undefined,
     };
 }
