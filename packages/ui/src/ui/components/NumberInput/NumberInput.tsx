@@ -116,6 +116,14 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
         return null;
     }
 
+    static formatBound(bound: number, props: NumberInputWithErrorProps) {
+        const {format, decimalPlaces, formatFn} = props;
+        if (formatFn) {
+            return formatFn(bound);
+        }
+        return formatValue(bound, format, {digits: decimalPlaces});
+    }
+
     static errorFromValue(v: NumberInputWithErrorProps['value'], props: NumberInputWithErrorProps) {
         const {validator = () => undefined, min, max, integerOnly} = props;
         const {value, error} = v || {};
@@ -146,11 +154,15 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
         }
 
         if (min !== undefined && value < min) {
-            return i18n('error_must-be-gte', {min});
+            return i18n('error_must-be-gte', {
+                min: NumberInputWithError.formatBound(min, props),
+            });
         }
 
         if (max !== undefined && value > max) {
-            return i18n('error_must-be-lte', {max});
+            return i18n('error_must-be-lte', {
+                max: NumberInputWithError.formatBound(max, props),
+            });
         }
 
         return undefined;
