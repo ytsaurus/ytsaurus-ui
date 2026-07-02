@@ -1,11 +1,9 @@
 import cn from 'bem-cn-lite';
-import map_ from 'lodash/map';
 import React from 'react';
-import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import Filter from '../../../components/Filter/Filter';
-import Select from '../../../components/Select/Select';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {AclMode} from '../../../constants/acl';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {selectObjectPermissionsTypesList} from '../../../store/selectors/acl/acl';
 import {
     selectAclRowAccessPredicateFilter,
@@ -14,9 +12,10 @@ import {
 } from '../../../store/selectors/acl/acl-filters';
 import {type ACLReduxProps} from '../ACL-connect-helpers';
 import {ColumnGroupsFilter} from '../ColumnGroups/ColumnGroups';
-import i18nPermissionValues from '../i18n-permission-values';
 import i18n from './i18n';
 import './ObjectPermissionsFilters.scss';
+import {ObjectPermissionsSelectFilter} from './ObjectPermissionsSelectFilter/ObjectPermissionsSelectFilter';
+import {ObjectPermissionsSubjectFilter} from './ObjectPermissionsSubjectFilter/ObejctPermissionsSubjectFilter';
 
 const block = cn('object-permissions-filters');
 
@@ -44,19 +43,16 @@ export default function ObjectPermissionsFilters({
             itemsToWrap={[
                 {
                     node: (
-                        <Filter
+                        <ObjectPermissionsSubjectFilter
                             className={block('filter')}
-                            placeholder={i18n('context_filter-by-subject')}
-                            onChange={(value: string) => {
+                            value={subjectFilter}
+                            onUpdate={(value: string) => {
                                 dispatch(
                                     updateAclFilters({
                                         objectSubject: value,
                                     }),
                                 );
                             }}
-                            value={subjectFilter}
-                            size="m"
-                            autofocus={false}
                         />
                     ),
                 },
@@ -73,15 +69,9 @@ export default function ObjectPermissionsFilters({
                             />
                         ),
                         [AclMode.MAIN_PERMISSIONS]: (
-                            <Select
+                            <ObjectPermissionsSelectFilter
                                 className={block('filter')}
-                                multiple
-                                placeholder={i18n('context_filter-placeholder')}
                                 value={selectedPermissons}
-                                items={map_(permissionList, (p) => ({
-                                    value: p,
-                                    text: i18nPermissionValues(`value_${p}`),
-                                }))}
                                 onUpdate={(value: string[]) => {
                                     dispatch(
                                         updateAclFilters({
@@ -89,9 +79,7 @@ export default function ObjectPermissionsFilters({
                                         }),
                                     );
                                 }}
-                                label={i18n('field_permissions')}
-                                maxVisibleValuesTextLength={60}
-                                width="auto"
+                                permissionList={permissionList}
                             />
                         ),
                         [AclMode.ROW_GROUPS_PERMISSIONS]: (

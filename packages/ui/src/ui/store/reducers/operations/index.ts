@@ -9,6 +9,7 @@ import jobsOperationIncarnations from './jobs/jobs-operation-incarnations';
 import jobsMonitor from './jobs/jobs-monitor';
 import {jobsTimelineReducer} from './jobs/jobs-timeline-slice';
 import {incarnations} from './incarnations';
+import {aclFilters} from './acl-filters';
 
 export default combineReducers({
     page,
@@ -20,4 +21,5 @@ export default combineReducers({
     jobsOperationIncarnations,
     incarnations,
     jobsTimeline: jobsTimelineReducer,
+    aclFilters,
 });

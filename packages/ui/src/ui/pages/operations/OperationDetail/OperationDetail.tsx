@@ -77,6 +77,7 @@ import {type OperationPool, type OperationStates} from '../selectors';
 import './OperationDetail.scss';
 import {JobsTimeline} from './tabs/JobsTimeline';
 import OperationDetailsMonitor from './tabs/monitor/OperationDetailsMonitor';
+import {OperationAclLazy} from './tabs/acl/lazy';
 
 const detailBlock = cn('operation-detail');
 
@@ -388,6 +389,9 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                 title: operationPerformanceUrlTemplate?.title,
                 routed: false,
             },
+            [Tab.ACL]: {
+                show: true,
+            },
         };
 
         if (monitorTabUrlTemplate) {
@@ -486,6 +490,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                         }
                     />
                     <Route path={`${path}/${Tab.LOGS}`} render={UIFactory.renderOperationLogsTab} />
+                    <Route path={`${path}/${Tab.ACL}`} component={OperationAclLazy} />
                     <Route path={`${path}/:tab`} component={Placeholder} />
                     <Redirect from={url} to={`${path}/${DEFAULT_TAB}`} />
                 </Switch>

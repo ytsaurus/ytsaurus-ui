@@ -260,6 +260,10 @@ export const defaultUIFactory: UIFactory = {
         return <DefaultSubjectLinkLazy {...props} />;
     },
 
+    fetchSubejectNames() {
+        return Promise.resolve(new Map());
+    },
+
     makeSupportContent(_x, makeContent) {
         const {reportBugUrl} = uiSettings;
         if (!reportBugUrl) {

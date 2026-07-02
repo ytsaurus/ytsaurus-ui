@@ -9,6 +9,7 @@
   "field_current_pool": "Current pool",
   "field_current_tablet_cell_bundle": "Current bundle",
   "field_current_access_control_object": "Current ACO",
+  "field_current_operation": "Current operation",
   "field_permissions": "Permissions",
   "field_read-columns": "Read columns",
   "field_read-column-group": "Read column group",
