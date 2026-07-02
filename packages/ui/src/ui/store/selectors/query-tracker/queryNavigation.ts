@@ -1,7 +1,7 @@
 import {type RootState} from '../../reducers';
 import {createSelector} from 'reselect';
 import {selectClusterList} from '../slideoutMenu';
-import {type NavigationNode} from '../../reducers/query-tracker/queryNavigationSlice';
+import {BodyType, type NavigationNode} from '../../reducers/query-tracker/queryNavigationSlice';
 import {selectGetSetting} from '../settings';
 import {createNestedNS} from '../../../../shared/utils/settings';
 import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
@@ -42,6 +42,25 @@ export const selectNavigationFilter = (state: RootState) =>
     state.queryTracker.queryNavigation.filter;
 
 export const selectNavigationNodes = (state: RootState) => state.queryTracker.queryNavigation.nodes;
+
+export const selectPathTargetNode = (state: RootState) =>
+    state.queryTracker.queryNavigation.pathTargetNode;
+
+export const selectPathActionsNode = createSelector(
+    [selectNavigationPath, selectNavigationNodes, selectPathTargetNode, selectNavigationNodeType],
+    (path, nodes, pathTargetNode, bodyType): Pick<NavigationNode, 'path' | 'type' | 'dynamic'> => {
+        const nodeFromList = nodes.find((node) => node.path === path);
+
+        return {
+            path,
+            type:
+                nodeFromList?.type ??
+                pathTargetNode?.type ??
+                (bodyType === BodyType.Table ? 'table' : undefined),
+            dynamic: nodeFromList?.dynamic ?? pathTargetNode?.dynamic,
+        };
+    },
+);
 
 export const selectNavigationTable = (state: RootState) => state.queryTracker.queryNavigation.table;
 
