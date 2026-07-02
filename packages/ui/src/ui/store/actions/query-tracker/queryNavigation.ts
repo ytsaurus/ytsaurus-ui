@@ -16,6 +16,7 @@ import {
     setNodeType,
     setNodes,
     setPath,
+    setPathTargetNode,
     setTable,
 } from '../../reducers/query-tracker/queryNavigationSlice';
 import {
@@ -51,6 +52,63 @@ import {toaster} from '../../../utils/toaster';
 import {ytComponentsNavigationMetaConfig} from '../../../components/MetaTable/ytComponentsNavigationMetaConfig';
 
 type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
+
+const loadPathTargetNode =
+    (path: string): AsyncAction =>
+    async (dispatch, getState) => {
+        const state = getState();
+        const clusterConfig = selectNavigationClusterConfig(state);
+        const nodeList = selectNavigationNodes(state);
+
+        const nodeFromList = nodeList.find((node) => node.path === path);
+        if (nodeFromList?.type) {
+            dispatch(
+                setPathTargetNode({
+                    type: nodeFromList.type,
+                    dynamic: nodeFromList.dynamic,
+                }),
+            );
+            return;
+        }
+
+        if (!clusterConfig) return;
+
+        try {
+            const setup = {
+                proxy: getClusterProxy(clusterConfig),
+                JSONSerializer,
+            };
+
+            const results = await ytApiV3Id.executeBatch(YTApiId.navigationGetPath, {
+                parameters: {
+                    requests: [
+                        {
+                            command: 'get',
+                            parameters: {
+                                path: `${path}/@type`,
+                            },
+                        },
+                        {
+                            command: 'get',
+                            parameters: {
+                                path: `${path}/@dynamic`,
+                            },
+                        },
+                    ],
+                },
+                setup,
+            });
+
+            dispatch(
+                setPathTargetNode({
+                    type: results[0].output as string,
+                    dynamic: Boolean(results[1].output),
+                }),
+            );
+        } catch {
+            dispatch(setPathTargetNode(undefined));
+        }
+    };
 
 export const toggleFavoritePath =
     (favoritePath: string): AsyncAction =>
@@ -104,6 +162,7 @@ export const loadNodeByPath =
         dispatch(setFilter(''));
         dispatch(setPath(path));
         dispatch(setNodeType(BodyType.Tree));
+        dispatch(setPathTargetNode(undefined));
         dispatch(setNodes(nodes as NavigationNode[]));
     };
 
@@ -127,6 +186,7 @@ export const loadTableAttributesByPath =
         };
 
         try {
+            await dispatch(loadPathTargetNode(path));
             const tableData = await loadTableAttributesByPathFromComponents(path, setup, {
                 clusterId: clusterConfig.id,
                 login,
