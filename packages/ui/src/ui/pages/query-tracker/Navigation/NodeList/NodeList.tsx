@@ -1,4 +1,4 @@
-import React, {type FC, useCallback, useRef, useState} from 'react';
+import React, {type FC, useCallback} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
     selectIsQueryNavigationLoading,
@@ -10,40 +10,24 @@ import {
     copyPathToClipboard,
     loadNodeByPath,
     loadTableAttributesByPath,
-    makeNewQueryWithTableSelect,
     toggleFavoritePath,
 } from '../../../../store/actions/query-tracker/queryNavigation';
 import './NodeList.scss';
 import cn from 'bem-cn-lite';
 import {isFolderNode} from '../../../../utils/navigation/isFolderNode';
 import {isTableNode} from '../../../../utils/navigation/isTableNode';
-import {useMonaco} from '../../hooks/useMonaco';
-import {insertTextWhereCursor} from '../helpers/insertTextWhereCursor';
-import {
-    selectIsQueryDraftEditted,
-    selectQueryEngine,
-} from '../../../../store/selectors/query-tracker/query';
-import {makePathByQueryEngine} from '../helpers/makePathByQueryEngine';
-import {type QueryEngine} from '../../../../../shared/constants/engines';
+import {selectQueryEngine} from '../../../../store/selectors/query-tracker/query';
 import {getNavigationUrl} from '../helpers/getNavigationUrl';
-import {createTableSelect} from '../helpers/createTableSelect';
-import {selectQueryResultGlobalSettings} from '../../../../store/selectors/query-tracker/queryResult';
-import {NewQueryPromt} from '../../NewQueryButton/NewQueryButton';
 import {ItemsList} from '../ItemsList';
 
 const b = cn('navigation-node-list');
 
 export const NodeList: FC = () => {
     const dispatch = useDispatch();
-    const [showPrompt, setShowPrompt] = useState(false);
-    const newQueryParams = useRef<{path: string; engine: QueryEngine} | null>(null);
     const clusterConfig = useSelector(selectNavigationClusterConfig);
     const nodes = useSelector(selectNodeListByFilter);
     const engine = useSelector(selectQueryEngine);
-    const {pageSize} = selectQueryResultGlobalSettings();
-    const dirtyQuery = useSelector(selectIsQueryDraftEditted);
     const loading = useSelector(selectIsQueryNavigationLoading);
-    const {getEditor} = useMonaco();
 
     const handleNodeClick = (path: string, type: string | undefined) => {
         if (isFolderNode(type)) {
@@ -63,39 +47,13 @@ export const NodeList: FC = () => {
         [dispatch],
     );
 
-    const handleEditorInsert = useCallback(
-        async (path: string, type: 'path' | 'select') => {
-            if (!clusterConfig || !clusterConfig.id) return;
-            const editor = getEditor('queryEditor');
-            let text = '';
-            if (type === 'path') {
-                text = makePathByQueryEngine({
-                    cluster: clusterConfig.id,
-                    path,
-                    engine,
-                });
-            } else {
-                text = await createTableSelect({clusterConfig, path, engine, limit: pageSize});
-            }
-            insertTextWhereCursor(text, editor);
-        },
-        [clusterConfig, engine, getEditor, pageSize],
-    );
-
     const onClipboardCopy = useCallback(
-        (path: string, type: 'path' | 'url') => {
+        (path: string) => {
             if (!clusterConfig || !clusterConfig.id) return;
-            const pathString =
-                type === 'path'
-                    ? makePathByQueryEngine({
-                          cluster: clusterConfig.id,
-                          path,
-                          engine,
-                      })
-                    : getNavigationUrl(clusterConfig.id, path);
+            const pathString = getNavigationUrl(clusterConfig.id, path);
             dispatch(copyPathToClipboard(pathString));
         },
-        [clusterConfig, dispatch, engine],
+        [clusterConfig, dispatch],
     );
 
     const handleNewWindowOpen = useCallback(
@@ -108,33 +66,6 @@ export const NodeList: FC = () => {
         [clusterConfig],
     );
 
-    const handlePromptConfirm = useCallback(() => {
-        const parameters = newQueryParams.current;
-        if (!parameters) return;
-
-        dispatch(makeNewQueryWithTableSelect(parameters.path, parameters.engine));
-        setShowPrompt(false);
-    }, [dispatch, setShowPrompt]);
-
-    const handlePromptCancel = useCallback(() => {
-        newQueryParams.current = null;
-        setShowPrompt(false);
-    }, [setShowPrompt]);
-
-    const handleNewQuery = useCallback(
-        async (path: string, newEngine: QueryEngine) => {
-            if (dirtyQuery) {
-                setShowPrompt(true);
-                newQueryParams.current = {path, engine: newEngine};
-                return;
-            }
-
-            newQueryParams.current = {path, engine: newEngine};
-            handlePromptConfirm();
-        },
-        [dirtyQuery, handlePromptConfirm, setShowPrompt],
-    );
-
     return (
         <div className={b()}>
             <ItemsList
@@ -145,21 +76,14 @@ export const NodeList: FC = () => {
                         <NodeListRow
                             key={node.path}
                             node={node}
-                            queryEngine={engine}
+                            engine={engine}
                             onClick={handleNodeClick}
                             onFavoriteToggle={handleFavoriteToggle}
-                            onEditorInsert={handleEditorInsert}
                             onClipboardCopy={onClipboardCopy}
                             onNewWindowOpen={handleNewWindowOpen}
-                            onNewQuery={handleNewQuery}
                         />
                     );
                 }}
-            />
-            <NewQueryPromt
-                confirm={handlePromptConfirm}
-                cancel={handlePromptCancel}
-                visible={showPrompt}
             />
         </div>
     );
