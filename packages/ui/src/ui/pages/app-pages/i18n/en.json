@@ -1,0 +1,20 @@
+{
+  "title_navigation": "Navigation",
+  "title_flow-pipelines": "Flow pipelines",
+  "title_operations": "Operations",
+  "title_scheduling": "Scheduling",
+  "title_components": "Components",
+  "title_dashboard": "Dashboard",
+  "title_accounts": "Accounts",
+  "title_bundles": "Bundles",
+  "title_groups": "Groups",
+  "title_users": "Users",
+  "title_path-viewer": "Path Viewer",
+  "title_job": "Job",
+  "title_tablet": "Tablet",
+  "title_banned": "Banned",
+  "title_system": "System",
+  "title_versions": "Versions",
+  "title_queries": "Queries",
+  "title_cliques": "Cliques"
+}
