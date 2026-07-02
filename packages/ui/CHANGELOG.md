@@ -1,5 +1,34 @@
 # Changelog
 
+## [3.17.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.16.0...ui-v3.17.0) (2026-07-02)
+
+
+### Features
+
+* **Accounts:** resource warning [YTFRONT-5886] ([3de1ce2](https://github.com/ytsaurus/ytsaurus-ui/commit/3de1ce2a1b0648633a73641b9be4835a62e9904b))
+
+
+### Bug Fixes
+
+* **Accounts:** edit quota limit text fix [YTFRONT-5854] ([c8b226a](https://github.com/ytsaurus/ytsaurus-ui/commit/c8b226adb889af62158cc422096650e9f2ad5a40))
+* **ACL/RowGroups:** order groups by name [YTFRONT-5758] ([7012f35](https://github.com/ytsaurus/ytsaurus-ui/commit/7012f354cbdb83f9080a2f753c687726ed649772))
+* **App/Toaster:** better background color for toasts [YTFRONT-5856] ([f1c3219](https://github.com/ytsaurus/ytsaurus-ui/commit/f1c321962182e93c816124c0170a7f4587b6e054))
+* **App:** get rid of unnecessary import [YTFRONT-5870] ([1bb667f](https://github.com/ytsaurus/ytsaurus-ui/commit/1bb667f197939e3716e10e4d8a548c3f23c97234))
+* **Navigation:** remote-copy path validation [YTFRONT-5898] ([66a1471](https://github.com/ytsaurus/ytsaurus-ui/commit/66a1471387bb688d705046556c7ebecb046bf7a5))
+* **Navigation:** user attributes typed output [YTFRONT-5880] ([a9092da](https://github.com/ytsaurus/ytsaurus-ui/commit/a9092daabd248b07d8773bfb6d2dbe13d218b170))
+* **Operations/Incarnations:** events section selected text copy [YTFRONT-5740] ([64355b9](https://github.com/ytsaurus/ytsaurus-ui/commit/64355b94db51bc875ef7b4766f249261ba5e361f))
+* **Operations:** wrong data in timeline modal [YTFRONT-5894] ([c7d6dd0](https://github.com/ytsaurus/ytsaurus-ui/commit/c7d6dd0c0dacae990544d129ff831fb28d168ff3))
+* **PrometheusDashboards:** handle 'gbytes' properly [YTFRONT-5831] ([761d0d5](https://github.com/ytsaurus/ytsaurus-ui/commit/761d0d56c1a1505284008655119ff881d8847e6b))
+* **Queries:** correct color for warnings within errors [YTFRONT-5264] ([9c12fca](https://github.com/ytsaurus/ytsaurus-ui/commit/9c12fca871baf3283a7e59613a2874f8e4a4ff8b))
+* **Queries:** cyrillic name in history [YTFRONT-5881] ([287681d](https://github.com/ytsaurus/ytsaurus-ui/commit/287681d1594df05d73acca849cdd1c81c8dec17d))
+* **Queries:** do not disable the start until the controller responds [YTFRONT-5818] ([9c6304e](https://github.com/ytsaurus/ytsaurus-ui/commit/9c6304ea331357b80519bf836065c55bd903d9f2))
+* **Queries:** dont add discovery path in spark connect [YTFRONT-5887] ([58c9f96](https://github.com/ytsaurus/ytsaurus-ui/commit/58c9f96cc60120ba1a948a6aab66e66bd0dce763))
+* **Queries:** wrong default aco [YTFRONT-5668] ([83dc3c0](https://github.com/ytsaurus/ytsaurus-ui/commit/83dc3c0975341dfe3828e17530e636a4af2571fc))
+* **Scheduling/ACL:** reset acl state for new path [YTFRONT-5848] ([a7be8dd](https://github.com/ytsaurus/ytsaurus-ui/commit/a7be8dd98db2705655df24aa353d5ff0cdfb0e02))
+* **Scheduling/Attributes:** keep pool,tree url params [YTFRONT-5867] ([058b8ef](https://github.com/ytsaurus/ytsaurus-ui/commit/058b8ef3e0f069f29dad34e22e99940313607066))
+* **Scheduling:** fix a misprint [YTFRONT-5680] ([3416cc0](https://github.com/ytsaurus/ytsaurus-ui/commit/3416cc08b0f3e88e0211f4faaee69a72e2996d5e))
+* **System:** manual container selection [YTFRONT-5778] ([1f2423c](https://github.com/ytsaurus/ytsaurus-ui/commit/1f2423ce835a759fa5e473599f62f40008fde656))
+
 ## [3.16.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.15.0...ui-v3.16.0) (2026-06-17)
 
 
