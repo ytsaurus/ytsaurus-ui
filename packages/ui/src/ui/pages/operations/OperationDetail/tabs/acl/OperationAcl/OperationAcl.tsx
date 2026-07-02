@@ -17,6 +17,7 @@ import {aggregateBySubject} from '../../../../../../utils/acl/acl-aggregate';
 import {getOperationAclSplitted} from '../../../../../../utils/acl/acl-operation';
 import {OperationAclDeleteButton} from './OperationAclDeleteButton/OperationAclDeleteButton';
 import {OperationAclToolbar} from './OperationAclToolbar/OperationAclToolbar';
+import i18n from './i18n';
 
 export function OperationAcl() {
     const {expandedItems, onExpandAclSubject} = useExpandedItems();
@@ -39,8 +40,8 @@ export function OperationAcl() {
         <YTErrorBlock error={error} />
     ) : (
         <AclTableWithToolbar
-            title={'Operation permissions'}
-            noItemsText={noItemsText ?? 'No data to display'}
+            title={i18n('title_operation-permissions')}
+            noItemsText={noItemsText ?? i18n('alert_no-data')}
             items={items}
             loading={loading}
             loaded={!loading}
@@ -104,7 +105,7 @@ function useOperationAcl(expandedItems: Set<string | number>) {
     return {
         ...result,
         ...aggregateBySubject(items, expandedItems),
-        noItemsText: filtered ? 'No data to display due to filters' : undefined,
+        noItemsText: filtered ? i18n('alert_no-data-filters') : undefined,
     };
 }
 

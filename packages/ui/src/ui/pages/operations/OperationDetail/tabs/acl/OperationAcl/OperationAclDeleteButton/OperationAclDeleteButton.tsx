@@ -1,7 +1,8 @@
 import TrashBinIcon from '@gravity-ui/icons/svgs/trash-bin.svg';
 import {Button, Icon} from '@gravity-ui/uikit';
 import React from 'react';
-import {AclRoleActionsType} from '../../../../../../../UIFactory';
+import {type AclRoleActionsType} from '../../../../../../../UIFactory';
+import i18n from './i18n';
 import DeletePermissionModal from '../../../../../../../containers/ACL/DeletePermissionModal/DeletePermissionModal';
 import {
     type DeletePemissionsParams,
@@ -21,7 +22,7 @@ export function OperationAclDeleteButton({row}: Props) {
     const [visible, setVisible] = React.useState(false);
     return (
         <>
-            <Button onClick={() => setVisible(true)} view="flat" title="Delete">
+            <Button onClick={() => setVisible(true)} view="flat" title={i18n('action_delete')}>
                 <Icon color="secondary" data={TrashBinIcon} />
             </Button>
             <DeletePermissionModal
