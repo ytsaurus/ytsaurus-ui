@@ -4,20 +4,24 @@ import ColumnHeader, {
     type ColumnHeaderOnSort,
 } from '../../../../../components/ColumnHeader/ColumnHeader';
 import {setAccountUsageSortState} from '../../../../../store/actions/accounts/account-usage';
-import {type AccountUsageField} from '../../../../../store/reducers/accounts/usage/account-usage-types';
+import {
+    type AccountUsageField,
+    type AccountUsageVersionedField,
+} from '../../../../../store/reducers/accounts/usage/account-usage-types';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {
     readableAccountUsageColumnName,
     selectAccountUsageSortStateByColumn,
 } from '../../../../../store/selectors/accounts/account-usage';
 
-type OnSort = ColumnHeaderOnSort<AccountUsageField>;
+type OnSort = ColumnHeaderOnSort<AccountUsageField | AccountUsageVersionedField>;
 
 type Props = {
     column: AccountUsageField;
+    versionedColumn: AccountUsageVersionedField;
 };
 
-export const Header = ({column}: Props) => {
+export const VersionedHeader = ({column, versionedColumn}: Props) => {
     const dispatch = useDispatch();
 
     const sortState = useSelector(selectAccountUsageSortStateByColumn);
@@ -31,15 +35,23 @@ export const Header = ({column}: Props) => {
         [dispatch],
     );
 
-    const {order, multisortIndex} = sortState[column] || {};
+    const columnTitle = readableAccountUsageColumnName(column);
+
+    const versionedSortState = sortState[versionedColumn];
+    const activeColumn = versionedSortState ? versionedColumn : column;
+    const activeSortState = versionedSortState ?? sortState[column];
 
     return (
         <ColumnHeader
-            column={column}
-            title={readableAccountUsageColumnName(column)}
-            order={order}
+            column={activeColumn}
+            title={columnTitle}
+            order={activeSortState?.order}
+            multisortIndex={activeSortState?.multisortIndex}
             onSort={onSort}
-            multisortIndex={multisortIndex}
+            options={[
+                {column, title: 'Committed'},
+                {column: versionedColumn, title: 'Uncommitted'},
+            ]}
         />
     );
 };
