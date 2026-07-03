@@ -5,7 +5,7 @@ import map_ from 'lodash/map';
 
 import cn from 'bem-cn-lite';
 
-import {getCreatePoolDialogFlatTreeItems} from '../../../../store/selectors/scheduling/create-pool-dialog';
+import {selectCreatePoolDialogFlatTreeItems} from '../../../../store/selectors/scheduling/create-pool-dialog';
 import Select from '../../../../components/Select/Select';
 
 const block = cn('accounts-suggest');
@@ -21,7 +21,7 @@ interface Props {
 export default function CreatePoolParentSuggest(props: Props) {
     const {onChange, placeholder, value, error, ...rest} = props;
 
-    const {sortedFlatTree} = useSelector(getCreatePoolDialogFlatTreeItems);
+    const {sortedFlatTree} = useSelector(selectCreatePoolDialogFlatTreeItems);
 
     const ycItems = map_(sortedFlatTree, (item) => ({
         value: item,
