@@ -14,7 +14,7 @@ import {
 import {schedulingSetAbcFilter} from '../../../../../store/actions/scheduling/scheduling-ts';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {selectSchedulingAbcFilter} from '../../../../../store/selectors/scheduling/attributes-to-filter';
-import {getExpandedPoolsLoadAll} from '../../../../../store/selectors/scheduling/expanded-pools';
+import {selectExpandedPoolsLoadAll} from '../../../../../store/selectors/scheduling/expanded-pools';
 import {
     SCHEDULING_CONTENT_MODES,
     getSchedulingContentMode,
@@ -85,7 +85,7 @@ export function SchedulingExpandAll() {
     const [showConfirmation, setShowConfirmation] = React.useState(false);
 
     const dispatch = useDispatch();
-    const loadAll = useSelector(getExpandedPoolsLoadAll);
+    const loadAll = useSelector(selectExpandedPoolsLoadAll);
 
     const confirmation = showConfirmation ? (
         <DialogWrapper open={true} onClose={() => {}}>

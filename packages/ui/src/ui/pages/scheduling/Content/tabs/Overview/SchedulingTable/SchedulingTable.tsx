@@ -24,7 +24,7 @@ import Label from '../../../../../../components/Label';
 import {MetaTable, Tooltip} from '@ytsaurus/components';
 import {OperationType} from '../../../../../../components/OperationType/OperationType';
 import {SubjectCard} from '../../../../../../components/SubjectLink/SubjectLink';
-import {getSchedulingOperationsLoading} from '../../../../../../store/selectors/scheduling/expanded-pools';
+import {selectSchedulingOperationsLoading} from '../../../../../../store/selectors/scheduling/expanded-pools';
 import {
     getSchedulingContentMode,
     getSchedulingLoading,
@@ -711,7 +711,7 @@ function useSchedulingTableColumns() {
 }
 
 function NameHeader() {
-    const expandedeLoading = useSelector(getSchedulingOperationsLoading);
+    const expandedeLoading = useSelector(selectSchedulingOperationsLoading);
     const loading = useSelector(getSchedulingLoading);
     return (
         <SchedulingColumnHeader

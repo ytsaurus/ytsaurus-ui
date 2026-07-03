@@ -2,25 +2,26 @@ import {createSelector} from 'reselect';
 
 import {type RootState} from '../../reducers';
 
-export const getExpandedPoolCypressData = (state: RootState) =>
+export const selectExpandedPoolCypressData = (state: RootState) =>
     state.scheduling.expandedPools.flattenCypressData;
 
-export const getSchedulingOperations = (state: RootState) =>
+export const selectSchedulingOperations = (state: RootState) =>
     state.scheduling.expandedPools.rawOperations;
-export const getExpandedPoolsTree = (state: RootState) =>
+export const selectExpandedPoolsTree = (state: RootState) =>
     state.scheduling.expandedPools.expandedPoolsTree;
-export const getSchedulingOperationsError = (state: RootState) =>
+export const selectSchedulingOperationsError = (state: RootState) =>
     state.scheduling.expandedPools.error;
-export const getSchedulingOperationsLoading = (state: RootState) =>
+export const selectSchedulingOperationsLoading = (state: RootState) =>
     state.scheduling.expandedPools.loading;
-export const getSchedulingOperationsLoaded = (state: RootState) =>
+export const selectSchedulingOperationsLoaded = (state: RootState) =>
     state.scheduling.expandedPools.loading;
-export const getSchedulingOperationsExpandedPools = (state: RootState) =>
+export const selectSchedulingOperationsExpandedPools = (state: RootState) =>
     state.scheduling.expandedPools.expandedPools;
-export const getExpandedPoolsLoadAll = (state: RootState) => state.scheduling.expandedPools.loadAll;
+export const selectExpandedPoolsLoadAll = (state: RootState) =>
+    state.scheduling.expandedPools.loadAll;
 
-export const getSchedulingOperationsLoadingStatus = createSelector(
-    [getSchedulingOperationsLoading, getSchedulingOperationsLoaded],
+export const selectSchedulingOperationsLoadingStatus = createSelector(
+    [selectSchedulingOperationsLoading, selectSchedulingOperationsLoaded],
     (loading, loaded) => {
         return loading && !loaded;
     },
