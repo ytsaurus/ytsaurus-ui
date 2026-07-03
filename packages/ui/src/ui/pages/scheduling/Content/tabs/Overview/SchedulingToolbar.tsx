@@ -13,7 +13,7 @@ import {
 } from '../../../../../store/actions/scheduling/scheduling';
 import {schedulingSetAbcFilter} from '../../../../../store/actions/scheduling/scheduling-ts';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
-import {getSchedulingAbcFilter} from '../../../../../store/selectors/scheduling/attributes-to-filter';
+import {selectSchedulingAbcFilter} from '../../../../../store/selectors/scheduling/attributes-to-filter';
 import {getExpandedPoolsLoadAll} from '../../../../../store/selectors/scheduling/expanded-pools';
 import {
     SCHEDULING_CONTENT_MODES,
@@ -70,7 +70,7 @@ function SchedulingContentMode() {
 
 function SchedulingAbc() {
     const dispatch = useDispatch();
-    const {slug} = useSelector(getSchedulingAbcFilter) ?? {};
+    const {slug} = useSelector(selectSchedulingAbcFilter) ?? {};
 
     return UIFactory.renderControlAbcService({
         className: block('abc-filter'),

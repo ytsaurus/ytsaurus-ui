@@ -23,8 +23,8 @@ import {orderTypeToOldSortState} from '../../../utils/sort-helpers';
 import {visitTreeItems} from '../../../utils/utils';
 import {getSchedulingOperationsExpandedPools} from './expanded-pools';
 import {
-    getSchedulingAttributesToFilter,
-    getSchedulingFilteredPoolNames,
+    selectSchedulingAttributesToFilter,
+    selectSchedulingFilteredPoolNames,
 } from './attributes-to-filter';
 
 export const getPools = getPoolsImpl;
@@ -89,7 +89,7 @@ export const getSchedulingEffectiveSortState = createSelector(
 );
 
 export const getPoolsNames = createSelector(
-    getSchedulingAttributesToFilter,
+    selectSchedulingAttributesToFilter,
     (pools): Array<string> => map_(pools, (_v, name) => name).sort(),
 );
 
@@ -171,7 +171,7 @@ export const getCurrentTreeExpandedPools = createSelector(
 );
 
 const getSchedulingOverviewFilteredTree = createSelector(
-    [getCurrentPool, getSchedulingFilteredPoolNames, getCurrentTreeExpandedPools],
+    [getCurrentPool, selectSchedulingFilteredPoolNames, getCurrentTreeExpandedPools],
     (treeRoot, visiblePools, expandedPools) => {
         if (treeRoot) {
             const res = treeList.filterTreeEachChild(

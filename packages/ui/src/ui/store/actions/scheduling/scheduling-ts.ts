@@ -46,8 +46,8 @@ import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import {type RootState} from '../../../store/reducers';
 import {type SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
 import {
-    getSchedulingAttributesToFilterParams,
-    schedulingOverviewHasFilter,
+    selectSchedulingAttributesToFilterParams,
+    selectSchedulingOverviewHasFilter,
 } from '../../../store/selectors/scheduling/attributes-to-filter';
 import {USE_CACHE} from '../../../../shared/constants/yt-api';
 import {toaster} from '../../../utils/toaster';
@@ -336,11 +336,11 @@ export function schedulingLoadFilterAttributes(
     return (dispatch, getState) => {
         const state = getState();
 
-        if (checkFilters && !schedulingOverviewHasFilter(state)) {
+        if (checkFilters && !selectSchedulingOverviewHasFilter(state)) {
             return undefined;
         }
 
-        const {lastTime, lastTree} = getSchedulingAttributesToFilterParams(state);
+        const {lastTime, lastTree} = selectSchedulingAttributesToFilterParams(state);
         if (tree === lastTree && Date.now() - lastTime < 120000) {
             return undefined;
         }
