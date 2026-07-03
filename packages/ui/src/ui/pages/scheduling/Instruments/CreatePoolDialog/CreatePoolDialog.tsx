@@ -19,10 +19,10 @@ import {
     selectCreatePoolDialogFlatTreeItems,
 } from '../../../../store/selectors/scheduling/create-pool-dialog';
 import {
-    getIsRoot,
-    getPool,
-    getTree,
-    getTreesSelectItems,
+    selectPool,
+    selectSchedulingIsRoot,
+    selectTree,
+    selectTreesSelectItems,
 } from '../../../../store/selectors/scheduling/scheduling';
 import {type FIX_MY_TYPE} from '../../../../types';
 import UIFactory from '../../../../UIFactory';
@@ -34,7 +34,7 @@ const allowRoot = !uiSettings.schedulingDenyRootAsParent;
 export default function CreatePoolButton() {
     const dispatch = useDispatch();
 
-    const isRoot = useSelector(getIsRoot);
+    const isRoot = useSelector(selectSchedulingIsRoot);
 
     const [visible, changeVisibility] = useState(false);
     const handleShow = useCallback(() => changeVisibility(true), [changeVisibility]);
@@ -63,7 +63,7 @@ interface FormValues {
 
 function CreatePoolDialog(props: {onClose: () => void}) {
     const dispatch = useDispatch();
-    const treeStored: string = useSelector(getTree);
+    const treeStored: string = useSelector(selectTree);
     const [tree, setTree] = React.useState(treeStored);
     const handleTreeChange = React.useCallback(
         (newTree: string | undefined) => {
@@ -79,8 +79,8 @@ function CreatePoolDialog(props: {onClose: () => void}) {
     const error = useSelector(selectCreatePoolDialogError);
 
     const login = useSelector(selectCurrentUserName);
-    const treeItems = useSelector(getTreesSelectItems);
-    const pool = useSelector(getPool);
+    const treeItems = useSelector(selectTreesSelectItems);
+    const pool = useSelector(selectPool);
 
     const handleCreateConfirm = useCallback(
         (form: FormApi<FormValues>) => {

@@ -15,7 +15,7 @@ import {ROOT_POOL_NAME} from '../../../constants/scheduling';
 
 import {type OldSortState} from '../../../types';
 
-import {selectPools as getPoolsImpl, selectSchedulingPoolsMapByName} from './scheduling-pools';
+import {selectPools as selectPoolsImpl, selectSchedulingPoolsMapByName} from './scheduling-pools';
 import {type RootState} from '../../../store/reducers';
 import {isAbcPoolName, isTopLevelPool} from '../../../utils/scheduling/pool';
 import {type PoolTreeNode} from '../../../utils/scheduling/pool-child';
@@ -27,56 +27,57 @@ import {
     selectSchedulingFilteredPoolNames,
 } from './attributes-to-filter';
 
-export const getPools = getPoolsImpl;
+export const selectPools = selectPoolsImpl;
 
-export const getSchedulingLoading = (state: RootState) => {
+export const selectSchedulingLoading = (state: RootState) => {
     const {loading, poolLoading} = state.scheduling.scheduling;
     return loading || poolLoading;
 };
 
-const getExpandedPoolsIsInitialLoading = (state: RootState) => {
+const selectExpandedPoolsIsInitialLoading = (state: RootState) => {
     const {loaded, loading} = state.scheduling.expandedPools;
     return !loaded && loading;
 };
 
-export const getSchedulingIsInitialLoading = (state: RootState) => {
+export const selectSchedulingIsInitialLoading = (state: RootState) => {
     const {loaded, loading} = state.scheduling.scheduling;
-    return (!loaded && loading) || getExpandedPoolsIsInitialLoading(state);
+    return (!loaded && loading) || selectExpandedPoolsIsInitialLoading(state);
 };
 
-export const getTreeResources = (state: RootState) => state.scheduling.scheduling.treeResources;
-export const getSchedulingTreeMainResource = (state: RootState) =>
+export const selectTreeResources = (state: RootState) => state.scheduling.scheduling.treeResources;
+export const selectSchedulingTreeMainResource = (state: RootState) =>
     state.scheduling.scheduling.treeResources.config?.main_resource;
 
-export const getPoolChildrenFilter = (state: RootState) =>
+export const selectPoolChildrenFilter = (state: RootState) =>
     state.scheduling.scheduling.poolChildrenFilter;
-export const getSchedulingTreeState = (state: RootState) => state.scheduling.scheduling.treeState;
-const getContentModeRaw = (state: RootState) => state.scheduling.scheduling.contentMode;
+const selectSchedulingContentModeRaw = (state: RootState) =>
+    state.scheduling.scheduling.contentMode;
 
-export const getTree = (state: RootState) => state.scheduling.scheduling.tree;
-export const getTrees = (state: RootState) => state.scheduling.scheduling.trees;
+export const selectTree = (state: RootState) => state.scheduling.scheduling.tree;
+export const selectTrees = (state: RootState) => state.scheduling.scheduling.trees;
 
-export const getPool = (state: RootState) => state.scheduling.scheduling.pool;
+export const selectPool = (state: RootState) => state.scheduling.scheduling.pool;
 
 export const selectSchedulingError = (state: RootState) => {
     const {error, errorData} = state.scheduling.scheduling;
     return error ? errorData : undefined;
 };
 
-export const getSchedulingShowAbsResources = (state: RootState) =>
+export const selectSchedulingShowAbsResources = (state: RootState) =>
     state.scheduling.scheduling.showAbsResources;
 
-export const getSchedulingEditItem = (state: RootState) => state.scheduling.scheduling.editItem;
+export const selectSchedulingEditItem = (state: RootState) => state.scheduling.scheduling.editItem;
 
-export const getCurrentPool = createSelector([getPool, getPools], (pool, pools) => {
+export const selectCurrentPool = createSelector([selectPool, selectPools], (pool, pools) => {
     const res = find_(pools, (item) => item.name === pool);
     return res;
 });
 
-export const getSchedulingSortState = (state: RootState) => state.scheduling.scheduling.sortState;
+export const selectSchedulingSortState = (state: RootState) =>
+    state.scheduling.scheduling.sortState;
 
-export const getSchedulingEffectiveSortState = createSelector(
-    [getSchedulingSortState, getCurrentPool],
+export const selectSchedulingEffectiveSortState = createSelector(
+    [selectSchedulingSortState, selectCurrentPool],
     (sortState, pool): OldSortState => {
         if (!sortState?.length) {
             return pool?.mode === 'fifo' ? {field: 'FI', asc: true} : {field: 'name', asc: true};
@@ -88,7 +89,7 @@ export const getSchedulingEffectiveSortState = createSelector(
     },
 );
 
-export const getPoolsNames = createSelector(
+export const selectPoolsNames = createSelector(
     selectSchedulingAttributesToFilter,
     (pools): Array<string> => map_(pools, (_v, name) => name).sort(),
 );
@@ -106,21 +107,24 @@ export const SCHEDULING_CONTENT_MODES = [
 
 export type SchedulingContentMode = (typeof SCHEDULING_CONTENT_MODES)[number];
 
-export const getSchedulingContentMode = createSelector([getContentModeRaw], (mode) => {
-    const index = SCHEDULING_CONTENT_MODES.indexOf(mode as any);
-    return SCHEDULING_CONTENT_MODES[index !== -1 ? index : 0];
-});
+export const selectSchedulingContentMode = createSelector(
+    [selectSchedulingContentModeRaw],
+    (mode) => {
+        const index = SCHEDULING_CONTENT_MODES.indexOf(mode as any);
+        return SCHEDULING_CONTENT_MODES[index !== -1 ? index : 0];
+    },
+);
 
-export const getIsRoot = createSelector(getPool, (pool) => pool === ROOT_POOL_NAME);
+export const selectSchedulingIsRoot = createSelector(selectPool, (pool) => pool === ROOT_POOL_NAME);
 
-export const getTreesSelectItems = createSelector(getTrees, (trees) =>
+export const selectTreesSelectItems = createSelector(selectTrees, (trees) =>
     map_(trees, (tree) => ({
         value: tree,
         content: hammer.format['Readable'](tree) as string,
     })),
 );
 
-export const getPoolsSelectItems = createSelector(getPoolsNames, (pools) => {
+export const selectPoolsSelectItems = createSelector(selectPoolsNames, (pools) => {
     const items = map_(pools, (pool) => ({
         value: pool,
         content: pool,
@@ -129,12 +133,12 @@ export const getPoolsSelectItems = createSelector(getPoolsNames, (pools) => {
     return items;
 });
 
-export const getPoolIsEphemeral = createSelector([getCurrentPool], (currentPool) => {
+export const selectPoolIsEphemeral = createSelector([selectCurrentPool], (currentPool) => {
     if (currentPool && currentPool.isEphemeral !== undefined) return currentPool.isEphemeral;
     return undefined;
 });
 
-export const getCurrentPoolChildren = createSelector(getCurrentPool, (currentPool) => {
+export const selectCurrentPoolChildren = createSelector(selectCurrentPool, (currentPool) => {
     if (currentPool) {
         return currentPool.children;
     }
@@ -142,7 +146,7 @@ export const getCurrentPoolChildren = createSelector(getCurrentPool, (currentPoo
     return undefined;
 });
 
-export const getCurrentPoolOperations = createSelector(getCurrentPool, (currentPool) => {
+export const selectCurrentPoolOperations = createSelector(selectCurrentPool, (currentPool) => {
     if (currentPool) {
         return currentPool.leaves;
     }
@@ -150,8 +154,8 @@ export const getCurrentPoolOperations = createSelector(getCurrentPool, (currentP
     return undefined;
 });
 
-export const getResources = createSelector(
-    [getCurrentPool, getTreeResources],
+export const selectResources = createSelector(
+    [selectCurrentPool, selectTreeResources],
     (currentPool, resources) => {
         if (currentPool && currentPool.name !== '<Root>') {
             return prepareResources(currentPool.attributes);
@@ -163,15 +167,15 @@ export const getResources = createSelector(
     },
 );
 
-export const getCurrentTreeExpandedPools = createSelector(
-    [getTree, selectSchedulingOperationsExpandedPools],
+export const selectCurrentTreeExpandedPools = createSelector(
+    [selectTree, selectSchedulingOperationsExpandedPools],
     (tree, expandedPools) => {
         return expandedPools[tree];
     },
 );
 
-const getSchedulingOverviewFilteredTree = createSelector(
-    [getCurrentPool, selectSchedulingFilteredPoolNames, getCurrentTreeExpandedPools],
+const selectSchedulingOverviewFilteredTree = createSelector(
+    [selectCurrentPool, selectSchedulingFilteredPoolNames, selectCurrentTreeExpandedPools],
     (treeRoot, visiblePools, expandedPools) => {
         if (treeRoot) {
             const res = treeList.filterTreeEachChild(
@@ -191,8 +195,8 @@ const getSchedulingOverviewFilteredTree = createSelector(
     },
 );
 
-export const getSchedulingOverviewTableItems = createSelector(
-    [getSchedulingOverviewFilteredTree, getSchedulingEffectiveSortState],
+export const selectSchedulingOverviewTableItems = createSelector(
+    [selectSchedulingOverviewFilteredTree, selectSchedulingEffectiveSortState],
     (filteredTree, sortState) => {
         if (filteredTree) {
             const isRoot = filteredTree && filteredTree.name === ROOT_POOL_NAME;
@@ -219,12 +223,12 @@ export const getSchedulingOverviewTableItems = createSelector(
 // The same cluster is ready for bundle's ACL
 const CLUSTERS_WITHOUT_POOL_ACL = ['locke'];
 
-export const isPoolAclAllowed = createSelector([selectCluster], (cluster) => {
+export const selectIsPoolAclAllowed = createSelector([selectCluster], (cluster) => {
     return CLUSTERS_WITHOUT_POOL_ACL.indexOf(cluster) === -1;
 });
 
-export const getCurrentPoolPath = createSelector(
-    [getPool, getPools, getTree],
+export const selectCurrentPoolPath = createSelector(
+    [selectPool, selectPools, selectTree],
     (pool, pools, tree) => {
         return calculatePoolPath(pool, pools, tree);
     },
@@ -251,8 +255,8 @@ export function calculatePoolPath(
     return `${prefix}${pathStr}`;
 }
 
-export const getSchedulingTopPoolOfEditItem = createSelector(
-    [getSchedulingEditItem, selectSchedulingPoolsMapByName],
+export const selectSchedulingTopPoolOfEditItem = createSelector(
+    [selectSchedulingEditItem, selectSchedulingPoolsMapByName],
     (pool, mapOfPools) => {
         if (isAbcPoolName(pool?.name)) {
             return undefined;
@@ -279,8 +283,8 @@ export const getSchedulingTopPoolOfEditItem = createSelector(
     },
 );
 
-export const getSchedulingSourcesOfEditItem = createSelector(
-    [getSchedulingEditItem, getSchedulingTopPoolOfEditItem, selectSchedulingPoolsMapByName],
+export const selectSchedulingSourcesOfEditItem = createSelector(
+    [selectSchedulingEditItem, selectSchedulingTopPoolOfEditItem, selectSchedulingPoolsMapByName],
     (pool, topPool, mapOfPools): Array<string> => {
         if (!pool?.name || !mapOfPools || !topPool) {
             return [];
@@ -305,8 +309,8 @@ export const getSchedulingSourcesOfEditItem = createSelector(
     },
 );
 
-export const getSchedulingSourcesOfEditItemSkipParent = createSelector(
-    [getSchedulingEditItem, getSchedulingSourcesOfEditItem],
+export const selectSchedulingSourcesOfEditItemSkipParent = createSelector(
+    [selectSchedulingEditItem, selectSchedulingSourcesOfEditItem],
     (pool, sources) => {
         if (!pool?.parent) {
             return sources;

@@ -14,11 +14,11 @@ import {YTErrorBlock} from '../../../../containers/Block/Block';
 import {closeEditModal, editPool} from '../../../../store/actions/scheduling/scheduling';
 import {
     calculatePoolPath,
-    getPools,
-    getPoolsSelectItems,
-    getSchedulingEditItem,
-    getSchedulingSourcesOfEditItem,
-    getTree,
+    selectPools,
+    selectPoolsSelectItems,
+    selectSchedulingEditItem,
+    selectSchedulingSourcesOfEditItem,
+    selectTree,
 } from '../../../../store/selectors/scheduling/scheduling';
 import {isAbcPoolName, isTopLevelPool} from '../../../../utils/scheduling/pool';
 import {
@@ -72,18 +72,18 @@ function makeError(error: any) {
 export function PoolEditorDialog() {
     const dispatch = useDispatch();
 
-    const editItem = useSelector(getSchedulingEditItem);
+    const editItem = useSelector(selectSchedulingEditItem);
     const {poolErrorData, editVisibility} = useSelector(
         (state: RootState) => state.scheduling.scheduling,
     );
 
     const treGpuLimit = useSelector(selectCurrentTreeGpuLimit);
 
-    const allowedSources = useSelector(getSchedulingSourcesOfEditItem);
+    const allowedSources = useSelector(selectSchedulingSourcesOfEditItem);
 
-    const poolsItems = useSelector(getPoolsSelectItems);
-    const pools = useSelector(getPools);
-    const tree = useSelector(getTree);
+    const poolsItems = useSelector(selectPoolsSelectItems);
+    const pools = useSelector(selectPools);
+    const tree = useSelector(selectTree);
     const modeItems = [
         {key: 'fair_share', value: 'fair_share', title: 'fair_share'},
         {key: 'fifo', value: 'fifo', title: 'fifo'},

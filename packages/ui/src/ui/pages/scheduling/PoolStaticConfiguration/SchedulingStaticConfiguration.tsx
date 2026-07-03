@@ -7,7 +7,7 @@ import i18n from './i18n';
 import {type Column} from '@gravity-ui/react-data-table';
 
 import CollapsibleSection from '../../../components/CollapsibleSection/CollapsibleSection';
-import {getIsRoot, getTree} from '../../../store/selectors/scheduling/scheduling';
+import {selectSchedulingIsRoot, selectTree} from '../../../store/selectors/scheduling/scheduling';
 import {selectCurrentPoolTreeStaticConfiguration} from '../../../store/selectors/scheduling/scheduling-ts';
 
 import {DataTableYT} from '../../../components/DataTableYT';
@@ -24,7 +24,7 @@ const block = cn('scheduling-static-configuration');
 
 function SchedulingStaticConfiguration() {
     const dispatch = useDispatch();
-    const isRoot = useSelector(getIsRoot);
+    const isRoot = useSelector(selectSchedulingIsRoot);
 
     const collapsed = useSelector(selectSettingsSchedulingExpandStaticConfiguration);
     const onToggle = React.useCallback(
@@ -52,7 +52,7 @@ export default React.memo(SchedulingStaticConfiguration);
 
 function PoolTreeStaticConfiguration() {
     const items = useSelector(selectCurrentPoolTreeStaticConfiguration);
-    const poolTree = useSelector(getTree);
+    const poolTree = useSelector(selectTree);
     const cluster = useSelector(selectCluster);
 
     const columns: Array<Column<ArrayElement<typeof items>>> = [

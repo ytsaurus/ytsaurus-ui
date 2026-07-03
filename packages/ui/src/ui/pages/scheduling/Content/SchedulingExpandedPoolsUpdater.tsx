@@ -1,11 +1,11 @@
 import React from 'react';
-import {getPool, getTree} from '../../../store/selectors/scheduling/scheduling';
+import {selectPool, selectTree} from '../../../store/selectors/scheduling/scheduling';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {loadExpandedPools} from '../../../store/actions/scheduling/expanded-pools';
 
 function SchedulingExpandedPoolsUpdater() {
-    const tree = useSelector(getTree);
-    const name = useSelector(getPool);
+    const tree = useSelector(selectTree);
+    const name = useSelector(selectPool);
 
     const dispatch = useDispatch();
 

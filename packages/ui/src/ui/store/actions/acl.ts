@@ -11,7 +11,7 @@ import {
     REQUEST_PERMISSION,
     UPDATE_ACL,
 } from '../../constants/acl';
-import {getTree} from '../../store/selectors/scheduling/scheduling';
+import {selectTree} from '../../store/selectors/scheduling/scheduling';
 import {
     type YTPermissionTypeUI,
     checkUserPermissionsUI,
@@ -87,7 +87,7 @@ export function loadAclData(
         dispatch({type: ACL_LOAD_DATA.REQUEST, idmKind, data: {path}});
 
         const poolTree =
-            idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
+            idmKind === IdmObjectType.POOL ? normalizedPoolTree || selectTree(state) : undefined;
         const {permissionTypes} = UIFactory.getAclPermissionsSettings()[idmKind];
 
         const {userPermissionsPath} = options;
@@ -168,7 +168,7 @@ export function deletePermissions(
         });
 
         const poolTree =
-            idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
+            idmKind === IdmObjectType.POOL ? normalizedPoolTree || selectTree(state) : undefined;
 
         try {
             const deletePermissionsPath = await getPathToCheckPermissions(idmKind, path, poolTree);
@@ -312,7 +312,7 @@ export function requestPermissions(
         }
 
         const poolTree =
-            idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
+            idmKind === IdmObjectType.POOL ? normalizedPoolTree || selectTree(state) : undefined;
 
         const requestPermissionsPath = await getPathToCheckPermissions(
             idmKind,
@@ -393,7 +393,7 @@ export function updateAcl(
         });
 
         const poolTree =
-            idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
+            idmKind === IdmObjectType.POOL ? normalizedPoolTree || selectTree(state) : undefined;
 
         return getPathToCheckPermissions(idmKind, path, poolTree)
             .then((sysPath) => {

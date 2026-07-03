@@ -15,7 +15,7 @@ import {
 import {SettingName} from '../../../shared/constants/settings';
 import {selectActiveAccount} from '../../store/selectors/accounts/accounts';
 import {selectPath} from '../../store/selectors/navigation';
-import {getPool, getTree} from '../../store/selectors/scheduling/scheduling';
+import {selectPool, selectTree} from '../../store/selectors/scheduling/scheduling';
 import {selectTabletsActiveBundle} from './tablet_cell_bundles';
 import {selectChaosActiveBundle} from './chaos_cell_bundles';
 import {selectChytCurrentAlias} from './chyt';
@@ -83,7 +83,7 @@ export const selectFavouritePools = createSelector(
 );
 
 export const selectIsActivePoolInFavourites = createSelector(
-    [getPool, getTree, selectFavouritePools],
+    [selectPool, selectTree, selectFavouritePools],
     prepareIsPoolInFavourites,
 );
 

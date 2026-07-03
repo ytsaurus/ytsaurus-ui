@@ -24,9 +24,9 @@ import {type ThunkAction} from 'redux-thunk';
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {
-    getPools,
-    getSchedulingIsInitialLoading,
-    getTree,
+    selectPools,
+    selectSchedulingIsInitialLoading,
+    selectTree,
 } from '../../../store/selectors/scheduling/scheduling';
 
 import {
@@ -62,7 +62,7 @@ export function loadSchedulingData(): SchedulingThunkAction {
         dispatch({type: SCHEDULING_DATA_REQUEST});
 
         const state = getState();
-        const isInitialLoading = getSchedulingIsInitialLoading(state);
+        const isInitialLoading = selectSchedulingIsInitialLoading(state);
 
         const cluster = selectCluster(state);
         const rumId = new RumWrapper(cluster, RumMeasureTypes.SCHEDULING);
@@ -179,8 +179,8 @@ export function deletePool(item?: {name: string; parent?: string}): SchedulingTh
 
         const state = getState();
 
-        const tree = getTree(state);
-        const pools = getPools(state);
+        const tree = selectTree(state);
+        const pools = selectPools(state);
         const path = computePoolPath(item, pools);
 
         dispatch({type: SCHEDULING_DELETE_POOL_REQUEST});
@@ -374,7 +374,7 @@ export function schedulingSetAbcFilter(abcService?: {
 }): SchedulingThunkAction {
     return (dispatch, getState) => {
         const {id, slug} = abcService ?? {};
-        dispatch(schedulingLoadFilterAttributes(getTree(getState())));
+        dispatch(schedulingLoadFilterAttributes(selectTree(getState())));
         dispatch({
             type: SCHEDULING_DATA_PARTITION,
             data: {abcServiceFilter: {id, slug}},

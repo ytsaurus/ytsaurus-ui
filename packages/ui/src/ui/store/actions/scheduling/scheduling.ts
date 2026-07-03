@@ -18,8 +18,8 @@ import {selectSchedulingNS} from '../../../store/selectors/settings';
 import {toggleFavourite} from '../../../store/actions/favourites';
 import {
     type SchedulingContentMode,
-    getPools,
-    getTree,
+    selectPools,
+    selectTree,
 } from '../../../store/selectors/scheduling/scheduling';
 import {
     type SchedulingAction,
@@ -207,8 +207,8 @@ export function editPool(
     return (dispatch, getState) => {
         const state = getState();
 
-        const tree = getTree(state);
-        const pools = getPools(state);
+        const tree = selectTree(state);
+        const pools = selectPools(state);
         const poolPath = computePoolPath(pool, pools);
         const path = `//sys/pool_trees/${tree}/${poolPath}`;
 
