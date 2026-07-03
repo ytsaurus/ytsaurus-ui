@@ -3,7 +3,7 @@ import reduce_ from 'lodash/reduce';
 import forEach_ from 'lodash/forEach';
 
 import {type RootState} from '../../reducers';
-import {getSchedulingPoolsMapByName} from './scheduling-pools';
+import {selectSchedulingPoolsMapByName} from './scheduling-pools';
 
 export const selectSchedulingAbcFilter = (state: RootState) =>
     state.scheduling.scheduling.abcServiceFilter;
@@ -23,7 +23,7 @@ export const selectSchedulingOverviewHasFilter = (state: RootState) => {
 };
 
 export const selectSchedulingFilteredPoolNames = createSelector(
-    [selectSchedulingAttributesToFilter, getSchedulingPoolsMapByName, selectSchedulingAbcFilter],
+    [selectSchedulingAttributesToFilter, selectSchedulingPoolsMapByName, selectSchedulingAbcFilter],
     (attrsToFilter, loadedPools, abcFilter) => {
         if (!attrsToFilter) {
             return undefined;

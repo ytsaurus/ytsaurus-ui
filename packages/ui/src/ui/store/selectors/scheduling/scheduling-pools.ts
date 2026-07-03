@@ -19,12 +19,12 @@ import {RumWrapper} from '../../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import {EMPTY_OBJECT} from '../../../constants/empty';
 
-export const getTree = (state: RootState) => state.scheduling.scheduling.tree;
-const getPoolsRaw = (state: RootState) => state.scheduling.expandedPools.rawPools;
-const getTreeResources = (state: RootState) => state.scheduling.scheduling.treeResources;
+export const selectTree = (state: RootState) => state.scheduling.scheduling.tree;
+const selectPoolsRaw = (state: RootState) => state.scheduling.expandedPools.rawPools;
+const selectTreeResources = (state: RootState) => state.scheduling.scheduling.treeResources;
 
 const getSchedulingTreeOperations = createSelector(
-    [selectSchedulingOperations, selectExpandedPoolsTree, getTree],
+    [selectSchedulingOperations, selectExpandedPoolsTree, selectTree],
     (rawOperations, expandedPoolsTree, tree) => {
         if (tree !== expandedPoolsTree) {
             return EMPTY_OBJECT as typeof rawOperations;
@@ -34,8 +34,8 @@ const getSchedulingTreeOperations = createSelector(
     },
 );
 
-const getOperationsFiltered = createSelector(
-    [getPoolsRaw, getSchedulingTreeOperations],
+const selectOperationsFiltered = createSelector(
+    [selectPoolsRaw, getSchedulingTreeOperations],
     (rawPools, rawOperations) => {
         return reduce_(
             rawOperations,
@@ -50,12 +50,12 @@ const getOperationsFiltered = createSelector(
     },
 );
 
-const getPoolsPrepared = createSelector(
+const selectPoolsPrepared = createSelector(
     [
-        getPoolsRaw,
-        getOperationsFiltered,
+        selectPoolsRaw,
+        selectOperationsFiltered,
         selectExpandedPoolCypressData,
-        getTreeResources,
+        selectTreeResources,
         selectCluster,
     ],
     (rawPools, rawOperations, attributes, treeResources, cluster) => {
@@ -80,7 +80,7 @@ const getPoolsPrepared = createSelector(
     },
 );
 
-export const getSchedulingPoolsMapByName = createSelector([getPoolsPrepared], (pools) => {
+export const selectSchedulingPoolsMapByName = createSelector([selectPoolsPrepared], (pools) => {
     return reduce_(
         pools,
         (acc, item) => {
@@ -91,8 +91,8 @@ export const getSchedulingPoolsMapByName = createSelector([getPoolsPrepared], (p
     );
 });
 
-export const getSchedulingPoolsExtraInfo = createSelector(
-    [getSchedulingPoolsMapByName],
+export const selectSchedulingPoolsExtraInfo = createSelector(
+    [selectSchedulingPoolsMapByName],
     (poolsMap) => {
         const root = poolsMap[ROOT_POOL_NAME];
         if (!root) {
@@ -223,8 +223,8 @@ export type PoolResourceDetails = {
     guaranteed?: number;
 };
 
-export const getPools = createSelector(
-    [getPoolsPrepared, getSchedulingPoolsExtraInfo],
+export const selectPools = createSelector(
+    [selectPoolsPrepared, selectSchedulingPoolsExtraInfo],
     (pools, extras) => {
         const res = map_(pools, (item) => {
             const itemExtra = extras[item.name] || {};

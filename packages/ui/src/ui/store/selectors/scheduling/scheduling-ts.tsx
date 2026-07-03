@@ -8,10 +8,10 @@ import {getCurrentPool, getIsRoot, getPool, getTree, getTreeResources} from './s
 import ypath from '../../../common/thor/ypath';
 import {ROOT_POOL_NAME} from '../../../constants/scheduling';
 import {selectCluster} from '../global';
-import {getPools} from './scheduling-pools';
+import {selectPools} from './scheduling-pools';
 
 export const getSchedulingBreadcrumbItems = createSelector(
-    [getPool, getPools],
+    [getPool, selectPools],
     (pool: string, pools) => {
         let current: string | undefined = pool;
         const path = [];
@@ -111,7 +111,7 @@ function calcTreeStaticConfigurationByDistributed(
     };
 }
 
-export const getPoolsTopLevel = createSelector([getPools], (pools) => {
+export const getPoolsTopLevel = createSelector([selectPools], (pools) => {
     return filter_(pools, ({parent}) => parent === ROOT_POOL_NAME);
 });
 
