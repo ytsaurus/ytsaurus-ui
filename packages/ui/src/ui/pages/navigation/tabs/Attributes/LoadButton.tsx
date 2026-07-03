@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react';
 import {ActionTooltip, Button, Icon} from '@gravity-ui/uikit';
-import {ArrowDownToLine} from '@gravity-ui/icons';
+import {ChevronsDown} from '@gravity-ui/icons';
 
 import i18n from './i18n';
 
@@ -21,13 +21,14 @@ export const LoadButton = (props: Props) => {
     return (
         <ActionTooltip title={i18n('action_load-opaque-attribute')}>
             <Button
+                view="outlined"
                 className={className}
                 onClick={handleRequestLoad}
                 size="xs"
                 loading={loading}
                 qa="load-button"
             >
-                <Icon data={ArrowDownToLine} size={12} />
+                <Icon data={ChevronsDown} size={12} />
             </Button>
         </ActionTooltip>
     );
