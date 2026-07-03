@@ -12,7 +12,7 @@ import {
     getCurrentPool,
     getCurrentTreeExpandedPools,
 } from '../../../../../../store/selectors/scheduling/scheduling';
-import {getTree} from '../../../../../../store/selectors/scheduling/scheduling-pools';
+import {selectTree} from '../../../../../../store/selectors/scheduling/scheduling-pools';
 import {type PoolLeafNode} from '../../../../../../utils/scheduling/pool-child';
 import {unquote} from '../../../../../../utils/string';
 import {YSON_AS_TEXT, prettyPrintSafe} from '../../../../../../utils/unipika';
@@ -25,7 +25,7 @@ const block = cn('yt-scheduling-name-cell');
 
 export function NameCell({row}: {row: RowData}) {
     const cluster = useSelector(selectCluster);
-    const tree = useSelector(getTree);
+    const tree = useSelector(selectTree);
     const currentPool = useSelector(getCurrentPool);
 
     const dispatch = useDispatch();

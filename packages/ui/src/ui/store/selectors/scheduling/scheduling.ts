@@ -15,7 +15,7 @@ import {ROOT_POOL_NAME} from '../../../constants/scheduling';
 
 import {type OldSortState} from '../../../types';
 
-import {getPools as getPoolsImpl, getSchedulingPoolsMapByName} from './scheduling-pools';
+import {selectPools as getPoolsImpl, selectSchedulingPoolsMapByName} from './scheduling-pools';
 import {type RootState} from '../../../store/reducers';
 import {isAbcPoolName, isTopLevelPool} from '../../../utils/scheduling/pool';
 import {type PoolTreeNode} from '../../../utils/scheduling/pool-child';
@@ -252,7 +252,7 @@ export function calculatePoolPath(
 }
 
 export const getSchedulingTopPoolOfEditItem = createSelector(
-    [getSchedulingEditItem, getSchedulingPoolsMapByName],
+    [getSchedulingEditItem, selectSchedulingPoolsMapByName],
     (pool, mapOfPools) => {
         if (isAbcPoolName(pool?.name)) {
             return undefined;
@@ -280,7 +280,7 @@ export const getSchedulingTopPoolOfEditItem = createSelector(
 );
 
 export const getSchedulingSourcesOfEditItem = createSelector(
-    [getSchedulingEditItem, getSchedulingTopPoolOfEditItem, getSchedulingPoolsMapByName],
+    [getSchedulingEditItem, getSchedulingTopPoolOfEditItem, selectSchedulingPoolsMapByName],
     (pool, topPool, mapOfPools): Array<string> => {
         if (!pool?.name || !mapOfPools || !topPool) {
             return [];

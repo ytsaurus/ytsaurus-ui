@@ -35,7 +35,7 @@ import {getCurrentTreeGpuLimit} from '../../../../store/selectors/scheduling/sch
 
 import Link from '../../../../containers/Link/Link';
 import {type RootState} from '../../../../store/reducers';
-import {getSchedulingPoolsMapByName} from '../../../../store/selectors/scheduling/scheduling-pools';
+import {selectSchedulingPoolsMapByName} from '../../../../store/selectors/scheduling/scheduling-pools';
 
 import UIFactory from '../../../../UIFactory';
 import ypath from '../../../../common/thor/ypath';
@@ -523,7 +523,7 @@ export function PoolEditorDialog() {
 function useTransferNotice(editItem?: PoolTreeNode): [DialogField<PoolEditorFormValues>] | [] {
     const {parent} = editItem || {};
     //    const abcInfo = abcInfoFromAttributes(cypressAttributes);
-    const poolsByName = useSelector(getSchedulingPoolsMapByName);
+    const poolsByName = useSelector(selectSchedulingPoolsMapByName);
     const parentPool = poolsByName[parent!];
 
     const children = UIFactory.renderTransferQuotaNoticeForPool({

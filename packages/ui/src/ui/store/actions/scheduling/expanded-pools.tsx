@@ -31,7 +31,7 @@ import {
 import {EMPTY_OBJECT} from '../../../constants/empty';
 import {
     type PoolInfo,
-    getSchedulingPoolsMapByName,
+    selectSchedulingPoolsMapByName,
 } from '../../selectors/scheduling/scheduling-pools';
 import {type BatchSubRequest} from '../../../../shared/yt-types';
 import {type SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
@@ -396,7 +396,7 @@ export function setExpandedPools(changes: Record<string, boolean>): ExpandedPool
         const tree = getTree(getState());
         const expandedPools = selectSchedulingOperationsExpandedPools(state);
 
-        const poolsByName = getSchedulingPoolsMapByName(state);
+        const poolsByName = selectSchedulingPoolsMapByName(state);
 
         const treeExpandedPools = new Map(expandedPools[tree]);
         forEach_(changes, (expanded, poolName) => {
@@ -488,7 +488,7 @@ export function getSchedulingOperationsCount(): ThunkAction<number, RootState, a
     return (_dispatch, getState) => {
         const state = getState();
 
-        const tree = getSchedulingPoolsMapByName(state);
+        const tree = selectSchedulingPoolsMapByName(state);
         const root = tree[ROOT_POOL_NAME];
         return root?.operationCount || 0;
     };

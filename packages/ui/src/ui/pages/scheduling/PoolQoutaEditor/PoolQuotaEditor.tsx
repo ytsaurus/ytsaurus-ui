@@ -10,7 +10,7 @@ import i18n from './i18n';
 import {type RootState} from '../../../store/reducers';
 import {type ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../store/redux-hooks';
-import {getSchedulingPoolsMapByName} from '../../../store/selectors/scheduling/scheduling-pools';
+import {selectSchedulingPoolsMapByName} from '../../../store/selectors/scheduling/scheduling-pools';
 import {
     getSchedulingSourcesOfEditItem,
     getSchedulingSourcesOfEditItemSkipParent,
@@ -120,7 +120,7 @@ class PoolQuotaEditorControl extends React.Component<Props & ReduxProps> {
 
 const mapStateToProps = (state: RootState) => {
     return {
-        poolsByName: getSchedulingPoolsMapByName(state),
+        poolsByName: selectSchedulingPoolsMapByName(state),
     };
 };
 
