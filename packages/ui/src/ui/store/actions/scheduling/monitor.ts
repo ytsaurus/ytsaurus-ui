@@ -1,4 +1,4 @@
-import {getSchedulingMonitorChartStates} from '../../selectors/scheduling/monitor';
+import {selectSchedulingMonitorChartStates} from '../../selectors/scheduling/monitor';
 import {type ThunkAction} from 'redux-thunk';
 import {type RootState} from '../../reducers';
 import {SCHEDULING_DATA_PARTITION} from '../../../constants/scheduling';
@@ -12,7 +12,7 @@ export function setSchedulingMonitorChartState(v: {
     return (dispatch, getState) => {
         const {chartType, finalState} = v;
         const monitorChartStatus = {
-            ...getSchedulingMonitorChartStates(getState()),
+            ...selectSchedulingMonitorChartStates(getState()),
         };
         monitorChartStatus[chartType] = finalState;
 
