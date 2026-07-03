@@ -5,25 +5,25 @@ import forEach_ from 'lodash/forEach';
 import {type RootState} from '../../reducers';
 import {getSchedulingPoolsMapByName} from './scheduling-pools';
 
-export const getSchedulingAbcFilter = (state: RootState) =>
+export const selectSchedulingAbcFilter = (state: RootState) =>
     state.scheduling.scheduling.abcServiceFilter;
 
-export const getSchedulingOperationRefId = (state: RootState) =>
+export const selectSchedulingOperationRefId = (state: RootState) =>
     state.scheduling.scheduling.operationRefId;
 
-export const getSchedulingAttributesToFilter = (state: RootState) =>
+export const selectSchedulingAttributesToFilter = (state: RootState) =>
     state.scheduling.scheduling.attributesToFilter;
-export const getSchedulingAttributesToFilterParams = (state: RootState) =>
+export const selectSchedulingAttributesToFilterParams = (state: RootState) =>
     state.scheduling.scheduling.attributesToFilterParams;
 
-export const schedulingOverviewHasFilter = (state: RootState) => {
-    const abcFilter = getSchedulingAbcFilter(state);
+export const selectSchedulingOverviewHasFilter = (state: RootState) => {
+    const abcFilter = selectSchedulingAbcFilter(state);
 
     return abcFilter?.id !== undefined;
 };
 
-export const getSchedulingFilteredPoolNames = createSelector(
-    [getSchedulingAttributesToFilter, getSchedulingPoolsMapByName, getSchedulingAbcFilter],
+export const selectSchedulingFilteredPoolNames = createSelector(
+    [selectSchedulingAttributesToFilter, getSchedulingPoolsMapByName, selectSchedulingAbcFilter],
     (attrsToFilter, loadedPools, abcFilter) => {
         if (!attrsToFilter) {
             return undefined;

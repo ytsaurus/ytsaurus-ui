@@ -47,7 +47,7 @@ import {
 } from '../../../../../../store/actions/scheduling/scheduling';
 import {openPoolDeleteModal} from '../../../../../../store/actions/scheduling/scheduling-ts';
 import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
-import {getSchedulingOperationRefId} from '../../../../../../store/selectors/scheduling/attributes-to-filter';
+import {selectSchedulingOperationRefId} from '../../../../../../store/selectors/scheduling/attributes-to-filter';
 import {selectSchedulingOverivewColumns} from '../../../../../../store/selectors/scheduling/overview-columns';
 import {getProgressTheme} from '../../../../../../utils/progress';
 import {
@@ -76,7 +76,7 @@ export function SchedulingTable() {
     const {columns, columnVisibility, columnOrder} = useSchedulingTableColumns();
     const items = useSelector(getSchedulingOverviewTableItems);
 
-    const operationRefId = useSelector(getSchedulingOperationRefId);
+    const operationRefId = useSelector(selectSchedulingOperationRefId);
 
     const table = useTable({
         columns,
