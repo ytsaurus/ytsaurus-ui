@@ -10,9 +10,9 @@ import {preparePools} from '../../../utils/scheduling/scheduling';
 import ypath from '../../../common/thor/ypath';
 import {updatePoolChild} from '../../../utils/scheduling/pool-child';
 import {
-    getExpandedPoolCypressData,
-    getExpandedPoolsTree,
-    getSchedulingOperations,
+    selectExpandedPoolCypressData,
+    selectExpandedPoolsTree,
+    selectSchedulingOperations,
 } from './expanded-pools';
 import {selectCluster} from '../../../store/selectors/global';
 import {RumWrapper} from '../../../rum/rum-wrap-api';
@@ -24,7 +24,7 @@ const getPoolsRaw = (state: RootState) => state.scheduling.expandedPools.rawPool
 const getTreeResources = (state: RootState) => state.scheduling.scheduling.treeResources;
 
 const getSchedulingTreeOperations = createSelector(
-    [getSchedulingOperations, getExpandedPoolsTree, getTree],
+    [selectSchedulingOperations, selectExpandedPoolsTree, getTree],
     (rawOperations, expandedPoolsTree, tree) => {
         if (tree !== expandedPoolsTree) {
             return EMPTY_OBJECT as typeof rawOperations;
@@ -54,7 +54,7 @@ const getPoolsPrepared = createSelector(
     [
         getPoolsRaw,
         getOperationsFiltered,
-        getExpandedPoolCypressData,
+        selectExpandedPoolCypressData,
         getTreeResources,
         selectCluster,
     ],

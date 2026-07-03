@@ -25,8 +25,8 @@ import {
 import {schedulingDataFailure} from './scheduling';
 import {calculatePoolPath, getPool, getPools, getTree} from '../../selectors/scheduling/scheduling';
 import {
-    getExpandedPoolsLoadAll,
-    getSchedulingOperationsExpandedPools,
+    selectExpandedPoolsLoadAll,
+    selectSchedulingOperationsExpandedPools,
 } from '../../selectors/scheduling/expanded-pools';
 import {EMPTY_OBJECT} from '../../../constants/empty';
 import {
@@ -162,10 +162,10 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
     return (dispatch, getState) => {
         const state = getState();
 
-        const loadAll = getExpandedPoolsLoadAll(state);
+        const loadAll = selectExpandedPoolsLoadAll(state);
         const expandedPools: Map<string, ExpandedPoolInfo> = loadAll
             ? new Map()
-            : (getSchedulingOperationsExpandedPools(state)[tree] ?? new Map());
+            : (selectSchedulingOperationsExpandedPools(state)[tree] ?? new Map());
         const expandedPoolNames: Array<string> = [...expandedPools.keys()];
 
         const operationsExpandedPools: Array<string> = [...expandedPoolNames];
@@ -394,7 +394,7 @@ export function setExpandedPools(changes: Record<string, boolean>): ExpandedPool
     return (dispatch, getState) => {
         const state = getState();
         const tree = getTree(getState());
-        const expandedPools = getSchedulingOperationsExpandedPools(state);
+        const expandedPools = selectSchedulingOperationsExpandedPools(state);
 
         const poolsByName = getSchedulingPoolsMapByName(state);
 
@@ -423,7 +423,7 @@ function addFullPathToExpandedPoolsNoLoad(
 ): ExpandedPoolsThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-        const oldExpandedPools = getSchedulingOperationsExpandedPools(state);
+        const oldExpandedPools = selectSchedulingOperationsExpandedPools(state);
         const treeExpandedPools = new Map(oldExpandedPools[tree]);
 
         /**
@@ -447,7 +447,7 @@ function updateExpandedPoolNoLoad(
     treeExpandedPools: Map<string, ExpandedPoolInfo>,
 ): ExpandedPoolsThunkAction {
     return (dispatch, getState) => {
-        const oldExpandedPools = getSchedulingOperationsExpandedPools(getState());
+        const oldExpandedPools = selectSchedulingOperationsExpandedPools(getState());
 
         const expandedPools = {
             ...oldExpandedPools,
@@ -468,7 +468,7 @@ export function resetExpandedPools(tree: string): ExpandedPoolsThunkAction {
         }
 
         const state = getState();
-        const {[tree]: old, ...rest} = getSchedulingOperationsExpandedPools(state);
+        const {[tree]: old, ...rest} = selectSchedulingOperationsExpandedPools(state);
 
         if (old?.size) {
             dispatch({

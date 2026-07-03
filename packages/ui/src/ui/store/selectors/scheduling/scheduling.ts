@@ -21,7 +21,7 @@ import {isAbcPoolName, isTopLevelPool} from '../../../utils/scheduling/pool';
 import {type PoolTreeNode} from '../../../utils/scheduling/pool-child';
 import {orderTypeToOldSortState} from '../../../utils/sort-helpers';
 import {visitTreeItems} from '../../../utils/utils';
-import {getSchedulingOperationsExpandedPools} from './expanded-pools';
+import {selectSchedulingOperationsExpandedPools} from './expanded-pools';
 import {
     selectSchedulingAttributesToFilter,
     selectSchedulingFilteredPoolNames,
@@ -164,7 +164,7 @@ export const getResources = createSelector(
 );
 
 export const getCurrentTreeExpandedPools = createSelector(
-    [getTree, getSchedulingOperationsExpandedPools],
+    [getTree, selectSchedulingOperationsExpandedPools],
     (tree, expandedPools) => {
         return expandedPools[tree];
     },
