@@ -15,8 +15,8 @@ import {
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {selectCurrentUserName} from '../../../../store/selectors/global';
 import {
-    getCreatePoolDialogError,
-    getCreatePoolDialogFlatTreeItems,
+    selectCreatePoolDialogError,
+    selectCreatePoolDialogFlatTreeItems,
 } from '../../../../store/selectors/scheduling/create-pool-dialog';
 import {
     getIsRoot,
@@ -76,7 +76,7 @@ function CreatePoolDialog(props: {onClose: () => void}) {
         dispatch(fetchCreatePoolDialogTreeItems(tree));
     }, [dispatch]);
 
-    const error = useSelector(getCreatePoolDialogError);
+    const error = useSelector(selectCreatePoolDialogError);
 
     const login = useSelector(selectCurrentUserName);
     const treeItems = useSelector(getTreesSelectItems);
@@ -117,7 +117,7 @@ function CreatePoolDialog(props: {onClose: () => void}) {
         [setName],
     );
 
-    const {sortedFlatTree} = useSelector(getCreatePoolDialogFlatTreeItems);
+    const {sortedFlatTree} = useSelector(selectCreatePoolDialogFlatTreeItems);
 
     const validateForm = React.useCallback(
         (values: FormValues): null | {name?: string} => {
