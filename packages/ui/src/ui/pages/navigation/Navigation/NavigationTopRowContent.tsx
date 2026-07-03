@@ -18,16 +18,11 @@ import {makeRoutedURL} from '../../../store/location';
 import {restoreObject} from '../../../store/actions/navigation/modals/restore-object';
 import {selectNavigationDefaultPath} from '../../../store/selectors/settings';
 import {
-    selectFavouritePaths,
-    selectIsCurrentPathInFavourites,
-} from '../../../store/selectors/favourites';
-import {
     selectActualPath,
     selectIsNavigationFinalLoadState,
     selectPath,
     selectTransaction,
 } from '../../../store/selectors/navigation';
-import {navigationToggleFavourite} from '../../../store/actions/favourites';
 import {
     clearTransaction,
     setTransaction,
@@ -35,7 +30,8 @@ import {
     updateView,
 } from '../../../store/actions/navigation';
 
-import Favourites from '../../../components/Favourites/Favourites';
+import {NavigationFavorites} from '../../../containers/NavigationFavorites';
+import {type FavouritesItem} from '../../../components/Favourites/Favourites';
 import {ClipboardButton, Escaped, MetaTable, Tooltip} from '@ytsaurus/components';
 import Link from '../../../containers/Link/Link';
 import Editor from '../../../components/Editor/Editor';
@@ -85,32 +81,17 @@ function NavigationTopRowContent() {
 
 function NavigationFavourites() {
     const dispatch = useDispatch();
-
-    const favourites = useSelector(selectFavouritePaths);
-
-    const isInFavourites = useSelector(selectIsCurrentPathInFavourites);
     const path = useSelector(selectPath);
-
-    const handleToggle = React.useCallback(() => {
-        dispatch(navigationToggleFavourite(path));
-    }, [dispatch, path]);
+    const cluster = useSelector(selectCluster);
 
     const handleItemClick = React.useCallback(
-        ({path}: {path: string}) => {
-            dispatch(updatePath(path));
+        (item: FavouritesItem) => {
+            dispatch(updatePath(item.path));
         },
         [dispatch],
     );
 
-    return (
-        <Favourites
-            theme={'clear'}
-            isActive={isInFavourites}
-            items={favourites || []}
-            onItemClick={handleItemClick}
-            onToggle={handleToggle}
-        />
-    );
+    return <NavigationFavorites path={path} cluster={cluster} onItemClick={handleItemClick} />;
 }
 
 function NavigationPathToClipboard() {

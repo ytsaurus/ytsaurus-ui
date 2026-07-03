@@ -30,9 +30,6 @@ import {
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {JSONSerializer} from '../../../common/yt-api';
-import {toggleFavourite} from '../favourites';
-import {createNestedNS} from '../../../../shared/utils/settings';
-import {NAMESPACES} from '../../../../shared/constants/settings';
 import {isTableNode} from '../../../utils/navigation/isTableNode';
 import {isFolderNode} from '../../../utils/navigation/isFolderNode';
 import {QueryEngine} from '../../../../shared/constants/engines';
@@ -108,29 +105,6 @@ const loadPathTargetNode =
         } catch {
             dispatch(setPathTargetNode(undefined));
         }
-    };
-
-export const toggleFavoritePath =
-    (favoritePath: string): AsyncAction =>
-    (dispatch, getState) => {
-        const state = getState();
-        const cluster = selectNavigationCluster(state);
-        const nodes = selectNavigationNodes(state);
-
-        if (!cluster) return;
-        const parentNS = createNestedNS(cluster, NAMESPACES.LOCAL);
-        dispatch(toggleFavourite(favoritePath, parentNS));
-
-        const newNodes = nodes.map((node) => {
-            if (node.path === favoritePath) {
-                return {
-                    ...node,
-                    isFavorite: !node.isFavorite,
-                };
-            }
-            return node;
-        });
-        dispatch(setNodes(newNodes));
     };
 
 // nodes list by path

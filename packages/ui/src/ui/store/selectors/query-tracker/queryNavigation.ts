@@ -75,10 +75,17 @@ export const selectClustersByFilter: (state: RootState) => ReturnType<typeof sel
     });
 
 export const selectNodeListByFilter = createSelector(
-    [selectNavigationNodes, selectNavigationFilter, selectNavigationPath],
-    (nodes, filter, path) => {
+    [selectNavigationNodes, selectNavigationFilter, selectNavigationPath, selectFavouritePaths],
+    (nodes, filter, path, favouritePaths) => {
         const isRoot = !path || path === '/';
         const parentPath = isRoot ? path : path.split('/').slice(0, -1).join('/');
+
+        const favouritePathSet = new Set(favouritePaths);
+        const nodesWithFavoriteState = nodes.map((node) => {
+            const isFavorite = favouritePathSet.has(node.path);
+            return node.isFavorite === isFavorite ? node : {...node, isFavorite};
+        });
+
         const upItem: NavigationNode = {
             name: '...',
             type: 'map_node',
@@ -86,9 +93,9 @@ export const selectNodeListByFilter = createSelector(
             isFavorite: false,
         };
 
-        if (!filter) return isRoot ? nodes : [upItem, ...nodes];
+        if (!filter) return isRoot ? nodesWithFavoriteState : [upItem, ...nodesWithFavoriteState];
 
-        const result = nodes.filter(({name}) => filterValueInText(name, filter));
+        const result = nodesWithFavoriteState.filter(({name}) => filterValueInText(name, filter));
 
         if (!isRoot) {
             result.unshift(upItem);

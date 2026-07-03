@@ -173,6 +173,10 @@ type DashboardSettings = {
     [key in `local::${Cluster}::dashboard::config`]: DashKitProps['config'];
 };
 
+type FavouritesSettings = {
+    [key in `local::${Cluster}::favourites`]: Array<string | {path: string}>;
+};
+
 type QueryTrackerLastSelectedACOsSettings = {
     [key in `qt-stage::${Stage}::queryTracker::lastSelectedACOs`]: string[];
 };
@@ -239,6 +243,7 @@ export type DescribedSettings = GlobalSettings &
     QueryTrackerLastYqlVersion &
     ComponentsSettings &
     SchedulingSettings &
-    DashboardSettings;
+    DashboardSettings &
+    FavouritesSettings;
 
 export type SettingKey = keyof DescribedSettings;
