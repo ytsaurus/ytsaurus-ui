@@ -14,7 +14,6 @@ import {
 } from '../../store/selectors/settings';
 import {SettingName} from '../../../shared/constants/settings';
 import {selectActiveAccount} from '../../store/selectors/accounts/accounts';
-import {selectPath} from '../../store/selectors/navigation';
 import {selectPool, selectTree} from '../../store/selectors/scheduling/scheduling';
 import {selectTabletsActiveBundle} from './tablet_cell_bundles';
 import {selectChaosActiveBundle} from './chaos_cell_bundles';
@@ -69,11 +68,6 @@ export const selectLastVisitedPaths = createSelector(
 );
 
 export const selectPopularPaths = createSelector([selectLastVisitedPaths], preparePopulars);
-
-export const selectIsCurrentPathInFavourites = createSelector(
-    [selectPath, selectFavouritePaths],
-    prepareIsInFavourites,
-);
 
 //************* Selectors for Scheduling *****************
 

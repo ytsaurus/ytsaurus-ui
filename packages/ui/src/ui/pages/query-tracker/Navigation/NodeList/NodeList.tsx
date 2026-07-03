@@ -2,6 +2,7 @@ import React, {type FC, useCallback} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
     selectIsQueryNavigationLoading,
+    selectNavigationCluster,
     selectNavigationClusterConfig,
     selectNodeListByFilter,
 } from '../../../../store/selectors/query-tracker/queryNavigation';
@@ -10,8 +11,8 @@ import {
     copyPathToClipboard,
     loadNodeByPath,
     loadTableAttributesByPath,
-    toggleFavoritePath,
 } from '../../../../store/actions/query-tracker/queryNavigation';
+import {navigationToggleFavourite} from '../../../../store/actions/favourites';
 import './NodeList.scss';
 import cn from 'bem-cn-lite';
 import {isFolderNode} from '../../../../utils/navigation/isFolderNode';
@@ -24,6 +25,7 @@ const b = cn('navigation-node-list');
 
 export const NodeList: FC = () => {
     const dispatch = useDispatch();
+    const cluster = useSelector(selectNavigationCluster);
     const clusterConfig = useSelector(selectNavigationClusterConfig);
     const nodes = useSelector(selectNodeListByFilter);
     const engine = useSelector(selectQueryEngine);
@@ -42,9 +44,9 @@ export const NodeList: FC = () => {
 
     const handleFavoriteToggle = useCallback(
         (favoritePath: string) => {
-            dispatch(toggleFavoritePath(favoritePath));
+            dispatch(navigationToggleFavourite(favoritePath, cluster));
         },
-        [dispatch],
+        [dispatch, cluster],
     );
 
     const onClipboardCopy = useCallback(

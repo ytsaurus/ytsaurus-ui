@@ -9,7 +9,8 @@ import {
     selectClusterNS,
     selectGetSetting,
 } from '../../store/selectors/settings';
-import {SettingName} from '../../../shared/constants/settings';
+import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
+import {createNestedNS} from '../../../shared/utils/settings';
 import {reloadSetting, setSetting} from '../../store/actions/settings';
 
 import {selectActiveAccount} from '../../store/selectors/accounts/accounts';
@@ -97,11 +98,13 @@ export function chytToggleFavourite(clique) {
     };
 }
 
-export function navigationToggleFavourite(path) {
+export function navigationToggleFavourite(path, cluster) {
     getMetrics().countEvent('navigation_toggle-favourites');
 
-    return (dispatch, getState) => {
-        const parentNS = selectClusterNS(getState());
+    return (dispatch) => {
+        if (!cluster) return;
+
+        const parentNS = createNestedNS(cluster, NAMESPACES.LOCAL);
         return dispatch(toggleFavourite(path, parentNS));
     };
 }
