@@ -48,7 +48,7 @@ import {
 import {openPoolDeleteModal} from '../../../../../../store/actions/scheduling/scheduling-ts';
 import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
 import {getSchedulingOperationRefId} from '../../../../../../store/selectors/scheduling/attributes-to-filter';
-import {getSchedulingOverivewColumns} from '../../../../../../store/selectors/scheduling/overview-columns';
+import {selectSchedulingOverivewColumns} from '../../../../../../store/selectors/scheduling/overview-columns';
 import {getProgressTheme} from '../../../../../../utils/progress';
 import {
     type SchedulingColumn,
@@ -199,7 +199,7 @@ const COLUMNS_BY_MODE: Record<SchedulintTableMode, Array<SchedulingColumn>> = {
 
 function useSchedulingVisibleColumns() {
     const mode = useSelector(getSchedulingContentMode);
-    const customColumns = useSelector(getSchedulingOverivewColumns);
+    const customColumns = useSelector(selectSchedulingOverivewColumns);
 
     return mode === 'custom' ? customColumns : (COLUMNS_BY_MODE[mode] ?? []);
 }

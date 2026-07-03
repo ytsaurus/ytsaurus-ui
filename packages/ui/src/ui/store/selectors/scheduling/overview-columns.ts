@@ -22,7 +22,7 @@ const DEFAULT_COLUMNS: Array<SchedulingColumn> = [
     'actions',
 ];
 
-export const getSchedulingOverivewColumns = createSelector([selectSettingsData], (data) => {
+export const selectSchedulingOverivewColumns = createSelector([selectSettingsData], (data) => {
     const columns = data['global::scheduling::overviewColumns'];
     if (!columns) {
         return [...DEFAULT_COLUMNS];
