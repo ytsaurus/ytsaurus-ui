@@ -18,7 +18,7 @@ import {
 } from '../../../../../store/selectors/scheduling/scheduling';
 import {
     type PoolStaticConfigurationItem,
-    getCurrentPoolGuarantees,
+    selectCurrentPoolGuarantees,
 } from '../../../../../store/selectors/scheduling/scheduling-ts';
 import {addProgressStackSpacers} from '../../../../../utils/progress';
 import {type PoolData} from '../../../../../utils/scheduling/pool-child';
@@ -32,7 +32,7 @@ const block = cn('yt-scheduling-meta');
 export function SchedulingMeta() {
     const pool = useSelector(getCurrentPool);
 
-    const guarantees = useSelector(getCurrentPoolGuarantees);
+    const guarantees = useSelector(selectCurrentPoolGuarantees);
     const mainResource = useSelector(getSchedulingTreeMainResource);
 
     // eslint-disable-next-line complexity

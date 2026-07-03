@@ -31,7 +31,7 @@ import {
 
 import {checkUserPermissionsUI} from '../../../../utils/acl/acl-api';
 import {selectCluster, selectCurrentUserName} from '../../../../store/selectors/global';
-import {getCurrentTreeGpuLimit} from '../../../../store/selectors/scheduling/scheduling-ts';
+import {selectCurrentTreeGpuLimit} from '../../../../store/selectors/scheduling/scheduling-ts';
 
 import Link from '../../../../containers/Link/Link';
 import {type RootState} from '../../../../store/reducers';
@@ -77,7 +77,7 @@ export function PoolEditorDialog() {
         (state: RootState) => state.scheduling.scheduling,
     );
 
-    const treGpuLimit = useSelector(getCurrentTreeGpuLimit);
+    const treGpuLimit = useSelector(selectCurrentTreeGpuLimit);
 
     const allowedSources = useSelector(getSchedulingSourcesOfEditItem);
 

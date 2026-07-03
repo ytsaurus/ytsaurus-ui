@@ -33,7 +33,7 @@ import {
     SchedulingTab,
 } from '../../../constants/scheduling';
 import {ClipboardButton} from '@ytsaurus/components';
-import {getSchedulingBreadcrumbItems} from '../../../store/selectors/scheduling/scheduling-ts';
+import {selectSchedulingBreadcrumbItems} from '../../../store/selectors/scheduling/scheduling-ts';
 import {Page} from '../../../constants';
 import {EditableBreadcrumbs} from '../../../components/EditableBreadcrumbs/EditableBreadcrumbs';
 import CreatePoolButton from '../Instruments/CreatePoolDialog/CreatePoolDialog';
@@ -124,7 +124,7 @@ function CurrentPoolToClipboardButton() {
 }
 
 function SchedulingBreadcrumbs() {
-    const bcItems = useSelector(getSchedulingBreadcrumbItems);
+    const bcItems = useSelector(selectSchedulingBreadcrumbItems);
     const dispatch = useDispatch();
     const history = useHistory();
     const tree = useSelector(getTree);

@@ -8,7 +8,7 @@ import {type Column} from '@gravity-ui/react-data-table';
 
 import CollapsibleSection from '../../../components/CollapsibleSection/CollapsibleSection';
 import {getIsRoot, getTree} from '../../../store/selectors/scheduling/scheduling';
-import {getCurrentPoolTreeStaticConfiguration} from '../../../store/selectors/scheduling/scheduling-ts';
+import {selectCurrentPoolTreeStaticConfiguration} from '../../../store/selectors/scheduling/scheduling-ts';
 
 import {DataTableYT} from '../../../components/DataTableYT';
 import format from '../../../common/hammer/format';
@@ -51,7 +51,7 @@ function SchedulingStaticConfiguration() {
 export default React.memo(SchedulingStaticConfiguration);
 
 function PoolTreeStaticConfiguration() {
-    const items = useSelector(getCurrentPoolTreeStaticConfiguration);
+    const items = useSelector(selectCurrentPoolTreeStaticConfiguration);
     const poolTree = useSelector(getTree);
     const cluster = useSelector(selectCluster);
 

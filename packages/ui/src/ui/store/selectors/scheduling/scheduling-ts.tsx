@@ -10,7 +10,7 @@ import {ROOT_POOL_NAME} from '../../../constants/scheduling';
 import {selectCluster} from '../global';
 import {selectPools} from './scheduling-pools';
 
-export const getSchedulingBreadcrumbItems = createSelector(
+export const selectSchedulingBreadcrumbItems = createSelector(
     [getPool, selectPools],
     (pool: string, pools) => {
         let current: string | undefined = pool;
@@ -46,7 +46,7 @@ function makeStaticConfigurationItem(name: string, attrs: object): PoolStaticCon
     };
 }
 
-export const getCurrentPoolGuarantees = createSelector(
+export const selectCurrentPoolGuarantees = createSelector(
     [getIsRoot, getCurrentPool],
     (isRoot, data) => {
         if (isRoot || !data?.attributes) {
@@ -111,11 +111,11 @@ function calcTreeStaticConfigurationByDistributed(
     };
 }
 
-export const getPoolsTopLevel = createSelector([selectPools], (pools) => {
+export const selectPoolsTopLevel = createSelector([selectPools], (pools) => {
     return filter_(pools, ({parent}) => parent === ROOT_POOL_NAME);
 });
 
-const getPoolsAllocatedOperationsCount = createSelector([getPoolsTopLevel], (topPools) => {
+const selectPoolsAllocatedOperationsCount = createSelector([selectPoolsTopLevel], (topPools) => {
     return reduce_(
         topPools,
         (acc, item) => {
@@ -127,12 +127,12 @@ const getPoolsAllocatedOperationsCount = createSelector([getPoolsTopLevel], (top
     );
 });
 
-export const getCurrentTreeGpuLimit = createSelector([getTreeResources], (resources): number => {
+export const selectCurrentTreeGpuLimit = createSelector([getTreeResources], (resources): number => {
     return ypath.getNumber(resources, '/resource_limits/gpu', 0);
 });
 
-export const getOperationsStaticConfiguration = createSelector(
-    [getTreeResources, getPoolsAllocatedOperationsCount, selectCluster, getTree],
+export const selectOperationsStaticConfiguration = createSelector(
+    [getTreeResources, selectPoolsAllocatedOperationsCount, selectCluster, getTree],
     ({config}, allocated): Array<PoolTreeStaticConfigurationItem> => {
         const operationCount = ypath.getNumber(config, '/max_operation_count', 0);
         const runningOperationCount = ypath.getNumber(config, '/max_running_operation_count', 0);
@@ -171,8 +171,8 @@ export const getOperationsStaticConfiguration = createSelector(
     },
 );
 
-export const getCurrentPoolTreeStaticConfiguration = createSelector(
-    [getTreeResources, getOperationsStaticConfiguration],
+export const selectCurrentPoolTreeStaticConfiguration = createSelector(
+    [getTreeResources, selectOperationsStaticConfiguration],
     (treeResources = {}, operationRows): Array<PoolTreeStaticConfigurationItem> => {
         const {resource_distribution_info, resource_limits} = treeResources;
 
