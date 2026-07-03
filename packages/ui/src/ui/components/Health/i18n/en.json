@@ -2,6 +2,7 @@
   "value_good": "good",
   "value_initializing": "initializing",
   "value_degrading": "degrading",
+  "value_degraded": "degraded",
   "value_failed": "failed",
   "value_changing": "changing",
   "value_pending": "pending"
