@@ -6,13 +6,13 @@ import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
 import {YTApiId} from '../../../../../rum/rum-wrap-api';
 import {getPoolPathsByName} from '../../../../../store/actions/scheduling/expanded-pools';
 import {useFetchBatchQuery} from '../../../../../store/api/yt';
-import {getCurrentPool} from '../../../../../store/selectors/scheduling/scheduling';
+import {selectCurrentPool} from '../../../../../store/selectors/scheduling/scheduling';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {type PoolTreeNode} from '../../../../../utils/scheduling/pool-child';
 import i18n from './i18n';
 
 export function PoolAttributes({className}: {className: string}) {
-    const pool = useSelector(getCurrentPool);
+    const pool = useSelector(selectCurrentPool);
 
     if (!pool) {
         return null;

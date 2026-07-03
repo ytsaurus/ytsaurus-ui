@@ -19,11 +19,11 @@ import PoolAcl from '../../../pages/scheduling/Content/tabs/PoolAcl/PoolAcl';
 import {useSelector} from '../../../store/redux-hooks';
 import {selectCluster} from '../../../store/selectors/global';
 import {
-    getIsRoot,
-    getPool,
-    getPoolIsEphemeral,
-    getTree,
-    isPoolAclAllowed,
+    selectIsPoolAclAllowed,
+    selectPool,
+    selectPoolIsEphemeral,
+    selectSchedulingIsRoot,
+    selectTree,
 } from '../../../store/selectors/scheduling/scheduling';
 import {type TabSettings, makeTabProps} from '../../../utils';
 import {makeSchedulingUrl} from '../../../utils/app-url';
@@ -43,11 +43,11 @@ type ContentProps = {
 
 function Content({match, location}: ContentProps) {
     const cluster = useSelector(selectCluster);
-    const pool = useSelector(getPool);
-    const tree = useSelector(getTree);
-    const isEphemeral = useSelector(getPoolIsEphemeral);
-    const isRoot = useSelector(getIsRoot);
-    const allowAcl = useSelector(isPoolAclAllowed);
+    const pool = useSelector(selectPool);
+    const tree = useSelector(selectTree);
+    const isEphemeral = useSelector(selectPoolIsEphemeral);
+    const isRoot = useSelector(selectSchedulingIsRoot);
+    const allowAcl = useSelector(selectIsPoolAclAllowed);
 
     const localTab: Record<string, string> = {...SchedulingTab};
 

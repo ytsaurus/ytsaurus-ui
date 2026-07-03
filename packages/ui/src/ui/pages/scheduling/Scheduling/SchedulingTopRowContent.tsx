@@ -10,12 +10,12 @@ import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/Secti
 import Favourites from '../../../components/Favourites/Favourites';
 import {PoolsSuggest} from '../PoolsSuggest/PoolsSuggest';
 import {
-    getCurrentPool,
-    getCurrentPoolPath,
-    getPool,
-    getTree,
-    getTreesSelectItems,
+    selectCurrentPool,
+    selectCurrentPoolPath,
+    selectPool,
     selectSchedulingError,
+    selectTree,
+    selectTreesSelectItems,
 } from '../../../store/selectors/scheduling/scheduling';
 import {
     selectFavouritePools,
@@ -48,7 +48,7 @@ import i18n from './i18n';
 const block = cn('scheduling-top-row-content');
 
 function SchedulingTopRowContent() {
-    const pool = useSelector(getCurrentPool);
+    const pool = useSelector(selectCurrentPool);
     const clusterUiConfig = useSelector(selectClusterUiConfig);
 
     return (
@@ -77,9 +77,9 @@ function SchedulingTopRowContent() {
 }
 
 function SchedulingFavourites() {
-    const tree = useSelector(getTree);
+    const tree = useSelector(selectTree);
     const dispatch = useDispatch();
-    const pool = useSelector(getPool);
+    const pool = useSelector(selectPool);
     const favouritesPools = useSelector(selectFavouritePools);
     const isActivePool = useSelector(selectIsActivePoolInFavourites);
 
@@ -110,8 +110,8 @@ function SchedulingFavourites() {
 }
 
 function CurrentPoolToClipboardButton() {
-    const currentPool = useSelector(getPool);
-    const currentPoolPath = useSelector(getCurrentPoolPath);
+    const currentPool = useSelector(selectPool);
+    const currentPoolPath = useSelector(selectCurrentPoolPath);
 
     return (
         <ClipboardButton
@@ -127,9 +127,9 @@ function SchedulingBreadcrumbs() {
     const bcItems = useSelector(selectSchedulingBreadcrumbItems);
     const dispatch = useDispatch();
     const history = useHistory();
-    const tree = useSelector(getTree);
+    const tree = useSelector(selectTree);
     const cluster = useSelector(selectCluster);
-    const pool = useSelector(getPool);
+    const pool = useSelector(selectPool);
 
     const error = useSelector(selectSchedulingError);
 
@@ -194,8 +194,8 @@ function calcPathname(pathname: string, cluster: string, pool?: string) {
 }
 
 function SchedulingPhysicalTree() {
-    const tree = useSelector(getTree);
-    const treeItems = useSelector(getTreesSelectItems);
+    const tree = useSelector(selectTree);
+    const treeItems = useSelector(selectTreesSelectItems);
     const dispatch = useDispatch();
 
     const onChange = React.useCallback((tree: string) => dispatch(changeTree(tree)), [dispatch]);

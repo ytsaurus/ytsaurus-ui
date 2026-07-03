@@ -12,8 +12,8 @@ import {type ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../store/redux-hooks';
 import {selectSchedulingPoolsMapByName} from '../../../store/selectors/scheduling/scheduling-pools';
 import {
-    getSchedulingSourcesOfEditItem,
-    getSchedulingSourcesOfEditItemSkipParent,
+    selectSchedulingSourcesOfEditItem,
+    selectSchedulingSourcesOfEditItemSkipParent,
 } from '../../../store/selectors/scheduling/scheduling';
 import Select from '../../../components/Select/Select';
 import {type PoolResourceType, getPoolResourceInfo} from '../../../utils/scheduling/scheduling';
@@ -134,8 +134,8 @@ function PoolSourceSuggest(props: {
     skipParent?: boolean;
 }) {
     const {value, onChange, disabled, skipParent} = props;
-    const sources = useSelector(getSchedulingSourcesOfEditItem);
-    const sourcesNoParent = useSelector(getSchedulingSourcesOfEditItemSkipParent);
+    const sources = useSelector(selectSchedulingSourcesOfEditItem);
+    const sourcesNoParent = useSelector(selectSchedulingSourcesOfEditItemSkipParent);
 
     const items = React.useMemo(() => {
         const res = skipParent ? sourcesNoParent : sources;

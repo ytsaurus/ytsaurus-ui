@@ -23,7 +23,12 @@ import {
     SCHEDULING_EXPANDED_POOLS_SUCCESS,
 } from '../../../constants/scheduling';
 import {schedulingDataFailure} from './scheduling';
-import {calculatePoolPath, getPool, getPools, getTree} from '../../selectors/scheduling/scheduling';
+import {
+    calculatePoolPath,
+    selectPool,
+    selectPools,
+    selectTree,
+} from '../../selectors/scheduling/scheduling';
 import {
     selectExpandedPoolsLoadAll,
     selectSchedulingOperationsExpandedPools,
@@ -109,7 +114,7 @@ class EmptyFullPath extends Error {}
 
 export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
     return (dispatch, getState) => {
-        const pool = getPool(getState());
+        const pool = selectPool(getState());
 
         if (!tree) {
             return undefined;
@@ -393,7 +398,7 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
 export function setExpandedPools(changes: Record<string, boolean>): ExpandedPoolsThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-        const tree = getTree(getState());
+        const tree = selectTree(getState());
         const expandedPools = selectSchedulingOperationsExpandedPools(state);
 
         const poolsByName = selectSchedulingPoolsMapByName(state);
@@ -499,8 +504,8 @@ export function getPoolPathsByName(
 ): ThunkAction<{fullPath: string; orchidPath: string}, RootState, unknown, any> {
     return (_dispatch, getState) => {
         const state = getState();
-        const pools = getPools(state);
-        const tree = getTree(state);
+        const pools = selectPools(state);
+        const tree = selectTree(state);
 
         return {
             fullPath: calculatePoolPath(poolName, pools, tree),
@@ -517,7 +522,7 @@ export function setLoadAllOperations(loadAll: boolean): ExpandedPoolsThunkAction
             data: {loadAll},
         });
 
-        const tree = getTree(state);
+        const tree = selectTree(state);
         dispatch(loadExpandedPools(tree));
     };
 }

@@ -28,7 +28,7 @@ import {getSchedulingIsFinalLoadingState} from '../../../store/selectors/schedul
 import SchedulingResources from '../Content/SchedulingResources';
 import {PoolEditorDialog} from './PoolEditorDialog/PoolEditorDialog';
 import {type RootState} from '../../../store/reducers';
-import {getPool, selectSchedulingError} from '../../../store/selectors/scheduling/scheduling';
+import {selectPool, selectSchedulingError} from '../../../store/selectors/scheduling/scheduling';
 import {changePool} from '../../../store/actions/scheduling/scheduling';
 import {SchedulingError} from './SchedulingError';
 
@@ -38,7 +38,7 @@ const SchedulingDialogsMemo = React.memo(SchedulingDialogs);
 
 function Scheduling() {
     const error = useSelector(selectSchedulingError);
-    const pool = useSelector(getPool);
+    const pool = useSelector(selectPool);
     const dispatch = useDispatch();
 
     const updateFn = React.useCallback(() => {

@@ -26,12 +26,12 @@ import {OperationType} from '../../../../../../components/OperationType/Operatio
 import {SubjectCard} from '../../../../../../components/SubjectLink/SubjectLink';
 import {selectSchedulingOperationsLoading} from '../../../../../../store/selectors/scheduling/expanded-pools';
 import {
-    getSchedulingContentMode,
-    getSchedulingLoading,
-    getSchedulingOverviewTableItems,
-    getSchedulingShowAbsResources,
-    getSchedulingSortState,
-    getSchedulingTreeMainResource,
+    selectSchedulingContentMode,
+    selectSchedulingLoading,
+    selectSchedulingOverviewTableItems,
+    selectSchedulingShowAbsResources,
+    selectSchedulingSortState,
+    selectSchedulingTreeMainResource,
 } from '../../../../../../store/selectors/scheduling/scheduling';
 
 import {type KeysByType} from '../../../../../../../@types/types';
@@ -61,7 +61,7 @@ import './SchedulingTable.scss';
 
 const block = cn('yt-scheduling-table');
 
-export type RowData = ReturnType<typeof getSchedulingOverviewTableItems>[number];
+export type RowData = ReturnType<typeof selectSchedulingOverviewTableItems>[number];
 
 export function SchedulingTable() {
     const {columnSizes, setColumnSizes} = useSettingsColumnSizes(
@@ -74,7 +74,7 @@ export function SchedulingTable() {
     );
 
     const {columns, columnVisibility, columnOrder} = useSchedulingTableColumns();
-    const items = useSelector(getSchedulingOverviewTableItems);
+    const items = useSelector(selectSchedulingOverviewTableItems);
 
     const operationRefId = useSelector(selectSchedulingOperationRefId);
 
@@ -122,7 +122,7 @@ export function SchedulingTable() {
     );
 }
 
-type SchedulintTableMode = ReturnType<typeof getSchedulingContentMode>;
+type SchedulintTableMode = ReturnType<typeof selectSchedulingContentMode>;
 
 const COLUMNS_BY_MODE: Record<SchedulintTableMode, Array<SchedulingColumn>> = {
     summary: [
@@ -198,7 +198,7 @@ const COLUMNS_BY_MODE: Record<SchedulintTableMode, Array<SchedulingColumn>> = {
 };
 
 function useSchedulingVisibleColumns() {
-    const mode = useSelector(getSchedulingContentMode);
+    const mode = useSelector(selectSchedulingContentMode);
     const customColumns = useSelector(selectSchedulingOverivewColumns);
 
     return mode === 'custom' ? customColumns : (COLUMNS_BY_MODE[mode] ?? []);
@@ -712,7 +712,7 @@ function useSchedulingTableColumns() {
 
 function NameHeader() {
     const expandedeLoading = useSelector(selectSchedulingOperationsLoading);
-    const loading = useSelector(getSchedulingLoading);
+    const loading = useSelector(selectSchedulingLoading);
     return (
         <SchedulingColumnHeader
             title={i18n('title_pool-operation')}
@@ -729,8 +729,8 @@ type ResourceSummaryProps = {
 };
 
 function ResourceSummary({item, type}: ResourceSummaryProps) {
-    const showAbsResources = useSelector(getSchedulingShowAbsResources);
-    const dominantResource = useSelector(getSchedulingTreeMainResource) ?? 'CPU';
+    const showAbsResources = useSelector(selectSchedulingShowAbsResources);
+    const dominantResource = useSelector(selectSchedulingTreeMainResource) ?? 'CPU';
 
     const {fairShareRatio} = item;
 
@@ -903,7 +903,7 @@ function FairShareUsage({item}: {item: RowData}) {
 function SchedulingColumnHeader(props: ColumnHeaderProps<SchedulingColumn>) {
     const dispatch = useDispatch();
 
-    const [sortState] = useSelector(getSchedulingSortState);
+    const [sortState] = useSelector(selectSchedulingSortState);
 
     const order = props.column === sortState?.column ? sortState.order : undefined;
 
@@ -959,7 +959,7 @@ function SchedulingColumnHeader(props: ColumnHeaderProps<SchedulingColumn>) {
 }
 
 function SchedulingTableSettings<T extends tanstack.Table<any>>({table}: {table: T}) {
-    const mode = useSelector(getSchedulingContentMode);
+    const mode = useSelector(selectSchedulingContentMode);
 
     return mode === 'custom' ? <TableSettings table={table} /> : null;
 }

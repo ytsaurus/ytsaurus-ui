@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import forEach_ from 'lodash/forEach';
 
-import {getPoolsNames, getTree} from '../../../store/selectors/scheduling/scheduling';
+import {selectPoolsNames, selectTree} from '../../../store/selectors/scheduling/scheduling';
 import {changePool} from '../../../store/actions/scheduling/scheduling';
 import {schedulingLoadFilterAttributes} from '../../../store/actions/scheduling/scheduling-ts';
 
@@ -26,8 +26,8 @@ export function PoolsSuggest({
     className?: string;
     autoFocus?: boolean;
 }) {
-    const poolNames = useSelector(getPoolsNames);
-    const tree = useSelector(getTree);
+    const poolNames = useSelector(selectPoolsNames);
+    const tree = useSelector(selectTree);
     const dispatch = useDispatch();
 
     const getSuggestItems = React.useCallback(

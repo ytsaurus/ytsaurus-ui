@@ -5,7 +5,10 @@ import map_ from 'lodash/map';
 import isEmpty_ from 'lodash/isEmpty';
 
 import hammer from '../../../common/hammer';
-import {getIsRoot, getResources} from '../../../store/selectors/scheduling/scheduling';
+import {
+    selectResources,
+    selectSchedulingIsRoot,
+} from '../../../store/selectors/scheduling/scheduling';
 import {Progress} from '@gravity-ui/uikit';
 
 import './SchedulingResources.scss';
@@ -14,8 +17,8 @@ const block = cn('scheduling-resources');
 const headingBlock = cn('elements-heading');
 
 function SchedulingResources() {
-    const isRoot = useSelector(getIsRoot);
-    const resources = useSelector(getResources) as any;
+    const isRoot = useSelector(selectSchedulingIsRoot);
+    const resources = useSelector(selectResources) as any;
 
     return !isRoot || isEmpty_(resources) ? null : (
         <div className={block()}>

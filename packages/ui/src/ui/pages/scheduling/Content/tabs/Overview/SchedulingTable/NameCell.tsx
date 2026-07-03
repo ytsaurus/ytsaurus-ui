@@ -9,8 +9,8 @@ import {setExpandedPools} from '../../../../../../store/actions/scheduling/expan
 import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
 import {selectCluster} from '../../../../../../store/selectors/global/cluster';
 import {
-    getCurrentPool,
-    getCurrentTreeExpandedPools,
+    selectCurrentPool,
+    selectCurrentTreeExpandedPools,
 } from '../../../../../../store/selectors/scheduling/scheduling';
 import {selectTree} from '../../../../../../store/selectors/scheduling/scheduling-pools';
 import {type PoolLeafNode} from '../../../../../../utils/scheduling/pool-child';
@@ -26,10 +26,10 @@ const block = cn('yt-scheduling-name-cell');
 export function NameCell({row}: {row: RowData}) {
     const cluster = useSelector(selectCluster);
     const tree = useSelector(selectTree);
-    const currentPool = useSelector(getCurrentPool);
+    const currentPool = useSelector(selectCurrentPool);
 
     const dispatch = useDispatch();
-    const expandedPools = useSelector(getCurrentTreeExpandedPools);
+    const expandedPools = useSelector(selectCurrentTreeExpandedPools);
 
     const handlePoolExpand = React.useCallback(
         (poolName: string, value: boolean) => {

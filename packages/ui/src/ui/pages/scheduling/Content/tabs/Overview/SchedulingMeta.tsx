@@ -13,8 +13,8 @@ import {ColorCircle} from '../../../../../components/ColorCircle/ColorCircle';
 import {MetaTable, type MetaTableItem, Tooltip, YTText} from '@ytsaurus/components';
 import {ROOT_POOL_NAME} from '../../../../../constants/scheduling';
 import {
-    getCurrentPool,
-    getSchedulingTreeMainResource,
+    selectCurrentPool,
+    selectSchedulingTreeMainResource,
 } from '../../../../../store/selectors/scheduling/scheduling';
 import {
     type PoolStaticConfigurationItem,
@@ -30,10 +30,10 @@ import './SchedulingMeta.scss';
 const block = cn('yt-scheduling-meta');
 
 export function SchedulingMeta() {
-    const pool = useSelector(getCurrentPool);
+    const pool = useSelector(selectCurrentPool);
 
     const guarantees = useSelector(selectCurrentPoolGuarantees);
-    const mainResource = useSelector(getSchedulingTreeMainResource);
+    const mainResource = useSelector(selectSchedulingTreeMainResource);
 
     // eslint-disable-next-line complexity
     const {items, subTitles} = React.useMemo(() => {

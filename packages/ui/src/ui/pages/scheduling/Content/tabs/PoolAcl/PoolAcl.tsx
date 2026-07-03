@@ -9,10 +9,10 @@ import {NoContent} from '../../../../../components/NoContent';
 import i18n from './i18n';
 import {type RootState} from '../../../../../store/reducers';
 import {
-    getIsRoot,
-    getPool,
-    getPools,
-    getTree,
+    selectPool,
+    selectPools,
+    selectSchedulingIsRoot,
+    selectTree,
 } from '../../../../../store/selectors/scheduling/scheduling';
 import {PoolAclPanel} from '../../../../../containers/ACL';
 import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
@@ -24,11 +24,11 @@ import {IdmObjectType} from '../../../../../constants/acl';
 import {useAppRumMeasureStart} from '../../../../../rum/rum-app-measures';
 
 function PoolAcl() {
-    const isRoot = useSelector(getIsRoot);
+    const isRoot = useSelector(selectSchedulingIsRoot);
 
-    const pool = useSelector(getPool);
-    const tree = useSelector(getTree);
-    const pools = useSelector(getPools);
+    const pool = useSelector(selectPool);
+    const tree = useSelector(selectTree);
+    const pools = useSelector(selectPools);
 
     if (isRoot) {
         return (

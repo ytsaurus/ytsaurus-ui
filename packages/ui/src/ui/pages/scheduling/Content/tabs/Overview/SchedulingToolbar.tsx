@@ -17,8 +17,8 @@ import {selectSchedulingAbcFilter} from '../../../../../store/selectors/scheduli
 import {selectExpandedPoolsLoadAll} from '../../../../../store/selectors/scheduling/expanded-pools';
 import {
     SCHEDULING_CONTENT_MODES,
-    getSchedulingContentMode,
-    getSchedulingShowAbsResources,
+    selectSchedulingContentMode,
+    selectSchedulingShowAbsResources,
 } from '../../../../../store/selectors/scheduling/scheduling';
 
 import {PoolsSuggest} from '../../../../../pages/scheduling/PoolsSuggest/PoolsSuggest';
@@ -30,7 +30,7 @@ import './SchedulingToolbar.scss';
 const block = cn('yt-scheduling-toolbar');
 
 export function SchedulingToolbar() {
-    const mode = useSelector(getSchedulingContentMode);
+    const mode = useSelector(selectSchedulingContentMode);
 
     return (
         <Toolbar
@@ -52,7 +52,7 @@ export function SchedulingToolbar() {
 
 function SchedulingContentMode() {
     const dispatch = useDispatch();
-    const mode = useSelector(getSchedulingContentMode);
+    const mode = useSelector(selectSchedulingContentMode);
 
     return (
         <SegmentedRadioGroup
@@ -127,7 +127,7 @@ export function SchedulingExpandAll() {
 
 function SchedulingShowAbsResources() {
     const dispatch = useDispatch();
-    const value = useSelector(getSchedulingShowAbsResources);
+    const value = useSelector(selectSchedulingShowAbsResources);
 
     return (
         <Switch
