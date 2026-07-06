@@ -1,24 +1,27 @@
 import React from 'react';
 
+import {docsUrl} from '../../../config';
 import {DialogError, type FormApi, YTDFDialog} from '../../../containers/Dialog';
-import {makeLink} from './CreateTableModal/CreateTableModal';
-import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
     hideTableEraseModal,
     runTableErase,
 } from '../../../store/actions/navigation/modals/table-erase-modal';
+import {DYNAMIC_TABLE_WRITER_SETTINGS} from '../../../store/actions/navigation/modals/table-merge-sort-modal';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
     selectNavigationTableEraseModalPath,
     selectNavigationTableEraseModalVisible,
 } from '../../../store/selectors/navigation/modals/table-erase-modal';
-import {docsUrl} from '../../../config';
 import UIFactory from '../../../UIFactory';
+import {makeLink} from './CreateTableModal/CreateTableModal';
+import {getAlterOutputToDynamicFields} from './fields/alter-output-to-dynamic/alter-output-to-dynamic';
 import i18n from './i18n';
 
 interface FormValues {
     path: string;
     range: string;
     combine_chunks: boolean;
+    alterOutputToDynamic: boolean;
 }
 
 export default function TableEraseModal() {
@@ -32,15 +35,20 @@ export default function TableEraseModal() {
     const handleAdd = React.useCallback(
         async (form: FormApi<FormValues>) => {
             try {
-                const {range, combine_chunks} = form.getState().values;
+                const {range, combine_chunks, alterOutputToDynamic} = form.getState().values;
 
                 const [from, to] = range?.split(':') || [];
+                const dynamicSettings = alterOutputToDynamic
+                    ? {table_writer: DYNAMIC_TABLE_WRITER_SETTINGS}
+                    : undefined;
                 await dispatch(
                     runTableErase({
                         path: path ?? '',
                         from: from ? Number(from) : undefined,
                         to: to ? Number(to) : undefined,
                         combine_chunks,
+                        job_io: dynamicSettings,
+                        auto_merge: dynamicSettings ? {job_io: dynamicSettings} : undefined,
                     }),
                 );
             } catch (e) {
@@ -95,6 +103,7 @@ export default function TableEraseModal() {
                     type: 'tumbler',
                     caption: i18n('field_combine-chunks'),
                 },
+                ...getAlterOutputToDynamicFields<FormValues>(),
                 ...(!error
                     ? []
                     : [

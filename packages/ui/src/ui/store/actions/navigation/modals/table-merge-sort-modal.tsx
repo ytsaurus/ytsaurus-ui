@@ -116,11 +116,23 @@ export function tableSortModalLoadColumns(
     };
 }
 
+export interface TableWriterSettings {
+    block_size: number;
+    desired_chunk_size: number;
+}
+
+export const DYNAMIC_TABLE_WRITER_SETTINGS: TableWriterSettings = {
+    block_size: 256 * 1024,
+    desired_chunk_size: 100 * 1024 * 1024,
+};
+
 interface SortParams {
     input_table_paths: Array<string>;
     output_table_path: {$value: string; $attributes: Record<string, string>};
     sort_by: Array<{name: string; sort_order: 'ascending' | 'descending'}>;
     pool?: string;
+    sort_job_io?: {table_writer: TableWriterSettings};
+    auto_merge?: {job_io: {table_writer: TableWriterSettings}};
 }
 
 export function runTableSort(spec: SortParams): TableMergeSortThunkAction {
@@ -188,6 +200,8 @@ interface MergeParams {
     output_table_path: string;
     merge_by: Array<string>;
     mode: 'unordered' | 'sorted' | 'ordered';
+    job_io?: {table_writer: TableWriterSettings};
+    auto_merge?: {job_io: {table_writer: TableWriterSettings}};
 }
 
 export function runTableMerge(spec: MergeParams): TableMergeSortThunkAction {
