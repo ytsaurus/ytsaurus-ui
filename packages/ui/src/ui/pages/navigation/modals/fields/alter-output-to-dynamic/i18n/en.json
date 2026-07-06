@@ -1,0 +1,4 @@
+{
+  "field_prepare-to-dynamic-mode": "Prepare for dynamic mode",
+  "alert_prepare-to-dynamic-mode-info": "The system will pick appropriate chunk and block sizes suitable to convert the table to dynamic mode, otherwise the table may become inconvertible. The table will not be converted to dynamic mode automatically — you need to do it yourself via alter-table --dynamic."
+}

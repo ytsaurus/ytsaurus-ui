@@ -13,6 +13,7 @@ import {
     selectNavigationTableSortSuggestColumns,
 } from '../../../../store/selectors/navigation/modals/table-merge-sort-modal';
 import {
+    DYNAMIC_TABLE_WRITER_SETTINGS,
     hideTableMergeModal,
     isPathStaticTable,
     runTableMerge,
@@ -24,7 +25,9 @@ import {parseBytes} from '../../../../utils/parse/parse-bytes';
 import {docsUrl} from '../../../../config';
 import UIFactory from '../../../../UIFactory';
 import {WaitForDefaultPoolTree} from '../../../../hooks/global-pool-trees';
+import {getAlterOutputToDynamicFields} from '../fields/alter-output-to-dynamic/alter-output-to-dynamic';
 import i18n from './i18n';
+
 
 export default function TableMergeModal() {
     const login = useSelector(selectCurrentUserName);
@@ -52,10 +55,14 @@ export default function TableMergeModal() {
                     chunkSize,
                     force_transform,
                     combine_chunks,
+                    alterOutputToDynamic,
                 } = values;
                 const chunkSizeBytes = parseBytes(chunkSize);
                 const data_size_per_job = isNaN(chunkSizeBytes) ? undefined : chunkSizeBytes;
                 const pool_trees = poolTree.length ? poolTree : undefined;
+                const dynamicSettings = alterOutputToDynamic
+                    ? {table_writer: DYNAMIC_TABLE_WRITER_SETTINGS}
+                    : undefined;
                 await dispatch(
                     runTableMerge(
                         pickBy_(
@@ -72,6 +79,8 @@ export default function TableMergeModal() {
                                 data_size_per_job,
                                 force_transform,
                                 combine_chunks,
+                                job_io: dynamicSettings,
+                                auto_merge: dynamicSettings ? {job_io: dynamicSettings} : undefined,
                             },
                             Boolean,
                         ) as any,
@@ -204,6 +213,7 @@ export default function TableMergeModal() {
                             type: 'tumbler',
                             caption: i18n('field_force-transform'),
                         },
+                        ...getAlterOutputToDynamicFields<FormValues>(),
                         ...(!error
                             ? []
                             : [
@@ -244,4 +254,5 @@ interface FormValues {
     chunkSize: string;
     force_transform: boolean;
     combine_chunks: boolean;
+    alterOutputToDynamic: boolean;
 }

@@ -10,6 +10,7 @@ import {AppStoreProvider} from '../../../../containers/App/AppStoreProvider';
 import {OperationShortInfo} from '../../../../pages/components/OperationShortInfo/OperationShortInfo';
 import {makeUiMarker} from '../../../../utils/cypress-attributes';
 import {Page} from '../../../../constants';
+import {type TableWriterSettings} from './table-merge-sort-modal';
 
 export function showTableEraseModal(path: string) {
     return {type: TABLE_ERASE_MODAL_PARTIAL, data: {visible: true, path}};
@@ -29,11 +30,15 @@ export function runTableErase({
     from,
     to,
     combine_chunks,
+    job_io,
+    auto_merge,
 }: {
     path: string;
     from?: number;
     to?: number;
     combine_chunks?: boolean;
+    job_io?: {table_writer: TableWriterSettings};
+    auto_merge?: {job_io: {table_writer: TableWriterSettings}};
 }): EraseThunkAction {
     return () => {
         if (!path) {
@@ -48,12 +53,20 @@ export function runTableErase({
             range = `[:#${to}]`;
         }
 
+        const spec: Record<string, unknown> = {
+            table_path: path + range,
+            combine_chunks,
+        };
+        if (job_io) {
+            spec.job_io = job_io;
+        }
+        if (auto_merge) {
+            spec.auto_merge = auto_merge;
+        }
+
         return wrapApiPromiseByToaster(
             yt.v3.erase({
-                spec: {
-                    table_path: path + range,
-                    combine_chunks,
-                },
+                spec,
                 ...makeUiMarker(`${Page.NAVIGATION}:erase`),
             }),
             {

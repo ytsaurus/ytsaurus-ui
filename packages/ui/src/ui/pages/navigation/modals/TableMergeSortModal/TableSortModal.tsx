@@ -13,6 +13,7 @@ import {
     selectNavigationTableSortVisible,
 } from '../../../../store/selectors/navigation/modals/table-merge-sort-modal';
 import {
+    DYNAMIC_TABLE_WRITER_SETTINGS,
     hideTableSortModal,
     isPathStaticTable,
     runTableSort,
@@ -25,6 +26,7 @@ import {type ColumnSortByInfo} from './TableSortByControl';
 import {docsUrl} from '../../../../config';
 import UIFactory from '../../../../UIFactory';
 import {WaitForDefaultPoolTree} from '../../../../hooks/global-pool-trees';
+import {getAlterOutputToDynamicFields} from '../fields/alter-output-to-dynamic/alter-output-to-dynamic';
 import i18n from './i18n';
 
 const block = cn('table-sort-modal');
@@ -45,7 +47,11 @@ export default function TableSortModal() {
         async (form: any) => {
             try {
                 const {values} = form.getState();
-                const {paths, outputPath, columns, pool, poolTree} = values;
+                const {paths, outputPath, columns, pool, poolTree, alterOutputToDynamic} = values;
+
+                const dynamicSettings = alterOutputToDynamic
+                    ? {table_writer: DYNAMIC_TABLE_WRITER_SETTINGS}
+                    : undefined;
 
                 const spec = Object.assign(
                     {
@@ -65,6 +71,8 @@ export default function TableSortModal() {
                     },
                     pool ? {pool} : {},
                     poolTree.length ? {pool_trees: poolTree} : {},
+                    dynamicSettings ? {sort_job_io: dynamicSettings} : {},
+                    dynamicSettings ? {auto_merge: {job_io: dynamicSettings}} : {},
                 );
 
                 await dispatch(runTableSort(spec));
@@ -188,6 +196,7 @@ export default function TableSortModal() {
                                 };
                             },
                         },
+                        ...getAlterOutputToDynamicFields<FormValues>(),
                         ...errorFields,
                     ]}
                 />
@@ -202,4 +211,5 @@ interface FormValues {
     columns: Array<string>;
     poolTree: string[];
     pool: string;
+    alterOutputToDynamic: boolean;
 }
