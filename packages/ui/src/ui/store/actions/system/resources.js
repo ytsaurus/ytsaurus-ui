@@ -4,6 +4,8 @@ import {showErrorPopup} from '../../../utils/utils';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 import {toaster} from '../../../utils/toaster';
+import {GLOBAL_PARTIAL} from '../../../constants/global';
+import {calculateAndDispatchUncommittedDiskSpace} from '../../../utils/diskSpaceProgress';
 
 export const FETCH_RESOURCES = createActionTypes('RESOURCES');
 export const FETCH_NODE_ATTRS = createActionTypes('NODE_ATTRS');
@@ -32,11 +34,23 @@ export function loadSystemResources() {
                     ...USE_SUPRESS_SYNC,
                 },
             },
+            {
+                command: 'get',
+                parameters: {
+                    path: '//sys/accounts/root/@recursive_resource_usage/disk_space_per_medium',
+                },
+            },
+            {
+                command: 'get',
+                parameters: {
+                    path: '//sys/accounts/root/@recursive_committed_resource_usage/disk_space_per_medium',
+                },
+            },
         ];
 
         return ytApiV3Id
             .executeBatch(YTApiId.systemResources, {requests})
-            .then(([cluster, attrs]) => {
+            .then(([cluster, attrs, recursiveUsage, recursiveCommittedUsage]) => {
                 if (cluster?.error) {
                     dispatch({type: FETCH_RESOURCES.FAILURE, data: cluster.error});
                     handleError(cluster.error);
@@ -56,6 +70,16 @@ export function loadSystemResources() {
                         data: attrs.output,
                     });
                 }
+
+                const uncommittedDiskSpacePerMedium = calculateAndDispatchUncommittedDiskSpace(
+                    recursiveUsage,
+                    recursiveCommittedUsage,
+                );
+
+                dispatch({
+                    type: GLOBAL_PARTIAL,
+                    data: {uncommittedDiskSpacePerMedium},
+                });
 
                 return {
                     isRetryFutile: isRetryFutile(cluster?.error) || isRetryFutile(attrs?.error),

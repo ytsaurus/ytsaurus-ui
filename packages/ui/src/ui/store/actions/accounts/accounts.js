@@ -8,6 +8,7 @@ import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
 import {setSetting} from '../../../store/actions/settings';
 import {accountsTrackVisit} from '../../../store/actions/favourites';
 import {setAccountParent} from '../../../utils/accounts/editor';
+import {calculateAndDispatchUncommittedDiskSpace} from '../../../utils/diskSpaceProgress';
 import {
     ACCOUNTS_TABLE_ID,
     CHANGE_CONTENT_MODE_FILTER,
@@ -26,6 +27,7 @@ import {
     UPDATE_EDITABLE_ACCOUNT,
 } from '../../../constants/accounts/accounts';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../constants/accounts';
+import {GLOBAL_PARTIAL} from '../../../constants/global';
 import {USE_CACHE, USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
 import {selectCluster, selectCurrentUserName} from '../../../store/selectors/global';
 import {
@@ -101,6 +103,18 @@ export function fetchAccounts() {
                     path: '//sys/users/' + userName + '/@usable_accounts',
                 },
             },
+            {
+                command: 'get',
+                parameters: {
+                    path: '//sys/accounts/root/@recursive_resource_usage/disk_space_per_medium',
+                },
+            },
+            {
+                command: 'get',
+                parameters: {
+                    path: '//sys/accounts/root/@recursive_committed_resource_usage/disk_space_per_medium',
+                },
+            },
         ];
 
         const rumId = new RumWrapper(cluster, RumMeasureTypes.ACCOUNTS);
@@ -117,6 +131,8 @@ export function fetchAccounts() {
                     {error: resourceError, output: resources},
                     {error: nodesError, output: nodes},
                     {error: usableAccountsError, output: usableAccounts},
+                    {output: recursiveUsage},
+                    {output: recursiveCommittedUsage},
                 ] = batchData;
                 Promise.resolve(accountsError)
                     .then((e) => {
@@ -180,6 +196,16 @@ export function fetchAccounts() {
                         data: {error: usableAccountsError},
                     });
                 }
+
+                const uncommittedDiskSpacePerMedium = calculateAndDispatchUncommittedDiskSpace(
+                    recursiveUsage,
+                    recursiveCommittedUsage,
+                );
+
+                dispatch({
+                    type: GLOBAL_PARTIAL,
+                    data: {uncommittedDiskSpacePerMedium},
+                });
             });
     };
 }

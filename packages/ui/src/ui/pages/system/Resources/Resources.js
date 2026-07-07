@@ -3,21 +3,21 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import block from 'bem-cn-lite';
 
-import forEach_ from 'lodash/forEach';
-
-import {Progress} from '@gravity-ui/uikit';
-
+import {Flex, Progress} from '@gravity-ui/uikit';
 import {YTErrorBlock} from '../../../containers/Block/Block';
-import hammer from '../../../common/hammer';
-import {getMediumList} from '../../../store/selectors/thor';
+import {
+    getMediumList,
+    getSystemReservedDiskSpaceByMedium,
+    getUncommittedDiskSpaceByMedium,
+} from '../../../store/selectors/thor';
 import {loadSystemResources} from '../../../store/actions/system/resources';
 import {useDispatch} from '../../../store/redux-hooks';
 import {useUpdater} from '../../../hooks/use-updater';
+import {MetaTable, Tooltip} from '@ytsaurus/components';
+import {ColorCircle} from '../../../components/ColorCircle/ColorCircle';
+import {prepareDiskResources, prepareResources} from '../../../utils/system/resources';
 
 import './Resources.scss';
-
-const formatNumber = hammer.format.Number;
-const formatBytes = hammer.format.Bytes;
 
 const b = block('system');
 
@@ -27,74 +27,28 @@ class Resources extends Component {
         resources: PropTypes.object.isRequired,
         nodeAttributes: PropTypes.object,
         mediumList: PropTypes.arrayOf(PropTypes.string),
+        systemReservedDiskSpacePerMedium: PropTypes.object,
+        uncommittedDiskSpacePerMedium: PropTypes.object,
     };
 
-    prepareResources() {
-        const {resources} = this.props;
-        if (!resources) {
-            return [];
-        }
-        const {resource_usage: usage, resource_limits: limits} = resources;
-        return [
-            {
-                caption: 'CPU',
-                usage: {
-                    text: formatNumber(usage?.cpu) + ' / ' + formatNumber(limits?.cpu),
-                    progress: limits?.cpu ? (usage.cpu / limits.cpu) * 100 : 0,
-                },
-            },
-            {
-                caption: 'Memory',
-                usage: {
-                    text:
-                        formatBytes(usage?.user_memory) + ' / ' + formatBytes(limits?.user_memory),
-                    progress: limits?.user_memory
-                        ? (usage.user_memory / limits.user_memory) * 100
-                        : 0,
-                },
-            },
-            {
-                caption: 'GPU',
-                usage: {
-                    text: formatNumber(usage?.gpu) + ' / ' + formatNumber(limits?.gpu),
-                    progress: limits?.gpu ? (usage.gpu / limits.gpu) * 100 : 0,
-                },
-            },
-        ];
-    }
+    renderTooltipContent(tooltipItems) {
+        const items = tooltipItems.map((item) => {
+            const isTotal = item.isTotal;
+            return {
+                key: item.title || '',
+                label: isTotal ? (
+                    <span>{item.title}</span>
+                ) : (
+                    <Flex gap={2} alignItems="center">
+                        <ColorCircle theme={item.theme} color={item.color} />
+                        <span>{item.title}</span>
+                    </Flex>
+                ),
+                value: item.value,
+            };
+        });
 
-    prepareDiskResources() {
-        const {nodeAttributes, mediumList} = this.props;
-        const diskResourcesPerMedium = [];
-        if (nodeAttributes && mediumList) {
-            const {
-                available_space_per_medium: availableSpacePerMedium,
-                used_space_per_medium: usedSpacePerMedium,
-            } = nodeAttributes;
-
-            forEach_(mediumList, (medium) => {
-                const available = availableSpacePerMedium[medium];
-                const used = usedSpacePerMedium[medium];
-
-                if (available > 0 || used > 0) {
-                    const total = available + used;
-                    const caption = hammer.format['ReadableField'](medium);
-                    const progressText =
-                        hammer.format['Bytes'](used) + ' / ' + hammer.format['Bytes'](total);
-                    const progressValue = (used / total) * 100;
-
-                    diskResourcesPerMedium.push({
-                        caption,
-                        show: true,
-                        usage: {
-                            text: progressText,
-                            progress: progressValue,
-                        },
-                    });
-                }
-            });
-        }
-        return diskResourcesPerMedium;
+        return <MetaTable items={items} />;
     }
 
     renderFullNodesMessage() {
@@ -119,12 +73,22 @@ class Resources extends Component {
 
     renderResources(entries) {
         return entries.map(({caption, usage}) => {
+            const progressElement = usage.tooltipInfo ? (
+                <Tooltip
+                    className={b('resources-progress-tooltip')}
+                    placement={'bottom'}
+                    content={this.renderTooltipContent(usage.tooltipInfo)}
+                >
+                    <Progress stack={usage.stack} text={usage.text} />
+                </Tooltip>
+            ) : (
+                <Progress theme={'success'} text={usage.text} value={usage.progress} />
+            );
+
             return (
                 <div key={caption} className={b('resource')}>
                     <div className={b('resources-caption')}>{caption}</div>
-                    <div className={b('resources-progress')}>
-                        <Progress theme={'success'} text={usage.text} value={usage.progress} />
-                    </div>
+                    <div className={b('resources-progress')}>{progressElement}</div>
                 </div>
             );
         });
@@ -132,9 +96,23 @@ class Resources extends Component {
 
     renderImpl() {
         const headingCN = b('resources-heading');
-        const resources = this.prepareResources();
-        const diskResources = this.prepareDiskResources();
-        const showResources = resources.length > 0;
+        const {
+            resources,
+            nodeAttributes,
+            mediumList,
+            systemReservedDiskSpacePerMedium,
+            uncommittedDiskSpacePerMedium,
+        } = this.props;
+
+        const resourcesData = prepareResources(resources);
+        const diskResources = prepareDiskResources({
+            nodeAttributes,
+            mediumList,
+            systemReservedDiskSpacePerMedium,
+            uncommittedDiskSpacePerMedium,
+        });
+
+        const showResources = resourcesData.length > 0;
         const showDiskResources = diskResources.length > 0;
         const diskResourcesCN = b('resources-heading', b('resources-meters-disk'));
 
@@ -146,7 +124,7 @@ class Resources extends Component {
                         <div key="resources" className={headingCN}>
                             Resources
                         </div>,
-                        this.renderResources(resources),
+                        this.renderResources(resourcesData),
                     ]}
                     {showDiskResources && [
                         <div key="disk-resources" className={diskResourcesCN}>
@@ -175,6 +153,8 @@ function mapStateToProps(state) {
         resources,
         nodeAttributes,
         mediumList: getMediumList(state),
+        systemReservedDiskSpacePerMedium: getSystemReservedDiskSpaceByMedium(state),
+        uncommittedDiskSpacePerMedium: getUncommittedDiskSpaceByMedium(state),
     };
 }
 
