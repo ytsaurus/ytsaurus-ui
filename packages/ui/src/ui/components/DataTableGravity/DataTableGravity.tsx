@@ -82,7 +82,11 @@ export function DataTableGravity<TData, TScrollElement extends Element | Window>
         [rowClassName, isHighlightedRow],
     );
 
-    const {cellAttributes: cellAttrs, headerCellAttributes: headerCellAttrs} = props;
+    const {
+        cellAttributes: cellAttrs,
+        headerCellAttributes: headerCellAttrs,
+        footerCellAttributes: footerCellAttrs,
+    } = props;
 
     const cellAttributes = React.useCallback<
         Exclude<typeof props.cellAttributes & Function, undefined>
@@ -131,6 +135,29 @@ export function DataTableGravity<TData, TScrollElement extends Element | Window>
         [headerCellAttrs],
     );
 
+    const footerCellAttributes = React.useCallback<
+        Exclude<typeof props.footerCellAttributes & Function, undefined>
+    >(
+        (footer) => {
+            const res =
+                typeof footerCellAttrs === 'function' ? footerCellAttrs(footer) : footerCellAttrs;
+
+            const style = {...getCellStyles(footer)};
+            if (style.left !== undefined) {
+                Object.assign(style, {left: `calc(${style.left} + var(--gn-aside-header-size))`});
+            }
+
+            return {
+                ...res,
+                style: {
+                    ...res?.style,
+                    ...style,
+                },
+            };
+        },
+        [footerCellAttrs],
+    );
+
     return (
         <div className={block({virtualized}, className)} ref={setElement}>
             <Table
@@ -139,8 +166,9 @@ export function DataTableGravity<TData, TScrollElement extends Element | Window>
                 rowClassName={rowClassNameFn}
                 {...virtualizerProps}
                 {...props}
-                cellAttributes={cellAttributes}
                 headerCellAttributes={headerCellAttributes}
+                cellAttributes={cellAttributes}
+                footerCellAttributes={footerCellAttributes}
                 renderSortIndicator={(sortProps) => {
                     if (renderSortIndicator) {
                         return renderSortIndicator(sortProps);

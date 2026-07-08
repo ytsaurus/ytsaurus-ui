@@ -24,7 +24,7 @@
     .gt-table__cell_pinned-right,
     .gt-table__header-cell_pinned-left,
     .gt-table__cell_pinned-left {
-        background-color: var(--main-background);
+        background-color: var(--yt-table-background-color, var(--main-background));
         opacity: 0.9;
     }
 

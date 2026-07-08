@@ -1,11 +1,10 @@
+import {DropdownMenu, Flex, Progress, Text} from '@gravity-ui/uikit';
+import {MetaTable, Tooltip, YTText} from '@ytsaurus/components';
 import cn from 'bem-cn-lite';
 import moment from 'moment';
 import React from 'react';
-
-import {DropdownMenu, Flex, Progress, Text} from '@gravity-ui/uikit';
-
+import {type KeysByType} from '../../../../../../../@types/types';
 import format from '../../../../../../common/hammer/format';
-
 import ColumnHeader, {
     type ColumnHeaderProps,
 } from '../../../../../../components/ColumnHeader/ColumnHeader';
@@ -21,20 +20,8 @@ import {
     type FormatNumberProps,
 } from '../../../../../../components/FormatNumber/FormatNumber';
 import Label from '../../../../../../components/Label';
-import {MetaTable, Tooltip} from '@ytsaurus/components';
 import {OperationType} from '../../../../../../components/OperationType/OperationType';
 import {SubjectCard} from '../../../../../../components/SubjectLink/SubjectLink';
-import {selectSchedulingOperationsLoading} from '../../../../../../store/selectors/scheduling/expanded-pools';
-import {
-    selectSchedulingContentMode,
-    selectSchedulingLoading,
-    selectSchedulingOverviewTableItems,
-    selectSchedulingShowAbsResources,
-    selectSchedulingSortState,
-    selectSchedulingTreeMainResource,
-} from '../../../../../../store/selectors/scheduling/scheduling';
-
-import {type KeysByType} from '../../../../../../../@types/types';
 import {formatTimeDuration} from '../../../../../../components/TimeDuration/TimeDuration';
 import {useSettingsColumnSizes} from '../../../../../../hooks/settings/use-settings-column-sizes';
 import {useSettingsVisibleColumns} from '../../../../../../hooks/settings/use-settings-column-visibility';
@@ -48,7 +35,17 @@ import {
 import {openPoolDeleteModal} from '../../../../../../store/actions/scheduling/scheduling-ts';
 import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
 import {selectSchedulingOperationRefId} from '../../../../../../store/selectors/scheduling/attributes-to-filter';
+import {selectSchedulingOperationsLoading} from '../../../../../../store/selectors/scheduling/expanded-pools';
 import {selectSchedulingOverivewColumns} from '../../../../../../store/selectors/scheduling/overview-columns';
+import {
+    selectSchedulingChildrenAggregatedRow,
+    selectSchedulingContentMode,
+    selectSchedulingLoading,
+    selectSchedulingOverviewTableItems,
+    selectSchedulingShowAbsResources,
+    selectSchedulingSortState,
+    selectSchedulingTreeMainResource,
+} from '../../../../../../store/selectors/scheduling/scheduling';
 import {getProgressTheme} from '../../../../../../utils/progress';
 import {
     type SchedulingColumn,
@@ -112,6 +109,9 @@ export function SchedulingTable() {
 
     return (
         <DataTableGravity
+            withFooter
+            stickyFooter
+            footerClassName={block('footer')}
             className={block()}
             table={table}
             virtualized
@@ -210,6 +210,7 @@ type KeyByGetterReturnType<T> =
 
 function makeNumberColumn(
     id: KeyByGetterReturnType<number | undefined>,
+    aggregationRow: RowData | undefined,
     {
         type = 'NumberSmart',
         ...rest
@@ -219,7 +220,7 @@ function makeNumberColumn(
     return {
         id,
         header: () => <SchedulingColumnHeader column={id} />,
-        cell: ({row: {original: item}}: tanstack.CellContext<RowData, unknown>) => {
+        ...cellAndFooter(aggregationRow, (item) => {
             let value: number | undefined;
             if ('sort' in info && 'function' === typeof info.sort) {
                 value = info.sort(item);
@@ -232,7 +233,7 @@ function makeNumberColumn(
                     <FormatNumber value={value} type={type} {...rest} />
                 </TableCell>
             );
-        },
+        }),
     };
 }
 
@@ -266,8 +267,25 @@ type SchedulingColumnDef = Omit<tanstack.ColumnDef<RowData>, 'id'> & {id: Schedu
 
 const DurationMemo = React.memo(Duration);
 
+function cellAndFooter(
+    aggregationRow: RowData | undefined,
+    renderItem: (item: RowData) => React.ReactNode,
+): Pick<SchedulingColumnDef, 'cell' | 'footer'> {
+    if (!aggregationRow) {
+        return {
+            cell: ({row: {original: item}}) => renderItem(item),
+        };
+    }
+    return {
+        cell: ({row: {original: item}}) => renderItem(item),
+        footer: () => renderItem(aggregationRow),
+    };
+}
+
 function useSchedulingTableColumns() {
     const visibleColumns = useSchedulingVisibleColumns();
+
+    const aggregationRow = useSelector(selectSchedulingChildrenAggregatedRow);
 
     const columns = React.useMemo(() => {
         const availableColumns: Array<SchedulingColumnDef> = [
@@ -284,6 +302,13 @@ function useSchedulingTableColumns() {
                 },
                 enableColumnFilter: false,
                 enableHiding: false,
+                ...(aggregationRow
+                    ? {
+                          footer: () => {
+                              return <YTText bold>{i18n('title_aggregation')}</YTText>;
+                          },
+                      }
+                    : {}),
             },
             {
                 id: 'weight',
@@ -294,7 +319,7 @@ function useSchedulingTableColumns() {
                         allowUnordered
                     />
                 ),
-                cell: ({row: {original: item}}) => {
+                ...cellAndFooter(aggregationRow, (item) => {
                     const {weightEdited = NaN, type, weight} = item;
                     return (
                         <TableCell>
@@ -309,7 +334,7 @@ function useSchedulingTableColumns() {
                             )}
                         </TableCell>
                     );
-                },
+                }),
                 size: 100,
             },
             {
@@ -373,13 +398,13 @@ function useSchedulingTableColumns() {
                         allowUnordered
                     />
                 ),
-                cell: ({row: {original: item}}) => {
+                ...cellAndFooter(aggregationRow, (item) => {
                     return (
                         <TableCell justifyContent="center">
                             <FairShareUsage item={item} />
                         </TableCell>
                     );
-                },
+                }),
             },
             {
                 id: 'usage',
@@ -400,13 +425,13 @@ function useSchedulingTableColumns() {
                         ]}
                     />
                 ),
-                cell: ({row: {original: item}}) => {
+                ...cellAndFooter(aggregationRow, (item) => {
                     return (
                         <TableCell>
                             <ResourceSummary item={item} type="usage" />
                         </TableCell>
                     );
-                },
+                }),
                 size: 100,
             },
             {
@@ -428,13 +453,13 @@ function useSchedulingTableColumns() {
                         ]}
                     />
                 ),
-                cell: ({row: {original: item}}) => {
+                ...cellAndFooter(aggregationRow, (item) => {
                     return (
                         <TableCell>
                             <ResourceSummary item={item} type="demand" />
                         </TableCell>
                     );
-                },
+                }),
                 size: 100,
             },
             {
@@ -468,13 +493,13 @@ function useSchedulingTableColumns() {
                         ]}
                     />
                 ),
-                cell: ({row: {original: item}}) => {
+                ...cellAndFooter(aggregationRow, (item) => {
                     return (
                         <TableCell>
                             <ResourceSummary item={item} type="effectiveGuaranteed" />
                         </TableCell>
                     );
-                },
+                }),
                 size: 100,
             },
             {
@@ -498,7 +523,7 @@ function useSchedulingTableColumns() {
                         ]}
                     />
                 ),
-                cell: ({row: {original: item}}) => {
+                ...cellAndFooter(aggregationRow, (item) => {
                     const {
                         maxOperationCount,
                         maxOperationCountEdited,
@@ -523,7 +548,7 @@ function useSchedulingTableColumns() {
                             </Text>
                         </TableCell>
                     );
-                },
+                }),
                 size: 120,
             },
             {
@@ -584,7 +609,7 @@ function useSchedulingTableColumns() {
                         ]}
                     />
                 ),
-                cell: ({row: {original: item}}) => {
+                ...cellAndFooter(aggregationRow, (item) => {
                     const info = childTableItems.operation_progress;
                     const value = info.get(item);
                     const theme = getProgressTheme(value);
@@ -594,7 +619,7 @@ function useSchedulingTableColumns() {
                     ) : (
                         <Progress value={value * 100} theme={theme} text={text} />
                     );
-                },
+                }),
             },
             {
                 id: 'running_operation_progress',
@@ -621,7 +646,7 @@ function useSchedulingTableColumns() {
                         ]}
                     />
                 ),
-                cell: ({row: {original: item}}) => {
+                ...cellAndFooter(aggregationRow, (item) => {
                     const info = childTableItems.running_operation_progress;
                     const value = info.get(item);
                     const theme = getProgressTheme(value);
@@ -631,46 +656,61 @@ function useSchedulingTableColumns() {
                     ) : (
                         <Progress value={value * 100} theme={theme} text={text} />
                     );
-                },
+                }),
             },
-            makeNumberColumn('abs_demand_cpu', {hideApproximateChar: true}),
-            makeNumberColumn('abs_demand_gpu', {hideApproximateChar: true}),
-            makeNumberColumn('abs_demand_memory', {type: 'Bytes', hideApproximateChar: true}),
-            makeNumberColumn('abs_demand_user_slots'),
-            makeNumberColumn('abs_guaranteed_cpu', {hideApproximateChar: true}),
-            makeNumberColumn('abs_guaranteed_gpu', {hideApproximateChar: true}),
-            makeNumberColumn('abs_guaranteed_memory', {type: 'Bytes', hideApproximateChar: true}),
-            makeNumberColumn('abs_guaranteed_user_slots'),
-            makeNumberColumn('abs_usage_cpu', {hideApproximateChar: true}),
-            makeNumberColumn('abs_usage_gpu', {hideApproximateChar: true}),
-            makeNumberColumn('abs_usage_memory', {type: 'Bytes', hideApproximateChar: true}),
-            makeNumberColumn('abs_usage_user_slots'),
-            makeNumberColumn('accumulated'),
-            makeNumberColumn('burst_cpu'),
-            makeNumberColumn('burst_duration'),
-            makeNumberColumn('children_burst_cpu'),
-            makeNumberColumn('children_flow_cpu'),
-            makeNumberColumn('flow_cpu'),
-            makeReadableFieldColumn('integral_type'),
-            makeNumberColumn('max_operation_count'),
-            makeNumberColumn('max_running_operation_count'),
-            makeNumberColumn('min_resources_cpu', {hideApproximateChar: true}),
-            makeNumberColumn('min_resources_gpu', {hideApproximateChar: true}),
-            makeNumberColumn('min_resources_memory', {type: 'Bytes', hideApproximateChar: true}),
-            makeNumberColumn('min_resources_user_slots'),
-            makeNumberColumn('operation_count'),
-            makeNumberColumn('resource_detailed_cpu', {hideApproximateChar: true}),
-            makeNumberColumn('resource_detailed_gpu', {hideApproximateChar: true}),
-            makeNumberColumn('resource_detailed_memory', {
+            makeNumberColumn('abs_demand_cpu', aggregationRow, {hideApproximateChar: true}),
+            makeNumberColumn('abs_demand_gpu', aggregationRow, {hideApproximateChar: true}),
+            makeNumberColumn('abs_demand_memory', aggregationRow, {
                 type: 'Bytes',
                 hideApproximateChar: true,
             }),
-            makeNumberColumn('resource_detailed_user_slots'),
-            makeNumberColumn('resource_limit_cpu'),
-            makeNumberColumn('resource_limit_gpu'),
-            makeNumberColumn('resource_limit_memory', {type: 'Bytes', hideApproximateChar: true}),
-            makeNumberColumn('resource_limit_user_slots'),
-            makeNumberColumn('running_operation_count'),
+            makeNumberColumn('abs_demand_user_slots', aggregationRow),
+            makeNumberColumn('abs_guaranteed_cpu', aggregationRow, {hideApproximateChar: true}),
+            makeNumberColumn('abs_guaranteed_gpu', aggregationRow, {hideApproximateChar: true}),
+            makeNumberColumn('abs_guaranteed_memory', aggregationRow, {
+                type: 'Bytes',
+                hideApproximateChar: true,
+            }),
+            makeNumberColumn('abs_guaranteed_user_slots', aggregationRow),
+            makeNumberColumn('abs_usage_cpu', aggregationRow, {hideApproximateChar: true}),
+            makeNumberColumn('abs_usage_gpu', aggregationRow, {hideApproximateChar: true}),
+            makeNumberColumn('abs_usage_memory', aggregationRow, {
+                type: 'Bytes',
+                hideApproximateChar: true,
+            }),
+            makeNumberColumn('abs_usage_user_slots', aggregationRow),
+            makeNumberColumn('accumulated', aggregationRow),
+            makeNumberColumn('burst_cpu', aggregationRow),
+            makeNumberColumn('burst_duration', aggregationRow),
+            makeNumberColumn('children_burst_cpu', aggregationRow),
+            makeNumberColumn('children_flow_cpu', aggregationRow),
+            makeNumberColumn('flow_cpu', aggregationRow),
+            makeReadableFieldColumn('integral_type'),
+            makeNumberColumn('max_operation_count', aggregationRow),
+            makeNumberColumn('max_running_operation_count', aggregationRow),
+            makeNumberColumn('min_resources_cpu', aggregationRow, {hideApproximateChar: true}),
+            makeNumberColumn('min_resources_gpu', aggregationRow, {hideApproximateChar: true}),
+            makeNumberColumn('min_resources_memory', aggregationRow, {
+                type: 'Bytes',
+                hideApproximateChar: true,
+            }),
+            makeNumberColumn('min_resources_user_slots', aggregationRow),
+            makeNumberColumn('operation_count', aggregationRow),
+            makeNumberColumn('resource_detailed_cpu', aggregationRow, {hideApproximateChar: true}),
+            makeNumberColumn('resource_detailed_gpu', aggregationRow, {hideApproximateChar: true}),
+            makeNumberColumn('resource_detailed_memory', aggregationRow, {
+                type: 'Bytes',
+                hideApproximateChar: true,
+            }),
+            makeNumberColumn('resource_detailed_user_slots', aggregationRow),
+            makeNumberColumn('resource_limit_cpu', aggregationRow),
+            makeNumberColumn('resource_limit_gpu', aggregationRow),
+            makeNumberColumn('resource_limit_memory', aggregationRow, {
+                type: 'Bytes',
+                hideApproximateChar: true,
+            }),
+            makeNumberColumn('resource_limit_user_slots', aggregationRow),
+            makeNumberColumn('running_operation_count', aggregationRow),
             {
                 id: 'actions',
                 header: (ctx) => {
@@ -687,7 +727,7 @@ function useSchedulingTableColumns() {
         ];
 
         return availableColumns;
-    }, []);
+    }, [aggregationRow]);
 
     const {columnVisibility, columnOrder} = React.useMemo(() => {
         const visible = new Set(visibleColumns);
@@ -839,8 +879,8 @@ function Duration({start}: {start?: string}) {
 function RowActions({item}: {item: RowData}) {
     const dispatch = useDispatch();
 
-    const {type, isEphemeral} = item;
-    const editable = !isEphemeral && type === 'pool';
+    const {type, isEphemeral, isAggregationRow} = item;
+    const editable = !isEphemeral && type === 'pool' && !isAggregationRow;
 
     return (
         editable && (
