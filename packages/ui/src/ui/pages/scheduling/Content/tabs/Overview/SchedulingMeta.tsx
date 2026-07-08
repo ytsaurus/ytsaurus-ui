@@ -51,8 +51,8 @@ export function SchedulingMeta() {
         const res = {
             items: [
                 [
-                    {key: 'mode', label: i18n('mode'), value: format.ReadableField(mode)},
-                    {key: 'weight', label: i18n('weight'), value: format.Number(weight)},
+                    {key: 'mode', label: i18n('field_mode'), value: format.ReadableField(mode)},
+                    {key: 'weight', label: i18n('field_weight'), value: format.Number(weight)},
                     {
                         key: 'operations-running',
                         label: i18n('operations-running'),

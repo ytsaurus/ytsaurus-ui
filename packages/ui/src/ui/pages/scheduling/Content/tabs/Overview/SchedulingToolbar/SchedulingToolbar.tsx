@@ -1,28 +1,32 @@
 import cn from 'bem-cn-lite';
 import React from 'react';
 
-import {SegmentedRadioGroup, Switch} from '@gravity-ui/uikit';
+import {Label, SegmentedRadioGroup, Switch} from '@gravity-ui/uikit';
 
-import {DialogWrapper} from '../../../../../components/DialogWrapper/DialogWrapper';
-import {ExpandButton} from '../../../../../components/ExpandButton';
-import {Toolbar} from '../../../../../components/WithStickyToolbar/Toolbar/Toolbar';
-import {setLoadAllOperations} from '../../../../../store/actions/scheduling/expanded-pools';
+import {DialogWrapper} from '../../../../../../components/DialogWrapper/DialogWrapper';
+import {ExpandButton} from '../../../../../../components/ExpandButton';
+import {Toolbar} from '../../../../../../components/WithStickyToolbar/Toolbar/Toolbar';
+import {setLoadAllOperations} from '../../../../../../store/actions/scheduling/expanded-pools';
 import {
     schedulingChangeContentMode,
+    schedulingClearOperationRef,
     schedulingSetShowAbsResources,
-} from '../../../../../store/actions/scheduling/scheduling';
-import {schedulingSetAbcFilter} from '../../../../../store/actions/scheduling/scheduling-ts';
-import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
-import {selectSchedulingAbcFilter} from '../../../../../store/selectors/scheduling/attributes-to-filter';
-import {selectExpandedPoolsLoadAll} from '../../../../../store/selectors/scheduling/expanded-pools';
+} from '../../../../../../store/actions/scheduling/scheduling';
+import {schedulingSetAbcFilter} from '../../../../../../store/actions/scheduling/scheduling-ts';
+import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
+import {
+    selectSchedulingAbcFilter,
+    selectSchedulingOperationRefId,
+} from '../../../../../../store/selectors/scheduling/attributes-to-filter';
+import {selectExpandedPoolsLoadAll} from '../../../../../../store/selectors/scheduling/expanded-pools';
 import {
     SCHEDULING_CONTENT_MODES,
     selectSchedulingContentMode,
     selectSchedulingShowAbsResources,
-} from '../../../../../store/selectors/scheduling/scheduling';
+} from '../../../../../../store/selectors/scheduling/scheduling';
 
-import {PoolsSuggest} from '../../../../../pages/scheduling/PoolsSuggest/PoolsSuggest';
-import UIFactory from '../../../../../UIFactory';
+import {PoolsSuggest} from '../../../../PoolsSuggest/PoolsSuggest';
+import UIFactory from '../../../../../../UIFactory';
 import i18n from './i18n';
 
 import './SchedulingToolbar.scss';
@@ -45,8 +49,26 @@ export function SchedulingToolbar() {
                 ...(mode === 'summary' || mode === 'custom'
                     ? [{node: <SchedulingShowAbsResources />}]
                     : []),
+                {node: <OperationRefBadge />},
             ]}
         />
+    );
+}
+
+function OperationRefBadge() {
+    const dispatch = useDispatch();
+    const operationRefId = useSelector(selectSchedulingOperationRefId);
+
+    if (!operationRefId) return null;
+
+    return (
+        <Label
+            type="close"
+            theme="info"
+            onCloseClick={() => dispatch(schedulingClearOperationRef())}
+        >
+            {i18n('context_scroll-to-operation', {operationRefId})}
+        </Label>
     );
 }
 

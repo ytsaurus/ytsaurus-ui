@@ -379,6 +379,13 @@ export function schedulingSetShowAbsResources(showAbsResources: boolean): Schedu
     };
 }
 
+export function schedulingClearOperationRef(): SchedulingAction {
+    return {
+        type: SCHEDULING_DATA_PARTITION,
+        data: {operationRefId: undefined},
+    };
+}
+
 export function schedulingDataFailure(error: YTError): SchedulingAction {
     return {
         type: SCHEDULING_DATA_FAILURE,
