@@ -77,6 +77,7 @@ function preparePoolChildResource<T extends 'pool' | 'operation'>(
 export type PoolData<T extends 'pool' | 'operation'> = {
     type: T;
     pool?: string;
+    isAggregationRow?: boolean;
     attributes?: {
         accumulated_resource_volume?: Record<PoolResourceType, number | undefined>;
         integral_pool_capacity?: Record<PoolResourceType, number | undefined>;

@@ -24,4 +24,14 @@
     &__duration {
         white-space: nowrap;
     }
+
+    &__footer {
+        .gt-table__footer-row {
+            height: 48px;
+        }
+        .gt-table__footer-cell {
+            --yt-table-background-color: var(--g-color-base-generic-ultralight);
+            background-color: var(--yt-table-background-color);
+        }
+    }
 }

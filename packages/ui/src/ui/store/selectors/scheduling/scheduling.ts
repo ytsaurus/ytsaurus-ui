@@ -8,24 +8,24 @@ import * as treeList from '../../../common/hammer/tree-list';
 import {createSelector} from 'reselect';
 import {selectCluster} from '../../../store/selectors/global';
 
-import {prepareResources} from '../../../utils/scheduling/overview';
 import {childTableItems} from '../../../utils/scheduling/detailsTable';
+import {prepareResources} from '../../../utils/scheduling/overview';
 
 import {ROOT_POOL_NAME} from '../../../constants/scheduling';
 
 import {type OldSortState} from '../../../types';
 
-import {selectPools as selectPoolsImpl, selectSchedulingPoolsMapByName} from './scheduling-pools';
 import {type RootState} from '../../../store/reducers';
 import {isAbcPoolName, isTopLevelPool} from '../../../utils/scheduling/pool';
 import {type PoolTreeNode} from '../../../utils/scheduling/pool-child';
 import {orderTypeToOldSortState} from '../../../utils/sort-helpers';
 import {visitTreeItems} from '../../../utils/utils';
-import {selectSchedulingOperationsExpandedPools} from './expanded-pools';
 import {
     selectSchedulingAttributesToFilter,
     selectSchedulingFilteredPoolNames,
 } from './attributes-to-filter';
+import {selectSchedulingOperationsExpandedPools} from './expanded-pools';
+import {selectPools as selectPoolsImpl, selectSchedulingPoolsMapByName} from './scheduling-pools';
 
 export const selectPools = selectPoolsImpl;
 
@@ -195,6 +195,8 @@ const selectSchedulingOverviewFilteredTree = createSelector(
     },
 );
 
+type RowData = ReturnType<typeof selectSchedulingOverviewTableItems>[number];
+
 export const selectSchedulingOverviewTableItems = createSelector(
     [selectSchedulingOverviewFilteredTree, selectSchedulingEffectiveSortState],
     (filteredTree, sortState) => {
@@ -217,6 +219,101 @@ export const selectSchedulingOverviewTableItems = createSelector(
         }
 
         return [];
+    },
+);
+
+type AggResources = NonNullable<PoolTreeNode['resources']>;
+
+function aggregateChildrenResources(children: Array<PoolTreeNode>): AggResources {
+    const resourceTypes = ['cpu', 'gpu', 'user_memory', 'user_slots'] as const;
+    const resourceFields = [
+        'usage',
+        'demand',
+        'guaranteed',
+        'effectiveGuaranteed',
+        'min',
+        'detailed',
+        'limit',
+    ] as const;
+
+    const result: AggResources = {};
+
+    for (const resource of resourceTypes) {
+        const hasAnyValue = children.some((child) => child.resources?.[resource]);
+        if (!hasAnyValue) continue;
+
+        const aggregated: NonNullable<AggResources[typeof resource]> = {};
+        for (const field of resourceFields) {
+            let total = 0;
+            let hasValue = false;
+            for (const child of children) {
+                if (child.incomplete) continue;
+                const val = child.resources?.[resource]?.[field];
+                if (typeof val === 'number' && !isNaN(val)) {
+                    total += val;
+                    hasValue = true;
+                }
+            }
+            if (hasValue) {
+                aggregated[field] = total;
+            }
+        }
+        result[resource] = aggregated;
+    }
+
+    return result;
+}
+
+function sumChildrenField(
+    children: Array<PoolTreeNode>,
+    field: keyof PoolTreeNode,
+): number | undefined {
+    let total = 0;
+    let hasValue = false;
+    for (const child of children) {
+        if (child.incomplete) continue;
+        const val = child[field];
+        if (typeof val === 'number' && !isNaN(val)) {
+            total += val;
+            hasValue = true;
+        }
+    }
+    return hasValue ? total : undefined;
+}
+
+export const selectSchedulingChildrenAggregatedRow = createSelector(
+    [selectCurrentPool],
+    (currentPool): RowData | undefined => {
+        const {children = []} = currentPool || {};
+        if (children.length < 1) {
+            return undefined;
+        }
+
+        const aggregationRow = {
+            type: 'pool' as const,
+            name: '##children-aggregation##',
+            isAggregationRow: true,
+            level: 1,
+            attributes: {},
+            leaves: [],
+            children: [],
+            resources: aggregateChildrenResources(children),
+            operationCount: sumChildrenField(children, 'operationCount'),
+            maxOperationCount: sumChildrenField(children, 'maxOperationCount'),
+            runningOperationCount: sumChildrenField(children, 'runningOperationCount'),
+            maxRunningOperationCount: sumChildrenField(children, 'maxRunningOperationCount'),
+            burstCPU: sumChildrenField(children, 'burstCPU'),
+            flowCPU: sumChildrenField(children, 'flowCPU'),
+            childrenBurstCPU: sumChildrenField(children, 'childrenBurstCPU'),
+            childrenFlowCPU: sumChildrenField(children, 'childrenFlowCPU'),
+            accumulated: sumChildrenField(children, 'accumulated'),
+            burstDuration: sumChildrenField(children, 'burstDuration'),
+            weight: sumChildrenField(children, 'weight'),
+            fairShareRatio: sumChildrenField(children, 'fairShareRatio'),
+            usageRatio: sumChildrenField(children, 'usageRatio'),
+        };
+
+        return aggregationRow as unknown as RowData;
     },
 );
 
