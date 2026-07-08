@@ -13,9 +13,14 @@ PageHead.propTypes = {
 function PageHead({title, cluster}: {title: string; cluster?: string}) {
     const {favicon} = getClusterAppearance(cluster) || {};
 
+    React.useLayoutEffect(() => {
+        const links = document.head.querySelectorAll<HTMLLinkElement>('link[rel="icon"]');
+        links.forEach((link) => link.parentNode?.removeChild(link));
+    }, []);
+
     return (
-        <Helmet key="helmet">
-            <link rel="shortcut icon" href={favicon} />
+        <Helmet>
+            <link rel="icon" href={favicon} />
             <title>{title}</title>
         </Helmet>
     );
