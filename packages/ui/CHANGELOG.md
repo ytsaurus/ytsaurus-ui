@@ -5,7 +5,7 @@
 
 ### Bug Fixes
 
-* **Dockerfile:** do not show nginx weilcome page [[#1694](https://github.com/ytsaurus/ytsaurus-ui/issues/1694)] ([5aa72ec](https://github.com/ytsaurus/ytsaurus-ui/commit/5aa72eceda1d7d187a1c440840ac9ae851976b40))
+* **Dockerfile:** do not show nginx welcome page [[#1694](https://github.com/ytsaurus/ytsaurus-ui/issues/1694)] ([5aa72ec](https://github.com/ytsaurus/ytsaurus-ui/commit/5aa72eceda1d7d187a1c440840ac9ae851976b40))
 * **UI:** format min/max bounds in NumberInput validation errors [YTFRONT-5452] ([50a0b07](https://github.com/ytsaurus/ytsaurus-ui/commit/50a0b0797f6a129c370efb48d68b6b9174fec7c8))
 
 ## [3.17.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.16.0...ui-v3.17.0) (2026-07-02)
