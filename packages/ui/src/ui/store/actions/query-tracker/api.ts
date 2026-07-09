@@ -162,7 +162,7 @@ export function loadQueriesList({
                 limit,
                 output_format: 'json',
             },
-            setup: getQTApiSetup(),
+            setup: {...getQTApiSetup(), JSONSerializer},
             cancellation,
         });
     };

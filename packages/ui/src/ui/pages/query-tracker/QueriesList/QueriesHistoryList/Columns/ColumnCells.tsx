@@ -2,7 +2,6 @@ import React, {type FC} from 'react';
 import {Text} from '@gravity-ui/uikit';
 import block from 'bem-cn-lite';
 import hammer from '../../../../../common/hammer';
-import unipika from '../../../../../common/thor/unipika';
 import {QueryStatusIcon} from '../../../../../components/QueryStatus';
 import {formatTime} from '../../../../../components/common/Timeline/util';
 import {type QueryItem} from '../../../../../types/query-tracker/api';
@@ -19,8 +18,7 @@ type CellProps = {
 };
 
 export const QueryHistoryNameCell: FC<CellProps> = ({row}) => {
-    const title = row.annotations?.title;
-    const name = title ? unipika.decode(title) : title;
+    const name = row.annotations?.title;
 
     return (
         <div className={b('name')} title={name}>
