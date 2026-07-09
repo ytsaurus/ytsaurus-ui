@@ -12,7 +12,7 @@ test('Query/Result: truncated image-audio', async ({page}) => {
     });
 
     await page.setViewportSize({
-        width: 1280,
+        width: 1600,
         height: 1280,
     });
 
@@ -40,6 +40,8 @@ test('Query/Result: truncated image-audio', async ({page}) => {
         element.scrollTop = 0;
         element.scrollLeft = 0;
     });
+
+    await page.mouse.move(0, 0);
 
     await expect(page).toHaveScreenshot();
 });
