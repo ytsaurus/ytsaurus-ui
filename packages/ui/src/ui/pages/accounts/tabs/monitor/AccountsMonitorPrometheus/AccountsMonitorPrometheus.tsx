@@ -8,7 +8,7 @@ import ypath from '../../../../../common/thor/ypath';
 
 import {PrometheusDashboardLazy} from '../../../../../containers/PrometheusDashboard/lazy';
 import {selectAccountsMapByName} from '../../../../../store/selectors/accounts/accounts-ts';
-import {getMediumList} from '../../../../../store/selectors/thor';
+import {selectMediumList} from '../../../../../store/selectors/thor';
 import {usePrometheusDashboardParams} from '../../../../../store/reducers/prometheusDashboard/prometheusDashboard-hooks';
 
 type LeftRightMedium = {
@@ -30,7 +30,7 @@ export function AccountsMonitorPrometheus({cluster, account}: {cluster: string; 
 }
 
 function useAccountMonitoringParams({cluster, account}: {cluster: string; account: string}) {
-    const mediumList: Array<string> = useSelector(getMediumList);
+    const mediumList: Array<string> = useSelector(selectMediumList);
     const accountData = useSelector(selectAccountsMapByName)[account];
 
     const {params: selection, setParams: setSelection} =

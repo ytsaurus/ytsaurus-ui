@@ -22,7 +22,7 @@ import {
     selectFlowStaticSpecError,
     selectFlowStaticSpecFirstLoading,
 } from '../../../../store/selectors/flow/specs';
-import {getFlowSpecYsonSettings} from '../../../../store/selectors/thor/unipika';
+import {selectFlowSpecYsonSettings} from '../../../../store/selectors/thor/unipika';
 import {type FlowSpecState} from '../../../../store/reducers/flow/specs';
 
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
@@ -53,7 +53,7 @@ type PipelineSpecProps = {
 function PipelineSpec({path, data, error, name, onSave, allowForce}: PipelineSpecProps) {
     const [showEdit, setShowEdit] = React.useState(false);
 
-    const settings = useSelector(getFlowSpecYsonSettings);
+    const settings = useSelector(selectFlowSpecYsonSettings);
 
     return (
         <React.Fragment>

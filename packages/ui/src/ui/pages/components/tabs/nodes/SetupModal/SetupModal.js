@@ -26,7 +26,7 @@ import {FLAG_STATE, MEDIUM_COLS_PREFIX} from '../../../../../constants/component
 import {updateListWithAll} from '../../../../../utils';
 import {parseBytes} from '../../../../../utils/parse/parse-bytes';
 
-import {getMediumListNoCache} from '../../../../../store/selectors/thor';
+import {selectMediumListNoCache} from '../../../../../store/selectors/thor';
 import TagsFilter from './TagsFilter/TagsFilter';
 import {
     selectComponentNodesFiltersSetup,
@@ -872,7 +872,7 @@ export class SetupModal extends Component {
 const mapStateToProps = (state) => {
     return {
         setup: selectComponentNodesFiltersSetup(state),
-        mediumList: getMediumListNoCache(state),
+        mediumList: selectMediumListNoCache(state),
         nodeTags: selectComponentNodesTags(state),
         nodeRacks: selectComponentNodesRacks(state),
         nodeStates: COMPONENTS_AVAILABLE_STATES,

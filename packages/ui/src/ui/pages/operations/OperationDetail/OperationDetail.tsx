@@ -71,8 +71,8 @@ import {
     selectTotalCpuTimeSpent,
     selectTotalJobWallTime,
 } from '../../../store/selectors/operations/statistics-v2';
-import {getCurrentCluster} from '../../../store/selectors/thor';
-import {getYsonSettingsDisableDecode} from '../../../store/selectors/thor/unipika';
+import {selectCurrentCluster} from '../../../store/selectors/thor';
+import {selectYsonSettingsDisableDecode} from '../../../store/selectors/thor/unipika';
 import {type OperationPool, type OperationStates} from '../selectors';
 import './OperationDetail.scss';
 import {JobsTimeline} from './tabs/JobsTimeline';
@@ -576,7 +576,7 @@ const mapStateToProps = (state: RootState, routerProps: RouteProps) => {
     const monitorTabVisible = Boolean(monitoringComponent) || Boolean(monitorTabUrlTemplate);
 
     return {
-        cluster: getCurrentCluster(state),
+        cluster: selectCurrentCluster(state),
         operation,
         errorData,
         loading,
@@ -598,7 +598,7 @@ const mapStateToProps = (state: RootState, routerProps: RouteProps) => {
         isGpuOperation: selectIsOperationInGpuTree(state),
         operationPerformanceUrlTemplate: selectOperationPerformanceUrlTemplate(state),
         operationEvents,
-        ysonSettings: getYsonSettingsDisableDecode(state),
+        ysonSettings: selectYsonSettingsDisableDecode(state),
     };
 };
 

@@ -13,7 +13,7 @@ import {
 } from '../../../../../store/selectors/components/node/unrecognized-options';
 import {YTErrorBlock} from '../../../../../containers/Block/Block';
 import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
-import {getNodeUnrecognizedOptionsYsonSettings} from '../../../../../store/selectors/thor/unipika';
+import {selectNodeUnrecognizedOptionsYsonSettings} from '../../../../../store/selectors/thor/unipika';
 import {YsonDownloadButton} from '../../../../../components/DownloadAttributesButton';
 
 export function NodeUnrecognizedOptions({host}: {host: string}) {
@@ -26,7 +26,7 @@ export function NodeUnrecognizedOptions({host}: {host: string}) {
     const data = useSelector(selectNodeUnrecognizedOptionsData);
     const error = useSelector(selectNodeUnrecognizedOptionsError);
 
-    const unipikaSettings = useSelector(getNodeUnrecognizedOptionsYsonSettings);
+    const unipikaSettings = useSelector(selectNodeUnrecognizedOptionsYsonSettings);
 
     return error ? (
         <YTErrorBlock error={error} />

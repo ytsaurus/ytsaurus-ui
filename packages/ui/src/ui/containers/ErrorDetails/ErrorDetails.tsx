@@ -20,7 +20,7 @@ import {unescapeSlashX} from '../../utils/utils';
 import FormattedText from '../../components/formatters/FormattedText';
 import {type UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {ErrorToClipboardButton} from '../../containers/ErrorToClipboardButton/ErrorToClipboardButton';
-import {getYsonSettingsErrorDetails} from '../../store/selectors/thor/unipika';
+import {selectYsonSettingsErrorDetails} from '../../store/selectors/thor/unipika';
 import {useSelector} from '../../store/redux-hooks';
 
 const b = block('elements-error-details');
@@ -37,7 +37,7 @@ type State = {
 };
 
 export default function ErrorDetails({error, ...props}: ErrorDetailsProps) {
-    const unipikaSettings = useSelector(getYsonSettingsErrorDetails);
+    const unipikaSettings = useSelector(selectYsonSettingsErrorDetails);
 
     const normalizedError = React.useMemo(() => {
         if (typeof error === 'string') {

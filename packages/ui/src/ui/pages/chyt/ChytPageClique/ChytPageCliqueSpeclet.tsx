@@ -22,7 +22,7 @@ import {
     selectChytOptionsDataAlias,
     selectChytOptionsError,
 } from '../../../store/selectors/chyt/options';
-import {getEditJsonYsonSettings} from '../../../store/selectors/thor/unipika';
+import {selectEditJsonYsonSettings} from '../../../store/selectors/thor/unipika';
 import {chytLoadCliqueSpeclet} from '../../../store/actions/chyt/speclet';
 import {chytEditOptions, chytLoadCliqueOptions} from '../../../store/actions/chyt/options';
 import {type ChytCliqueOptionsState} from '../../../store/reducers/chyt/options';
@@ -57,7 +57,7 @@ function useSpecletData({
     const specletData = useSelector(selectChytOptionsData);
     const dataAlias = useSelector(selectChytOptionsDataAlias);
     const error = useSelector(selectChytOptionsError);
-    const unipikaSettings = useSelector(getEditJsonYsonSettings);
+    const unipikaSettings = useSelector(selectEditJsonYsonSettings);
 
     return {alias, specletData, dataAlias, error, unipikaSettings};
 }

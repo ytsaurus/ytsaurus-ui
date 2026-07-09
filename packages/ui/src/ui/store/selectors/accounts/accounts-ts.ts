@@ -17,7 +17,7 @@ import {
 } from '../../../constants/accounts/accounts';
 import hammer from '../../../common/hammer';
 import {type FIX_MY_TYPE} from '../../../types';
-import {getMediumListNoCache} from '../thor';
+import {selectMediumListNoCache} from '../thor';
 import ypath from '../../../common/thor/ypath';
 
 import {accountMemoryMediumToFieldName} from '../../../utils/accounts/accounts-selector';
@@ -187,7 +187,7 @@ function makeStaticConfigurationItem(
 }
 
 export const selectActiveAccountStaticConfiguration = createSelector(
-    [selectActiveAccount, selectAccountsTree, getMediumListNoCache],
+    [selectActiveAccount, selectAccountsTree, selectMediumListNoCache],
     (activeAccount, tree = {}, mediums = []) => {
         const item = tree[activeAccount];
         if (!item) {

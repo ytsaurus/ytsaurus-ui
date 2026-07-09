@@ -41,7 +41,7 @@ import {selectDefaultTableColumnLimit} from '../../selectors/settings';
 import {selectIsYqlTypesEnabled} from '../../selectors/navigation/content/table';
 import {getClusterProxy, selectCurrentUserName} from '../../selectors/global';
 import {selectQueryResultGlobalSettings} from '../../selectors/query-tracker/queryResult';
-import {getYsonSettingsDisableDecode} from '../../selectors/thor/unipika';
+import {selectYsonSettingsDisableDecode} from '../../selectors/thor/unipika';
 import {QueriesListMode} from '../../../types/query-tracker/queryList';
 import {type ClusterConfig} from '../../../../shared/yt-types';
 import {type YTError} from '../../../../@types/types';
@@ -117,7 +117,7 @@ export const loadTableAttributesByPath =
         const defaultTableColumnLimit = selectDefaultTableColumnLimit(state);
         const useYqlTypes = selectIsYqlTypesEnabled(state);
         const login = selectCurrentUserName(state);
-        const ysonSettings = getYsonSettingsDisableDecode(state);
+        const ysonSettings = selectYsonSettingsDisableDecode(state);
 
         if (!clusterConfig) return;
 
