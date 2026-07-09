@@ -24,7 +24,7 @@ export interface YsonSettings {
  * unipika.format && unipika.foramtRaw mix different properties into settings-object.
  * So, to minimize side-effects each UI-component should use his-own copy of settings-object.
  */
-const getYsonSettings = createSelector(
+const selectYsonSettings = createSelector(
     [
         selectFormat,
         selectShowDecoded,
@@ -51,30 +51,33 @@ const getYsonSettings = createSelector(
     },
 );
 
-export const getJobGeneralYsonSettings = createSelector([getYsonSettings], clone_);
+export const selectJobGeneralYsonSettings = createSelector([selectYsonSettings], clone_);
 
-export const getJobSpecificationYsonSettings = createSelector([getYsonSettings], clone_);
+export const selectJobSpecificationYsonSettings = createSelector([selectYsonSettings], clone_);
 
-export const getTableYsonSettings = createSelector([getYsonSettings], clone_);
+export const selectTableYsonSettings = createSelector([selectYsonSettings], clone_);
 
-export const getOperationAttributesYsonSettings = createSelector([getYsonSettings], clone_);
+export const selectOperationAttributesYsonSettings = createSelector([selectYsonSettings], clone_);
 
-export const getOperationExperimentsYsonSettings = createSelector([getYsonSettings], clone_);
+export const selectOperationExperimentsYsonSettings = createSelector([selectYsonSettings], clone_);
 
-export const getNavigationMountConfigYsonSettings = createSelector([getYsonSettings], clone_);
+export const selectNavigationMountConfigYsonSettings = createSelector([selectYsonSettings], clone_);
 
-export const getEditJsonYsonSettings = createSelector([getYsonSettings], clone_);
+export const selectEditJsonYsonSettings = createSelector([selectYsonSettings], clone_);
 
-export const getNodeUnrecognizedOptionsYsonSettings = createSelector([getYsonSettings], clone_);
+export const selectNodeUnrecognizedOptionsYsonSettings = createSelector(
+    [selectYsonSettings],
+    clone_,
+);
 
-export const getPreviewCellYsonSettings = createSelector([getYsonSettings], clone_);
+export const selectPreviewCellYsonSettings = createSelector([selectYsonSettings], clone_);
 
-export const getFlowSpecYsonSettings = createSelector([getYsonSettings], clone_);
+export const selectFlowSpecYsonSettings = createSelector([selectYsonSettings], clone_);
 
-export const getErrorsYsonSettings = createSelector([getYsonSettings], clone_);
+export const selectErrorsYsonSettings = createSelector([selectYsonSettings], clone_);
 
-export const getYsonSettingsDisableDecode = createSelector([getYsonSettings], (settings) => {
+export const selectYsonSettingsDisableDecode = createSelector([selectYsonSettings], (settings) => {
     return {...settings, decodeUTF8: false};
 });
 
-export const getYsonSettingsErrorDetails = createSelector([getYsonSettings], clone_);
+export const selectYsonSettingsErrorDetails = createSelector([selectYsonSettings], clone_);

@@ -2,7 +2,7 @@ import React, {useMemo} from 'react';
 import {useSelector} from 'react-redux';
 
 import {WidgetHeader} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetHeader/WidgetHeader';
-import {getMediumList} from '../../../../../../store/selectors/thor';
+import {selectMediumList} from '../../../../../../store/selectors/thor';
 import {type YTError} from '../../../../../../types';
 
 import {useAccountsWidget} from '../hooks/use-accounts-widget';
@@ -13,7 +13,7 @@ import i18n from '../i18n';
 export function AccountsWidgetHeader(props: AccountsWidgetProps) {
     const name = props?.data?.name;
     const {accounts, isLoading, userColumns} = useAccountsWidget(props);
-    const mediumList = useSelector(getMediumList);
+    const mediumList = useSelector(selectMediumList);
 
     const error = useMemo((): YTError | undefined => {
         if (!Array.isArray(userColumns)) {
