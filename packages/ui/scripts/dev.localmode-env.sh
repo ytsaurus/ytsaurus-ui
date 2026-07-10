@@ -55,10 +55,12 @@ if [ $? -ne 0 -o "${useStop}" = "1" ]; then
   (
     echo
     echo "Use following environment variables to control behavior of the script:"
-    echo "    PROMETHEUS=1     - to add --run-prometheus"
-    echo "    SKIP_PULL=1      - to add --ui-skip-pull true --yt-skip-pull true"
-    echo "    WITH_AUTH=1      - to add --with-auth, also adds 'export YT_TOKEN=password'"
-    echo "    DEBUG_LOGGING=1  - to add --enable-debug-logging"
+    echo "    PROMETHEUS=1                     - to add --run-prometheus"
+    echo "    SKIP_PULL=1                      - to add --ui-skip-pull true --yt-skip-pull true"
+    echo "    WITH_AUTH=1                      - to add --with-auth, also adds 'export YT_TOKEN=password'"
+    echo "    DEBUG_LOGGING=1                  - to add --enable-debug-logging"
+    echo "    LOCALMODE_EXTERNAL_PROXY=host    - to add  --ui-external-proxy host"
+    echo "    AUTH_COOKIE_DOMAIN=domain        - to add --ui-auth-cookie-domain domain"
     echo "    "
   ) >&2
 
@@ -83,9 +85,17 @@ if [ $? -ne 0 -o "${useStop}" = "1" ]; then
     command="$command --ui-version $UI_VERSION_LOCAL --ui-skip-pull true"
   fi
 
+  if [ "$LOCALMODE_EXTERNAL_PROXY" != "" ]; then
+    command="$command --ui-external-proxy $LOCALMODE_EXTERNAL_PROXY"
+  fi
+
+  if [ "$AUTH_COOKIE_DOMAIN" != "" ]; then
+    command="$command --ui-auth-cookie-domain $AUTH_COOKIE_DOMAIN"
+  fi
+
   echo
   echo "The command bellow will be used to start your cluster:"
-  echo "$command" | xargs -I {} echo "    {} \\"
+  echo "$command" | sed -e 's/ --/\n    --/g' | xargs -I {} echo "    {} \\"
   echo
 
   if [ "${useStop}" = "1" ]; then

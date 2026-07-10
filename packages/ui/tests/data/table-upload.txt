@@ -1,0 +1,2 @@
+{"Column_1":true,"Column_2":false}
+{"Column_1":false,"Column_2":true}
