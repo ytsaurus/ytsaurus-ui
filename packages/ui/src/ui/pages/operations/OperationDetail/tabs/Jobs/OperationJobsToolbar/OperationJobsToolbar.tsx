@@ -4,9 +4,7 @@ import cn from 'bem-cn-lite';
 
 import i18n from './i18n';
 
-import keys_ from 'lodash/keys';
-
-import hammer from '../../../../../../common/hammer';
+import {utils} from '../../../../../../common/hammer/utils';
 import JobsSelectFilter from './JobsSelectFilter';
 import JobsPaginator from './JobsPaginator';
 import JobsFilterBy from './JobsFilterBy';
@@ -23,11 +21,12 @@ const block = cn('operation-detail-jobs');
 const tbBlock = cn('elements-toolbar');
 
 // TODO: make this a selector inside a specific <JobsTypeFilter> component once we start using reselect library
-function extractJobTypes(operations: RootState['operations']): string[] {
-    const initialTypes = ['all'];
-
-    const typeCounters = operations.jobs.filters.type.counters;
-    return hammer.utils.sortInPredefinedOrder(initialTypes, keys_(typeCounters));
+function extractJobTypes(operations: RootState['operations']) {
+    const {counters = {}} = operations.jobs.filters.type;
+    const keys: Array<string> = utils.sortInPredefinedOrder(['all'], Object.keys(counters));
+    return keys.map((name) => {
+        return {name};
+    });
 }
 
 const tbComp = tbBlock('component');
@@ -38,7 +37,7 @@ export default function OperationJobsToolbar() {
     const taskNames = useSelector(selectOperationTasksNames);
     const allTaskNames = React.useMemo(() => {
         return [
-            '',
+            {name: ''},
             ...taskNames.map((name) => {
                 return {name, caption: name};
             }),
@@ -74,11 +73,11 @@ export default function OperationJobsToolbar() {
                             name="state"
                             label={i18n('field_state') + ':'}
                             states={[
-                                {value: 'all', caption: i18n('value_all')},
-                                {value: 'running', caption: i18n('value_running')},
-                                {value: 'completed', caption: i18n('value_completed')},
-                                {value: 'failed', caption: i18n('value_failed')},
-                                {value: 'aborted', caption: i18n('value_aborted')},
+                                {name: 'all', caption: i18n('value_all')},
+                                {name: 'running', caption: i18n('value_running')},
+                                {name: 'completed', caption: i18n('value_completed')},
+                                {name: 'failed', caption: i18n('value_failed')},
+                                {name: 'aborted', caption: i18n('value_aborted')},
                             ]}
                             disabled={showCompetitiveJobs}
                             width={200}

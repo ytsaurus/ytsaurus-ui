@@ -3,13 +3,14 @@ import React, {Component} from 'react';
 import map_ from 'lodash/map';
 
 import hammer from '../../../common/hammer';
-import Select, {YTSelectProps} from '../../../components/Select/Select';
+import Select, {type YTSelectProps} from '../../../components/Select/Select';
 
 type StateItem = string | {name: string; caption?: string};
 
-interface Props extends Omit<YTSelectProps, 'items' | 'onUpdate' | 'value' | 'placeholder'> {
+interface Props<NameT extends string = string>
+    extends Omit<YTSelectProps, 'items' | 'onUpdate' | 'value' | 'placeholder'> {
     // from props
-    name: string;
+    name: NameT;
     label?: string;
     withCounters?: boolean;
     multiple?: boolean;
@@ -21,7 +22,9 @@ interface Props extends Omit<YTSelectProps, 'items' | 'onUpdate' | 'value' | 'pl
     counters?: Record<string, number>;
 }
 
-export default class OperationSelectFilter extends Component<Props> {
+export default class OperationSelectFilter<NameT extends string = string> extends Component<
+    Props<NameT>
+> {
     static defaultProps = {
         withCounters: true,
     };
