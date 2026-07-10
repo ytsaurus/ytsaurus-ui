@@ -88,6 +88,7 @@ export default class Pagination extends React.Component {
                                 last: 'angle-double-right',
                             }[name]
                         }
+                        size={13}
                     />
                 </Button>
                 {typeof control.hotkeyHandler !== 'undefined' && (

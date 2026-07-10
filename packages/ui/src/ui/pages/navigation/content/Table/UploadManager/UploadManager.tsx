@@ -543,7 +543,7 @@ class UploadManager extends React.Component<Props, State> {
         return (
             <React.Fragment>
                 <Button size="m" title={i18n('action_upload')} onClick={handleShow}>
-                    <Icon awesome="upload" />
+                    <Icon awesome="upload" size={13} />
                     &nbsp; {i18n('action_upload')}
                 </Button>
 

@@ -28,7 +28,6 @@ import {WaitForDefaultPoolTree} from '../../../../hooks/global-pool-trees';
 import {getAlterOutputToDynamicFields} from '../fields/alter-output-to-dynamic/alter-output-to-dynamic';
 import i18n from './i18n';
 
-
 export default function TableMergeModal() {
     const login = useSelector(selectCurrentUserName);
     const visible = useSelector(selectNavigationTableMergeVisible);

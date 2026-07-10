@@ -40,7 +40,7 @@ export default function DataLensButton({className}: {className: string}) {
             title={i18n('action_create-dataset-in-datalens')}
             disabled={!loaded || showTooltip}
         >
-            <Icon awesome={'chart-bar'} />
+            <Icon awesome={'chart-bar'} size={13} />
             DataLens
         </Button>
     );
