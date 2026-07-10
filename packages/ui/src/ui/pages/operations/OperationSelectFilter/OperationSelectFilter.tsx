@@ -1,29 +1,29 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 
 import map_ from 'lodash/map';
 
 import hammer from '../../../common/hammer';
-import Select from '../../../components/Select/Select';
-import {itemsProps} from '../../../components/Suggest/Suggest';
+import Select, {YTSelectProps} from '../../../components/Select/Select';
 
-export default class OperationSelectFilter extends Component {
-    static propTypes = {
-        // from props
-        name: PropTypes.string.isRequired,
-        label: PropTypes.string,
-        withCounters: PropTypes.bool,
-        type: PropTypes.string,
-        // from connect
-        updateFilter: PropTypes.func.isRequired,
-        states: itemsProps,
-        value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
-        counters: PropTypes.object,
-    };
+type StateItem = string | {name: string; caption?: string};
 
+interface Props extends Omit<YTSelectProps, 'items' | 'onUpdate' | 'value' | 'placeholder'> {
+    // from props
+    name: string;
+    label?: string;
+    withCounters?: boolean;
+    multiple?: boolean;
+    placeholder?: string | ((value: Props['value']) => string);
+    // from connect
+    updateFilter: (name: string, value: string | string[] | undefined) => void;
+    states?: Array<StateItem>;
+    value?: string | string[];
+    counters?: Record<string, number>;
+}
+
+export default class OperationSelectFilter extends Component<Props> {
     static defaultProps = {
         withCounters: true,
-        type: 'radio',
     };
 
     get items() {
@@ -40,7 +40,9 @@ export default class OperationSelectFilter extends Component {
 
             return {
                 value: stateName,
-                text: state.caption || hammer.format['ReadableField'](stateName),
+                text:
+                    (typeof state !== 'string' && state.caption) ||
+                    hammer.format['ReadableField'](stateName),
                 count: withCounters ? count : undefined,
             };
         });
@@ -49,22 +51,17 @@ export default class OperationSelectFilter extends Component {
             res.push({
                 value,
                 text: hammer.format.ReadableField(value),
+                count: undefined,
             });
         }
 
         return res;
     }
 
-    onRadioChange = (val) => this.props.updateFilter(this.props.name, val);
-    onCheckChange = (val) => this.props.updateFilter(this.props.name, val);
-
     render() {
-        const {name, label, value, type, placeholder, ...props} = this.props;
-        const {multiple} = this.props;
+        const {name, label, value = [], placeholder, multiple, ...props} = this.props;
 
         const placeHolder = 'function' === typeof placeholder ? placeholder(value) : placeholder;
-
-        const onChange = type === 'radio' ? this.onRadioChange : this.onCheckChange;
 
         return (
             <Select
@@ -73,9 +70,11 @@ export default class OperationSelectFilter extends Component {
                 {...props}
                 placeholder={placeHolder}
                 value={Array.isArray(value) ? value : [value]}
-                type={type}
                 items={this.items}
-                onUpdate={(vals) => onChange(multiple ? vals : vals[0])}
+                onUpdate={(value) => {
+                    const v = multiple ? value : value[0];
+                    this.props.updateFilter(this.props.name, v);
+                }}
             />
         );
     }

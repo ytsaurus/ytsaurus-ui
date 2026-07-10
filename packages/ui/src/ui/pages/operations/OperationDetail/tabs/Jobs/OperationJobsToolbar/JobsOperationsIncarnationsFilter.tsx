@@ -35,8 +35,9 @@ export function JobsOperationIncarnationsFilter({
                   disabled={disabled}
                   width={'auto'}
                   value={filter}
-                  updateFilter={(_name: unknown, value: string) => {
-                      dispatch(updateJobsOperationIncarnationFilter(value));
+                  updateFilter={(_name: unknown, value?: string | Array<string>) => {
+                      const v = Array.isArray(value) ? value[0] : value;
+                      dispatch(updateJobsOperationIncarnationFilter(v));
                   }}
                   hideClear={false}
                   hideFilter={false}
