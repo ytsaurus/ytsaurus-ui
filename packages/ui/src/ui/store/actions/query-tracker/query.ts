@@ -139,12 +139,24 @@ export const setUserLastChoice =
             delete newSettings.clique;
         }
 
-        if (engine === QueryEngine.SPYT && lastPath && !isSpytConnectAvailable) {
-            newSettings.discovery_group = lastPath;
+        // Settings last choice in SPYT (without Connect)
+        if (engine === QueryEngine.SPYT && !isSpytConnectAvailable) {
+            const queryHasDiscoveryPath = Boolean(newSettings.discovery_group);
+            const shouldUseLastDiscoveryPath = !queryHasDiscoveryPath && Boolean(lastPath);
+
+            if (shouldUseLastDiscoveryPath) {
+                newSettings.discovery_group = lastPath;
+            }
         }
 
-        if (engine === QueryEngine.CHYT && lastClique) {
-            newSettings.clique = lastClique;
+        // Settings last choice in CHYT
+        if (engine === QueryEngine.CHYT) {
+            const queryHasClique = Boolean(newSettings.clique);
+            const shouldUseLastClique = !queryHasClique && Boolean(lastClique);
+
+            if (shouldUseLastClique) {
+                newSettings.clique = lastClique;
+            }
         }
 
         if (engine === QueryEngine.YQL && !settings?.yql_version) {
