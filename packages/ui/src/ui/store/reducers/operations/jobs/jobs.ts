@@ -30,6 +30,7 @@ import {type DetailedOperationSelector} from '../../../../pages/operations/selec
 export type WithDefaultValue<T> = {
     value: T;
     defaultValue: T;
+    counters?: Record<string, number>;
 };
 
 export type JobsState = {
@@ -48,8 +49,8 @@ export type JobsState = {
         address: WithDefaultValue<string> & {data: Array<unknown>};
         monitoringDescriptor: WithDefaultValue<string>;
         taskName: WithDefaultValue<string>;
-        state: WithDefaultValue<string> & {counters?: Record<string, number>};
-        type: WithDefaultValue<string> & {counters?: Record<string, number>};
+        state: WithDefaultValue<string>;
+        type: WithDefaultValue<string>;
         withStderr: WithDefaultValue<boolean>;
         withFailContext: WithDefaultValue<boolean>;
         withSpec: WithDefaultValue<boolean>;
