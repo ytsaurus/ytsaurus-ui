@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.18.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.17.1...ui-v3.18.0) (2026-07-10)
+
+
+### Features
+
+* **Account:** add versioned column sort [YTFRONT-5361] ([e2ec066](https://github.com/ytsaurus/ytsaurus-ui/commit/e2ec066ab8bc6ff399eb34eb220c982a290e87ff))
+
+
+### Bug Fixes
+
+* **Operartion/Jobs:** fix state filter [YTFRONT-5919] ([a90e810](https://github.com/ytsaurus/ytsaurus-ui/commit/a90e810c0351db26995e8aafb0e9a0371659bf45))
+* **PageHead:** use cluster-theme specific favicon [YTFRONT-5918] ([cb6e981](https://github.com/ytsaurus/ytsaurus-ui/commit/cb6e9816fdb342a25f82dd90569285f8eafec764))
+
 ## [3.17.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.17.0...ui-v3.17.1) (2026-07-09)
 
 
