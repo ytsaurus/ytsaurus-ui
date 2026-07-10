@@ -33,7 +33,7 @@ function FullScreenButton({block, toggleFullScreen, isFullScreen}) {
                     title={i18n('action_toggle-full-screen')}
                     onClick={toggleFullScreen}
                 >
-                    <Icon awesome={isFullScreen ? 'compress' : 'expand'} />
+                    <Icon awesome={isFullScreen ? 'compress' : 'expand'} size={13} />
                 </Button>
             </div>
         )

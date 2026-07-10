@@ -67,7 +67,7 @@ const SettingsButton: VFC<Props> = ({
             className={block('settings')}
             button={
                 <Button size="m" title={i18n('title_settings')}>
-                    <Icon awesome="cog" face="solid" />
+                    <Icon awesome="cog" face="solid" size={13} />
                 </Button>
             }
             template={

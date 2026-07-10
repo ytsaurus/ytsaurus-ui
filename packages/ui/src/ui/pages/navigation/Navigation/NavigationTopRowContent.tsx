@@ -196,7 +196,7 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
                     {index ? (
                         <Escaped text={text} onClick={isLastItem ? onEdit : undefined} />
                     ) : (
-                        <Icon awesome={'folder-tree'} face={'solid'} />
+                        <Icon awesome={'folder-tree'} face={'solid'} size={15} />
                     )}
                 </Breadcrumbs.Item>
             );

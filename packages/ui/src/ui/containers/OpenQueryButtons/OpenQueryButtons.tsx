@@ -119,7 +119,7 @@ export function OpenQueryButtons({className, autoOpen}: OpenQueryButtonProps) {
                         target="_blank"
                         title={i18n('action_open-queries-page')}
                     >
-                        <Icon awesome="table" />
+                        <Icon awesome="table" size={13} />
                     </Button>
                 </div>
             )}

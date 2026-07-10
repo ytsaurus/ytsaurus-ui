@@ -64,7 +64,7 @@ function ColumnSelectorButton({
                 style={showAllColumns ? undefined : actionStyle}
                 qa="table-columns-button"
             >
-                <Icon awesome="filter" face="solid" />
+                <Icon awesome="filter" face="solid" size={13} />
                 {i18n('action_columns')}
                 <Secondary disabled={!showAllColumns}>
                     {' '}

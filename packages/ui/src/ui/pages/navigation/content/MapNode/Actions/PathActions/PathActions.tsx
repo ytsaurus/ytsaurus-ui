@@ -348,7 +348,7 @@ function PathActions(props: Props) {
                         className={dropDownBtnClassName}
                         view={dropDownBtnTheme}
                     >
-                        <Icon awesome="ellipsis-h" />
+                        <Icon awesome="ellipsis-h" size={13} />
                     </Button>
                 )}
                 items={menuItems}

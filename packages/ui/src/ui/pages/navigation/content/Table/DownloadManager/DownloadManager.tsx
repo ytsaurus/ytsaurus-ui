@@ -938,7 +938,7 @@ export class DownloadManager extends React.Component<Props, State> {
                     onClick={this.showDialog}
                     qa={'show-download-static-table'}
                 >
-                    <Icon awesome="download" />
+                    <Icon awesome="download" size={13} />
                     &nbsp; {i18n('action_download')}
                 </Button>
 
