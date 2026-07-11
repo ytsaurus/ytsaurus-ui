@@ -10,6 +10,6 @@
   "action_yes": "Yes",
   "action_cancel": "Cancel",
   "confirm_change-quota": "Do you really want to change the quota limit?",
-  "confirm_previous-value-prefix": "The previous value is ",
+  "confirm_previous-value-prefix": "The previous value is",
   "confirm_previous-value-infix": ", the new value is"
 }

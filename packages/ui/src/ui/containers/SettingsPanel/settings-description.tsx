@@ -400,6 +400,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         settingNS={NAMESPACES.NAVIGATION}
                         annotation={
                             i18n('context_path-autocorrection-description') +
+                            ' ' +
                             docsUrl(
                                 'For details see ' +
                                     `<a class="link link_theme_normal" href="${UIFactory.docsUrls['faq:enablepathautocorrection']}" target="_blank">FAQ</a>` +

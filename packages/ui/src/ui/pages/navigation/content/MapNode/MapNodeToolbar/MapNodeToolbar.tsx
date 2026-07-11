@@ -20,7 +20,7 @@ import {selectIsCreateTableModalVisible} from '../../../../../store/selectors/na
 import {openCreateTableModal} from '../../../../../store/actions/navigation/modals/create-table';
 import {selectPath, selectTransaction} from '../../../../../store/selectors/navigation';
 import {selectNavigationPathAttributes} from '../../../../../store/selectors/navigation/navigation';
-import {getMediumList} from '../../../../../store/selectors/thor';
+import {selectMediumList} from '../../../../../store/selectors/thor';
 import {
     selectContentMode,
     selectError,
@@ -74,7 +74,7 @@ function mapStateToProps(state: RootState) {
         contentMode: selectContentMode(state),
         filterState: selectFilterState(state),
         transaction: selectTransaction(state),
-        mediumList: getMediumList(state),
+        mediumList: selectMediumList(state),
         mediumType: selectMediumType(state),
         showCreateTableModal: selectIsCreateTableModalVisible(state),
         attributes: selectNavigationPathAttributes(state),

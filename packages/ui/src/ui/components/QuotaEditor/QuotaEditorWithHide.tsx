@@ -66,8 +66,7 @@ export default class QuotaEditorWithHide extends React.Component<Props, State> {
             <div className={block('confirm', className)}>
                 <div className={block('confirm-notice')}>{i18n('confirm_change-quota')}</div>
                 <div className={block('confirm-details')}>
-                    {i18n('confirm_previous-value-prefix')}
-                    {this.renderLimit(limit)}
+                    {i18n('confirm_previous-value-prefix')} {this.renderLimit(limit)}
                     {i18n('confirm_previous-value-infix')}
                     {this.renderLimit(this.getLimit())}
                 </div>

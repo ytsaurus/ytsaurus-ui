@@ -13,7 +13,7 @@
   "confirm_delete-account": "Delete account {{name}}",
   "field_tablets": "Tablets",
   "field_tablet-static-memory": "Tablet static memory",
-  "context_tablet-accounting-moved": "Tablet resource accounting (tablet count and tablet static memory) has been moved from accounts to ",
+  "context_tablet-accounting-moved": "Tablet resource accounting (tablet count and tablet static memory) has been moved from accounts to",
   "action_tablet-cell-bundles": "tablet cell bundles",
   "action_more-details": "More details"
 }

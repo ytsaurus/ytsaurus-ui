@@ -19,8 +19,8 @@ function MaintenanceRequestsImpl({requests = {}}: MaintenanceRequestsProps) {
             <div key={key}>
                 <Bold>
                     <Label theme="danger" type="text" text={format.ReadableField(type)} />
-                </Bold>
-                {i18n('context_by')}
+                </Bold>{' '}
+                {i18n('context_by')}{' '}
                 <Bold>
                     <SubjectCard type="user" name={user} />
                     {': '}

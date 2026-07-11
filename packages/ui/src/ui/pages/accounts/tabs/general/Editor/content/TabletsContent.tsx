@@ -84,7 +84,7 @@ export function TabletAccountingNotice({className}: {className?: string}) {
     return !allowPerTablet ? null : (
         <div className={className}>
             <div className={block('warning')}>
-                {i18n('context_tablet-accounting-moved')}
+                {i18n('context_tablet-accounting-moved')}{' '}
                 <Link url={`/${cluster}/${Page.TABLET_CELL_BUNDLES}`} routed>
                     {i18n('action_tablet-cell-bundles')}
                 </Link>

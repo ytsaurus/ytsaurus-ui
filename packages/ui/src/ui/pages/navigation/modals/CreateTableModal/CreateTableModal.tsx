@@ -599,7 +599,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                 caption: i18n('field_table-type'),
                                 tooltip: (
                                     <div className={block('tooltip')}>
-                                        {i18n('context_data-rows-of')}
+                                        {i18n('context_data-rows-of')}{' '}
                                         {docsUrl(
                                             makeLink(
                                                 UIFactory.docsUrls['storage:static_tables'],
@@ -607,8 +607,8 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                                 true,
                                             ),
                                             i18n('value_static-tables-link'),
-                                        )}
-                                        {i18n('context_static-tables-description')}
+                                        )}{' '}
+                                        {i18n('context_static-tables-description')}{' '}
                                         {docsUrl(
                                             makeLink(
                                                 UIFactory.docsUrls['dynamic-tables:overview'],
@@ -616,7 +616,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                                 true,
                                             ),
                                             i18n('value_dynamic-tables-link'),
-                                        )}
+                                        )}{' '}
                                         {i18n('context_dynamic-tables-allow-modify')}
                                         <div className={block('alert-text')}>
                                             {i18n('context_before-using-dynamic-tables')}{' '}

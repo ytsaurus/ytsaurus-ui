@@ -87,7 +87,7 @@ function AccountUsageColumnsDialog({visible, onClose}: DialogProps) {
                     name
                 ) : (
                     <span>
-                        <Secondary>{i18n('field_medium')}</Secondary>
+                        <Secondary>{i18n('field_medium')}</Secondary>{' '}
                         {readableAccountUsageColumnName(caption)}
                     </span>
                 );
