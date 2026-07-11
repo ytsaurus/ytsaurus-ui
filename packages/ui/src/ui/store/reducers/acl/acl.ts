@@ -90,6 +90,7 @@ const initialState: AclState = {
     [IdmObjectType.ACCOUNT]: {...aclDefaults},
     [IdmObjectType.POOL]: {...aclDefaults},
     [IdmObjectType.TABLET_CELL_BUNDLE]: {...aclDefaults},
+    [IdmObjectType.OPERATION]: {...aclDefaults},
 };
 
 function modifyFieldState(state: AclState, field: IdmKindType, fieldData: Partial<AclKindState>) {

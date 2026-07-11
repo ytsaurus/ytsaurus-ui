@@ -1,15 +1,14 @@
 import map_ from 'lodash/map';
-
 import moment from 'moment';
-
-import ypath from '../../common/thor/ypath';
-import hammer from '../../common/hammer';
 import {createSelector} from 'reselect';
-import {remoteInputUrl} from '../../utils/operations/tabs/details/specification/specification';
-import {type FIX_MY_TYPE} from '../../types';
+import {type CypressNodeRaw} from '../../../shared/yt-types';
+import hammer from '../../common/hammer';
+import ypath from '../../common/thor/ypath';
 import {type RootState} from '../../store/reducers';
 import {type JobsState} from '../../store/reducers/operations/jobs/jobs';
-import {type CypressNodeRaw} from '../../../shared/yt-types';
+import {type FIX_MY_TYPE} from '../../types';
+import {ACE, AclFlags} from '../../utils/acl/acl-types';
+import {remoteInputUrl} from '../../utils/operations/tabs/details/specification/specification';
 
 export interface OperationPoolResourceLimits {
     cpu?: number;
@@ -314,6 +313,10 @@ export class DetailedOperationSelector extends OperationSelector {
         }
 
         this.live_preview = ypath.getValue(progress, '/live_preview');
+    }
+
+    getAcl() {
+        return ypath.getValue(this.$attributes, '/runtime_parameters/acl') as Array<ACE & AclFlags>;
     }
 
     getLivePreviewPath(

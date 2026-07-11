@@ -18,6 +18,7 @@ export const operationData: OperationDetailSuccessActionData = {
         inIntermediateState: () => false,
         successfullyCompleted: () => true,
         computePools: () => {},
+        getAcl: () => [],
     },
     actions: [],
     details: {

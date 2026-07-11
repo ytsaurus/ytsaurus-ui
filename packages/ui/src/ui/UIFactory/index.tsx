@@ -417,6 +417,10 @@ export interface UIFactory {
     }): React.ReactNode;
 
     renderSubjectCard(props: SubjectCardProps): React.ReactNode;
+    fetchSubejectNames(params: {
+        cluster: string;
+        subjects: Array<Pick<SubjectCardProps, 'name' | 'type'>>;
+    }): Promise<Map<string, {title: string; internal?: boolean; url?: string; isTvm?: boolean}>>;
 
     makeSupportContent(
         params: {login: string; cluster?: string; buttonToWrap?: React.ReactNode},

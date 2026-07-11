@@ -17,6 +17,7 @@ export const IdmObjectType = {
     TABLET_CELL_BUNDLE: 'tablet_cell_bundle',
     ACCESS_CONTROL_OBJECT: 'access_control_object',
     UI_EFFECTIVE_ACL: 'ui_effective_acl',
+    OPERATION: 'operation',
 } as const;
 
 export const REGISTER_QUEUE_CONSUMER = 'register_queue_consumer';
@@ -128,6 +129,16 @@ export const PERMISSIONS_SETTINGS: Record<IdmKindType, PermissionSettings> = {
         allowInheritAcl: false,
         allowInheritResponsibles: false,
         allowDeleteWithoutRevisionCheck: true,
+    },
+    [IdmObjectType.OPERATION]: {
+        permissionTypes: ['read', 'manage', 'administer'],
+        permissionsToRequest: [['read'], ['manage'], ['administer']],
+        allowBossApprovals: false,
+        allowReadApprovers: false,
+        allowAuditors: false,
+        allowInheritAcl: false,
+        allowInheritResponsibles: false,
+        allowDeleteWithoutRevisionCheck: false,
     },
 };
 
