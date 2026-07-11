@@ -12,7 +12,7 @@ function prepareDetailedColumn(resource: PoolResourceType) {
         },
         sort: true,
         get caption() {
-            return i18n('field_abs-fair-share') + ReadableResource(resource);
+            return i18n('field_abs-fair-share') + ' ' + ReadableResource(resource);
         },
         align: 'right',
     };
@@ -26,7 +26,7 @@ function prepareLimitColumn(resource: PoolResourceType) {
         sort: true,
         sortWithUndefined: true,
         get caption() {
-            return i18n('field_limit') + ReadableResource(resource);
+            return i18n('field_limit') + ' ' + ReadableResource(resource);
         },
         align: 'right',
     };
@@ -39,7 +39,7 @@ function prepareMinResourcesColumn(resource: PoolResourceType) {
         },
         sort: true,
         get caption() {
-            return i18n('field_strong-guarantee-short') + ReadableResource(resource);
+            return i18n('field_strong-guarantee-short') + ' ' + ReadableResource(resource);
         },
         get title() {
             return i18n('field_strong-guarantee');
@@ -58,7 +58,7 @@ function prepareAbsGuaranteedColumn(
         },
         sort: true,
         get caption() {
-            return i18n('field_estimated-guarantee-short') + ReadableResource(resource);
+            return i18n('field_estimated-guarantee-short') + ' ' + ReadableResource(resource);
         },
         get title() {
             return i18n('field_estimated-guarantee');
@@ -70,11 +70,11 @@ function prepareAbsGuaranteedColumn(
 function ReadableResource(resource: PoolResourceType) {
     switch (resource) {
         case 'user_memory':
-            return ' RAM';
+            return 'RAM';
         case 'user_slots':
             return i18n('value_slots');
         default:
-            return ' ' + format.ReadableField(resource);
+            return format.ReadableField(resource);
     }
 }
 
@@ -85,7 +85,7 @@ function prepareAbsDemandColumn(resource: PoolResourceType) {
         },
         sort: true,
         get caption() {
-            return i18n('field_abs-demand') + ReadableResource(resource);
+            return i18n('field_abs-demand') + ' ' + ReadableResource(resource);
         },
         align: 'right',
     };
@@ -98,7 +98,7 @@ function prepareAbsUsageColumn(resource: PoolResourceType) {
         },
         sort: true,
         get caption() {
-            return i18n('field_abs-usage') + ReadableResource(resource);
+            return i18n('field_abs-usage') + ' ' + ReadableResource(resource);
         },
         align: 'right',
     };

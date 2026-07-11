@@ -121,8 +121,7 @@ const TIMEOUT_ERROR = {
                 {i18n('alert_pool-not-appeared')}
                 {createUrl ? (
                     <>
-                        {i18n('alert_pool-fill-ticket')}
-                        <Link url={createUrl}>{queue}</Link>
+                        {i18n('alert_pool-fill-ticket')} <Link url={createUrl}>{queue}</Link>
                     </>
                 ) : (
                     i18n('alert_pool-contact-support')

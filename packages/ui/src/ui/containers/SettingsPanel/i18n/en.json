@@ -59,7 +59,7 @@
   "field_smart-filter": "Use smart filter",
   "context_smart-filter-description": "Use logical operators in filter like \"and\" and \"or\"",
   "field_path-autocorrection": "Path autocorrection",
-  "context_path-autocorrection-description": "Autocorrect erroneous path if possible. ",
+  "context_path-autocorrection-description": "Autocorrect erroneous path if possible.",
   "title_components": "Components",
   "field_enable-side-bar": "Enable side bar",
   "context_enable-side-bar-description": "Display node data in the side bar when clicked.",

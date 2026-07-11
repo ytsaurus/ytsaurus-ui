@@ -54,6 +54,6 @@
   "value_replication": "Replication",
   "value_scan": "Scan",
   "value_static-table": "Static table",
-  "value_static-tables-link": " Static tables ",
-  "value_dynamic-tables-link": " Dynamic tables "
+  "value_static-tables-link": "Static tables",
+  "value_dynamic-tables-link": "Dynamic tables"
 }

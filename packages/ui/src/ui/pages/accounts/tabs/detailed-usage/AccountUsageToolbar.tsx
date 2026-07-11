@@ -438,7 +438,7 @@ const VIEW_TYPE_ITEMS = [
     {
         value: 'tree-diff' as const,
         get text() {
-            return i18n('title_diff') + i18n('value_view-tree');
+            return i18n('title_diff') + ' ' + i18n('value_view-tree');
         },
         get content() {
             return <DiffTitle title={i18n('value_view-tree')} />;
@@ -448,7 +448,7 @@ const VIEW_TYPE_ITEMS = [
     {
         value: 'list-diff' as const,
         get text() {
-            return i18n('title_diff') + i18n('value_view-list');
+            return i18n('title_diff') + ' ' + i18n('value_view-list');
         },
         get content() {
             return <DiffTitle title={i18n('value_view-list')} />;
@@ -458,7 +458,7 @@ const VIEW_TYPE_ITEMS = [
     {
         value: 'list-plus-folders-diff' as const,
         get text() {
-            return i18n('title_diff') + i18n('value_view-list-plus-folders');
+            return i18n('title_diff') + ' ' + i18n('value_view-list-plus-folders');
         },
         get content() {
             return <DiffTitle title={i18n('value_view-list-plus-folders')} />;
@@ -470,8 +470,7 @@ const VIEW_TYPE_ITEMS = [
 function DiffTitle({title}: {title: string}) {
     return (
         <React.Fragment>
-            <Secondary>{i18n('title_diff')}</Secondary>
-            {title}
+            <Secondary>{i18n('title_diff')}</Secondary> {title}
         </React.Fragment>
     );
 }
