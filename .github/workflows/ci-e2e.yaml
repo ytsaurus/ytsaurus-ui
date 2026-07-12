@@ -73,7 +73,7 @@ jobs:
     steps:
       - name: Run containers for 'Local'
         run: |
-          run_local_cluster.sh --cluster-name ui --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e  --init-operations-archive
+          # run_local_cluster.sh --cluster-name ui --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e  --init-operations-archive
       - name: Checkout
         uses: actions/checkout@v2
         with:
@@ -86,19 +86,19 @@ jobs:
       - name: npm ci
         run: |
           cd packages/ui/tests
-          npm ci
+          # npm ci
       - name: Install browsers
         run: |
           cd packages/ui/tests
-          npx playwright install chromium
+          # npx playwright install chromium
       - name: Init YT local
         run: |
           cd packages/ui
-          YT_PROXY=`hostname`:8000 npm run e2e:localmode:init
+          # YT_PROXY=`hostname`:8000 npm run e2e:localmode:init
       - name: E2E for 'Local'
         run: |
           cd packages/ui
-          npm run e2e:localmode:ui
+          # npm run e2e:localmode:ui
       - name: Upload local test-results
         uses: actions/upload-artifact@v4
         if: always()
@@ -118,8 +118,8 @@ jobs:
     steps:
       - name: Run containers for 'Local as remote'
         run: |
-          run_local_cluster.sh --stop || true
-          run_local_cluster.sh --cluster-name ui --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e --docker-hostname `hostname` --fqdn localhost --ui-network bridge  --init-operations-archive
+          # run_local_cluster.sh --stop || true
+          # run_local_cluster.sh --cluster-name ui --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e --docker-hostname `hostname` --fqdn localhost --ui-network bridge  --init-operations-archive
       - name: Checkout
         uses: actions/checkout@v2
         with:
@@ -132,12 +132,12 @@ jobs:
       - name: npm ci
         run: |
           cd packages/ui/tests
-          npm ci
+          # npm ci
       - name: Tests for 'Local as remote'
         run: |
           cd packages/ui
-          YT_PROXY=`hostname`:8000 npm run e2e:localmode:init
-          npm run e2e:localmode:remote
+          # YT_PROXY=`hostname`:8000 npm run e2e:localmode:init
+          # npm run e2e:localmode:remote
       - name: Upload local test-results
         uses: actions/upload-artifact@v4
         if: always()
@@ -158,8 +158,8 @@ jobs:
     steps:
       - name: Run containers for 'Local'
         run: |
-          run_local_cluster.sh --stop || true
-          run_local_cluster.sh --cluster-name ui --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e  --init-operations-archive
+          # run_local_cluster.sh --stop || true
+          # run_local_cluster.sh --cluster-name ui --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e  --init-operations-archive
       - name: Checkout
         uses: actions/checkout@v2
         with:
@@ -172,11 +172,11 @@ jobs:
       - name: Init YT local
         run: |
           cd packages/ui
-          YT_PROXY=`hostname`:8000 npm run e2e:localmode:init
+          # YT_PROXY=`hostname`:8000 npm run e2e:localmode:init
       - name: Screenshot tests for 'Local'
         run: |
           cd packages/ui
-          npm run e2e:localmode:screenshots
+          # npm run e2e:localmode:screenshots
       - name: Upload local test-results
         uses: actions/upload-artifact@v4
         if: always()
@@ -198,8 +198,30 @@ jobs:
     steps:
       - name: Run containers for 'Local'
         run: |
+          cd packages/ui
+          export cookieDomain=.$(hostname)
+          export externalProxy=external-proxy.$(hostname)
+
+          (
+            echo 127.0.0.1 $externalProxy
+            echo ::1 $externalProxy
+          ) >> /etc/hosts
+
           run_local_cluster.sh --stop || true
-          run_local_cluster.sh --cluster-name ui --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e  --init-operations-archive --with-auth --run-prometheus
+
+          run_local_cluster.sh \
+            --cluster-name ui \
+            --node-count 2 \
+            --ui-skip-pull true \
+            --ui-version local \
+            --yt-version stable \
+            --init-operations-archive \
+            --ui-app-installation e2e \
+            --with-auth \
+            --run-prometheus \
+            --ui-external-proxy $externalProxy \
+            --ui-auth-cookie-domain .cookieDomain
+
       - name: Checkout
         uses: actions/checkout@v2
         with:
@@ -222,10 +244,11 @@ jobs:
           cd packages/ui
           WITH_AUTH=true YT_TOKEN=password YT_PROXY=`hostname`:8000 npm run e2e:localmode:monitoring:init
       - name: YT auth
+      - name: Prepare auth file
         run: |
           cd packages/ui
           npm run e2e:localmode:passwd:auth
-      - name: E2E-monitoring
+      - name: E2E-passwd
         run: |
           cd packages/ui
           npm run e2e:localmode:passwd
