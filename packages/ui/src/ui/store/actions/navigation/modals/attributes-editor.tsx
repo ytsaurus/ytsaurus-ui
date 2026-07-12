@@ -157,7 +157,7 @@ export function navigationSetNodeAttributes(
                 const newAttrs = {...restGeneralAttrs, ...storageAttrs};
                 const type = ypath.getValue(attrs, '/@type');
                 const isDynamic = ypath.getValue(attrs, '/@dynamic');
-                const isDynTable = type === 'table' && isDynamic;
+                const isDynTable = ['table', 'replicated_table'].includes(type) && isDynamic;
                 if (in_memory_mode !== undefined && isDynTable) {
                     Object.assign(newAttrs, {in_memory_mode});
                 }
