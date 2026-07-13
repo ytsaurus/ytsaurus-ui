@@ -7,7 +7,7 @@ import ColumnHeader, {
     type HasSortColumn,
 } from '../../../../../components/ColumnHeader/ColumnHeader';
 import {toggleColumnSortOrder} from '../../../../../store/actions/tables';
-import {getTables} from '../../../../../store/selectors/tables';
+import {selectTables} from '../../../../../store/selectors/tables';
 import {type NodesTableColumnNames} from '../../../../../pages/components/tabs/nodes/tables';
 import {oldSortStateToOrderType} from '../../../../../utils/sort-helpers';
 
@@ -15,7 +15,7 @@ export function NodesColumnHeader(
     props: HasSortColumn<NodesTableColumnNames> & Pick<ColumnHeaderProps, 'align'>,
 ) {
     const dispatch = useDispatch();
-    const sortState = useSelector(getTables)[COMPONENTS_NODES_TABLE_ID];
+    const sortState = useSelector(selectTables)[COMPONENTS_NODES_TABLE_ID];
     const order = oldSortStateToOrderType(sortState);
 
     const column = props.options?.find(({column}) => sortState.field === column);
