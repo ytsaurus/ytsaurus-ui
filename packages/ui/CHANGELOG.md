@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.18.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.18.0...ui-v3.18.1) (2026-07-13)
+
+
+### Bug Fixes
+
+* **System/Chunks:** do not highlight 'Lost' values ([fd961cc](https://github.com/ytsaurus/ytsaurus-ui/commit/fd961cca387f0acd932b9035dbc4e59af8d6dbca))
+
 ## [3.18.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.17.1...ui-v3.18.0) (2026-07-10)
 
 
