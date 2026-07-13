@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.19.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.18.1...ui-v3.19.0) (2026-07-13)
+
+
+### Features
+
+* **Queries:** unified path action menu [YTFRONT-4886] ([ce3f485](https://github.com/ytsaurus/ytsaurus-ui/commit/ce3f4850553caeeac6967374e9603dd26d74fa17))
+
+
+### Bug Fixes
+
+* **Queries:** cyrillic name in history [YTFRONT-5881] ([ecc03cf](https://github.com/ytsaurus/ytsaurus-ui/commit/ecc03cfc5a5e64754fe32df1298c6359e36e0af6))
+
 ## [3.18.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.18.0...ui-v3.18.1) (2026-07-13)
 
 
