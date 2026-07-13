@@ -1,4 +1,4 @@
-## YTsaurus platform interface
+## YTsaurus platform interface up_cluster_config
 
 User interface for a [YTsaurus platform](https://ytsaurus.tech) cluster.
 
