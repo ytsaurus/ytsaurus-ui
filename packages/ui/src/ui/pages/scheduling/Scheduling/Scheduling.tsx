@@ -24,7 +24,7 @@ import {
 import './Scheduling.scss';
 import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
-import {getSchedulingIsFinalLoadingState} from '../../../store/selectors/scheduling';
+import {selectSchedulingIsFinalLoadingState} from '../../../store/selectors/scheduling';
 import SchedulingResources from '../Content/SchedulingResources';
 import {PoolEditorDialog} from './PoolEditorDialog/PoolEditorDialog';
 import {type RootState} from '../../../store/reducers';
@@ -73,7 +73,7 @@ function Scheduling() {
 const SchedulingMemo = React.memo(Scheduling);
 
 export default function SchedulingWithRum() {
-    const isFinalState = useSelector(getSchedulingIsFinalLoadingState);
+    const isFinalState = useSelector(selectSchedulingIsFinalLoadingState);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.SCHEDULING,

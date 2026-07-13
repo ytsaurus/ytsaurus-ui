@@ -23,7 +23,7 @@ export const selectTree = (state: RootState) => state.scheduling.scheduling.tree
 const selectPoolsRaw = (state: RootState) => state.scheduling.expandedPools.rawPools;
 const selectTreeResources = (state: RootState) => state.scheduling.scheduling.treeResources;
 
-const getSchedulingTreeOperations = createSelector(
+const selectSchedulingTreeOperations = createSelector(
     [selectSchedulingOperations, selectExpandedPoolsTree, selectTree],
     (rawOperations, expandedPoolsTree, tree) => {
         if (tree !== expandedPoolsTree) {
@@ -35,7 +35,7 @@ const getSchedulingTreeOperations = createSelector(
 );
 
 const selectOperationsFiltered = createSelector(
-    [selectPoolsRaw, getSchedulingTreeOperations],
+    [selectPoolsRaw, selectSchedulingTreeOperations],
     (rawPools, rawOperations) => {
         return reduce_(
             rawOperations,

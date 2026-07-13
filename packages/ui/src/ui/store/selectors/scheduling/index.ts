@@ -2,7 +2,7 @@ import {type RootState} from '../../../store/reducers';
 import {calculateLoadingStatus, isFinalLoadingStatus} from '../../../utils/utils';
 import {createSelector} from 'reselect';
 
-export const getSchedulingIsFinalLoadingState = createSelector(
+export const selectSchedulingIsFinalLoadingState = createSelector(
     [
         (store: RootState) => store.scheduling.scheduling.loading,
         (store: RootState) => store.scheduling.scheduling.loaded,
