@@ -4,12 +4,12 @@ import {tableItems} from '../../../../utils/navigation/content/transaction-map/t
 import {NAVIGATION_TRANSACTION_MAP_TABLE_ID} from '../../../../constants/navigation/content/transaction-map';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 
-const getRawTransactions = (state) => state.navigation.content.transactionMap.transactions;
-const getSortState = (state) => state.tables[NAVIGATION_TRANSACTION_MAP_TABLE_ID];
-const getFilter = (state) => state.navigation.content.transactionMap.filter;
+const selectRawTransactions = (state) => state.navigation.content.transactionMap.transactions;
+const selectSortState = (state) => state.tables[NAVIGATION_TRANSACTION_MAP_TABLE_ID];
+const selectFilter = (state) => state.navigation.content.transactionMap.filter;
 
 const selectFilteredTransactions = createSelector(
-    [getRawTransactions, getFilter],
+    [selectRawTransactions, selectFilter],
     (rawTransactions, filter) =>
         hammer.filter.filter({
             data: rawTransactions,
@@ -19,7 +19,7 @@ const selectFilteredTransactions = createSelector(
 );
 
 export const selectTransactions = createSelector(
-    [selectFilteredTransactions, getSortState],
+    [selectFilteredTransactions, selectSortState],
     (filteredTransactions, sortState) =>
         hammer.utils.sort(filteredTransactions, sortState, tableItems),
 );
