@@ -78,9 +78,6 @@ const chunkTypes = [
         get caption() {
             return i18n('field_lost');
         },
-        label(count) {
-            return count > 0 && 'danger';
-        },
     },
     {
         name: 'lost_vital_chunks',
