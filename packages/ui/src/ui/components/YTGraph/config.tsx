@@ -104,6 +104,7 @@ const LAYOUT_OPTIONS = {
     'elk.layered.crossingMinimization.strategy': 'LAYER_PER_LAYER_SWEEP',
     'elk.layered.thoroughness': '200', // Level of detail
     'elk.portConstraints': 'FREE',
+    'elk.spacing.componentComponent': '300',
 };
 
 function toElkNodes(children: Array<ElkNode & {level?: number}> = []) {
