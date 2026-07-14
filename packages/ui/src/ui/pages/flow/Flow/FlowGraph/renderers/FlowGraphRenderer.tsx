@@ -1,12 +1,9 @@
+import {Flex, Icon, type IconData, Text} from '@gravity-ui/uikit';
+import {Tooltip, YTText} from '@ytsaurus/components';
 import cn from 'bem-cn-lite';
 import React from 'react';
-
-import {Dialog, Flex, Icon, Text} from '@gravity-ui/uikit';
-import {type IconData} from '@gravity-ui/uikit';
-
 import {type FlowMessageType, type FlowNodeStatusType} from '../../../../../../shared/yt-types';
 import format from '../../../../../common/hammer/format';
-import {YTErrorBlock} from '../../../../../containers/Block/Block';
 import {
     ClickableText,
     type ClickableTextProps,
@@ -15,9 +12,10 @@ import {ExpandButton} from '../../../../../components/ExpandButton';
 import YTIcon from '../../../../../components/Icon/Icon';
 import Label from '../../../../../components/Label';
 import {Markdown} from '../../../../../components/Markdown/Markdown';
-import {Tooltip, YTText} from '@ytsaurus/components';
 import {Yson} from '../../../../../components/Yson/Yson';
+import {YTErrorBlock} from '../../../../../containers/Block/Block';
 import './FlowGraphRenderer.scss';
+import {useFlowMessagesDialogContext} from './FlowMessagesDialogContext/FlowMessagesDialogContext';
 
 const block = cn('yt-flow-graph-renderer');
 
@@ -52,24 +50,22 @@ export function FlowCaption1({text}: {text: React.ReactNode}) {
     );
 }
 
-type FlowMessagesProps = {data?: Array<FlowMessageType>; paddingTop?: 'none'};
+export type FlowMessagesProps = {data?: Array<FlowMessageType>; paddingTop?: 'none'};
 
 export function FlowMessages({data, paddingTop}: FlowMessagesProps) {
-    const [visible, setVisible] = React.useState(false);
-
     const color = useFlowMessagesColor(data);
+    const {setVisibleMessages} = useFlowMessagesDialogContext();
 
     return !data?.length ? null : (
         <div className={block('messages', {'padding-top': paddingTop})}>
-            <ClickableText color={color} onClick={() => setVisible(true)}>
+            <ClickableText color={color} onClick={() => setVisibleMessages(data)}>
                 Messages ({data.length})
             </ClickableText>
-            {visible && <FlowMessagesDialog data={data} onClose={() => setVisible(false)} />}
         </div>
     );
 }
 
-export function useFlowMessagesColor(data: FlowMessagesProps['data']) {
+function useFlowMessagesColor(data: FlowMessagesProps['data']) {
     return React.useMemo(() => {
         return data?.reduce(
             (acc, {level}) => {
@@ -85,17 +81,6 @@ export function useFlowMessagesColor(data: FlowMessagesProps['data']) {
             undefined as ClickableTextProps['color'],
         );
     }, [data]);
-}
-
-function FlowMessagesDialog({data, onClose}: FlowMessagesProps & {onClose(): void}) {
-    return (
-        <Dialog className={block('messages-dialog')} open={true} onClose={onClose}>
-            <Dialog.Header caption="Messages" />
-            <Dialog.Body className={block('messages-body')}>
-                <FlowMessagesContent data={data} />
-            </Dialog.Body>
-        </Dialog>
-    );
 }
 
 export function FlowMessagesContent({data}: FlowMessagesProps) {
