@@ -148,6 +148,28 @@ function useFlowWorkersColumns() {
     const res = React.useMemo(() => {
         const columns: Array<FlowWorkersColumnDef> = [
             {
+                id: 'name',
+                header: () => i18n('name'),
+                size: 400,
+                cell: ({row: {original: item}}) => {
+                    return (
+                        <TableCell>
+                            <YTText ellipsis>{item.name}</YTText>
+                            <ClipboardButton
+                                className={block('show-on-row-hover')}
+                                text={item.name}
+                                view="flat-secondary"
+                            />
+                        </TableCell>
+                    );
+                },
+                enableColumnFilter: false,
+                enableHiding: false,
+                accessorFn(d) {
+                    return d.name;
+                },
+            },
+            {
                 id: 'address',
                 header: () => i18n('address'),
                 size: 400,

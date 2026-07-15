@@ -2,4 +2,12 @@
     &__name-filter {
         width: 400px;
     }
+
+    tr &__show-on-row-hover {
+        display: none;
+    }
+
+    tr:hover &__show-on-row-hover {
+        display: unset;
+    }
 }
