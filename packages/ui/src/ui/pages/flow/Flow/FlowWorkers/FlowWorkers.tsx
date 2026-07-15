@@ -1,3 +1,5 @@
+import terminalSvg from '@gravity-ui/icons/svgs/terminal-line.svg';
+import {ClipboardButton, YTText} from '@ytsaurus/components';
 import cn from 'bem-cn-lite';
 import moment from 'moment';
 import React from 'react';
@@ -11,13 +13,12 @@ import {
     type tanstack,
     useTable,
 } from '../../../../components/DataTableGravity';
-import Link from '../../../../containers/Link/Link';
 import Loader from '../../../../components/Loader/Loader';
-import {NoWrap} from '@ytsaurus/components';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {formatTimeDuration} from '../../../../components/TimeDuration/TimeDuration';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
+import Link from '../../../../containers/Link/Link';
 import {useSettingsColumnSizes} from '../../../../hooks/settings/use-settings-column-sizes';
 import {FlowError} from '../../../../pages/flow/flow-components/FlowError/FlowError';
 import {ShowDataButton} from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
@@ -176,16 +177,21 @@ function useFlowWorkersColumns() {
                 cell: ({row: {original: item}}) => {
                     return (
                         <TableCell>
-                            <NoWrap>
+                            <YTText ellipsis>
                                 <FlowWorkerAddress item={item} />
-                            </NoWrap>
+                            </YTText>
+                            <ClipboardButton
+                                className={block('show-on-row-hover')}
+                                text={item.rpc_address}
+                                view="flat-secondary"
+                            />
                         </TableCell>
                     );
                 },
                 enableColumnFilter: false,
                 enableHiding: false,
-                accessorFn(d) {
-                    return d.address;
+                accessorFn({rpc_address}) {
+                    return rpc_address;
                 },
             },
             {
@@ -267,11 +273,11 @@ function FlowWorkerAddress({item}: {item: FlowWorkerData}) {
     const path = useSelector(selectFlowPipelinePath);
     return (
         <Link
-            url={makeFlowLink({path, tab: FlowTab.WORKERS, worker: item.address})}
+            url={makeFlowLink({path, tab: FlowTab.WORKERS, worker: item.rpc_address})}
             routed
             routedPreserveLocation
         >
-            {item.address}
+            {item.rpc_address}
         </Link>
     );
 }
