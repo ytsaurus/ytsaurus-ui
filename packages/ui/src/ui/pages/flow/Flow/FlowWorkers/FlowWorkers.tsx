@@ -251,11 +251,19 @@ function useFlowWorkersColumns() {
             {
                 id: 'actions',
                 header: () => null,
-                size: 50,
+                size: 100,
                 cell: ({row: {original: item}}) => {
                     return (
                         <TableCell>
-                            <ClickableAttributesButton title={item.address} attributes={item} />
+                            <ClickableAttributesButton title={item.rpc_address} attributes={item} />
+                            {Boolean(item.remote_shell_command) && (
+                                <ClipboardButton
+                                    icon={terminalSvg}
+                                    text={item.remote_shell_command}
+                                    view="flat-secondary"
+                                    hoverContent={i18n('copy-remote-shell-command')}
+                                />
+                            )}
                         </TableCell>
                     );
                 },

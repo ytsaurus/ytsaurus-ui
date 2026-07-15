@@ -1,5 +1,6 @@
 {
   "address": "Address",
+  "copy-remote-shell-command": "Copy remote shell command",
   "cpu-usage": "CPU usage",
   "health": "Health",
   "incarnation-id": "Incarnation Id",

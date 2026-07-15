@@ -9,7 +9,7 @@ import format from '../../../../common/hammer/format';
 import Label from '../../../../components/Label';
 import Link from '../../../../containers/Link/Link';
 import Loader from '../../../../components/Loader/Loader';
-import {MetaTable, type MetaTableProps} from '@ytsaurus/components';
+import {ClipboardButton, MetaTable, type MetaTableProps} from '@ytsaurus/components';
 import {TemplateId} from '../../../../components/MetaTable/templates/Template';
 import Tabs from '../../../../components/Tabs/Tabs';
 import {FlowEntityTitle} from '../../../../pages/flow/flow-components/FlowEntityHeader';
@@ -303,26 +303,6 @@ function FlowWorkerMeta({data}: {data?: FlowWorkerData}) {
                     value: data?.groups.join(',') || format.NO_VALUE,
                     visible,
                 },
-                {
-                    key: 'deploy-link',
-                    label: i18n('deploy-link'),
-                    value: (
-                        <Link url={data?.deploy_address} hasExternalIcon>
-                            {i18n('link')}
-                        </Link>
-                    ),
-                    visible: visible && Boolean(data?.deploy_address),
-                },
-                {
-                    key: 'backtraces',
-                    label: i18n('backtraces'),
-                    value: (
-                        <Link url={data?.backtrace_address} hasExternalIcon>
-                            {i18n('link')}
-                        </Link>
-                    ),
-                    visible: visible && Boolean(data?.backtrace_address),
-                },
             ],
             [
                 {
@@ -350,7 +330,38 @@ function FlowWorkerMeta({data}: {data?: FlowWorkerData}) {
                     visible,
                 },
             ],
-            getLoadedDataMetaItems({label: i18n('worker-data'), data}),
+            [
+                ...getLoadedDataMetaItems({label: i18n('worker-data'), data}),
+                {
+                    key: 'remote-shell',
+                    labelTopPadding: '4px',
+                    label: i18n('remote-shell-command'),
+                    value: (
+                        <ClipboardButton text={data?.remote_shell_command} view="flat-secondary" />
+                    ),
+                    visible: visible && Boolean(data?.remote_shell_command),
+                },
+                {
+                    key: 'deploy-link',
+                    label: i18n('deploy-link'),
+                    value: (
+                        <Link url={data?.deploy_address} hasExternalIcon>
+                            {i18n('link')}
+                        </Link>
+                    ),
+                    visible: visible && Boolean(data?.deploy_address),
+                },
+                {
+                    key: 'backtraces',
+                    label: i18n('backtraces'),
+                    value: (
+                        <Link url={data?.backtrace_address} hasExternalIcon>
+                            {i18n('link')}
+                        </Link>
+                    ),
+                    visible: visible && Boolean(data?.backtrace_address),
+                },
+            ],
         ];
         return res;
     }, [data]);

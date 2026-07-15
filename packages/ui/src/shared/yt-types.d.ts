@@ -746,6 +746,7 @@ export type FlowWorkerData = {
     backtrace_address: string;
     partitions: Array<FlowComputationPartitionType>;
     flamegraph_address: string;
+    remote_shell_command?: string;
 };
 
 export type FlowDescribeComputationsData = {
