@@ -15,6 +15,7 @@
   "monitoring": "Monitoring",
   "bytes-per-second": "Bytes per second",
   "deploy-link": "Deploy link",
+  "name": "Name",
   "worker": "Worker",
   "worker-data": "Worker data",
   "worker-groups": "Worker groups",

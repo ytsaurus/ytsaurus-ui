@@ -730,6 +730,7 @@ export type FlowWorkerDetailsType = FlowWorkerData & {};
 
 export type FlowWorkerData = {
     address: string;
+    name: string;
     banned: boolean;
     bytes_per_second: number;
     cpu_usage: number;

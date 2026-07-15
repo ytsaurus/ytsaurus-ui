@@ -287,6 +287,12 @@ function FlowWorkerMeta({data}: {data?: FlowWorkerData}) {
                 ...getFlowPathMetaItems(path),
                 {key: 'address', label: i18n('address'), value: data?.address, visible},
                 {
+                    key: 'name',
+                    label: i18n('name'),
+                    value: data?.name,
+                    visible: Boolean(data?.name),
+                },
+                {
                     key: 'worker-incarnation-id',
                     label: i18n('worker-incarnation-id'),
                     value: <TemplateId id={data?.incarnation_id} />,
