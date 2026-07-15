@@ -1,4 +1,8 @@
 .yt-navigation-breadcrumbs {
+    &__copy-btn {
+        margin-left: var(--g-spacing-half);
+    }
+
     &__root-icon {
         margin-bottom: -2px;
     }
