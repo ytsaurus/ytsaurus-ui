@@ -173,7 +173,7 @@ function FlowWorkerActions({data}: {data?: FlowWorkerData}) {
 }
 
 function FlowWorkerBanAction({
-    data: {address: worker, banned},
+    data: {rpc_address: worker, banned},
     pipeline_path,
 }: {
     data: FlowWorkerData;
@@ -245,7 +245,7 @@ function FlowWorkerFlamegraphAction({data: {flamegraph_address}}: {data: FlowWor
 }
 
 function FlowWorkerKillAction({
-    data: {address: worker},
+    data: {rpc_address: worker},
     pipeline_path,
 }: {
     data: FlowWorkerData;
@@ -285,13 +285,13 @@ function FlowWorkerMeta({data}: {data?: FlowWorkerData}) {
         const res: MetaTableProps['items'] = [
             [
                 ...getFlowPathMetaItems(path),
-                {key: 'address', label: i18n('address'), value: data?.address, visible},
                 {
                     key: 'name',
                     label: i18n('name'),
                     value: data?.name,
                     visible: Boolean(data?.name),
                 },
+                {key: 'address', label: i18n('address'), value: data?.rpc_address, visible},
                 {
                     key: 'worker-incarnation-id',
                     label: i18n('worker-incarnation-id'),
