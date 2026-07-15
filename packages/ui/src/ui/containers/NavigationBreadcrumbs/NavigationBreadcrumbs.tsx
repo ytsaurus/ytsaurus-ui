@@ -1,10 +1,11 @@
 import {FolderTree} from '@gravity-ui/icons';
 import {Breadcrumbs} from '@gravity-ui/uikit';
+import {ClipboardButton} from '@ytsaurus/components';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import ypath from '../../common/thor/ypath';
-import Link from '../../containers/Link/Link';
 import {YT} from '../../config/yt-config';
+import Link from '../../containers/Link/Link';
 import {makeNavigationLink} from '../../utils/app-url/navigation';
 import './NavigationBreadcrumbs.scss';
 
@@ -21,19 +22,23 @@ export type OnItemClickType = (
     options: {item: NavigationBreadcrumbsItem; isLast: boolean},
 ) => void;
 
+type NavigationBreadcrumbsProps = {
+    className?: string;
+    path: string;
+    cluster?: string;
+    onItemClick?: OnItemClickType;
+    maxItems?: number;
+    hideCopyButton?: boolean;
+};
+
 export function NavigationBreadcrumbs({
     className,
     path,
     cluster = YT.cluster,
     onItemClick,
     maxItems,
-}: {
-    className?: string;
-    path: string;
-    cluster?: string;
-    onItemClick?: OnItemClickType;
-    maxItems?: number;
-}) {
+    hideCopyButton,
+}: NavigationBreadcrumbsProps) {
     const items = React.useMemo(() => {
         if (!cluster) return [];
 
@@ -74,7 +79,19 @@ export function NavigationBreadcrumbs({
     }, [path, onItemClick, cluster]);
 
     return (
-        <Breadcrumbs className={block(null, className)} maxItems={maxItems}>
+        <Breadcrumbs
+            className={block(null, className)}
+            maxItems={maxItems}
+            endContent={
+                hideCopyButton ? undefined : (
+                    <ClipboardButton
+                        className={block('copy-btn')}
+                        view="flat-secondary"
+                        text={path}
+                    />
+                )
+            }
+        >
             {items}
         </Breadcrumbs>
     );
