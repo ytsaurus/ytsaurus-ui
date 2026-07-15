@@ -16,6 +16,7 @@
   "bytes-per-second": "Bytes per second",
   "deploy-link": "Deploy link",
   "name": "Name",
+  "remote-shell-command": "Remote shell command",
   "worker": "Worker",
   "worker-data": "Worker data",
   "worker-groups": "Worker groups",
