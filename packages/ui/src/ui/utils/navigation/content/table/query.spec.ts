@@ -111,21 +111,21 @@ describe('Query.prepareKey', () => {
     });
 });
 
-describe('Query.prepareOffset', () => {
+describe('Query.prepareWhere', () => {
     const offsetKey = '(10, 20)';
 
     it('uses >= for ascending order', () => {
-        const result = Query.prepareOffset(['pk'], offsetKey, false);
+        const result = Query.prepareWhere(['pk'], offsetKey, 'gq');
         expect(result).toBe('([pk]) >= (10, 20)');
     });
 
     it('uses <= for descending order', () => {
-        const result = Query.prepareOffset(['pk'], offsetKey, true);
+        const result = Query.prepareWhere(['pk'], offsetKey, 'lq');
         expect(result).toBe('([pk]) <= (10, 20)');
     });
 
     it('escapes multiple offset columns', () => {
-        const result = Query.prepareOffset(['a', 'b'], offsetKey, false);
+        const result = Query.prepareWhere(['a', 'b'], offsetKey, 'gq');
         expect(result).toBe('([a], [b]) >= (10, 20)');
     });
 });
