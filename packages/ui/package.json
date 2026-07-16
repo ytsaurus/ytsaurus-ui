@@ -99,6 +99,8 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
     "@gravity-ui/app-builder": "^0.26.0",
     "@gravity-ui/chartkit": "^7.11.1",
     "@gravity-ui/components": "^4.12.0",
@@ -166,6 +168,9 @@
     "eslint-plugin-lodash": "^7.4.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "final-form": "^4.20.10",
+    "final-form-arrays": "^3.1.0",
+    "final-form-calculate": "^1.3.2",
     "fontfaceobserver": "^2.1.0",
     "history": "^4.10.1",
     "hoist-non-react-statics": "~3.3.2",
@@ -180,6 +185,7 @@
     "moment": "^2.29.4",
     "moment-timezone": "^0.6.0",
     "monaco-editor": "^0.40.0",
+    "monaco-editor-webpack-plugin": "^7.1.1",
     "monaco-vim": "^0.4.2",
     "msw": "^2.10.3",
     "msw-storybook-addon": "^2.0.5",
@@ -191,6 +197,8 @@
     "rc-slider": "^11.1.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-final-form": "^6.5.9",
+    "react-final-form-arrays": "^3.1.4",
     "react-helmet": "^6.1.0",
     "react-is": "^17.0.2",
     "react-list": "^0.8.17",
@@ -220,7 +228,7 @@
     "web-worker": "^1.3.0"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "gitHead": "aba657f50f894370eaef7f27d5083386e218afe8",
   "overrides": {
