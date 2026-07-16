@@ -28,7 +28,7 @@ import {updateView} from '../../../../../store/actions/navigation';
 import CancelHelper from '../../../../../utils/cancel-helper';
 import {openInNewTab, showErrorPopup} from '../../../../../utils/utils';
 import {prepareRequest} from '../../../../../utils/navigation';
-import Query from '../../../../../utils/navigation/content/table/query';
+import {Query} from '../../../../../utils/navigation/content/table/query';
 import Columns from '../../../../../utils/navigation/content/table/columns';
 import {selectCluster} from '../../../../../store/selectors/global';
 import {

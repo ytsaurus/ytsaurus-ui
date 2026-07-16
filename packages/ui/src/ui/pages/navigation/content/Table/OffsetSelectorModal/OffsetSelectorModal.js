@@ -12,7 +12,7 @@ import map_ from 'lodash/map';
 import {TextInput} from '@gravity-ui/uikit';
 import Modal from '../../../../../components/Modal/Modal';
 
-import Query from '../../../../../utils/navigation/content/table/query';
+import {Query} from '../../../../../utils/navigation/content/table/query';
 
 import {
     selectCurrentOffsetValues,

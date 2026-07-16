@@ -1,9 +1,9 @@
-import Query from './query';
+import {Query} from './query';
 
 // Mock unipika to avoid pulling in the heavy rendering dependency
 jest.mock('../../../../common/thor/unipika', () => ({
-    formatFromYSON: jest.fn((_value: unknown, _settings: unknown) => 'yson-value'),
-    formatFromYQL: jest.fn((_value: unknown, _settings: unknown) => 'yql-value'),
+    formatFromYSON: jest.fn(() => 'yson-value'),
+    formatFromYQL: jest.fn(() => 'yql-value'),
 }));
 
 import unipika from '../../../../common/thor/unipika';
@@ -54,14 +54,16 @@ describe('Query.prepareColumnValue', () => {
     });
 
     it('falls back to formatFromYSON when value is falsy (null)', () => {
-        Query.prepareColumnValue(null, ['some-type']);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        Query.prepareColumnValue(null, ['some-type'] as any);
         expect(unipikaFormatFromYSON).toHaveBeenCalledWith(null, YSON_SETTINGS);
         expect(unipikaFormatFromYQL).not.toHaveBeenCalled();
     });
 
     it('uses formatFromYQL when both value and yqlTypes are present', () => {
         const value = ['data', 1];
-        const yqlTypes = ['type0', 'type1'];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const yqlTypes = ['type0', 'type1'] as any;
         Query.prepareColumnValue(value, yqlTypes);
         expect(unipikaFormatFromYQL).toHaveBeenCalledWith(['data', 'type1'], YSON_SETTINGS);
         expect(unipikaFormatFromYSON).not.toHaveBeenCalled();
@@ -73,7 +75,8 @@ describe('Query.prepareColumnValue', () => {
     });
 
     it('returns the mocked yql-value string from formatFromYQL', () => {
-        const result = Query.prepareColumnValue(['d', 0], ['typeA']);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const result = Query.prepareColumnValue(['d', 0], ['typeA'] as any);
         expect(result).toBe('yql-value');
     });
 });
@@ -85,8 +88,10 @@ describe('Query.prepareKey', () => {
 
     it('returns empty string for an empty key', () => {
         expect(Query.prepareKey([], undefined)).toBe('');
-        expect(Query.prepareKey(null, undefined)).toBe('');
-        expect(Query.prepareKey(undefined, undefined)).toBe('');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        expect(Query.prepareKey(null as any, undefined)).toBe('');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        expect(Query.prepareKey(undefined as any, undefined)).toBe('');
     });
 
     it('wraps a single string value in parentheses without re-formatting', () => {
@@ -143,15 +148,21 @@ describe('Query.prepareOrder', () => {
 });
 
 describe('Query.prepareQuery', () => {
+    // Base params without offset — matches the {offset?: never} branch of QueryOffsetParameters
     const baseParams = {
         path: '//home/test',
         columns: [{name: 'id'}, {name: 'ts'}, {name: 'name'}],
         keyColumns: ['id', 'ts'],
-        offsetColumns: ['id', 'ts'],
-        offset: null,
         limit: 100,
         orderBySupported: false,
         descending: false,
+    };
+
+    // Offset params — matches the {offset, offsetColumns} branch
+    const offsetParams = {
+        ...baseParams,
+        offsetColumns: ['id', 'ts'],
+        offset: '(5, 42)',
     };
 
     it('builds a simple SELECT without WHERE or ORDER BY', () => {
@@ -167,18 +178,14 @@ describe('Query.prepareQuery', () => {
     });
 
     it('includes WHERE clause with multiple offset columns when offset is provided', () => {
-        const result = Query.prepareQuery({...baseParams, offset: '(5, 42)'});
+        const result = Query.prepareQuery(offsetParams);
         expect(result).toBe(
             '[id], [ts], [name] FROM [//home/test] WHERE ([id], [ts]) >= (5, 42) LIMIT 100',
         );
     });
 
     it('includes both WHERE and ORDER BY with multiple columns when both are applicable', () => {
-        const result = Query.prepareQuery({
-            ...baseParams,
-            orderBySupported: true,
-            offset: '(5, 42)',
-        });
+        const result = Query.prepareQuery({...offsetParams, orderBySupported: true});
         expect(result).toBe(
             '[id], [ts], [name] FROM [//home/test] WHERE ([id], [ts]) >= (5, 42) ORDER BY [id] ASC, [ts] ASC LIMIT 100',
         );
@@ -186,9 +193,8 @@ describe('Query.prepareQuery', () => {
 
     it('uses DESC in WHERE and ORDER BY with multiple columns when descending=true', () => {
         const result = Query.prepareQuery({
-            ...baseParams,
+            ...offsetParams,
             orderBySupported: true,
-            offset: '(5, 42)',
             descending: true,
         });
         expect(result).toBe(

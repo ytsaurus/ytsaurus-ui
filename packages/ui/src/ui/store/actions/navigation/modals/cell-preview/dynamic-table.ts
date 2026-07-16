@@ -4,7 +4,7 @@ import {
     selectKeyColumns,
     selectYqlTypes,
 } from '../../../../selectors/navigation/content/table-ts';
-import Query from '../../../../../utils/navigation/content/table/query';
+import {Query} from '../../../../../utils/navigation/content/table/query';
 import {getCliCommandResultFormat} from './format';
 
 export const getDynamicTableCellPath = ({
