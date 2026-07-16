@@ -22,7 +22,7 @@ export async function readDynamicTable({
             ...(setup as object),
             ...tableReadSetup,
         },
-        parameters: {...(parameters as object), ...tableReadParameters},
+        parameters: {...parameters, ...tableReadParameters},
         cancellation,
     });
 

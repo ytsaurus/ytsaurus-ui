@@ -71,7 +71,7 @@ export const getJobsWithEvents =
                 ],
             });
 
-            const jobs = listResponse.jobs as OperationJob[];
+            const jobs = listResponse.jobs as unknown as OperationJob[];
             dispatch(setJobsCountError(jobs.length >= MAX_JOBS_COUNT));
 
             const result = jobs.reduce<Pick<JobsTimelineState, 'jobs' | 'eventsInterval'>>(

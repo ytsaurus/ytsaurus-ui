@@ -3,6 +3,7 @@ import {type YTError} from '../@types/types';
 import {type RawJob} from '../ytsaurus-ui.ui/types/operations/job';
 import {type DescribedSettings, type Stage} from './constants/settings-types';
 import {type UISettings} from './ui-settings';
+import {type CheckPermissionResult} from './utils/check-permission';
 
 export type RawVersion = `${MajorMinorPatch}-${string}` | '';
 
@@ -158,6 +159,10 @@ export type SetSubRequest<K extends string, T extends BaseBatchParams, V> = SubR
     input: V;
 };
 
+export interface OperationIdParams {
+    operation_id: string;
+}
+
 export interface BaseBatchParams {
     transaction_id?: string;
     ui_marker?: string;
@@ -179,6 +184,17 @@ export interface PathParams extends BaseBatchParams {
                   stringify?: boolean;
               };
           };
+}
+
+export interface SelectRowsParams {
+    query: string;
+    timestamp?: number;
+
+    dump_error_into_response?: boolean;
+    omit_inaccessible_columns?: boolean;
+    omit_inaccessible_rows?: boolean;
+
+    output_format: ReadTableOutputFormat;
 }
 
 export interface GetParams extends PathParams {
@@ -207,11 +223,16 @@ export interface MergeParams extends BaseBatchParams {
     };
 }
 
-export interface CheckPermissionsParams extends BaseBatchParams {
+export interface CheckPermissionParams extends BaseBatchParams {
     user: string;
     path: string;
     permission: YTPermissionType;
+    columns?: Array<string>;
     vital?: boolean;
+}
+
+export interface CheckPermissionResponse extends CheckPermissionResult {
+    columns?: Array<CheckPermissionResult>;
 }
 
 export interface TransferPoolQuotaParams extends BaseBatchParams {
@@ -300,6 +321,8 @@ export interface ListJobsParameters {
     limit?: number;
 
     operation_incarnation?: string;
+
+    attributes?: Array<string>;
 }
 
 export interface GetJobParameters {
@@ -417,7 +440,7 @@ export interface AlterReplicationCardParams {
 export type BatchSubRequest =
     | SubRequest<'transfer_pool_resources', TransferPoolQuotaParams>
     | SubRequest<'mount_table' | 'unmount_table' | 'freeze_table' | 'unfreeze_table', PathParams>
-    | SubRequest<'check_permission', CheckPermissionsParams>
+    | SubRequest<'check_permission', CheckPermissionParams>
     | SetSubRequest<'set', PathParams, any>
     | SubRequest<'remove', PathParams>
     | SubRequest<'get' | 'list', GetParams>
@@ -857,7 +880,7 @@ export type ReadTableParameters = BaseBatchParams & {
 };
 
 export type ReadTableOutputFormat = {
-    $value: 'web_json';
+    $value: 'web_json' | 'json';
     $attributes: {
         value_format?: 'yql';
         field_weight_limit?: number;
@@ -888,3 +911,12 @@ export type OperationEvent = {
 };
 
 export type ListOperationEventsResponse = Array<OperationEvent>;
+
+export type SupportedFeatures = {
+    compression_codecs?: Array<string>;
+    erasure_codecs?: Array<string>;
+    primitive_types?: Array<string>;
+    operation_statistics_descriptions?: Record<string, {description?: string; unit?: string}>;
+    require_password_in_authentication_commands?: boolean;
+    query_memory_limit_in_tablet_nodes?: boolean;
+};
