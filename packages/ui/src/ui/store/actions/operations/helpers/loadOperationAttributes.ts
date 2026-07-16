@@ -20,7 +20,7 @@ export const loadOperationAttributes = async (id: string, isAlias: boolean) => {
     return ytApiV3.getOperation({
         parameters: {
             operation_id: operationId,
-            includeScheduler,
+            include_scheduler: includeScheduler,
             output_format: TYPED_OUTPUT_FORMAT,
         },
         setup: {JSONSerializer},
