@@ -18,34 +18,67 @@ const GREATER_THAN_OR_EQUAL = '>=';
 const LESS_THAN_OR_EQUAL = '<=';
 const SEPARATOR = ',';
 
+type Column = {name?: string} | string;
+
+type UnipikaSettings = {
+    format: 'yson';
+    break: boolean;
+    indent: number;
+    asHTML: boolean;
+    treatValAsData: boolean;
+};
+
+// A YQL value is a tuple [data, type-index] where the type-index refers to a
+// position in the accompanying yqlTypes array.
+type YqlRawValue = [unknown, number];
+type ColumnValue = YqlRawValue | unknown;
+
+export interface QueryParameters {
+    path: string;
+    columns: Column[];
+    keyColumns: string[];
+    offsetColumns: string[];
+    /** Pre-formatted offset key string, e.g. "(5, 42)". Pass null/undefined for first page. */
+    offset: string | null | undefined;
+    limit: number;
+    orderBySupported: boolean;
+    descending?: boolean;
+}
+
 export default class Query {
     // What if key_column name has unicode symbols ->
     // we won't be able to load attributes (the problem will reveal itself on prev step)
-    static prepareColumns(columns) {
+    static prepareColumns(columns: Column[]): string {
         const selector = map_(columns, (column) => {
-            return ESCAPE_START + (column.name || column) + ESCAPE_END;
+            return (
+                ESCAPE_START +
+                (typeof column === 'string' ? column : (column.name ?? column)) +
+                ESCAPE_END
+            );
         }).join(SEPARATOR + DELIMITER);
 
-        return selector ? selector : '*';
+        return selector || '*';
     }
 
-    static prepareColumnValue(value, yqlTypes) {
-        const settings = {
+    static prepareColumnValue(value: ColumnValue, yqlTypes: string[] | undefined): string {
+        const settings: UnipikaSettings = {
             format: 'yson',
             break: false,
             indent: 0,
             asHTML: false,
             treatValAsData: true,
         };
-        if (!yqlTypes || !value) {
+
+        if (yqlTypes === null || yqlTypes === undefined || value === null || value === undefined) {
             return unipika.formatFromYSON(value, settings);
         }
 
-        const yqlValue = [value[0], yqlTypes[Number(value[1])]];
+        const [data, typeIndex] = value as YqlRawValue;
+        const yqlValue: [unknown, string] = [data, yqlTypes[Number(typeIndex)]];
         return unipika.formatFromYQL(yqlValue, settings);
     }
 
-    static prepareKey(key, yqlTypes) {
+    static prepareKey(key: ColumnValue[], yqlTypes: string[] | undefined): string {
         if (isEmpty_(key)) {
             return '';
         }
@@ -60,7 +93,7 @@ export default class Query {
         );
     }
 
-    static prepareOffset(offsetColumns, offsetKey, descending) {
+    static prepareOffset(offsetColumns: string[], offsetKey: string, descending: boolean): string {
         return (
             KEY_START +
             map_(offsetColumns, (columnName) => {
@@ -74,7 +107,7 @@ export default class Query {
         );
     }
 
-    static prepareOrder(keyColumns, descending) {
+    static prepareOrder(keyColumns: string[], descending: boolean): string {
         return map_(keyColumns, (columnName) => {
             return (
                 ESCAPE_START +
@@ -86,7 +119,7 @@ export default class Query {
         }).join(SEPARATOR + DELIMITER);
     }
 
-    static prepareQuery(parameters) {
+    static prepareQuery(parameters: QueryParameters): string {
         const {
             path,
             columns,
@@ -97,6 +130,7 @@ export default class Query {
             orderBySupported,
             descending = false,
         } = parameters;
+
         const orderByClause = orderBySupported
             ? ORDER_BY + DELIMITER + Query.prepareOrder(keyColumns, descending) + DELIMITER
             : '';
