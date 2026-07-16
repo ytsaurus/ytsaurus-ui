@@ -5,8 +5,6 @@ import unipika from '../../../../common/thor/unipika';
 
 const ASCENDING_ORDER = 'ASC';
 const DESCENDING_ORDER = 'DESC';
-const GREATER_THAN_OR_EQUAL = '>=';
-const LESS_THAN_OR_EQUAL = '<=';
 
 function wrap(type: 'square' | 'round', str: string): string {
     const [begin, end] = type === 'square' ? ['[', ']'] : ['(', ')'];
@@ -91,13 +89,22 @@ export class Query {
         );
     }
 
-    static prepareOffset(offsetColumns: string[], offsetKey: string, descending: boolean): string {
+    static prepareWhere(
+        offsetColumns: string[],
+        offsetKey: string,
+        op: 'lq' | 'gq' | 'eq',
+    ): string {
+        const comparator = {
+            lq: '<=',
+            gq: '>=',
+            eq: '=',
+        }[op];
         return [
             wrap(
                 'round',
                 map_(offsetColumns, (columnName) => wrap('square', columnName)).join(', '),
             ),
-            descending ? LESS_THAN_OR_EQUAL : GREATER_THAN_OR_EQUAL,
+            comparator,
             offsetKey,
         ].join(' ');
     }
@@ -125,7 +132,9 @@ export class Query {
         return [
             Query.prepareColumns(columns),
             `FROM ${wrap('square', path)}`,
-            offset ? `WHERE ${Query.prepareOffset(offsetColumns, offset, descending)}` : '',
+            offset
+                ? `WHERE ${Query.prepareWhere(offsetColumns, offset, descending ? 'lq' : 'gq')}`
+                : '',
             orderBySupported ? `ORDER BY ${Query.prepareOrder(keyColumns, descending)}` : '',
             `LIMIT ${limit}`,
         ]
