@@ -1,4 +1,4 @@
-import Query from '../../../../../utils/navigation/content/table/query';
+import {Query} from '../../../../../utils/navigation/content/table/query';
 import {updateTableData} from '../../../../../store/actions/navigation/content/table/table';
 import {
     CLOSE_OFFSET_SELECTOR_MODAL,

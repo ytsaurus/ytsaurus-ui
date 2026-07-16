@@ -1,22 +1,17 @@
+import {type TypeArray} from '@ytsaurus/components';
 import isEmpty_ from 'lodash/isEmpty';
 import map_ from 'lodash/map';
-
 import unipika from '../../../../common/thor/unipika';
 
-const FROM = 'FROM';
-const LIMIT = 'LIMIT';
-const WHERE = 'WHERE';
-const ORDER_BY = 'ORDER BY';
 const ASCENDING_ORDER = 'ASC';
 const DESCENDING_ORDER = 'DESC';
-const DELIMITER = ' ';
-const ESCAPE_START = '[';
-const ESCAPE_END = ']';
-const KEY_START = '(';
-const KEY_END = ')';
 const GREATER_THAN_OR_EQUAL = '>=';
 const LESS_THAN_OR_EQUAL = '<=';
-const SEPARATOR = ',';
+
+function wrap(type: 'square' | 'round', str: string): string {
+    const [begin, end] = type === 'square' ? ['[', ']'] : ['(', ')'];
+    return begin + str + end;
+}
 
 type Column = {name?: string} | string;
 
@@ -33,34 +28,38 @@ type UnipikaSettings = {
 type YqlRawValue = [unknown, number];
 type ColumnValue = YqlRawValue | unknown;
 
-export interface QueryParameters {
+export type QueryParameters = {
     path: string;
     columns: Column[];
-    keyColumns: string[];
-    offsetColumns: string[];
-    /** Pre-formatted offset key string, e.g. "(5, 42)". Pass null/undefined for first page. */
-    offset: string | null | undefined;
+    keyColumns?: string[];
     limit: number;
-    orderBySupported: boolean;
+    orderBySupported?: boolean;
     descending?: boolean;
-}
+} & QueryOffsetParameters;
 
-export default class Query {
+export type QueryOffsetParameters =
+    | {offset?: never; offsetColumns?: never}
+    | {
+          /** Pre-formatted offset key string, e.g. "(5, 42)". Pass null/undefined for first page. */
+          offset: string;
+          offsetColumns: Array<string>;
+      };
+
+export class Query {
     // What if key_column name has unicode symbols ->
     // we won't be able to load attributes (the problem will reveal itself on prev step)
     static prepareColumns(columns: Column[]): string {
         const selector = map_(columns, (column) => {
-            return (
-                ESCAPE_START +
-                (typeof column === 'string' ? column : (column.name ?? column)) +
-                ESCAPE_END
+            return wrap(
+                'square',
+                typeof column === 'string' ? column : String(column.name ?? column),
             );
-        }).join(SEPARATOR + DELIMITER);
+        }).join(', ');
 
         return selector || '*';
     }
 
-    static prepareColumnValue(value: ColumnValue, yqlTypes: string[] | undefined): string {
+    static prepareColumnValue(value: ColumnValue, yqlTypes?: TypeArray[] | null): string {
         const settings: UnipikaSettings = {
             format: 'yson',
             break: false,
@@ -74,49 +73,41 @@ export default class Query {
         }
 
         const [data, typeIndex] = value as YqlRawValue;
-        const yqlValue: [unknown, string] = [data, yqlTypes[Number(typeIndex)]];
+        const yqlValue = [data, yqlTypes[Number(typeIndex)]];
         return unipika.formatFromYQL(yqlValue, settings);
     }
 
-    static prepareKey(key: ColumnValue[], yqlTypes: string[] | undefined): string {
+    static prepareKey(key: ColumnValue[], yqlTypes?: TypeArray[] | null): string {
         if (isEmpty_(key)) {
             return '';
         }
-        return (
-            KEY_START +
+        return wrap(
+            'round',
             map_(key, (columnValue) => {
                 return typeof columnValue === 'string'
                     ? columnValue
                     : Query.prepareColumnValue(columnValue, yqlTypes);
-            }).join(SEPARATOR + DELIMITER) +
-            KEY_END
+            }).join(', '),
         );
     }
 
     static prepareOffset(offsetColumns: string[], offsetKey: string, descending: boolean): string {
-        return (
-            KEY_START +
-            map_(offsetColumns, (columnName) => {
-                return ESCAPE_START + columnName + ESCAPE_END;
-            }).join(SEPARATOR + DELIMITER) +
-            KEY_END +
-            DELIMITER +
-            (descending ? LESS_THAN_OR_EQUAL : GREATER_THAN_OR_EQUAL) +
-            DELIMITER +
-            offsetKey
-        );
+        return [
+            wrap(
+                'round',
+                map_(offsetColumns, (columnName) => wrap('square', columnName)).join(', '),
+            ),
+            descending ? LESS_THAN_OR_EQUAL : GREATER_THAN_OR_EQUAL,
+            offsetKey,
+        ].join(' ');
     }
 
-    static prepareOrder(keyColumns: string[], descending: boolean): string {
+    static prepareOrder(keyColumns?: string[], descending?: boolean): string {
         return map_(keyColumns, (columnName) => {
             return (
-                ESCAPE_START +
-                columnName +
-                ESCAPE_END +
-                DELIMITER +
-                (descending ? DESCENDING_ORDER : ASCENDING_ORDER)
+                wrap('square', columnName) + ' ' + (descending ? DESCENDING_ORDER : ASCENDING_ORDER)
             );
-        }).join(SEPARATOR + DELIMITER);
+        }).join(', ');
     }
 
     static prepareQuery(parameters: QueryParameters): string {
@@ -131,29 +122,14 @@ export default class Query {
             descending = false,
         } = parameters;
 
-        const orderByClause = orderBySupported
-            ? ORDER_BY + DELIMITER + Query.prepareOrder(keyColumns, descending) + DELIMITER
-            : '';
-
-        return (
-            Query.prepareColumns(columns) +
-            DELIMITER +
-            FROM +
-            DELIMITER +
-            ESCAPE_START +
-            path +
-            ESCAPE_END +
-            DELIMITER +
-            (offset
-                ? WHERE +
-                  DELIMITER +
-                  Query.prepareOffset(offsetColumns, offset, descending) +
-                  DELIMITER
-                : '') +
-            orderByClause +
-            LIMIT +
-            DELIMITER +
-            limit
-        );
+        return [
+            Query.prepareColumns(columns),
+            `FROM ${wrap('square', path)}`,
+            offset ? `WHERE ${Query.prepareOffset(offsetColumns, offset, descending)}` : '',
+            orderBySupported ? `ORDER BY ${Query.prepareOrder(keyColumns, descending)}` : '',
+            `LIMIT ${limit}`,
+        ]
+            .filter(Boolean)
+            .join(' ');
     }
 }

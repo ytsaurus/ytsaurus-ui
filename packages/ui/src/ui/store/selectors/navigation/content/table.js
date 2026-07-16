@@ -11,7 +11,7 @@ import {selectAttributes} from '../../../../store/selectors/navigation';
 import {selectShouldUseYqlTypes} from '../../../../store/selectors/settings/settings-development';
 
 import Columns from '../../../../utils/navigation/content/table/columns';
-import Query from '../../../../utils/navigation/content/table/query';
+import {Query} from '../../../../utils/navigation/content/table/query';
 import {getColumnsValues} from '../../../../utils/navigation/content/table/table';
 import {
     selectColumns,

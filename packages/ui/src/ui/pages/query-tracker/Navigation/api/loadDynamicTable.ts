@@ -1,7 +1,7 @@
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import unipika from '../../../../common/thor/unipika';
-import Query from '../../../../utils/navigation/content/table/query';
+import {Query} from '../../../../utils/navigation/content/table/query';
 import {injectColumnsFromSchema} from '../../../../utils/navigation/content/table/table-ts';
 import {type NavigationTableSchema} from '../../../../store/reducers/query-tracker/queryNavigationSlice';
 import {JSONSerializer} from '../../../../common/yt-api';
@@ -78,13 +78,12 @@ export async function loadDynamicTableRequest({
         return Promise.reject(new Error('Dynamic table has denied key columns'));
     }
 
-    const aColumns = availableColumns.map(unipika.decode);
+    const aColumns: Array<string> = availableColumns.map(unipika.decode);
     const parameters = {
         query: Query.prepareQuery({
-            aColumns,
+            columns: aColumns,
             path,
             keyColumns,
-            offset: 0,
             limit,
         }),
         output_format,
