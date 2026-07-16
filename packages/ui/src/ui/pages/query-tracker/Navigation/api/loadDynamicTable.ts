@@ -20,14 +20,6 @@ type LoadDynamicTableParams = {
     output_format: ReadTableOutputFormat;
 };
 
-type ColumnPermission = {
-    action: string;
-    object_id: string;
-    object_name: string;
-    subject_id: string;
-    subject_name: string;
-};
-
 export async function loadDynamicTableRequest({
     clusterConfig,
     path,
@@ -38,7 +30,7 @@ export async function loadDynamicTableRequest({
     output_format,
 }: LoadDynamicTableParams): Promise<ReadTableResult> {
     const allColumns = schema.map(({name}) => name);
-    const permissions = await wrapApiPromiseByToaster<{columns: ColumnPermission[]}>(
+    const permissions = await wrapApiPromiseByToaster(
         ytApiV3Id.checkPermission(YTApiId.dynTableCheckPerm, {
             setup: {
                 proxy: getClusterProxy(clusterConfig),

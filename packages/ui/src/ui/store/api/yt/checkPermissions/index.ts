@@ -4,7 +4,7 @@ import {selectCluster} from '../../../../store/selectors/global/cluster';
 import {selectUseAutoRefresh} from '../../../../store/selectors/settings/settings-ts';
 import {type OverrideDataType} from '../types';
 import {ytApi} from '../ytApi';
-import {type CheckPermissionParams, checkPermission} from './endpoint';
+import {type Params, checkPermission} from './endpoint';
 
 const checkPermissionApi = ytApi.injectEndpoints({
     endpoints: (build) => ({
@@ -15,7 +15,7 @@ const checkPermissionApi = ytApi.injectEndpoints({
     }),
 });
 
-export function useCheckPermissionQuery(params: CheckPermissionParams) {
+export function useCheckPermissionQuery(params: Params) {
     const useAutoRefresh = useSelector(selectUseAutoRefresh);
     const cluster = useSelector(selectCluster);
 

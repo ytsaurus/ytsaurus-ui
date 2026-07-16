@@ -7,6 +7,7 @@ import {
 } from '../../../constants/global';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {type StatisticInfo} from '../../../components/StatisticTable';
+import {type SupportedFeatures} from '../../../../shared/yt-types';
 
 export interface SupportedFeaturesState {
     loaded: boolean;
@@ -14,14 +15,7 @@ export interface SupportedFeaturesState {
     error: YTError | undefined;
 
     featuresCluster: string;
-    features: {
-        compression_codecs?: Array<string>;
-        erasure_codecs?: Array<string>;
-        primitive_types?: Array<string>;
-        operation_statistics_descriptions?: Record<string, OperationStatisticInfo>;
-        require_password_in_authentication_commands?: boolean;
-        query_memory_limit_in_tablet_nodes?: boolean;
-    };
+    features: SupportedFeatures;
 
     flow_pipelines?: {
         pipeline_list_enabled: boolean;

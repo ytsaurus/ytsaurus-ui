@@ -59,7 +59,7 @@ export function performAction<T = unknown>({
 
     getMetrics().countEvent('operation_detail_action', name);
 
-    return ytApiV3[`${name}Operation`](parameters).then(updateOperation);
+    return ytApiV3[`${name}Operation` as const](parameters).then(updateOperation);
 }
 
 export function getDetailsTabsShowSettings(operation: unknown) {

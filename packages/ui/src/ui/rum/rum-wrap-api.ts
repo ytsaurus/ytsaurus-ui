@@ -9,10 +9,13 @@ import {
     type AlterReplicationCardParams,
     type BatchResultsItem,
     type BatchSubRequest,
+    type CheckPermissionParams,
+    type CheckPermissionResponse,
     type ExpectedVersion,
     type FlowExecuteCommand,
     type FlowExecuteTypes,
     type GetFlowViewData,
+    type GetJobParameters,
     type GetParams,
     type GetPipelineStateData,
     /* GetQueryTrackerInfoResponse, */
@@ -20,10 +23,13 @@ import {
     type ListJobsResponse,
     type ListOperationEventsParameters,
     type ListOperationEventsResponse,
+    type OperationIdParams,
     type OutputFormat,
     type PathParams,
     type PipelineParams,
     type ReadTableParameters,
+    type SelectRowsParams,
+    type SupportedFeatures,
     type TableParams,
 } from '../../shared/yt-types';
 import {YTApiId, type YTApiIdType} from '../../shared/constants/yt-api-id';
@@ -34,13 +40,54 @@ import {type FIX_MY_TYPE, type ValueOf} from '../types';
 
 export {YTApiId};
 
+type CreateParams = {
+    path?: string;
+    type: string;
+    recursive?: boolean;
+    ignore_existing?: boolean;
+    attributes?: Record<string, unknown>;
+};
+
+type StartTransactionParams = {timeout?: number};
+
+type WriteFileParams = {
+    path: string;
+    compute_md5?: boolean;
+    ping_ancestor_transactions?: boolean;
+    transaction_id?: string;
+};
+
+type TransactionIdParams = {transaction_id: string};
+
+type GetJobInputPathsParameters = {
+    job_id: string;
+    output_format?: OutputFormat;
+};
+
+type GetOperationParams = {
+    operation_id?: string;
+    operation_alias?: string;
+    include_runtime?: boolean;
+    includeScheduler?: boolean;
+    attributes?: string[];
+    output_format?: OutputFormat;
+};
+
 interface YTApiV3 {
     executeBatch<T = any>(
         ...args: ApiMethodParameters<BatchParameters>
     ): Promise<Array<BatchResultsItem<T>>>;
+    set(...args: ApiMethodParameters<PathParams>): Promise<void>;
     get<Value = any>(...args: ApiMethodParameters<GetParams>): Promise<Value>;
     list<Value = any>(...args: ApiMethodParameters<GetParams>): Promise<Value>;
+    remove(...args: ApiMethodParameters<PathParams>): Promise<void>;
     exists(...args: ApiMethodParameters<PathParams>): Promise<boolean>;
+    create(...args: ApiMethodParameters<CreateParams>): Promise<void>;
+    startTransaction(...args: ApiMethodParameters<StartTransactionParams>): Promise<string>;
+    writeFile(...args: ApiMethodParameters<WriteFileParams>): Promise<void>;
+    commitTransaction(...args: ApiMethodParameters<TransactionIdParams>): Promise<void>;
+    abortTransaction(...args: ApiMethodParameters<TransactionIdParams>): Promise<void>;
+    getOperation<Value = any>(...args: ApiMethodParameters<GetOperationParams>): Promise<Value>;
     alterQuery(
         ...args: ApiMethodParameters<{
             stage?: string;
@@ -53,10 +100,30 @@ interface YTApiV3 {
     ): Promise<any>;
     listJobs(...args: ApiMethodParameters<ListJobsParameters>): Promise<ListJobsResponse>;
     readTable(...args: ApiMethodParameters<ReadTableParameters>): Promise<unknown>;
-    [method: string]: (...args: ApiMethodParameters<any>) => Promise<any>;
+    selectRows<Value = any>(...args: ApiMethodParameters<SelectRowsParams>): Promise<Value>;
+    abortOperation(...args: ApiMethodParameters<OperationIdParams>): Promise<void>;
+    completeOperation(...args: ApiMethodParameters<OperationIdParams>): Promise<void>;
+    resumeOperation(...args: ApiMethodParameters<OperationIdParams>): Promise<void>;
+    suspendOperation(...args: ApiMethodParameters<OperationIdParams>): Promise<void>;
+    checkPermission(
+        ...args: ApiMethodParameters<CheckPermissionParams>
+    ): Promise<CheckPermissionResponse>;
+    alterTableReplica(
+        ...args: ApiMethodParameters<{
+            replica_id: string;
+            mode?: string;
+            enabled?: boolean;
+            enable_replicated_table_tracker?: boolean;
+        }>
+    ): Promise<void>;
+    getSupportedFeatures(...args: ApiMethodParameters<{}>): Promise<{features: SupportedFeatures}>;
+    getJob<Value = any>(...args: ApiMethodParameters<GetJobParameters>): Promise<Value>;
+    getJobInputPaths<Value = any>(
+        ...args: ApiMethodParameters<GetJobInputPathsParameters>
+    ): Promise<Value>;
 }
 
-type YTApiV3OmitT = Omit<YTApiV3, 'get' | 'list' | 'executeBatch'>;
+type YTApiV3OmitT = Omit<YTApiV3, 'get' | 'list' | 'executeBatch' | 'selectRows'>;
 
 type YTApiV3WithId = {
     [K in keyof YTApiV3OmitT]: {
@@ -69,6 +136,10 @@ type YTApiV3WithId = {
     ): Promise<Array<BatchResultsItem<T>>>;
     get<Value = any>(id: YTApiIdType, ...args: ApiMethodParameters<GetParams>): Promise<Value>;
     list<Value = any>(id: YTApiIdType, ...args: ApiMethodParameters<GetParams>): Promise<Value>;
+    selectRows<Value = any>(
+        id: YTApiIdType,
+        ...args: ApiMethodParameters<SelectRowsParams>
+    ): Promise<Value>;
 };
 
 type YTApiV4 = {
@@ -78,7 +149,6 @@ type YTApiV4 = {
     get<Value = any>(...args: ApiMethodParameters<GetParams>): Promise<{value: Value}>;
     list<Value = any>(...args: ApiMethodParameters<GetParams>): Promise<{value: Value}>;
     exists(...args: ApiMethodParameters<PathParams>): Promise<{value: boolean}>;
-
     startQuery(...args: ApiMethodParameters<FIX_MY_TYPE>): Promise<FIX_MY_TYPE>;
     listQueries(...args: ApiMethodParameters<FIX_MY_TYPE>): Promise<FIX_MY_TYPE>;
     getQuery(...args: ApiMethodParameters<FIX_MY_TYPE>): Promise<FIX_MY_TYPE>;
