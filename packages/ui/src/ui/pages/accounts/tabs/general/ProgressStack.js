@@ -80,14 +80,7 @@ function prepareProgressStack(treeItem, useChildren, getTreeItemInfoFn) {
     return {progressText, progressStack, tooltipInfo, limit};
 }
 
-function ProgressStackImpl({
-    treeItem,
-    infoGetter,
-    useChildren,
-    className,
-    formatNumber,
-    popupClassName,
-}) {
+function ProgressStackImpl({treeItem, infoGetter, useChildren, className, formatNumber}) {
     if (!treeItem || treeItem.isAggregation) {
         return hammer.format.NO_VALUE;
     }
@@ -120,7 +113,7 @@ function ProgressStackImpl({
                     <ProgressTooltip info={tooltipInfo} limit={limit} formatNumber={formatNumber} />
                 }
                 placement={['right', 'left', 'top', 'bottom']}
-                tooltipClassName={popupClassName}
+                style={{maxWidth: 600}}
             >
                 {progress}
             </Tooltip>
@@ -136,7 +129,6 @@ const ProgressStackTypeProp = PropTypes.oneOf(values_(AccountResourceName));
 
 ProgressStackByTreeItem.propTypes = {
     className: PropTypes.string,
-    popupClassName: PropTypes.string,
     activeAccount: PropTypes.string,
     mediumType: PropTypes.string,
 
@@ -144,14 +136,7 @@ ProgressStackByTreeItem.propTypes = {
     treeItem: PropTypes.object.isRequired,
 };
 
-export function ProgressStackByTreeItem({
-    treeItem,
-    activeAccount,
-    type,
-    mediumType,
-    className,
-    popupClassName,
-}) {
+export function ProgressStackByTreeItem({treeItem, activeAccount, type, mediumType, className}) {
     const accountName = getAccountName(treeItem);
     const isActiveAccount = activeAccount === accountName;
     const {format = 'Number', getInfo} = ACCOUNT_RESOURCE_TYPES_DESCRIPTION[type];
@@ -169,7 +154,6 @@ export function ProgressStackByTreeItem({
                     useChildren: isActiveAccount,
                     formatNumber,
                     className,
-                    popupClassName,
                 }}
             />
         </ErrorBoundary>

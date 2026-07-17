@@ -78,7 +78,6 @@ class AccountQuotaEditor extends React.Component<Props & ReduxProps, State> {
                             type={type}
                             mediumType={mediumType}
                             className={block('progress-tooltip')}
-                            popupClassName={block('progress-tooltip-popup')}
                         />
                     </div>
                     <ClickableText
