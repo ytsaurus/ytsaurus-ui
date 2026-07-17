@@ -63,7 +63,15 @@ export function FlowTabs() {
     const tabsProps = React.useMemo(() => {
         const {urlTemplate, component} = UIFactory.getMonitoringComponentForNavigationFlow() ?? {};
         const showSettings = {
-            [FlowTab.MONITORING]: {show: Boolean(component || urlTemplate)},
+            [FlowTab.GRAPH]: {title: i18n('graph')},
+            [FlowTab.COMPUTATIONS]: {title: i18n('computations')},
+            [FlowTab.WORKERS]: {title: i18n('workers')},
+            [FlowTab.MONITORING]: {
+                show: Boolean(component || urlTemplate),
+                title: i18n('monitoring'),
+            },
+            [FlowTab.STATIC_SPEC]: {title: i18n('static-spec')},
+            [FlowTab.DYNAMIC_SPEC]: {title: i18n('dynamic-spec')},
         };
 
         return makeTabProps(`/${cluster}/${Page.FLOWS}`, FlowTab, showSettings);

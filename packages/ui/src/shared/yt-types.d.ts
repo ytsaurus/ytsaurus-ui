@@ -961,7 +961,7 @@ export type GetOperationParams = {
     operation_id?: string;
     operation_alias?: string;
     include_runtime?: boolean;
-    includeScheduler?: boolean;
+    include_scheduler?: boolean;
     attributes?: string[];
     output_format?: OutputFormat;
 };
