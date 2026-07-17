@@ -6,7 +6,6 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {YT_API_REQUEST_ID_HEADER} from '../../shared/constants';
 import {
-    SelectRowsResponse,
     type AlterReplicationCardParams,
     type BatchResultsItem,
     type BatchSubRequest,
@@ -33,6 +32,7 @@ import {
     type PipelineParams,
     type ReadTableParameters,
     type SelectRowsParams,
+    type SelectRowsResponse,
     type StartTransactionParams,
     type SupportedFeatures,
     type TableParams,

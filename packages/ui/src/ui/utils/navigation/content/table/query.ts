@@ -79,13 +79,12 @@ export class Query {
         if (isEmpty_(key)) {
             return '';
         }
-        return wrap(
-            'round',
+        return prepareKeyImpl(
             map_(key, (columnValue) => {
                 return typeof columnValue === 'string'
                     ? columnValue
                     : Query.prepareColumnValue(columnValue, yqlTypes);
-            }).join(', '),
+            }),
         );
     }
 
@@ -141,4 +140,37 @@ export class Query {
             .filter(Boolean)
             .join(' ');
     }
+
+    static prepareQueryByKeys({
+        path,
+        columns,
+        keyValues = {},
+        limit,
+    }: {
+        path: string;
+        columns: Array<string>;
+        keyValues?: Record<string, unknown>;
+        limit: number;
+    }): string {
+        const whereColumns = Object.keys(keyValues);
+        const whereValues = Object.values(keyValues).map((v) => Query.prepareColumnValue(v));
+
+        const key = prepareKeyImpl(whereValues);
+
+        return [
+            Query.prepareColumns(columns),
+            `FROM ${wrap('square', path)}`,
+            whereColumns.length > 0 ? `WHERE ${Query.prepareWhere(whereColumns, key, 'eq')}` : '',
+            `LIMIT ${limit}`,
+        ]
+            .filter(Boolean)
+            .join(' ');
+    }
+}
+
+function prepareKeyImpl(keys: Array<string>) {
+    if (isEmpty_(keys)) {
+        return '';
+    }
+    return wrap('round', keys.join(', '));
 }
