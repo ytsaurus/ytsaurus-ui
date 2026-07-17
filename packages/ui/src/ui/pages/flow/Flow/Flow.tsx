@@ -10,7 +10,11 @@ import StatusLabel from '../../../components/StatusLabel/StatusLabel';
 import Tabs from '../../../components/Tabs/Tabs';
 import {YTErrorInline} from '../../../containers/YTErrorInline/YTErrorInline';
 import {useUpdater} from '../../../hooks/use-updater';
-import {useFlowAttributes} from '../../../pages/flow/flow-hooks/use-flow-attributes';
+import format from '../../../common/hammer/format';
+import {
+    useFlowAttributes,
+    useFlowLeaderControllerName,
+} from '../../../pages/flow/flow-hooks/use-flow-attributes';
 import {loadFlowStatus, updateFlowState} from '../../../store/actions/flow/status';
 import {useFlowExecuteQuery} from '../../../store/api/yt/flow';
 import {FlowTab} from '../../../store/reducers/flow/filters';
@@ -145,6 +149,9 @@ function FlowState() {
     const pipeline_path = useSelector(selectFlowPipelinePath);
     const value = useSelector(selectFlowStatusData);
     const {leader_controller_address} = useFlowAttributes(pipeline_path).data ?? {};
+    const {data: leaderName, errorContent: leaderError} = useFlowLeaderControllerName(
+        pipeline_path + '/flow_control',
+    );
     return (
         <React.Fragment>
             <Flex alignItems="baseline" justifyContent="space-between" gap={2}>
@@ -159,6 +166,23 @@ function FlowState() {
                     items={[
                         getFlowPathMetaItems(pipeline_path),
                         [
+                            {
+                                key: 'leader_controller_name',
+                                label: i18n('leader-controller-name'),
+                                value: leaderError ? (
+                                    leaderError
+                                ) : (
+                                    <>
+                                        {leaderName ?? format.NO_VALUE}
+                                        <ClipboardButton
+                                            view="flat-secondary"
+                                            text={leaderName}
+                                            inlineMargins
+                                        />
+                                    </>
+                                ),
+                                className: block('meta-item'),
+                            },
                             {
                                 key: 'leader_controller_address',
                                 label: i18n('leader-controller-address'),
@@ -230,7 +254,7 @@ function FlowMonitoring({pipeline_path}: {pipeline_path: string}) {
                     monitoring_project,
                 })}
             >
-                {title || 'Monitoring'}
+                {title || i18n('monitoring')}
             </Link>
         );
     } else {
