@@ -1,15 +1,11 @@
+import ypath from '../../../../../common/thor/ypath';
 import {ytApiV3} from '../../../../../rum/rum-wrap-api';
 import {
     getParsedError,
     parseErrorFromResponse,
     prepareRows,
 } from '../../../../../utils/navigation/content/table/table';
-import {
-    type ReadTableParameters,
-    type ReadTableResult,
-    tableReadParameters,
-    tableReadSetup,
-} from './readTable';
+import {type ReadTableParameters, type ReadTableResult, tableReadParameters} from './readTable';
 
 export async function readDynamicTable({
     setup,
@@ -17,10 +13,9 @@ export async function readDynamicTable({
     cancellation,
     reverseRows,
 }: ReadTableParameters<{query: string}>): Promise<ReadTableResult> {
-    const {data} = await ytApiV3.selectRows({
+    const data = await ytApiV3.selectRows({
         setup: {
             ...(setup as object),
-            ...tableReadSetup,
         },
         parameters: {...parameters, ...tableReadParameters},
         cancellation,
@@ -31,7 +26,7 @@ export async function readDynamicTable({
 
     const {columns, rows, yqlTypes} = prepareRows(data, reverseRows);
 
-    const value_format = parameters.output_format.$attributes.value_format;
+    const value_format = ypath.getValue(parameters.output_format, '/@value_format');
 
     return {
         columns,

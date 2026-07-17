@@ -6,16 +6,20 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {YT_API_REQUEST_ID_HEADER} from '../../shared/constants';
 import {
+    SelectRowsResponse,
     type AlterReplicationCardParams,
     type BatchResultsItem,
     type BatchSubRequest,
     type CheckPermissionParams,
     type CheckPermissionResponse,
+    type CreateParams,
     type ExpectedVersion,
     type FlowExecuteCommand,
     type FlowExecuteTypes,
     type GetFlowViewData,
+    type GetJobInputPathsParameters,
     type GetJobParameters,
+    type GetOperationParams,
     type GetParams,
     type GetPipelineStateData,
     /* GetQueryTrackerInfoResponse, */
@@ -29,8 +33,11 @@ import {
     type PipelineParams,
     type ReadTableParameters,
     type SelectRowsParams,
+    type StartTransactionParams,
     type SupportedFeatures,
     type TableParams,
+    type TransactionIdParams,
+    type WriteFileParams,
 } from '../../shared/yt-types';
 import {YTApiId, type YTApiIdType} from '../../shared/constants/yt-api-id';
 
@@ -39,39 +46,6 @@ import {type RumMeasureTypes} from './rum-measure-types';
 import {type FIX_MY_TYPE, type ValueOf} from '../types';
 
 export {YTApiId};
-
-type CreateParams = {
-    path?: string;
-    type: string;
-    recursive?: boolean;
-    ignore_existing?: boolean;
-    attributes?: Record<string, unknown>;
-};
-
-type StartTransactionParams = {timeout?: number};
-
-type WriteFileParams = {
-    path: string;
-    compute_md5?: boolean;
-    ping_ancestor_transactions?: boolean;
-    transaction_id?: string;
-};
-
-type TransactionIdParams = {transaction_id: string};
-
-type GetJobInputPathsParameters = {
-    job_id: string;
-    output_format?: OutputFormat;
-};
-
-type GetOperationParams = {
-    operation_id?: string;
-    operation_alias?: string;
-    include_runtime?: boolean;
-    includeScheduler?: boolean;
-    attributes?: string[];
-    output_format?: OutputFormat;
-};
 
 interface YTApiV3 {
     executeBatch<T = any>(
@@ -100,7 +74,9 @@ interface YTApiV3 {
     ): Promise<any>;
     listJobs(...args: ApiMethodParameters<ListJobsParameters>): Promise<ListJobsResponse>;
     readTable(...args: ApiMethodParameters<ReadTableParameters>): Promise<unknown>;
-    selectRows<Value = any>(...args: ApiMethodParameters<SelectRowsParams>): Promise<Value>;
+    selectRows<T extends SelectRowsResponse = SelectRowsResponse>(
+        ...args: ApiMethodParameters<SelectRowsParams>
+    ): Promise<T>;
     abortOperation(...args: ApiMethodParameters<OperationIdParams>): Promise<void>;
     completeOperation(...args: ApiMethodParameters<OperationIdParams>): Promise<void>;
     resumeOperation(...args: ApiMethodParameters<OperationIdParams>): Promise<void>;
@@ -136,10 +112,10 @@ type YTApiV3WithId = {
     ): Promise<Array<BatchResultsItem<T>>>;
     get<Value = any>(id: YTApiIdType, ...args: ApiMethodParameters<GetParams>): Promise<Value>;
     list<Value = any>(id: YTApiIdType, ...args: ApiMethodParameters<GetParams>): Promise<Value>;
-    selectRows<Value = any>(
+    selectRows<RowDataT extends Record<string, unknown>>(
         id: YTApiIdType,
         ...args: ApiMethodParameters<SelectRowsParams>
-    ): Promise<Value>;
+    ): Promise<SelectRowsResponse<RowDataT>>;
 };
 
 type YTApiV4 = {

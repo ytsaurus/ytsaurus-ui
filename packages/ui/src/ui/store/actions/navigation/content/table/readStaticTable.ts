@@ -1,3 +1,4 @@
+import ypath from '../../../../../common/thor/ypath';
 import {ytApiV3} from '../../../../../rum/rum-wrap-api';
 import {
     getParsedError,
@@ -32,7 +33,7 @@ export async function readStaticTable({
     const {columns, rows, yqlTypes} = prepareRows(data, reverseRows);
     const omittedColumns = prepareHeaders(headers);
 
-    const value_format = parameters.output_format.$attributes.value_format;
+    const value_format = ypath.getValue(parameters.output_format, '/@value_format');
 
     return {
         columns,
