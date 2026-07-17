@@ -197,6 +197,16 @@ export interface SelectRowsParams {
     output_format: ReadTableOutputFormat;
 }
 
+export interface SelectRowsResponse<
+    RowT extends Record<string, unknown> = Record<string, unknown>,
+> {
+    rows: Array<RowT>;
+    all_column_names: Array<string>;
+    incomplete_all_column_names: 'false' | 'true';
+    incomplete_columns: 'false' | 'true';
+    yql_type_registry: Array<unknown>;
+}
+
 export interface GetParams extends PathParams {
     // see more details https://nda.ya.ru/t/OkgJ1bMg6WtqEf
     attributes?: Array<string> | {keys: Array<string>; paths: Array<string>};
@@ -879,17 +889,19 @@ export type ReadTableParameters = BaseBatchParams & {
     omit_inaccessible_columns?: boolean;
 };
 
-export type ReadTableOutputFormat = {
-    $value: 'web_json' | 'json';
-    $attributes: {
-        value_format?: 'yql';
-        field_weight_limit?: number;
-        string_weight_limit?: number;
-        max_selected_column_count?: number;
-        max_all_column_names_count?: number;
-        column_names?: Array<string>;
-    };
-};
+export type ReadTableOutputFormat =
+    | 'web_json'
+    | {
+          $value: 'web_json';
+          $attributes: {
+              value_format?: 'yql';
+              field_weight_limit?: number;
+              string_weight_limit?: number;
+              max_selected_column_count?: number;
+              max_all_column_names_count?: number;
+              column_names?: Array<string>;
+          };
+      };
 
 type IncarnationSwitchReason =
     | 'job_aborted'
@@ -919,4 +931,37 @@ export type SupportedFeatures = {
     operation_statistics_descriptions?: Record<string, {description?: string; unit?: string}>;
     require_password_in_authentication_commands?: boolean;
     query_memory_limit_in_tablet_nodes?: boolean;
+};
+
+export type CreateParams = {
+    path?: string;
+    type: string;
+    recursive?: boolean;
+    ignore_existing?: boolean;
+    attributes?: Record<string, unknown>;
+};
+
+export type StartTransactionParams = {timeout?: number};
+
+export type WriteFileParams = {
+    path: string;
+    compute_md5?: boolean;
+    ping_ancestor_transactions?: boolean;
+    transaction_id?: string;
+};
+
+export type TransactionIdParams = {transaction_id: string};
+
+export type GetJobInputPathsParameters = {
+    job_id: string;
+    output_format?: OutputFormat;
+};
+
+export type GetOperationParams = {
+    operation_id?: string;
+    operation_alias?: string;
+    include_runtime?: boolean;
+    includeScheduler?: boolean;
+    attributes?: string[];
+    output_format?: OutputFormat;
 };
