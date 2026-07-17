@@ -3,6 +3,7 @@ import React from 'react';
 import {DialogWrapper} from '../../../../../../components/DialogWrapper/DialogWrapper';
 import {FlowMessagesContent, type FlowMessagesProps} from '../FlowGraphRenderer';
 import '../FlowGraphRenderer.scss';
+import i18n from './i18n';
 
 const block = cn('yt-flow-graph-renderer');
 
@@ -32,7 +33,7 @@ export function FlowMessagesDialogContext({children}: {children: React.ReactNode
                     open={true}
                     onClose={() => setVisibleMessages(undefined)}
                 >
-                    <DialogWrapper.Header caption="Messages" />
+                    <DialogWrapper.Header caption={i18n('title_messages')} />
                     <DialogWrapper.Body className={block('messages-body')}>
                         <FlowMessagesContent data={data} />
                     </DialogWrapper.Body>

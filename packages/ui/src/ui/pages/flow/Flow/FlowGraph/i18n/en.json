@@ -1,3 +1,8 @@
 {
-  "graph-data": "Graph data"
+  "alert_empty-graph": "The graph is empty",
+  "context_select-node": "Select a node...",
+  "context_high-consumption": "High consumption",
+  "field_zoom-to": "Zoom to:",
+  "action_graph-data": "Graph data",
+  "action_messages": "Messages ({{count}})"
 }

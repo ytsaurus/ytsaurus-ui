@@ -113,7 +113,7 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
     }
 
     if (isEmpty) {
-        return <NoContent warning="The graph is empty" />;
+        return <NoContent warning={i18n('alert_empty-graph')} />;
     }
 
     return (
@@ -173,8 +173,8 @@ function FlowGraphToolbar({
                     node: (
                         <Select
                             value={zoomToNode ? [zoomToNode] : []}
-                            label="Zoom to:"
-                            placeholder="Select a node..."
+                            label={i18n('field_zoom-to')}
+                            placeholder={i18n('context_select-node')}
                             onUpdate={([zoomToNode = '']) => {
                                 dispatch(filtersSlice.actions.updateFlowFilters({zoomToNode}));
                             }}
@@ -192,7 +192,7 @@ function FlowGraphToolbar({
 function FlowGraphDataButton() {
     const pipeline_path = useSelector(selectFlowPipelinePath);
     const {data} = useFlowGraphLoadedData({pipeline_path});
-    return <ShowDataButton data={data} label={i18n('graph-data')} />;
+    return <ShowDataButton data={data} label={i18n('action_graph-data')} />;
 }
 
 function renderContent({item, ...rest}: {item: FlowGraphBlock; detailed?: boolean}) {

@@ -14,6 +14,7 @@ import Label from '../../../../../components/Label';
 import {Markdown} from '../../../../../components/Markdown/Markdown';
 import {Yson} from '../../../../../components/Yson/Yson';
 import {YTErrorBlock} from '../../../../../containers/Block/Block';
+import i18n from '../i18n';
 import './FlowGraphRenderer.scss';
 import {useFlowMessagesDialogContext} from './FlowMessagesDialogContext/FlowMessagesDialogContext';
 
@@ -59,7 +60,7 @@ export function FlowMessages({data, paddingTop}: FlowMessagesProps) {
     return !data?.length ? null : (
         <div className={block('messages', {'padding-top': paddingTop})}>
             <ClickableText color={color} onClick={() => setVisibleMessages(data)}>
-                Messages ({data.length})
+                {i18n('action_messages', {count: data.length})}
             </ClickableText>
         </div>
     );
@@ -160,7 +161,7 @@ export function TextWithHighConsumption({
     }
 
     return (
-        <Tooltip content="High consumption">
+        <Tooltip content={i18n('context_high-consumption')}>
             <YTText color="warning">{children}</YTText>
             &nbsp;
             {detailed ? <YTIcon awesome="question-circle" color="secondary" /> : null}
