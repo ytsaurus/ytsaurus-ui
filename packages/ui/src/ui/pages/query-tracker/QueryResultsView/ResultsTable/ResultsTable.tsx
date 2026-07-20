@@ -11,7 +11,7 @@ import {patchQueryResultSettings} from '../../../../store/actions/query-tracker/
 
 const settings = {
     escapeWhitespace: false,
-    decodeUTF8: true,
+    decodeUTF8: false,
     showDecoded: false,
     binaryAsHex: true,
     escapeYQLStrings: true,

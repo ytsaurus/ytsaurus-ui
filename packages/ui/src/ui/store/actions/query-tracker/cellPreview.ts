@@ -24,7 +24,10 @@ export const onCellPreviewQueryResults = (
             dataHandler.onStartLoading({columnName, rowIndex});
         } else {
             batch(() => {
-                dispatch({type: CELL_PREVIEW.REQUEST, data: {}});
+                dispatch({
+                    type: CELL_PREVIEW.REQUEST,
+                    data: {shouldDecodeUTF8: false},
+                });
                 dispatch(openCellPreview());
             });
         }

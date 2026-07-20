@@ -6,6 +6,8 @@ export const selectCellPreviewLoading = (state: RootState) =>
     state.navigation.modals.cellPreviewModal.loading;
 export const selectCellPreviewData = (state: RootState) =>
     state.navigation.modals.cellPreviewModal.data;
+export const selectCellPreviewShouldDecodeUTF8 = (state: RootState) =>
+    state.navigation.modals.cellPreviewModal.shouldDecodeUTF8;
 export const selectCellPreviewYtCliDownloadCommand = (state: RootState) =>
     state.navigation.modals.cellPreviewModal.ytCliDownloadCommand;
 export const selectCellPreviewNoticeText = (state: RootState) =>

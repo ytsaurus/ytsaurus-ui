@@ -6,6 +6,7 @@ export interface CellPreviewState {
     loading: boolean;
     data: {$value?: any; $type?: string; $tag?: string} | undefined;
     ytCliDownloadCommand?: string;
+    shouldDecodeUTF8?: boolean;
     noticeText?: string;
     error?: YTError;
 }
@@ -25,6 +26,7 @@ export default function cellPreviewReducer(
             return {
                 ...state,
                 ytCliDownloadCommand: action.data.ytCliDownloadCommand,
+                shouldDecodeUTF8: action.data.shouldDecodeUTF8,
                 loading: true,
                 error: undefined,
             };
@@ -50,7 +52,10 @@ export default function cellPreviewReducer(
 }
 
 export type CellPreviewAction =
-    | ActionD<typeof CELL_PREVIEW.REQUEST, Pick<CellPreviewState, 'ytCliDownloadCommand'>>
+    | ActionD<
+          typeof CELL_PREVIEW.REQUEST,
+          Pick<CellPreviewState, 'ytCliDownloadCommand' | 'shouldDecodeUTF8'>
+      >
     | ActionD<typeof CELL_PREVIEW.SUCCESS, Pick<CellPreviewState, 'data' | 'noticeText'>>
     | ActionD<typeof CELL_PREVIEW.FAILURE, Pick<CellPreviewState, 'error'>>
     | ActionD<typeof CELL_PREVIEW.PARTITION, Partial<CellPreviewState>>;
