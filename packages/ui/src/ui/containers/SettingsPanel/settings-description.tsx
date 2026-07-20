@@ -60,6 +60,7 @@ import {queriesPage} from './queriesPage';
 import i18n from './i18n';
 
 export interface SettingsPage {
+    id: string;
     title: string;
     icon: IconProps;
     sections: Array<SettingsSection>;
@@ -95,7 +96,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
     const hasQuerySuggestions = Boolean(UIFactory.getInlineSuggestionsApi());
 
     return compact_([
-        makePage(i18n('title_general'), generalIcon, [
+        makePage('general', i18n('title_general'), generalIcon, [
             makeItem('startPage', i18n('field_start-page'), 'top', <StartPageSettingMemo />),
             makeItem(
                 'global::newDashboardPage',
@@ -141,7 +142,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 />,
             ),
         ]),
-        makePage(i18n('title_appearance'), paletteIcon, [
+        makePage('appearance', i18n('title_appearance'), paletteIcon, [
             makeItem(
                 SettingName.GLOBAL.THEME,
                 i18n('field_theme'),
@@ -188,6 +189,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
         ]),
         isAdmin &&
             makePage(
+                'development',
                 i18n('title_development'),
                 closeTagIcon,
                 compact_([
@@ -227,7 +229,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 ]),
             ),
 
-        makePage(i18n('title_data'), dataIcon, [
+        makePage('data', i18n('title_data'), dataIcon, [
             makeItem(
                 SettingName.YSON.FORMAT,
                 i18n('field_data-format'),
@@ -301,7 +303,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 />,
             ),
         ]),
-        makePage(i18n('title_system'), systemIcon, [
+        makePage('system', i18n('title_system'), systemIcon, [
             makeItem(
                 SettingName.SYSTEM.MASTERS_HOST_TYPE,
                 i18n('field_host-type'),
@@ -314,7 +316,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 />,
             ),
         ]),
-        makePage(i18n('title_operation'), operationsIcon, [
+        makePage('operation', i18n('title_operation'), operationsIcon, [
             makeItem(
                 SettingName.OPERATIONS.STATISTICS_AGGREGATION_TYPE,
                 i18n('field_statistics-type'),
@@ -328,6 +330,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             ),
         ]),
         makePage(
+            'navigation',
             i18n('title_navigation'),
             navigationIcon,
             compact_([
@@ -410,7 +413,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 ),
             ]),
         ),
-        makePageBySections(i18n('title_components'), componentsIcon, [
+        makePageBySections('components', i18n('title_components'), componentsIcon, [
             {
                 title: i18n('title_general'),
                 items: [
@@ -445,6 +448,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
         ]),
 
         makePage(
+            'table',
             i18n('title_table'),
             tableIcon,
             compact_([
@@ -533,7 +537,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
         ),
 
         oauthTokenUrl &&
-            makePage(i18n('title_auth'), shieldIcon, [
+            makePage('auth', i18n('title_auth'), shieldIcon, [
                 makeItem(
                     'oauthToken',
                     i18n('field_oauth-token'),
@@ -546,6 +550,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
 
         isVcsVisible &&
             makePage(
+                'vcs',
                 i18n('title_vcs'),
                 LogoGitlabIcon,
                 compact_([
@@ -565,7 +570,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 ]),
             ),
 
-        makePageBySections(i18n('title_editor'), PencilToSquareIcon, [
+        makePageBySections('editor', i18n('title_editor'), PencilToSquareIcon, [
             {
                 title: i18n('title_visual-settings'),
                 items: [
@@ -587,6 +592,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             hasQuerySuggestions,
         }),
         makePage(
+            'about',
             i18n('title_about'),
             infoIcon,
             compact_([
@@ -616,19 +622,21 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
 }
 
 export function makePage(
+    id: string,
     title: string,
     icon: IconProps | undefined,
     items: Array<SettingsItem>,
 ): SettingsPage {
-    return makePageBySections(title, icon, [{title, items}]);
+    return makePageBySections(id, title, icon, [{title, items}]);
 }
 
 export function makePageBySections(
+    id: string,
     title: string,
     icon: IconProps | undefined,
     sections: Array<SettingsSection>,
 ) {
-    return {title, icon: icon || generalIcon, sections};
+    return {id, title, icon: icon || generalIcon, sections};
 }
 
 export function makeItem(

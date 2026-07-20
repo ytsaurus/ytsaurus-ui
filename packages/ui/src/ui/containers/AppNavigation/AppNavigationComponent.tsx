@@ -122,6 +122,7 @@ function AppNavigationComponent({
                             compact={compact}
                             title={i18n('action_settings')}
                             onItemClick={toggleSettingsVisible}
+                            qa="app:settings"
                             icon={GearIcon}
                         />,
                     );
