@@ -20,6 +20,7 @@ type Props = {
 
 export const queriesPage = ({cluster, hasQuerySuggestions}: Props) => {
     return makePage(
+        'queries',
         i18n('title_queries'),
         undefined,
         compact_([

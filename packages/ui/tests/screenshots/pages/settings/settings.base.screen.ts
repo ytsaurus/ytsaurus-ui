@@ -15,8 +15,7 @@ test('Settings: checking the functionality of the menu', async ({page}) => {
     });
 
     await test.step('Table', async () => {
-        await basePage(page).settingsShowSection('Table');
-        await page.getByTestId('/Table');
+        await basePage(page).settingsShowSection('table');
         await expect(page).toHaveScreenshot();
     });
 });
