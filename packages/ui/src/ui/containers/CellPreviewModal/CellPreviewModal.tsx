@@ -9,6 +9,7 @@ import {
     selectCellPreviewData,
     selectCellPreviewLoading,
     selectCellPreviewNoticeText,
+    selectCellPreviewShouldDecodeUTF8,
     selectCellPreviewVisible,
     selectCellPreviewYtCliDownloadCommand,
     selectErrorPreviewCellPath,
@@ -32,12 +33,17 @@ export const CellPreviewModal: React.FC = () => {
 
     const loading = useSelector(selectCellPreviewLoading);
     const data = useSelector(selectCellPreviewData);
+    const shouldDecodeUTF8 = useSelector(selectCellPreviewShouldDecodeUTF8);
     const visible = useSelector(selectCellPreviewVisible);
     const ytCliDownloadCommand = useSelector(selectCellPreviewYtCliDownloadCommand);
     const noticeText = useSelector(selectCellPreviewNoticeText);
     const error = useSelector(selectErrorPreviewCellPath);
 
     const unipikaSettings = useSelector(selectPreviewCellYsonSettings);
+    const previewSettings =
+        shouldDecodeUTF8 === undefined
+            ? unipikaSettings
+            : {...unipikaSettings, decodeUTF8: shouldDecodeUTF8};
 
     return (
         <SimpleModal
@@ -79,7 +85,7 @@ export const CellPreviewModal: React.FC = () => {
                 {error ? (
                     <YTErrorBlock error={error} />
                 ) : (
-                    <PreviewContent data={data} unipikaSettings={unipikaSettings} />
+                    <PreviewContent data={data} unipikaSettings={previewSettings} />
                 )}
             </Flex>
         </SimpleModal>

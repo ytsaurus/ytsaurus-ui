@@ -17,6 +17,7 @@ export interface YsonSettings {
     escapeWhitespace: boolean;
     binaryAsHex: boolean;
     asHTML: boolean;
+    decodeUTF8?: boolean;
 }
 
 /**
