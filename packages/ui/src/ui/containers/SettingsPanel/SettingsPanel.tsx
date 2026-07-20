@@ -23,7 +23,12 @@ function SettingsPanel() {
                     const hasItems = some_(page.sections, ({items}) => items.length > 0);
                     return (
                         hasItems && (
-                            <Settings.Page key={i} title={page.title} icon={iconData(page.icon)}>
+                            <Settings.Page
+                                key={i}
+                                id={page.id}
+                                title={page.title}
+                                icon={iconData(page.icon)}
+                            >
                                 {map_(page.sections, (section, j) => {
                                     return (
                                         <Settings.Section key={j} title={section.title}>
