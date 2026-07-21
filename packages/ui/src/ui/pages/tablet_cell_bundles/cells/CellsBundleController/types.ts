@@ -1,18 +1,8 @@
-import {
-    type AllocatedInstance,
-    type InProgressInstance,
-} from '../../../../store/reducers/tablet_cell_bundles';
+import {type BundleInstance} from '../../../../store/reducers/tablet_cell_bundles';
+import {type OrderType} from '../../../../utils/sort-helpers';
+import {type SortState} from '../../../../types';
 
-export type RowData = {
-    address?: string;
-    url?: string;
-    data?: AllocatedInstance;
-    allocationState?: InProgressInstance['hulk_request_state'] | 'removing';
-    hulkRequestPath?: string;
-    tablet_static_memory?: {used?: number; limit?: number};
-    deployUrl?: string;
-    nannyUrl?: string;
-};
+export type RowData = BundleInstance;
 
 export type ColumnRenderProps<T> = {
     value?: unknown;
@@ -20,4 +10,11 @@ export type ColumnRenderProps<T> = {
     index: number;
     footer?: boolean;
     headerData?: boolean;
+};
+
+type SortColumn = keyof BundleInstance;
+
+export type ColumnsParams = {
+    sortState?: SortState<SortColumn>;
+    onSortChange?: (column: SortColumn, order: OrderType) => void;
 };

@@ -14,12 +14,12 @@ export interface Acl {
     subjects: string[];
 }
 
-export interface SortState<T = string> {
+export interface SortState<T extends string = string> {
     column?: T;
     order?: OrderType;
 }
 
-export interface OldSortState<T = string> {
+export interface OldSortState<T extends string = string> {
     field?: T;
     asc?: boolean;
     undefinedAsc?: boolean;

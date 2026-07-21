@@ -8,6 +8,7 @@ import Label from '../../../../components/Label';
 import Link from '../../../../containers/Link/Link';
 import ChartLink from '../../../../components/ChartLink/ChartLink';
 import Icon from '../../../../components/Icon/Icon';
+import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
 
 import {lastWord, printUsageLimit} from '../../../../utils';
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
@@ -15,11 +16,43 @@ import {makeNavigationLink} from '../../../../utils/app-url';
 import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import {Progress} from '@gravity-ui/uikit';
 import {computeProgress, getProgressTheme} from '../../../../utils/progress';
+import {type OrderType} from '../../../../utils/sort-helpers';
 
-import {type ColumnRenderProps, type RowData} from './types';
+import {type ColumnRenderProps, type ColumnsParams, type RowData} from './types';
 import './CellsBundleController.scss';
 
 export const block = cn('cells-bundle-controller');
+
+type RenderColumnHeaderParams = ColumnsParams & {
+    column: keyof RowData;
+    title: string;
+    allowedOrderTypes?: Array<OrderType>;
+};
+
+export const renderColumnHeader = ({
+    column,
+    title,
+    sortState,
+    onSortChange,
+    allowedOrderTypes,
+}: RenderColumnHeaderParams) => {
+    if (!onSortChange) {
+        return title;
+    }
+
+    const {column: sortColumn, order} = sortState ?? {};
+
+    return (
+        <ColumnHeader
+            column={column}
+            title={title}
+            order={sortColumn === column ? order : undefined}
+            onSort={onSortChange}
+            allowedOrderTypes={allowedOrderTypes}
+            withUndefined={!allowedOrderTypes}
+        />
+    );
+};
 
 export const renderAddress = (props: ColumnRenderProps<RowData>) => {
     const {url, address} = props.row;

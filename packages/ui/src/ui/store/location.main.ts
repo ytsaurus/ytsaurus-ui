@@ -70,10 +70,12 @@ import {getSystemPreparedState, systemParams} from '../store/reducers/system/url
 import {
     bundlesPrometheusParams,
     selectTabletsBundlesAclPreparedState,
+    selectTabletsBundlesInstancesPreparedState,
     selectTabletsBundlesPreparedState,
     selectTabletsCellsPreparedState,
     tabletsAllBundlesParams,
     tabletsBundlesAclParams,
+    tabletsBundlesInstancesParams,
     tabletsBundlesParams,
     tabletsTabletCellsParams,
 } from './reducers/tablet_cell_bundles/url-mapping';
@@ -172,6 +174,11 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [
         `/*/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}`,
         [tabletsTabletCellsParams, selectTabletsCellsPreparedState],
+    ],
+
+    [
+        `/*/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.INSTANCES}`,
+        [tabletsBundlesInstancesParams, selectTabletsBundlesInstancesPreparedState],
     ],
 
     [

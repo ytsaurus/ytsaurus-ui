@@ -29,6 +29,7 @@ export interface TabletsBundlesState {
 
     bundlesSort: SortState<keyof TabletBundle>;
     cellsSort: SortState<keyof TabletCell>;
+    instancesSort: SortState<keyof BundleInstance>;
 
     activeBundle: string;
 
@@ -174,6 +175,17 @@ export interface InProgressInstance {
     instance_info: AllocatedInstance;
 }
 
+export interface BundleInstance {
+    address?: string;
+    url?: string;
+    data?: AllocatedInstance;
+    allocationState?: InProgressInstance['hulk_request_state'] | 'removing';
+    hulkRequestPath?: string;
+    tablet_static_memory?: {used?: number; limit?: number};
+    deployUrl?: string;
+    nannyUrl?: string;
+}
+
 export interface OrchidBundles {
     [bundleName: string]: OrchidBundlesData;
 }
@@ -219,6 +231,7 @@ const persistedState: Pick<
     TabletsBundlesState,
     | 'bundlesSort'
     | 'cellsSort'
+    | 'instancesSort'
     | 'bundlesNameFilter'
     | 'bundlesAccountFilter'
     | 'bundlesTagNodeFilter'
@@ -229,6 +242,7 @@ const persistedState: Pick<
 > = {
     bundlesSort: {column: 'bundle', order: 'asc'},
     cellsSort: {},
+    instancesSort: {column: 'address', order: 'asc'},
 
     bundlesNameFilter: '',
     bundlesAccountFilter: '',
@@ -290,6 +304,7 @@ export type TabletsPartialAction = ActionD<
             | 'bundlesAccountFilter'
             | 'bundlesTagNodeFilter'
             | 'cellsSort'
+            | 'instancesSort'
             | 'cellsIdFilter'
             | 'cellsBundleFilter'
             | 'cellsHostFilter'
