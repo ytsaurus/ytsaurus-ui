@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.20.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.19.0...ui-v3.20.0) (2026-07-21)
+
+
+### Features
+
+* **Scheduling:** add aggregation row [YTFRONT-5841] ([004b7a7](https://github.com/ytsaurus/ytsaurus-ui/commit/004b7a74b11989bb34221a4783c1de37ec8d3766))
+* **Scheduling:** show active operation ref [YTFRONT-5666] ([6a2c61a](https://github.com/ytsaurus/ytsaurus-ui/commit/6a2c61a075153a92cd32ed7a85e5c32a3b0c5cc7))
+* update to nodejs 24 [YTFRONT-5911] ([ce910ce](https://github.com/ytsaurus/ytsaurus-ui/commit/ce910ce3f601fa35d1c7cab610a4ed193f700de7))
+
+
+### Bug Fixes
+
+* **Accounts/General:** change the quota limit confirm message [YTFRONT-5938] ([42d1447](https://github.com/ytsaurus/ytsaurus-ui/commit/42d1447a17f7a224fb21e1bd97beb71a9f2c2714))
+* **Accounts/general:** fix ProgressStack tooltip max-width [YTFRONT-5816] ([e6e03c4](https://github.com/ytsaurus/ytsaurus-ui/commit/e6e03c4e979119b81795676c8ec06ea5568ab195))
+* **Operation:** controller in terminal stages [YTFRONT-5573] ([efdce8e](https://github.com/ytsaurus/ytsaurus-ui/commit/efdce8e38dd1ffbf7598754306a83bf1a31e63e3))
+* **Operation:** wrong parameter in get operation [YTFRONT-5573] ([e7440aa](https://github.com/ytsaurus/ytsaurus-ui/commit/e7440aa56a249c2b6d06a56d889503714b344e60))
+
 ## [3.19.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.18.1...ui-v3.19.0) (2026-07-13)
 
 
