@@ -105,6 +105,31 @@ export function selectTabletsCellsPreparedState(
     });
 }
 
+export const tabletsBundlesInstancesParams = {
+    ...tabletsBundlesParams,
+    sortBy: {
+        stateKey: 'tablet_cell_bundles.instancesSort',
+        initialState: initialState.instancesSort,
+        type: 'object',
+        options: {
+            parse: parseSortState,
+        },
+    },
+};
+
+export function selectTabletsBundlesInstancesPreparedState(
+    state: RootState,
+    {query}: {query: RootState},
+): RootState {
+    const queryTcb = query.tablet_cell_bundles;
+    return produce(state, (draft) => {
+        const draftTcb = draft.tablet_cell_bundles;
+
+        updateIfChanged(draftTcb, 'activeBundle', queryTcb.activeBundle);
+        updateIfChanged(draftTcb, 'instancesSort', queryTcb.instancesSort);
+    });
+}
+
 export const tabletsBundlesAclParams = {
     ...tabletsBundlesParams,
     ...aclFiltersParams,

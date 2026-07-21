@@ -67,7 +67,7 @@ export function multiSortWithUndefined<T extends {}>(
 
 export function multiSortBySortStateArray<T extends {}>(
     items: Array<T>,
-    sortState: Array<SortState<keyof T>>,
+    sortState: Array<SortState<keyof T & string>>,
 ) {
     if (!sortState.length) {
         return items;
@@ -78,7 +78,7 @@ export function multiSortBySortStateArray<T extends {}>(
     return multiSortWithUndefined(items, columnSortInfo);
 }
 
-function sortState2columnSortState<T extends {}>({column, order}: SortState<keyof T>) {
+function sortState2columnSortState<T extends {}>({column, order}: SortState<keyof T & string>) {
     if (!column || !order) {
         return undefined;
     }
@@ -242,7 +242,7 @@ export function orderTypeToOrderK(orderValue?: OrderType): {
     return res;
 }
 
-export function sortArrayBySortState<T>(items: Array<T>, sortState?: SortState<keyof T>) {
+export function sortArrayBySortState<T>(items: Array<T>, sortState?: SortState<keyof T & string>) {
     const {column, order} = sortState || {};
     if (!column || !order) {
         return items;
@@ -256,7 +256,7 @@ export function sortArrayBySortState<T>(items: Array<T>, sortState?: SortState<k
     });
 }
 
-export function oldSortStateToOrderType<T = string>(
+export function oldSortStateToOrderType<T extends string = string>(
     sortState?: OldSortState<T>,
 ): OrderType | undefined {
     const {field, asc, undefinedAsc} = sortState || {};

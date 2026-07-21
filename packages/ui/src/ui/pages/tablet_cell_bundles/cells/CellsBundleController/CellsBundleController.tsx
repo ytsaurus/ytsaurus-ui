@@ -12,21 +12,21 @@ import {DataTableYT} from '../../../../components/DataTableYT';
 import {block} from './utils';
 import {TABLE_SETTINGS} from './constants';
 import {useColumns} from './useColumns';
-import {type RowData} from './types';
+import {type ColumnsParams, type RowData} from './types';
 
-type Props = {
+type Props = ColumnsParams & {
     hideColumns?: Array<string>;
     items: Array<RowData>;
 };
 
-export const CellsBundleController = ({items, hideColumns}: Props) => {
+export const CellsBundleController = ({items, hideColumns, sortState, onSortChange}: Props) => {
     const [filter, setFilter] = React.useState('');
 
     const data = React.useMemo(() => {
         return !filter ? items : filter_(items, ({address}) => -1 !== address?.indexOf(filter));
     }, [items, filter]);
 
-    const columns = useColumns(hideColumns);
+    const columns = useColumns({hideColumns, sortState, onSortChange});
 
     const renderToolbar = (
         <Toolbar

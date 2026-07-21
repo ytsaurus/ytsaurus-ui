@@ -11,6 +11,7 @@ import {
 } from '../../../utils/components/tablet-cells';
 import {
     type AllocatedInstancesMap,
+    type BundleInstance,
     type InProgressInstancesMap,
     type TabletBundle,
     type TabletCell,
@@ -87,7 +88,7 @@ function prepareBundleInstances(
     inProgresss: InProgressInstancesMap,
     instanceDetailsMap: Record<string, BundleControllerInstanceDetails>,
     makeUrl: (address: string) => string,
-) {
+): Array<BundleInstance> {
     return [
         ...map_(allocated, (data, address) => {
             const details = instanceDetailsMap?.[address] || {};
@@ -129,24 +130,30 @@ export const selectActiveBundleControllerData = createSelector(
     },
 );
 
+export const selectActiveBundleInstancesSortState = (state: RootState) =>
+    state.tablet_cell_bundles.instancesSort;
+
 export const selectActiveBundleInstances = createSelector(
     [
         selectActiveBundleControllerData,
         selectCluster,
         selectTabletCellBundleControllerInstanceDetailsMap,
+        selectActiveBundleInstancesSortState,
     ],
-    (bundleControllerData, cluster, instanceDetailsMap) => {
+    (bundleControllerData, cluster, instanceDetailsMap, sortState) => {
         if (!bundleControllerData) {
             return [];
         }
 
         const {allocated_tablet_nodes, allocating_tablet_nodes} = bundleControllerData;
-        return prepareBundleInstances(
+        const bundleInstances = prepareBundleInstances(
             allocated_tablet_nodes,
             allocating_tablet_nodes,
             instanceDetailsMap,
             (address) => makeComponentsNodesUrl({host: address, cluster}),
         );
+
+        return sortArrayBySortState(bundleInstances, sortState);
     },
 );
 
