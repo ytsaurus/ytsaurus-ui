@@ -1,0 +1,15 @@
+{
+    schema=[
+        {
+            name=id;
+            type_v3=uint64
+        };
+        {
+            name=titles;
+            type_v3={
+              type_name=optional;
+              item=yson;
+            }
+        }
+    ]
+}
