@@ -281,88 +281,92 @@ function FlowWorkerKillAction({
 function FlowWorkerMeta({data}: {data?: FlowWorkerData}) {
     const path = useSelector(selectFlowPipelinePath);
     const items = React.useMemo(() => {
-        const visible = Boolean(data);
-        const res: MetaTableProps['items'] = [
-            [
-                ...getFlowPathMetaItems(path),
-                {
-                    key: 'name',
-                    label: i18n('name'),
-                    value: data?.name,
-                    visible: Boolean(data?.name),
-                },
-                {key: 'address', label: i18n('address'), value: data?.rpc_address, visible},
-                {
-                    key: 'worker-incarnation-id',
-                    label: i18n('worker-incarnation-id'),
-                    value: <TemplateId id={data?.incarnation_id} />,
-                },
-                {
-                    key: 'worker-groups',
-                    label: i18n('worker-groups'),
-                    value: data?.groups.join(',') || format.NO_VALUE,
-                    visible,
-                },
-            ],
-            [
-                {
-                    key: 'cpu-usage',
-                    label: i18n('cpu-usage'),
-                    value: format.NumberSmart(data?.cpu_usage),
-                    visible,
-                },
-                {
-                    key: 'memory-usage',
-                    label: i18n('memory-usage'),
-                    value: format.Bytes(data?.memory_usage),
-                    visible,
-                },
-                {
-                    key: 'message-per-second',
-                    label: i18n('message-per-second'),
-                    value: format.NumberWithSuffix(data?.messages_per_second),
-                    visible,
-                },
-                {
-                    key: 'bytes-per-second',
-                    label: i18n('bytes-per-second'),
-                    value: format.Bytes(data?.bytes_per_second),
-                    visible,
-                },
-            ],
-            [
-                ...getLoadedDataMetaItems({label: i18n('worker-data'), data}),
-                {
-                    key: 'remote-shell',
-                    labelTopPadding: '4px',
-                    label: i18n('remote-shell-command'),
-                    value: (
-                        <ClipboardButton text={data?.remote_shell_command} view="flat-secondary" />
-                    ),
-                    visible: visible && Boolean(data?.remote_shell_command),
-                },
-                {
-                    key: 'deploy-link',
-                    label: i18n('deploy-link'),
-                    value: (
-                        <Link url={data?.deploy_address} hasExternalIcon>
-                            {i18n('link')}
-                        </Link>
-                    ),
-                    visible: visible && Boolean(data?.deploy_address),
-                },
-                {
-                    key: 'backtraces',
-                    label: i18n('backtraces'),
-                    value: (
-                        <Link url={data?.backtrace_address} hasExternalIcon>
-                            {i18n('link')}
-                        </Link>
-                    ),
-                    visible: visible && Boolean(data?.backtrace_address),
-                },
-            ],
-        ];
+        const res: MetaTableProps['items'] =
+            data === undefined
+                ? []
+                : [
+                      [
+                          ...getFlowPathMetaItems(path),
+                          {
+                              key: 'name',
+                              label: i18n('name'),
+                              value: data.name,
+                              visible: Boolean(data.name),
+                          },
+                          {
+                              key: 'address',
+                              label: i18n('address'),
+                              value: data.rpc_address,
+                          },
+                          {
+                              key: 'worker-incarnation-id',
+                              label: i18n('worker-incarnation-id'),
+                              value: <TemplateId id={data.incarnation_id} />,
+                          },
+                          {
+                              key: 'worker-groups',
+                              label: i18n('worker-groups'),
+                              value: data.groups.join(',') || format.NO_VALUE,
+                          },
+                      ],
+                      [
+                          {
+                              key: 'cpu-usage',
+                              label: i18n('cpu-usage'),
+                              value: format.NumberSmart(data.cpu_usage),
+                          },
+                          {
+                              key: 'memory-usage',
+                              label: i18n('memory-usage'),
+                              value: format.Bytes(data.memory_usage),
+                          },
+                          {
+                              key: 'message-per-second',
+                              label: i18n('message-per-second'),
+                              value: format.NumberWithSuffix(data.messages_per_second),
+                          },
+                          {
+                              key: 'bytes-per-second',
+                              label: i18n('bytes-per-second'),
+                              value: format.Bytes(data.bytes_per_second),
+                          },
+                      ],
+                      [
+                          ...getLoadedDataMetaItems({label: i18n('worker-data'), data}),
+                          {
+                              key: 'remote-shell',
+                              labelTopPadding: '4px',
+                              label: i18n('remote-shell-command'),
+                              value: (
+                                  <ClipboardButton
+                                      text={data.remote_shell_command}
+                                      view="flat-secondary"
+                                  />
+                              ),
+                              visible: Boolean(data.remote_shell_command),
+                          },
+                          {
+                              key: 'deploy-link',
+                              label: i18n('deploy-link'),
+                              value: (
+                                  <Link url={data.deploy_address} hasExternalIcon>
+                                      {i18n('link')}
+                                  </Link>
+                              ),
+                              visible: Boolean(data.deploy_address),
+                          },
+                          {
+                              key: 'backtraces',
+                              label: i18n('backtraces'),
+                              value: (
+                                  <Link url={data.backtrace_address} hasExternalIcon>
+                                      {i18n('link')}
+                                  </Link>
+                              ),
+                              visible: Boolean(data.backtrace_address),
+                          },
+                      ],
+                  ];
         return res;
     }, [data]);
     return data ? <MetaTable items={items} /> : null;
