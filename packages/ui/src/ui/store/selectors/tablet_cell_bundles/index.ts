@@ -34,7 +34,9 @@ import {type BundleControllerInstanceDetails} from '../../../store/reducers/tabl
 import UIFactory from '../../../UIFactory';
 
 export const selectTabletsIsLoaded = (state: RootState) => state.tablet_cell_bundles.loaded;
+
 export const selectTabletsIsLoading = (state: RootState) => state.tablet_cell_bundles.loading;
+
 export const selectTabletsError = (state: RootState) => state.tablet_cell_bundles.error;
 
 export const selectTabletsBundlesSortState = (state: RootState) =>
@@ -42,8 +44,10 @@ export const selectTabletsBundlesSortState = (state: RootState) =>
 
 export const selectTabletsBundlesNameFilter = (state: RootState) =>
     state.tablet_cell_bundles.bundlesNameFilter;
+
 export const selectTabletsBundlesAccountFilter = (state: RootState) =>
     state.tablet_cell_bundles.bundlesAccountFilter;
+
 export const selectTabletsBundlesTagNodeFilter = (state: RootState) =>
     state.tablet_cell_bundles.bundlesTagNodeFilter;
 
@@ -52,7 +56,7 @@ export const selectTabletsBundles = (state: RootState) => state.tablet_cell_bund
 export const selectTabletsActiveBundle = (state: RootState) =>
     state.tablet_cell_bundles.activeBundle;
 
-export const selectBundleDefaultConfig = (state: RootState) =>
+const selectBundleDefaultConfig = (state: RootState) =>
     state.tablet_cell_bundles.bundleDefaultConfig;
 
 export const selectTabletBundlesTableMode = (state: RootState) =>
@@ -222,7 +226,7 @@ const COLUMNS_SORTABLE_AS_IS = new Set<keyof TabletBundle>([
     'tablet_static_memory_percentage',
 ]);
 
-export const selectTabletsBundlesFiltered = createSelector(
+const selectTabletsBundlesFiltered = createSelector(
     [
         selectTabletsBundles,
         selectTabletsBundlesNameFilter,
@@ -278,18 +282,21 @@ export const selectTabletsBundlesSorted = createSelector(
     },
 );
 
-export const selectTabletsCells = (state: RootState) => state.tablet_cell_bundles.cells;
+const selectTabletsCells = (state: RootState) => state.tablet_cell_bundles.cells;
+
 export const selectTabletsCellsSortState = (state: RootState) =>
     state.tablet_cell_bundles.cellsSort;
 
 export const selectTabletsCellsIdFilter = (state: RootState) =>
     state.tablet_cell_bundles.cellsIdFilter;
+
 export const selectTabletsCellsBundleFilter = (state: RootState) =>
     state.tablet_cell_bundles.cellsBundleFilter;
+
 export const selectTabletsCellsHostFilter = (state: RootState) =>
     state.tablet_cell_bundles.cellsHostFilter;
 
-export const selectTabletCellsOfActiveAccount = createSelector(
+const selectTabletCellsOfActiveAccount = createSelector(
     [selectTabletsCells, selectTabletsActiveBundle],
     (cells, activeBundle) => {
         if (!activeBundle) {
@@ -302,7 +309,7 @@ export const selectTabletCellsOfActiveAccount = createSelector(
     },
 );
 
-export const selectTabletsCellsFiltered = createSelector(
+const selectTabletsCellsFiltered = createSelector(
     [
         selectTabletCellsOfActiveAccount,
         selectTabletsCellsIdFilter,
@@ -332,14 +339,6 @@ export const selectTabletsCellsFiltered = createSelector(
         return !predicates.length ? cells : filter_(cells, concatByAnd(...predicates));
     },
 );
-
-export function filterTabletCellsByBundle(bundle: string, cells: Array<TabletCell>) {
-    if (!bundle) {
-        return [];
-    }
-
-    return filter_(cells, (item) => item.bundle === bundle);
-}
 
 export const selectTabletsCellsSorted = createSelector(
     [selectTabletsCellsFiltered, selectTabletsCellsSortState],
