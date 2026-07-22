@@ -130,6 +130,31 @@ export function selectTabletsBundlesInstancesPreparedState(
     });
 }
 
+export const tabletsBundlesProxiesParams = {
+    ...tabletsBundlesParams,
+    sortBy: {
+        stateKey: 'tablet_cell_bundles.proxiesSort',
+        initialState: initialState.proxiesSort,
+        type: 'object',
+        options: {
+            parse: parseSortState,
+        },
+    },
+};
+
+export function selectTabletsBundlesProxiesPreparedState(
+    state: RootState,
+    {query}: {query: RootState},
+): RootState {
+    const queryTcb = query.tablet_cell_bundles;
+    return produce(state, (draft) => {
+        const draftTcb = draft.tablet_cell_bundles;
+
+        updateIfChanged(draftTcb, 'activeBundle', queryTcb.activeBundle);
+        updateIfChanged(draftTcb, 'proxiesSort', queryTcb.proxiesSort);
+    });
+}
+
 export const tabletsBundlesAclParams = {
     ...tabletsBundlesParams,
     ...aclFiltersParams,

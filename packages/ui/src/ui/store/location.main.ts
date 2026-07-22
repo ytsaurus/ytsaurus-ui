@@ -72,11 +72,13 @@ import {
     selectTabletsBundlesAclPreparedState,
     selectTabletsBundlesInstancesPreparedState,
     selectTabletsBundlesPreparedState,
+    selectTabletsBundlesProxiesPreparedState,
     selectTabletsCellsPreparedState,
     tabletsAllBundlesParams,
     tabletsBundlesAclParams,
     tabletsBundlesInstancesParams,
     tabletsBundlesParams,
+    tabletsBundlesProxiesParams,
     tabletsTabletCellsParams,
 } from './reducers/tablet_cell_bundles/url-mapping';
 
@@ -179,6 +181,11 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [
         `/*/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.INSTANCES}`,
         [tabletsBundlesInstancesParams, selectTabletsBundlesInstancesPreparedState],
+    ],
+
+    [
+        `/*/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.PROXIES}`,
+        [tabletsBundlesProxiesParams, selectTabletsBundlesProxiesPreparedState],
     ],
 
     [
