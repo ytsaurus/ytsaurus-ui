@@ -2,7 +2,7 @@ import {ArrowUpRightFromSquare, CircleQuestion} from '@gravity-ui/icons';
 import {Button, Flex, Icon, Link, Text} from '@gravity-ui/uikit';
 import React from 'react';
 import {ClipboardButton, Label, MetaTable, Tooltip} from '@ytsaurus/components';
-import YTLink from '../../../../containers/Link/Link';
+import {RoutedLink} from '../../../../containers/RoutedLink/RoutedLink';
 import {getDescriptionType} from '../../../../store/reducers/navigation/description';
 import {useSelector} from '../../../../store/redux-hooks';
 import {selectPath} from '../../../../store/selectors/navigation';
@@ -59,6 +59,7 @@ export function NavigationDescriptionOverview() {
 
 function SourcePath({path}: {path: string}) {
     const url = makeNavigationLink({path});
+
     return (
         <Tooltip
             content={
@@ -69,10 +70,13 @@ function SourcePath({path}: {path: string}) {
                             key: 'source-path',
                             label: i18n('field_source-path'),
                             value: (
-                                <Flex alignItems="baseline">
-                                    <YTLink theme="secondary" url={url} routed>
-                                        {path}
-                                    </YTLink>
+                                <Flex alignItems="baseline" overflow="hidden">
+                                    <Text ellipsis>
+                                        <RoutedLink view="secondary" href={url}>
+                                            {path}
+                                        </RoutedLink>
+                                    </Text>
+
                                     <ClipboardButton view="flat-secondary" text={path} />
                                 </Flex>
                             ),
@@ -83,9 +87,10 @@ function SourcePath({path}: {path: string}) {
         >
             <Label>
                 <Flex alignItems={'center'} gap={1}>
-                    <YTLink theme="secondary" url={url} routed>
+                    <RoutedLink view="secondary" href={url}>
                         {i18n('value_inherited')}
-                    </YTLink>{' '}
+                    </RoutedLink>
+
                     <Icon data={CircleQuestion} size={14} style={{marginBottom: '-2px'}} />
                 </Flex>
             </Label>
