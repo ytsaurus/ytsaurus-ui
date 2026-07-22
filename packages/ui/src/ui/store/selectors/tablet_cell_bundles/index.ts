@@ -157,24 +157,30 @@ export const selectActiveBundleInstances = createSelector(
     },
 );
 
+export const selectActiveBundleProxiesSortState = (state: RootState) =>
+    state.tablet_cell_bundles.proxiesSort;
+
 export const selectActiveBundleProxies = createSelector(
     [
         selectActiveBundleControllerData,
         selectCluster,
         selectTabletCellBundleControllerInstanceDetailsMap,
+        selectActiveBundleProxiesSortState,
     ],
-    (bundleControllerData, cluster, instanceDetailsMap) => {
+    (bundleControllerData, cluster, instanceDetailsMap, sortState) => {
         if (!bundleControllerData) {
             return [];
         }
 
         const {allocated_rpc_proxies, allocating_rpc_proxies} = bundleControllerData;
-        return prepareBundleInstances(
+        const bundleProxies = prepareBundleInstances(
             allocated_rpc_proxies,
             allocating_rpc_proxies,
             instanceDetailsMap,
             (address) => makeProxyUrl(cluster, address),
         );
+
+        return sortArrayBySortState(bundleProxies, sortState);
     },
 );
 

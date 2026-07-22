@@ -30,6 +30,7 @@ export interface TabletsBundlesState {
     bundlesSort: SortState<keyof TabletBundle>;
     cellsSort: SortState<keyof TabletCell>;
     instancesSort: SortState<keyof BundleInstance>;
+    proxiesSort: SortState<keyof BundleInstance>;
 
     activeBundle: string;
 
@@ -232,6 +233,7 @@ const persistedState: Pick<
     | 'bundlesSort'
     | 'cellsSort'
     | 'instancesSort'
+    | 'proxiesSort'
     | 'bundlesNameFilter'
     | 'bundlesAccountFilter'
     | 'bundlesTagNodeFilter'
@@ -243,6 +245,7 @@ const persistedState: Pick<
     bundlesSort: {column: 'bundle', order: 'asc'},
     cellsSort: {},
     instancesSort: {column: 'address', order: 'asc'},
+    proxiesSort: {column: 'address', order: 'asc'},
 
     bundlesNameFilter: '',
     bundlesAccountFilter: '',
@@ -305,6 +308,7 @@ export type TabletsPartialAction = ActionD<
             | 'bundlesTagNodeFilter'
             | 'cellsSort'
             | 'instancesSort'
+            | 'proxiesSort'
             | 'cellsIdFilter'
             | 'cellsBundleFilter'
             | 'cellsHostFilter'
