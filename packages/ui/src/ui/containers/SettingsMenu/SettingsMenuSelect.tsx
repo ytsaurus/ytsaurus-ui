@@ -141,7 +141,12 @@ export function SettingsMenuRadioByKey<K extends KeysByType<DescribedSettings, s
 
     return (
         <SettingsItemLayot {...rest}>
-            <SegmentedRadioGroup options={options} value={value} onUpdate={onUpdate} />
+            <SegmentedRadioGroup
+                options={options}
+                value={value}
+                onUpdate={onUpdate}
+                qa={settingKey}
+            />
         </SettingsItemLayot>
     );
 }
