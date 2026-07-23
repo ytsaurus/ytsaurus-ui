@@ -1,4 +1,4 @@
-import React from 'react';
+import {useMemo} from 'react';
 
 import {type Column} from '@gravity-ui/react-data-table';
 
@@ -10,7 +10,7 @@ import {
     renderAllocationRequest,
     renderAllocationState,
     renderColumnHeader,
-    renderMemory,
+    renderStaticMemory,
     renderType,
 } from './utils';
 import {type ColumnsParams, type RowData} from './types';
@@ -19,10 +19,10 @@ import {type ColumnsParams, type RowData} from './types';
  * All columns use sortable: false — sorting is handled manually here instead of
  * relying on DataTable's built-in sort, since it needs to stay in sync with the URL and redux state.
  */
-const getColumns = ({sortState, onSortChange}: ColumnsParams): Array<Column<RowData>> => {
+const getColumns = ({sortState, onSortChange}: ColumnsParams) => {
     return [
         {
-            name: 'Address',
+            name: 'address',
             header: renderColumnHeader({
                 column: 'address',
                 title: i18n('field_address'),
@@ -34,22 +34,22 @@ const getColumns = ({sortState, onSortChange}: ColumnsParams): Array<Column<RowD
             sortable: false,
         },
         {
-            name: 'Type',
+            name: 'type',
             header: i18n('field_type'),
             render: renderType,
             sortable: false,
             width: 200,
         },
         {
-            name: 'tablet_static_memory',
+            name: 'staticMemory',
             header: i18n('field_tablet-static-memory'),
-            render: renderMemory,
+            render: renderStaticMemory,
             sortable: false,
             width: 200,
             align: 'center',
         },
         {
-            name: 'Allocation request',
+            name: 'allocationRequest',
             header: i18n('field_allocation-request'),
             render: renderAllocationRequest,
             width: 300,
@@ -57,7 +57,7 @@ const getColumns = ({sortState, onSortChange}: ColumnsParams): Array<Column<RowD
             sortable: false,
         },
         {
-            name: 'Allocation state',
+            name: 'allocationState',
             header: renderColumnHeader({
                 column: 'allocationState',
                 title: i18n('field_allocation-state'),
@@ -70,26 +70,30 @@ const getColumns = ({sortState, onSortChange}: ColumnsParams): Array<Column<RowD
             width: 200,
         },
         {
-            name: '',
+            name: 'actions',
             render: renderActions,
             width: 80,
             align: 'center',
         },
-    ];
+    ] as const satisfies Array<Column<RowData>>;
 };
 
+export type ColumnName = ReturnType<typeof getColumns>[number]['name'];
+
 type UseColumnsParams = ColumnsParams & {
-    hideColumns?: Array<string>;
+    hideColumns?: Array<ColumnName>;
 };
 
 export const useColumns = ({hideColumns, sortState, onSortChange}: UseColumnsParams) => {
-    const res = React.useMemo(() => {
+    const res = useMemo(() => {
         const columns = getColumns({sortState, onSortChange});
+
         if (!hideColumns?.length) {
             return columns;
         }
 
         const toHide = new Set(hideColumns);
+
         return columns.filter((item) => !toHide.has(item.name));
     }, [hideColumns, sortState, onSortChange]);
     return res;
