@@ -79,7 +79,7 @@ export const renderType = (props: ColumnRenderProps<RowData>) => {
     );
 };
 
-export const renderMemory = (props: ColumnRenderProps<RowData>) => {
+export const renderStaticMemory = (props: ColumnRenderProps<RowData>) => {
     const {tablet_static_memory} = props.row;
     if (!tablet_static_memory) {
         return format.NO_VALUE;

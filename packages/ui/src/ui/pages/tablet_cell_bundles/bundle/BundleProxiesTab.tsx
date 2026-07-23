@@ -25,7 +25,7 @@ export const BundleProxiesTab = () => {
         <ErrorBoundary>
             <CellsBundleController
                 items={items}
-                hideColumns={['tablet_static_memory']}
+                hideColumns={['staticMemory']}
                 sortState={sortState}
                 onSortChange={onSortChange}
             />

@@ -11,12 +11,12 @@ import {DataTableYT} from '../../../../components/DataTableYT';
 
 import {block} from './utils';
 import {TABLE_SETTINGS} from './constants';
-import {useColumns} from './useColumns';
+import {type ColumnName, useColumns} from './useColumns';
 import {type ColumnsParams, type RowData} from './types';
 
 type Props = ColumnsParams & {
-    hideColumns?: Array<string>;
     items: Array<RowData>;
+    hideColumns?: Array<ColumnName>;
 };
 
 export const CellsBundleController = ({items, hideColumns, sortState, onSortChange}: Props) => {
