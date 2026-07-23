@@ -7,6 +7,9 @@ import {histogramItems, tableItems} from '../../../../utils/navigation/tabs/tabl
 import {NAVIGATION_TABLETS_TABLE_ID} from '../../../../constants/navigation/tabs/tablets';
 import {prepareAggregation, prepareDataForColumns} from '../../../../utils/navigation/tabs/tablets';
 import {calculateLoadingStatus} from '../../../../utils/utils';
+import {findTabletByKey, isPivotFilter} from '../../../../utils/navigation/tabs/find-tablet-by-key';
+import {selectAttributes} from '../index';
+import ypath from '../../../../common/thor/ypath';
 
 export const selectTabletsMode = (state) => state.navigation.tabs.tablets.tabletsMode;
 
@@ -60,10 +63,25 @@ const selectSortedTablets = createSelector(
     (rawTablets, sortState) => hammer.utils.sort(rawTablets, sortState, tableItems),
 );
 
+export const selectIsSearchByPivot = createSelector([selectTabletsFilter], (tabletsFilter) => {
+    return isPivotFilter(tabletsFilter);
+});
+
 const selectFilteredTablets = createSelector(
-    [selectSortedTablets, selectTabletsFilter],
-    (sortedTablets, tabletsFilter) =>
-        hammer.filter.filter({
+    [
+        selectMergedRawTablets,
+        selectSortedTablets,
+        selectTabletsFilter,
+        selectAttributes,
+        selectIsSearchByPivot,
+    ],
+    (rawTablets, sortedTablets, tabletsFilter, attributes, isSearchByPivot) => {
+        if (isSearchByPivot) {
+            const schema = ypath.getValue(attributes, '/schema') || [];
+            return findTabletByKey(tabletsFilter, rawTablets, schema);
+        }
+
+        return hammer.filter.filter({
             data: sortedTablets,
             input: tabletsFilter,
             factors: [
@@ -86,7 +104,8 @@ const selectFilteredTablets = createSelector(
                     return tableItems['replication_mode']?.get?.(item);
                 },
             ],
-        }),
+        });
+    },
 );
 
 export const selectPreparedDataForColumns = createSelector([selectFilteredTablets], (items) => {
