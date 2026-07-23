@@ -7,11 +7,12 @@ import cn from 'bem-cn-lite';
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
 import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
 import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
-import {ClipboardButton} from '@ytsaurus/components';
+import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import RadioButton from '../../../../components/RadioButton/RadioButton';
-import {Loader, Progress} from '@gravity-ui/uikit';
+import {Flex, Loader, Progress, Text, Icon as UIKitIcon} from '@gravity-ui/uikit';
+import SvgCircleQuestion from '@gravity-ui/icons/svgs/circle-question.svg';
 import Histogram from '../../../../components/Histogram/Histogram';
 import Filter from '../../../../components/Filter/Filter';
 import Label from '../../../../components/Label';
@@ -526,13 +527,20 @@ class Tablets extends Component {
 
         return (
             <div className={block('overview')}>
-                <Filter
-                    size="m"
-                    value={tabletsFilter}
-                    onChange={changeTabletsFilter}
-                    placeholder={i18n('context_filter-placeholder')}
-                    className={block('tablets-filter')}
-                />
+                <Flex alignItems="center" gap={1} className={block('tablets-filter-wrap')}>
+                    <Filter
+                        size="m"
+                        value={tabletsFilter}
+                        onChange={changeTabletsFilter}
+                        placeholder={i18n('context_filter-placeholder')}
+                        className={block('tablets-filter')}
+                    />
+                    <Tooltip content={i18n('context_filter-tooltip')}>
+                        <Text color="secondary" className={block('tablets-filter-tooltip-icon')}>
+                            <UIKitIcon data={SvgCircleQuestion} size={16} />
+                        </Text>
+                    </Tooltip>
+                </Flex>
 
                 <RadioButton
                     size="m"
