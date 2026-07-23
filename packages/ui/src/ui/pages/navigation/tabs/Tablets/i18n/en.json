@@ -1,6 +1,7 @@
 {
   "action_copy-pivot-key": "Copy Pivot Key",
-  "context_filter-placeholder": "Filter by Tablet Id/Cell Id/State/Host...",
+  "context_filter-placeholder": "Filter by Tablet Id/Cell Id/Pivot key/State/Host...",
+  "context_filter-tooltip": "To find the tablet serving a key, enter key values as an array: [number] or [number, number].",
   "value_default": "Default",
   "value_data": "Data",
   "value_data-by-nodes": "Data by nodes",
@@ -9,5 +10,6 @@
   "value_performance": "Performance",
   "title_histogram": "Histogram",
   "title_tablets": "Tablets",
-  "context_total-count": "(total {{count}})"
+  "context_total-count": "(total {{count}})",
+  "value_pivot-search": "Pivot search"
 }
