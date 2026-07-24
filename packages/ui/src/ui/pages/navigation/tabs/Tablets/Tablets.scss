@@ -8,6 +8,7 @@
 
     &__overview {
         display: flex;
+        gap: 8px;
 
         padding: 10px 0;
         margin-bottom: 20px;
@@ -22,7 +23,16 @@
     .histogram__select {
         width: 20%;
         min-width: 40ex;
+    }
+
+    .histogram__select,
+    &__tablets-filter-wrap {
         margin-right: 20px;
+    }
+
+    &__tablets-filter-tooltip-icon {
+        display: flex;
+        align-items: center;
     }
 
     &_loading {

@@ -1,6 +1,7 @@
 {
   "action_copy-pivot-key": "Copy Pivot Key",
-  "context_filter-placeholder": "Filter by Tablet Id/Cell Id/State/Host...",
+  "context_filter-placeholder": "Filter by Tablet Id/Cell Id/Pivot key/State/Host...",
+  "context_filter-tooltip": "To find the tablet serving a key, enter key values as an array: [value] or [value, value]. The closing bracket is optional. Use the u suffix for uint64 values, for example [553402322211286528u]. Other input filters tablets by Tablet ID, Cell ID, State, or Host.",
   "value_default": "Default",
   "value_data": "Data",
   "value_data-by-nodes": "Data by nodes",
