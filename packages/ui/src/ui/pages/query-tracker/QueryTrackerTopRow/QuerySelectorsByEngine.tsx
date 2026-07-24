@@ -60,7 +60,8 @@ export const QuerySelectorsByEngine: FC = () => {
 
     const clusterCliqueList =
         settings.cluster && settings.cluster in cliqueMap ? cliqueMap[settings.cluster] : {};
-    const cliqueList = engine in clusterCliqueList ? clusterCliqueList[engine] : [];
+    const hasLoadedCliqueList = engine in clusterCliqueList;
+    const cliqueList = hasLoadedCliqueList ? clusterCliqueList[engine] : [];
 
     if (engine === QueryEngine.YQL && availableYql.length) {
         return (
@@ -74,20 +75,35 @@ export const QuerySelectorsByEngine: FC = () => {
         );
     }
 
-    if (engine === QueryEngine.SPYT && hasSpytConnect) {
-        return null;
-    }
+    if (engine === QueryEngine.SPYT) {
+        if (hasSpytConnect) return null;
 
-    if (engine === QueryEngine.CHYT || engine === QueryEngine.SPYT) {
-        const isChyt = engine === QueryEngine.CHYT;
         return (
             <QueryCliqueSelector
                 loading={cliqueLoading}
                 cliqueList={cliqueList}
-                value={isChyt ? settings.clique : settings.discovery_group}
-                onChange={isChyt ? handleCliqueChange : handlePathChange}
-                showStatus={isChyt}
-                placeholder={isChyt ? undefined : 'Discovery path'}
+                value={settings.discovery_group}
+                onChange={handlePathChange}
+                placeholder="Discovery path"
+            />
+        );
+    }
+
+    if (engine === QueryEngine.CHYT) {
+        const cliqueListIsReady = !cliqueLoading && hasLoadedCliqueList;
+        const queryClique = settings.clique;
+
+        const isQueryCliqueInCliqueList = cliqueList.some(({alias}) => alias === queryClique);
+        const cliqueToDisplay =
+            !cliqueListIsReady || isQueryCliqueInCliqueList ? queryClique : undefined;
+
+        return (
+            <QueryCliqueSelector
+                loading={cliqueLoading}
+                cliqueList={cliqueList}
+                value={cliqueToDisplay}
+                onChange={handleCliqueChange}
+                showStatus
             />
         );
     }
