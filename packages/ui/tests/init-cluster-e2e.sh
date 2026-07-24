@@ -281,9 +281,21 @@ cat $(dirname $0)/data/cyrillic-truncated-table/data | yt write-table --format y
 CYRILLIC_TABLE=${E2E_DIR}/tmp/cyrillic-table
 yt create --attributes '{"schema"=[{"name"="Тест1"; "type"="string"};{"name"="Тест2"; "type"="string"}]}' table ${CYRILLIC_TABLE}
 
+# Yson list of Cyrillic strings (reproduces YTFRONT-5937 / query result UTF-8 decode issue)
+YSON_CYRILLIC_TABLE=${E2E_DIR}/tmp/yson-cyrillic-table
+YSON_CYRILLIC_TABLE_SCHEMA=$(cat $(dirname $0)/data/yson-cyrillic-table/table.schema)
+yt create --attributes "$YSON_CYRILLIC_TABLE_SCHEMA" table ${YSON_CYRILLIC_TABLE}
+cat $(dirname $0)/data/yson-cyrillic-table/data.json |
+    yt write-table --format '<encode_utf8=%false>json' ${YSON_CYRILLIC_TABLE}
+
 if [ "${SKIP_QUERIES}" != "true" ]; then
     # create an operation with problematic symbols
     yt start-query yql 'SELECT count + 1, type || "ã ã" || "this is ÂÅ!" FROM ui.`'${E2E_DIR}'/locked`;' --settings '{"symbols"="ãÂÅỞã";"test_cyr"="Привет";"smyle"="😅"}'
+    # Cyrillic inside Optional[Yson] list — must render without double UTF-8 decode.
+    # Persist query id so e2e can open completed results without re-running YQL from UI
+    echo -n E2E_YSON_CYRILLIC_QUERY_ID= >>./e2e-env.tmp
+    yt start-query yql 'SELECT id, titles FROM ui.`'${E2E_DIR}'/tmp/yson-cyrillic-table`;' \
+        --annotations '{title="e2e-yson-cyrillic-titles"}' >>./e2e-env.tmp
     yt vanilla --spec '{"title" = "YQL operation (501 - 🚧 - 5 - try to join ozon, 68f0b53b787fdd313c1e780c by mied) тест";"tasks" = {"main" = {"job_count" = 1;"command" = "sleep 10";}}}' --async
 fi
 

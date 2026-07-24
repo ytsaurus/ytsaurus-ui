@@ -5,7 +5,7 @@ import i18n from './i18n';
 
 const defaultSettings: UnipikaSettings = {
     escapeWhitespace: false,
-    decodeUTF8: true,
+    decodeUTF8: false,
     binaryAsHex: true,
     escapeYQLStrings: true,
     omitStructNull: true,

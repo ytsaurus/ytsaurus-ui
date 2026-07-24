@@ -1,8 +1,14 @@
 import {expect, test} from '@playwright/test';
-import {E2E_DIR, makeClusterUrl} from '../../utils';
+import {E2E_DIR, E2E_YSON_CYRILLIC_QUERY_ID, makeClusterUrl} from '../../utils';
 import {BasePage} from '../../widgets/BasePage';
 
 const DEFAULT_QUERY_CLUSTER = 'ui';
+const YSON_CYRILLIC_TITLES = [
+    'Помощь на всех этапах',
+    'Поиск помещения',
+    'Собственный кол-центр',
+    'Отзывы',
+];
 
 function replaceNbsps(str: string) {
     const re = new RegExp(String.fromCharCode(160), 'g');
@@ -48,7 +54,7 @@ class QueryTrackerPage extends BasePage {
     }
 
     async verifyQueryResultTable() {
-        await expect(this.page.locator('.query-result-table')).toBeVisible();
+        await expect(this.page.locator('.query-result-table')).toBeVisible({timeout: 60_000});
     }
 
     async isQueryResultTableHide() {
@@ -145,6 +151,25 @@ test('@QueryTracker: Click on the new query button in the queries widget should 
     const resetQueryText = await queryTrackerPage.getQueryText();
 
     await expect(resetQueryText).toBe(queryText);
+});
+
+test('@QueryTracker: Cyrillic in Yson query result is decoded correctly', async ({page}) => {
+    test.slow();
+
+    test.skip(
+        !E2E_YSON_CYRILLIC_QUERY_ID,
+        'E2E_YSON_CYRILLIC_QUERY_ID is missing (re-run e2e:localmode:init)',
+    );
+
+    await page.goto(makeClusterUrl(`queries/${E2E_YSON_CYRILLIC_QUERY_ID}`));
+
+    const queryTrackerPage = new QueryTrackerPage({page});
+    await queryTrackerPage.verifyQueryResultTable();
+
+    const resultTable = page.locator('.query-result-table');
+    for (const title of YSON_CYRILLIC_TITLES) {
+        await expect(resultTable).toContainText(title);
+    }
 });
 
 test.describe('@QueryTracker: Suggest scenarios', () => {
