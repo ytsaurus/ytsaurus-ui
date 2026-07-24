@@ -1,5 +1,26 @@
 # Changelog
 
+## [3.21.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.20.0...ui-v3.21.0) (2026-07-24)
+
+
+### Features
+
+* **AiChat:** add ui factory external chat method [YTFRONT-5769] ([6870940](https://github.com/ytsaurus/ytsaurus-ui/commit/68709409a75062ca209ca67c6e9f3de1dc0db885))
+* **Bundles/Instances:** add columns sorting [YTFRONT-5892] ([e7de94b](https://github.com/ytsaurus/ytsaurus-ui/commit/e7de94b7492ff003a583bd85cef6d8024d4cda75))
+* **Bundles/Proxies:** add columns sorting [YTFRONT-5892] ([edd91a4](https://github.com/ytsaurus/ytsaurus-ui/commit/edd91a4e537925cbdb8d5e030aa36698012a2625))
+* **Flow/Worker:** add Name field [YTFRONT-5609] ([8c1a3a7](https://github.com/ytsaurus/ytsaurus-ui/commit/8c1a3a7795ac4648e8d88cf2734672597642cdcf))
+* **Flow/Worker:** add rmote shell command [YTFRONT-5609] ([15d9127](https://github.com/ytsaurus/ytsaurus-ui/commit/15d9127d4685e6bdda0ed98d5f5486527e711c3b))
+* **Flow:** add 'Leader controller name' [YTFRONT-5829] ([57d61a0](https://github.com/ytsaurus/ytsaurus-ui/commit/57d61a07a4b9366fcabf7c1223663334d68cd49e))
+* **Navigation/Sort,Merge,Erase:** add 'Prepare for dynamic mode' [YTFRONT-3774] ([75ee610](https://github.com/ytsaurus/ytsaurus-ui/commit/75ee610c6bbeebe9a7bcf64b129b92ccd0f8ffda))
+
+
+### Bug Fixes
+
+* **Flow/Messages:** do not close dialog when pointer leaves browser window [YTFRONT-5675] ([c66966e](https://github.com/ytsaurus/ytsaurus-ui/commit/c66966e856c973196bf09afd137c0f03fa97fd01))
+* **Flow/Worker:** use rpc_address instead of address [YTFRONT-5609] ([daa1571](https://github.com/ytsaurus/ytsaurus-ui/commit/daa1571ac8a9acd08fea03a31496ebdc42cb5e09))
+* **Flow:** add copy path button for 'Flow path' [YTFRONT-5608] ([22a6207](https://github.com/ytsaurus/ytsaurus-ui/commit/22a6207c85902a82af196dbb50ab5ff0ac072116))
+* **Flow:** add spacing for independent graphs [YTFRONT-5673] ([f7140d0](https://github.com/ytsaurus/ytsaurus-ui/commit/f7140d0f41a567277d25cb067a1cf081529afb25))
+
 ## [3.20.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.19.0...ui-v3.20.0) (2026-07-21)
 
 
