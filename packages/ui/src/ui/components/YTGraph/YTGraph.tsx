@@ -43,10 +43,15 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     autoCenter,
     highlightConnectionsOnHover = false,
     onBlockClick,
+    onGraph,
 }: YTGraphProps<B, C>) {
     const theme = useThemeValue();
     const {graph, setEntities, start} = useGraph(config);
     const fitGraphRef = React.useRef(true);
+
+    React.useEffect(() => {
+        onGraph?.(graph);
+    }, [graph, onGraph]);
 
     useAutoGroups({allowAutoGroups, graph});
     useCustomGroups({customGroups, graph});
