@@ -1,4 +1,4 @@
-## YTsaurus platform UI
+## YTsaurus platform UI fix(Scheduling): health frame height [YTFRONT-5872]
 
 The repository contains code related to UI for [YTsaurus platform](https://ytsaurus.tech).
 
