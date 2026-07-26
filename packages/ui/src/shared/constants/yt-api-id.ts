@@ -104,6 +104,8 @@ export const enum YTApiId {
 
     listOperations = 'listOperations',
 
+    operationGetRuntimeParameters = 'operationGetRuntimeParameters',
+    operationUpdateRuntimeParameters = 'operationUpdateRuntimeParameters',
     operationGetJobs = 'operationGetJobs',
     operationIntermediateResourceUsage = 'operationIntermediateResourceUsage',
     operationIsEphemeral = 'operationIsEphemeral',

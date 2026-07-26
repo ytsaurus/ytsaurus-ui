@@ -1,3 +1,5 @@
+import forEach_ from 'lodash/forEach';
+import some_ from 'lodash/some';
 import {type YTPermissionType} from '../../../shared/yt-types';
 import {
     IdmObjectType,
@@ -180,3 +182,66 @@ export function convertFromUIPermission(permission: YTPermissionTypeUI): {
 export function isGranted(role: boolean | PreparedRole | undefined) {
     return 'boolean' === typeof role ? role : role?.state === 'granted';
 }
+
+export type HasSplitted = {
+    isSplitted?: boolean;
+    subjectIndex?: number;
+};
+
+export function splitSubjects<T extends {subjects: Array<unknown>; types?: Array<unknown>}>(
+    items: Array<T>,
+    {addAclIndex}: {addAclIndex?: boolean} = {},
+) {
+    const res: Array<T & HasSplitted> = [];
+    forEach_(items, (item, aclIndex) => {
+        const commonPart = addAclIndex ? {aclIndex} : {};
+        const {subjects, types = []} = item;
+        if (subjects && subjects.length > 1) {
+            forEach_(subjects, (subject, index) => {
+                res.push({
+                    ...item,
+                    subjects: [subject],
+                    types: [types?.[index]],
+                    isSplitted: true,
+                    subjectIndex: index,
+                    ...commonPart,
+                });
+            });
+        } else {
+            res.push({...item, ...commonPart});
+        }
+    });
+    return res;
+}
+
+export function subjectFilterPredicate<
+    T extends {subjectType?: unknown; groupInfo?: unknown; subjects: Array<unknown>},
+>(item: T, filter: string) {
+    const {subjectType, groupInfo} = item;
+    if (subjectType === 'group') {
+        return some_(Object.entries(groupInfo ?? {}), ([key, value]) => {
+            let str: string | undefined = String(value);
+            if (key === 'url') {
+                if (str[str.length - 1] === '/') str = str.slice(0, -1);
+                str = str.split('/').pop();
+            }
+            return -1 !== str?.toLowerCase().indexOf(filter);
+        });
+    }
+    const value = String(item.subjects[0] ?? '');
+    return -1 !== value.toLowerCase().indexOf(filter);
+}
+
+export const permissionsFilterPredicate = (
+    item: {permissions?: Array<YTPermissionTypeUI>},
+    filter: Set<YTPermissionTypeUI>,
+) => {
+    const {permissions} = item;
+    let foundCount = 0;
+    return permissions?.some((p) => {
+        if (filter.has(p)) {
+            foundCount++;
+        }
+        return foundCount >= filter.size;
+    });
+};

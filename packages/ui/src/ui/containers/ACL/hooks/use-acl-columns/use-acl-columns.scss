@@ -1,0 +1,118 @@
+.yt-acl-columns {
+    &__table-item {
+        --data-table-cell-border-padding: 4px;
+        --data-table-cell-horizontal-padding: 4px;
+
+        box-sizing: border-box;
+
+        &_type_expand {
+            padding-left: 2px;
+            padding-right: 2px;
+        }
+
+        &_type_subjects {
+            max-width: 320px;
+            .yt-subject-link {
+                display: flex;
+            }
+            .yc-popover {
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        &_type_permissions {
+            max-width: 320px;
+        }
+
+        &_type_approve-type {
+            width: calc(270px + 160px);
+        }
+
+        &_type_inheritance-mode {
+            width: 160px;
+            max-width: 200px;
+        }
+
+        &_type_actions {
+            width: 85px;
+
+            .g-button {
+                margin-top: -4px;
+                margin-bottom: -4px;
+            }
+        }
+
+        &_type_columns {
+            width: 575px;
+            white-space: normal;
+        }
+    }
+
+    table &__permissions {
+        display: flex;
+        align-items: baseline;
+
+        .elements-text {
+            white-space: normal;
+        }
+
+        &_type_allow {
+            .icon {
+                color: var(--success-color);
+                margin-right: 4px;
+                padding: 0 5px;
+            }
+        }
+
+        &_type_deny {
+            .icon {
+                color: var(--danger-color);
+                margin-right: 7px;
+            }
+        }
+    }
+
+    table &__subjects {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .icon {
+            margin-left: 16px;
+        }
+    }
+
+    &__subject {
+        &_level_1 {
+            padding-left: 28px;
+        }
+    }
+
+    &__subject-with-tvm {
+        flex-grow: 1;
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+    }
+
+    &__inherited {
+        padding-right: 8px;
+        &_hidden {
+            visibility: hidden;
+        }
+    }
+
+    &__inherited-icon {
+        vertical-align: middle;
+    }
+
+    &__action-label {
+        text-align: center;
+        min-width: 5ex;
+        margin-right: 1ex;
+        font-weight: unset;
+        flex-shrink: 0;
+    }
+}

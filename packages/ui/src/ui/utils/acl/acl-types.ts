@@ -8,7 +8,8 @@ export type IdmKindType =
     | 'account'
     | 'pool'
     | 'tablet_cell_bundle'
-    | 'access_control_object';
+    | 'access_control_object'
+    | 'operation';
 
 export interface Group {
     members?: Array<Subject>;
@@ -73,20 +74,16 @@ export interface Role {
     deprive_after_days?: number;
 }
 
-export type RoleConverted = ResponsibleType & {
-    idmLink?: string;
-    inherited?: boolean;
-    isApproved?: boolean;
-    isDepriving?: boolean;
-    isMissing?: boolean;
-    isRequested?: boolean;
-    isUnrecognized?: boolean;
-    key?: string;
-    role_type?: string;
-    state?: string;
-    text: string;
-    group?: string;
-};
+export type RoleConverted = ResponsibleType &
+    AclFlags & {
+        idmLink?: string;
+        inherited?: boolean;
+        key?: string;
+        role_type?: string;
+        state?: string;
+        text: string;
+        group?: string;
+    };
 
 export interface ResponsibleSettingsV2 {
     responsible: Array<Role>;
@@ -235,34 +232,30 @@ export type InheritanceModeType =
     | 'object_only'
     | 'object_and_descendants';
 
-export type PreparedAclSubject = TypedAclSubject & {
-    inheritance_mode?: InheritanceModeType;
-    inherited?: boolean;
-    inheritedFrom?: InheritedFrom;
-    key?: string;
-    permissions?: Array<YTPermissionTypeUI>;
-    subjects: Array<string | number>;
-    action?: string;
-    group?: string;
-    columns?: Role['columns'];
-    row_access_predicate?: string;
-    state?: string;
-    idmLink?: string;
-    depriveDate?: string;
-    isDepriving?: boolean;
-    isRequested?: boolean;
-    isApproved?: boolean;
-    isUnrecognized?: boolean;
-    isMissing?: boolean;
-    revision?: number;
-    aclIndex?: number;
-    isSplitted?: boolean;
-    subjectIndex?: number;
-    vital?: boolean;
-    group_type?: SubjectGroupType;
+export type PreparedAclSubject = TypedAclSubject &
+    AclFlags & {
+        inheritance_mode?: InheritanceModeType;
+        inherited?: boolean;
+        inheritedFrom?: InheritedFrom;
+        key?: string;
+        permissions?: Array<YTPermissionTypeUI>;
+        subjects: Array<string | number>;
+        action?: string;
+        group?: string;
+        columns?: Role['columns'];
+        row_access_predicate?: string;
+        state?: string;
+        idmLink?: string;
+        depriveDate?: string;
+        revision?: number;
+        aclIndex?: number;
+        isSplitted?: boolean;
+        subjectIndex?: number;
+        vital?: boolean;
+        group_type?: SubjectGroupType;
 
-    type?: 'columns';
-};
+        type?: 'columns';
+    };
 
 export type ResponsibleType =
     | {type: 'users'; value: string}
@@ -282,3 +275,11 @@ export interface UpdateAclParams {
     comment?: string;
     name: string;
 }
+
+export type AclFlags = {
+    isUnrecognized?: boolean;
+    isDepriving?: boolean;
+    isRequested?: boolean;
+    isApproved?: boolean;
+    isMissing?: boolean;
+};

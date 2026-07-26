@@ -21,6 +21,7 @@ export const Tab = {
     PERFORMANCE: 'performance',
     INCARNATIONS: 'incarnations',
     LOGS: 'logs',
+    ACL: 'acl'
 } as const;
 
 export type OperationTabType = ValueOf<typeof Tab>;

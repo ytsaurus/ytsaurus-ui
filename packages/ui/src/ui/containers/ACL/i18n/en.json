@@ -1,10 +1,5 @@
 {
-  "field_private-columns": "Private columns",
-  "field_type": "Type",
-  "field_subjects": "Subjects",
   "field_permissions": "Permissions",
-  "field_inheritance-mode": "Inheritance mode",
-  "field_row-access-predicate": "Row access predicate",
   "field_inherit-acl": "Inherit ACL",
   "field_boss-approval": "Boss approval",
   "field_inherit-responsibles": "Inherit responsibles",

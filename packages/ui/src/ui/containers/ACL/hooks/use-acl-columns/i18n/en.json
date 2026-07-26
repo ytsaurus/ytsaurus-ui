@@ -1,0 +1,8 @@
+{
+  "field_private-columns": "Private columns",
+  "field_type": "Type",
+  "field_subjects": "Subjects",
+  "field_permissions": "Permissions",
+  "field_inheritance-mode": "Inheritance mode",
+  "field_row-access-predicate": "Row access predicate"
+}

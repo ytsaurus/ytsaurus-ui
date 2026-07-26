@@ -1,0 +1,21 @@
+.yt-acl-table-with-toolbar {
+    &__row {
+        &_depriving {
+            opacity: 0.5;
+            background-color: var(--danger-background);
+        }
+        &_approved,
+        &_requested {
+            opacity: 0.5;
+            background-color: var(--g-color-base-misc-light);
+        }
+
+        &_unrecognized {
+            background-color: var(--g-color-base-danger-light);
+
+            &:hover {
+                --hover-background: var(--g-color-base-danger-light-hover);
+            }
+        }
+    }
+}

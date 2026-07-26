@@ -24,6 +24,7 @@ import {YTApiId, ytApiV3, ytApiV3Id} from '../../rum/rum-wrap-api';
 import UIFactory from '../../UIFactory';
 import {unquote} from '../../utils/string';
 import {YSON_AS_TEXT, prettyPrintSafe} from '../../utils/unipika';
+import {addOperationAcl} from './acl-operation';
 import {
     type ACE,
     type ACLResponsible,
@@ -32,6 +33,7 @@ import {
     type IdmKindType,
     type PreparedAclData,
     type PreparedAclSubject,
+    type Subject,
     type UpdateAclParams,
     type UpdateResponse,
 } from './acl-types';
@@ -224,6 +226,18 @@ export function checkPermissions(
 }
 
 export function requestPermissions(params: RequestPermissionParams): Promise<UpdateResponse> {
+    if (params.kind === 'operation') {
+        return addOperationAcl({
+            operation_id: params.path,
+            toAdd: params.roles_grouped.map(({permissions = [], subject}) => {
+                return {
+                    permissions,
+                    subjects: [prepareAceSubject(subject)],
+                };
+            }),
+        });
+    }
+
     const {roles_grouped, sysPath, kind} = params;
     const aclAttr = getAclAttr(kind);
     const batchParams: ExecuteBatchParams = {
@@ -252,6 +266,16 @@ export function requestPermissions(params: RequestPermissionParams): Promise<Upd
         }
         return results;
     });
+}
+
+function prepareAceSubject(item: Subject) {
+    if ('group' in item) {
+        return item.group;
+    } else if ('user' in item) {
+        return item.user;
+    } else {
+        return `tvm:${item.tvm_id}`;
+    }
 }
 
 export function updateAclAttributes(_cluster: string, path: string, params: UpdateAclParams) {
