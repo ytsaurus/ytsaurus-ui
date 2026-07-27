@@ -1,9 +1,7 @@
 import {type FlowComputationStreamType} from '../../../../../../shared/yt-types';
-
 import {type YTGraphBlock} from '../../../../../components/YTGraph';
 import {rumLogError} from '../../../../../rum/rum-counter';
-import {FlowComputationRuntimeType} from '../../types';
-
+import {type FlowComputationRuntimeType} from '../../types';
 import {type FlowGraphBlockItem} from '../FlowGraph';
 
 const PADDING = 50;
