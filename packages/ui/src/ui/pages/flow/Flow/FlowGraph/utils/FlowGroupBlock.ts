@@ -47,7 +47,7 @@ export class FlowGroupBlock
         >['backgroundTheme'];
     }) {
         this.id = id;
-        this.meta = computation;
+        this.meta = {...computation};
         this.name = computation.name;
         this.backgroundTheme = backgroundTheme;
 
