@@ -1,6 +1,6 @@
 import {Anchor, ECameraScaleLevel} from '@gravity-ui/graph';
 import {GRAPH_COLORS} from '../../../../../components/YTGraph/constants';
-import {FlowComputationRuntimeType} from '../../types';
+import {type FlowComputationRuntimeType} from '../../types';
 import {
     COMPUTATION_ANCHOR_SIZE,
     getStreamsSummmaryByAnchorType,

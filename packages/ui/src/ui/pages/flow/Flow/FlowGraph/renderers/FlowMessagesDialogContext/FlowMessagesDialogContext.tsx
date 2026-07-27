@@ -23,11 +23,11 @@ export function useFlowMessagesDialogContext() {
 }
 
 export function FlowMessagesDialogContext({children}: {children: React.ReactNode}) {
-    const [data, setVisibleMessages] = React.useState<FlowMessagesProps['data']>();
+    const [data = [], setVisibleMessages] = React.useState<FlowMessagesProps['data']>();
     return (
         <FlowMessagesDialogCtx.Provider value={{data, setVisibleMessages}}>
             {children}
-            {data && (
+            {data.length! > 0 && (
                 <DialogWrapper
                     className={block('messages-dialog')}
                     open={true}
