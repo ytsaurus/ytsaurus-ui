@@ -12,6 +12,21 @@ import {
 } from '../../types';
 import {FlowGraphBlock, FlowGraphBlockItem} from '../FlowGraph';
 
+export function applyConnectionStyle(
+    dst: TConnection,
+    {
+        drained,
+        backpressure_detected,
+    }: Partial<Pick<FlowExtendedStremType, 'drained' | 'backpressure_detected'>>,
+) {
+    dst.styles = Object.assign(
+        {},
+        dst.styles,
+        drained ? {background: GRAPH_COLORS.infoLine} : {},
+        backpressure_detected ? {background: GRAPH_COLORS.warningLine} : {},
+    );
+}
+
 export function addFlowConnection(
     dstConnections: Array<TConnection>,
     sourceBlockId: TBlockId,
