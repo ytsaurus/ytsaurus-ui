@@ -41,12 +41,14 @@ import {
     selectFlowZoomToNode,
 } from '../../../../store/selectors/flow/filters';
 import {selectCluster} from '../../../../store/selectors/global/cluster';
+import {type SVGIconSvgrData} from '../../../../types/uikit';
 import {type FlowComputationRuntimeType} from '../types';
 import './FlowGraph.scss';
 import i18n from './i18n';
 import {Computation} from './renderers/Computation';
 import {ComputationCanvasBlock} from './renderers/ComputationCanvas';
 import {ComputationGroupCanvasBlock} from './renderers/ComputationGroupCanvas';
+import {FlowGraphAnchors} from './renderers/FlowGraphAnchors/FlowGraphAnchors';
 import {STATUS_TO_BG_THEME} from './renderers/FlowGraphRenderer';
 import {Sink} from './renderers/Sink';
 import {SinkCanvasBlock} from './renderers/SinkCanvas';
@@ -54,6 +56,7 @@ import {Stream} from './renderers/Stream';
 import {StreamCanvasBlock} from './renderers/StreamCanvas';
 import {FlowGroupBlock} from './utils/FlowGroupBlock';
 import {
+    addComputationInOut,
     addFlowConnection,
     applyConnectionStyle,
     makeBlock,
@@ -132,11 +135,14 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
                 setScale={setScale}
                 {...config}
                 data={useGroups && !zoomToState ? groups : data}
-                renderBlock={({className, style, data}) => {
+                renderBlock={({className, data, graph}) => {
                     return (
-                        <Flex className={block('item-container', className)} style={style}>
-                            {renderContent({item: data})}
-                        </Flex>
+                        <GraphBlock graph={graph} block={data} className={block('graph-block')}>
+                            <Flex className={block('item-container', className)}>
+                                {renderContent({item: data})}
+                            </Flex>
+                            <FlowGraphAnchors graph={graph} data={data} />
+                        </GraphBlock>
                     );
                 }}
                 renderPopup={({data}) => {
@@ -320,8 +326,12 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                         groupId,
                         backgroundTheme: STATUS_TO_BG_THEME[computation.status],
                         ...COMPUTATION_SIZE,
+                        anchors: [],
                     },
                 );
+                const {targetAnchorId, sourceAnchorId} = addComputationInOut(computationBlock);
+                addComputationInOut(groupBlock);
+
                 blockById.set(computationBlock.id, computationBlock);
                 res.data.blocks.push(computationBlock);
 
@@ -335,13 +345,17 @@ function useFlowGraphData(params: {pipeline_path: string}) {
 
                     streams.forEach((id) => {
                         if (key === 'input_streams' || key === 'source_streams') {
-                            const c = addFlowConnection(res.data.connections, id, computation.id);
+                            const c = addFlowConnection(res.data.connections, id, computation.id, {
+                                targetAnchorId,
+                            });
                             applyConnectionStyle(
                                 c,
                                 runtimeData.input.extendedStreams.get(id) ?? {},
                             );
                         } else if (key === 'output_streams') {
-                            const c = addFlowConnection(res.data.connections, computation.id, id);
+                            const c = addFlowConnection(res.data.connections, computation.id, id, {
+                                sourceAnchorId,
+                            });
                             applyConnectionStyle(
                                 c,
                                 runtimeData.output.extendedStreams.get(id) ?? {},
@@ -354,6 +368,7 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                                 res.data.connections,
                                 computation.id,
                                 id,
+                                {sourceAnchorId},
                             );
                             makeTimerAnchors(computationBlock, timerBlock, cOut);
                             const timerInfo = runtimeData.timer.extendedStreams.get(id) ?? {};
@@ -363,6 +378,7 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                                 res.data.connections,
                                 id,
                                 computation.id,
+                                {targetAnchorId},
                             );
                             makeTimerAnchors(timerBlock, computationBlock, cIn);
                             applyConnectionStyle(cIn, timerInfo);
