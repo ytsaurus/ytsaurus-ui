@@ -5,7 +5,10 @@ import {type DescribedSettings, type Stage} from './constants/settings-types';
 import {type UISettings} from './ui-settings';
 import {type CheckPermissionResult} from './utils/check-permission';
 
+export type MajorMinorPatch = `${number}.${number}.${number}`;
 export type RawVersion = `${MajorMinorPatch}-${string}` | '';
+
+export type AuthWay = 'oauth' | 'passwd';
 
 export interface YTConfig {
     clusters: Record<string, ClusterConfig>;
