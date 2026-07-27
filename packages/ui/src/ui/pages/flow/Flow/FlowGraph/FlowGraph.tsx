@@ -1,21 +1,14 @@
-import {
-    ECameraScaleLevel,
-    type TAnchor,
-    type TBlock,
-    type TBlockId,
-    type TConnection,
-} from '@gravity-ui/graph';
+import {ECameraScaleLevel, Graph, type TBlockId, type TConnection} from '@gravity-ui/graph';
+import {GraphBlock, useGraphEvents} from '@gravity-ui/graph/react';
 import ClockIcon from '@gravity-ui/icons/svgs/clock.svg';
 import FileCodeIcon from '@gravity-ui/icons/svgs/file-code.svg';
 import ReceiptIcon from '@gravity-ui/icons/svgs/receipt.svg';
 import {Flex} from '@gravity-ui/uikit';
-import {type SVGIconSvgrData} from '../../../../types/uikit';
 import cn from 'bem-cn-lite';
 import partition_ from 'lodash/partition';
 import React from 'react';
 import {
     type FlowComputationStreamType,
-    type FlowComputationType,
     type FlowSink,
     type FlowStream,
 } from '../../../../../shared/yt-types';
@@ -24,12 +17,12 @@ import {NoContent} from '../../../../components/NoContent';
 import Select from '../../../../components/Select/Select';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {
-    YTGraph,
-    type YTGraphBlock,
-    type YTGraphData,
     useConfig,
     useElkLayout,
     useGraphScale,
+    YTGraph,
+    type YTGraphBlock,
+    type YTGraphData,
 } from '../../../../components/YTGraph';
 import {FlowError} from '../../../../pages/flow/flow-components/FlowError/FlowError';
 import {ShowDataButton} from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
