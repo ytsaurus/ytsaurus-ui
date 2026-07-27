@@ -1,4 +1,4 @@
-import {Graph, TAnchor} from '@gravity-ui/graph';
+import {type Graph, type TAnchor} from '@gravity-ui/graph';
 import {GraphBlockAnchor} from '@gravity-ui/graph/build/react-components';
 import ArrowShapeRightToLineIcon from '@gravity-ui/icons/svgs/arrow-shape-right-to-line.svg';
 import CircleInfoIcon from '@gravity-ui/icons/svgs/circle-info.svg';
@@ -7,7 +7,7 @@ import {Icon, type IconProps} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {type FlowComputationUIStreamsSummary} from '../../../../../../pages/flow/Flow/types';
-import {FlowGraphBlock} from '../../FlowGraph';
+import {type FlowGraphBlock} from '../../FlowGraph';
 import {
     COMPUTATION_ANCHOR_SIZE,
     COMPUTATION_IN,

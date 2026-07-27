@@ -1,17 +1,17 @@
-import {TAnchor, TBlock, TBlockId, TConnection} from '@gravity-ui/graph';
+import {type TAnchor, type TBlock, type TBlockId, type TConnection} from '@gravity-ui/graph';
 import {v4 as uuidv4} from 'uuid';
 import {
     type FlowComputationType,
     type FlowExtendedStremType,
 } from '../../../../../../shared/yt-types';
 import {GRAPH_COLORS} from '../../../../../components/YTGraph/constants';
-import {YTGraphBlock} from '../../../../../components/YTGraph/types';
+import {type YTGraphBlock} from '../../../../../components/YTGraph/types';
 import {
-    FlowComputationRuntimeData,
-    FlowComputationRuntimeType,
-    FlowComputationUIStreamsSummary,
+    type FlowComputationRuntimeData,
+    type FlowComputationRuntimeType,
+    type FlowComputationUIStreamsSummary,
 } from '../../types';
-import {FlowGraphBlock, FlowGraphBlockItem} from '../FlowGraph';
+import {type FlowGraphBlock, type FlowGraphBlockItem} from '../FlowGraph';
 
 export function applyConnectionStyle(
     dst: TConnection,
@@ -209,9 +209,9 @@ export function isComputationAnchorType(type: string): type is FlowComputationAn
 }
 
 export function isFlowComputationOrGroup(
-    block: FlowGraphBlock,
+    block?: FlowGraphBlock,
 ): block is
     | YTGraphBlock<'computation-group', FlowComputationRuntimeType>
     | YTGraphBlock<'computation', FlowComputationRuntimeType> {
-    return block.is === 'computation';
+    return block?.is === 'computation' || block?.is === 'computation-group';
 }
