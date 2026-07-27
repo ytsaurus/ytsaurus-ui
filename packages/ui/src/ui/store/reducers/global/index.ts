@@ -31,8 +31,8 @@ import {EMPTY_OBJECT} from '../../../constants/empty';
 import {getClusterConfig} from '../../../utils';
 import {defaultClusterUiConfig} from './cluster-ui-config';
 import {type ActionD, type YTError} from '../../../types';
-import {type AuthWay} from '../../../../shared/constants';
 import {
+    type AuthWay,
     type ClusterConfig,
     type ClusterUiConfig,
     type CypressNode,
@@ -72,7 +72,7 @@ export type GlobalState = {
     masterVersion?: RawVersion;
 
     login: string;
-    authWay: AuthWay;
+    authWay?: AuthWay;
 
     // cluster-params
     paramsCluster?: string;
