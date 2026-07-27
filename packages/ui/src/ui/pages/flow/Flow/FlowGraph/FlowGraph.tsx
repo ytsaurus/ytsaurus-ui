@@ -41,6 +41,7 @@ import {
     selectFlowZoomToNode,
 } from '../../../../store/selectors/flow/filters';
 import {selectCluster} from '../../../../store/selectors/global/cluster';
+import {type FlowComputationRuntimeType} from '../types';
 import './FlowGraph.scss';
 import i18n from './i18n';
 import {Computation} from './renderers/Computation';
@@ -54,7 +55,9 @@ import {StreamCanvasBlock} from './renderers/StreamCanvas';
 import {FlowGroupBlock} from './utils/FlowGroupBlock';
 import {
     addFlowConnection,
+    applyConnectionStyle,
     makeBlock,
+    makeFlowComputationRuntimeData,
     makeTimerAnchors,
 } from './utils/utils';
 
@@ -79,8 +82,8 @@ export function FlowGraph({pipeline_path}: {pipeline_path: string}) {
 }
 
 export type FlowGraphBlock =
-    | (YTGraphBlock<'computation-group', FlowComputationType> & {stream_type?: never})
-    | (YTGraphBlock<'computation', FlowComputationType> & {stream_type?: never})
+    | (YTGraphBlock<'computation-group', FlowComputationRuntimeType> & {stream_type?: never})
+    | (YTGraphBlock<'computation', FlowComputationRuntimeType> & {stream_type?: never})
     | (YTGraphBlock<'stream', FlowStream> & {
           icon?: SVGIconSvgrData;
           stream_type?: FlowComputationStreamType;
@@ -235,8 +238,39 @@ function useFlowGraphLoadedData({pipeline_path}: {pipeline_path: string}) {
     });
 }
 
+function useFlowGraphRuntimeData({pipeline_path}: {pipeline_path: string}) {
+    const {data, ...rest} = useFlowGraphLoadedData({pipeline_path});
+
+    const dataWithRuntime = React.useMemo(() => {
+        if (!data) {
+            return data;
+        }
+
+        const {computations, ...restLoadedData} = data;
+
+        return {
+            ...restLoadedData,
+            computations: Object.entries(computations).reduce(
+                (acc, [key, item]) => {
+                    acc[key] = {
+                        ...item,
+                        runtimeData: makeFlowComputationRuntimeData(item),
+                    };
+                    return acc;
+                },
+                {} as Record<string, FlowComputationRuntimeType>,
+            ),
+        };
+    }, [data]);
+
+    return {
+        data: dataWithRuntime,
+        ...rest,
+    };
+}
+
 function useFlowGraphData(params: {pipeline_path: string}) {
-    const {data: loadedData} = useFlowGraphLoadedData(params);
+    const {data: loadedData} = useFlowGraphRuntimeData(params);
 
     type FlowData = YTGraphData<FlowGraphBlock, TConnection>;
 
@@ -291,6 +325,8 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                 blockById.set(computationBlock.id, computationBlock);
                 res.data.blocks.push(computationBlock);
 
+                const {runtimeData} = computation;
+
                 function collectStreams<K extends FlowComputationStreamType>(
                     key: K,
                     options?: {groupId: string},
@@ -299,9 +335,17 @@ function useFlowGraphData(params: {pipeline_path: string}) {
 
                     streams.forEach((id) => {
                         if (key === 'input_streams' || key === 'source_streams') {
-                            addFlowConnection(res.data.connections, id, computation.id);
+                            const c = addFlowConnection(res.data.connections, id, computation.id);
+                            applyConnectionStyle(
+                                c,
+                                runtimeData.input.extendedStreams.get(id) ?? {},
+                            );
                         } else if (key === 'output_streams') {
-                            addFlowConnection(res.data.connections, computation.id, id);
+                            const c = addFlowConnection(res.data.connections, computation.id, id);
+                            applyConnectionStyle(
+                                c,
+                                runtimeData.output.extendedStreams.get(id) ?? {},
+                            );
                         } else if (key === 'timer_streams') {
                             const computationBlock = blockById.get(computation.id)!;
                             const timerBlock = blockById.get(id)!;
@@ -312,6 +356,8 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                                 id,
                             );
                             makeTimerAnchors(computationBlock, timerBlock, cOut);
+                            const timerInfo = runtimeData.timer.extendedStreams.get(id) ?? {};
+                            applyConnectionStyle(cOut, timerInfo);
 
                             const cIn = addFlowConnection(
                                 res.data.connections,
@@ -319,6 +365,7 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                                 computation.id,
                             );
                             makeTimerAnchors(timerBlock, computationBlock, cIn);
+                            applyConnectionStyle(cIn, timerInfo);
                         }
 
                         if (options?.groupId) {
@@ -358,9 +405,9 @@ function useFlowGraphData(params: {pipeline_path: string}) {
             });
 
             // Transform connections to group connections
-            const connectionIds = new Set<string>();
+            const connectionById = new Map<string, (typeof res.data.connections)[number]>();
             res.data.connections.forEach((item) => {
-                const {sourceBlockId, targetBlockId} = item;
+                const {sourceBlockId, targetBlockId, styles} = item;
                 const src = blockById.get(sourceBlockId!)!;
                 const dst = blockById.get(targetBlockId!)!;
 
@@ -382,9 +429,13 @@ function useFlowGraphData(params: {pipeline_path: string}) {
 
                 if (source && target) {
                     const id = `_${source}->${target}_`;
-                    if (!connectionIds.has(id)) {
-                        connectionIds.add(id);
-                        addFlowConnection(res.groups.connections, source, target);
+
+                    let c = connectionById.get(id);
+                    if (c === undefined) {
+                        c = addFlowConnection(res.groups.connections, source, target, {styles});
+                        connectionById.set(id, c);
+                    } else {
+                        c.styles = Object.assign({}, c.styles, styles);
                     }
                 }
             });
