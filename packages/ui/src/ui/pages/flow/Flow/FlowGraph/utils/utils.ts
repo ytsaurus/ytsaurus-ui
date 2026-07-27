@@ -27,6 +27,100 @@ export function applyConnectionStyle(
     );
 }
 
+const uuid = uuidv4();
+
+/**
+ * Avoid collision with real ids from response
+ * @param id
+ * @returns
+ */
+function flowRuntimeId(id: string) {
+    return `${id}__${uuid}`;
+}
+
+export const COMPUTATION_IN = 'COMPUTATION_IN';
+export const COMPUTATION_OUT = 'COMPUTATION_OUT';
+export const COMPUTATION_TIMER_IN = 'COMPUTATION_TIMER_IN';
+export const COMPUTATION_TIMER_OUT = 'COMPUTATION_TIMER_OUT';
+
+const COMPUTATION_ANCHOR_TYPES = [
+    COMPUTATION_IN,
+    COMPUTATION_OUT,
+    COMPUTATION_TIMER_IN,
+    COMPUTATION_TIMER_OUT,
+];
+
+export type FlowComputationAnchorType = (typeof COMPUTATION_ANCHOR_TYPES)[number];
+
+export const COMPUTATION_ANCHOR_SIZE = 24;
+
+export function addComputationInOut(dstBlock: TBlock) {
+    dstBlock.anchors = dstBlock.anchors ?? [];
+
+    const targetAnchorId = flowRuntimeId(`${COMPUTATION_IN}_${dstBlock.id}`);
+    const anchorIn: TAnchor = {
+        id: targetAnchorId,
+        blockId: dstBlock.id,
+        type: COMPUTATION_IN,
+        index: dstBlock.anchors.length,
+    };
+
+    const sourceAnchorId = flowRuntimeId(`${COMPUTATION_OUT}_${dstBlock.id}`);
+    const anchorOut: TAnchor = {
+        id: sourceAnchorId,
+        blockId: dstBlock.id,
+        type: COMPUTATION_OUT,
+        index: dstBlock.anchors.length,
+    };
+
+    dstBlock.anchors?.push(anchorIn, anchorOut);
+
+    return {sourceAnchorId, targetAnchorId};
+}
+
+function makeFlowStreamsSummary(): FlowComputationUIStreamsSummary {
+    return {
+        drained: false,
+        backpressureDetected: false,
+        messages: [],
+        extendedStreams: new Map<string, FlowExtendedStremType>(),
+    };
+}
+
+export function makeFlowComputationRuntimeData(
+    computation: FlowComputationType,
+): FlowComputationRuntimeData {
+    const input = makeFlowStreamsSummary();
+    const output = makeFlowStreamsSummary();
+    const timer = makeFlowStreamsSummary();
+
+    function collectStreamsSummary(
+        dstSummary: FlowComputationUIStreamsSummary,
+        info: Array<FlowExtendedStremType>,
+    ) {
+        return info.reduce((acc, item) => {
+            dstSummary.drained = dstSummary.drained || item.drained;
+            dstSummary.backpressureDetected =
+                dstSummary.backpressureDetected || item.backpressure_detected;
+            dstSummary.messages.push(...item.messages);
+
+            acc.set(item.stream_graph_entity_id, item);
+            return acc;
+        }, dstSummary.extendedStreams);
+    }
+
+    collectStreamsSummary(input, computation.extended_input_streams);
+    collectStreamsSummary(output, computation.extended_output_streams);
+    collectStreamsSummary(input, computation.extended_source_streams);
+    collectStreamsSummary(timer, computation.extended_timer_streams);
+
+    return {
+        input,
+        output,
+        timer,
+    };
+}
+
 export function addFlowConnection(
     dstConnections: Array<TConnection>,
     sourceBlockId: TBlockId,
@@ -79,4 +173,36 @@ export function makeTimerAnchors(src: TBlock, dst: TBlock, c: TConnection) {
 
     c.targetAnchorId = dstAnchor.id;
     c.sourceAnchorId = srcAnchor.id;
+}
+
+export function hasVisibleStreamsSummaryDetails(
+    data?: FlowComputationUIStreamsSummary,
+): data is FlowComputationUIStreamsSummary {
+    if (!data) {
+        return false;
+    }
+    return data.messages.length > 0 || data.drained || data.backpressureDetected;
+}
+
+export function getStreamsSummmaryByAnchorType(
+    block: FlowComputationRuntimeType,
+    type: FlowComputationAnchorType,
+) {
+    const {runtimeData} = block;
+
+    switch (type) {
+        case COMPUTATION_IN:
+            return runtimeData.input;
+        case COMPUTATION_OUT:
+            return runtimeData.output;
+        case COMPUTATION_TIMER_IN:
+        case COMPUTATION_TIMER_OUT:
+            return runtimeData.timer;
+    }
+
+    return undefined;
+}
+
+export function isComputationAnchorType(type: string): type is FlowComputationAnchorType {
+    return COMPUTATION_ANCHOR_TYPES.includes(type as FlowComputationAnchorType);
 }

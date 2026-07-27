@@ -1,15 +1,19 @@
-import CpuIcon from '@gravity-ui/icons/svgs/cpu.svg';
-
 import {type TAnchor} from '@gravity-ui/graph';
-
+import CpuIcon from '@gravity-ui/icons/svgs/cpu.svg';
 import format from '../../../../../common/hammer/format';
 import {
     NoopComponent,
     YTGraphCanvasBlock,
     type YTGraphFontSize,
 } from '../../../../../components/YTGraph';
-
 import {type FlowGraphBlockItem} from '../FlowGraph';
+import {
+    COMPUTATION_IN,
+    COMPUTATION_OUT,
+    COMPUTATION_TIMER_IN,
+    COMPUTATION_TIMER_OUT,
+} from '../utils/utils';
+import {ComputationAnchor} from './ComputationAnchor';
 
 export class ComputationCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockItem<'computation'>> {
     PADDING = 15;
@@ -99,16 +103,46 @@ export class ComputationCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockIte
         });
     }
 
-    getAnchorPosition({index = 0}: TAnchor) {
-        const {length = 0} = this.state.anchors ?? [];
+    getAnchorPosition(anchor: TAnchor) {
+        const {type} = anchor;
+        const {width, height} = this.state;
 
-        const {width, height} = this.getGeometry();
-        const step = width / (length + 1);
+        const BOTTOM_ANCHORS_COUNT = 2;
+        const step = width / (BOTTOM_ANCHORS_COUNT + 1);
 
-        return {y: height, x: step * (index + 1)};
+        switch (type) {
+            case COMPUTATION_TIMER_IN:
+                return {y: height, x: step};
+            case COMPUTATION_TIMER_OUT:
+                return {y: height, x: step * 2};
+            case COMPUTATION_IN:
+                return {y: height / 2, x: 0};
+            case COMPUTATION_OUT:
+                return {y: height / 2, x: width};
+        }
+        return super.getAnchorPosition(anchor);
     }
 
-    renderAnchor: YTGraphCanvasBlock<FlowGraphBlockItem<'computation'>>['renderAnchor'] = () => {
-        return NoopComponent.create();
+    renderAnchor: YTGraphCanvasBlock<FlowGraphBlockItem<'computation'>>['renderAnchor'] = (
+        anchor,
+        getPosition,
+    ) => {
+        if (anchor.type === COMPUTATION_TIMER_IN || anchor.type === COMPUTATION_TIMER_OUT) {
+            return NoopComponent.create();
+        }
+
+        return ComputationAnchor.create(
+            {
+                ...anchor,
+                zIndex: this.zIndex,
+                size: 24,
+                lineWidth: 2,
+                port: this.getAnchorPort(anchor.id),
+                getPosition,
+            },
+            {
+                key: anchor.id,
+            },
+        );
     };
 }
