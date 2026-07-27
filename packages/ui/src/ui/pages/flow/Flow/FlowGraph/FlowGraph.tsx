@@ -1,4 +1,4 @@
-import {ECameraScaleLevel, Graph, type TBlockId, type TConnection} from '@gravity-ui/graph';
+import {ECameraScaleLevel, type Graph, type TBlockId, type TConnection} from '@gravity-ui/graph';
 import {GraphBlock, useGraphEvents} from '@gravity-ui/graph/react';
 import ClockIcon from '@gravity-ui/icons/svgs/clock.svg';
 import FileCodeIcon from '@gravity-ui/icons/svgs/file-code.svg';
@@ -17,12 +17,12 @@ import {NoContent} from '../../../../components/NoContent';
 import Select from '../../../../components/Select/Select';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {
-    useConfig,
-    useElkLayout,
-    useGraphScale,
     YTGraph,
     type YTGraphBlock,
     type YTGraphData,
+    useConfig,
+    useElkLayout,
+    useGraphScale,
 } from '../../../../components/YTGraph';
 import {FlowError} from '../../../../pages/flow/flow-components/FlowError/FlowError';
 import {ShowDataButton} from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
@@ -43,6 +43,7 @@ import {ComputationCanvasBlock} from './renderers/ComputationCanvas';
 import {ComputationGroupCanvasBlock} from './renderers/ComputationGroupCanvas';
 import {FlowGraphAnchors} from './renderers/FlowGraphAnchors/FlowGraphAnchors';
 import {STATUS_TO_BG_THEME} from './renderers/FlowGraphRenderer';
+import {useFlowMessagesDialogContext} from './renderers/FlowMessagesDialogContext/FlowMessagesDialogContext';
 import {Sink} from './renderers/Sink';
 import {SinkCanvasBlock} from './renderers/SinkCanvas';
 import {Stream} from './renderers/Stream';
@@ -52,6 +53,9 @@ import {
     addComputationInOut,
     addFlowConnection,
     applyConnectionStyle,
+    getStreamsSummmaryByAnchorType,
+    isComputationAnchorType,
+    isFlowComputationOrGroup,
     makeBlock,
     makeFlowComputationRuntimeData,
     makeTimerAnchors,
@@ -89,6 +93,8 @@ export type FlowGraphBlock =
 export type FlowGraphBlockItem<T extends FlowGraphBlock['is']> = FlowGraphBlock & {is: T};
 
 export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
+    const [graph, setGraphInstance] = React.useState<Graph>();
+
     const {scale, setScale} = useGraphScale();
     const useGroups = scale === ECameraScaleLevel.Minimalistic;
 
@@ -111,6 +117,8 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
     const {isEmpty, isLoading, data, groups, groupBlocks} = useFlowGraphData({
         pipeline_path,
     });
+
+    useFlowGraphEvents(graph);
 
     if (isLoading) {
         return <Loader visible centered />;
@@ -148,9 +156,39 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
                 customGroups={groupBlocks}
                 zoomToNode={zoomToState}
                 onZoomToFinished={() => setZoomToState(undefined)}
+                graphInstanceRef={setGraphInstance}
             />
         </div>
     );
+}
+
+function useFlowGraphEvents(graph?: Graph) {
+    const {setVisibleMessages} = useFlowMessagesDialogContext();
+    const lastSelectedAnchorRef = React.useRef<string>();
+
+    useGraphEvents(graph ?? null, {
+        onBlockAnchorSelectionChange({anchor: {id, blockId, type}, selected}) {
+            const block = graph?.api.getBlockById(blockId) as FlowGraphBlock;
+            if (
+                !graph ||
+                !selected ||
+                !isComputationAnchorType(type) ||
+                !isFlowComputationOrGroup(block)
+            ) {
+                return;
+            }
+
+            lastSelectedAnchorRef.current = id;
+            const summary = getStreamsSummmaryByAnchorType(block.meta, type);
+            if (summary) {
+                setVisibleMessages(summary.messages);
+                requestAnimationFrame(() => {
+                    // We need to reset selection to display message for each click on a specific anchor
+                    graph.api.setAnchorSelection(blockId, id, false);
+                });
+            }
+        },
+    });
 }
 
 function FlowGraphToolbar({
@@ -231,10 +269,12 @@ const SINK_SIZE = {width: 200, height: 80};
 
 function useFlowGraphLoadedData({pipeline_path}: {pipeline_path: string}) {
     const cluster = useSelector(selectCluster);
-    return useFlowExecuteQuery<'describe-pipeline'>({
+    const {data, ...rest} = useFlowExecuteQuery<'describe-pipeline'>({
         cluster,
         parameters: {pipeline_path, flow_command: 'describe-pipeline'},
     });
+
+    return {data, ...rest};
 }
 
 function useFlowGraphRuntimeData({pipeline_path}: {pipeline_path: string}) {
