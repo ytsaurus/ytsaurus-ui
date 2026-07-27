@@ -52,6 +52,11 @@ import {SinkCanvasBlock} from './renderers/SinkCanvas';
 import {Stream} from './renderers/Stream';
 import {StreamCanvasBlock} from './renderers/StreamCanvas';
 import {FlowGroupBlock} from './utils/FlowGroupBlock';
+import {
+    addFlowConnection,
+    makeBlock,
+    makeTimerAnchors,
+} from './utils/utils';
 
 const block = cn('yt-flow-graph');
 
@@ -247,22 +252,6 @@ function useFlowGraphData(params: {pipeline_path: string}) {
 
             const blockById: Map<TBlockId, FlowGraphBlock> = new Map();
 
-            function addConnection<AnthorType extends string>(
-                connections: FlowData['connections'],
-                sourceBlockId: string,
-                targetBlockId: string,
-                {anchorType}: {anchorType?: AnthorType} = {},
-            ) {
-                const c: (typeof connections)[number] = {sourceBlockId, targetBlockId};
-                connections.push(c);
-                if (anchorType) {
-                    const src = blockById.get(sourceBlockId)!;
-                    const dst = blockById.get(targetBlockId)!;
-
-                    makeTimerAnchors(anchorType, src, dst, c);
-                }
-            }
-
             // Collect streams
             Object.values(streams).forEach((stream) => {
                 const streamBlock = makeBlock('stream', stream, {
@@ -310,16 +299,26 @@ function useFlowGraphData(params: {pipeline_path: string}) {
 
                     streams.forEach((id) => {
                         if (key === 'input_streams' || key === 'source_streams') {
-                            addConnection(res.data.connections, id, computation.id);
+                            addFlowConnection(res.data.connections, id, computation.id);
                         } else if (key === 'output_streams') {
-                            addConnection(res.data.connections, computation.id, id);
+                            addFlowConnection(res.data.connections, computation.id, id);
                         } else if (key === 'timer_streams') {
-                            addConnection(res.data.connections, computation.id, id, {
-                                anchorType: key,
-                            });
-                            addConnection(res.data.connections, id, computation.id, {
-                                anchorType: key,
-                            });
+                            const computationBlock = blockById.get(computation.id)!;
+                            const timerBlock = blockById.get(id)!;
+
+                            const cOut = addFlowConnection(
+                                res.data.connections,
+                                computation.id,
+                                id,
+                            );
+                            makeTimerAnchors(computationBlock, timerBlock, cOut);
+
+                            const cIn = addFlowConnection(
+                                res.data.connections,
+                                id,
+                                computation.id,
+                            );
+                            makeTimerAnchors(timerBlock, computationBlock, cIn);
                         }
 
                         if (options?.groupId) {
@@ -341,7 +340,7 @@ function useFlowGraphData(params: {pipeline_path: string}) {
             // Collect sinks
             Object.entries(sinks).forEach(([_key, item]) => {
                 const sink = makeBlock('sink', item, {...SINK_SIZE, icon: ReceiptIcon});
-                addConnection(res.data.connections, item.stream_id, item.id);
+                addFlowConnection(res.data.connections, item.stream_id, item.id);
                 blockById.set(sink.id, sink);
 
                 res.data.blocks.push(sink);
@@ -351,7 +350,7 @@ function useFlowGraphData(params: {pipeline_path: string}) {
             // Collect sources
             Object.entries(sources).forEach(([_key, item]) => {
                 const source = makeBlock('sink', item, {...SINK_SIZE, icon: FileCodeIcon});
-                addConnection(res.data.connections, item.id, item.stream_id);
+                addFlowConnection(res.data.connections, item.id, item.stream_id);
                 blockById.set(item.id, source);
 
                 res.data.blocks.push(source);
@@ -385,7 +384,7 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                     const id = `_${source}->${target}_`;
                     if (!connectionIds.has(id)) {
                         connectionIds.add(id);
-                        addConnection(res.groups.connections, source, target);
+                        addFlowConnection(res.groups.connections, source, target);
                     }
                 }
             });
@@ -442,42 +441,4 @@ function useFlowGraphData(params: {pipeline_path: string}) {
         ...res,
         messages: loadedData?.messages,
     };
-}
-
-function makeBlock<
-    T extends FlowGraphBlock['is'],
-    D extends FlowGraphBlockItem<T>,
-    O extends Partial<D>,
->(type: T, item: D['meta'], options: O) {
-    return {
-        id: item.id,
-        is: type,
-        name: item.name ?? item.id,
-        selected: false,
-        anchors: [],
-        ...options,
-        meta: item,
-        // the values should be overriden by layout process
-        x: 0,
-        y: 0,
-    };
-}
-
-function makeTimerAnchors<T extends string>(type: T, src: TBlock, dst: TBlock, c: TConnection) {
-    const srcAnchor: TAnchor = {
-        id: `anchor:out:${src.id as string}:${dst.id as string}:`,
-        blockId: src.id,
-        type,
-    };
-    const dstAnchor: TAnchor = {
-        id: `anchor:in:${src.id as string}:${dst.id as string}:`,
-        blockId: dst.id,
-        type,
-    };
-
-    src.anchors?.push({...srcAnchor, index: src.anchors.length});
-    dst.anchors?.push({...dstAnchor, index: dst.anchors.length});
-
-    c.targetAnchorId = dstAnchor.id;
-    c.sourceAnchorId = srcAnchor.id;
 }
