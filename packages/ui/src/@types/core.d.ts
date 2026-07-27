@@ -3,7 +3,7 @@ import {type MetrikaCounter} from '@gravity-ui/app-layout';
 
 import {type UISettings} from '../../shared/ui-settings';
 import {type ClusterConfig} from '../shared/yt-types';
-import {type DescribedSettings} from '../shared/constants/settings-types';
+import {type AppLang, type DescribedSettings} from '../shared/constants/settings-types';
 
 export {type AppConfig} from '@gravity-ui/nodekit';
 export {type Request, type Response} from '@gravity-ui/expresskit';
@@ -143,6 +143,8 @@ export interface YTCoreConfig {
     tabletErrorsBaseUrl?: string;
 
     adjustAppConfig?: (nodekit: NodeKit) => void;
+
+    appLangs?: Array<{value: AppLang; content: string}>;
 }
 
 interface YTRequestFields {

@@ -27,7 +27,7 @@ import LogoGitlabIcon from '@gravity-ui/icons/svgs/logo-gitlab.svg';
 import PencilToSquareIcon from '@gravity-ui/icons/svgs/pencil-to-square.svg';
 import {useClusterFromLocation} from '../../hooks/use-cluster';
 import {docsUrl} from '../../config/index';
-import {uiSettings} from '../../config/ui-settings';
+import {getConfigData, uiSettings} from '../../config/ui-settings';
 
 import ypath from '../../common/thor/ypath';
 
@@ -144,6 +144,19 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             ),
         ]),
         makePage('appearance', i18n('title_appearance'), paletteIcon, [
+            ...(getConfigData().appLangs
+                ? [
+                      makeItem(
+                          'global::lang',
+                          i18n('field_language'),
+                          'top',
+                          <SettingsMenuRadioByKey
+                              settingKey="global::lang"
+                              options={getConfigData().appLangs}
+                          />,
+                      ),
+                  ]
+                : []),
             makeItem(
                 SettingName.GLOBAL.THEME,
                 i18n('field_theme'),

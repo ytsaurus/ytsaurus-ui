@@ -27,7 +27,9 @@ export async function getLayoutConfig(req: Request, params: Params): Promise<App
         prometheusBaseUrl,
         userSettingsConfig,
         tabletErrorsBaseUrl,
+        appLangs,
     } = req.ctx.config as YTCoreConfig;
+
     const YT = ytConfig;
     const uiVersion = getInterfaceVersion();
 
@@ -72,6 +74,7 @@ export async function getLayoutConfig(req: Request, params: Params): Promise<App
             odinPageEnabled: Boolean(odinBaseUrl),
             allowTabletErrorsAPI: Boolean(tabletErrorsBaseUrl),
             allowPrometheusDashboards: Boolean(prometheusBaseUrl),
+            appLangs,
         },
         pluginsOptions: {
             yandexMetrika: {
