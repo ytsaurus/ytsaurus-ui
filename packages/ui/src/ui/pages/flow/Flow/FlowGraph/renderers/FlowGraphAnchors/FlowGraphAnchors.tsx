@@ -3,21 +3,21 @@ import {GraphBlockAnchor} from '@gravity-ui/graph/build/react-components';
 import ArrowShapeRightToLineIcon from '@gravity-ui/icons/svgs/arrow-shape-right-to-line.svg';
 import CircleInfoIcon from '@gravity-ui/icons/svgs/circle-info.svg';
 import FlagIcon from '@gravity-ui/icons/svgs/flag.svg';
-import {Icon} from '@gravity-ui/uikit';
+import {Icon, type IconProps} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
-import {
-    type FlowComputationRuntimeType,
-    type FlowComputationUIStreamsSummary,
-} from '../../../../../../pages/flow/Flow/types';
+import {type FlowComputationUIStreamsSummary} from '../../../../../../pages/flow/Flow/types';
 import {FlowGraphBlock} from '../../FlowGraph';
 import {
     COMPUTATION_ANCHOR_SIZE,
     COMPUTATION_IN,
     COMPUTATION_OUT,
+    COMPUTATION_TIMER_IN,
+    COMPUTATION_TIMER_OUT,
     type FlowComputationAnchorType,
     getStreamsSummmaryByAnchorType,
     hasVisibleStreamsSummaryDetails,
+    isFlowComputationOrGroup,
 } from '../../utils/utils';
 import './FlowGraphAnchors.scss';
 
@@ -29,10 +29,15 @@ export function FlowGraphAnchors({graph, data}: {graph: Graph; data: FlowGraphBl
     return anchors.map((anchor) => {
         switch (anchor.type) {
             case COMPUTATION_IN:
-            case COMPUTATION_OUT: {
+            case COMPUTATION_OUT:
+            case COMPUTATION_TIMER_IN:
+            case COMPUTATION_TIMER_OUT: {
+                if (!isFlowComputationOrGroup(data)) {
+                    return null;
+                }
                 const summary = getStreamsSummmaryByAnchorType(
-                    data.meta as FlowComputationRuntimeType,
-                    anchor.type as any as FlowComputationAnchorType,
+                    data.meta,
+                    anchor.type as FlowComputationAnchorType,
                 );
                 return hasVisibleStreamsSummaryDetails(summary) ? (
                     <FlowComputationStreamsSummary
@@ -63,10 +68,13 @@ export function FlowComputationStreamsSummary({
     const {drained, backpressureDetected: backpressured} = data;
 
     let svgIcon = CircleInfoIcon;
+    let color: IconProps['color'] = 'secondary';
     if (drained) {
         svgIcon = FlagIcon;
+        color = 'info-heavy';
     } else if (backpressured) {
         svgIcon = ArrowShapeRightToLineIcon;
+        color = 'warning-heavy';
     }
 
     return (
@@ -84,7 +92,7 @@ export function FlowComputationStreamsSummary({
                     })}
                     style={{padding: (COMPUTATION_ANCHOR_SIZE - 2 - ICON_SIZE) / 2}}
                 >
-                    <Icon data={svgIcon} size={ICON_SIZE} color={'warning-heavy'} />
+                    <Icon data={svgIcon} size={ICON_SIZE} color={color} />
                 </div>
             </div>
         </GraphBlockAnchor>
