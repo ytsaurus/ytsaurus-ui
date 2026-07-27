@@ -5,6 +5,7 @@ import {
     type FlowExtendedStremType,
 } from '../../../../../../shared/yt-types';
 import {GRAPH_COLORS} from '../../../../../components/YTGraph/constants';
+import {YTGraphBlock} from '../../../../../components/YTGraph/types';
 import {
     FlowComputationRuntimeData,
     FlowComputationRuntimeType,
@@ -205,4 +206,12 @@ export function getStreamsSummmaryByAnchorType(
 
 export function isComputationAnchorType(type: string): type is FlowComputationAnchorType {
     return COMPUTATION_ANCHOR_TYPES.includes(type as FlowComputationAnchorType);
+}
+
+export function isFlowComputationOrGroup(
+    block: FlowGraphBlock,
+): block is
+    | YTGraphBlock<'computation-group', FlowComputationRuntimeType>
+    | YTGraphBlock<'computation', FlowComputationRuntimeType> {
+    return block.is === 'computation';
 }
