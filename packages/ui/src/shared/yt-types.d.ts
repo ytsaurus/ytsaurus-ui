@@ -1,7 +1,7 @@
 import {type YTError} from '../@types/types';
 
 import {type RawJob} from '../ytsaurus-ui.ui/types/operations/job';
-import {type DescribedSettings, type Stage} from './constants/settings-types';
+import {type AppLang, type DescribedSettings, type Stage} from './constants/settings-types';
 import {type UISettings} from './ui-settings';
 import {type CheckPermissionResult} from './utils/check-permission';
 
@@ -518,6 +518,7 @@ export interface ConfigData {
     odinPageEnabled: boolean;
     allowTabletErrorsAPI: boolean;
     allowPrometheusDashboards: boolean;
+    appLangs?: Array<{value: AppLang; content: string}>;
 }
 
 export type PipelineParams = {
