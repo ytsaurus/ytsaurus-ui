@@ -67,6 +67,7 @@ export interface SettingsPage {
 }
 
 export interface SettingsSection {
+    id: string;
     title: string;
     items: Array<SettingsItem>;
 }
@@ -202,18 +203,6 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                             settingNS={NAMESPACES.DEVELOPMENT}
                             label={i18n('field_regular-user-ui')}
                             annotation={i18n('context_regular-user-ui-description')}
-                        />,
-                    ),
-                    makeItem(
-                        'global::lang',
-                        i18n('field_language'),
-                        'top',
-                        <SettingsMenuRadioByKey
-                            settingKey="global::lang"
-                            options={[
-                                {value: 'en', content: 'English'},
-                                {value: 'ru', content: 'Русский'},
-                            ]}
                         />,
                     ),
                     makeItem(
@@ -415,6 +404,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
         ),
         makePageBySections('components', i18n('title_components'), componentsIcon, [
             {
+                id: 'components/general',
                 title: i18n('title_general'),
                 items: [
                     makeItem(
@@ -431,6 +421,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 ],
             },
             {
+                id: 'components/memory-popup',
                 title: i18n('title_memory-popup'),
                 items: [
                     makeItem(
@@ -572,6 +563,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
 
         makePageBySections('editor', i18n('title_editor'), PencilToSquareIcon, [
             {
+                id: 'visual-settings',
                 title: i18n('title_visual-settings'),
                 items: [
                     makeItem(
@@ -627,7 +619,7 @@ export function makePage(
     icon: IconProps | undefined,
     items: Array<SettingsItem>,
 ): SettingsPage {
-    return makePageBySections(id, title, icon, [{title, items}]);
+    return makePageBySections(id, title, icon, [{id: `${id}/${id}`, title, items}]);
 }
 
 export function makePageBySections(
@@ -657,17 +649,17 @@ export function useSettingsDescription(): Array<SettingsPage> {
     const externalSettings = UIFactory.getExternalSettings({cluster, isAdmin, login});
 
     const res = React.useMemo(() => {
-        const extPages: Record<string, SettingsPage> = hashByTitle(externalSettings);
+        const extPages: Record<string, SettingsPage> = mapById(externalSettings);
         return produce(settings, (pages) => {
             forEach_(pages, (page) => {
-                const extPage = extPages[page.title];
+                const extPage = extPages[page.id];
                 if (extPage) {
-                    delete extPages[page.title];
-                    const extSections = hashByTitle(extPage.sections);
+                    delete extPages[page.id];
+                    const extSections = mapById(extPage.sections);
                     forEach_(page.sections, (section) => {
-                        const s = extSections[section.title];
+                        const s = extSections[section.id];
                         if (s) {
-                            delete extSections[section.title];
+                            delete extSections[section.id];
                             const extIdsMap = new Map(s.items.map((i) => [i.id, i]));
                             const newItems = section.items.filter((i) => !extIdsMap.has(i.id));
                             section.items = [...newItems, ...s.items];
@@ -687,11 +679,11 @@ export function useSettingsDescription(): Array<SettingsPage> {
     return res;
 }
 
-function hashByTitle<T extends {title: string}>(data: Array<T>) {
+function mapById<T extends {id: string}>(data: Array<T>) {
     return reduce_(
         data,
         (acc, item) => {
-            acc[item.title] = item;
+            acc[item.id] = item;
             return acc;
         },
         {} as Record<string, T>,
