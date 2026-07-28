@@ -2,6 +2,7 @@ import React, {type FC, useCallback} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {NavigationTable as NavigationTableComponent} from '@ytsaurus/components/modules';
 import {
+    selectNavigationCluster,
     selectNavigationClusterConfig,
     selectNavigationFilter,
     selectNavigationPath,
@@ -16,17 +17,21 @@ import {createTableSelect} from '../helpers/createTableSelect';
 import {insertTextWhereCursor} from '../helpers/insertTextWhereCursor';
 import {rumLogError} from '../../../../rum/rum-counter';
 import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
+import {useExternalSchemaColumns} from './useExternalSchemaColumns';
 
 export const NavigationTable: FC = () => {
     const dispatch = useDispatch();
     const ysonSettings = useSelector(selectYsonSettingsDisableDecode);
     const clusterConfig = useSelector(selectNavigationClusterConfig);
+    const cluster = useSelector(selectNavigationCluster);
     const table = useSelector(selectNavigationTable);
     const engine = useSelector(selectQueryEngine);
     const limit = useSelector(selectPageSize);
     const path = useSelector(selectNavigationPath);
     const filter = useSelector(selectNavigationFilter);
     const {getEditor} = useMonaco();
+
+    const additionalSchemaColumns = useExternalSchemaColumns(cluster, path);
 
     const handleInsertTableSelect = useCallback(async () => {
         if (!clusterConfig) return;
@@ -49,6 +54,7 @@ export const NavigationTable: FC = () => {
             onFilterChange={handleFilterChange}
             onInsertTableSelect={handleInsertTableSelect}
             ysonSettings={ysonSettings}
+            additionalSchemaColumns={additionalSchemaColumns}
             logError={rumLogError}
             ErrorBoundaryComponent={ErrorBoundary}
         />
