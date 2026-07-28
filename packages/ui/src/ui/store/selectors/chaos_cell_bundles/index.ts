@@ -2,12 +2,11 @@ import filter_ from 'lodash/filter';
 import find_ from 'lodash/find';
 import map_ from 'lodash/map';
 import uniq_ from 'lodash/uniq';
-
 import {createSelector} from 'reselect';
-
 import {concatByAnd} from '../../../common/hammer/predicate';
 import {type RootState} from '../../../store/reducers';
-import {type ChaosBundle, type ChaosCell} from '../../../store/reducers/chaos_cell_bundles';
+import {type ChaosBundle} from '../../../store/reducers/chaos_cell_bundles';
+import {type BundleCell} from '../../../store/reducers/tablet_cell_bundles/types';
 import {selectCluster} from '../../../store/selectors/global';
 import {
     aggregateTotal,
@@ -160,7 +159,7 @@ export const selectChaosCellsFiltered = createSelector(
         selectChaosActiveBundle,
     ],
     (cells, idFilter, bundleFilter, hostFilter) => {
-        const predicates: Array<(item: ChaosCell) => boolean> = [];
+        const predicates: Array<(item: BundleCell) => boolean> = [];
         if (idFilter) {
             predicates.push((item) => {
                 return -1 !== item.id.indexOf(idFilter);
@@ -182,7 +181,7 @@ export const selectChaosCellsFiltered = createSelector(
     },
 );
 
-export function filterChaosCellsByBundle(bundle: string, cells: Array<ChaosCell>) {
+export function filterChaosCellsByBundle(bundle: string, cells: Array<BundleCell>) {
     if (!bundle) {
         return [];
     }
@@ -207,7 +206,7 @@ export const selectChaosCellsHosts = createSelector([selectChaosCellsOfActiveAcc
 
 export const selectChaosCellsHostsOfActiveBundle = createSelector(
     [selectChaosActiveBundle, selectChaosCellsFiltered],
-    (activeBundle: string, cells: Array<ChaosCell>) => {
+    (activeBundle: string, cells: Array<BundleCell>) => {
         if (!activeBundle) {
             return '';
         }

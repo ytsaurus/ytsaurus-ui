@@ -318,7 +318,7 @@ const selectTabletsCellsFiltered = createSelector(
         selectTabletsActiveBundle,
     ],
     (cells, idFilter, bundleFilter, hostFilter) => {
-        const predicates: Array<(item: TabletCell) => boolean> = [];
+        const predicates: Array<(item: BundleCell) => boolean> = [];
         if (idFilter) {
             predicates.push((item) => {
                 return -1 !== item.id.indexOf(idFilter);
@@ -360,7 +360,7 @@ export const selectTabletsCellsHosts = createSelector(
 
 export const selectTabletsCellsHostsOfActiveBundle = createSelector(
     [selectTabletsActiveBundle, selectTabletsCellsFiltered],
-    (activeBundle: string, cells: Array<TabletCell>) => {
+    (activeBundle: string, cells: Array<BundleCell>) => {
         if (!activeBundle) {
             return '';
         }
