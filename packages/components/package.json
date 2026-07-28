@@ -9,8 +9,7 @@
   },
   "files": [
     "build/esm",
-    "src/styles",
-    "README.ru.md"
+    "src/styles"
   ],
   "main": "./build/esm/index.js",
   "module": "./build/esm/index.js",

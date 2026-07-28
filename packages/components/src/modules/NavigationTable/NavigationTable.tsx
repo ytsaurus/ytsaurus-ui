@@ -1,16 +1,12 @@
 import React, {FC, useState} from 'react';
 import cn from 'bem-cn-lite';
 import {SegmentedRadioGroup} from '@gravity-ui/uikit';
-import {
-    LogErrorFn,
-    NavigationTableData,
-    NavigationTableMeta,
-    NavigationTableSchema,
-} from '../../types';
+import {LogErrorFn, NavigationTableData, NavigationTableMeta} from '../../types';
 import type {UnipikaSettings} from '../../internal/Yson/StructuredYson/StructuredYsonTypes';
 import type {SchemaDataTypeProps} from '../../components';
 import i18n from './i18n';
 import {NavigationSchemaTab} from './NavigationSchemaTab';
+import type {ExternalSchemaColumn, SchemaTabProps} from './NavigationSchemaTab/NavigationSchemaTab';
 import {NavigationPreviewTab} from './NavigationPreviewTab';
 import './NavigationTable.scss';
 import type {ErrorBoundaryProps} from '../../internal/DefaultErrorBoundary';
@@ -42,13 +38,8 @@ export type NavigationTableProps = {
     ysonSettings?: UnipikaSettings;
     emptyMessage?: React.ReactNode;
     primitiveTypes?: SchemaDataTypeProps['primitiveTypes'];
-    /** Custom schema tab. Filter state resets when the table changes. */
-    renderSchemaTab?: (props: {
-        schema: NavigationTableSchema[];
-        filter?: string;
-        onFilterChange?: (value: string) => void;
-        ysonSettings?: UnipikaSettings;
-    }) => React.ReactNode;
+    additionalSchemaColumns?: ExternalSchemaColumn[];
+    renderSchemaTab?: (props: SchemaTabProps) => React.ReactNode;
     renderPreviewTab?: (props: {
         table: NavigationTableData;
         onEditorInsert?: () => void | Promise<void>;
@@ -70,6 +61,7 @@ export const NavigationTable: FC<NavigationTableProps> = ({
     ysonSettings,
     emptyMessage,
     primitiveTypes,
+    additionalSchemaColumns,
     renderSchemaTab,
     renderPreviewTab,
     renderMetaTab,
@@ -95,11 +87,12 @@ export const NavigationTable: FC<NavigationTableProps> = ({
         );
     }
 
-    const schemaData = {
+    const schemaData: SchemaTabProps = {
         schema: table.schema,
         filter,
         onFilterChange: handleFilterChange,
         ysonSettings,
+        additionalSchemaColumns,
     };
     const schemaContent =
         activeTab === TableTab.Schema &&

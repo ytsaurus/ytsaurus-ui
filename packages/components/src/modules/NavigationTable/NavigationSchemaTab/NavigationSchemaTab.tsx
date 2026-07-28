@@ -9,11 +9,14 @@ import i18n from './i18n';
 import {filterSchema} from '../helpers/filterSchema';
 import {makeNavigationColumns} from './makeNavigationColumns';
 
-type SchemaTabProps = {
+export type ExternalSchemaColumn = Column<NavigationTableSchema>;
+
+export type SchemaTabProps = {
     schema: NavigationTableSchema[];
     filter?: string;
     onFilterChange?: (value: string) => void;
     ysonSettings?: UnipikaSettings;
+    additionalSchemaColumns?: ExternalSchemaColumn[];
 };
 
 export const NavigationSchemaTab: FC<SchemaTabProps> = ({
@@ -21,11 +24,17 @@ export const NavigationSchemaTab: FC<SchemaTabProps> = ({
     filter,
     onFilterChange,
     ysonSettings = YSON_DEFAULT_UNIPIKA_SETTINGS,
+    additionalSchemaColumns,
 }) => {
     const filteredSchema = filterSchema(schema, filter);
-    const columns: Column<NavigationTableSchema>[] = useMemo(
+    const baseColumns: Column<NavigationTableSchema>[] = useMemo(
         () => makeNavigationColumns(ysonSettings),
         [ysonSettings],
+    );
+    const columns: Column<NavigationTableSchema>[] = useMemo(
+        () =>
+            additionalSchemaColumns ? [...baseColumns, ...additionalSchemaColumns] : baseColumns,
+        [baseColumns, additionalSchemaColumns],
     );
 
     return (

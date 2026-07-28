@@ -3,6 +3,7 @@ import type {CSSProperties} from 'react';
 import type {NavigationTableData} from '../../types';
 
 import type {NavigationTableInitialTab} from './NavigationTable';
+import type {ExternalSchemaColumn} from './NavigationSchemaTab/NavigationSchemaTab';
 
 /** Extra provider settings for stories/tests (NavigationSchemaTab uses `ysonSettings` from `NavigationTable`). */
 export const navigationTableStoryUnipikaForProvider = {
@@ -45,16 +46,33 @@ export const navigationTableStoryFrameStyle: CSSProperties = {
 
 export const navigationTableStoryEmptyMessage = 'No table is loaded for this path.';
 
-export type NavigationTableStoryState = 'withData' | 'empty';
+export const navigationTableSampleAdditionalColumns: ExternalSchemaColumn[] = [
+    {
+        name: 'description',
+        header: 'Description',
+        sortable: false,
+        render: ({row}) => `Column "${row.name}" of type ${row.type}`,
+    },
+];
 
-export const navigationTableVisualCaseOrder: NavigationTableStoryState[] = ['withData', 'empty'];
+export type NavigationTableStoryState = 'withData' | 'withExtraColumns' | 'empty';
 
-/** Playwright titles + `initialActiveTab` for non-default tabs (Schema is default). */
+export const navigationTableVisualCaseOrder: NavigationTableStoryState[] = [
+    'withData',
+    'withExtraColumns',
+    'empty',
+];
+
 export const navigationTableWithDataVisualCases: Array<{
     testTitle: string;
     initialActiveTab?: NavigationTableInitialTab;
+    withExtraColumns?: boolean;
 }> = [
     {testTitle: 'withData'},
     {testTitle: 'withData Preview', initialActiveTab: 'preview'},
     {testTitle: 'withData Meta', initialActiveTab: 'meta'},
+    {
+        testTitle: 'withData ExtraColumns',
+        withExtraColumns: true,
+    },
 ];
