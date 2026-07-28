@@ -1,27 +1,29 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {useLayoutEffect} from 'react';
 import {Helmet} from 'react-helmet';
 import {useSelector} from '../../store/redux-hooks';
 import {type RootState} from '../../store/reducers';
 import {getClusterAppearance} from '../../appearance';
 
-PageHead.propTypes = {
-    title: PropTypes.string,
-    cluster: PropTypes.string,
-};
+function PageHead({title, favicon}: {title: string; favicon?: string}) {
+    /*
+     * Removes stale <link rel="icon"> tags added by the HTML template.
+     * Use useLayoutEffect (not useEffect) to remove the stale icon before react-helmet
+     * commits the new one, so both never coexist in <head>.
+     */
+    useLayoutEffect(() => {
+        if (!favicon) {
+            return;
+        }
 
-function PageHead({title, cluster}: {title: string; cluster?: string}) {
-    const {favicon} = getClusterAppearance(cluster) || {};
-
-    React.useLayoutEffect(() => {
-        const links = document.head.querySelectorAll<HTMLLinkElement>('link[rel="icon"]');
-        links.forEach((link) => link.parentNode?.removeChild(link));
-    }, []);
+        document.head
+            .querySelectorAll<HTMLLinkElement>('link[rel="icon"]:not([data-react-helmet])')
+            .forEach((link) => link.remove());
+    }, [favicon]);
 
     return (
         <Helmet>
-            <link rel="icon" href={favicon} />
             <title>{title}</title>
+            {favicon ? <link rel="icon" href={favicon} /> : null}
         </Helmet>
     );
 }
@@ -30,7 +32,9 @@ export default React.memo(PageHead);
 
 function PageHeadByClusterImpl({cluster}: {cluster: string}) {
     const title = useSelector((state: RootState) => state.global.title);
-    return <PageHead title={title} cluster={cluster} />;
+    const {favicon} = getClusterAppearance(cluster);
+
+    return <PageHead title={title} favicon={favicon} />;
 }
 
 export const PageHeadByCluster = React.memo(PageHeadByClusterImpl);

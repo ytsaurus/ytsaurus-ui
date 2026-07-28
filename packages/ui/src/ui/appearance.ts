@@ -1,3 +1,4 @@
+import {type Required} from 'utility-types';
 import {type ClusterTheme} from '../shared/yt-types';
 import {YT} from './config/yt-config';
 import UIFactory from './UIFactory';
@@ -22,41 +23,43 @@ export const favicons: Record<ClusterTheme, string> = {
     electricviolet: require('./assets/img/favicon-electricviolet.png'),
 };
 
-export interface ClusterAppearance {
+export type ClusterAppearance = {
     favicon?: string;
     icon: string;
     icon2x: string;
     iconbig?: string;
-}
+};
 
-export const defaultClusterAppearance: ClusterAppearance = {
+type RequiredClusterAppearance = Required<ClusterAppearance, 'favicon'>;
+
+export const defaultClusterAppearance: RequiredClusterAppearance = {
     icon: require('./assets/img/cluster.svg'),
     icon2x: require('./assets/img/cluster-2x.svg'),
     favicon,
 };
 
-const localClusterAppearance: ClusterAppearance = {
+const localClusterAppearance: RequiredClusterAppearance = {
     favicon,
     icon: require('./assets/img/ui.jpg'),
     icon2x: require('./assets/img/ui-2x.jpg'),
     iconbig: require('./assets/img/ui-big.jpg'),
 };
 
-const cache: Record<string, ClusterAppearance> = {};
+const cache: Record<string, RequiredClusterAppearance> = {};
 
-export function getClusterAppearance(cluster = ''): ClusterAppearance {
+export function getClusterAppearance(cluster = ''): RequiredClusterAppearance {
     if (!cache[cluster]) {
         const {theme} = YT.clusters[cluster] ?? {};
 
-        const item = (cache[cluster] = {
+        const item = {
             ...(YT.isLocalCluster ? localClusterAppearance : defaultClusterAppearance),
-        });
+        };
 
-        Object.assign(
-            item,
-            {favicon: favicons[theme] ?? item.favicon},
-            UIFactory.getClusterAppearance(cluster),
-        );
+        cache[cluster] = {
+            ...item,
+            favicon: favicons[theme] ?? item.favicon,
+            ...UIFactory.getClusterAppearance(cluster),
+        };
     }
 
     return cache[cluster];
