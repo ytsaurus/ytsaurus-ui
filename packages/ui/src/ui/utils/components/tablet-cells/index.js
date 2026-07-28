@@ -29,11 +29,13 @@ export function prepareTabletCells(tabletCells) {
         let peer;
         let peerAddress;
         let state;
+        let lastHydraRestartReason;
 
         if (peerCount) {
             peer = find_(peers, (peer) => peer.state === 'leading') || peers[0];
             peerAddress = peer.address;
             state = peer.state;
+            lastHydraRestartReason = peer.last_hydra_restart_reason;
         }
 
         return {
@@ -48,6 +50,7 @@ export function prepareTabletCells(tabletCells) {
             peers,
             peer,
             peerAddress,
+            lastHydraRestartReason,
         };
     });
 }
