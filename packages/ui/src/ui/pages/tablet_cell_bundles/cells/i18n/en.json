@@ -21,5 +21,6 @@
   "field_cell-id-placeholder": "Enter cell id...",
   "field_bundle-placeholder": "Enter bundle name...",
   "field_host-placeholder": "Enter host...",
-  "action_copy-host-list": "Copy host list"
+  "action_copy-host-list": "Copy host list",
+  "action_details": "Details"
 }

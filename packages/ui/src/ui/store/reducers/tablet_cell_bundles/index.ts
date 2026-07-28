@@ -8,7 +8,7 @@ import {
     TABLETS_BUNDLES_PARTIAL,
 } from '../../../constants/tablets';
 import {type ActionD, type SortState, type YTError} from '../../../types';
-import {BundleCell} from './types';
+import {type BundleCell} from './types';
 
 export interface TabletsBundlesState {
     loaded: boolean;

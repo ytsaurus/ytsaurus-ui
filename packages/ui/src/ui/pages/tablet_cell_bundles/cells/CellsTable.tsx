@@ -1,32 +1,27 @@
-import React from 'react';
-import cn from 'bem-cn-lite';
-
-import capitalize_ from 'lodash/capitalize';
-
-import i18n from './i18n';
-
 import DataTable, {type Column, type Settings} from '@gravity-ui/react-data-table';
-
+import {Flex} from '@gravity-ui/uikit';
+import {ClipboardButton, Tooltip} from '@ytsaurus/components';
+import cn from 'bem-cn-lite';
+import capitalize_ from 'lodash/capitalize';
+import React from 'react';
 import format from '../../../common/hammer/format';
 import ClickableAttributesButton from '../../../components/AttributesButton/ClickableAttributesButton';
-import {ClipboardButton, Tooltip} from '@ytsaurus/components';
-import {DataTableYT} from '../../../components/DataTableYT';
+import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
+import {DataTableYT} from '../../../components/DataTableYT';
+import {Health} from '../../../components/Health/Health';
 import Icon from '../../../components/Icon/Icon';
 import Label, {type LabelTheme} from '../../../components/Label';
-import Link from '../../../containers/Link/Link';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
-import {Health} from '../../../components/Health/Health';
-import {type OrderType} from '../../../utils/sort-helpers';
 import {Host} from '../../../containers/Host/Host';
-// @ts-ignore
-import {
-    type TabletCell,
-    type TabletsPartialAction,
-} from '../../../store/reducers/tablet_cell_bundles';
+import Link from '../../../containers/Link/Link';
+import {type TabletsPartialAction} from '../../../store/reducers/tablet_cell_bundles';
+import {type BundleCell} from '../../../store/reducers/tablet_cell_bundles/types';
 import {type SortState} from '../../../types';
-
+import {type OrderType} from '../../../utils/sort-helpers';
+import {showErrorPopup} from '../../../utils/utils';
 import './CellsTable.scss';
+import i18n from './i18n';
 
 const block = cn('cells-table');
 
@@ -133,9 +128,23 @@ class CellsTable extends React.Component<Props & ReduxProps> {
         return format.Bytes(value);
     }
 
-    renderHealth(data: {row: TabletCell}) {
-        const {health} = data?.row || {};
-        return <Health value={health} />;
+    renderHealth(data: {row: BundleCell}) {
+        const {health, lastHydraRestartReason} = data?.row || {};
+        return (
+            <Flex gap={1}>
+                <Health value={health} />
+                {health === 'failed' && lastHydraRestartReason ? (
+                    <ClickableText
+                        color="secondary"
+                        onClick={() => {
+                            showErrorPopup(lastHydraRestartReason);
+                        }}
+                    >
+                        {i18n('action_details')}
+                    </ClickableText>
+                ) : null}
+            </Flex>
+        );
     }
 
     renderId = (data: {row: BundleCell}) => {
