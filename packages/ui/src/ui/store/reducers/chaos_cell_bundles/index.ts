@@ -10,13 +10,14 @@ import {
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {type BundleControllerConfig} from '../../../store/reducers/tablet_cell_bundles';
 import {type ActionD, type SortState, type YTError} from '../../../types';
+import {type BundleCell} from '../tablet_cell_bundles/types';
 
 export interface ChaosBundlesState {
     loaded: boolean;
     loading: boolean;
     error: YTError | undefined;
 
-    cells: Array<ChaosCell>;
+    cells: Array<BundleCell>;
     bundles: Array<ChaosBundle>;
 
     bundlesNameFilter: string;
@@ -28,7 +29,7 @@ export interface ChaosBundlesState {
     cellsHostFilter: string;
 
     bundlesSort: SortState<keyof ChaosBundle>;
-    cellsSort: SortState<keyof ChaosCell>;
+    cellsSort: SortState<keyof BundleCell>;
 
     activeBundle: string;
 
@@ -36,21 +37,6 @@ export interface ChaosBundlesState {
 }
 
 export type BundlesTableMode = 'default' | 'tablets' | 'tablets_memory';
-
-export interface ChaosCell {
-    id: string;
-    bundle: string;
-    health: ChaosBundle['health'];
-    memory: number;
-    compressed: number;
-    tablets: number;
-    uncompressed: number;
-    peerAddress: string;
-    state: string;
-
-    peer: ChaosCellPeer;
-    peers: Array<ChaosCellPeer>;
-}
 
 export interface ChaosCellPeer {
     address: string;
@@ -179,7 +165,7 @@ export type ChaosBundlesAction =
     | ActionD<typeof CHAOS_BUNDLES_LOAD_FAILURE, YTError>
     | ActionD<
           typeof CHAOS_BUNDLES_LOAD_SUCCESS,
-          {cells: Array<ChaosCell>; bundles: Array<ChaosBundle>}
+          {cells: Array<BundleCell>; bundles: Array<ChaosBundle>}
       >
     | ChaosPartialAction
     | ActionD<typeof CHAOS_BUNDLES_ACTIVE_ACCOUNT, Pick<ChaosBundlesState, 'activeBundle'>>;

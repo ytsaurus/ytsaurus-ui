@@ -119,16 +119,16 @@ class CellsTable extends React.Component<Props & ReduxProps> {
 
     onColumnSort = (column: string, order: OrderType) => {
         this.props.setTabletsPartial({
-            cellsSort: {column: column as keyof TabletCell, order},
+            cellsSort: {column: column as keyof BundleCell, order},
         });
     };
 
-    renderNumber(colName: keyof TabletCell, data: {row: TabletCell}) {
+    renderNumber(colName: keyof BundleCell, data: {row: BundleCell}) {
         const {[colName]: value} = data?.row || {};
         return hammer.format['Number'](value);
     }
 
-    renderBytes(colName: keyof TabletCell, data: {row: TabletCell}) {
+    renderBytes(colName: keyof BundleCell, data: {row: BundleCell}) {
         const {[colName]: value} = data?.row || {};
         return hammer.format['Bytes'](value);
     }
@@ -138,7 +138,7 @@ class CellsTable extends React.Component<Props & ReduxProps> {
         return <Health value={health} />;
     }
 
-    renderId = (data: {row: TabletCell}) => {
+    renderId = (data: {row: BundleCell}) => {
         const {id} = data?.row || {};
         return (
             <div className={block('id')}>
@@ -150,7 +150,7 @@ class CellsTable extends React.Component<Props & ReduxProps> {
         );
     };
 
-    renderHost(data: {row: TabletCell}) {
+    renderHost(data: {row: BundleCell}) {
         return (
             <Host
                 asTabletNode
@@ -160,7 +160,7 @@ class CellsTable extends React.Component<Props & ReduxProps> {
         );
     }
 
-    renderBundle = (data: {row: TabletCell}) => {
+    renderBundle = (data: {row: BundleCell}) => {
         const {activeBundleLink, cluster} = this.props;
         const {bundle} = data?.row || {};
         return (
@@ -177,13 +177,13 @@ class CellsTable extends React.Component<Props & ReduxProps> {
         );
     };
 
-    renderState = (data: {row: TabletCell}) => {
+    renderState = (data: {row: BundleCell}) => {
         const {state} = data?.row ?? {};
         const theme = state ? STATE_THEME[state] : undefined;
         return <Label theme={theme} type="text" text={state} capitalize />;
     };
 
-    renderActions = (data: {row: TabletCell}) => {
+    renderActions = (data: {row: BundleCell}) => {
         const {attributesPath, cellNavigationLink, cluster} = this.props;
         const {id} = data?.row || {};
         return (
@@ -208,7 +208,7 @@ class CellsTable extends React.Component<Props & ReduxProps> {
         );
     };
 
-    column(name: string, sortable = false): Column<TabletCell> {
+    column(name: string, sortable = false): Column<BundleCell> {
         return {
             name,
             align: 'left',
@@ -218,7 +218,7 @@ class CellsTable extends React.Component<Props & ReduxProps> {
         };
     }
 
-    sortableColumn(name: keyof TabletCell) {
+    sortableColumn(name: keyof BundleCell) {
         return this.column(name, true);
     }
 
@@ -243,27 +243,27 @@ class CellsTable extends React.Component<Props & ReduxProps> {
 }
 
 const Columns = {
-    id(this: CellsTable): Column<TabletCell> {
+    id(this: CellsTable): Column<BundleCell> {
         return {
             ...this.sortableColumn('id'),
             render: this.renderId,
             width: 400,
         };
     },
-    bundle(this: CellsTable): Column<TabletCell> {
+    bundle(this: CellsTable): Column<BundleCell> {
         return {
             ...this.sortableColumn('bundle'),
             render: wrapCell(this.renderBundle),
         };
     },
-    health(this: CellsTable): Column<TabletCell> {
+    health(this: CellsTable): Column<BundleCell> {
         return {
             ...this.sortableColumn('health'),
             render: wrapCell(this.renderHealth),
             width: 80,
         };
     },
-    tablets(this: CellsTable): Column<TabletCell> {
+    tablets(this: CellsTable): Column<BundleCell> {
         return {
             ...this.sortableColumn('tablets'),
             render: wrapCell(this.renderNumber.bind(this, 'tablets')),
@@ -271,7 +271,7 @@ const Columns = {
             width: 100,
         };
     },
-    memory(this: CellsTable): Column<TabletCell> {
+    memory(this: CellsTable): Column<BundleCell> {
         return {
             ...this.sortableColumn('memory'),
             render: wrapCell(this.renderBytes.bind(this, 'memory')),
@@ -279,7 +279,7 @@ const Columns = {
             width: 100,
         };
     },
-    uncompressed(this: CellsTable): Column<TabletCell> {
+    uncompressed(this: CellsTable): Column<BundleCell> {
         return {
             ...this.sortableColumn('uncompressed'),
             render: wrapCell(this.renderBytes.bind(this, 'uncompressed')),
@@ -287,7 +287,7 @@ const Columns = {
             width: 150,
         };
     },
-    compressed(this: CellsTable): Column<TabletCell> {
+    compressed(this: CellsTable): Column<BundleCell> {
         return {
             ...this.sortableColumn('compressed'),
             render: wrapCell(this.renderBytes.bind(this, 'compressed')),
@@ -295,21 +295,21 @@ const Columns = {
             width: 130,
         };
     },
-    peerAddress(this: CellsTable): Column<TabletCell> {
+    peerAddress(this: CellsTable): Column<BundleCell> {
         return {
             ...this.sortableColumn('peerAddress'),
             render: this.renderHost,
             width: 130,
         };
     },
-    state(this: CellsTable): Column<TabletCell> {
+    state(this: CellsTable): Column<BundleCell> {
         return {
             ...this.sortableColumn('state'),
             render: wrapCell(this.renderState),
             width: 100,
         };
     },
-    actions(this: CellsTable): Column<TabletCell> {
+    actions(this: CellsTable): Column<BundleCell> {
         return {
             ...this.column('actions'),
             render: this.renderActions,
@@ -322,8 +322,8 @@ export type ReduxProps = {
     cluster: string;
     loading: boolean;
     loaded: boolean;
-    data: TabletCell[];
-    sortState: SortState<keyof TabletCell>;
+    data: BundleCell[];
+    sortState: SortState<keyof BundleCell>;
     columns: Array<keyof typeof Columns>;
     activeBundleLink(cluster: string, bundle: string): string;
     attributesPath(id: string): string;

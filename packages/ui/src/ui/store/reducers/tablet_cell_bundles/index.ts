@@ -8,13 +8,14 @@ import {
     TABLETS_BUNDLES_PARTIAL,
 } from '../../../constants/tablets';
 import {type ActionD, type SortState, type YTError} from '../../../types';
+import {BundleCell} from './types';
 
 export interface TabletsBundlesState {
     loaded: boolean;
     loading: boolean;
     error: YTError | undefined;
 
-    cells: Array<TabletCell>;
+    cells: Array<BundleCell>;
     bundles: Array<TabletBundle>;
 
     writableByName: Map<string, boolean>;
@@ -28,7 +29,7 @@ export interface TabletsBundlesState {
     cellsHostFilter: string;
 
     bundlesSort: SortState<keyof TabletBundle>;
-    cellsSort: SortState<keyof TabletCell>;
+    cellsSort: SortState<keyof BundleCell>;
     instancesSort: SortState<keyof BundleInstance>;
     proxiesSort: SortState<keyof BundleInstance>;
 
@@ -39,27 +40,6 @@ export interface TabletsBundlesState {
 }
 
 export type BundlesTableMode = 'default' | 'tablets' | 'tablets_memory';
-
-export interface TabletCell {
-    id: string;
-    bundle: string;
-    health: TabletBundle['health'];
-    memory: number;
-    compressed: number;
-    tablets: number;
-    uncompressed: number;
-    peerAddress: string;
-    state: string;
-
-    peer: TabletCellPeer;
-    peers: Array<TabletCellPeer>;
-}
-
-export interface TabletCellPeer {
-    address: string;
-    last_seen: string;
-    state: string;
-}
 
 export interface BundleControllerConfig {
     cpu_limits: CPULimits;
