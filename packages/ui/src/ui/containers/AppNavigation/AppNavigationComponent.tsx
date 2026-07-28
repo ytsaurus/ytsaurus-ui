@@ -82,7 +82,7 @@ function AppNavigationComponent({
                 text: () => 'YTsaurus',
                 textSize: 22,
                 icon: Logo,
-                iconSize: 36,
+                iconSize: 32,
                 iconClassName: logoClassName,
                 wrapper: (node) => {
                     return (

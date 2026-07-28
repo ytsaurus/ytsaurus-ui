@@ -2,25 +2,25 @@ import {type ClusterTheme} from '../shared/yt-types';
 import {YT} from './config/yt-config';
 import UIFactory from './UIFactory';
 
-const favicon = require('./assets/img/favicon.png');
-
 export const favicons: Record<ClusterTheme, string> = {
-    grapefruit: require('./assets/img/favicon-grapefruit.png'),
-    bittersweet: require('./assets/img/favicon-bittersweet.png'),
-    sunflower: require('./assets/img/favicon-sunflower.png'),
-    grass: require('./assets/img/favicon-grass.png'),
-    mint: require('./assets/img/favicon-mint.png'),
-    aqua: require('./assets/img/favicon-aqua.png'),
-    bluejeans: require('./assets/img/favicon-bluejeans.png'),
-    lavander: require('./assets/img/favicon-lavander.png'),
-    pinkrose: require('./assets/img/favicon-pinkrose.png'),
-    lightgray: require('./assets/img/favicon-lightgray.png'),
-    mediumgray: require('./assets/img/favicon-mediumgray.png'),
-    darkgray: require('./assets/img/favicon-darkgray.png'),
-    dornyellow: require('./assets/img/favicon-dorn-yellow.png'),
-    rubber: require('./assets/img/favicon-rubber.png'),
-    electricviolet: require('./assets/img/favicon-electricviolet.png'),
+    grapefruit: require('./assets/img/favicon/grapefruit.png'),
+    bittersweet: require('./assets/img/favicon/bittersweet.png'),
+    sunflower: require('./assets/img/favicon/sunflower.png'),
+    grass: require('./assets/img/favicon/grass.png'),
+    mint: require('./assets/img/favicon/mint.png'),
+    aqua: require('./assets/img/favicon/aqua.png'),
+    bluejeans: require('./assets/img/favicon/bluejeans.png'),
+    lavander: require('./assets/img/favicon/lavander.png'),
+    pinkrose: require('./assets/img/favicon/pinkrose.png'),
+    lightgray: require('./assets/img/favicon/lightgray.png'),
+    mediumgray: require('./assets/img/favicon/mediumgray.png'),
+    darkgray: require('./assets/img/favicon/darkgray.png'),
+    dornyellow: require('./assets/img/favicon/dornyellow.png'),
+    rubber: require('./assets/img/favicon/rubber.png'),
+    electricviolet: require('./assets/img/favicon/electricviolet.png'),
 };
+
+const favicon = favicons.lightgray;
 
 export interface ClusterAppearance {
     favicon?: string;
