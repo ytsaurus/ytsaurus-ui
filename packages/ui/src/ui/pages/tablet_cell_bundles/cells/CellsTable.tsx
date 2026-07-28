@@ -7,6 +7,7 @@ import i18n from './i18n';
 
 import DataTable, {type Column, type Settings} from '@gravity-ui/react-data-table';
 
+import format from '../../../common/hammer/format';
 import ClickableAttributesButton from '../../../components/AttributesButton/ClickableAttributesButton';
 import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import {DataTableYT} from '../../../components/DataTableYT';
@@ -19,7 +20,6 @@ import {Health} from '../../../components/Health/Health';
 import {type OrderType} from '../../../utils/sort-helpers';
 import {Host} from '../../../containers/Host/Host';
 // @ts-ignore
-import hammer from '@ytsaurus/interface-helpers/lib/hammer';
 import {
     type TabletCell,
     type TabletsPartialAction,
@@ -125,12 +125,12 @@ class CellsTable extends React.Component<Props & ReduxProps> {
 
     renderNumber(colName: keyof BundleCell, data: {row: BundleCell}) {
         const {[colName]: value} = data?.row || {};
-        return hammer.format['Number'](value);
+        return format.Number(value);
     }
 
     renderBytes(colName: keyof BundleCell, data: {row: BundleCell}) {
         const {[colName]: value} = data?.row || {};
-        return hammer.format['Bytes'](value);
+        return format.Bytes(value);
     }
 
     renderHealth(data: {row: TabletCell}) {
