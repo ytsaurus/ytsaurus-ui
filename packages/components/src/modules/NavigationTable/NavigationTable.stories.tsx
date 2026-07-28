@@ -4,6 +4,7 @@ import {YSON_DEFAULT_UNIPIKA_SETTINGS} from '../../internal/Yson';
 import {NavigationTable} from './NavigationTable';
 import {
     type NavigationTableStoryState,
+    navigationTableSampleAdditionalColumns,
     navigationTableSampleTable,
     navigationTableStoryEmptyMessage,
     navigationTableStoryFrameStyle,
@@ -37,6 +38,11 @@ const meta: Meta<DemoArgs> = {
                 table={state === 'empty' ? undefined : navigationTableSampleTable}
                 emptyMessage={navigationTableStoryEmptyMessage}
                 ysonSettings={YSON_DEFAULT_UNIPIKA_SETTINGS}
+                additionalSchemaColumns={
+                    state === 'withExtraColumns'
+                        ? navigationTableSampleAdditionalColumns
+                        : undefined
+                }
                 logError={() => undefined}
                 onInsertTableSelect={() => undefined}
             />

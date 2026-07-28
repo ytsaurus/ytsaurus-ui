@@ -1,7 +1,5 @@
 # @ytsaurus/components
 
-**English** | [Русский](README.ru.md)
-
 A library of **core React components** for building UIs around YTsaurus.
 
 ---
@@ -135,6 +133,27 @@ export function TableExplorer() {
 ```
 
 A fuller integration (Redux, `navigationTableConfig`, doc links) lives in **`packages/ui`** (e.g. query-tracker actions and meta config for `MetaTable`).
+
+### Extra schema columns
+
+Pass **`additionalSchemaColumns`** to append custom columns after the default **Name** / **Type** columns of the schema tab. Each item is an **`ExternalSchemaColumn`** (a `@gravity-ui/react-data-table` column over `NavigationTableSchema`):
+
+```tsx
+import {NavigationTable, type ExternalSchemaColumn} from '@ytsaurus/components/modules';
+
+const additionalSchemaColumns: ExternalSchemaColumn[] = [
+    {
+        name: 'description',
+        header: 'Description',
+        sortable: false,
+        render: ({row}) => row.name, // `row` is a NavigationTableSchema entry
+    },
+];
+
+<NavigationTable table={table} additionalSchemaColumns={additionalSchemaColumns} />;
+```
+
+A real example — external schema description columns (title/description with a source link) — lives in **`packages/ui`** (`useExternalSchemaColumns`).
 
 ---
 
