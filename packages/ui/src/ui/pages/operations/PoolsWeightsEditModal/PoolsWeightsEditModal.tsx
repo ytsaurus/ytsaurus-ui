@@ -97,7 +97,8 @@ export function PoolsWeightsEditModal() {
                                         min: 0,
                                         hidePrettyValue: true,
                                         disabled: !editable,
-                                        decimalPlaces: 2,
+                                        formatFn: (value: number | undefined) =>
+                                            value === undefined ? '' : String(value),
                                     },
                                 },
                             ],
