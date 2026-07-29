@@ -306,7 +306,7 @@ function FlowWorkerMeta({data}: {data?: FlowWorkerData}) {
                           {
                               key: 'worker-groups',
                               label: i18n('worker-groups'),
-                              value: data.groups.join(',') || format.NO_VALUE,
+                              value: data.worker_groups?.join(',') || format.NO_VALUE,
                           },
                       ],
                       [

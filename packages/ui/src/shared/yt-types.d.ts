@@ -774,7 +774,7 @@ export type FlowWorkerData = {
     banned: boolean;
     bytes_per_second: number;
     cpu_usage: number;
-    groups: Array<unknown>;
+    worker_groups?: Array<unknown>;
     incarnation_id: string;
     memory_usage: number;
     messages_per_second: number;
