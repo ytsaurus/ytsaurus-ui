@@ -16,6 +16,7 @@ interface NodeCpuAndMemoryProps {
     networkProgress: Node['networkProgress'];
     networkText: Node['networkText'];
     gpu?: Node['gpu'];
+    flavors?: Node['flavors'];
 }
 
 export const hasCpuAndMemoryMeta = (node: NodeCpuAndMemoryProps) =>
@@ -23,6 +24,11 @@ export const hasCpuAndMemoryMeta = (node: NodeCpuAndMemoryProps) =>
 
 function NodeCpuAndMemory({node}: {node: NodeCpuAndMemoryProps}): ReturnType<React.VFC> {
     const {memoryData, memoryText, cpuProgress, cpuText, networkProgress, networkText, gpu} = node;
+
+    const isExecNode = React.useMemo(() => {
+        return Boolean(node.flavors?.includes('exec'));
+    }, [node.flavors]);
+
     return (
         <MetaTable
             items={[
@@ -30,6 +36,7 @@ function NodeCpuAndMemory({node}: {node: NodeCpuAndMemoryProps}): ReturnType<Rea
                     key: 'cpu',
                     label: i18n('field_cpu'),
                     value: <Progress value={cpuProgress || 0} text={cpuText} theme="success" />,
+                    visible: isExecNode,
                 },
                 {
                     key: 'memory',
@@ -46,7 +53,7 @@ function NodeCpuAndMemory({node}: {node: NodeCpuAndMemoryProps}): ReturnType<Rea
                             theme="success"
                         />
                     ),
-                    visible: gpu !== undefined,
+                    visible: isExecNode && gpu !== undefined,
                 },
                 {
                     key: 'network',
@@ -54,6 +61,7 @@ function NodeCpuAndMemory({node}: {node: NodeCpuAndMemoryProps}): ReturnType<Rea
                     value: (
                         <Progress value={networkProgress || 0} text={networkText} theme="success" />
                     ),
+                    visible: isExecNode,
                 },
             ]}
         />
