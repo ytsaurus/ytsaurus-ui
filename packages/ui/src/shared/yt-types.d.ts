@@ -519,14 +519,17 @@ export interface ConfigData {
 
 export type PipelineParams = {
     pipeline_path: string;
+    output_format?: 'web_json';
 };
 
 export type TableParams = {
     path: string;
 };
 
+export type Int64 = string | number | {$type: 'int64'; $value: string};
+
 export type ExpectedVersion = {
-    expected_version?: string | number;
+    expected_version?: Int64;
 };
 
 export type GetPipelineStateData =

@@ -1,6 +1,7 @@
 import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
 
 import {type YTError} from '../../../../@types/types';
+import {type Int64} from '../../../../shared/yt-types';
 
 export type FlowSpecState = {
     loaded: boolean;
@@ -8,7 +9,7 @@ export type FlowSpecState = {
     error: YTError | undefined;
 
     pipeline_path: string | undefined;
-    data: {spec: unknown; version: number} | undefined;
+    data: {spec: unknown; version: Int64} | undefined;
 };
 
 const initialState: FlowSpecState = {
