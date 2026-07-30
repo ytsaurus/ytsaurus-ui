@@ -22,7 +22,7 @@ export function loadFlowStaticSpec(pipeline_path: string): AsyncAction {
         dispatch(staticSpecActions.onRequest({pipeline_path}));
         return ytApiV4
             .getPipelineSpec({
-                parameters: {pipeline_path},
+                parameters: {pipeline_path, output_format: 'web_json'},
                 cancellation: cancelHelper.removeAllAndSave,
             })
             .then(
@@ -68,7 +68,7 @@ export function loadFlowDynamicSpec(pipeline_path: string): AsyncAction {
         dispatch(dynamicSpecActions.onRequest({pipeline_path}));
         return ytApiV4
             .getPipelineDynamicSpec({
-                parameters: {pipeline_path},
+                parameters: {pipeline_path, output_format: 'web_json'},
                 cancellation: cancelHelper.removeAllAndSave,
             })
             .then(
