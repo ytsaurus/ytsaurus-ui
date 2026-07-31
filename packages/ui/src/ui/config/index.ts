@@ -64,10 +64,6 @@ export function getExportTableBaseUrl({cluster}: {cluster: string}) {
     return clusterSpecificUISettings.exportTableBaseUrl;
 }
 
-export function allowDirectDownload() {
-    return uiSettings.directDownload;
-}
-
 export function createAdminReqTicketUrl(params: Record<string, string> = {}) {
     const {trackerBaseUrl, trackerAdminRequestQueue: queue} = uiSettings;
     return createTrackerUrl(trackerBaseUrl, queue, params);

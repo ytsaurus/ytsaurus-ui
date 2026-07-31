@@ -7,6 +7,7 @@ import {type BatchResultsItem, type BatchSubRequest} from '../../../../shared/yt
 import {YTApiId, ytApiV3, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import ypath from '../../../common/thor/ypath';
 import {getClusterConfigByName, getClusterProxy} from '../../selectors/global';
+import {selectMergedUiSettings} from '../../selectors/global/cluster';
 import {type RootState} from '../../reducers';
 import {makeDirectDownloadPath} from '../../../utils/navigation';
 import {UPDATE_QUERIES_LIST} from '../../reducers/query-tracker/query-tracker-contants';
@@ -343,11 +344,13 @@ export function getDownloadQueryResultURL(
         const clusterConfig = getClusterConfigByName(getQueryTrackerCluster() || cluster);
         if (clusterConfig) {
             const {proxy, externalProxy} = clusterConfig;
+            const uiSettings = selectMergedUiSettings(state);
             const base = makeDirectDownloadPath('read_query_result', {
                 cluster,
                 version: 'v4',
                 proxy,
                 externalProxy,
+                uiSettings,
             });
             return `${base}?${params.toString()}`;
         }

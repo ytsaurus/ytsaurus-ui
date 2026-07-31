@@ -34,6 +34,7 @@ import ChartLink from '../../../components/ChartLink/ChartLink';
 import {selectJob} from '../../../store/selectors/job/detail';
 import {ClipboardButton, MetaTable} from '@ytsaurus/components';
 import {selectCluster, selectClusterUiConfig} from '../../../store/selectors/global';
+import {selectMergedUiSettings} from '../../../store/selectors/global/cluster';
 import UIFactory from '../../../UIFactory';
 import {StaleJobIcon} from '../../../pages/operations/OperationDetail/tabs/Jobs/StaleJobIcon';
 import {Host} from '../../../containers/Host/Host';
@@ -51,6 +52,7 @@ export default function JobGeneral() {
     const settings = useSelector(selectJobGeneralYsonSettings);
     const job = useSelector(selectJob);
     const {loaded} = useSelector((state: RootState) => state.job.general);
+    const mergedUiSettings = useSelector(selectMergedUiSettings);
 
     const {url: traceUrl, title: traceTitle} = useJobProfilingUrl({
         operationId: job?.operationId,
@@ -225,7 +227,7 @@ export default function JobGeneral() {
                                 value: (
                                     <ClickableText
                                         onClick={() =>
-                                            window.open(job?.prepareCommandURL('get_job_input'))
+                                            window.open(job?.prepareCommandURL('get_job_input', mergedUiSettings))
                                         }
                                     >
                                         {'get_job_input'}
@@ -237,7 +239,7 @@ export default function JobGeneral() {
                                 value: (
                                     <ClickableText
                                         onClick={() =>
-                                            window.open(job?.prepareCommandURL('get_job_stderr'))
+                                            window.open(job?.prepareCommandURL('get_job_stderr', mergedUiSettings))
                                         }
                                     >
                                         {'get_job_stderr'}
@@ -255,6 +257,7 @@ export default function JobGeneral() {
                                                       window.open(
                                                           job?.prepareCommandURL(
                                                               'get_job_fail_context',
+                                                              mergedUiSettings,
                                                           ),
                                                       )
                                                   }

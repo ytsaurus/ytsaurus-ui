@@ -4,7 +4,8 @@ import Link from '../../../../../../containers/Link/Link';
 import {Template} from '../../../../../../components/MetaTable/templates/Template';
 import {showErrorModal} from '../../../../../../store/actions/actions';
 import {showInputPaths} from '../../../../../../store/actions/operations/jobs';
-import {useDispatch} from '../../../../../../store/redux-hooks';
+import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
+import {selectMergedUiSettings} from '../../../../../../store/selectors/global/cluster';
 import {type Job} from '../job-selector';
 import i18n from './i18n';
 
@@ -33,7 +34,8 @@ function JobInputPaths({job}: {job: Job}) {
 /* ----------------------------------------------------------------------------------------------------------------- */
 
 function JobDebugInfo({type, job}: {type: 'stderr' | 'fail_context' | 'full_input'; job: Job}) {
-    const {size, url} = job.getDebugInfo(type)!;
+    const mergedUiSettings = useSelector(selectMergedUiSettings);
+    const {size, url} = job.getDebugInfo(type, mergedUiSettings)!;
     return <Template.DownloadLink url={url} size={size} />;
 }
 

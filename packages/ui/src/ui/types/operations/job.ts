@@ -1,3 +1,4 @@
+import {UISettings} from '../../../shared/ui-settings';
 import {type OperationType} from '../../../shared/yt-types';
 import {type Acl, type YTError} from '../../types';
 
@@ -74,7 +75,7 @@ export interface PreparedJob extends Partial<RawJob> {
     duration: number;
     error?: JobError;
 
-    prepareCommandURL: (command: string) => string;
+    prepareCommandURL: (command: string, uiSettings: Pick<UISettings, 'directDownload'>) => string;
 }
 
 export interface PreparedJobEvent {
