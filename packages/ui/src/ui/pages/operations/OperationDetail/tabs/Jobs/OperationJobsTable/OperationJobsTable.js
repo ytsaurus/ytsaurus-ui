@@ -37,6 +37,7 @@ import {
     selectOperationId,
     selectOperationTasksNames,
 } from '../../../../../../store/selectors/operations/operation';
+import {selectMergedUiSettings} from '../../../../../../store/selectors/global/cluster';
 import UIFactory from '../../../../../../UIFactory';
 import {StaleJobIcon} from '../StaleJobIcon';
 
@@ -244,6 +245,7 @@ class OperationJobsTable extends React.Component {
     };
 
     renderErrorAndDebug = (item) => {
+        const {uiSettings} = this.props;
         const items = [
             {
                 key: 'error',
@@ -258,12 +260,12 @@ class OperationJobsTable extends React.Component {
             {
                 key: 'stderr',
                 value: <JobTemplate.DebugInfo job={item} type="stderr" />,
-                visible: item.getDebugInfo('stderr').size > 0,
+                visible: item.getDebugInfo('stderr', uiSettings).size > 0,
             },
             {
                 key: 'fail_context',
                 value: <JobTemplate.DebugInfo job={item} type="fail_context" />,
-                visible: item.getDebugInfo('fail_context').size > 0,
+                visible: item.getDebugInfo('fail_context', uiSettings).size > 0,
             },
             {
                 key: 'full_input',
@@ -567,6 +569,7 @@ function mapStateToProps(state, props) {
     const jobsOperationId = selectJobsOperationId(state);
     const operationId = selectOperationId(state);
     const {jobs, job, competitiveJobs, inputPaths} = operations.jobs;
+    const uiSettings = selectMergedUiSettings(state);
     return {
         jobs: operationId !== jobsOperationId ? [] : jobs,
         job,
@@ -579,6 +582,7 @@ function mapStateToProps(state, props) {
         collapsibleSize: UI_COLLAPSIBLE_SIZE,
         isLoading: props.isLoading || operationId !== jobsOperationId,
         taskNamesNumber,
+        uiSettings,
     };
 }
 

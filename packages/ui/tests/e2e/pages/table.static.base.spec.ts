@@ -1,5 +1,6 @@
 import {expect, test} from '@playwright/test';
 import {E2E_DIR, makeClusterTille, makeClusterUrl} from '../../utils';
+import {basePage} from '../../widgets/BasePage';
 
 const PATH = `${E2E_DIR}/static-table`;
 
@@ -60,17 +61,12 @@ test('Static table: column selector work properly', async ({page}) => {
 });
 
 test('Static table: externalProxy', async ({page}) => {
+    await basePage(page).override_window__DATA__({directDownload: true}, {});
+
     const url = makeClusterUrl(`navigation?path=${PATH}`);
     await page.goto(url);
 
-    await page.waitForSelector('.navigation');
-    await page.waitForFunction(() => {
-        window.__DATA__.uiSettings.directDownload = true;
-        return window.__DATA__.uiSettings;
-    });
-
     await page.click('button[data-qa="show-download-static-table"]');
-
     await page.waitForSelector(
         `a[href^="//external.proxy.my/api/v3/read_table?path=${encodeURIComponent(PATH)}"]`,
     );

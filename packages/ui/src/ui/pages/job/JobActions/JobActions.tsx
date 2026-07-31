@@ -20,6 +20,7 @@ import {selectJob, selectJobActions} from '../../../store/selectors/job/detail';
 import {loadJobData} from '../../../store/actions/job/general';
 import {promptAction} from '../../../store/actions/actions';
 import {selectCluster} from '../../../store/selectors/global';
+import {selectMergedUiSettings} from '../../../store/selectors/global/cluster';
 import {type RootState} from '../../../store/reducers';
 import {type PreparedJob} from '../../../types/operations/job';
 import {showErrorPopup} from '../../../utils/utils';
@@ -67,17 +68,18 @@ const getAdditionalActions = (
     job: Job | undefined,
     openJobShellModal: () => void,
     openDumpContextModal: () => void,
+    uiSettings: {directDownload?: boolean},
 ) => {
     const infoActions = [
         {
             action: () => {
-                window.open(job?.prepareCommandURL?.('get_job_input') || window.location.href);
+                window.open(job?.prepareCommandURL?.('get_job_input', uiSettings) || window.location.href);
             },
             text: 'get_job_input',
         },
         {
             action: () => {
-                window.open(job?.prepareCommandURL?.('get_job_stderr') || window.location.href);
+                window.open(job?.prepareCommandURL?.('get_job_stderr', uiSettings) || window.location.href);
             },
             text: 'get_job_stderr',
         },
@@ -87,7 +89,7 @@ const getAdditionalActions = (
         infoActions.push({
             action: () => {
                 window.open(
-                    job?.prepareCommandURL?.('get_job_fail_context') || window.location.href,
+                    job?.prepareCommandURL?.('get_job_fail_context', uiSettings) || window.location.href,
                 );
             },
             text: 'get_job_fail_context',
@@ -217,6 +219,7 @@ export default function JobActions({className}: {className?: string}) {
     const job = useSelector(selectJob);
     const {loaded} = useSelector((state: RootState) => state.job.general);
     const cluster = useSelector(selectCluster);
+    const mergedUiSettings = useSelector(selectMergedUiSettings);
     const jobId = (job as PreparedJob).id;
 
     const jobShellCommand = `yt run-job-shell ${jobId}`;
@@ -250,8 +253,8 @@ export default function JobActions({className}: {className?: string}) {
 
     const actions = useSelector(selectJobActions);
     const additionalActions = useMemo(
-        () => getAdditionalActions(job, openJobShellModal, openDumpContextModal),
-        [job, openJobShellModal, openDumpContextModal],
+        () => getAdditionalActions(job, openJobShellModal, openDumpContextModal, mergedUiSettings),
+        [job, openJobShellModal, openDumpContextModal, mergedUiSettings],
     );
 
     if (!loaded) {

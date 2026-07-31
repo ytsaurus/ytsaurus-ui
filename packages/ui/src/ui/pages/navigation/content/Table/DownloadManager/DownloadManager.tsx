@@ -29,6 +29,7 @@ import {selectRowsPerTablePage, selectShowDecoded} from '../../../../../store/se
 import {selectSchema} from '../../../../../store/selectors/navigation/tabs/schema';
 import {selectPath, selectTransaction} from '../../../../../store/selectors/navigation';
 import {selectCluster, selectCurrentClusterConfig} from '../../../../../store/selectors/global';
+import {selectMergedUiSettings} from '../../../../../store/selectors/global/cluster';
 import withVisible, {type WithVisibleProps} from '../../../../../hocs/withVisible';
 import {
     selectAllColumns,
@@ -301,7 +302,7 @@ export class DownloadManager extends React.Component<Props, State> {
     }
 
     getDownloadLink() {
-        const {cluster, proxy, externalProxy} = this.props;
+        const {cluster, proxy, externalProxy, uiSettings} = this.props;
         const {format, number_precision_mode} = this.state;
         const {query, error} = this.getDownloadParams();
 
@@ -311,7 +312,12 @@ export class DownloadManager extends React.Component<Props, State> {
             return {url: `${base}?${params}&${query}`, error};
         }
 
-        const base = makeDirectDownloadPath('read_table', {cluster, proxy, externalProxy});
+        const base = makeDirectDownloadPath('read_table', {
+            cluster,
+            proxy,
+            externalProxy,
+            uiSettings,
+        });
 
         return {url: `${base}?${query}`, error};
     }
@@ -974,6 +980,7 @@ const mapStateToProps = (state: RootState) => {
     const path = selectPath(state);
     const {proxy, externalProxy} = selectCurrentClusterConfig(state);
     const transaction_id = selectTransaction(state);
+    const uiSettings = selectMergedUiSettings(state);
 
     const isSchematicTable = schema.length > 0;
 
@@ -992,6 +999,7 @@ const mapStateToProps = (state: RootState) => {
         proxy,
         externalProxy,
         transaction_id,
+        uiSettings,
     };
 };
 

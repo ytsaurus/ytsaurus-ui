@@ -7,7 +7,7 @@ import moment from 'moment';
 // @ts-expect-error
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
-import {makeDirectDownloadPath} from '../../../../../utils/navigation';
+import {UISettings} from '../../../../../../shared/ui-settings';
 import {
     type ClusterConfig,
     type ListJobsItem,
@@ -20,6 +20,7 @@ import {
     type RawJob,
     type RawJobEvent,
 } from '../../../../../types/operations/job';
+import {makeDirectDownloadPath} from '../../../../../utils/navigation';
 
 type JobsData = ListJobsItem | RawJob;
 
@@ -151,7 +152,10 @@ export class Job implements RawJob {
         this.brief_statistics['processed_input_uncompressed_data_size'] = uncompressedSize;
     }
 
-    prepareCommandURL(commandName: 'get_job_stderr' | 'get_job_fail_context' | 'get_job_input') {
+    prepareCommandURL(
+        commandName: 'get_job_stderr' | 'get_job_fail_context' | 'get_job_input',
+        uiSettings: Pick<UISettings, 'directDownload'>,
+    ) {
         const params = qs.stringify({
             operation_id: this.operationId,
             job_id: this.id,
@@ -162,26 +166,30 @@ export class Job implements RawJob {
             cluster: this.cluster,
             proxy: this.proxy,
             externalProxy: this.externalProxy,
+            uiSettings,
         });
 
         return `${path}?${params}`;
     }
 
-    getDebugInfo(name: 'stderr' | 'fail_context' | 'full_input') {
+    getDebugInfo(
+        name: 'stderr' | 'fail_context' | 'full_input',
+        uiSettings: Pick<UISettings, 'directDownload'>,
+    ) {
         switch (name) {
             case 'stderr':
                 return {
                     size: (this.attributes as ListJobsItem).stderr_size,
-                    url: this.prepareCommandURL('get_job_stderr'),
+                    url: this.prepareCommandURL('get_job_stderr', uiSettings),
                 };
             case 'fail_context':
                 return {
                     size: (this.attributes as ListJobsItem).fail_context_size,
-                    url: this.prepareCommandURL('get_job_fail_context'),
+                    url: this.prepareCommandURL('get_job_fail_context', uiSettings),
                 };
             case 'full_input':
                 return {
-                    url: this.prepareCommandURL('get_job_input'),
+                    url: this.prepareCommandURL('get_job_input', uiSettings),
                 };
         }
     }

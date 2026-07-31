@@ -1,12 +1,11 @@
-import unipika from '../../common/thor/unipika';
+import {type CancelTokenSource} from 'axios';
 // @ts-ignore
 import ypath from '../../common/thor/ypath';
 
-import {type CancelTokenSource} from 'axios';
-
+import {UISettings} from '../../../shared/ui-settings';
+import unipika from '../../common/thor/unipika';
 import {Page} from '../../constants/index';
 import {SUPPRESS_REDIRECT} from '../../constants/navigation/modals/delete-object';
-import {allowDirectDownload} from '../../config';
 
 export function autoCorrectPath(path: string) {
     // 1) Strip slash from the end
@@ -157,10 +156,17 @@ export function makeDirectDownloadPath(
         cluster,
         proxy,
         externalProxy,
+        uiSettings,
         version = 'v3',
-    }: {cluster: string; proxy: string; externalProxy: string | undefined; version?: 'v3' | 'v4'},
+    }: {
+        cluster: string;
+        proxy: string;
+        externalProxy: string | undefined;
+        uiSettings: Pick<UISettings, 'directDownload'>;
+        version?: 'v3' | 'v4';
+    },
 ) {
-    return allowDirectDownload()
+    return uiSettings.directDownload
         ? `//${externalProxy ?? proxy}/api/${version}/${command}`
         : `/api/yt/${cluster}/api/${version}/${command}`;
 }

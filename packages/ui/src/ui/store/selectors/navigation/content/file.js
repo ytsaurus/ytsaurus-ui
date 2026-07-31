@@ -2,14 +2,15 @@ import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {createSelector} from 'reselect';
 import {selectAttributes, selectPath} from '../../../../store/selectors/navigation';
 import {selectCurrentClusterConfig} from '../../../../store/selectors/global';
+import {selectMergedUiSettings} from '../../../../store/selectors/global/cluster';
 import {MAX_FILE_SIZE} from '../../../../constants/navigation/content/file';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 import {makeDirectDownloadPath} from '../../../../utils/navigation';
 
 export const selectDownloadPath = createSelector(
-    [selectPath, selectCurrentClusterConfig],
-    (cypressPath, {id: cluster, proxy, externalProxy}) => {
-        const path = makeDirectDownloadPath('read_file', {cluster, proxy, externalProxy});
+    [selectPath, selectCurrentClusterConfig, selectMergedUiSettings],
+    (cypressPath, {id: cluster, proxy, externalProxy}, uiSettings) => {
+        const path = makeDirectDownloadPath('read_file', {cluster, proxy, externalProxy, uiSettings});
         const query = [
             'path=' + encodeURIComponent(cypressPath),
             'disposition=attachment',
