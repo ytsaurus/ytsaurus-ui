@@ -882,32 +882,45 @@ function RowActions({item}: {item: RowData}) {
     const {type, isEphemeral, isAggregationRow} = item;
     const editable = !isEphemeral && type === 'pool' && !isAggregationRow;
 
+    if (isAggregationRow) {
+        return null;
+    }
+
     return (
-        editable && (
-            <DropdownMenu
-                switcherWrapperClassName={block('actions')}
-                items={[
-                    {
-                        text: i18n('action_attributes'),
-                        action: () => {
+        <DropdownMenu
+            switcherWrapperClassName={block('actions')}
+            items={[
+                {
+                    text: i18n('action_attributes'),
+                    action: () => {
+                        if (type === 'pool') {
                             const exactPath = dispatch(getPoolPathsByName(item.name))?.orchidPath;
-                            if (type === 'pool') {
-                                dispatch(openAttributesModal({title: item.name, exactPath}));
-                            }
-                        },
+                            dispatch(openAttributesModal({title: item.name, exactPath}));
+                        } else {
+                            dispatch(
+                                openAttributesModal({
+                                    title: item.name,
+                                    attributes: item.attributes,
+                                }),
+                            );
+                        }
                     },
-                    {
-                        action: () => dispatch(openEditModal(item)),
-                        text: i18n('action_edit'),
-                    },
-                    {
-                        action: () => dispatch(openPoolDeleteModal(item)),
-                        text: i18n('action_delete'),
-                        theme: 'danger' as const,
-                    },
-                ]}
-            />
-        )
+                },
+                ...(editable
+                    ? [
+                          {
+                              action: () => dispatch(openEditModal(item)),
+                              text: i18n('action_edit'),
+                          },
+                          {
+                              action: () => dispatch(openPoolDeleteModal(item)),
+                              text: i18n('action_delete'),
+                              theme: 'danger' as const,
+                          },
+                      ]
+                    : []),
+            ]}
+        />
     );
 }
 
