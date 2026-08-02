@@ -73,13 +73,17 @@ const getAdditionalActions = (
     const infoActions = [
         {
             action: () => {
-                window.open(job?.prepareCommandURL?.('get_job_input', uiSettings) || window.location.href);
+                window.open(
+                    job?.prepareCommandURL?.('get_job_input', uiSettings) || window.location.href,
+                );
             },
             text: 'get_job_input',
         },
         {
             action: () => {
-                window.open(job?.prepareCommandURL?.('get_job_stderr', uiSettings) || window.location.href);
+                window.open(
+                    job?.prepareCommandURL?.('get_job_stderr', uiSettings) || window.location.href,
+                );
             },
             text: 'get_job_stderr',
         },
@@ -89,7 +93,8 @@ const getAdditionalActions = (
         infoActions.push({
             action: () => {
                 window.open(
-                    job?.prepareCommandURL?.('get_job_fail_context', uiSettings) || window.location.href,
+                    job?.prepareCommandURL?.('get_job_fail_context', uiSettings) ||
+                        window.location.href,
                 );
             },
             text: 'get_job_fail_context',

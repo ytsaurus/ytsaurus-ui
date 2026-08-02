@@ -1,4 +1,4 @@
-import {UISettings} from '../../../shared/ui-settings';
+import {type UISettings} from '../../../shared/ui-settings';
 import {type OperationType} from '../../../shared/yt-types';
 import {type Acl, type YTError} from '../../types';
 

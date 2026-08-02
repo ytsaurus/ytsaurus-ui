@@ -2,7 +2,7 @@ import {type CancelTokenSource} from 'axios';
 // @ts-ignore
 import ypath from '../../common/thor/ypath';
 
-import {UISettings} from '../../../shared/ui-settings';
+import {type UISettings} from '../../../shared/ui-settings';
 import unipika from '../../common/thor/unipika';
 import {Page} from '../../constants/index';
 import {SUPPRESS_REDIRECT} from '../../constants/navigation/modals/delete-object';
