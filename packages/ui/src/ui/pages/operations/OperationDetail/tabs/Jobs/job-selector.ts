@@ -7,7 +7,7 @@ import moment from 'moment';
 // @ts-expect-error
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
-import {UISettings} from '../../../../../../shared/ui-settings';
+import {type UISettings} from '../../../../../../shared/ui-settings';
 import {
     type ClusterConfig,
     type ListJobsItem,

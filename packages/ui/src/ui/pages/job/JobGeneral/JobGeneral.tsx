@@ -227,7 +227,12 @@ export default function JobGeneral() {
                                 value: (
                                     <ClickableText
                                         onClick={() =>
-                                            window.open(job?.prepareCommandURL('get_job_input', mergedUiSettings))
+                                            window.open(
+                                                job?.prepareCommandURL(
+                                                    'get_job_input',
+                                                    mergedUiSettings,
+                                                ),
+                                            )
                                         }
                                     >
                                         {'get_job_input'}
@@ -239,7 +244,12 @@ export default function JobGeneral() {
                                 value: (
                                     <ClickableText
                                         onClick={() =>
-                                            window.open(job?.prepareCommandURL('get_job_stderr', mergedUiSettings))
+                                            window.open(
+                                                job?.prepareCommandURL(
+                                                    'get_job_stderr',
+                                                    mergedUiSettings,
+                                                ),
+                                            )
                                         }
                                     >
                                         {'get_job_stderr'}

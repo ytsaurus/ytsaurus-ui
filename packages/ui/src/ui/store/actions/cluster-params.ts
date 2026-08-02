@@ -97,7 +97,7 @@ export function initClusterParams(cluster: string): GlobalThunkAction<Promise<vo
 
         return getClusterParams(rumId, cluster)
             .then(({data}) => {
-                const {mediumList, schedulerVersion, masterVersion, uiConfig, uiDevConfig} = data;
+                const {mediumList, masterVersion, uiConfig, uiDevConfig} = data;
                 const error = getBatchError([mediumList], 'Cluster initialization failure');
                 if (error) {
                     throw error;
@@ -113,7 +113,6 @@ export function initClusterParams(cluster: string): GlobalThunkAction<Promise<vo
                         mediumList: ypath.getValue(mediumList.output),
                         clusterUiConfig,
                         clusterUiDevConfig,
-                        schedulerVersion: schedulerVersion.output,
                         masterVersion: masterVersion.output,
                     },
                 });

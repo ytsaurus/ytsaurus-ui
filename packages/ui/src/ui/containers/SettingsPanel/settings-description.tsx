@@ -41,7 +41,6 @@ import SettingsMenuInput from '../SettingsMenu/SettingsMenuInput';
 import {
     selectCurrentUserName,
     selectGlobalMasterVersion,
-    selectGlobalSchedulerVersion,
     selectHttpProxyVersion,
 } from '../../store/selectors/global';
 import {selectIsDeveloperOrWatchmen} from '../../store/selectors/global/is-developer';
@@ -90,7 +89,6 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
     const clusterNS = useSelector(selectCurrentClusterNS);
 
     const httpProxyVersion = useSelector(selectHttpProxyVersion);
-    const schedulerVersion = useSelector(selectGlobalSchedulerVersion);
     const masterVersion = useSelector(selectGlobalMasterVersion);
     const vcsConfig = useSelector(selectVcsConfig);
     const isVcsVisible = useSelector(selectIsVcsVisible);
@@ -598,13 +596,6 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         i18n('field_http-proxy-version'),
                         undefined,
                         httpProxyVersion,
-                    ),
-                Boolean(cluster) &&
-                    makeItem(
-                        'schedulerVersion',
-                        i18n('field_scheduler-version'),
-                        undefined,
-                        schedulerVersion,
                     ),
                 Boolean(cluster) &&
                     makeItem(

@@ -114,7 +114,7 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
                 return Promise.reject(error.data);
             });
 
-        const [mediumList, schedulerVersion, uiConfig, uiDevConfig, masterVersion] = await yt.v3
+        const [mediumList, uiConfig, uiDevConfig, masterVersion] = await yt.v3
             .executeBatch({
                 setup: {
                     ...configSetup,
@@ -140,13 +140,6 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
                             command: 'list',
                             parameters: {
                                 path: '//sys/media',
-                                ...USE_SUPRESS_SYNC,
-                            },
-                        },
-                        {
-                            command: 'get',
-                            parameters: {
-                                path: '//sys/scheduler/orchid/service/version',
                                 ...USE_SUPRESS_SYNC,
                             },
                         },
@@ -204,11 +197,6 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
             delete uiDevConfig.error;
         }
 
-        if (schedulerVersion?.error?.code === yt.codes.NODE_DOES_NOT_EXIST) {
-            delete schedulerVersion.error;
-            schedulerVersion.output = '0.0.0-unknown';
-        }
-
         if (masterVersion?.error?.code === yt.codes.NODE_DOES_NOT_EXIST) {
             delete masterVersion.error;
             masterVersion.output = '0.0.0-unknown';
@@ -216,7 +204,6 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
 
         const response = {
             mediumList,
-            schedulerVersion,
             uiConfig: outputUiSettingsToCamelCase(uiConfig),
             uiDevConfig: outputUiSettingsToCamelCase(uiDevConfig),
             masterVersion: masterVersion ?? mastersList,
@@ -224,7 +211,6 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
 
         if (
             mediumList.error ||
-            schedulerVersion.error ||
             (uiConfig.error && uiConfig.error.code !== yt.codes.NODE_DOES_NOT_EXIST) ||
             (uiDevConfig.error && uiDevConfig.error.code !== yt.codes.NODE_DOES_NOT_EXIST) ||
             (masterVersion?.error && masterVersion.error.code !== yt.codes.NODE_DOES_NOT_EXIST) ||
@@ -233,7 +219,6 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
             cx.logError('Unacceptable response', undefined, {
                 cluster,
                 mediumList: {error: mediumList.error},
-                schedulerVersion: {error: schedulerVersion.error},
                 uiConfig: {error: uiConfig.error},
                 uiDevConfig: {error: uiDevConfig.error},
                 masterVersion: {error: masterVersion?.error},

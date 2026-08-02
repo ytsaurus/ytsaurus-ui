@@ -70,7 +70,6 @@ export type GlobalState = {
 
     version?: RawVersion;
     masterVersion?: RawVersion;
-    schedulerVersion?: RawVersion;
 
     login: string;
     authWay: AuthWay;
@@ -137,7 +136,6 @@ const initialState: GlobalState = {
     error: EMPTY_OBJECT,
 
     version: YT.parameters.version,
-    schedulerVersion: undefined,
     masterVersion: undefined,
     login: YT.parameters.login,
     authWay: YT.parameters.authWay,
@@ -234,7 +232,6 @@ export default (state = initialState, action: GloablStateAction): GlobalState =>
         case INIT_CLUSTER_PARAMS.SUCCESS: {
             const {
                 mediumList,
-                schedulerVersion,
                 masterVersion,
                 accounts,
                 clusterUiConfig,
@@ -252,7 +249,6 @@ export default (state = initialState, action: GloablStateAction): GlobalState =>
                 paramsLoaded: true,
                 paramsLoading: false,
                 paramsError: undefined,
-                schedulerVersion,
                 masterVersion,
             };
         }
@@ -340,7 +336,6 @@ export type GloablStateAction =
           Pick<
               GlobalState,
               | 'mediumList'
-              | 'schedulerVersion'
               | 'masterVersion'
               | 'accounts'
               | 'clusterUiConfig'
