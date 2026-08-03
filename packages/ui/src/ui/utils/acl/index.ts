@@ -10,6 +10,7 @@ import {
     type InheritedFrom,
     type ResponsibleType,
     type Subject,
+    type TypedAclSubject,
 } from '../../utils/acl/acl-types';
 import {type YTPermissionTypeUI} from './acl-api';
 import {makeRegexpFromSettings} from '../../../shared/utils';
@@ -78,10 +79,9 @@ export function normalizeIdmParams(idmKind: IdmKindType, path = '') {
 
 export type SubjectGroupType = 'service' | 'department' | string;
 
-export interface PreparedRole {
-    type?: 'users' | 'groups';
+export type PreparedRole = TypedAclSubject & {
+    type?: 'users' | 'groups' | 'app';
     subject: Subject;
-    subjectUrl?: string;
     inherited?: boolean;
     inheritedFrom?: InheritedFrom;
     idmLink?: string;
@@ -99,6 +99,7 @@ export interface PreparedRole {
     group_type?: SubjectGroupType;
     user?: string;
     name?: string;
+
     tvm_id?: string;
 
     state?: string;
@@ -110,13 +111,10 @@ export interface PreparedRole {
     member?: boolean;
     deprive_date?: string;
 
-    internal?: boolean;
-
     url?: string;
 
     types?: undefined;
-    subjectType?: undefined;
-}
+};
 
 export function prepareAclSubject(item: ResponsibleType): Subject {
     switch (item.type) {

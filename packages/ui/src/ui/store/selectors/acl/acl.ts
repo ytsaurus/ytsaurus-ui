@@ -41,19 +41,11 @@ function prepareApprovers(
     type: 'read_approver' | 'responsible' | 'auditor',
 ) {
     return map_(approvers, (subject) => {
-        const extra = {
-            type,
-            subjects: [subject.value],
-            subjectType: subject.type === 'users' ? ('user' as const) : ('group' as const),
-            groupInfo:
-                subject.type === 'groups'
-                    ? {name: subject.group_name, url: subject.url, group: subject.group}
-                    : undefined,
-            action: undefined,
-        };
         return {
             ...subject,
-            ...extra,
+            type,
+            subjects: [subject.value],
+            action: undefined,
         };
     });
 }

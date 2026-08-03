@@ -224,6 +224,7 @@ export const selectGroupEditorRoles = createSelector(
                     subject: {
                         user: member,
                     },
+                    subjectType: 'user',
                 };
             }),
         };
