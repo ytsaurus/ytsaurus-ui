@@ -302,7 +302,7 @@ export class DownloadManager extends React.Component<Props, State> {
     }
 
     getDownloadLink() {
-        const {cluster, proxy, externalProxy, uiSettings} = this.props;
+        const {cluster, clusterConfig, uiSettings} = this.props;
         const {format, number_precision_mode} = this.state;
         const {query, error} = this.getDownloadParams();
 
@@ -313,9 +313,7 @@ export class DownloadManager extends React.Component<Props, State> {
         }
 
         const base = makeDirectDownloadPath('read_table', {
-            cluster,
-            proxy,
-            externalProxy,
+            clusterConfig,
             uiSettings,
         });
 
@@ -978,7 +976,7 @@ const mapStateToProps = (state: RootState) => {
     const columns: typeof allColumns = selectColumns(state);
     const schema = selectSchema(state);
     const path = selectPath(state);
-    const {proxy, externalProxy} = selectCurrentClusterConfig(state);
+    const clusterConfig = selectCurrentClusterConfig(state);
     const transaction_id = selectTransaction(state);
     const uiSettings = selectMergedUiSettings(state);
 
@@ -996,8 +994,7 @@ const mapStateToProps = (state: RootState) => {
         columns,
         showDecoded,
         isSchematicTable,
-        proxy,
-        externalProxy,
+        clusterConfig,
         transaction_id,
         uiSettings,
     };

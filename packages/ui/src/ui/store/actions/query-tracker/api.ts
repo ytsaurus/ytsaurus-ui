@@ -360,13 +360,10 @@ export function getDownloadQueryResultURL(
         }
         const clusterConfig = getClusterConfigByName(getQueryTrackerCluster() || cluster);
         if (clusterConfig) {
-            const {proxy, externalProxy} = clusterConfig;
             const uiSettings = selectMergedUiSettings(state);
             const base = makeDirectDownloadPath('read_query_result', {
-                cluster,
+                clusterConfig,
                 version: 'v4',
-                proxy,
-                externalProxy,
                 uiSettings,
             });
             return `${base}?${params.toString()}`;
