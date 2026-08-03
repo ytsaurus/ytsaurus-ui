@@ -13,7 +13,7 @@ import {toaster} from '../utils/toaster';
 
 export function initYTApiClusterParams(cluster: string) {
     const {clusters} = YT;
-    const config = getClusterConfig(clusters, cluster);
+    const config = {...getClusterConfig(clusters, cluster)};
 
     yt.setup.setGlobalOption('suppressAccessTracking', true);
     yt.setup.setGlobalOption('useEncodedParameters', true);
