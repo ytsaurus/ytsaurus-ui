@@ -93,6 +93,7 @@ export const enum YTApiId {
     navigationTypeDynamic = 'navigationTypeDynamic',
     navigationUpdateView = 'navigationUpdateView',
     navigationUserAttributes = 'navigationUserAttributes',
+    navigationHasRowLevelAccess = 'navigationHasRowLevelAccess',
 
     nodeAttributes = 'nodeAttributes',
     nodeMemoryUsage = 'nodeMemoryUsage',

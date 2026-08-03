@@ -28,12 +28,18 @@ export function useTableAccessMetaItem({path, user, transaction_id}: UseTableAcc
             user,
         },
     });
-    const hasRls = useGetQuery<boolean>({
-        id: YTApiId.checkPermissions,
-        parameters: {transaction_id, path: `${path}/@has_row_level_ace`},
-    });
 
-    if (fullReadPermission.error || hasRls.error) {
+    const hasRls = useGetQuery<{has_row_level_ace?: boolean; virtual?: boolean}>({
+        id: YTApiId.navigationHasRowLevelAccess,
+        parameters: {
+            transaction_id,
+            path: `${path}/@`,
+            attributes: ['has_row_level_ace', 'virtual'],
+        },
+    });
+    const ignoreCheckPermissionError = !hasRls.data?.has_row_level_ace;
+
+    if ((!ignoreCheckPermissionError && fullReadPermission.error) || hasRls.error) {
         const error = {
             message: i18n('alert_failed-to-check-row-level-access'),
             inner_errors: compact_([fullReadPermission.error, hasRls.error]),
@@ -45,7 +51,10 @@ export function useTableAccessMetaItem({path, user, transaction_id}: UseTableAcc
         };
     }
 
-    const hasLimitedAccess = hasRls.data && fullReadPermission.data?.action === 'deny';
+    const {has_row_level_ace, virtual} = hasRls.data || {};
+    const hasLimitedAccess =
+        !virtual && has_row_level_ace && fullReadPermission.data?.action === 'deny';
+
     if (!hasLimitedAccess) {
         return undefined;
     }
