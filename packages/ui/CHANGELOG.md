@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.21.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.21.0...ui-v3.21.1) (2026-08-03)
+
+
+### Bug Fixes
+
+* **Flow:** preserve 64-bit spec versions [[#1724](https://github.com/ytsaurus/ytsaurus-ui/issues/1724)] ([6d30584](https://github.com/ytsaurus/ytsaurus-ui/commit/6d30584c99d089a357aa188342520de6f8a70772))
+* **Operation:** wrong suspended status [YTFRONT-5948] ([663f043](https://github.com/ytsaurus/ytsaurus-ui/commit/663f0431c852c7a76b256fa3f3c3115cd205a36c))
+* **Queries/Hitory:** minimal attributes set [YTFRONT-5946] ([0ac5ce3](https://github.com/ytsaurus/ytsaurus-ui/commit/0ac5ce313ffaa369423b28251c1681cd66d5ee08))
+
 ## [3.21.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.20.0...ui-v3.21.0) (2026-07-29)
 
 
