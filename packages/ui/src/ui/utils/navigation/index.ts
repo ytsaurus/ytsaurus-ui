@@ -158,13 +158,21 @@ export function makeDirectDownloadPath(
         uiSettings,
         version = 'v3',
     }: {
-        clusterConfig: Pick<ClusterConfig, 'id' | 'proxy' | 'externalProxy'>;
+        clusterConfig: Pick<ClusterConfig, 'id' | 'proxy' | 'externalProxy' | 'secure'>;
         uiSettings: Pick<UISettings, 'directDownload'>;
         version?: 'v3' | 'v4';
     },
 ) {
-    const {id: cluster, proxy, externalProxy} = clusterConfig;
-    return uiSettings.directDownload
-        ? `//${externalProxy ?? proxy}/api/${version}/${command}`
-        : `/api/yt/${cluster}/api/${version}/${command}`;
+    const {id: cluster, proxy, externalProxy, secure} = clusterConfig;
+
+    if (!uiSettings.directDownload) {
+        return `/api/yt/${cluster}/api/${version}/${command}`;
+    }
+
+    if (externalProxy) {
+        return `//${externalProxy}/api/${version}/${command}`;
+    }
+
+    const schema = secure ? 'https' : 'http';
+    return `${schema}://${proxy}/api/${version}/${command}`;
 }
