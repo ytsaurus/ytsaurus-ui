@@ -145,6 +145,19 @@ export async function generateQueryFromTable(
     return undefined;
 }
 
+// Minimal set of QueryItem fields actually rendered by the queries list UI
+const QUERIES_LIST_ATTRIBUTES = [
+    'id',
+    'state',
+    'start_time',
+    'finish_time',
+    'user',
+    'engine',
+    'annotations',
+    'is_tutorial',
+    'access_control_objects',
+];
+
 export function loadQueriesList({
     params,
     cursor,
@@ -154,12 +167,16 @@ export function loadQueriesList({
     return async (_dispatch, getState) => {
         const state = getState();
         const {stage} = selectQueryTrackerRequestOptions(state);
+        const attributes = params.use_full_text_search
+            ? [...QUERIES_LIST_ATTRIBUTES, 'query']
+            : QUERIES_LIST_ATTRIBUTES;
         return ytApiV4Id.listQueries(YTApiId.listQueries, {
             parameters: {
                 stage,
                 ...params,
                 ...cursor,
                 limit,
+                attributes,
                 output_format: 'json',
             },
             setup: {...getQTApiSetup(), JSONSerializer},
