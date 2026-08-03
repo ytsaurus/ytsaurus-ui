@@ -3,6 +3,7 @@ import {type CancelTokenSource} from 'axios';
 import ypath from '../../common/thor/ypath';
 
 import {type UISettings} from '../../../shared/ui-settings';
+import {type ClusterConfig} from '../../../shared/yt-types';
 import unipika from '../../common/thor/unipika';
 import {Page} from '../../constants/index';
 import {SUPPRESS_REDIRECT} from '../../constants/navigation/modals/delete-object';
@@ -153,19 +154,16 @@ export function makeDirectDownloadPath(
         | 'get_job_input'
         | 'get_job_stderr',
     {
-        cluster,
-        proxy,
-        externalProxy,
+        clusterConfig,
         uiSettings,
         version = 'v3',
     }: {
-        cluster: string;
-        proxy: string;
-        externalProxy: string | undefined;
+        clusterConfig: Pick<ClusterConfig, 'id' | 'proxy' | 'externalProxy'>;
         uiSettings: Pick<UISettings, 'directDownload'>;
         version?: 'v3' | 'v4';
     },
 ) {
+    const {id: cluster, proxy, externalProxy} = clusterConfig;
     return uiSettings.directDownload
         ? `//${externalProxy ?? proxy}/api/${version}/${command}`
         : `/api/yt/${cluster}/api/${version}/${command}`;

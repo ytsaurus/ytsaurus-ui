@@ -43,9 +43,7 @@ export class Job implements RawJob {
         return Job.hasUserErrorCode(error) ? Job.USER_ERROR : Job.SYSTEM_ERROR;
     }
 
-    cluster: ClusterConfig['id'];
-    proxy: ClusterConfig['proxy'];
-    externalProxy: ClusterConfig['externalProxy'];
+    clusterConfig: ClusterConfig;
     operationId: string;
     job_id: string;
     id: string;
@@ -96,11 +94,7 @@ export class Job implements RawJob {
         operationId: string;
         clusterConfig: ClusterConfig;
     }) {
-        const {id: cluster, proxy, externalProxy} = clusterConfig ?? {};
-
-        this.cluster = cluster;
-        this.proxy = proxy;
-        this.externalProxy = externalProxy;
+        this.clusterConfig = clusterConfig;
         this.operationId = operationId;
         this.attributes = job;
 
@@ -163,9 +157,7 @@ export class Job implements RawJob {
         });
 
         const path = makeDirectDownloadPath(commandName, {
-            cluster: this.cluster,
-            proxy: this.proxy,
-            externalProxy: this.externalProxy,
+            clusterConfig: this.clusterConfig,
             uiSettings,
         });
 

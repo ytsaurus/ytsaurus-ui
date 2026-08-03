@@ -1,7 +1,11 @@
 import {type QueryResultColumn} from '../../../../types/query-tracker/queryResult';
 import qs from 'qs';
 import React, {useMemo, useState} from 'react';
-import {selectCluster, selectMergedUiSettings} from '../../../../store/selectors/global';
+import {
+    selectCluster,
+    selectCurrentClusterConfig,
+    selectMergedUiSettings,
+} from '../../../../store/selectors/global';
 import {DownloadManager} from '../../../navigation/content/Table/DownloadManager/DownloadManager';
 import {getDownloadQueryResultURL} from '../../../../store/actions/query-tracker/api';
 import {selectQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
@@ -109,6 +113,7 @@ export const QueryResultDownloadManager = React.memo(function QueryResultDownloa
     };
 
     const uiSettings = useSelector(selectMergedUiSettings);
+    const clusterConfig = useSelector(selectCurrentClusterConfig);
 
     return (
         <QueryResultTableDownloadManager
@@ -140,6 +145,7 @@ export const QueryResultDownloadManager = React.memo(function QueryResultDownloa
             downloadFile={handleDownload}
             downloadToClipboard={handleCopy}
             uiSettings={uiSettings}
+            clusterConfig={clusterConfig}
         />
     );
 });
