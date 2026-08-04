@@ -8,15 +8,19 @@ import AccountLink from '../../pages/accounts/AccountLink';
 import TabletCellBundleLink from '../../pages/tablet_cell_bundles/TabletCellBundleLink';
 import ChaosCellBundleLink from '../../pages/tablet_cell_bundles/ChaosCellBundleLink';
 import UIFactory from '../../UIFactory';
+import {makeNavigationLink} from '../../utils/app-url';
 import {renderDefaultMetaOperationLink} from './presets/defaultMetaOperationLink';
+import {renderDefaultMarkdown} from './presets/defaultRenderMarkdown';
 import AutomaticModeSwitch from '../../pages/navigation/content/Table/TableMeta/AutomaticModeSwitch';
 
 /**
- * Partial {@link TYComponentsNavigationMetaConfig} for MetaTable presets / `makeMetaItems`.
+ * {@link TYComponentsNavigationMetaConfig} for MetaTable presets / `makeMetaItems`.
  * Used where `table.meta` is built outside React (e.g. query-tracker `loadTableAttributesByPath`).
  */
-export const ytComponentsNavigationMetaConfig: Partial<TYComponentsNavigationMetaConfig> = {
+export const ytComponentsNavigationMetaConfig: TYComponentsNavigationMetaConfig = {
     docsUrls,
+    navigationLinkTemplate: makeNavigationLink,
+    renderMarkdown: renderDefaultMarkdown,
     renderMetaOperationLink: renderDefaultMetaOperationLink,
     renderMetaTableAutomaticModeSwitch: (params: MetaTableAutomaticModeSwitchParams) => (
         <AutomaticModeSwitch value={params.value} onEdit={params.onEdit} />

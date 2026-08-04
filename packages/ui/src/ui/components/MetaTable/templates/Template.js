@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import React, {Fragment} from 'react';
+import React from 'react';
 import cn from 'bem-cn-lite';
 import {Link} from '@gravity-ui/uikit';
 
 import {
-    ClipboardButton,
     TemplateFormattedValue,
     TemplateId,
+    TemplateLink,
     TemplateReadable,
     TemplateTime,
 } from '@ytsaurus/components';
@@ -15,7 +15,7 @@ import CollapsableText from '../../../components/CollapsableText/CollapsableText
 import Icon from '../../../components/Icon/Icon';
 import {ClickableText} from '../../../components/ClickableText/ClickableText';
 
-export {TemplateId, TemplateFormattedValue, TemplateReadable, TemplateTime};
+export {TemplateId, TemplateFormattedValue, TemplateReadable, TemplateTime, TemplateLink};
 
 const itemBlock = cn('meta-table-item');
 
@@ -89,51 +89,6 @@ function TemplateDownloadLink({size, url}) {
 TemplateDownloadLink.propTypes = {
     url: PropTypes.string.isRequired,
     size: PropTypes.number,
-};
-
-/* ----------------------------------------------------------------------------------------------------------------- */
-
-function TemplateLink({
-    url,
-    icon,
-    text = '',
-    shiftText = '',
-    face,
-    withClipboard = false,
-    hoverContent = '',
-}) {
-    return (
-        <Fragment>
-            <div className={itemBlock('link', {clickable: withClipboard})}>
-                <span className="elements-ellipsis">
-                    <Link title={url} href={url} target="_blank">
-                        {icon && <Icon awesome={icon} face={face} />}
-                        {text}
-                    </Link>
-                </span>
-                {withClipboard && (
-                    <Fragment>
-                        &nbsp;
-                        <ClipboardButton
-                            view="flat-secondary"
-                            text={text}
-                            shiftText={shiftText}
-                            hoverContent={hoverContent}
-                            size="s"
-                        />
-                    </Fragment>
-                )}
-            </div>
-        </Fragment>
-    );
-}
-
-TemplateLink.propTypes = {
-    url: PropTypes.string.isRequired,
-    text: PropTypes.string,
-    icon: PropTypes.string,
-    face: PropTypes.string,
-    withClipboard: PropTypes.bool,
 };
 
 /* ----------------------------------------------------------------------------------------------------------------- */

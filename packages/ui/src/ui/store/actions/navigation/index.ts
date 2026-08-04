@@ -273,6 +273,7 @@ export function navigateParent(): NavigationThunk {
 
 const attributesToLoad = [
     '_format',
+    '_nirvana_meta',
     '_read_schema',
     '_restore_path',
     '_yql_key_meta',
