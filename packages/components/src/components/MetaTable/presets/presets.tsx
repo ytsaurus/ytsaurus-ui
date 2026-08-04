@@ -91,7 +91,7 @@ export function dynTableInfo(
     attributes: any,
     cluster: string,
     tabletErrorCount: number,
-    config?: Partial<TYComponentsNavigationMetaConfig>,
+    config?: TYComponentsNavigationMetaConfig,
 ) {
     const [tabletCellBundle, tabletState, inMemoryMode] = ypath.getValues(attributes, [
         '/tablet_cell_bundle',
@@ -162,7 +162,7 @@ export const makeMetaItems = ({
     tabletErrorCount?: number;
     onEditEnableReplicatedTableTracker?: (currentValue?: boolean) => Promise<void>;
     docsUrls?: Record<string, string>;
-    navigationTableConfig?: Partial<TYComponentsNavigationMetaConfig>;
+    navigationTableConfig?: TYComponentsNavigationMetaConfig;
 }) => {
     const config = navigationTableConfig
         ? {...navigationTableConfig, docsUrls: docsUrls ?? navigationTableConfig.docsUrls}

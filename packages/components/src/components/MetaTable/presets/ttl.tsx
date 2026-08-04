@@ -28,7 +28,7 @@ export function makeTTLItems(
         showTTLLabel?: boolean;
         docsUrls?: Record<string, string>;
         cluster?: string;
-        config?: Partial<TYComponentsNavigationMetaConfig>;
+        config?: TYComponentsNavigationMetaConfig;
     } = {},
 ) {
     const expirationTime = ypath.getValue(attrs, '/expiration_time');
