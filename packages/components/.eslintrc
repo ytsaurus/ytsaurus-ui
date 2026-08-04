@@ -1,6 +1,9 @@
 {
     "extends": ["@gravity-ui/eslint-config", "@gravity-ui/eslint-config/prettier"],
     "root": true,
+    "parserOptions": {
+        "sourceType": "module"
+    },
     "rules": {
         "new-cap": 0,
         "import/order": 0
