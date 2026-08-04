@@ -8,6 +8,9 @@
 * **Flow:** preserve 64-bit spec versions [[#1724](https://github.com/ytsaurus/ytsaurus-ui/issues/1724)] ([6d30584](https://github.com/ytsaurus/ytsaurus-ui/commit/6d30584c99d089a357aa188342520de6f8a70772))
 * **Operation:** wrong suspended status [YTFRONT-5948] ([663f043](https://github.com/ytsaurus/ytsaurus-ui/commit/663f0431c852c7a76b256fa3f3c3115cd205a36c))
 * **Queries/Hitory:** minimal attributes set [YTFRONT-5946] ([0ac5ce3](https://github.com/ytsaurus/ytsaurus-ui/commit/0ac5ce313ffaa369423b28251c1681cd66d5ee08))
+* **Components/Node:** display CPU/GPU/Net only for 'flavor:exec' [YTFRONT-5945] ([8c10c19](https://github.com/ytsaurus/ytsaurus-ui/pull/1727/changes/8c10c19527ca1856a6b1d5a81547117822b6eccc))
+* **makeDirectDownloadPath:** use cluster specific uiSettings [YTFRONT-5917] ([41fb76f](https://github.com/ytsaurus/ytsaurus-ui/pull/1727/changes/41fb76f512cfce1be25dbfd686125d9e1a8f081e))
+* **cluster-params:** do not try to load scheduler version [YTFRONT-5951] ([04c8c9d](https://github.com/ytsaurus/ytsaurus-ui/pull/1727/changes/04c8c9d5edc1b4941df60b52bb189cdf34f18c6d))
 
 ## [3.21.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.20.0...ui-v3.21.0) (2026-07-29)
 
@@ -2612,7 +2615,7 @@
 ## [1.0.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v0.23.0...ui-v1.0.0) (2023-10-09)
 
 
-### ⚠ BREAKING CHANGES 
+### ⚠ BREAKING CHANGES
 
 * update @gravity-ui/uikit v5
 
