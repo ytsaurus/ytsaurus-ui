@@ -6,6 +6,7 @@ import {YT} from '../../../config/yt-config';
 import UIFactory from '../../../UIFactory';
 import {makeNavigationLink} from '../../../utils/app-url';
 import {renderDefaultMetaOperationLink} from './defaultMetaOperationLink';
+import {renderDefaultMarkdown} from './defaultRenderMarkdown';
 
 export default function main(attributes: any, cluster?: string) {
     return metaTablePresetMain(attributes, cluster || YT.cluster, {
@@ -14,5 +15,6 @@ export default function main(attributes: any, cluster?: string) {
         docsUrls: UIFactory.docsUrls,
         navigationLinkTemplate: ({cluster: c, path}) => makeNavigationLink({path, cluster: c}),
         renderMetaOperationLink: renderDefaultMetaOperationLink,
+        renderMarkdown: renderDefaultMarkdown,
     });
 }
