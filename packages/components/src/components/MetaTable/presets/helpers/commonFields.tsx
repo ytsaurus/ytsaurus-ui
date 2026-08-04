@@ -32,7 +32,7 @@ export const getCommonFields = ({
     tableType: string;
     tabletErrorCount: number;
     onEditEnableReplicatedTableTracker?: MetaTableAutomaticModeSwitchOnEdit;
-    config?: Partial<TYComponentsNavigationMetaConfig>;
+    config?: TYComponentsNavigationMetaConfig;
 }) => {
     const [sorted, chaosCellBundle, enableReplicatedTableTracker] = ypath.getValues(attributes, [
         '/sorted',

@@ -5,7 +5,9 @@ import type {TYComponentsNavigationMetaConfig} from '../../../types';
 import {MetaTableItem} from '../MetaTable';
 import i18n from './i18n';
 
-const normalizeMetaOperationLinkItems = (
+const LINK_MAX_WIDTH = '50ch';
+
+const normalizeMetaTableItems = (
     result: MetaTableItem | MetaTableItem[] | null | undefined,
 ): MetaTableItem[] => {
     if (!result) return [];
@@ -16,33 +18,58 @@ const normalizeMetaOperationLinkItems = (
 type Props = (
     attributes: any,
     cluster: string,
-    config?: Partial<TYComponentsNavigationMetaConfig>,
+    config?: TYComponentsNavigationMetaConfig,
 ) => MetaTableItem[];
 
 export const metaTablePresetMain: Props = (attributes, cluster, config = {}) => {
-    const SubjectCard = config.SubjectCard;
-    const AccountLink = config.AccountLink;
-    const renderMetaOperationLink = config.renderMetaOperationLink ?? null;
-    const [id, owner, account, creationTime, modificationTime, accessTime, yqlOpId] =
-        ypath.getValues(attributes, [
-            '/id',
-            '/owner',
-            '/account',
-            '/creation_time',
-            '/modification_time',
-            '/access_time',
-            '/_yql_op_id',
-        ]);
+    const {SubjectCard, AccountLink, renderMetaOperationLink, renderMarkdown} = config;
+    const [
+        id,
+        owner,
+        account,
+        creationTime,
+        modificationTime,
+        accessTime,
+        yqlOpId,
+        nirvanaBlockUrl,
+    ] = ypath.getValues(attributes, [
+        '/id',
+        '/owner',
+        '/account',
+        '/creation_time',
+        '/modification_time',
+        '/access_time',
+        '/_yql_op_id',
+        '/_nirvana_meta/block_url',
+    ]);
 
     const operationLinkItems =
         yqlOpId && renderMetaOperationLink
-            ? normalizeMetaOperationLinkItems(
+            ? normalizeMetaTableItems(
                   renderMetaOperationLink({
                       operationId: yqlOpId,
                       cluster,
                   }),
               )
             : [];
+
+    const nirvanaMetaItems = nirvanaBlockUrl
+        ? [
+              {
+                  key: 'nirvana_block_url',
+                  value: renderMarkdown ? (
+                      renderMarkdown({text: nirvanaBlockUrl})
+                  ) : (
+                      <Template.Link
+                          url={nirvanaBlockUrl}
+                          text={nirvanaBlockUrl}
+                          maxWidth={LINK_MAX_WIDTH}
+                          withClipboard
+                      />
+                  ),
+              },
+          ]
+        : [];
 
     return [
         {
@@ -87,5 +114,6 @@ export const metaTablePresetMain: Props = (attributes, cluster, config = {}) => 
             visible: Boolean(accessTime),
         },
         ...operationLinkItems,
+        ...nirvanaMetaItems,
     ];
 };
