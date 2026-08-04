@@ -1,3 +1,4 @@
+import type {ReactNode} from 'react';
 import type {MetaTableItem} from '../components';
 
 export type MetaTableAutomaticModeSwitchOnEdit = (currentValue?: boolean) => Promise<void>;
@@ -39,6 +40,11 @@ export type MetaTableOperationLinkParams = {
     cluster: string;
 };
 
+export type MetaTableRenderMarkdownParams = {
+    text: string;
+    allowHTML?: boolean;
+};
+
 export type MetaTableAutomaticModeSwitchParams = {
     value?: boolean;
     cluster: string;
@@ -52,17 +58,16 @@ export type NavigationLinkTemplate = (params: {
 
 export type YtComponentsDocsUrlKey = 'cypress:ttl' | 'storage:replication#erasure';
 
-export type TYComponentsNavigationMetaConfig = {
-    SubjectCard?: (props: SubjectCardProps) => React.ReactNode;
-    AccountLink?: (props: MetaTableAccountLinkProps) => React.ReactNode;
-    TabletCellBundleLink?: (props: MetaTableTabletCellBundleLinkProps) => React.ReactNode;
-    ChaosCellBundleLink?: (props: MetaTableChaosCellBundleLinkProps) => React.ReactNode;
-    renderMetaOperationLink?: (
+export type TYComponentsNavigationMetaConfig = Partial<{
+    SubjectCard: (props: SubjectCardProps) => ReactNode;
+    AccountLink: (props: MetaTableAccountLinkProps) => ReactNode;
+    TabletCellBundleLink: (props: MetaTableTabletCellBundleLinkProps) => ReactNode;
+    ChaosCellBundleLink: (props: MetaTableChaosCellBundleLinkProps) => ReactNode;
+    renderMetaOperationLink: (
         params: MetaTableOperationLinkParams,
     ) => MetaTableItem | MetaTableItem[] | null | undefined;
-    renderMetaTableAutomaticModeSwitch?: (
-        params: MetaTableAutomaticModeSwitchParams,
-    ) => React.ReactNode;
-    navigationLinkTemplate?: NavigationLinkTemplate;
-    docsUrls?: Record<YtComponentsDocsUrlKey, string>;
-};
+    renderMarkdown: (params: MetaTableRenderMarkdownParams) => ReactNode;
+    renderMetaTableAutomaticModeSwitch: (params: MetaTableAutomaticModeSwitchParams) => ReactNode;
+    navigationLinkTemplate: NavigationLinkTemplate;
+    docsUrls: Record<YtComponentsDocsUrlKey, string>;
+}>;

@@ -21,7 +21,7 @@ export const loadTableAttributesByPath = async (
         useYqlTypes?: boolean;
         docsUrls?: Record<string, string>;
         showDecoded?: boolean;
-        navigationTableConfig?: Partial<TYComponentsNavigationMetaConfig>;
+        navigationTableConfig?: TYComponentsNavigationMetaConfig;
     },
 ): Promise<NavigationTable> => {
     const attributes = await loadTableAttributes(path, setup);

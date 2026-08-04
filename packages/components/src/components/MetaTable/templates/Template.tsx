@@ -1,7 +1,7 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {Text as GravityText, Icon, Link} from '@gravity-ui/uikit';
+import {Flex, Icon, type IconData, Link, Text} from '@gravity-ui/uikit';
 
 import {format as hammerFormat} from '../../../utils';
 import {ClipboardButton} from '../../ClipboardButton';
@@ -15,7 +15,7 @@ const itemBlock = cn('meta-table-item');
 export function TemplateId({id}: {id?: string}) {
     return (
         <div className={itemBlock('id')}>
-            <GravityText ellipsis>{id}</GravityText>
+            <Text ellipsis>{id}</Text>
             &nbsp;
             <ClipboardButton view="flat-secondary" text={id ?? ''} size="s" />
         </div>
@@ -59,46 +59,50 @@ export function TemplateReadable({value = hammerFormat.NO_VALUE}: {value?: strin
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-type IconData = React.ComponentType<React.SVGProps<SVGSVGElement>>;
-
-function TemplateLink({
-    url,
-    icon: IconComponent,
-    text = '',
-    shiftText = undefined,
-    withClipboard = false,
-    hoverContent = undefined,
-}: {
+type TampleteLinkProps = {
     url: string;
     text?: string;
     icon?: IconData;
     withClipboard?: boolean;
     shiftText?: string;
     hoverContent?: React.ReactNode;
-}) {
+    maxWidth?: number;
+};
+
+function TemplateLink({
+    url,
+    icon: IconComponent,
+    text = '',
+    shiftText,
+    withClipboard,
+    hoverContent,
+    maxWidth,
+}: TampleteLinkProps) {
     return (
-        <Fragment>
-            <div className={itemBlock('link', {clickable: withClipboard})}>
-                <GravityText ellipsis>
-                    <Link title={url} href={url}>
-                        {IconComponent && <Icon data={IconComponent as never} size={14} />}
-                        {text}
-                    </Link>
-                </GravityText>
-                {withClipboard && (
-                    <Fragment>
-                        &nbsp;
-                        <ClipboardButton
-                            view="flat-secondary"
-                            text={text}
-                            shiftText={shiftText}
-                            hoverContent={hoverContent}
-                            size="s"
-                        />
-                    </Fragment>
-                )}
-            </div>
-        </Fragment>
+        <Flex
+            gap={2}
+            wrap="nowrap"
+            alignItems="center"
+            className={itemBlock('link')}
+            style={{maxWidth}}
+        >
+            <Text ellipsis>
+                <Link title={url} href={url}>
+                    {IconComponent && <Icon data={IconComponent} size={14} />}
+                    {text}
+                </Link>
+            </Text>
+
+            {withClipboard && (
+                <ClipboardButton
+                    view="flat-secondary"
+                    text={text}
+                    shiftText={shiftText}
+                    hoverContent={hoverContent}
+                    size="s"
+                />
+            )}
+        </Flex>
     );
 }
 
