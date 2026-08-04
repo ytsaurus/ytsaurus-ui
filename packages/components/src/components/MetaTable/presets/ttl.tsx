@@ -17,6 +17,8 @@ import './ttl.scss';
 
 const block = cn('meta-table-ttl');
 
+const LINK_MAX_WIDTH = '50ch';
+
 export function makeTTLItems(
     attrs: unknown,
     {
@@ -52,8 +54,17 @@ export function makeTTLItems(
         res.push({
             key: 'effective_expiration_time_path',
             label: i18n('field_effective-expiration-time-path'),
-            qa: 'expiration_timeout_path',
-            value: timePathUrl ? <Template.Link url={timePathUrl} text={time.path} /> : time.path,
+            qa: 'expiration_time_path',
+            value: timePathUrl ? (
+                <Template.Link
+                    url={timePathUrl}
+                    text={time.path}
+                    maxWidth={LINK_MAX_WIDTH}
+                    withClipboard
+                />
+            ) : (
+                time.path
+            ),
         });
     }
     if (expirationTime) {
@@ -82,7 +93,12 @@ export function makeTTLItems(
             label: i18n('field_effective-expiration-timeout-path'),
             qa: 'expiration_timeout_path',
             value: timeoutPathUrl ? (
-                <Template.Link url={timeoutPathUrl} text={timeout.path} />
+                <Template.Link
+                    url={timeoutPathUrl}
+                    text={timeout.path}
+                    maxWidth={LINK_MAX_WIDTH}
+                    withClipboard
+                />
             ) : (
                 timeout.path
             ),
