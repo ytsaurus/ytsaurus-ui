@@ -1,7 +1,7 @@
 import map_ from 'lodash/map';
 
 import {format, ypath} from '../../../utils';
-import {Template} from '../templates/Template';
+import {TemplateFormattedValue, TemplateReadable} from '../templates/Template';
 
 import i18n from './i18n';
 
@@ -27,7 +27,7 @@ export function metaTablePresetSize(attributes: unknown, mediumList: Array<strin
             key: medium + '_disk_space',
             label: i18n('field_medium-disk-space', {name: format.ReadableField(medium)}),
             value: (
-                <Template.FormattedValue
+                <TemplateFormattedValue
                     value={usageMediumDiskSpace || mediumDiskSpace}
                     format="Bytes"
                 />
@@ -46,27 +46,27 @@ export function metaTablePresetSize(attributes: unknown, mediumList: Array<strin
         {
             key: 'uncompressed_data_size',
             label: i18n('field_uncompressed-size'),
-            value: <Template.FormattedValue value={uncompressedDataSize} format="Bytes" />,
+            value: <TemplateFormattedValue value={uncompressedDataSize} format="Bytes" />,
             visible: uncompressedDataSize !== undefined,
             tooltip: i18n('context_uncompressed-size'),
         },
         {
             key: 'compressed_data_size',
             label: i18n('field_compressed-size'),
-            value: <Template.FormattedValue value={compressedDataSize} format="Bytes" />,
+            value: <TemplateFormattedValue value={compressedDataSize} format="Bytes" />,
             visible: compressedDataSize !== undefined,
             tooltip: i18n('context_compressed-size'),
         },
         {
             key: 'primary_medium',
             label: i18n('field_primary-medium'),
-            value: <Template.Readable value={primaryMedium} />,
+            value: <TemplateReadable value={primaryMedium} />,
             visible: primaryMedium !== undefined,
         },
         {
             key: 'disk_space',
             label: i18n('field_total-disk-space'),
-            value: <Template.FormattedValue value={usageDiskSpace ?? diskSpace} format="Bytes" />,
+            value: <TemplateFormattedValue value={usageDiskSpace ?? diskSpace} format="Bytes" />,
             visible: usageDiskSpace !== undefined || diskSpace !== undefined,
             tooltip: i18n('context_disk-space'),
         },

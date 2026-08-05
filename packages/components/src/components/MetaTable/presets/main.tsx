@@ -1,5 +1,6 @@
 import {ypath} from '../../../utils';
-import {Template} from '../templates/Template';
+import {TemplateId, TemplateLink} from '../templates/Template';
+import {TemplateTime} from '../templates/TemplateTime';
 import {makeTTLItems} from './ttl';
 import type {TYComponentsNavigationMetaConfig} from '../../../types';
 import {MetaTableItem} from '../MetaTable';
@@ -60,7 +61,7 @@ export const metaTablePresetMain: Props = (attributes, cluster, config = {}) => 
                   value: renderMarkdown ? (
                       renderMarkdown({text: nirvanaBlockUrl})
                   ) : (
-                      <Template.Link
+                      <TemplateLink
                           url={nirvanaBlockUrl}
                           text={nirvanaBlockUrl}
                           maxWidth={LINK_MAX_WIDTH}
@@ -75,7 +76,7 @@ export const metaTablePresetMain: Props = (attributes, cluster, config = {}) => 
         {
             key: 'id',
             label: i18n('field_id'),
-            value: <Template.Id id={id} />,
+            value: <TemplateId id={id} />,
         },
         {
             key: 'owner',
@@ -92,7 +93,7 @@ export const metaTablePresetMain: Props = (attributes, cluster, config = {}) => 
         {
             key: 'creation_time',
             label: i18n('field_creation-time'),
-            value: <Template.Time time={creationTime} valueFormat="DateTime" />,
+            value: <TemplateTime time={creationTime} valueFormat="DateTime" />,
             visible: Boolean(creationTime),
         },
         ...makeTTLItems(attributes, {
@@ -104,13 +105,13 @@ export const metaTablePresetMain: Props = (attributes, cluster, config = {}) => 
         {
             key: 'modification_time',
             label: i18n('field_modification-time'),
-            value: <Template.Time time={modificationTime} valueFormat="DateTime" />,
+            value: <TemplateTime time={modificationTime} valueFormat="DateTime" />,
             visible: Boolean(modificationTime),
         },
         {
             key: 'access_time',
             label: i18n('field_access-time'),
-            value: <Template.Time time={accessTime} valueFormat="DateTime" />,
+            value: <TemplateTime time={accessTime} valueFormat="DateTime" />,
             visible: Boolean(accessTime),
         },
         ...operationLinkItems,
