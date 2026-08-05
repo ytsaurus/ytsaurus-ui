@@ -94,7 +94,9 @@ export class Accounts extends React.Component<
             [AccountsTab.MONITOR]: monitoringTitle ?? i18n('title_monitoring'),
         });
 
-        const lastTab = lastVisitedTab in AccountsTab ? lastVisitedTab : undefined;
+        const lastTab = Object.values(AccountsTab).includes(lastVisitedTab)
+            ? lastVisitedTab
+            : undefined;
         const tabToRedirect = activeAccount && lastTab ? lastTab : AccountsTab.GENERAL;
 
         return (
