@@ -8,7 +8,7 @@ import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 import {ypath} from '../../../utils';
 
 import {MetaTableItem} from '../MetaTable';
-import {Template} from '../templates/Template';
+import {TemplateLink} from '../templates/Template';
 import type {TYComponentsNavigationMetaConfig} from '../../../types';
 import {formatTimeDuration} from './helpers/formatTimeDuration';
 import i18n from './i18n';
@@ -56,7 +56,7 @@ export function makeTTLItems(
             label: i18n('field_effective-expiration-time-path'),
             qa: 'expiration_time_path',
             value: timePathUrl ? (
-                <Template.Link
+                <TemplateLink
                     url={timePathUrl}
                     text={time.path}
                     maxWidth={LINK_MAX_WIDTH}
@@ -93,7 +93,7 @@ export function makeTTLItems(
             label: i18n('field_effective-expiration-timeout-path'),
             qa: 'expiration_timeout_path',
             value: timeoutPathUrl ? (
-                <Template.Link
+                <TemplateLink
                     url={timeoutPathUrl}
                     text={timeout.path}
                     maxWidth={LINK_MAX_WIDTH}

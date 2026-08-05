@@ -1,6 +1,6 @@
 import {format, ypath} from '../../../utils';
 import {Label, LabelOnOff} from '../../Label';
-import {Template} from '../templates/Template';
+import {TemplateFormattedValue} from '../templates/Template';
 import {compression} from './compression';
 import {erasureReplication} from './erasure-replication';
 import {metaTablePresetSize} from './size';
@@ -56,7 +56,7 @@ export function tableSize(attributes: any, isDynamic: boolean, mediumList: strin
         {
             key: 'dataWeight',
             label: i18n('field_data-weight'),
-            value: <Template.FormattedValue value={dataWeight} format="Bytes" />,
+            value: <TemplateFormattedValue value={dataWeight} format="Bytes" />,
             tooltip: i18n('context_data-weight'),
             visible: dataWeight !== undefined,
         },

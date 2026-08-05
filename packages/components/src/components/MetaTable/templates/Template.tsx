@@ -6,8 +6,6 @@ import {Flex, Icon, type IconData, Link, Text} from '@gravity-ui/uikit';
 import {format as hammerFormat} from '../../../utils';
 import {ClipboardButton} from '../../ClipboardButton';
 
-import {TemplateTime} from './TemplateTime';
-
 const itemBlock = cn('meta-table-item');
 
 /* ----------------------------------------------------------------------------------------------------------------- */
@@ -69,7 +67,7 @@ type TampleteLinkProps = {
     maxWidth?: string | number;
 };
 
-function TemplateLink({
+export function TemplateLink({
     url,
     icon: IconComponent,
     text = '',
@@ -105,13 +103,3 @@ function TemplateLink({
         </Flex>
     );
 }
-
-/* ----------------------------------------------------------------------------------------------------------------- */
-
-export function Template() {}
-
-Template.Id = TemplateId;
-Template.FormattedValue = TemplateFormattedValue;
-Template.Readable = TemplateReadable;
-Template.Time = TemplateTime;
-Template.Link = TemplateLink;
