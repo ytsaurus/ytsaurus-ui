@@ -1,6 +1,6 @@
 import {format, ypath} from '../../../utils';
 import {Label, LabelOnOff} from '../../Label';
-import {TemplateFormattedValue} from '../templates/Template';
+import {TemplateFormattedValue} from '../templates';
 import {compression} from './compression';
 import {erasureReplication} from './erasure-replication';
 import {metaTablePresetSize} from './size';
