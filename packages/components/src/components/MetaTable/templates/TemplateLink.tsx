@@ -27,7 +27,7 @@ export function TemplateLink({
 }: Props) {
     return (
         <Flex
-            gap={2}
+            gap={1}
             wrap="nowrap"
             alignItems="center"
             className={itemBlock('link')}

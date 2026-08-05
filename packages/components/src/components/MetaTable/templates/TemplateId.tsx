@@ -1,4 +1,4 @@
-import {Text} from '@gravity-ui/uikit';
+import {Flex, Text} from '@gravity-ui/uikit';
 
 import {ClipboardButton} from '../../ClipboardButton';
 
@@ -10,10 +10,9 @@ type Props = {
 
 export function TemplateId({id}: Props) {
     return (
-        <div className={itemBlock('id')}>
+        <Flex gap={1} wrap="nowrap" alignItems="center" className={itemBlock('id')}>
             <Text ellipsis>{id}</Text>
-            &nbsp;
             <ClipboardButton view="flat-secondary" text={id ?? ''} size="s" />
-        </div>
+        </Flex>
     );
 }
