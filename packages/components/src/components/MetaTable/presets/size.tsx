@@ -1,7 +1,7 @@
 import map_ from 'lodash/map';
 
 import {format, ypath} from '../../../utils';
-import {TemplateFormattedValue, TemplateReadable} from '../templates/Template';
+import {TemplateFormattedValue, TemplateReadable} from '../templates';
 
 import i18n from './i18n';
 

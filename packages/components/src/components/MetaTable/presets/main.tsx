@@ -1,6 +1,5 @@
 import {ypath} from '../../../utils';
-import {TemplateId, TemplateLink} from '../templates/Template';
-import {TemplateTime} from '../templates/TemplateTime';
+import {TemplateId, TemplateLink, TemplateTime} from '../templates';
 import {makeTTLItems} from './ttl';
 import type {TYComponentsNavigationMetaConfig} from '../../../types';
 import {MetaTableItem} from '../MetaTable';

@@ -8,7 +8,7 @@ import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 import {ypath} from '../../../utils';
 
 import {MetaTableItem} from '../MetaTable';
-import {TemplateLink} from '../templates/Template';
+import {TemplateLink} from '../templates';
 import type {TYComponentsNavigationMetaConfig} from '../../../types';
 import {formatTimeDuration} from './helpers/formatTimeDuration';
 import i18n from './i18n';
