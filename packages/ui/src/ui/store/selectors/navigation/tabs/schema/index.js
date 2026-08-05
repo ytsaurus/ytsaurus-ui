@@ -2,11 +2,12 @@ import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
-import ypath from '../../../../common/thor/ypath';
-import hammer from '../../../../common/hammer';
+import ypath from '../../../../../common/thor/ypath';
+import hammer from '../../../../../common/hammer';
 import {createSelector} from 'reselect';
-import {selectAttributes} from '../../../../store/selectors/navigation';
+import {selectAttributes} from '../..';
 import i18n from './i18n';
+import {getSchemaColumnName} from './schema-columns';
 
 const EXCLUDED_COLUMNS = {sort_order: null};
 
@@ -53,7 +54,7 @@ export const selectComputedColumns = createSelector([selectSchema], (schema) => 
         (res, schemaEntry) => {
             forEach_(schemaEntry, (columnValue, columnName) => {
                 res[columnName] = res[columnName] || {
-                    caption: columnName === 'index' ? '#' : undefined,
+                    caption: columnName === 'index' ? '#' : getSchemaColumnName(columnName),
                     sort: false,
                     align: 'left',
                 };

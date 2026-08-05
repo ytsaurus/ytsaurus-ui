@@ -1,11 +1,11 @@
 {
-  "value_elections": "elections",
-  "value_follower_recovery": "follower recovery",
-  "value_following": "following",
-  "value_leader_recovery": "leader recovery",
-  "value_leading": "leading",
-  "value_offline": "offline",
-  "value_online": "online",
-  "value_stopped": "stopped",
-  "value_unknown": "unknown"
+  "value_elections": "Elections",
+  "value_follower_recovery": "Follower recovery",
+  "value_following": "Following",
+  "value_leader_recovery": "Leader recovery",
+  "value_leading": "Leading",
+  "value_offline": "Offline",
+  "value_online": "Online",
+  "value_stopped": "Stopped",
+  "value_unknown": "Unknown"
 }
