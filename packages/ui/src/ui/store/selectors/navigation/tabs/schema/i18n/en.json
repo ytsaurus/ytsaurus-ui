@@ -1,0 +1,14 @@
+{
+  "column_name": "Name",
+  "column_type": "Type",
+  "column_type_v3": "Type v3",
+  "column_sort_order": "Sort order",
+  "column_lock": "Lock",
+  "column_expression": "Expression",
+  "column_aggregate": "Aggregate",
+  "column_required": "Required",
+  "column_group": "Group",
+  "field_schema-mode": "Schema mode",
+  "field_strict": "Strict",
+  "field_unique-keys": "Unique keys"
+}

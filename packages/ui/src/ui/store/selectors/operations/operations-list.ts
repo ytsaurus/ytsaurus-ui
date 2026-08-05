@@ -19,6 +19,7 @@ import {
     type OperationPresetsSettings,
     type OperationsListPreset,
 } from '../../../../shared/constants/settings-types';
+import i18n from './i18n';
 
 export const selectOperationsListIsFinalState = createSelector(
     [
@@ -47,7 +48,7 @@ export const selectOperationsListIsFinalState = createSelector(
 function createPreconfiguredPresets(login: string) {
     return {
         [OPERATIONS_LIST_RUNNING_PRESET]: {
-            name: 'My/Running',
+            name: i18n('value_my-running'),
             preconfigured: true,
             filters: {
                 ...OPERATIONS_LIST_DEFAULT_FILTERS,
@@ -56,7 +57,7 @@ function createPreconfiguredPresets(login: string) {
             },
         },
         ['failed']: {
-            name: 'My/Failed',
+            name: i18n('value_my-failed'),
             preconfigured: true,
             filters: {
                 ...OPERATIONS_LIST_DEFAULT_FILTERS,
