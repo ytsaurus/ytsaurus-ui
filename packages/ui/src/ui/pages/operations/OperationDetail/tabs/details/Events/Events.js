@@ -11,7 +11,10 @@ import ElementsTableBase from '../../../../../../components/ElementsTable/Elemen
 import withStickyFooter from '../../../../../../components/ElementsTable/hocs/withStickyFooter';
 import withStickyHead from '../../../../../../components/ElementsTable/hocs/withStickyHead';
 import {Progress} from '@gravity-ui/uikit';
-import {Template} from '../../../../../../components/MetaTable/templates/Template';
+import {
+    TemplateReadable,
+    TemplateTime,
+} from '../../../../../../components/MetaTable/templates/Template';
 import {Event} from '../../../../../../utils/operations/tabs/details/events/events';
 
 import hammer from '../../../../../../common/hammer';
@@ -50,7 +53,7 @@ export default class Events extends React.Component {
             start_time(event, columnName) {
                 const value = getValue(event, columnName);
                 return value ? (
-                    <Template.Time
+                    <TemplateTime
                         time={value}
                         settings={{format: 'full'}}
                         valueFormat={'DateTime'}
@@ -60,7 +63,7 @@ export default class Events extends React.Component {
             finish_time(event, columnName) {
                 const value = getValue(event, columnName);
                 return value ? (
-                    <Template.Time
+                    <TemplateTime
                         time={value}
                         settings={{format: 'full'}}
                         valueFormat={'DateTime'}
@@ -73,7 +76,7 @@ export default class Events extends React.Component {
                 }
                 const value = getValue(item, columnName);
                 return (
-                    <Template.Time
+                    <TemplateTime
                         time={value}
                         settings={{format: 'milliseconds'}}
                         valueFormat={'TimeDuration'}
@@ -102,11 +105,11 @@ export default class Events extends React.Component {
             },
             state(event, columnName) {
                 const value = getValue(event, columnName);
-                return <Template.Readable value={value} />;
+                return <TemplateReadable value={value} />;
             },
             phase(event, columnName) {
                 const value = getValue(event, columnName);
-                return <Template.Readable value={value} />;
+                return <TemplateReadable value={value} />;
             },
             actions: (event) => {
                 const {attributes} = event || {};

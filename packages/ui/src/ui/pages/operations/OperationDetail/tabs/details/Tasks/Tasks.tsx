@@ -7,7 +7,13 @@ import isEmpty_ from 'lodash/isEmpty';
 import CollapsibleSection from '../../../../../../components/CollapsibleSection/CollapsibleSection';
 import ElementsTable from '../../../../../../components/ElementsTable/ElementsTable';
 import {MetaTable} from '@ytsaurus/components';
-import {Template} from '../../../../../../components/MetaTable/templates/Template';
+import {
+    TemplateFormattedValue,
+    TemplateNumber,
+    TemplateReadable,
+    TemplateTime,
+    TemplateValue,
+} from '../../../../../../components/MetaTable/templates/Template';
 
 import hammer from '../../../../../../common/hammer';
 import ypath from '../../../../../../common/thor/ypath';
@@ -286,7 +292,7 @@ class Tasks extends React.Component<Props, State> {
                                 key: 'aborted_jobs_time_ratio',
                                 label: i18n('field_aborted-jobs-time-ratio'),
                                 value: (
-                                    <Template.FormattedValue
+                                    <TemplateFormattedValue
                                         value={abortedJobsTimeRatio}
                                         format="Percent"
                                     />
@@ -296,7 +302,7 @@ class Tasks extends React.Component<Props, State> {
                                 key: 'aborted_jobs_time',
                                 label: i18n('field_aborted-jobs-time'),
                                 value: (
-                                    <Template.FormattedValue
+                                    <TemplateFormattedValue
                                         value={abortedJobsTime}
                                         format="TimeDuration"
                                     />
@@ -306,7 +312,7 @@ class Tasks extends React.Component<Props, State> {
                                 key: 'completed_jobs_time',
                                 label: i18n('field_completed-jobs-time'),
                                 value: (
-                                    <Template.FormattedValue
+                                    <TemplateFormattedValue
                                         value={completedJobsTime}
                                         format="TimeDuration"
                                     />
@@ -318,7 +324,7 @@ class Tasks extends React.Component<Props, State> {
                                 key: 'average_read_data_rate',
                                 label: i18n('field_average-read-data-rate'),
                                 value: (
-                                    <Template.FormattedValue
+                                    <TemplateFormattedValue
                                         value={averageReadDataRate}
                                         format="BytesPerSecond"
                                     />
@@ -328,7 +334,7 @@ class Tasks extends React.Component<Props, State> {
                                 key: 'average_read_row_rate',
                                 label: i18n('field_average-read-row-rate'),
                                 value: (
-                                    <Template.FormattedValue
+                                    <TemplateFormattedValue
                                         value={averageReadRowRate}
                                         format={rowRateFormat}
                                     />
@@ -393,42 +399,42 @@ function TaskInfo(props: ItemTaskInfo) {
                 [
                     {
                         key: 'job_type',
-                        value: <Template.Value value={ypath.getValue(job_type)} />,
+                        value: <TemplateValue value={ypath.getValue(job_type)} />,
                     },
                     {
                         key: 'has_user_job',
-                        value: <Template.Readable value={String(ypath.getValue(has_user_job))} />,
+                        value: <TemplateReadable value={String(ypath.getValue(has_user_job))} />,
                     },
                     {
                         key: 'input_finished',
-                        value: <Template.Readable value={String(ypath.getValue(input_finished))} />,
+                        value: <TemplateReadable value={String(ypath.getValue(input_finished))} />,
                     },
                     {
                         key: 'completed',
-                        value: <Template.Readable value={String(ypath.getValue(completed))} />,
+                        value: <TemplateReadable value={String(ypath.getValue(completed))} />,
                     },
                     {
                         key: 'user_job_memory_reserve_factor',
                         value: (
-                            <Template.Number
+                            <TemplateNumber
                                 value={ypath.getValue(user_job_memory_reserve_factor)}
                             />
                         ),
                     },
                     {
                         key: 'start_time',
-                        value: <Template.Time time={ypath.getValue(start_time)} />,
+                        value: <TemplateTime time={ypath.getValue(start_time)} />,
                     },
                     {
                         key: 'completion_time',
-                        value: <Template.Time time={ypath.getValue(completion_time)} />,
+                        value: <TemplateTime time={ypath.getValue(completion_time)} />,
                     },
                 ],
                 [
                     {
                         key: 'ready_time',
                         value: (
-                            <Template.Time
+                            <TemplateTime
                                 time={readyTime}
                                 valueFormat={'TimeDuration'}
                                 settings={{format: 'milliseconds'}}
@@ -438,7 +444,7 @@ function TaskInfo(props: ItemTaskInfo) {
                     {
                         key: 'exhaust_time',
                         value: (
-                            <Template.Time
+                            <TemplateTime
                                 time={exhaustTime}
                                 valueFormat={'TimeDuration'}
                                 settings={{format: 'milliseconds'}}
@@ -451,7 +457,7 @@ function TaskInfo(props: ItemTaskInfo) {
                             timeSum === 0 ? (
                                 'n/a'
                             ) : (
-                                <Template.FormattedValue
+                                <TemplateFormattedValue
                                     value={(exhaustTime / timeSum) * 100}
                                     format={'Percent'}
                                     settings={{digits: 1}}

@@ -14,7 +14,11 @@ import Button from '../../../components/Button/Button';
 import {YTErrorBlock} from '../../../containers/Block/Block';
 import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import Icon from '../../../components/Icon/Icon';
-import {Template} from '../../../components/MetaTable/templates/Template';
+import {
+    TemplateId,
+    TemplateReadable,
+    TemplateTime,
+} from '../../../components/MetaTable/templates/Template';
 import {TemplatePools} from '../../../components/MetaTable/templates/OperationTemplate';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';
 import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
@@ -260,7 +264,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
 
         const items = [
             [
-                {key: 'id', label: i18n('field_id'), value: <Template.Id id={$value} />},
+                {key: 'id', label: i18n('field_id'), value: <TemplateId id={$value} />},
                 {key: 'user', label: i18n('field_user'), value: <SubjectCard name={user} />},
                 {
                     key: 'pools',
@@ -277,34 +281,34 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                         />
                     ),
                 },
-                {key: 'type', label: i18n('field_type'), value: <Template.Readable value={type} />},
+                {key: 'type', label: i18n('field_type'), value: <TemplateReadable value={type} />},
             ],
             [
                 {
                     key: 'started',
                     label: i18n('field_started'),
-                    value: <Template.Time time={startTime} valueFormat="DateTime" />,
+                    value: <TemplateTime time={startTime} valueFormat="DateTime" />,
                 },
                 {
                     key: 'finished',
                     label: i18n('field_finished'),
-                    value: <Template.Time time={finishTime} valueFormat="DateTime" />,
+                    value: <TemplateTime time={finishTime} valueFormat="DateTime" />,
                 },
                 {
                     key: 'duration',
                     label: i18n('field_duration'),
-                    value: <Template.Time time={duration} valueFormat="TimeDuration" />,
+                    value: <TemplateTime time={duration} valueFormat="TimeDuration" />,
                 },
                 {
                     key: 'total job wall time',
                     label: i18n('field_total-job-wall-time'),
-                    value: <Template.Time time={totalJobWallTime} valueFormat="TimeDuration" />,
+                    value: <TemplateTime time={totalJobWallTime} valueFormat="TimeDuration" />,
                     visible: !isGpuVanillaOperation,
                 },
                 {
                     key: 'total cpu time spent',
                     label: i18n('field_total-cpu-time-spent'),
-                    value: <Template.Time time={cpuTimeSpent} valueFormat="TimeDuration" />,
+                    value: <TemplateTime time={cpuTimeSpent} valueFormat="TimeDuration" />,
                     visible: !isGpuVanillaOperation,
                 },
             ],

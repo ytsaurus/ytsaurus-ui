@@ -1,7 +1,10 @@
 import React from 'react';
 import {Progress} from '@gravity-ui/uikit';
 import Link from '../../../../../../containers/Link/Link';
-import {Template} from '../../../../../../components/MetaTable/templates/Template';
+import {
+    TemplateDownloadLink,
+    TemplateError,
+} from '../../../../../../components/MetaTable/templates/Template';
 import {showErrorModal} from '../../../../../../store/actions/actions';
 import {showInputPaths} from '../../../../../../store/actions/operations/jobs';
 import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
@@ -15,7 +18,7 @@ function JobError({error}: {error: Error}) {
     const dispatch = useDispatch();
     return (
         <div>
-            <Template.Error error={error} onClick={() => dispatch(showErrorModal(error))} />
+            <TemplateError error={error} onClick={() => dispatch(showErrorModal(error))} />
         </div>
     );
 }
@@ -36,7 +39,7 @@ function JobInputPaths({job}: {job: Job}) {
 function JobDebugInfo({type, job}: {type: 'stderr' | 'fail_context' | 'full_input'; job: Job}) {
     const mergedUiSettings = useSelector(selectMergedUiSettings);
     const {size, url} = job.getDebugInfo(type, mergedUiSettings)!;
-    return <Template.DownloadLink url={url} size={size} />;
+    return <TemplateDownloadLink url={url} size={size} />;
 }
 
 /* ----------------------------------------------------------------------------------------------------------------- */

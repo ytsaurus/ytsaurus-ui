@@ -5,7 +5,7 @@ import cn from 'bem-cn-lite';
 
 import format from '../../common/hammer/format';
 import {DataTableYT} from '../DataTableYT';
-import {Template} from '../../components/MetaTable/templates/Template';
+import {TemplateTime} from '../../components/MetaTable/templates/Template';
 
 import {ClickableText} from '../../components/ClickableText/ClickableText';
 import Icon from '../../components/Icon/Icon';
@@ -53,7 +53,7 @@ const columns: Array<Column<AlertInfo>> = [
             const {from, to} = row;
             return (
                 <React.Fragment>
-                    <Template.Time
+                    <TemplateTime
                         time={from}
                         settings={{format: 'full'}}
                         valueFormat={'DateTime'}
@@ -62,7 +62,7 @@ const columns: Array<Column<AlertInfo>> = [
                     {!to ? (
                         '...'
                     ) : (
-                        <Template.Time
+                        <TemplateTime
                             time={to}
                             settings={{format: 'full'}}
                             valueFormat={'DateTime'}

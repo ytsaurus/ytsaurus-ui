@@ -12,7 +12,7 @@ import {
 import CollapsibleList from '../../../components/CollapsibleList/CollapsibleList';
 import Icon from '../../../components/Icon/Icon';
 
-import {Template} from './Template';
+import {TemplateCollapsableText} from './Template';
 import {paramsToQuery} from '../../../utils';
 import hammer from '../../../common/hammer';
 import {Page} from '../../../constants/index';
@@ -125,7 +125,7 @@ interface TemplateCommandProps {
 export function TemplateCommand({value, lineCount, settings}: TemplateCommandProps) {
     const command = Array.isArray(value) ? hammer.format['Command'](value) : value;
 
-    return <Template.CollapsableText value={command} lineCount={lineCount} settings={settings} />;
+    return <TemplateCollapsableText value={command} lineCount={lineCount} settings={settings} />;
 }
 
 TemplateCommand.propTypes = {

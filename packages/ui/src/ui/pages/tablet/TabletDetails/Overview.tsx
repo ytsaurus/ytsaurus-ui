@@ -12,7 +12,7 @@ import {DialogWrapper as Dialog} from '../../../components/DialogWrapper/DialogW
 
 import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import {MetaTable, Tooltip} from '@ytsaurus/components';
-import {Template} from '../../../components/MetaTable/templates/Template';
+import {TemplateId, TemplateLink} from '../../../components/MetaTable/templates/Template';
 import Histogram from '../../../components/Histogram/Histogram';
 import {size} from '../../../components/MetaTable/presets';
 import {YTErrorBlock} from '../../../containers/Block/Block';
@@ -247,13 +247,13 @@ function Overview({id, block}: Props) {
                                 {
                                     key: 'id',
                                     label: i18n('meta_id'),
-                                    value: <Template.Id id={id} />,
+                                    value: <TemplateId id={id} />,
                                 },
                                 {
                                     key: 'tablet_cell_id',
                                     label: i18n('meta_tablet-cell-id'),
                                     value: (
-                                        <Template.Link
+                                        <TemplateLink
                                             withClipboard
                                             text={cellId}
                                             shiftText={tabletPath}
@@ -266,7 +266,7 @@ function Overview({id, block}: Props) {
                                     key: 'table_path',
                                     label: i18n('field_table-path'),
                                     value: (
-                                        <Template.Link
+                                        <TemplateLink
                                             withClipboard
                                             text={tablePath}
                                             url={`/${cluster}/${Page.NAVIGATION}?path=${tablePath}&mode=${NavigationTab.TABLETS}`}
@@ -277,7 +277,7 @@ function Overview({id, block}: Props) {
                                     key: 'tablet cell leader node',
                                     label: i18n('meta_tablet-cell-leader-node'),
                                     value: (
-                                        <Template.Link
+                                        <TemplateLink
                                             withClipboard
                                             text={cellLeadingPeer?.address}
                                             url={makeComponentsNodesUrl({
