@@ -72,11 +72,6 @@
         display: block;
     }
 
-    &__id {
-        display: flex;
-        align-items: center;
-    }
-
     &__file {
         @include mixins.reset-li();
     }
