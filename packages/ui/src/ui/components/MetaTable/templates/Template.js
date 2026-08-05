@@ -3,19 +3,18 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import {Link} from '@gravity-ui/uikit';
 
-import {
+import hammer from '../../../common/hammer';
+import CollapsableText from '../../../components/CollapsableText/CollapsableText';
+import Icon from '../../../components/Icon/Icon';
+import {ClickableText} from '../../../components/ClickableText/ClickableText';
+
+export {
     TemplateFormattedValue,
     TemplateId,
     TemplateLink,
     TemplateReadable,
     TemplateTime,
 } from '@ytsaurus/components';
-import hammer from '../../../common/hammer';
-import CollapsableText from '../../../components/CollapsableText/CollapsableText';
-import Icon from '../../../components/Icon/Icon';
-import {ClickableText} from '../../../components/ClickableText/ClickableText';
-
-export {TemplateId, TemplateFormattedValue, TemplateReadable, TemplateTime, TemplateLink};
 
 const itemBlock = cn('meta-table-item');
 
@@ -53,7 +52,7 @@ TemplateCollapsableText.propTypes = {
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-function TemplateShowError({error, onClick}) {
+export function TemplateError({error, onClick}) {
     return typeof error === 'object' ? (
         <ClickableText onClick={onClick}>
             <span style={{color: 'var(--secondary-link)'}}>View</span>
@@ -63,14 +62,14 @@ function TemplateShowError({error, onClick}) {
     );
 }
 
-TemplateShowError.propTypes = {
+TemplateError.propTypes = {
     error: PropTypes.object,
     onClick: PropTypes.func,
 };
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-function TemplateDownloadLink({size, url}) {
+export function TemplateDownloadLink({size, url}) {
     return (
         <span className={itemBlock('download-link')}>
             <Link title="Download" href={url} target="_blank">
@@ -90,18 +89,3 @@ TemplateDownloadLink.propTypes = {
     url: PropTypes.string.isRequired,
     size: PropTypes.number,
 };
-
-/* ----------------------------------------------------------------------------------------------------------------- */
-
-export function Template() {}
-
-Template.Id = TemplateId;
-Template.Value = TemplateValue;
-Template.FormattedValue = TemplateFormattedValue;
-Template.Readable = TemplateReadable;
-Template.Time = TemplateTime;
-Template.Number = TemplateNumber;
-Template.CollapsableText = TemplateCollapsableText;
-Template.Error = TemplateShowError;
-Template.DownloadLink = TemplateDownloadLink;
-Template.Link = TemplateLink;

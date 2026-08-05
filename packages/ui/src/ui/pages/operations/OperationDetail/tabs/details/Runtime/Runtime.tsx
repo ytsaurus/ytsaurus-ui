@@ -5,7 +5,7 @@ import cn from 'bem-cn-lite';
 import map_ from 'lodash/map';
 
 import {MetaTable} from '@ytsaurus/components';
-import {Template} from '../../../../../../components/MetaTable/templates/Template';
+import {TemplateFormattedValue} from '../../../../../../components/MetaTable/templates/Template';
 import {TemplateWeight} from '../../../../../../components/MetaTable/templates/OperationTemplate';
 
 import {formatShare} from '../../../../../../utils/operations/tabs/details/runtime';
@@ -140,7 +140,7 @@ class Runtime extends Component<Props> {
                                     </Tooltip>
                                 ),
                                 value: (
-                                    <Template.FormattedValue
+                                    <TemplateFormattedValue
                                         value={progress.fifo_index}
                                         format="Number"
                                     />

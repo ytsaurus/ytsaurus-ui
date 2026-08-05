@@ -14,7 +14,7 @@ import Link from '../../../../../containers/Link/Link';
 import Label from '../../../../../components/Label';
 import Button from '../../../../../components/Button/Button';
 import {YTErrorBlock} from '../../../../../containers/Block/Block';
-import {Template} from '../../../../../components/MetaTable/templates/Template';
+import {TemplateFormattedValue} from '../../../../../components/MetaTable/templates/Template';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 
 import {loadNodeAttributes} from '../../../../../store/actions/components/node/node';
@@ -168,7 +168,7 @@ class NodeCard extends Component {
                             key: 'available-space',
                             label: i18n('field_available-space'),
                             value: (
-                                <Template.FormattedValue
+                                <TemplateFormattedValue
                                     value={location.available_space}
                                     format="Bytes"
                                 />
@@ -178,7 +178,7 @@ class NodeCard extends Component {
                             key: 'watermark-space',
                             label: i18n('field_watermark-space'),
                             value: (
-                                <Template.FormattedValue
+                                <TemplateFormattedValue
                                     value={location.low_watermark_space}
                                     format="Bytes"
                                 />

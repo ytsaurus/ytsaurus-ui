@@ -14,7 +14,7 @@ import {showErrorModal} from '../../../../../store/actions/actions';
 
 import {MetaTable} from '@ytsaurus/components';
 import YTLink from '../../../../../containers/Link/Link';
-import {Template} from '../../../../../components/MetaTable/templates/Template';
+import {TemplateError} from '../../../../../components/MetaTable/templates/Template';
 
 import i18n from './i18n';
 
@@ -69,7 +69,7 @@ export function IncarnationMeta(props: Props) {
         {
             key: 'error',
             value: (
-                <Template.Error
+                <TemplateError
                     error={switch_info?.trigger_job_error as YTError}
                     onClick={() => dispatch(showErrorModal(switch_info?.trigger_job_error))}
                 />

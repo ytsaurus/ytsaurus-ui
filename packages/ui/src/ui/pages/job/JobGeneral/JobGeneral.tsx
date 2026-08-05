@@ -7,7 +7,12 @@ import {Alert, Flex, Link} from '@gravity-ui/uikit';
 
 import Specification from '../../../pages/job/tabs/Specification/Specification';
 import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
-import {Template} from '../../../components/MetaTable/templates/Template';
+import {
+    TemplateId,
+    TemplateLink,
+    TemplateTime,
+    TemplateValue,
+} from '../../../components/MetaTable/templates/Template';
 import Statistics from '../../../pages/job/tabs/Statistics/Statistics';
 import JobBreadcrumbs from '../JobBreadcrumbs/JobBreadcrumbs';
 import Statuslabel from '../../../components/StatusLabel/StatusLabel';
@@ -141,7 +146,7 @@ export default function JobGeneral() {
                             {
                                 key: i18n('field_operation-id'),
                                 value: (
-                                    <Template.Link
+                                    <TemplateLink
                                         url={operationUrl}
                                         text={operationId}
                                         withClipboard
@@ -169,14 +174,14 @@ export default function JobGeneral() {
                             {
                                 key: 'type',
                                 value: (
-                                    <Template.Value value={hammer.format['ReadableField'](type)} />
+                                    <TemplateValue value={hammer.format['ReadableField'](type)} />
                                 ),
                             },
                             {
                                 key: i18n('field_monitoring-descriptor'),
                                 value: (
                                     <span className={block('meta-host')}>
-                                        <Template.Id id={monitoring_descriptor} />
+                                        <TemplateId id={monitoring_descriptor} />
                                         <ChartLink
                                             url={UIFactory.makeUrlForMonitoringDescriptor(
                                                 cluster,
@@ -200,15 +205,15 @@ export default function JobGeneral() {
                         [
                             {
                                 key: i18n('field_started'),
-                                value: <Template.Time time={startTime} valueFormat="DateTime" />,
+                                value: <TemplateTime time={startTime} valueFormat="DateTime" />,
                             },
                             {
                                 key: i18n('field_finished'),
-                                value: <Template.Time time={finishTime} valueFormat="DateTime" />,
+                                value: <TemplateTime time={finishTime} valueFormat="DateTime" />,
                             },
                             {
                                 key: i18n('field_duration'),
-                                value: <Template.Time time={duration} valueFormat="TimeDuration" />,
+                                value: <TemplateTime time={duration} valueFormat="TimeDuration" />,
                             },
                             {
                                 key: i18n('field_stale'),
