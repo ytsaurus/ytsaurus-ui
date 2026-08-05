@@ -11,6 +11,7 @@ import Tabs from '../../../components/Tabs/Tabs';
 import {YTErrorInline} from '../../../containers/YTErrorInline/YTErrorInline';
 import {useUpdater} from '../../../hooks/use-updater';
 import format from '../../../common/hammer/format';
+import {YT} from '../../../config/yt-config';
 import {
     useFlowAttributes,
     useFlowLeaderControllerName,
@@ -29,6 +30,8 @@ import {selectCluster} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 import {makeTabProps} from '../../../utils';
 import {FlowEntityTitle} from '../flow-components/FlowEntityHeader';
+import FlowPipelineStateTab from '../flow-components/FlowStateViewer/FlowPipelineStateTab';
+import i18nFlowState from '../flow-components/FlowStateViewer/i18n';
 import i18n from '../i18n';
 import './Flow.scss';
 import {FlowComputations} from './FlowComputations/FlowComputations';
@@ -39,6 +42,18 @@ import {FlowDynamicSpec, FlowStaticSpec} from './PipelineSpec/PipelineSpec';
 import {getFlowPathMetaItems} from '../flow-components/FlowMeta/FlowMeta';
 
 const block = cn('yt-flow');
+
+type FlowPipelineExtraTab = {
+    value: string;
+    title: string;
+    component: React.ComponentType<{pipeline_path: string}>;
+};
+
+const isLocalMode = Boolean(YT.isLocalCluster);
+
+const extraTabs: Array<FlowPipelineExtraTab> = isLocalMode
+    ? []
+    : [{value: 'state', title: i18nFlowState('mode_state'), component: FlowPipelineStateTab}];
 
 export function Flow() {
     const currentComputation = useSelector(selectFlowCurrentComputation);
@@ -74,7 +89,18 @@ export function FlowTabs() {
             [FlowTab.DYNAMIC_SPEC]: {title: i18n('dynamic-spec')},
         };
 
-        return makeTabProps(`/${cluster}/${Page.FLOWS}`, FlowTab, showSettings);
+        const props = makeTabProps(`/${cluster}/${Page.FLOWS}`, FlowTab, showSettings);
+        const extraItems = extraTabs.map(({value, title}) => ({
+            value,
+            text: title,
+            url: `/${cluster}/${Page.FLOWS}/${value}`,
+            show: true,
+        }));
+        const monitoringIndex = props.items.findIndex(({value}) => value === FlowTab.MONITORING);
+        const insertAt = monitoringIndex === -1 ? props.items.length : monitoringIndex + 1;
+        const items = [...props.items];
+        items.splice(insertAt, 0, ...extraItems);
+        return {...props, items};
     }, [cluster]);
 
     return <Tabs className={block('tabs')} routed routedPreserveLocation {...tabsProps} />;
@@ -113,6 +139,13 @@ function FlowContent() {
                 path={`/:cluster/${Page.FLOWS}/${FlowTab.MONITORING}`}
                 render={() => <FlowMonitoring pipeline_path={path} />}
             />
+            {extraTabs.map(({value, component: TabComponent}) => (
+                <Route
+                    key={value}
+                    path={`/:cluster/${Page.FLOWS}/${value}`}
+                    render={() => <TabComponent pipeline_path={path} />}
+                />
+            ))}
             <Redirect to={`/:cluster/${Page.FLOWS}/${FlowTab.GRAPH}`} />
         </Switch>
     );
