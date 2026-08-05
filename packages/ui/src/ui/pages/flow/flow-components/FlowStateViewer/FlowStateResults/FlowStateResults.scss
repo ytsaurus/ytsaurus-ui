@@ -1,0 +1,37 @@
+.yt-flow-state-results {
+    .gt-table__cell_id__select {
+        align-content: center;
+    }
+
+    &__value-cell {
+        overflow: hidden;
+        max-height: 32px;
+        min-width: 0;
+        flex: 1;
+    }
+
+    &__hover-action {
+        visibility: hidden;
+    }
+
+    .yt-gravity-table__row:hover .yt-flow-state-results__hover-action {
+        visibility: visible;
+    }
+
+    &__content {
+        position: relative;
+
+        &_loading {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    }
+
+    &__content-loader {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

@@ -1,0 +1,15 @@
+{
+  "column_state-kind": "State kind",
+  "column_computation": "Computation",
+  "link_open-computation-page": "Open computation page",
+  "column_partition": "Partition",
+  "column_key": "Key",
+  "column_state-name": "State",
+  "column_value": "Value",
+  "text_no-results": "No states loaded",
+  "text_selected-rows": "Selected: {{count}}",
+  "action_delete": "Delete",
+  "alert_no-write-permission": "Deleting states requires write permission on the pipeline",
+  "label_raw-yson": "Raw YSON",
+  "label_rows": "rows"
+}
