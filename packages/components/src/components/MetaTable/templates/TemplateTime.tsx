@@ -19,13 +19,7 @@ export type Format<T extends ValueFormat> = T extends 'TimeDuration'
 export type DateTimeFormat = 'human' | 'full' | 'short' | 'day' | 'month' | 'time';
 
 export type TimeDurationFormat =
-    | 'years'
-    | 'months'
-    | 'days'
-    | 'hours'
-    | 'minutes'
-    | 'seconds'
-    | 'milliseconds';
+    'years' | 'months' | 'days' | 'hours' | 'minutes' | 'seconds' | 'milliseconds';
 
 export function TemplateTime<T extends ValueFormat = 'DateTime'>({
     time,

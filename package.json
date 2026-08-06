@@ -6,11 +6,31 @@
     "@gravity-ui/prettier-config": "^1.1.0",
     "@gravity-ui/stylelint-config": "^4.0.1",
     "@gravity-ui/tsconfig": "^1.0.0",
-    "lerna": "^6.5.1"
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-lodash": "^7.4.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^9.1.7",
+    "lerna": "^6.5.1",
+    "nano-staged": "^1.0.2",
+    "oxlint": "^1.77.0"
   },
   "scripts": {
+    "prepare": "husky",
     "lint": "lerna run lint",
     "postinstall": "lerna run deps:install",
     "test": "lerna run test"
+  },
+  "nano-staged": {
+    "*.{scss}": [
+      "stylelint --fix --quiet"
+    ],
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix --quiet",
+      "oxlint --fix --deny-warnings"
+    ],
+    "*.{md,mdx,json,yaml}": [
+      "prettier --write"
+    ]
   }
 }
