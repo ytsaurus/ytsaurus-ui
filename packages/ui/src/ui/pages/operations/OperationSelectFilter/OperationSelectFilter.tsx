@@ -7,8 +7,10 @@ import Select, {type YTSelectProps} from '../../../components/Select/Select';
 
 type StateItem = string | {name: string; caption?: string};
 
-interface Props<NameT extends string = string>
-    extends Omit<YTSelectProps, 'items' | 'onUpdate' | 'value' | 'placeholder'> {
+interface Props<NameT extends string = string> extends Omit<
+    YTSelectProps,
+    'items' | 'onUpdate' | 'value' | 'placeholder'
+> {
     // from props
     name: NameT;
     label?: string;

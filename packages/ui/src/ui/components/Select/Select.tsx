@@ -23,8 +23,10 @@ import i18n from './i18n';
 
 const block = cn('yt-select');
 
-export interface YTSelectProps<T extends string = string>
-    extends Omit<SelectProps, 'options' | 'filter' | 'onChange' | 'onUpdate' | 'value'> {
+export interface YTSelectProps<T extends string = string> extends Omit<
+    SelectProps,
+    'options' | 'filter' | 'onChange' | 'onUpdate' | 'value'
+> {
     className?: string;
     value?: Array<T>;
     items: Array<Item<T>>;
@@ -83,8 +85,10 @@ SelectFacade.getDefaultValue = () => {
     return undefined;
 };
 
-interface SelectSingleProps<T extends string>
-    extends Omit<YTSelectProps<T>, 'value' | 'onUpdate' | 'onChange'> {
+interface SelectSingleProps<T extends string> extends Omit<
+    YTSelectProps<T>,
+    'value' | 'onUpdate' | 'onChange'
+> {
     value?: string;
     onChange?: (v?: string) => void;
 }

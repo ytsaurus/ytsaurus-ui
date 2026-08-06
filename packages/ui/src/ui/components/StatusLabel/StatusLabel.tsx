@@ -46,13 +46,7 @@ function getViewState(label?: StatusLabelProps['label']): ViewState {
 }
 
 export type ViewState =
-    | 'preparing'
-    | 'running'
-    | 'failed'
-    | 'aborted'
-    | 'completed'
-    | 'suspended'
-    | 'unknown';
+    'preparing' | 'running' | 'failed' | 'aborted' | 'completed' | 'suspended' | 'unknown';
 
 function getIcon(state: ViewState) {
     const iconsByViewState: Record<ViewState, IconName> = {

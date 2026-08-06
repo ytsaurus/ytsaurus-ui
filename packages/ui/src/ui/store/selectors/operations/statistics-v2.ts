@@ -34,8 +34,7 @@ export const selectOperationStatisticsV2 = createSelector(
     [selectOperationDetailsOperation],
     (operation) => {
         return ypath.getValue(operation, '/@progress/job_statistics_v2') as
-            | StatisticTreeRoot
-            | undefined;
+            StatisticTreeRoot | undefined;
     },
 );
 

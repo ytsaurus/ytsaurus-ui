@@ -184,11 +184,10 @@ export default function ColumnGroups({
     );
 }
 
-interface ColumnGropsToolbarProps
-    extends Pick<
-        ACLReduxProps,
-        'updateAclFilters' | 'columnsFilter' | 'userPermissionsAccessColumns'
-    > {}
+interface ColumnGropsToolbarProps extends Pick<
+    ACLReduxProps,
+    'updateAclFilters' | 'columnsFilter' | 'userPermissionsAccessColumns'
+> {}
 
 export function ColumnGroupsFilter({
     columnsFilter: value,

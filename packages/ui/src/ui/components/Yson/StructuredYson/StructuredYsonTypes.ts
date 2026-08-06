@@ -83,9 +83,6 @@ export type UnipikaMapLike = UnipikaMap | UnipikaYqlMapContainer;
 export type UnipikaListLike = UnipikaList | UnipikaYqlListContainer;
 
 export type UnipikaContainerValue =
-    | UnipikaMap
-    | UnipikaList
-    | UnipikaYqlListContainer
-    | UnipikaYqlMapContainer;
+    UnipikaMap | UnipikaList | UnipikaYqlListContainer | UnipikaYqlMapContainer;
 
 export type UnipikaNonContainerValue = Exclude<UnipikaValue, UnipikaContainerValue>;

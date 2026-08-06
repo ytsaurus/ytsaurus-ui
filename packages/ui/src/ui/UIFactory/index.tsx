@@ -151,11 +151,7 @@ export type YQLButtonProps = {
 };
 
 export type InlineSuggestionsTelemetryType =
-    | 'accepted'
-    | 'discarded'
-    | 'ignored'
-    | 'enabled'
-    | 'disabled';
+    'accepted' | 'discarded' | 'ignored' | 'enabled' | 'disabled';
 export interface InlineSuggestionsApi {
     getQuerySuggestions(data: {
         query: string;
@@ -311,8 +307,7 @@ export interface UIFactory {
           };
 
     getMonitoringComponentForFlowComputation():
-        | undefined
-        | React.ComponentType<FlowComputationMonitorProps>;
+        undefined | React.ComponentType<FlowComputationMonitorProps>;
 
     getMonitoringComponentForFlowWorker(): undefined | React.ComponentType<FlowWorkerMonitorProps>;
 
@@ -326,8 +321,7 @@ export interface UIFactory {
           }>;
 
     getStatisticsComponentForBundle():
-        | undefined
-        | React.ComponentType<{cluster: string; bundle: string; theme: string}>;
+        undefined | React.ComponentType<{cluster: string; bundle: string; theme: string}>;
 
     renderNavigationExtraActions(params: {
         className?: string;

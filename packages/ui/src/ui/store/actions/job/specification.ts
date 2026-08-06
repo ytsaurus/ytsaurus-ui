@@ -60,9 +60,7 @@ type CheckboxAction =
     | ChangeOmitOutputTableSpecsAction;
 
 export type SpecificationActionType =
-    | LoadJobSpecificationAction
-    | AbortAndResetAction
-    | CheckboxAction;
+    LoadJobSpecificationAction | AbortAndResetAction | CheckboxAction;
 
 const requests = new CancelHelper();
 

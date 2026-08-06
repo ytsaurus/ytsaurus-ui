@@ -55,8 +55,10 @@ function toRawValue(value: NumberInputProps['value']) {
     return value === undefined ? '' : value;
 }
 
-export interface NumberInputWithErrorProps
-    extends Omit<TextInputProps, 'value' | 'onChange' | 'theme' | 'error' | 'defaultValue'> {
+export interface NumberInputWithErrorProps extends Omit<
+    TextInputProps,
+    'value' | 'onChange' | 'theme' | 'error' | 'defaultValue'
+> {
     className?: string;
 
     format?: 'Number' | 'Bytes'; // 'Number' by default

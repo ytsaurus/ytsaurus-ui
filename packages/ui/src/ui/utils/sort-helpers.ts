@@ -156,13 +156,7 @@ export function compareArraysBySizeThenByItems<T>(
 }
 
 export type OrderType =
-    | 'asc'
-    | 'desc'
-    | ''
-    | 'asc-undefined'
-    | 'desc-undefined'
-    | 'undefined-asc'
-    | 'undefined-desc';
+    'asc' | 'desc' | '' | 'asc-undefined' | 'desc-undefined' | 'undefined-asc' | 'undefined-desc';
 
 export const DESC_ASC_UNORDERED = ['desc', 'asc', ''];
 

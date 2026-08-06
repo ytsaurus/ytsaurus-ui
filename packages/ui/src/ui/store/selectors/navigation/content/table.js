@@ -188,13 +188,13 @@ export const selectIsYqlSchemaExists = createSelector([selectAttributes], (attri
 
     return Boolean(
         (schema && schema.length) ||
-            (_readSchema && _readSchema.length) ||
-            ypath.getValue(attributes, '/_yql_row_spec') ||
-            ypath.getValue(attributes, '/_yql_row_spec') ||
-            ypath.getValue(attributes, '/_yql_key_meta') ||
-            ypath.getValue(attributes, '/_yql_subkey_meta') ||
-            ypath.getValue(attributes, '/_yql_value_meta') ||
-            ypath.getValue(attributes, '/_format') === 'yamred_dsv',
+        (_readSchema && _readSchema.length) ||
+        ypath.getValue(attributes, '/_yql_row_spec') ||
+        ypath.getValue(attributes, '/_yql_row_spec') ||
+        ypath.getValue(attributes, '/_yql_key_meta') ||
+        ypath.getValue(attributes, '/_yql_subkey_meta') ||
+        ypath.getValue(attributes, '/_yql_value_meta') ||
+        ypath.getValue(attributes, '/_format') === 'yamred_dsv',
     );
 });
 

@@ -5,12 +5,7 @@ import {type DatepickerOutputDates} from '../../../../components/common/Datepick
 export const PAGE_SIZE = 100;
 
 export type AccountUsageViewType =
-    | 'list'
-    | 'tree'
-    | 'list-plus-folders'
-    | 'list-diff'
-    | 'tree-diff'
-    | 'list-plus-folders-diff';
+    'list' | 'tree' | 'list-plus-folders' | 'list-diff' | 'tree-diff' | 'list-plus-folders-diff';
 
 export interface AccountUsageFiltersState {
     treePath: string;

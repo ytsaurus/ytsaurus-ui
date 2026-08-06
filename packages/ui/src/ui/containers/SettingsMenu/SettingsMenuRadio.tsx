@@ -78,7 +78,8 @@ export const SettingsMenuRadioBase = (props: BaseProps) => {
 type SettingNS = FIX_MY_TYPE;
 
 interface Props
-    extends ConnectedProps<typeof connector>,
+    extends
+        ConnectedProps<typeof connector>,
         Pick<BaseProps, 'items' | 'heading' | 'description' | 'onAfterChange' | 'convertValue'> {
     settingName: string;
     settingNS: SettingNS;

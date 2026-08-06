@@ -21,7 +21,7 @@ export interface ReplicaInfo {
     $attributes: ReplicaAttributes;
 }
 
-export type ReplicaAttributes = unknown /* {
+export type ReplicaAttributes = unknown; /* {
     cluster_name: {$type: 'string', $value: 'clustername'}
     error_count: {$type: 'int64', $value: '11'}
     mode: {$type: 'string', $value: 'async'}
@@ -29,7 +29,7 @@ export type ReplicaAttributes = unknown /* {
     replicated_table_tracker_enabled: {$type: 'boolean', $value: 'true'}
     replication_lag_time: {$type: 'int64', $value: '1657033924000'}
     state: {$type: 'string', $value: 'enabled'}
-} */;
+} */
 
 export const initialState: ReplicatedTableState = {
     loading: false,

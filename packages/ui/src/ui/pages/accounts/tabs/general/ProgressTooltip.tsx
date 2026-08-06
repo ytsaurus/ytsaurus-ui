@@ -47,8 +47,7 @@ export function ProgressTooltip({info, limit, formatNumber}: Props) {
 }
 
 interface ProgressTooltipRowProps<T extends number | string>
-    extends ProgressInfo<T>,
-        Pick<Props, 'formatNumber'> {
+    extends ProgressInfo<T>, Pick<Props, 'formatNumber'> {
     mixin?: string;
 }
 

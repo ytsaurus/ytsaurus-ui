@@ -16,11 +16,7 @@ import {dateTimeParse} from '../../../utils/date-utils';
 import {selectOperation} from './operation';
 
 export type IncarnationFinishReason =
-    | IncarnationSwitchReason
-    | `operation_${OperationStates}`
-    | 'running'
-    | 'finished'
-    | 'system';
+    IncarnationSwitchReason | `operation_${OperationStates}` | 'running' | 'finished' | 'system';
 
 export type Incarnation = {
     id: string;

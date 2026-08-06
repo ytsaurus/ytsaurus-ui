@@ -13,11 +13,11 @@ export function isOAuthAllowed(req: Request) {
     const config = req.ctx.config.ytOAuthSettings;
     return Boolean(
         config &&
-            config.baseURL &&
-            config.authPath &&
-            config.tokenPath &&
-            config.clientId &&
-            config.clientSecret,
+        config.baseURL &&
+        config.authPath &&
+        config.tokenPath &&
+        config.clientId &&
+        config.clientSecret,
     );
 }
 

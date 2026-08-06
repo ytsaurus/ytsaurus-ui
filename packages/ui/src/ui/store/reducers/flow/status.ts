@@ -12,13 +12,7 @@ export type FlowStatusState = {
 };
 
 export type FlowStatus =
-    | 'Unknown'
-    | 'Stopped'
-    | 'Paused'
-    | 'Working'
-    | 'Draining'
-    | 'Pausing'
-    | 'Completed';
+    'Unknown' | 'Stopped' | 'Paused' | 'Working' | 'Draining' | 'Pausing' | 'Completed';
 
 const initialState: FlowStatusState = {
     loading: false,

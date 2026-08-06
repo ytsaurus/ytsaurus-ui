@@ -1,12 +1,7 @@
 import {createWidgetDataFieldSelector} from './utils';
 
 export type QueryStatusesFilter =
-    | 'draft'
-    | 'running'
-    | 'completed'
-    | 'failed'
-    | 'aborted'
-    | undefined;
+    'draft' | 'running' | 'completed' | 'failed' | 'aborted' | undefined;
 
 export const selectQueryFilterState = createWidgetDataFieldSelector<QueryStatusesFilter>('state');
 

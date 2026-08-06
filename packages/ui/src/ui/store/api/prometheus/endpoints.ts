@@ -43,11 +43,11 @@ export function fetchPrometheusChartData(args: PrometheusChartParams) {
         const rangeParams = {start, end, step};
 
         return axios
-            .post<
-                ChartDataResponse,
-                AxiosResponse<ChartDataResponse>,
-                QueryRangePostData
-            >(`/api/${cluster}/prometheus/chart-data`, {id, start, end, step, dashboardType, ...rest}, {params: {id}})
+            .post<ChartDataResponse, AxiosResponse<ChartDataResponse>, QueryRangePostData>(
+                `/api/${cluster}/prometheus/chart-data`,
+                {id, start, end, step, dashboardType, ...rest},
+                {params: {id}},
+            )
             .then(
                 ({data}) => {
                     return {data: {responseData: data, ...rangeParams}, error: undefined};
