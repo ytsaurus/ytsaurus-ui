@@ -185,9 +185,7 @@ type NodeWithProps<T extends keyof typeof PropertiesByPredicate> = Pick<
 
 type Predicates = {
     [P in keyof typeof PropertiesByPredicate]:
-        | false
-        | undefined
-        | ((node: NodeWithProps<P>) => boolean);
+        false | undefined | ((node: NodeWithProps<P>) => boolean);
 };
 
 const selectRackPredicate = createSelector(

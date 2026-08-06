@@ -109,7 +109,7 @@ export default class ElementsTableRow extends React.PureComponent {
         const rowStyle = {height: itemHeight};
 
         const cells = [];
-        for (let i = 0; i < columnSet.items.length; ) {
+        for (let i = 0; i < columnSet.items.length;) {
             const columnName = columnSet.items[i];
             const {node, colSpanValue} = this.renderCell(item, columnName, index, i);
             cells.push(node);

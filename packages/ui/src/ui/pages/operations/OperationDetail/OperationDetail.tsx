@@ -230,10 +230,10 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
 
         const isWaiting = isWaitingForJobs || isWaitingForResources;
         const mainStatusProps:
-            | {label: typeof label}
-            | {state: 'unknown'; iconState: 'running'; text: string} = isWaiting
-            ? {state: 'unknown', iconState: 'running', text: i18n('value_running')}
-            : {label};
+            {label: typeof label} | {state: 'unknown'; iconState: 'running'; text: string} =
+            isWaiting
+                ? {state: 'unknown', iconState: 'running', text: i18n('value_running')}
+                : {label};
 
         return (
             <div className={detailBlock('header', 'elements-section')}>

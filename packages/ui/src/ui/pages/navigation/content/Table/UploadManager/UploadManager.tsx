@@ -95,8 +95,7 @@ const getFileTypes = (payload: {cluster: string}) => {
 };
 
 type ProgressState =
-    | {inProgress: false}
-    | {inProgress: true; event: {total?: number; loaded: number}};
+    {inProgress: false} | {inProgress: true; event: {total?: number; loaded: number}};
 
 class UploadManager extends React.Component<Props, State> {
     state: State = {

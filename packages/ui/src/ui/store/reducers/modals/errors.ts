@@ -47,5 +47,4 @@ export default (state = initialState, action: ErrorsAction) => {
 };
 
 export type ErrorsAction =
-    | ActionD<typeof SHOW_ERROR_MODAL, ErrorInfo>
-    | ActionD<typeof HIDE_ERROR_MODAL, number | string>;
+    ActionD<typeof SHOW_ERROR_MODAL, ErrorInfo> | ActionD<typeof HIDE_ERROR_MODAL, number | string>;

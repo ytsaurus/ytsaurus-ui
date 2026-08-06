@@ -33,9 +33,7 @@ interface LoadJobDataFailureAction {
 }
 
 export type LoadJobDataAction =
-    | LoadJobDataRequestAction
-    | LoadJobDataSuccessAction
-    | LoadJobDataFailureAction;
+    LoadJobDataRequestAction | LoadJobDataSuccessAction | LoadJobDataFailureAction;
 
 export function loadJobData(
     operationID: string,

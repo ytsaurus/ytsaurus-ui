@@ -4,10 +4,7 @@ import {useMemoizedIfEqual} from './use-memoized';
 
 type RMI = `${number}${'px' | '%'}`;
 type RootMargin =
-    | `${RMI}`
-    | `${RMI} ${RMI}`
-    | `${RMI} ${RMI} ${RMI}`
-    | `${RMI} ${RMI} ${RMI} ${RMI}`;
+    `${RMI}` | `${RMI} ${RMI}` | `${RMI} ${RMI} ${RMI}` | `${RMI} ${RMI} ${RMI} ${RMI}`;
 
 type UseIntersectionParams = {
     element: Element | null;

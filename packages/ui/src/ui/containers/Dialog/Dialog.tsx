@@ -217,8 +217,7 @@ export type DialogField<FormValues = unknown> =
 registerDialogTabControl('yt-create-table-tab', CreateTableTabField);
 
 export type DialogTabField<FieldT> =
-    | DFDialogTabField<FieldT>
-    | RegisteredDialogTabField<'yt-create-table-tab', any, FieldT>;
+    DFDialogTabField<FieldT> | RegisteredDialogTabField<'yt-create-table-tab', any, FieldT>;
 
 export type YTDialogType = typeof YTDialog;
 export function YTDialog<Values, InitialValues = Partial<Values>>(

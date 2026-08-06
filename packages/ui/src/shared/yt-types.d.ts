@@ -51,8 +51,7 @@ export interface ClusterUiConfig {
 }
 
 export type CypressNodeRaw<AttributesT extends Record<string, unknown>, ValueT> =
-    | ValueT
-    | CypressNode<AttributesT, ValueT>;
+    ValueT | CypressNode<AttributesT, ValueT>;
 
 export type CypressNode<AttributesT extends Record<string, unknown>, ValueT> = {
     $attributes: AttributesT;
@@ -537,13 +536,7 @@ export type ExpectedVersion = {
 };
 
 export type GetPipelineStateData =
-    | 'Unknown'
-    | 'Stopped'
-    | 'Paused'
-    | 'Working'
-    | 'Draining'
-    | 'Pausing'
-    | 'Completed';
+    'Unknown' | 'Stopped' | 'Paused' | 'Working' | 'Draining' | 'Pausing' | 'Completed';
 
 export type GetFlowViewData = {
     execution_spec: {
@@ -849,15 +842,7 @@ export type FlowPartitionStateType = 'completed' | 'executing' | 'transient' | '
 export type FlowPartitionJobStateType = 'unknown' | 'recovering' | 'working' | 'stopped';
 
 export type FlowNodeStatusType =
-    | 'minimum'
-    | 'trace'
-    | 'debug'
-    | 'info'
-    | 'warning'
-    | 'error'
-    | 'alert'
-    | 'fatal'
-    | 'maximum';
+    'minimum' | 'trace' | 'debug' | 'info' | 'warning' | 'error' | 'alert' | 'fatal' | 'maximum';
 
 export type FlowComputationstatus = 'info' | 'warning' | 'error';
 
@@ -873,10 +858,7 @@ export type FlowComputationStreams = Record<FlowComputationStreamType, Array<Str
  */
 
 type FlowComputationStreamType =
-    | 'input_streams'
-    | 'output_streams'
-    | 'source_streams'
-    | 'timer_streams';
+    'input_streams' | 'output_streams' | 'source_streams' | 'timer_streams';
 
 export type FlowStream = FlowNodeBase & {
     bytes_per_second?: number;
@@ -911,10 +893,7 @@ export type ReadTableOutputFormat =
       };
 
 type IncarnationSwitchReason =
-    | 'job_aborted'
-    | 'job_failed'
-    | 'job_interrupted'
-    | 'job_lack_after_revival';
+    'job_aborted' | 'job_failed' | 'job_interrupted' | 'job_lack_after_revival';
 
 export type ListOperationEventsParameters = {
     operation_id: string;

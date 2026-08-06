@@ -10,8 +10,7 @@ import {YTSortIndicator} from './YTSortIndicator';
 const block = cn('yt-gravity-table');
 
 export type VirtuallizerProps =
-    | {virtualized: never; rowHeight: never}
-    | {virtualized: true; rowHeight: number};
+    {virtualized: never; rowHeight: never} | {virtualized: true; rowHeight: number};
 
 export const getCellStyles = <TData, TValue = unknown>(
     cell?: Cell<TData, TValue> | Header<TData, TValue>,

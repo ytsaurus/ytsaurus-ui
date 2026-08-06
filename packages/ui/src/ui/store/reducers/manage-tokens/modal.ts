@@ -14,8 +14,7 @@ const initialState: ManageTokensModalState = {
 };
 
 export type ManageTokensModalAction =
-    | Action<typeof MANAGE_TOKENS_MODALS_CLOSE>
-    | Action<typeof MANAGE_TOKENS_MODALS_OPEN>;
+    Action<typeof MANAGE_TOKENS_MODALS_CLOSE> | Action<typeof MANAGE_TOKENS_MODALS_OPEN>;
 
 function reducer(state = initialState, action: ManageTokensModalAction) {
     switch (action.type) {

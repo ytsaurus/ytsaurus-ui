@@ -66,8 +66,7 @@ type FileType = 'xlsx';
 const FILE_TYPES: Array<{value: FileType; title: FileType}> = [{value: 'xlsx', title: 'xlsx'}];
 
 type ProgressState =
-    | {inProgress: false}
-    | {inProgress: true; event: {total?: number; loaded: number}};
+    {inProgress: false} | {inProgress: true; event: {total?: number; loaded: number}};
 
 const getExcelBaseUrl = (payload: {cluster: string}) => {
     return getConfigUploadTable(payload);

@@ -6,8 +6,10 @@ import {TextInput, type TextInputProps} from '@gravity-ui/uikit';
 import hammer from '../../common/hammer';
 import i18n from './i18n';
 
-export interface TimeInputProps
-    extends Omit<TextInputProps, 'value' | 'text' | 'onChange' | 'error'> {
+export interface TimeInputProps extends Omit<
+    TextInputProps,
+    'value' | 'text' | 'onChange' | 'error'
+> {
     value: number;
     onChange: (v: number) => void;
 }

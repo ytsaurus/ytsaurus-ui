@@ -11,10 +11,7 @@ type QueueAgentState = 'active' | 'standby';
 type SchedulerState = 'connected' | 'disconnected';
 
 export type MasterInstanceState =
-    | MasterAddress['state']
-    | MasterDataItem['state']
-    | QueueAgentState
-    | SchedulerState;
+    MasterAddress['state'] | MasterDataItem['state'] | QueueAgentState | SchedulerState;
 
 export class MasterInstance {
     $attributes: {

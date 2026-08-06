@@ -32,11 +32,10 @@ const SortableList = SortableContainer(({items}: {items: Array<React.ReactNode>}
     );
 });
 
-interface Props
-    extends Omit<
-        React.ComponentProps<typeof SortableList>,
-        'useDragHandle' | 'items' | 'onSortEnd'
-    > {
+interface Props extends Omit<
+    React.ComponentProps<typeof SortableList>,
+    'useDragHandle' | 'items' | 'onSortEnd'
+> {
     value: Array<React.ReactNode>;
     onChange: (value: Props['value']) => void;
     error?: string;

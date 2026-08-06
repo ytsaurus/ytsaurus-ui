@@ -26,8 +26,7 @@ const ELLIPSIS_CHAR = '\u2026';
 export type YTGraphFontSize = 'normal' | 'header' | 'header2' | number;
 
 type IconSrc =
-    | {src: string; currentColor?: undefined}
-    | {src?: SVGIconSvgrData; currentColor?: string};
+    {src: string; currentColor?: undefined} | {src?: SVGIconSvgrData; currentColor?: string};
 
 type RoundedBlockProps = {
     x: number;

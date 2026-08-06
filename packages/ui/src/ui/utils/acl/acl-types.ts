@@ -230,10 +230,7 @@ export type TypedAclSubject =
 export type InheritedFrom = {kind: IdmKindType; name: string; poolTree?: string};
 
 export type InheritanceModeType =
-    | 'descendants_only'
-    | 'immediate_descendants_only'
-    | 'object_only'
-    | 'object_and_descendants';
+    'descendants_only' | 'immediate_descendants_only' | 'object_only' | 'object_and_descendants';
 
 export type PreparedAclSubject = TypedAclSubject & {
     inheritance_mode?: InheritanceModeType;

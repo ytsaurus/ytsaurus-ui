@@ -11,8 +11,10 @@ import Select from '../../../components/Select/Select';
 
 const block = cn('tablet-cell-bundles-suggest');
 
-interface Props
-    extends Omit<ComponentProps<typeof Select>, 'value' | 'onChange' | 'onUpdate' | 'items'> {
+interface Props extends Omit<
+    ComponentProps<typeof Select>,
+    'value' | 'onChange' | 'onUpdate' | 'items'
+> {
     value?: string;
     onChange: (value?: string) => void;
 }

@@ -37,12 +37,7 @@ export type AccessLogFilterParams = Omit<AccessLogFiltersState, 'time'> & {
 
 export type AccessLogUserType = 'robot' | 'human' | 'system';
 export type AccessLogMethodType =
-    | 'read'
-    | 'write'
-    | 'lock'
-    | 'link'
-    | 'copy_move'
-    | 'dynamic_table_commands';
+    'read' | 'write' | 'lock' | 'link' | 'copy_move' | 'dynamic_table_commands';
 export type AccessLogScopeType = 'other' | 'table' | 'file' | 'document' | 'directory';
 export type AccessLogFieldSelectorType =
     //    | 'original_path'

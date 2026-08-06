@@ -2,12 +2,7 @@ import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
 
 type Index = number;
 export type QueryResultTab =
-    | 'error'
-    | 'meta'
-    | 'statistic'
-    | 'progress'
-    | `result/${Index}`
-    | `chart-tab/${Index}`;
+    'error' | 'meta' | 'statistic' | 'progress' | `result/${Index}` | `chart-tab/${Index}`;
 
 export type QueryTab = {id: QueryResultTab; title: string};
 
