@@ -6,14 +6,7 @@ import './Label.scss';
 const b = block('yt-label');
 
 export type LabelTheme =
-    | 'default'
-    | 'success'
-    | 'warning'
-    | 'danger'
-    | 'error'
-    | 'info'
-    | 'complementary'
-    | 'misc';
+    'default' | 'success' | 'warning' | 'danger' | 'error' | 'info' | 'complementary' | 'misc';
 
 export interface LabelProps {
     className?: string;

@@ -1,0 +1,7 @@
+npx nano-staged
+
+globalPreCommit=$(dirname "$0")/.git/hooks/pre-commit
+
+if [ -f "$globalPreCommit" ]; then
+    $globalPreCommit
+fi

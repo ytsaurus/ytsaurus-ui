@@ -3,8 +3,7 @@ import type {YTError} from './error';
 export type LogErrorFn = (params: {message: string}, error?: Error) => void;
 
 export type CypressNodeRaw<AttributesT extends Record<string, unknown>, ValueT> =
-    | ValueT
-    | CypressNode<AttributesT, ValueT>;
+    ValueT | CypressNode<AttributesT, ValueT>;
 
 export type CypressNode<AttributesT extends Record<string, unknown>, ValueT> = {
     $attributes: AttributesT;

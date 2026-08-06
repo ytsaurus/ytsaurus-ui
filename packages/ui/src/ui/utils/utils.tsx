@@ -99,8 +99,7 @@ interface CommonWrapApiOptions<T> {
 }
 
 type BatchWrapApiOption<Type extends 'v3' | 'v4' | undefined> =
-    | {batchType?: undefined; errorTitle?: string}
-    | {batchType: Type; errorTitle: string};
+    {batchType?: undefined; errorTitle?: string} | {batchType: Type; errorTitle: string};
 
 export type WrapApiOptions<
     T,

@@ -24,10 +24,7 @@ interface BaseUnipikaValue {
 }
 
 export type UnipikaValue = {$incomplete?: boolean} & (
-    | UnipikaMap
-    | UnipikaList
-    | UnipikaString
-    | UnipikaPrimitive
+    UnipikaMap | UnipikaList | UnipikaString | UnipikaPrimitive
 );
 
 export interface UnipikaMap extends BaseUnipikaValue {
