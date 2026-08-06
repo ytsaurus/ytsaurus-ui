@@ -10,11 +10,7 @@ import StatusLabel from '../../../components/StatusLabel/StatusLabel';
 import Tabs from '../../../components/Tabs/Tabs';
 import {YTErrorInline} from '../../../containers/YTErrorInline/YTErrorInline';
 import {useUpdater} from '../../../hooks/use-updater';
-import format from '../../../common/hammer/format';
-import {
-    useFlowAttributes,
-    useFlowLeaderControllerName,
-} from '../../../pages/flow/flow-hooks/use-flow-attributes';
+import {useFlowAttributes} from '../../../pages/flow/flow-hooks/use-flow-attributes';
 import {loadFlowStatus, updateFlowState} from '../../../store/actions/flow/status';
 import {useFlowExecuteQuery} from '../../../store/api/yt/flow';
 import {FlowTab} from '../../../store/reducers/flow/filters';
@@ -40,6 +36,17 @@ import {getFlowPathMetaItems} from '../flow-components/FlowMeta/FlowMeta';
 
 const block = cn('yt-flow');
 
+type FlowPipelineExtraTab = {
+    value: string;
+    title: string;
+    component: React.ComponentType<{pipeline_path: string}>;
+};
+
+const getExtraTabs = () =>
+    (
+        UIFactory as {getFlowPipelineExtraTabs?: () => Array<FlowPipelineExtraTab>}
+    ).getFlowPipelineExtraTabs?.() ?? [];
+
 export function Flow() {
     const currentComputation = useSelector(selectFlowCurrentComputation);
     const worker = useSelector(selectFlowCurrentWorker);
@@ -63,18 +70,21 @@ export function FlowTabs() {
     const tabsProps = React.useMemo(() => {
         const {urlTemplate, component} = UIFactory.getMonitoringComponentForNavigationFlow() ?? {};
         const showSettings = {
-            [FlowTab.GRAPH]: {title: i18n('graph')},
-            [FlowTab.COMPUTATIONS]: {title: i18n('computations')},
-            [FlowTab.WORKERS]: {title: i18n('workers')},
-            [FlowTab.MONITORING]: {
-                show: Boolean(component || urlTemplate),
-                title: i18n('monitoring'),
-            },
-            [FlowTab.STATIC_SPEC]: {title: i18n('static-spec')},
-            [FlowTab.DYNAMIC_SPEC]: {title: i18n('dynamic-spec')},
+            [FlowTab.MONITORING]: {show: Boolean(component || urlTemplate)},
         };
 
-        return makeTabProps(`/${cluster}/${Page.FLOWS}`, FlowTab, showSettings);
+        const props = makeTabProps(`/${cluster}/${Page.FLOWS}`, FlowTab, showSettings);
+        const extraItems = getExtraTabs().map(({value, title}) => ({
+            value,
+            text: title,
+            url: `/${cluster}/${Page.FLOWS}/${value}`,
+            show: true,
+        }));
+        const monitoringIndex = props.items.findIndex(({value}) => value === FlowTab.MONITORING);
+        const insertAt = monitoringIndex === -1 ? props.items.length : monitoringIndex + 1;
+        const items = [...props.items];
+        items.splice(insertAt, 0, ...extraItems);
+        return {...props, items};
     }, [cluster]);
 
     return <Tabs className={block('tabs')} routed routedPreserveLocation {...tabsProps} />;
@@ -113,6 +123,13 @@ function FlowContent() {
                 path={`/:cluster/${Page.FLOWS}/${FlowTab.MONITORING}`}
                 render={() => <FlowMonitoring pipeline_path={path} />}
             />
+            {getExtraTabs().map(({value, component: TabComponent}) => (
+                <Route
+                    key={value}
+                    path={`/:cluster/${Page.FLOWS}/${value}`}
+                    render={() => <TabComponent pipeline_path={path} />}
+                />
+            ))}
             <Redirect to={`/:cluster/${Page.FLOWS}/${FlowTab.GRAPH}`} />
         </Switch>
     );
@@ -157,9 +174,6 @@ function FlowState() {
     const pipeline_path = useSelector(selectFlowPipelinePath);
     const value = useSelector(selectFlowStatusData);
     const {leader_controller_address} = useFlowAttributes(pipeline_path).data ?? {};
-    const {data: leaderName, errorContent: leaderError} = useFlowLeaderControllerName(
-        pipeline_path + '/flow_control',
-    );
     return (
         <React.Fragment>
             <Flex alignItems="baseline" justifyContent="space-between" gap={2}>
@@ -174,23 +188,6 @@ function FlowState() {
                     items={[
                         getFlowPathMetaItems(pipeline_path),
                         [
-                            {
-                                key: 'leader_controller_name',
-                                label: i18n('leader-controller-name'),
-                                value: leaderError ? (
-                                    leaderError
-                                ) : (
-                                    <>
-                                        {leaderName ?? format.NO_VALUE}
-                                        <ClipboardButton
-                                            view="flat-secondary"
-                                            text={leaderName}
-                                            inlineMargins
-                                        />
-                                    </>
-                                ),
-                                className: block('meta-item'),
-                            },
                             {
                                 key: 'leader_controller_address',
                                 label: i18n('leader-controller-address'),
@@ -262,7 +259,7 @@ function FlowMonitoring({pipeline_path}: {pipeline_path: string}) {
                     monitoring_project,
                 })}
             >
-                {title || i18n('monitoring')}
+                {title || 'Monitoring'}
             </Link>
         );
     } else {

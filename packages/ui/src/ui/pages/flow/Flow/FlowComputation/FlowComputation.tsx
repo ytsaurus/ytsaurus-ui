@@ -15,7 +15,7 @@ import {filtersSlice} from '../../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {selectFlowPipelinePath} from '../../../../store/selectors/flow/filters';
 import {selectCluster} from '../../../../store/selectors/global/cluster';
-import UIFactory from '../../../../UIFactory';
+import UIFactory, {type FlowComputationMonitorProps} from '../../../../UIFactory';
 import './FlowComputation.scss';
 import {FlowComputationPartitions} from './FlowComputationPartitions';
 import {FlowComputationPerformance} from './FlowComputationPerformance/FlowComputationPerformance';
@@ -23,6 +23,17 @@ import {FlowPartition} from './FlowPartition/FlowPartition';
 import i18n from './i18n';
 
 const block = cn('yt-flow-computation');
+
+type FlowComputationExtraTab = {
+    value: string;
+    title: string;
+    component: React.ComponentType<FlowComputationMonitorProps>;
+};
+
+const getExtraTabs = () =>
+    (
+        UIFactory as {getFlowComputationExtraTabs?: () => Array<FlowComputationExtraTab>}
+    ).getFlowComputationExtraTabs?.() ?? [];
 
 export function FlowComputation() {
     const dispatch = useDispatch();
@@ -41,6 +52,7 @@ export function FlowComputation() {
     }, [computation, dispatch]);
 
     const monitoringComponent = UIFactory.getMonitoringComponentForFlowComputation();
+    const extraTabs = getExtraTabs();
 
     return (
         <div className={block()}>
@@ -58,13 +70,44 @@ export function FlowComputation() {
                         render={() => <FlowComputationMonitor computation={computation} />}
                     />
                 )}
+                {extraTabs.map((tab) => (
+                    <Route
+                        key={tab.value}
+                        exact
+                        path={`${path}/${tab.value}`}
+                        render={() => (
+                            <FlowComputationExtraTabView computation={computation} tab={tab} />
+                        )}
+                    />
+                ))}
             </Switch>
+        </div>
+    );
+}
+
+function FlowComputationExtraTabView({
+    computation,
+    tab,
+}: {
+    computation: string;
+    tab: FlowComputationExtraTab;
+}) {
+    const pipeline_path = useSelector(selectFlowPipelinePath);
+    const {data} = useFlowComputationData({computation, pipeline_path});
+    const TabComponent = tab.component;
+
+    return (
+        <div className={block()}>
+            <FlowEntityTitle title={computation} status={data?.status} />
+            <FlowComputationTabs computation={computation} />
+            <TabComponent path={pipeline_path} computation={computation} />
         </div>
     );
 }
 
 function FlowComputationTabs({computation}: {computation: string}) {
     const cluster = useSelector(selectCluster);
+    const extraTabs = getExtraTabs();
 
     return (
         <Tabs
@@ -87,6 +130,12 @@ function FlowComputationTabs({computation}: {computation: string}) {
                     url: `/${cluster}/${Page.FLOWS}/computations/${encodeURIComponent(computation)}/monitor`,
                     show: true,
                 },
+                ...extraTabs.map((tab) => ({
+                    value: tab.value,
+                    text: tab.title,
+                    url: `/${cluster}/${Page.FLOWS}/computations/${encodeURIComponent(computation)}/${tab.value}`,
+                    show: true,
+                })),
             ]}
         />
     );
