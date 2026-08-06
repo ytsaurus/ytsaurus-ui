@@ -15,7 +15,7 @@
     "build:diff": "statoscope validate -i dist/public/build/input.json -r dist/public/build/reference.json",
     "build:storybook": "storybook build",
     "clean": "rm -rf dist/*",
-    "copy:icons": "mkdir -p dist/public && cp src/ui/assets/img/favicon*.png dist/public",
+    "copy:icons": "mkdir -p dist/public && cp -r src/ui/assets/img/favicon dist/public/ && cp dist/public/favicon/lightgray.png dist/public/favicon.png",
     "cut:version": "node -e \"const json=require('${npm_config_file}'); delete json.version; console.log(JSON.stringify(json, null, 2))\"",
     "debug": "npm run copy:icons && NODE_OPTIONS=\"--max-http-header-size=204800 ${NODE_OPTIONS}\" app-builder dev --inspect --config ./build.app.config.ts",
     "deps:build": "npm run build",
