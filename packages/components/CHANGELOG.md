@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.1.0...components-v1.2.0) (2026-08-07)
+
+
+### Features
+
+* **Components:** add additional schema columns [YTFRONT-5891] ([fe5de5c](https://github.com/ytsaurus/ytsaurus-ui/commit/fe5de5c62a6e06e0adaa0a7746c5d61874ef0909))
+
 ## [1.1.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.0.0...components-v1.1.0) (2026-07-01)
 
 
