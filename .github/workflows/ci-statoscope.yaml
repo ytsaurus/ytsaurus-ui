@@ -3,6 +3,10 @@ name: "[ci]: Statoscope"
 on:
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   verify_files:
     name: Statoscope
@@ -24,7 +28,7 @@ jobs:
           cd packages/ui
           npm run build:analyze
           cp statoscope.config.js statoscope.config.js.bak
-          mv dist/public/build/stats.json ./input.json 
+          mv dist/public/build/stats.json ./input.json
       - name: Analyze previos build
         run: |
           cd packages/ui
@@ -69,12 +73,12 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.UI_S3_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.UI_S3_SECRET_KEY }}
         run: |
-            aws s3 cp ./report.html s3://statoscope-reports/${{ github.event.pull_request.number }} --endpoint-url=https://ytsaurus-ui-test-results.s3-private.mds.yandex.net --recursive
-            message="${message}[Statoscope report](https://ytsaurus-ui-test-results.s3-website.mds.yandex.net/statoscope-reports/${{ github.event.pull_request.number }}/report.html) is ready.\n"
+          aws s3 cp ./report.html s3://statoscope-reports/${{ github.event.pull_request.number }} --endpoint-url=https://ytsaurus-ui-test-results.s3-private.mds.yandex.net --recursive
+          message="${message}[Statoscope report](https://ytsaurus-ui-test-results.s3-website.mds.yandex.net/statoscope-reports/${{ github.event.pull_request.number }}/report.html) is ready.\n"
 
-            echo "message<<EOF" >> $GITHUB_OUTPUT
-            echo -e "$message" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
+          echo "message<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$message" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
         shell: bash
       - name: Create Comment
         uses: marocchino/sticky-pull-request-comment@v2
