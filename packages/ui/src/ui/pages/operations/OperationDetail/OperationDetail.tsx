@@ -114,34 +114,34 @@ function getSpecialWaitingStatuses(
         return {};
     }
 
+    const isSingleTree = new Set(pools?.map((pool) => pool?.tree)).size === 1;
+    if (!isSingleTree) {
+        return {};
+    }
+
     const fairShareRatio = runtime?.[0]?.progress?.fair_share_ratio as number | undefined;
     const usageRatio = runtime?.[0]?.progress?.usage_ratio as number | undefined;
     const demandRatio = runtime?.[0]?.progress?.demand_ratio as number | undefined;
 
-    const isSingleTree = new Set(pools?.map((pool) => pool?.tree)).size === 1;
+    if (type === 'vanilla' && isGpuOperation) {
+        const isWaitingForResources = fairShareRatio === usageRatio && fairShareRatio === 0;
 
-    switch (type) {
-        case 'vanilla': {
-            if (!isGpuOperation || !isSingleTree) {
-                return {};
-            }
-            const isWaitingForResources = fairShareRatio === usageRatio && fairShareRatio === 0;
+        const isWaitingForJobs =
+            fairShareRatio === demandRatio &&
+            usageRatio !== undefined &&
+            fairShareRatio !== undefined &&
+            usageRatio < fairShareRatio;
 
-            const isWaitingForJobs =
-                fairShareRatio === demandRatio &&
-                usageRatio !== undefined &&
-                fairShareRatio !== undefined &&
-                usageRatio < fairShareRatio;
-
-            return {isWaitingForResources, isWaitingForJobs};
-        }
-        default: {
-            if (usageRatio || !isSingleTree) {
-                return {};
-            }
-            return fairShareRatio ? {isWaitingForJobs: true} : {isWaitingForResources: true};
-        }
+        return {isWaitingForResources, isWaitingForJobs};
     }
+
+    // Runtime stats may not have loaded yet; only treat usage/fair share as
+    // "zero" once we've actually observed zero, not when data is missing.
+    if (usageRatio !== 0 || fairShareRatio === undefined) {
+        return {};
+    }
+
+    return fairShareRatio === 0 ? {isWaitingForResources: true} : {isWaitingForJobs: true};
 }
 
 const TOOLTIPS = {
