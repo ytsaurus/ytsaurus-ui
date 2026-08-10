@@ -1,4 +1,7 @@
 {
+  "value_active": "Active",
+  "value_connected": "Connected",
+  "value_disconnected": "Disconnected",
   "value_elections": "Elections",
   "value_follower_recovery": "Follower recovery",
   "value_following": "Following",
@@ -6,6 +9,7 @@
   "value_leading": "Leading",
   "value_offline": "Offline",
   "value_online": "Online",
+  "value_standby": "Standby",
   "value_stopped": "Stopped",
   "value_unknown": "Unknown"
 }

@@ -14,6 +14,7 @@ import {ChangeMaintenanceButton} from '../../Masters/ChangeMaintenanceButton';
 import {makeShortSystemAddress} from '../../helpers/makeShortSystemAddress';
 import {useDispatch} from '../../../../store/redux-hooks';
 import {changeSchedulerMaintenance} from '../../../../store/actions/system/schedulers';
+import {InstanceState} from '../../Masters/InstanceState/InstanceState';
 
 const b = block('system');
 
@@ -60,7 +61,9 @@ export default function Scheduler({
         <div className={b('scheduler')}>
             <NodeQuad theme={theme} />
 
-            <div className={b('scheduler-status')}>{hammer.format['ReadableField'](state)}</div>
+            <div className={b('scheduler-status')}>
+                <InstanceState state={state} />
+            </div>
 
             <div className={b('maintenance')}>
                 {maintenanceMessage && (
