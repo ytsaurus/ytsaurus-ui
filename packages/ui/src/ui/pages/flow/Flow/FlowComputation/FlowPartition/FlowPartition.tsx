@@ -68,7 +68,6 @@ export function FlowPartitionMeta({
     data?: FlowPartitionDetailsType;
 }) {
     const path = useSelector(selectFlowPipelinePath);
-    const hasData = Boolean(data);
     return (
         <MetaTable
             items={[
@@ -78,7 +77,6 @@ export function FlowPartitionMeta({
                         key: 'computation-id',
                         label: i18n('computation-id'),
                         value: data?.computation_id,
-                        visible: hasData,
                     },
                     {
                         key: 'partition-id',
@@ -88,20 +86,21 @@ export function FlowPartitionMeta({
                     {
                         key: 'current-job-id',
                         label: i18n('current-job-id'),
-                        value: <TemplateId id={data?.current_job_id} />,
-                        visible: hasData,
+                        value: data?.current_job_id ? (
+                            <TemplateId id={data.current_job_id} />
+                        ) : undefined,
                     },
                     {
                         key: 'current-worker-address',
                         label: i18n('current-worker-address'),
                         value: data?.current_worker_address,
-                        visible: hasData,
                     },
                     {
                         key: 'incarnation-id',
                         label: i18n('incarnation-id'),
-                        value: <TemplateId id={data?.current_worker_incarnation_id} />,
-                        visible: hasData,
+                        value: data?.current_worker_incarnation_id ? (
+                            <TemplateId id={data.current_worker_incarnation_id} />
+                        ) : undefined,
                     },
                 ],
                 [
@@ -117,26 +116,22 @@ export function FlowPartitionMeta({
                     {
                         key: 'cpu-usage',
                         label: i18n('cpu-usage'),
-                        value: format.NumberSmart(data?.cpu_usage),
-                        visible: hasData,
+                        value: data ? format.NumberSmart(data.cpu_usage) : undefined,
                     },
                     {
                         key: 'memory-usage',
                         label: i18n('memory-usage'),
-                        value: format.Bytes(data?.memory_usage),
-                        visible: hasData,
+                        value: data ? format.Bytes(data.memory_usage) : undefined,
                     },
                     {
                         key: 'message-per-second',
                         label: i18n('message-per-second'),
-                        value: format.NumberWithSuffix(data?.messages_per_second),
-                        visible: hasData,
+                        value: data ? format.NumberWithSuffix(data.messages_per_second) : undefined,
                     },
                     {
                         key: 'bytes-per-second',
                         label: i18n('bytes-per-second'),
-                        value: format.Bytes(data?.bytes_per_second),
-                        visible: hasData,
+                        value: data ? format.Bytes(data.bytes_per_second) : undefined,
                     },
                 ],
                 getLoadedDataMetaItems({label: i18n('partition-data'), data}),
