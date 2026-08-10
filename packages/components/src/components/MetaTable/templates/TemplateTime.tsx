@@ -1,9 +1,7 @@
-import cn from 'bem-cn-lite';
-
 import {Flex, Text as GravityText} from '@gravity-ui/uikit';
 import {format} from '../../../utils';
 
-const itemBlock = cn('meta-table-item');
+import {metaTableItemBlock} from '../utils';
 
 export type ValueFormat = 'DateTime' | 'TimeDuration' | 'DateTimeTwoLines';
 
@@ -35,7 +33,7 @@ export function TemplateTime<T extends ValueFormat = 'DateTime'>({
     settings,
     ...rest
 }: TemplateTimeProps<T>) {
-    const className = itemBlock('time', rest.className);
+    const className = metaTableItemBlock('time', rest.className);
 
     if (valueFormat === 'DateTimeTwoLines') {
         const title = format['DateTime'](time, settings);
