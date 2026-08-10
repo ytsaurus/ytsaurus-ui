@@ -1,8 +1,7 @@
 import type {ReactNode} from 'react';
-import cn from 'bem-cn-lite';
 import {format as hammerFormat} from '../../../utils';
 
-const block = cn('meta-table-item');
+import {metaTableItemBlock} from '../utils';
 
 type FormatSettings = Record<string, unknown>;
 
@@ -24,7 +23,7 @@ export function TemplateFormattedValue({value, format, settings}: Props) {
     const formatFn = isFn ? format : hammerFormat[format as keyof typeof hammerFormat];
 
     return (
-        <span className={block('value', {format: formatModifier})}>
+        <span className={metaTableItemBlock('value', {format: formatModifier})}>
             {formatFn(value, settings)}
         </span>
     );
