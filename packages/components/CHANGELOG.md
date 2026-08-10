@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.3.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.2.0...components-v1.3.0) (2026-08-10)
+
+
+### Features
+
+* **MetaTable:** render nirvana block url [YTFRONT-5942] ([9653e82](https://github.com/ytsaurus/ytsaurus-ui/commit/9653e82251b2b3204f9ab9274ab2bdc2f497eb55))
+
+
+### Bug Fixes
+
+* **MetaTable:** hide item with nullable value [YTFRONT-5767] ([8faf977](https://github.com/ytsaurus/ytsaurus-ui/commit/8faf9770bbd1021ca4867416472f0dd2ec4af588))
+* **MetaTable:** template components layout [YTFRONT-5942] ([160fe12](https://github.com/ytsaurus/ytsaurus-ui/commit/160fe122e42a3c3cb5e581f2fd5fbe90ac0b9a01))
+* **MetaTable:** ttl path link text-overflow [YTFRONT-5767] ([74e329e](https://github.com/ytsaurus/ytsaurus-ui/commit/74e329ec724a7c657556969a102e382d47b139b4))
+
 ## [1.2.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.1.0...components-v1.2.0) (2026-08-07)
 
 
