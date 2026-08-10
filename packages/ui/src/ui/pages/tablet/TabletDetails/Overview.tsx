@@ -276,17 +276,16 @@ function Overview({id, block}: Props) {
                                 {
                                     key: 'tablet cell leader node',
                                     label: i18n('meta_tablet-cell-leader-node'),
-                                    value: (
+                                    value: cellLeadingPeer?.address ? (
                                         <TemplateLink
                                             withClipboard
-                                            text={cellLeadingPeer?.address}
+                                            text={cellLeadingPeer.address}
                                             url={makeComponentsNodesUrl({
                                                 cluster,
-                                                host: cellLeadingPeer?.address,
+                                                host: cellLeadingPeer.address,
                                             })}
                                         />
-                                    ),
-                                    visible: Boolean(cellLeadingPeer),
+                                    ) : undefined,
                                 },
                                 {
                                     key: 'errors',

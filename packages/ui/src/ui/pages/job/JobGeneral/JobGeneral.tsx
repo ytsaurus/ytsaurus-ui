@@ -145,13 +145,13 @@ export default function JobGeneral() {
                         [
                             {
                                 key: i18n('field_operation-id'),
-                                value: (
+                                value: operationId ? (
                                     <TemplateLink
                                         url={operationUrl}
                                         text={operationId}
                                         withClipboard
                                     />
-                                ),
+                                ) : undefined,
                             },
                             {
                                 key: i18n('field_job-id'),
@@ -179,7 +179,7 @@ export default function JobGeneral() {
                             },
                             {
                                 key: i18n('field_monitoring-descriptor'),
-                                value: (
+                                value: monitoring_descriptor ? (
                                     <span className={block('meta-host')}>
                                         <TemplateId id={monitoring_descriptor} />
                                         <ChartLink
@@ -193,8 +193,7 @@ export default function JobGeneral() {
                                             )}
                                         />
                                     </span>
-                                ),
-                                visible: Boolean(monitoring_descriptor),
+                                ) : undefined,
                             },
                             {
                                 key: i18n('field_pool-tree'),
