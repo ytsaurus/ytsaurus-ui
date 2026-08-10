@@ -3,9 +3,8 @@ import {TemplateId, TemplateLink, TemplateTime} from '../templates';
 import {makeTTLItems} from './ttl';
 import type {TYComponentsNavigationMetaConfig} from '../../../types';
 import {MetaTableItem} from '../MetaTable';
+import {LINK_MAX_WIDTH} from './constants';
 import i18n from './i18n';
-
-const LINK_MAX_WIDTH = '50ch';
 
 const normalizeMetaTableItems = (
     result: MetaTableItem | MetaTableItem[] | null | undefined,
