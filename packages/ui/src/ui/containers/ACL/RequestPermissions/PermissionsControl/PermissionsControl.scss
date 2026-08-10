@@ -10,6 +10,14 @@
         margin-bottom: 10px;
     }
 
+    &__additional {
+        margin-top: 8px;
+    }
+
+    &__additional-content {
+        padding-top: 8px;
+    }
+
     &__error-message {
         color: var(--danger-text);
     }

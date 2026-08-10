@@ -1,0 +1,4 @@
+{
+  "title_additional-permissions": "Additional permissions",
+  "context_full-read-note": "This permission is only needed if you use Row-Level security or Column-level security. It is usually only required if you are the owner of the data."
+}
