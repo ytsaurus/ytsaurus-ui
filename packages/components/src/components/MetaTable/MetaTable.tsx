@@ -3,6 +3,7 @@ import React, {Component, Fragment} from 'react';
 import filter_ from 'lodash/filter';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
+import isNil_ from 'lodash/isNil';
 
 import cn from 'bem-cn-lite';
 
@@ -122,9 +123,16 @@ export class MetaTable extends Component<MetaTableProps> {
             title = groupTitles[index] ?? <>&nbsp;</>;
         }
 
-        const visibleItems = filter_(group, (item) => item.visible !== false);
+        const visibleItems = filter_(
+            group,
+            (item) => !isNil_(item.value) && item.visible !== false,
+        );
 
-        return !visibleItems?.length ? null : (
+        if (!visibleItems?.length) {
+            return null;
+        }
+
+        return (
             <div
                 className={block(
                     'group',
