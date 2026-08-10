@@ -7,7 +7,14 @@ import {
 import {type RootState} from '../../reducers';
 import {getPathByMasterType} from '../../actions/system/masters';
 
-export type MasterInstanceState = MasterAddress['state'] | MasterDataItem['state'];
+type QueueAgentState = 'active' | 'standby';
+type SchedulerState = 'connected' | 'disconnected';
+
+export type MasterInstanceState =
+    | MasterAddress['state']
+    | MasterDataItem['state']
+    | QueueAgentState
+    | SchedulerState;
 
 export class MasterInstance {
     $attributes: {
