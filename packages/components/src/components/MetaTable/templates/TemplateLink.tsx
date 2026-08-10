@@ -4,11 +4,9 @@ import {Flex, Icon, type IconData, Link, Text} from '@gravity-ui/uikit';
 
 import {ClipboardButton} from '../../ClipboardButton';
 
-import {itemBlock} from './utils';
-
 type Props = {
     url: string;
-    text?: string;
+    text: string;
     icon?: IconData;
     withClipboard?: boolean;
     shiftText?: string;
@@ -19,20 +17,14 @@ type Props = {
 export function TemplateLink({
     url,
     icon: IconComponent,
-    text = '',
+    text,
     shiftText,
     withClipboard,
     hoverContent,
     maxWidth,
 }: Props) {
     return (
-        <Flex
-            gap={1}
-            wrap="nowrap"
-            alignItems="center"
-            className={itemBlock('link')}
-            style={{maxWidth}}
-        >
+        <Flex gap={1} wrap="nowrap" alignItems="center" style={{maxWidth}}>
             <Text ellipsis>
                 <Link title={url} href={url}>
                     {IconComponent && <Icon data={IconComponent} size={14} />}

@@ -11,13 +11,12 @@ import {MetaTableItem} from '../MetaTable';
 import {TemplateLink} from '../templates';
 import type {TYComponentsNavigationMetaConfig} from '../../../types';
 import {formatTimeDuration} from './helpers/formatTimeDuration';
+import {LINK_MAX_WIDTH} from './constants';
 import i18n from './i18n';
 
 import './ttl.scss';
 
 const block = cn('meta-table-ttl');
-
-const LINK_MAX_WIDTH = '50ch';
 
 export function makeTTLItems(
     attrs: unknown,

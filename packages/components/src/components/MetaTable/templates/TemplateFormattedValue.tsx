@@ -1,28 +1,31 @@
 import type {ReactNode} from 'react';
-
+import cn from 'bem-cn-lite';
 import {format as hammerFormat} from '../../../utils';
 
-import {itemBlock} from './utils';
+const block = cn('meta-table-item');
+
+type FormatSettings = Record<string, unknown>;
+
+type FormatFn = (value: unknown, settings?: FormatSettings) => ReactNode;
 
 type Props = {
-    value?: string | number;
-    format?: string | ((value: unknown, settings?: Record<string, unknown>) => ReactNode);
-    settings?: Record<string, unknown>;
+    value: string | number | undefined;
+    format: string | FormatFn;
+    settings?: FormatSettings;
 };
 
-export function TemplateFormattedValue({value, format: formatKey, settings}: Props) {
-    const fmtIsFunc = typeof formatKey === 'function';
-    const fmtClass = fmtIsFunc ? undefined : (formatKey as string | undefined)?.toLowerCase();
+function isFormatFn(format: Props['format']): format is FormatFn {
+    return typeof format === 'function';
+}
+
+export function TemplateFormattedValue({value, format, settings}: Props) {
+    const isFn = isFormatFn(format);
+    const formatModifier = isFn ? undefined : format?.toLowerCase();
+    const formatFn = isFn ? format : hammerFormat[format as keyof typeof hammerFormat];
+
     return (
-        <span className={itemBlock('value', {format: fmtClass})}>
-            {fmtIsFunc
-                ? (formatKey as (value: unknown, settings?: Record<string, unknown>) => ReactNode)(
-                      value,
-                      settings,
-                  )
-                : formatKey
-                  ? hammerFormat[formatKey as keyof typeof hammerFormat](value, settings)
-                  : null}
+        <span className={block('value', {format: formatModifier})}>
+            {formatFn(value, settings)}
         </span>
     );
 }
