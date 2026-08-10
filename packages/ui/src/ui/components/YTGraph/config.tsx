@@ -34,7 +34,7 @@ export const getGraphColors = (): RecursivePartial<TGraphColors> => {
     };
 };
 
-export function useConfig<T extends TBlock>(
+export function useYTGraphConfig<T extends TBlock>(
     blockComponents: Record<T['is'], typeof CanvasBlock<T>>,
     {
         useDefaultConnection,
