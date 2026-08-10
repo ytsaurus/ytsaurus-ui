@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.3.0...components-v1.3.1) (2026-08-10)
+
+
+### Bug Fixes
+
+* **MetaTable:** template component lost className [YTFRONT-5942] ([cbc00e5](https://github.com/ytsaurus/ytsaurus-ui/commit/cbc00e50a03f213ade5ccddd92e73153c49271f2))
+
 ## [1.3.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.2.0...components-v1.3.0) (2026-08-10)
 
 
