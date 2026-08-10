@@ -20,9 +20,9 @@ import {
     YTGraph,
     type YTGraphBlock,
     type YTGraphData,
-    useConfig,
     useElkLayout,
     useGraphScale,
+    useYTGraphConfig,
 } from '../../../../components/YTGraph';
 import {FlowError} from '../../../../pages/flow/flow-components/FlowError/FlowError';
 import {ShowDataButton} from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
@@ -104,7 +104,7 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
         setZoomToState(zoomTo);
     }, [zoomTo]);
 
-    const config = useConfig<FlowGraphBlock>(
+    const config = useYTGraphConfig<FlowGraphBlock>(
         {
             computation: ComputationCanvasBlock,
             stream: StreamCanvasBlock,
