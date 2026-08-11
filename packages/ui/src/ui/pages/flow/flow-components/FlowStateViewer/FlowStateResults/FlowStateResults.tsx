@@ -153,6 +153,7 @@ function useResultColumns({
                             {original.computationId && (
                                 <span className={block('hover-action')}>
                                     <Link
+                                        className={block('row-link')}
                                         url={handlers.resolveComputationLink(
                                             original.computationId,
                                         )}
@@ -216,6 +217,7 @@ function useResultColumns({
                                 {location && (
                                     <span className={block('hover-action')}>
                                         <Link
+                                            className={block('row-link')}
                                             url={genNavigationUrl({
                                                 cluster: location.cluster ?? cluster,
                                                 path: location.path,

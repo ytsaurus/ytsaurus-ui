@@ -14,6 +14,11 @@
         visibility: hidden;
     }
 
+    &__row-link {
+        display: inline-flex;
+        align-items: center;
+    }
+
     .yt-gravity-table__row:hover .yt-flow-state-results__hover-action {
         visibility: visible;
     }
