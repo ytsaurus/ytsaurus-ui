@@ -75,12 +75,12 @@
 
     & &__table-item {
         box-sizing: border-box;
-        padding-left: 4px;
-        padding-right: 4px;
+        --data-table-cell-border-padding: 4px;
+        --data-table-cell-horizontal-padding: 4px;
 
         &_type_expand {
-            padding-left: 2px;
-            padding-right: 2px;
+            --data-table-cell-border-padding: 2px;
+            --data-table-cell-horizontal-padding: 2px;
         }
 
         &_type_subjects {
@@ -162,8 +162,8 @@
         flex-shrink: 0;
     }
 
-    .data-table__row:not(:last-child) {
-        border-bottom: 1px solid var(--g-color-line-generic);
+    .data-table .data-table__row:last-child {
+        border-bottom: none;
     }
 
     &__subject {
@@ -193,6 +193,8 @@
 
     &__inherited {
         padding-right: 8px;
+        display: flex;
+        align-items: center;
         &_hidden {
             visibility: hidden;
         }

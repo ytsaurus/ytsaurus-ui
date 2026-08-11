@@ -148,6 +148,7 @@ export default function ColumnGroups({
                                             }
                                         />
                                     ),
+                                    width: 250,
                                 },
                                 {
                                     node: (
@@ -170,7 +171,7 @@ export default function ColumnGroups({
                             noItemsText={i18n('alert_no-groups')}
                             data={columnGroups}
                             columns={columns}
-                            theme={'yt-borderless'}
+                            theme={'yt'}
                             settings={{
                                 sortable: false,
                                 displayIndices: false,

@@ -60,6 +60,8 @@
     "show:version": "echo ${npm_package_version}",
     "storybook": "storybook dev -p 8008",
     "start": "NODE_OPTIONS=\"--max-http-header-size=204800 ${NODE_OPTIONS}\" node dist/server",
+    "start:localmode": "bash -c '. scripts/dev.localmode-env.sh && TVM_DISABLED=true npm start'",
+    "start:localmode:e2e": "APP_INSTALLATION=${APP_INSTALLATION:-e2e} npm run start:localmode",
     "test": "npm run test:unit",
     "test:unit": "NODE_ENV=test:unit jest --config ./jest.config.js",
     "test:watch": "NODE_ENV=test:unit jest --config ./jest.config.js --watchAll",

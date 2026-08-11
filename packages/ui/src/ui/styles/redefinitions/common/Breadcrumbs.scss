@@ -1,8 +1,9 @@
 .g-breadcrumbs {
-    &__item {
+    & &__item {
         color: var(--secondary-text);
     }
-    &__link {
+
+    & &__link {
         &:hover {
             color: var(--hover-link) !important;
             cursor: pointer;

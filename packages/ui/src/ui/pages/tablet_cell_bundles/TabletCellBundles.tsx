@@ -244,7 +244,7 @@ function ActiveBundleDetails({
                         {allowAccounting && allowEdit && (
                             <div className={b('tabs-edit-btn')}>
                                 <Button className={b('edit-btn')} size={'m'} onClick={showEditor}>
-                                    <Icon awesome={'pencil'} />
+                                    <Icon awesome={'pencil'} size={13} />
                                     {i18n('action_edit-bundle')}
                                 </Button>
                             </div>
