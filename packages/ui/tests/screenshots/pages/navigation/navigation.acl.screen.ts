@@ -8,8 +8,9 @@ test('Navigation/ACL: main_permissions', async ({page}) => {
 
     await test.step('Add a permission for scheduler', async () => {
         await page.getByText('Add ACL').click();
-        await page
-            .locator('.df-dialog')
+        await navigationPage(page).dfDialog.waitForFixedPosition();
+        await navigationPage(page)
+            .dfDialog.locator()
             .getByText('Register queue consumer vital')
             .click({force: true});
         await page.getByText('Enter user name or login...').click({force: true});
@@ -22,6 +23,7 @@ test('Navigation/ACL: main_permissions', async ({page}) => {
 
         await navigationPage(page).replaceACLInputPath();
         await navigationPage(page).replaceBreadcrumbsTestDir();
+
         await expect(page).toHaveScreenshot();
 
         await page.getByText('Confirm').click();

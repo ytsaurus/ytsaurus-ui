@@ -402,7 +402,7 @@ class ACL extends Component<Props> {
                                     loaded={loaded}
                                     noItemsText={i18n('alert_no-responsibles')}
                                     columns={tableColumns}
-                                    theme={'yt-borderless'}
+                                    theme={'yt'}
                                     rowClassName={this.rowClassNameByFlags}
                                     settings={{
                                         sortable: false,
@@ -504,7 +504,7 @@ class ACL extends Component<Props> {
                                 loading={loading}
                                 loaded={loaded}
                                 columns={tableColumns}
-                                theme={'yt-borderless'}
+                                theme={'yt'}
                                 rowClassName={this.rowClassNameByFlags}
                                 settings={{
                                     sortable: false,

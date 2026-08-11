@@ -1,4 +1,4 @@
-import {type Page} from '@playwright/test';
+import {type Page, expect} from '@playwright/test';
 import {E2E_DIR_NAME} from '../utils';
 import {replaceInnerHtml} from '../utils/dom';
 import type {ConfigData} from '../../src/shared/yt-types';
@@ -326,6 +326,14 @@ export class BasePage extends HasPage {
             },
             {uiSettings, userSettings},
         );
+    }
+
+    async waitForCSS(selector: string, css: Record<string, string>) {
+        const firstSelector = this.page.locator(selector).first();
+
+        for (const key of Object.keys(css)) {
+            await expect(firstSelector).toHaveCSS(key, css[key]);
+        }
     }
 }
 

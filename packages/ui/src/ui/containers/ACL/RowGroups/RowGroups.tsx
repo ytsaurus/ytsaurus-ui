@@ -140,6 +140,7 @@ export function RowGroups({
                                             }
                                         />
                                     ),
+                                    width: 250,
                                 },
                             ]}
                         />
@@ -150,7 +151,7 @@ export function RowGroups({
                             noItemsText={i18n('alert_no-groups')}
                             data={rowGroups ?? []}
                             columns={columns}
-                            theme={'yt-borderless'}
+                            theme={'yt'}
                             settings={{
                                 sortable: false,
                                 displayIndices: false,

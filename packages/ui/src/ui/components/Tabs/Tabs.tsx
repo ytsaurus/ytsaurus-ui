@@ -87,7 +87,7 @@ class Tabs<ValueT extends string = string> extends React.Component<Props<ValueT>
     }
 
     renderLink(item: TabItem<ValueT>) {
-        const {active, onTabChange} = this.props;
+        const {active, onTabChange, size} = this.props;
         const onTabClick = (evt: React.MouseEvent<Element, MouseEvent>) => {
             const clickHandler = action.makeEntryClickHandler(evt, onTabChange);
             clickHandler(item.value);
@@ -102,7 +102,11 @@ class Tabs<ValueT extends string = string> extends React.Component<Props<ValueT>
                 >
                     {item.text}
                     {item.external && (
-                        <Icon className={b('external-icon')} awesome="external-link" />
+                        <Icon
+                            className={b('external-icon')}
+                            awesome="external-link"
+                            size={size === 'l' ? 17 : undefined}
+                        />
                     )}
                 </Link>
             )
