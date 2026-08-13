@@ -117,6 +117,7 @@ export async function promisifyWorker<T extends ExposedFunctions>(
         return jobResult;
     }
 
+    // eslint-disable-next-line no-param-reassign
     worker.onmessage = function (message: MessageEvent<Response>) {
         const response = message.data;
 
@@ -138,6 +139,7 @@ export async function promisifyWorker<T extends ExposedFunctions>(
         }
     };
 
+    // eslint-disable-next-line no-param-reassign
     worker.onerror = function (error) {
         // We don't actually know what job the error occured in, so reject them all just to be safe.
         // This event should never fire since we have a try catch within the worker's onmessage

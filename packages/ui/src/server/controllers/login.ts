@@ -48,9 +48,9 @@ export async function handleLogin(req: Request, res: Response) {
                     res,
                     response,
                     undefined,
-                    (headers: Record<string, string[]>) => {
-                        if (headers['set-cookie']) {
-                            headers['set-cookie'] = headers['set-cookie'].reduce<string[]>(
+                    (accHeaders: Record<string, string[]>) => {
+                        if (accHeaders['set-cookie']) {
+                            accHeaders['set-cookie'] = accHeaders['set-cookie'].reduce<string[]>(
                                 (ret, item) => {
                                     ret.push(item);
 
@@ -69,7 +69,7 @@ export async function handleLogin(req: Request, res: Response) {
                             );
                         }
 
-                        return removeSecureFlagIfOriginInsecure(req, headers);
+                        return removeSecureFlagIfOriginInsecure(req, accHeaders);
                     },
                 );
                 if (!pipedSize) {

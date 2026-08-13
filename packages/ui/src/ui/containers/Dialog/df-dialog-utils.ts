@@ -192,15 +192,15 @@ type Converter = ReturnType<typeof converterByType>;
 
 function makeDialogField<FormValues = any>(
     item: OptionDescription,
-    dstInitialValues: any,
-    dstConvertersByName: Record<string, {type: DialogField['type']; converter: Converter}>,
+    accInitialValues: any,
+    accConvertersByName: Record<string, {type: DialogField['type']; converter: Converter}>,
     options: MakeDialogFieldsOptions,
 ) {
     const {initialValue, converter, ...res} = descriptionToDialogField<FormValues>(item, options);
     const {type} = res;
 
-    dstInitialValues[item.name] = initialValue ?? converter.toFieldValue(item.current_value);
-    dstConvertersByName[item.name] = {type: type!, converter};
+    accInitialValues[item.name] = initialValue ?? converter.toFieldValue(item.current_value);
+    accConvertersByName[item.name] = {type: type!, converter};
 
     return res;
 }
