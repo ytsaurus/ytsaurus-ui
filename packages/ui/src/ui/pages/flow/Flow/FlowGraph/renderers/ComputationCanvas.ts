@@ -125,10 +125,6 @@ export class ComputationCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockIte
     override renderAnchor: YTGraphCanvasBlock<FlowGraphBlockItem<'computation'>>['renderAnchor'] = (
         anchor,
     ) => {
-        if (anchor.type === COMPUTATION_TIMER_IN || anchor.type === COMPUTATION_TIMER_OUT) {
-            return NoopComponent.create();
-        }
-
         return ComputationAnchor.create(
             {
                 ...anchor,
