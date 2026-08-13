@@ -231,10 +231,10 @@ export class Node {
 
         this.IOWeight = reduce_(
             media,
-            (result, medium, mediumName) => {
-                result[mediumName] = medium.io_weight;
+            (accResult, medium, mediumName) => {
+                accResult[mediumName] = medium.io_weight;
 
-                return result;
+                return accResult;
             },
             {} as Node['IOWeight'],
         );
@@ -354,16 +354,16 @@ export class Node {
         let usedDataInd = 0;
         let generatedColorInd = SERIE_COLORS.length;
 
-        memory = map_(memory, (categoryData) => {
-            memoryUsage += categoryData.rawData.used || 0;
+        memory = map_(memory, (accCategoryData) => {
+            memoryUsage += accCategoryData.rawData.used || 0;
             // the first 10 objects with a non-zero value are guaranteed to receive a predefined color value
-            if (categoryData.rawData.used && usedDataInd < 10) {
-                categoryData.color = Node.getColor(usedDataInd++);
+            if (accCategoryData.rawData.used && usedDataInd < 10) {
+                accCategoryData.color = Node.getColor(usedDataInd++);
             } else {
                 // the rest are generated
-                categoryData.color = Node.getColor(generatedColorInd++);
+                accCategoryData.color = Node.getColor(generatedColorInd++);
             }
-            return categoryData;
+            return accCategoryData;
         });
 
         this.memoryData = memory;
@@ -389,9 +389,9 @@ export class Node {
             const normalizeBy = 100 / this.memoryProgress;
 
             this.memoryProgress *= normalizeBy;
-            this.memoryData = map_(memory, (categoryData) => {
-                categoryData.value *= normalizeBy;
-                return categoryData;
+            this.memoryData = map_(memory, (accCategoryData) => {
+                accCategoryData.value *= normalizeBy;
+                return accCategoryData;
             });
         }
     }

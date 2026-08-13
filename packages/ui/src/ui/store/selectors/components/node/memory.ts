@@ -134,9 +134,9 @@ const selectNodeMemoryUsageBundlesByName = createSelector(
             maxRowCache = max_([maxRowCache, tmp.rowCache])!;
         });
 
-        forEach_(itemsByName, (item) => {
-            item.tabletStaticLimit = maxTabletStatic;
-            item.rowCacheLimit = maxRowCache;
+        forEach_(itemsByName, (accItem) => {
+            accItem.tabletStaticLimit = maxTabletStatic;
+            accItem.rowCacheLimit = maxRowCache;
         });
 
         return itemsByName;
@@ -306,14 +306,14 @@ const selectNodeMemoryUsageTablesAndBundlesByName = createSelector(
         });
 
         if (!allowBundles) {
-            forEach_(tablesByName, (item) => {
-                if (item.isBundle) {
+            forEach_(tablesByName, (accItem) => {
+                if (accItem.isBundle) {
                     return;
                 }
 
-                item.tabletDynamic.limit = maxDynamic;
-                item.tabletStaticLimit = maxStatic;
-                item.rowCacheLimit = maxRowCache;
+                accItem.tabletDynamic.limit = maxDynamic;
+                accItem.tabletStaticLimit = maxStatic;
+                accItem.rowCacheLimit = maxRowCache;
             });
         }
 
