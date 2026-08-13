@@ -157,6 +157,7 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
                 zoomToNode={zoomToState}
                 onZoomToFinished={() => setZoomToState(undefined)}
                 graphInstanceRef={setGraphInstance}
+                highlightConnectionsOnHover
             />
         </div>
     );
