@@ -192,63 +192,63 @@ export default class ColumnSelector extends Component {
 
     toggleItem = (name) => {
         this.withActualItems(({items}) => {
-            items = [...items];
-            const index = items.findIndex((item) => item.name === name);
-            const changedItem = items[index];
-            items[index] = {...changedItem, checked: !changedItem.checked};
+            const itemsCopy = [...items];
+            const index = itemsCopy.findIndex((item) => item.name === name);
+            const changedItem = itemsCopy[index];
+            itemsCopy[index] = {...changedItem, checked: !changedItem.checked};
 
-            return {items};
+            return {items: itemsCopy};
         });
     };
 
     selectAllItems = () => {
         this.withActualItems(({items}) => {
             const visibleMap = this.getVisibleItemsMap();
-            items = [...items];
-            each_(items, (item, index) => {
+            const itemsCopy = [...items];
+            each_(itemsCopy, (item, index) => {
                 if (!visibleMap[item.name]) {
                     return;
                 }
                 if (!item.checked && !item.disabled) {
-                    items[index] = {...item, checked: true};
+                    itemsCopy[index] = {...item, checked: true};
                 }
             });
 
-            return {items};
+            return {items: itemsCopy};
         });
     };
 
     deselectAllItems = () => {
         this.withActualItems(({items}) => {
             const visibleMap = this.getVisibleItemsMap();
-            items = [...items];
-            each_(items, (item, index) => {
+            const itemsCopy = [...items];
+            each_(itemsCopy, (item, index) => {
                 if (!visibleMap[item.name]) {
                     return;
                 }
                 if (item.checked && !item.disabled && (item.isDeletable ?? true)) {
-                    items[index] = {...item, checked: false};
+                    itemsCopy[index] = {...item, checked: false};
                 }
             });
 
-            return {items};
+            return {items: itemsCopy};
         });
     };
 
     invertItems = () => {
         this.withActualItems(({items}) => {
             const visibleItems = this.getVisibleItemsMap();
-            items = [...items];
-            each_(items, (item, index) => {
+            const itemsCopy = [...items];
+            each_(itemsCopy, (item, index) => {
                 if (!visibleItems[item.name]) {
                     return;
                 }
                 if (!item.disabled) {
-                    items[index] = {...item, checked: !item.checked};
+                    itemsCopy[index] = {...item, checked: !item.checked};
                 }
             });
 
-            return {items};
+            return {items: itemsCopy};
         });
     };
 
@@ -262,16 +262,20 @@ export default class ColumnSelector extends Component {
         }
 
         this.withActualItems(({items}) => {
-            items = [...items];
+            const itemsCopy = [...items];
 
             const {items: visibleItems} = this.getVisibleItems();
-            const fromIndex = items.findIndex((item) => item.name === visibleItems[oldIndex].name);
-            const toIndex = items.findIndex((item) => item.name === visibleItems[newIndex].name);
+            const fromIndex = itemsCopy.findIndex(
+                (item) => item.name === visibleItems[oldIndex].name,
+            );
+            const toIndex = itemsCopy.findIndex(
+                (item) => item.name === visibleItems[newIndex].name,
+            );
 
-            const [removed] = items.splice(fromIndex, 1);
-            items.splice(toIndex, 0, removed);
+            const [removed] = itemsCopy.splice(fromIndex, 1);
+            itemsCopy.splice(toIndex, 0, removed);
 
-            return {items};
+            return {items: itemsCopy};
         });
     };
 
@@ -366,9 +370,9 @@ export default class ColumnSelector extends Component {
 
     filterItems(items) {
         const {showDisabledItems} = this.props;
-        items = showDisabledItems ? items : filter_(items, (item) => !item.disabled);
+        const filteredItems = showDisabledItems ? items : filter_(items, (item) => !item.disabled);
 
-        const visibleItems = this.filterItemsByName(items);
+        const visibleItems = this.filterItemsByName(filteredItems);
         return this.state.showSelectedOnly
             ? filter_(visibleItems, (item) => item.checked)
             : visibleItems;

@@ -287,21 +287,21 @@ export function flattenTree<T extends TreeNode<unknown, unknown>>(
     level = 0,
     basePath = '',
 ) {
-    basePath += treeNode.name + '/';
+    const currentPath = basePath + treeNode.name + '/';
 
     let tree: Array<TreeNodeOrLeaf<T> & FlatItemDetails> = [];
 
     tree = tree.concat(
         map_(treeNode.leaves, (leaf) => {
-            return augmentTreeNode(leaf, level, basePath);
+            return augmentTreeNode(leaf, level, currentPath);
         }),
     );
 
     each_(treeNode.children, (childNode) => {
-        childNode = augmentTreeNode(childNode, level, basePath);
+        const augmented = augmentTreeNode(childNode, level, currentPath);
 
-        tree.push(childNode);
-        tree = tree.concat(flattenTree(childNode, level + 1, basePath));
+        tree.push(augmented);
+        tree = tree.concat(flattenTree(augmented, level + 1, currentPath));
     });
 
     return tree;

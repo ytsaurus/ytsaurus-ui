@@ -40,8 +40,8 @@ export const dashboardParams = {
 };
 
 export function getDashboardPreparedState(state, location) {
-    state = getListPreparedState(state, location);
-    state = getAccountsPreparedState(state, location);
+    const listState = getListPreparedState(state, location);
+    const dashboardState = getAccountsPreparedState(listState, location);
 
-    return state;
+    return dashboardState;
 }

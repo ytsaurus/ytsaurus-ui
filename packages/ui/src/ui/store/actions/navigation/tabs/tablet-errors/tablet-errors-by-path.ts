@@ -54,8 +54,7 @@ export function loadTabletErrorsByTablePath(
                 omit_(params, ['fixed_end_timestamp']),
             )
         ) {
-            page = 0;
-            dispatch(tabletErrorsByPathActions.updateFilter({pageFilter: page}));
+            dispatch(tabletErrorsByPathActions.updateFilter({pageFilter: 0}));
             return Promise.resolve();
         }
 

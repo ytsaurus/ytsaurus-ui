@@ -38,10 +38,8 @@ export function getPermissionDeniedError<T extends YTErrorRaw>(error: T): T | un
     return getErrorWithCode([error], yt.codes.PERMISSION_DENIED);
 }
 
-export function appendInnerErrors(targetErr: any, innerErr: YTError) {
-    if (!targetErr) {
-        targetErr = new Error('Unexpected behavior: targetErr is undefined.');
-    }
+export function appendInnerErrors(_targetErr: any, innerErr: YTError) {
+    const targetErr = _targetErr || new Error('Unexpected behavior: targetErr is undefined.');
 
     if (!targetErr.inner_errors) {
         targetErr.inner_errors = [innerErr];

@@ -24,11 +24,12 @@ function preformat(value) {
         [/_data_size$/, '_size'],
     ];
 
+    let result = value;
     forEach_(replacements, (replacementSettings) => {
-        value = value.replace.apply(value, replacementSettings);
+        result = result.replace.apply(result, replacementSettings);
     });
 
-    return value;
+    return result;
 }
 
 function postformat(value) {
@@ -54,13 +55,14 @@ function postformat(value) {
         ['lastVisited', 'Visited'],
     ];
 
+    let result = value;
     forEach_(replacements, (replacementSettings) => {
         const regex = new RegExp('(^|\\s)(' + replacementSettings[0] + ')($|\\s)', 'i');
         const replacement = '$1' + replacementSettings[1] + '$3';
-        value = value.replace(regex, replacement);
+        result = result.replace(regex, replacement);
     });
 
-    return value;
+    return result;
 }
 
 /**
@@ -69,8 +71,8 @@ function postformat(value) {
  * @param {Object} settings
  * @returns {String}
  */
-format['ReadableField'] = function (value, settings) {
-    settings = settings || {};
+format['ReadableField'] = function (value, _settings) {
+    const settings = _settings || {};
 
     let formatted = value;
 
@@ -194,10 +196,11 @@ format['RackToVector'] = function (value) {
     const rackPartRegex = /([a-z]+)|(\d+)|([-.])/i;
     const vector = [];
     let currentMatch;
+    let remaining = value;
 
-    if (typeof value !== 'undefined') {
+    if (typeof remaining !== 'undefined') {
         do {
-            currentMatch = rackPartRegex.exec(value);
+            currentMatch = rackPartRegex.exec(remaining);
 
             if (currentMatch !== null) {
                 if (currentMatch[2]) {
@@ -208,11 +211,11 @@ format['RackToVector'] = function (value) {
                     vector.push(currentMatch[3]);
                 }
 
-                value = value.substring(currentMatch.index + currentMatch[0].length);
+                remaining = remaining.substring(currentMatch.index + currentMatch[0].length);
             }
         } while (currentMatch !== null);
     } else {
-        vector.push(value);
+        vector.push(remaining);
     }
 
     return vector;

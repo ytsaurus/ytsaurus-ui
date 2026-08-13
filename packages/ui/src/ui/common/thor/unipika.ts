@@ -23,8 +23,8 @@ const {utf8} = unipika.utils;
 /**
  * @deprecated Use corresponding selector from `selectors/thor/unipika`
  */
-unipika.prepareSettings = function (settings: UnipikaSettings) {
-    settings = settings || {};
+unipika.prepareSettings = function (_settings: UnipikaSettings) {
+    const settings: UnipikaSettings = _settings || {};
     Object.assign(settings, getUnipikaSettingsFromConfig());
 
     settings.format = parseSetting(settings, 'format', getSettingBySelector(selectFormat));
@@ -53,8 +53,8 @@ unipika.prepareSettings = function (settings: UnipikaSettings) {
 /**
  * @deprecated The function uses store implicitly, use `prettyPrint` from `utils/unipika.ts instead of it.
  */
-unipika.prettyprint = function (value: unknown, settings: UnipikaSettings) {
-    settings = unipika.prepareSettings(settings);
+unipika.prettyprint = function (value: unknown, _settings: UnipikaSettings) {
+    const settings = unipika.prepareSettings(_settings);
     return prettyPrint(value, settings);
 };
 

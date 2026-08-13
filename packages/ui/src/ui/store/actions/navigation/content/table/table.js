@@ -424,6 +424,8 @@ export function updateTableData() {
                     dispatch(setColumns(preparedColumns, preparedOmittedColumns, []));
                 }
 
+                let displayRows = rows;
+
                 if (moveBackward) {
                     let newOffsetValue;
                     if (!isEmpty_(offsetValue) && rows.length < requestedPageSize) {
@@ -436,7 +438,7 @@ export function updateTableData() {
                             requestedPageSize - rows.length + 1,
                             previousRows.length,
                         );
-                        rows = rows.concat(previousRows.slice(1, addRowCount));
+                        displayRows = rows.concat(previousRows.slice(1, addRowCount));
                     } else {
                         const keyColumns = selectKeyColumns(state);
                         newOffsetValue = Query.prepareKey(getColumnsValues(rows[0], keyColumns));
@@ -452,7 +454,7 @@ export function updateTableData() {
 
                 dispatch({
                     type: GET_TABLE_DATA.SUCCESS,
-                    data: {rows, yqlTypes},
+                    data: {rows: displayRows, yqlTypes},
                 });
             })
             .catch((error) => {

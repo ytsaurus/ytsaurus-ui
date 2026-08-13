@@ -170,7 +170,7 @@ export async function pipeReadableToWriteable(
             pipedDataSize += chunk?.length;
         });
         src.on('error', (e: any) => {
-            resolve = () => {};
+            resolve = () => {}; // eslint-disable-line no-param-reassign
             reject(e);
         });
         src.on('close', () => {
