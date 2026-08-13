@@ -20,10 +20,17 @@ import {type RecursivePartial} from '@gravity-ui/graph/build/utils/types/helpers
 import {getCssColor} from '../../utils/get-css-color';
 import {useMemoizedIfEqual} from '../../hooks';
 import {type YTGraphBlock, type YTGraphData} from './types';
-import {NoopComponent} from './canvas/NoopComponent';
 
 export const getGraphColors = (): RecursivePartial<TGraphColors> => {
+    const canvasBackground = getCssColor('--g-color-base-background');
+
     return {
+        canvas: {
+            belowLayerBackground: canvasBackground,
+            layerBackground: canvasBackground,
+            border: canvasBackground,
+            dots: canvasBackground,
+        },
         connection: {
             background: getCssColor('--yql-graph-color-edge'),
             selectedBackground: getCssColor('--yql-graph-color-edge-highlight'),
@@ -67,8 +74,6 @@ export function useYTGraphConfig<T extends TBlock>(
                 canZoomCamera: true,
                 blockComponents: blockComponentsCached,
                 canDrag,
-                // @ts-expect-error
-                background: NoopComponent,
             },
             viewConfiguration: {
                 colors: {
