@@ -129,22 +129,22 @@ class ElementsTable extends Component {
         const totalKeys = keys.length;
         let prevKey, prevKeyParts;
 
-        return keys.reduce((states, key, index) => {
+        return keys.reduce((accStates, key, index) => {
             // initially item is not empty
-            states[key] = {empty: false};
+            accStates[key] = {empty: false};
 
             const keyParts = key.split('/');
             // if we haven't traversed deeper right after the previous item, then the previous item
             // doesn't have children, i.e. is empty
             if (prevKeyParts && prevKeyParts.length >= keyParts.length) {
-                states[prevKey] = {empty: true};
+                accStates[prevKey] = {empty: true};
             }
             // last item is always empty
             if (index === totalKeys - 1) {
-                states[key] = {empty: true};
+                accStates[key] = {empty: true};
             }
             [prevKey, prevKeyParts] = [key, keyParts];
-            return states;
+            return accStates;
         }, {});
     }
 

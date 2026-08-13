@@ -71,24 +71,24 @@ function prepareMediumStats<T extends Record<string, MediumStat>>(
     availableSpace: Record<keyof T, number>,
     settings: T,
 ) {
-    return forEach_(settings, (stats, type) => {
+    return forEach_(settings, (accStats, type) => {
         const used = usedSpace[type] || 0;
         const available = availableSpace[type] || 0;
-        stats.usage = used;
-        stats.limit = available;
+        accStats.usage = used;
+        accStats.limit = available;
     });
 }
 
 function initMediumStats<T extends readonly string[]>(list: T) {
     return reduce_(
         list,
-        (list, type: T[number]) => {
-            list[type] = {
+        (accList, type: T[number]) => {
+            accList[type] = {
                 usage: 0,
                 limit: 0,
             };
 
-            return list;
+            return accList;
         },
         {} as Record<T[number], MediumStat>,
     );

@@ -44,10 +44,12 @@ export function prepareUserData(item) {
     allGroups.sort();
     const hasIdm = flags.get(idm || false);
 
-    item.$attributes.idm = hasIdm;
-    item.$attributes.externalSystem = getExternalSystem(ldap, hasIdm);
-    item.$attributes['transitiveGroups'] = difference_(allGroups, groups);
-    return item.$attributes;
+    return {
+        ...item.$attributes,
+        idm: hasIdm,
+        externalSystem: getExternalSystem(ldap, hasIdm),
+        transitiveGroups: difference_(allGroups, groups),
+    };
 }
 
 export function fetchUsers() {

@@ -95,18 +95,18 @@ export type DataType = {
       }
 );
 export function getType(typeArray: yqlModel.value.TypeArray): DataType {
-    function setOptional(dataType: DataType) {
-        if (dataType.optional) {
-            dataType.optionalLevel = (dataType.optionalLevel || 1) + 1;
+    function setOptional(accDataType: DataType) {
+        if (accDataType.optional) {
+            accDataType.optionalLevel = (accDataType.optionalLevel || 1) + 1;
         }
-        dataType.optional = true;
-        return dataType;
+        accDataType.optional = true;
+        return accDataType;
     }
 
-    function setTag(dataType: DataType, typeTag: string) {
-        dataType.tagged = true;
-        dataType.tags = (dataType.tags || []).concat(typeTag);
-        return dataType;
+    function setTag(accDataType: DataType, typeTag: string) {
+        accDataType.tagged = true;
+        accDataType.tags = (accDataType.tags || []).concat(typeTag);
+        return accDataType;
     }
 
     function isEnum(variantTypes: {type: {name: string | number}}[]) {
