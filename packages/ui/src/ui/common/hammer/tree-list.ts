@@ -38,11 +38,11 @@ export type TreeNodeOrLeaf<T extends TreeNode<unknown, unknown>> = T | TreeLeaf<
  * @param initedBy - name of a treeNode that created this tree node initially
  */
 function getTreeNode<T, L>(
-    treeNodes: Record<string, TreeNode<T, L>>,
+    accTreeNodes: Record<string, TreeNode<T, L>>,
     name: string,
     initedBy: string,
 ): TreeNode<T, L> {
-    treeNodes[name] = treeNodes[name] || {
+    accTreeNodes[name] = accTreeNodes[name] || {
         name,
         attributes: {},
         children: [],
@@ -50,7 +50,7 @@ function getTreeNode<T, L>(
         _initedBy: initedBy, // needed for debug purposes in case of inconsistent data
     };
 
-    return treeNodes[name];
+    return accTreeNodes[name];
 }
 
 function getTreeLeafNode<L>(leafNode: L, name: string): LeafNode<L> {
@@ -243,19 +243,19 @@ export interface FieldDescr<T extends TreeNode<unknown, unknown>> {
  * @param fields - description for all possible sort fields in column-like format.
  */
 export function sortTree<T extends TreeNode<unknown, unknown>, FieldT extends string>(
-    treeNode: T,
+    accTreeNode: T,
     sortInfo: OldSortState,
     fields: Record<FieldT, FieldDescr<T>>,
 ) {
-    treeNode.children = utils.sort(treeNode.children, sortInfo, fields);
-    treeNode.leaves = utils.sort(treeNode.leaves, sortInfo, fields);
+    accTreeNode.children = utils.sort(accTreeNode.children, sortInfo, fields);
+    accTreeNode.leaves = utils.sort(accTreeNode.leaves, sortInfo, fields);
 
-    treeNode.children = map_(treeNode.children, (c) => {
-        const childEntry = c as typeof treeNode;
+    accTreeNode.children = map_(accTreeNode.children, (c) => {
+        const childEntry = c as typeof accTreeNode;
         return sortTree(childEntry, sortInfo, fields);
     });
 
-    return treeNode;
+    return accTreeNode;
 }
 
 function augmentTreeNode<T extends {name: string}>(entry: T, level: number, basePath: string) {
