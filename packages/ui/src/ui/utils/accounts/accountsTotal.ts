@@ -71,11 +71,11 @@ function prepareMediumStats<T extends Record<string, MediumStat>>(
     availableSpace: Record<keyof T, number>,
     settings: T,
 ) {
-    return forEach_(settings, (accStats, type) => {
+    return forEach_(settings, (draftStats, type) => {
         const used = usedSpace[type] || 0;
         const available = availableSpace[type] || 0;
-        accStats.usage = used;
-        accStats.limit = available;
+        draftStats.usage = used;
+        draftStats.limit = available;
     });
 }
 

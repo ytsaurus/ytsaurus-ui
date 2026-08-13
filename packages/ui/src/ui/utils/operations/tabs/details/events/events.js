@@ -34,7 +34,7 @@ function prepareEvents(events, params) {
         let lastState;
         let prepared = reduce_(
             events,
-            (prepared, event, index) => {
+            (accPrepared, event, index) => {
                 const nextEvent = events[index + 1];
                 let duration;
                 let finishTime;
@@ -55,8 +55,8 @@ function prepareEvents(events, params) {
                     showAttributesColumn = true;
                 }
 
-                prepared.totalDuration += duration;
-                prepared.events.push(
+                accPrepared.totalDuration += duration;
+                accPrepared.events.push(
                     new Event({
                         duration,
                         finishTime,
@@ -68,7 +68,7 @@ function prepareEvents(events, params) {
                     }),
                 );
 
-                return prepared;
+                return accPrepared;
             },
             {events: [], totalDuration: 0, precedingDuration: 0},
         );
@@ -77,19 +77,19 @@ function prepareEvents(events, params) {
 
         prepared = reduce_(
             eventsDurations,
-            (prepared, duration, index) => {
-                const currentEvent = prepared.events[index];
-                const totalDuration = prepared.totalDuration;
-                const precedingDuration = prepared.precedingDuration;
+            (accPrepared, duration, index) => {
+                const currentEvent = accPrepared.events[index];
+                const totalDuration = accPrepared.totalDuration;
+                const precedingDuration = accPrepared.precedingDuration;
 
                 currentEvent.progress = {
                     duration: durationToPercentage(duration, totalDuration),
                     precedingDuration: durationToPercentage(precedingDuration, totalDuration),
                 };
 
-                prepared.precedingDuration += duration;
+                accPrepared.precedingDuration += duration;
 
-                return prepared;
+                return accPrepared;
             },
             prepared,
         );

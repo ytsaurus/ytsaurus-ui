@@ -164,8 +164,8 @@ const selectTableColumns = createSelector(
 export const selectPreparedTableColumns = createSelector(selectTableColumns, (columns) =>
     transform_(
         columns,
-        (preparedColumns, column, name) => {
-            preparedColumns[name] = {
+        (accPreparedColumns, column, name) => {
+            accPreparedColumns[name] = {
                 ...column,
                 name,
             };
@@ -284,9 +284,9 @@ export const TYPE_WEIGHTS = map_(
         'boolean_node',
     ],
     (type, index, types) => ({type, weight: types.length - index}),
-).reduce((res, item) => {
-    res[item.type] = item.weight;
-    return res;
+).reduce((accRes, item) => {
+    accRes[item.type] = item.weight;
+    return accRes;
 }, {});
 
 export const selectSortedNodes = createSelector(

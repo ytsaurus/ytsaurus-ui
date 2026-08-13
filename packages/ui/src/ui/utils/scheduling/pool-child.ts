@@ -19,18 +19,18 @@ const RESOURCE_LIMIT_MAPPER: Partial<
 };
 
 function preparePoolChildResource<T extends 'pool' | 'operation'>(
-    accData: PoolOrOperation<T>,
+    draftData: PoolOrOperation<T>,
     _type: T,
     treeResources: TreeResources,
     resource: keyof Required<PoolData<'pool'>>['resources'],
 ) {
-    if (!accData.resources) {
+    if (!draftData.resources) {
         return;
     }
-    const attributes = accData.attributes;
+    const attributes = draftData.attributes;
 
-    if (accData.name === ROOT_POOL_NAME) {
-        accData.resources[resource] = {
+    if (draftData.name === ROOT_POOL_NAME) {
+        draftData.resources[resource] = {
             guaranteed: ypath.getNumber(treeResources, '/resource_limits/' + resource),
             usage: ypath.getNumber(treeResources, '/resource_usage/' + resource),
         };
@@ -50,11 +50,11 @@ function preparePoolChildResource<T extends 'pool' | 'operation'>(
 
         const limitResource = RESOURCE_LIMIT_MAPPER[resource] || resource;
         const resourceLimit = ypath.getNumber(
-            accData.cypressAttributes,
+            draftData.cypressAttributes,
             '/resource_limits/' + limitResource,
         );
         const specifiedResourceLimit = ypath.getNumber(
-            accData.attributes,
+            draftData.attributes,
             '/specified_resource_limits/' + limitResource,
         );
 
@@ -62,7 +62,7 @@ function preparePoolChildResource<T extends 'pool' | 'operation'>(
         const detailed =
             treeLimit * ypath.getNumber(attributes, '/detailed_fair_share/total/' + limitResource);
 
-        accData.resources[resource] = {
+        draftData.resources[resource] = {
             min,
             guaranteed,
             effectiveGuaranteed,
@@ -165,33 +165,33 @@ export type PoolOrOperation<T extends 'pool' | 'operation'> = T extends 'pool'
     : PoolLeafNode;
 
 export function updatePoolChild<T extends 'pool' | 'operation'>(
-    accData: PoolOrOperation<T>,
+    draftData: PoolOrOperation<T>,
     cypressData: unknown,
     type: T,
     treeResources: TreeResources,
 ): PoolOrOperation<T> {
     try {
-        const attributes = accData.attributes;
+        const attributes = draftData.attributes;
         const cypressAttributes = ypath.getAttributes(cypressData);
 
-        accData.cypressAttributes = cypressAttributes;
-        accData.type = type;
+        draftData.cypressAttributes = cypressAttributes;
+        draftData.type = type;
 
-        if (isPoolItem(accData)) {
-            if (typeof attributes === 'undefined' && accData.parent) {
+        if (isPoolItem(draftData)) {
+            if (typeof attributes === 'undefined' && draftData.parent) {
                 // eslint-disable-next-line no-console
                 console.error(
                     'Pool "%s" without attributes inited by "%s"',
-                    accData.name,
-                    accData._initedBy,
+                    draftData.name,
+                    draftData._initedBy,
                 );
             }
 
-            accData.mode = ypath.getValue(attributes, '/mode');
+            draftData.mode = ypath.getValue(attributes, '/mode');
 
-            accData.leaves = map_(accData.leaves, (leaf) => {
+            draftData.leaves = map_(draftData.leaves, (leaf) => {
                 const res = updatePoolChild(
-                    Object.assign(leaf, {pool: accData.name}),
+                    Object.assign(leaf, {pool: draftData.name}),
                     {},
                     'operation',
                     treeResources,
@@ -200,12 +200,12 @@ export function updatePoolChild<T extends 'pool' | 'operation'>(
             });
 
             const child_pool_count = ypath.getNumber(attributes, '/child_pool_count');
-            if (child_pool_count > 0 && !accData.children.length) {
+            if (child_pool_count > 0 && !draftData.children.length) {
                 for (let i = 0; i < child_pool_count; ++i) {
-                    accData.children.push({
-                        parent: accData.name,
+                    draftData.children.push({
+                        parent: draftData.name,
                         type: 'pool',
-                        name: `#key_${accData.name}_${i}`,
+                        name: `#key_${draftData.name}_${i}`,
                         attributes: {},
                         leaves: [],
                         incomplete: true,
@@ -214,89 +214,92 @@ export function updatePoolChild<T extends 'pool' | 'operation'>(
                 }
             }
 
-            if (!accData.leaves?.length) {
-                accData.pool_operation_count = ypath.getNumber(
+            if (!draftData.leaves?.length) {
+                draftData.pool_operation_count = ypath.getNumber(
                     attributes,
                     '/pool_operation_count',
                     NaN,
                 );
-                if (accData.pool_operation_count! > 0) {
+                if (draftData.pool_operation_count! > 0) {
                     const emptyOp = updatePoolChild(
                         {
                             attributes: {},
                             isLeafNode: true,
                             name: '',
                             type: 'operation',
-                            pool: accData.name,
+                            pool: draftData.name,
                         },
                         {},
                         'operation',
                         treeResources,
                     );
-                    accData.leaves = [];
-                    for (let i = 0; i < accData.pool_operation_count!; ++i) {
-                        accData.leaves.push({
+                    draftData.leaves = [];
+                    for (let i = 0; i < draftData.pool_operation_count!; ++i) {
+                        draftData.leaves.push({
                             ...emptyOp,
-                            name: `##fake_operation_${accData.name}_${i}`,
-                            pool: accData.name,
+                            name: `##fake_operation_${draftData.name}_${i}`,
+                            pool: draftData.name,
                         });
                     }
                 }
             }
 
             // Operations
-            accData.operationCount = ypath.getNumber(attributes, '/operation_count');
-            accData.maxOperationCount = ypath.getNumber(attributes, '/max_operation_count');
-            accData.maxOperationCountEdited = ypath.getNumber(
+            draftData.operationCount = ypath.getNumber(attributes, '/operation_count');
+            draftData.maxOperationCount = ypath.getNumber(attributes, '/max_operation_count');
+            draftData.maxOperationCountEdited = ypath.getNumber(
                 cypressAttributes,
                 '/max_operation_count',
             );
-            accData.lightweightRunningOperationCount = ypath.getNumber(
+            draftData.lightweightRunningOperationCount = ypath.getNumber(
                 attributes,
                 '/lightweight_running_operation_count',
             );
-            accData.runningOperationCount = ypath.getNumber(attributes, '/running_operation_count');
-            accData.maxRunningOperationCount = ypath.getNumber(
+            draftData.runningOperationCount = ypath.getNumber(
+                attributes,
+                '/running_operation_count',
+            );
+            draftData.maxRunningOperationCount = ypath.getNumber(
                 attributes,
                 '/max_running_operation_count',
             );
-            accData.maxRunningOperationCountEdited = ypath.getNumber(
+            draftData.maxRunningOperationCountEdited = ypath.getNumber(
                 cypressAttributes,
                 '/max_running_operation_count',
             );
         }
 
         if (type === 'operation') {
-            accData.operationType = ypath.getValue(attributes, '/type');
-            accData.user = ypath.getValue(attributes, '/user');
-            accData.startTime = ypath.getValue(attributes, '/start_time');
+            draftData.operationType = ypath.getValue(attributes, '/type');
+            draftData.user = ypath.getValue(attributes, '/user');
+            draftData.startTime = ypath.getValue(attributes, '/start_time');
         }
 
-        accData.id = accData.name;
-        accData.starvation_status = ypath.getValue(attributes, '/starvation_status');
+        draftData.id = draftData.name;
+        draftData.starvation_status = ypath.getValue(attributes, '/starvation_status');
 
         // General
-        accData.weight = ypath.getNumber(attributes, '/weight');
-        accData.weightEdited = ypath.getNumber(cypressAttributes, '/weight');
-        accData.minShareRatio = ypath.getNumber(attributes, '/min_share_ratio');
-        accData.maxShareRatio = ypath.getNumber(attributes, '/max_share_ratio');
-        accData.fairShareRatio = ypath.getNumber(attributes, '/fair_share_ratio');
-        accData.fifoIndex = ypath.getNumber(attributes, '/fifo_index');
-        accData.usageRatio = ypath.getNumber(attributes, '/usage_ratio');
-        accData.demandRatio = ypath.getNumber(attributes, '/demand_ratio');
-        accData.isEphemeral = ypath.getBoolean(attributes, '/is_ephemeral');
-        accData.isEffectiveLightweight = ypath.getBoolean(
+        draftData.weight = ypath.getNumber(attributes, '/weight');
+        draftData.weightEdited = ypath.getNumber(cypressAttributes, '/weight');
+        draftData.minShareRatio = ypath.getNumber(attributes, '/min_share_ratio');
+        draftData.maxShareRatio = ypath.getNumber(attributes, '/max_share_ratio');
+        draftData.fairShareRatio = ypath.getNumber(attributes, '/fair_share_ratio');
+        draftData.fifoIndex = ypath.getNumber(attributes, '/fifo_index');
+        draftData.usageRatio = ypath.getNumber(attributes, '/usage_ratio');
+        draftData.demandRatio = ypath.getNumber(attributes, '/demand_ratio');
+        draftData.isEphemeral = ypath.getBoolean(attributes, '/is_ephemeral');
+        draftData.isEffectiveLightweight = ypath.getBoolean(
             attributes,
             '/effective_lightweight_operations_enabled',
         );
 
-        accData.integralType = ypath.getValue(attributes, '/integral_guarantee_type');
+        draftData.integralType = ypath.getValue(attributes, '/integral_guarantee_type');
         const userDefinedBurstCPU = ypath.getNumber(
             cypressAttributes,
             '/integral_guarantees/burst_guarantee_resources/cpu',
             NaN,
         );
-        accData.burstCPU = ypath.getNumber(
+        draftData.burstCPU = ypath.getNumber(
             attributes,
             '/specified_burst_guarantee_resources/cpu',
             userDefinedBurstCPU,
@@ -306,7 +309,7 @@ export function updatePoolChild<T extends 'pool' | 'operation'>(
             '/integral_guarantees/resource_flow/cpu',
             NaN,
         );
-        accData.flowCPU = ypath.getNumber(
+        draftData.flowCPU = ypath.getNumber(
             attributes,
             '/specified_resource_flow/cpu',
             userDefinedFlowCPU,
@@ -316,45 +319,45 @@ export function updatePoolChild<T extends 'pool' | 'operation'>(
             '/integral_guarantees/resource_flow/gpu',
             NaN,
         );
-        accData.flowGPU = ypath.getNumber(
+        draftData.flowGPU = ypath.getNumber(
             attributes,
             '/specified_resource_flow/gpu',
             userDefinedFlowGPU,
         );
 
-        accData.accumulated = ypath.getValue(attributes, '/accumulated_resource_ratio_volume');
-        accData.accumulatedCpu = ypath.getValue(attributes, '/accumulated_resource_volume/cpu');
-        accData.burstDuration = ypath.getValue(attributes, '/estimated_burst_usage_duration_sec');
+        draftData.accumulated = ypath.getValue(attributes, '/accumulated_resource_ratio_volume');
+        draftData.accumulatedCpu = ypath.getValue(attributes, '/accumulated_resource_volume/cpu');
+        draftData.burstDuration = ypath.getValue(attributes, '/estimated_burst_usage_duration_sec');
 
         const fifoSortParams = map_(
             ypath.getValue(attributes, '/fifo_sort_parameters') ||
                 ypath.getValue(cypressAttributes, '/fifo_sort_parameters'),
             (param) => ypath.getValue(param),
         );
-        accData.fifoSortParams =
+        draftData.fifoSortParams =
             fifoSortParams.length > 0
                 ? fifoSortParams
                 : ['start_time', 'weight', 'pending_job_count'];
-        accData.abc = ypath.getValue(attributes, '/abc') || {};
-        accData.forbidImmediateOperations =
+        draftData.abc = ypath.getValue(attributes, '/abc') || {};
+        draftData.forbidImmediateOperations =
             ypath.getBoolean(cypressAttributes, '/forbid_immediate_operations') || false;
-        accData.createEphemeralSubpools =
+        draftData.createEphemeralSubpools =
             ypath.getBoolean(cypressAttributes, '/create_ephemeral_subpools') || false;
 
         // Resources
-        accData.dominantResource = ypath.getValue(attributes, '/dominant_resource');
+        draftData.dominantResource = ypath.getValue(attributes, '/dominant_resource');
 
-        accData.resources = {};
+        draftData.resources = {};
 
-        preparePoolChildResource(accData, type, treeResources, 'cpu');
-        preparePoolChildResource(accData, type, treeResources, 'user_memory');
-        preparePoolChildResource(accData, type, treeResources, 'gpu');
-        preparePoolChildResource(accData, type, treeResources, 'user_slots');
+        preparePoolChildResource(draftData, type, treeResources, 'cpu');
+        preparePoolChildResource(draftData, type, treeResources, 'user_memory');
+        preparePoolChildResource(draftData, type, treeResources, 'gpu');
+        preparePoolChildResource(draftData, type, treeResources, 'user_slots');
 
-        return accData;
+        return draftData;
     } catch (e) {
         throw appendInnerErrors(e, {
-            message: `An error occured while parsing pool "${accData.name}" data.`,
+            message: `An error occured while parsing pool "${draftData.name}" data.`,
         });
     }
 }

@@ -118,11 +118,11 @@ class InverseIndex extends BoundedArray {
 
     static TABLE_SIMILARITY_THRESHOLD = 0.9;
 
-    static addToFrequences(accContainer, word) {
-        if (isNaN(accContainer[word])) {
-            accContainer[word] = 0;
+    static addToFrequences(draftContainer, word) {
+        if (isNaN(draftContainer[word])) {
+            draftContainer[word] = 0;
         }
-        ++accContainer[word];
+        ++draftContainer[word];
     }
 
     _init(data = []) {

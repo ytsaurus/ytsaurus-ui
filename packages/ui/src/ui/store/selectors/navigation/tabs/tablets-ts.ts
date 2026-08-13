@@ -40,13 +40,13 @@ const SUM_FIELDS: Array<TypedKeys<TabletInfo, number>> = [
 ];
 
 function addHostItem(
-    accDst: TreeNode<TabletInfo, TabletInfo>,
+    draftDst: TreeNode<TabletInfo, TabletInfo>,
     item: TabletInfo,
-    accMaxDst: Pick<TabletInfo, TypedKeys<TabletInfo, number>>,
+    draftMaxDst: Pick<TabletInfo, TypedKeys<TabletInfo, number>>,
 ) {
-    accDst.children.push({
+    draftDst.children.push({
         name: item.tablet_id,
-        parent: accDst.name,
+        parent: draftDst.name,
         attributes: {
             ...item,
             name: item.tablet_id,
@@ -57,9 +57,9 @@ function addHostItem(
     });
 
     forEach_(SUM_FIELDS, (k) => {
-        accDst.attributes[k] += item[k];
+        draftDst.attributes[k] += item[k];
 
-        accMaxDst[k] = max_([accMaxDst[k], item[k]])!;
+        draftMaxDst[k] = max_([draftMaxDst[k], item[k]])!;
     });
 }
 
@@ -119,10 +119,10 @@ const selectTabletsByNameRoot = createSelector(
             attributes: {} as any,
         };
 
-        forEach_(root.children, (accItem) => {
-            accItem.attributes.childrenCount = accItem.children.length;
+        forEach_(root.children, (draftItem) => {
+            draftItem.attributes.childrenCount = draftItem.children.length;
             forEach_(SUM_FIELDS, (k) => {
-                maxHost[k] = max_([maxHost[k], accItem.attributes[k]])!;
+                maxHost[k] = max_([maxHost[k], draftItem.attributes[k]])!;
             });
         });
 

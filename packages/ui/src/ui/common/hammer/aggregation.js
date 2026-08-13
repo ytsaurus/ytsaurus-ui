@@ -2,46 +2,46 @@ import each_ from 'lodash/each';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
-function aggregateSimple(accAggregation, item, name, type) {
+function aggregateSimple(draftAggregation, item, name, type) {
     switch (type) {
         case 'sum':
-            accAggregation[name] = accAggregation[name] || 0;
+            draftAggregation[name] = draftAggregation[name] || 0;
             if (typeof item[name] === 'number') {
-                accAggregation[name] += item[name];
+                draftAggregation[name] += item[name];
             }
             break;
 
         case 'max':
-            accAggregation[name] = accAggregation[name] || -Infinity;
+            draftAggregation[name] = draftAggregation[name] || -Infinity;
             if (typeof item[name] === 'number') {
-                accAggregation[name] = Math.max(accAggregation[name], item[name]);
+                draftAggregation[name] = Math.max(draftAggregation[name], item[name]);
             }
             break;
 
         case 'min':
-            accAggregation[name] = accAggregation[name] || Infinity;
+            draftAggregation[name] = draftAggregation[name] || Infinity;
             if (typeof item[name] === 'number') {
-                accAggregation[name] = Math.min(accAggregation[name], item[name]);
+                draftAggregation[name] = Math.min(draftAggregation[name], item[name]);
             }
             break;
 
         case 'concat-array':
-            accAggregation[name] = accAggregation[name] || [];
+            draftAggregation[name] = draftAggregation[name] || [];
             if (Array.isArray(item[name])) {
-                accAggregation[name] = accAggregation[name].concat(item[name]);
+                draftAggregation[name] = draftAggregation[name].concat(item[name]);
             }
             break;
 
         case 'concat-string':
-            accAggregation[name] = accAggregation[name] || '';
+            draftAggregation[name] = draftAggregation[name] || '';
             if (typeof item[name] === 'string') {
-                accAggregation[name] += item[name];
+                draftAggregation[name] += item[name];
             }
             break;
 
         case 'count':
-            accAggregation[name] = accAggregation[name] || 0;
-            accAggregation[name]++;
+            draftAggregation[name] = draftAggregation[name] || 0;
+            draftAggregation[name]++;
             break;
 
         default:
@@ -49,28 +49,28 @@ function aggregateSimple(accAggregation, item, name, type) {
     }
 }
 
-function aggregateNested(accAggregation, item, parts, type) {
+function aggregateNested(draftAggregation, item, parts, type) {
     let name;
     if (parts.length > 1) {
         name = parts.shift();
-        accAggregation[name] = accAggregation[name] || {};
-        aggregateNested(accAggregation[name], item[name], parts.slice(), type);
+        draftAggregation[name] = draftAggregation[name] || {};
+        aggregateNested(draftAggregation[name], item[name], parts.slice(), type);
     } else {
         name = parts[0];
-        aggregateSimple(accAggregation, item, name, type);
+        aggregateSimple(draftAggregation, item, name, type);
     }
 }
 
-function aggregate(accAggregation, item, property, lastItem) {
+function aggregate(draftAggregation, item, property, lastItem) {
     const name = property.name;
     const type = property.type;
 
     if (typeof type === 'function') {
-        type(accAggregation, item, name, lastItem);
+        type(draftAggregation, item, name, lastItem);
     } else if (type.startsWith('nested/')) {
-        aggregateNested(accAggregation, item, name.split('.'), type.slice('nested/'.length));
+        aggregateNested(draftAggregation, item, name.split('.'), type.slice('nested/'.length));
     } else {
-        aggregateSimple(accAggregation, item, name, type);
+        aggregateSimple(draftAggregation, item, name, type);
     }
 }
 
@@ -114,9 +114,9 @@ export function prepare(items, properties, byProperty) {
     );
 
     prepared = [prepared.total].concat(
-        map_(prepared.byProperty, function (accValue, name) {
-            accValue[byProperty] = name;
-            return accValue;
+        map_(prepared.byProperty, function (draftValue, name) {
+            draftValue[byProperty] = name;
+            return draftValue;
         }),
     );
 

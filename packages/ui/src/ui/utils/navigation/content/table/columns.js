@@ -111,9 +111,9 @@ export default class Columns {
 
         const storedColumnsMap = reduce_(
             storedColumns,
-            (storedColumnsMap, column) => {
-                storedColumnsMap[column.name] = column;
-                return storedColumnsMap;
+            (accStoredColumnsMap, column) => {
+                accStoredColumnsMap[column.name] = column;
+                return accStoredColumnsMap;
             },
             {},
         );

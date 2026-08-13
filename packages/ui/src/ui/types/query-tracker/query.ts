@@ -8,35 +8,35 @@ export const cleanupQueryForDraft = (query: QueryItem): QueryItem => {
     };
 };
 
-export const prepareQueryPlanIds = (accQuery: QueryItem, defaultQueryACO: string): QueryItem => {
-    if (isSingleProgress(accQuery.progress)) {
-        const nodes = accQuery.progress?.yql_plan?.Basic.nodes;
-        const links = accQuery.progress?.yql_plan?.Basic.links;
-        const operations = accQuery.progress?.yql_plan?.Detailed?.Operations;
+export const prepareQueryPlanIds = (draftQuery: QueryItem, defaultQueryACO: string): QueryItem => {
+    if (isSingleProgress(draftQuery.progress)) {
+        const nodes = draftQuery.progress?.yql_plan?.Basic.nodes;
+        const links = draftQuery.progress?.yql_plan?.Basic.links;
+        const operations = draftQuery.progress?.yql_plan?.Detailed?.Operations;
         if (nodes) {
-            nodes.forEach((accNode) => {
-                accNode.id = String(accNode.id);
+            nodes.forEach((draftNode) => {
+                draftNode.id = String(draftNode.id);
             });
         }
         if (links) {
-            links.forEach((accLink) => {
-                accLink.source = String(accLink.source);
-                accLink.target = String(accLink.target);
+            links.forEach((draftLink) => {
+                draftLink.source = String(draftLink.source);
+                draftLink.target = String(draftLink.target);
             });
         }
         if (operations) {
-            operations.forEach((accOperation) => {
-                accOperation.Id = String(accOperation.Id);
-                if (accOperation.DependsOn) {
-                    accOperation.DependsOn = accOperation.DependsOn.map(String);
+            operations.forEach((draftOperation) => {
+                draftOperation.Id = String(draftOperation.Id);
+                if (draftOperation.DependsOn) {
+                    draftOperation.DependsOn = draftOperation.DependsOn.map(String);
                 }
             });
         }
     }
 
-    if (!accQuery.access_control_objects) {
-        accQuery.access_control_objects = [defaultQueryACO];
+    if (!draftQuery.access_control_objects) {
+        draftQuery.access_control_objects = [defaultQueryACO];
     }
 
-    return accQuery;
+    return draftQuery;
 };

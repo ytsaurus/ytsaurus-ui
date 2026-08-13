@@ -95,17 +95,17 @@ export class Month extends React.Component {
     };
 
     // eslint-disable-next-line complexity
-    getMods = ({currentDateTime, mergedIntervals, flags}) => {
+    getMods = ({currentDateTime, mergedIntervals, flags: draftFlags}) => {
         const {min, max, selectedInterval, hovered, isDefaultFrom, onRangeDateClick} = this.props;
 
         let isToday = false;
         let isSelected = false;
 
-        if (this.isMonthIncludeToday && !flags.hasToday) {
+        if (this.isMonthIncludeToday && !draftFlags.hasToday) {
             isToday = isDatesEqual(currentDateTime, this.todayDateTime);
 
             if (isToday) {
-                flags.hasToday = true;
+                draftFlags.hasToday = true;
             }
         }
 

@@ -10,18 +10,18 @@ import {Page} from '../../../constants/index';
 
 const preparedListParams = reduce_(
     listParams,
-    (result, value, key) => {
-        result[Page.OPERATIONS + '_' + key] = {...value};
-        return result;
+    (accResult, value, key) => {
+        accResult[Page.OPERATIONS + '_' + key] = {...value};
+        return accResult;
     },
     {},
 );
 
 const preparedAccountsParams = reduce_(
     accountsParams,
-    (result, value, key) => {
-        result[Page.ACCOUNTS + '_' + key] = {...value};
-        return result;
+    (accResult, value, key) => {
+        accResult[Page.ACCOUNTS + '_' + key] = {...value};
+        return accResult;
     },
     {},
 );

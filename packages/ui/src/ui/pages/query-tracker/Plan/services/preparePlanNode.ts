@@ -5,33 +5,33 @@ import {buildOperationUrl} from '../../QueryResults/helpers/buildOperationUrl';
 import {getOperationUrl} from '../../QueryResults/helpers/getOperationUrl';
 
 export const preparePlanNode = (
-    accNode: ProcessedNode,
+    draftNode: ProcessedNode,
     operationIdToCluster: Map<string, string>,
 ): ProcessedNode => {
-    if (accNode.type === 'in' || accNode.type === 'out') {
-        const table = parseTablePath(accNode.title ?? '');
+    if (draftNode.type === 'in' || draftNode.type === 'out') {
+        const table = parseTablePath(draftNode.title ?? '');
         if (table) {
-            accNode.url = genNavigationUrl({cluster: table.cluster, path: table.path});
+            draftNode.url = genNavigationUrl({cluster: table.cluster, path: table.path});
         }
-        return accNode;
+        return draftNode;
     }
 
-    if (accNode.progress?.remoteId) {
-        const id = accNode.progress.remoteId.split('/').pop();
+    if (draftNode.progress?.remoteId) {
+        const id = draftNode.progress.remoteId.split('/').pop();
 
         if (!id) {
-            accNode.url = getOperationUrl(accNode);
-            return accNode;
+            draftNode.url = getOperationUrl(draftNode);
+            return draftNode;
         }
 
         const cluster = operationIdToCluster.has(id)
             ? operationIdToCluster.get(id)
-            : accNode.progress?.remoteData?.cluster_name;
+            : draftNode.progress?.remoteData?.cluster_name;
 
         if (cluster) {
-            accNode.url = buildOperationUrl(cluster, id);
+            draftNode.url = buildOperationUrl(cluster, id);
         }
     }
 
-    return accNode;
+    return draftNode;
 };

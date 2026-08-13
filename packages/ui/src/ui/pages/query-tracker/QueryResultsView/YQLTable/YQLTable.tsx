@@ -388,9 +388,9 @@ function getSortedData<T>(
     }
     const sortOrderArray = Array.isArray(sortOrder) ? sortOrder : [sortOrder];
     const sortColumns = sortOrderArray.reduce(
-        (obj, {columnId, order}) => {
-            obj[columnId] = order;
-            return obj;
+        (accObj, {columnId, order}) => {
+            accObj[columnId] = order;
+            return accObj;
         },
         {} as Record<string, OrderType>,
     );

@@ -186,8 +186,8 @@ export const tableItems = {
 
             return [total > 0 ? completed / total : 0, total > 0 ? failed / total : 0, total];
         },
-        overall(accAggregation, tablet, name) {
-            const aggregatedStorePreload = (accAggregation[name] = accAggregation[name] || {
+        overall(draftAggregation, tablet, name) {
+            const aggregatedStorePreload = (draftAggregation[name] = draftAggregation[name] || {
                 completed: 0,
                 failed: 0,
                 pending: 0,

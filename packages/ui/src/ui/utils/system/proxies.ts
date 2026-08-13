@@ -50,17 +50,17 @@ export function getNodeffectiveState(state: NodeState): NodeEffectiveState {
 }
 
 export function incrementStateCounter<K extends string>(
-    accCounters: Partial<Record<K, number>>,
+    draftCounters: Partial<Record<K, number>>,
     k?: K,
 ) {
     if (!k) {
         return;
     }
 
-    if (accCounters[k] === undefined) {
-        accCounters[k] = 1;
+    if (draftCounters[k] === undefined) {
+        draftCounters[k] = 1;
     } else {
-        ++accCounters[k]!;
+        ++draftCounters[k]!;
     }
 }
 

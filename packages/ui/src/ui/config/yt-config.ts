@@ -13,11 +13,11 @@ export function getGroupedClusters(clusters = YT.clusters) {
 
     const groups = reduce_(
         clusters,
-        (groups, cluster) => {
+        (accGroups, cluster) => {
             const currentGroup = cluster.group || DEFAULT_GROUP;
-            groups[currentGroup] = groups[currentGroup] || [];
-            groups[currentGroup].push(cluster);
-            return groups;
+            accGroups[currentGroup] = accGroups[currentGroup] || [];
+            accGroups[currentGroup].push(cluster);
+            return accGroups;
         },
         {} as Record<string, Array<ClusterConfig>>,
     );

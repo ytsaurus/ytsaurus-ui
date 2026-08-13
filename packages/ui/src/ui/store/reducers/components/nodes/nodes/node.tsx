@@ -354,16 +354,16 @@ export class Node {
         let usedDataInd = 0;
         let generatedColorInd = SERIE_COLORS.length;
 
-        memory = map_(memory, (accCategoryData) => {
-            memoryUsage += accCategoryData.rawData.used || 0;
+        memory = map_(memory, (draftCategoryData) => {
+            memoryUsage += draftCategoryData.rawData.used || 0;
             // the first 10 objects with a non-zero value are guaranteed to receive a predefined color value
-            if (accCategoryData.rawData.used && usedDataInd < 10) {
-                accCategoryData.color = Node.getColor(usedDataInd++);
+            if (draftCategoryData.rawData.used && usedDataInd < 10) {
+                draftCategoryData.color = Node.getColor(usedDataInd++);
             } else {
                 // the rest are generated
-                accCategoryData.color = Node.getColor(generatedColorInd++);
+                draftCategoryData.color = Node.getColor(generatedColorInd++);
             }
-            return accCategoryData;
+            return draftCategoryData;
         });
 
         this.memoryData = memory;
@@ -389,9 +389,9 @@ export class Node {
             const normalizeBy = 100 / this.memoryProgress;
 
             this.memoryProgress *= normalizeBy;
-            this.memoryData = map_(memory, (accCategoryData) => {
-                accCategoryData.value *= normalizeBy;
-                return accCategoryData;
+            this.memoryData = map_(memory, (draftCategoryData) => {
+                draftCategoryData.value *= normalizeBy;
+                return draftCategoryData;
             });
         }
     }

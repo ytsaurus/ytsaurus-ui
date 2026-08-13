@@ -11,10 +11,10 @@ import i18n from './i18n';
 import './utils.scss';
 
 function wrapRenderMethods(templates) {
-    return Object.keys(templates).reduce((newTemplates, key) => {
-        newTemplates[key] = templates[key];
+    return Object.keys(templates).reduce((accTemplates, key) => {
+        accTemplates[key] = templates[key];
 
-        return newTemplates;
+        return accTemplates;
     }, {});
 }
 

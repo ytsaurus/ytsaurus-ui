@@ -48,28 +48,27 @@ export async function handleLogin(req: Request, res: Response) {
                     res,
                     response,
                     undefined,
-                    (accHeaders: Record<string, string[]>) => {
-                        if (accHeaders['set-cookie']) {
-                            accHeaders['set-cookie'] = accHeaders['set-cookie'].reduce<string[]>(
-                                (ret, item) => {
-                                    ret.push(item);
+                    (draftHeaders: Record<string, string[]>) => {
+                        if (draftHeaders['set-cookie']) {
+                            draftHeaders['set-cookie'] = draftHeaders['set-cookie'].reduce<
+                                string[]
+                            >((ret, item) => {
+                                ret.push(item);
 
-                                    if (item.startsWith(YT_CYPRESS_COOKIE_NAME)) {
-                                        ret.push(
-                                            item.replace(
-                                                YT_CYPRESS_COOKIE_NAME,
-                                                makeAuthClusterCookieName(ytAuthCluster),
-                                            ),
-                                        );
-                                    }
+                                if (item.startsWith(YT_CYPRESS_COOKIE_NAME)) {
+                                    ret.push(
+                                        item.replace(
+                                            YT_CYPRESS_COOKIE_NAME,
+                                            makeAuthClusterCookieName(ytAuthCluster),
+                                        ),
+                                    );
+                                }
 
-                                    return ret;
-                                },
-                                [],
-                            );
+                                return ret;
+                            }, []);
                         }
 
-                        return removeSecureFlagIfOriginInsecure(req, accHeaders);
+                        return removeSecureFlagIfOriginInsecure(req, draftHeaders);
                     },
                 );
                 if (!pipedSize) {

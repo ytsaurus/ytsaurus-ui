@@ -501,8 +501,8 @@ export function getTableData() {
                 // if we have columns preset -> update checked according to preset
                 const preset = selectColumnsPreset(state);
                 if (preset?.columns) {
-                    preparedColumns.forEach((column) => {
-                        column.checked = preset?.columns?.includes(column.name);
+                    preparedColumns.forEach((draftColumn) => {
+                        draftColumn.checked = preset?.columns?.includes(draftColumn.name);
                     });
                 }
                 dispatch(setColumns(preparedColumns, preparedOmittedColumns, deniedKeyColumns));

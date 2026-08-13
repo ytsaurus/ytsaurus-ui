@@ -419,7 +419,7 @@ function handleUnipikaMapImpl(
     items: UnipikaMap['$value'],
     level: number,
     ctx: FlatContext,
-    accInfo: LevelInfo,
+    draftInfo: LevelInfo,
 ) {
     for (let i = 0; i < items.length; ++i) {
         const [key, value] = items[i];
@@ -427,7 +427,7 @@ function handleUnipikaMapImpl(
         ctx.dst.push(keyItem);
         pushPath(key.$value, ctx);
         flattenUnipikaImpl(value, level, ctx);
-        ++accInfo.currentIndex;
+        ++draftInfo.currentIndex;
         popPath(ctx);
     }
 }

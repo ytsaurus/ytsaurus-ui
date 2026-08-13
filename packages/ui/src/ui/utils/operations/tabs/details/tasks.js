@@ -21,14 +21,14 @@ function prepareCategoryCounters(counters, category) {
     if (typeof counters[category] === 'object') {
         const prepared = reduce_(
             counters[category],
-            (statistics, count, key) => {
-                statistics.counters.push({
+            (accStatistics, count, key) => {
+                accStatistics.counters.push({
                     value: count,
                     key,
                 });
-                statistics.total += count;
+                accStatistics.total += count;
 
-                return statistics;
+                return accStatistics;
             },
             {
                 counters: [],
