@@ -8,35 +8,35 @@ export const cleanupQueryForDraft = (query: QueryItem): QueryItem => {
     };
 };
 
-export const prepareQueryPlanIds = (query: QueryItem, defaultQueryACO: string): QueryItem => {
-    if (isSingleProgress(query.progress)) {
-        const nodes = query.progress?.yql_plan?.Basic.nodes;
-        const links = query.progress?.yql_plan?.Basic.links;
-        const operations = query.progress?.yql_plan?.Detailed?.Operations;
+export const prepareQueryPlanIds = (accQuery: QueryItem, defaultQueryACO: string): QueryItem => {
+    if (isSingleProgress(accQuery.progress)) {
+        const nodes = accQuery.progress?.yql_plan?.Basic.nodes;
+        const links = accQuery.progress?.yql_plan?.Basic.links;
+        const operations = accQuery.progress?.yql_plan?.Detailed?.Operations;
         if (nodes) {
-            nodes.forEach((node) => {
-                node.id = String(node.id);
+            nodes.forEach((accNode) => {
+                accNode.id = String(accNode.id);
             });
         }
         if (links) {
-            links.forEach((link) => {
-                link.source = String(link.source);
-                link.target = String(link.target);
+            links.forEach((accLink) => {
+                accLink.source = String(accLink.source);
+                accLink.target = String(accLink.target);
             });
         }
         if (operations) {
-            operations.forEach((operation) => {
-                operation.Id = String(operation.Id);
-                if (operation.DependsOn) {
-                    operation.DependsOn = operation.DependsOn.map(String);
+            operations.forEach((accOperation) => {
+                accOperation.Id = String(accOperation.Id);
+                if (accOperation.DependsOn) {
+                    accOperation.DependsOn = accOperation.DependsOn.map(String);
                 }
             });
         }
     }
 
-    if (!query.access_control_objects) {
-        query.access_control_objects = [defaultQueryACO];
+    if (!accQuery.access_control_objects) {
+        accQuery.access_control_objects = [defaultQueryACO];
     }
 
-    return query;
+    return accQuery;
 };

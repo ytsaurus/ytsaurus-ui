@@ -19,18 +19,18 @@ const RESOURCE_LIMIT_MAPPER: Partial<
 };
 
 function preparePoolChildResource<T extends 'pool' | 'operation'>(
-    data: PoolOrOperation<T>,
+    accData: PoolOrOperation<T>,
     _type: T,
     treeResources: TreeResources,
     resource: keyof Required<PoolData<'pool'>>['resources'],
 ) {
-    if (!data.resources) {
+    if (!accData.resources) {
         return;
     }
-    const attributes = data.attributes;
+    const attributes = accData.attributes;
 
-    if (data.name === ROOT_POOL_NAME) {
-        data.resources[resource] = {
+    if (accData.name === ROOT_POOL_NAME) {
+        accData.resources[resource] = {
             guaranteed: ypath.getNumber(treeResources, '/resource_limits/' + resource),
             usage: ypath.getNumber(treeResources, '/resource_usage/' + resource),
         };
@@ -50,11 +50,11 @@ function preparePoolChildResource<T extends 'pool' | 'operation'>(
 
         const limitResource = RESOURCE_LIMIT_MAPPER[resource] || resource;
         const resourceLimit = ypath.getNumber(
-            data.cypressAttributes,
+            accData.cypressAttributes,
             '/resource_limits/' + limitResource,
         );
         const specifiedResourceLimit = ypath.getNumber(
-            data.attributes,
+            accData.attributes,
             '/specified_resource_limits/' + limitResource,
         );
 
@@ -62,7 +62,7 @@ function preparePoolChildResource<T extends 'pool' | 'operation'>(
         const detailed =
             treeLimit * ypath.getNumber(attributes, '/detailed_fair_share/total/' + limitResource);
 
-        data.resources[resource] = {
+        accData.resources[resource] = {
             min,
             guaranteed,
             effectiveGuaranteed,
@@ -165,33 +165,33 @@ export type PoolOrOperation<T extends 'pool' | 'operation'> = T extends 'pool'
     : PoolLeafNode;
 
 export function updatePoolChild<T extends 'pool' | 'operation'>(
-    data: PoolOrOperation<T>,
+    accData: PoolOrOperation<T>,
     cypressData: unknown,
     type: T,
     treeResources: TreeResources,
 ): PoolOrOperation<T> {
     try {
-        const attributes = data.attributes;
+        const attributes = accData.attributes;
         const cypressAttributes = ypath.getAttributes(cypressData);
 
-        data.cypressAttributes = cypressAttributes;
-        data.type = type;
+        accData.cypressAttributes = cypressAttributes;
+        accData.type = type;
 
-        if (isPoolItem(data)) {
-            if (typeof attributes === 'undefined' && data.parent) {
+        if (isPoolItem(accData)) {
+            if (typeof attributes === 'undefined' && accData.parent) {
                 // eslint-disable-next-line no-console
                 console.error(
                     'Pool "%s" without attributes inited by "%s"',
-                    data.name,
-                    data._initedBy,
+                    accData.name,
+                    accData._initedBy,
                 );
             }
 
-            data.mode = ypath.getValue(attributes, '/mode');
+            accData.mode = ypath.getValue(attributes, '/mode');
 
-            data.leaves = map_(data.leaves, (leaf) => {
+            accData.leaves = map_(accData.leaves, (leaf) => {
                 const res = updatePoolChild(
-                    Object.assign(leaf, {pool: data.name}),
+                    Object.assign(leaf, {pool: accData.name}),
                     {},
                     'operation',
                     treeResources,
@@ -200,12 +200,12 @@ export function updatePoolChild<T extends 'pool' | 'operation'>(
             });
 
             const child_pool_count = ypath.getNumber(attributes, '/child_pool_count');
-            if (child_pool_count > 0 && !data.children.length) {
+            if (child_pool_count > 0 && !accData.children.length) {
                 for (let i = 0; i < child_pool_count; ++i) {
-                    data.children.push({
-                        parent: data.name,
+                    accData.children.push({
+                        parent: accData.name,
                         type: 'pool',
-                        name: `#key_${data.name}_${i}`,
+                        name: `#key_${accData.name}_${i}`,
                         attributes: {},
                         leaves: [],
                         incomplete: true,
@@ -214,89 +214,89 @@ export function updatePoolChild<T extends 'pool' | 'operation'>(
                 }
             }
 
-            if (!data.leaves?.length) {
-                data.pool_operation_count = ypath.getNumber(
+            if (!accData.leaves?.length) {
+                accData.pool_operation_count = ypath.getNumber(
                     attributes,
                     '/pool_operation_count',
                     NaN,
                 );
-                if (data.pool_operation_count! > 0) {
+                if (accData.pool_operation_count! > 0) {
                     const emptyOp = updatePoolChild(
                         {
                             attributes: {},
                             isLeafNode: true,
                             name: '',
                             type: 'operation',
-                            pool: data.name,
+                            pool: accData.name,
                         },
                         {},
                         'operation',
                         treeResources,
                     );
-                    data.leaves = [];
-                    for (let i = 0; i < data.pool_operation_count!; ++i) {
-                        data.leaves.push({
+                    accData.leaves = [];
+                    for (let i = 0; i < accData.pool_operation_count!; ++i) {
+                        accData.leaves.push({
                             ...emptyOp,
-                            name: `##fake_operation_${data.name}_${i}`,
-                            pool: data.name,
+                            name: `##fake_operation_${accData.name}_${i}`,
+                            pool: accData.name,
                         });
                     }
                 }
             }
 
             // Operations
-            data.operationCount = ypath.getNumber(attributes, '/operation_count');
-            data.maxOperationCount = ypath.getNumber(attributes, '/max_operation_count');
-            data.maxOperationCountEdited = ypath.getNumber(
+            accData.operationCount = ypath.getNumber(attributes, '/operation_count');
+            accData.maxOperationCount = ypath.getNumber(attributes, '/max_operation_count');
+            accData.maxOperationCountEdited = ypath.getNumber(
                 cypressAttributes,
                 '/max_operation_count',
             );
-            data.lightweightRunningOperationCount = ypath.getNumber(
+            accData.lightweightRunningOperationCount = ypath.getNumber(
                 attributes,
                 '/lightweight_running_operation_count',
             );
-            data.runningOperationCount = ypath.getNumber(attributes, '/running_operation_count');
-            data.maxRunningOperationCount = ypath.getNumber(
+            accData.runningOperationCount = ypath.getNumber(attributes, '/running_operation_count');
+            accData.maxRunningOperationCount = ypath.getNumber(
                 attributes,
                 '/max_running_operation_count',
             );
-            data.maxRunningOperationCountEdited = ypath.getNumber(
+            accData.maxRunningOperationCountEdited = ypath.getNumber(
                 cypressAttributes,
                 '/max_running_operation_count',
             );
         }
 
         if (type === 'operation') {
-            data.operationType = ypath.getValue(attributes, '/type');
-            data.user = ypath.getValue(attributes, '/user');
-            data.startTime = ypath.getValue(attributes, '/start_time');
+            accData.operationType = ypath.getValue(attributes, '/type');
+            accData.user = ypath.getValue(attributes, '/user');
+            accData.startTime = ypath.getValue(attributes, '/start_time');
         }
 
-        data.id = data.name;
-        data.starvation_status = ypath.getValue(attributes, '/starvation_status');
+        accData.id = accData.name;
+        accData.starvation_status = ypath.getValue(attributes, '/starvation_status');
 
         // General
-        data.weight = ypath.getNumber(attributes, '/weight');
-        data.weightEdited = ypath.getNumber(cypressAttributes, '/weight');
-        data.minShareRatio = ypath.getNumber(attributes, '/min_share_ratio');
-        data.maxShareRatio = ypath.getNumber(attributes, '/max_share_ratio');
-        data.fairShareRatio = ypath.getNumber(attributes, '/fair_share_ratio');
-        data.fifoIndex = ypath.getNumber(attributes, '/fifo_index');
-        data.usageRatio = ypath.getNumber(attributes, '/usage_ratio');
-        data.demandRatio = ypath.getNumber(attributes, '/demand_ratio');
-        data.isEphemeral = ypath.getBoolean(attributes, '/is_ephemeral');
-        data.isEffectiveLightweight = ypath.getBoolean(
+        accData.weight = ypath.getNumber(attributes, '/weight');
+        accData.weightEdited = ypath.getNumber(cypressAttributes, '/weight');
+        accData.minShareRatio = ypath.getNumber(attributes, '/min_share_ratio');
+        accData.maxShareRatio = ypath.getNumber(attributes, '/max_share_ratio');
+        accData.fairShareRatio = ypath.getNumber(attributes, '/fair_share_ratio');
+        accData.fifoIndex = ypath.getNumber(attributes, '/fifo_index');
+        accData.usageRatio = ypath.getNumber(attributes, '/usage_ratio');
+        accData.demandRatio = ypath.getNumber(attributes, '/demand_ratio');
+        accData.isEphemeral = ypath.getBoolean(attributes, '/is_ephemeral');
+        accData.isEffectiveLightweight = ypath.getBoolean(
             attributes,
             '/effective_lightweight_operations_enabled',
         );
 
-        data.integralType = ypath.getValue(attributes, '/integral_guarantee_type');
+        accData.integralType = ypath.getValue(attributes, '/integral_guarantee_type');
         const userDefinedBurstCPU = ypath.getNumber(
             cypressAttributes,
             '/integral_guarantees/burst_guarantee_resources/cpu',
             NaN,
         );
-        data.burstCPU = ypath.getNumber(
+        accData.burstCPU = ypath.getNumber(
             attributes,
             '/specified_burst_guarantee_resources/cpu',
             userDefinedBurstCPU,
@@ -306,7 +306,7 @@ export function updatePoolChild<T extends 'pool' | 'operation'>(
             '/integral_guarantees/resource_flow/cpu',
             NaN,
         );
-        data.flowCPU = ypath.getNumber(
+        accData.flowCPU = ypath.getNumber(
             attributes,
             '/specified_resource_flow/cpu',
             userDefinedFlowCPU,
@@ -316,45 +316,45 @@ export function updatePoolChild<T extends 'pool' | 'operation'>(
             '/integral_guarantees/resource_flow/gpu',
             NaN,
         );
-        data.flowGPU = ypath.getNumber(
+        accData.flowGPU = ypath.getNumber(
             attributes,
             '/specified_resource_flow/gpu',
             userDefinedFlowGPU,
         );
 
-        data.accumulated = ypath.getValue(attributes, '/accumulated_resource_ratio_volume');
-        data.accumulatedCpu = ypath.getValue(attributes, '/accumulated_resource_volume/cpu');
-        data.burstDuration = ypath.getValue(attributes, '/estimated_burst_usage_duration_sec');
+        accData.accumulated = ypath.getValue(attributes, '/accumulated_resource_ratio_volume');
+        accData.accumulatedCpu = ypath.getValue(attributes, '/accumulated_resource_volume/cpu');
+        accData.burstDuration = ypath.getValue(attributes, '/estimated_burst_usage_duration_sec');
 
         const fifoSortParams = map_(
             ypath.getValue(attributes, '/fifo_sort_parameters') ||
                 ypath.getValue(cypressAttributes, '/fifo_sort_parameters'),
             (param) => ypath.getValue(param),
         );
-        data.fifoSortParams =
+        accData.fifoSortParams =
             fifoSortParams.length > 0
                 ? fifoSortParams
                 : ['start_time', 'weight', 'pending_job_count'];
-        data.abc = ypath.getValue(attributes, '/abc') || {};
-        data.forbidImmediateOperations =
+        accData.abc = ypath.getValue(attributes, '/abc') || {};
+        accData.forbidImmediateOperations =
             ypath.getBoolean(cypressAttributes, '/forbid_immediate_operations') || false;
-        data.createEphemeralSubpools =
+        accData.createEphemeralSubpools =
             ypath.getBoolean(cypressAttributes, '/create_ephemeral_subpools') || false;
 
         // Resources
-        data.dominantResource = ypath.getValue(attributes, '/dominant_resource');
+        accData.dominantResource = ypath.getValue(attributes, '/dominant_resource');
 
-        data.resources = {};
+        accData.resources = {};
 
-        preparePoolChildResource(data, type, treeResources, 'cpu');
-        preparePoolChildResource(data, type, treeResources, 'user_memory');
-        preparePoolChildResource(data, type, treeResources, 'gpu');
-        preparePoolChildResource(data, type, treeResources, 'user_slots');
+        preparePoolChildResource(accData, type, treeResources, 'cpu');
+        preparePoolChildResource(accData, type, treeResources, 'user_memory');
+        preparePoolChildResource(accData, type, treeResources, 'gpu');
+        preparePoolChildResource(accData, type, treeResources, 'user_slots');
 
-        return data;
+        return accData;
     } catch (e) {
         throw appendInnerErrors(e, {
-            message: `An error occured while parsing pool "${data.name}" data.`,
+            message: `An error occured while parsing pool "${accData.name}" data.`,
         });
     }
 }

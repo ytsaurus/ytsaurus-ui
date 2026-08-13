@@ -103,11 +103,11 @@ describe('hammer.aggregation', () => {
                 const properties = [
                     {
                         name: 'foo',
-                        type(aggregation, item, name) {
-                            aggregation[name] = aggregation[name] || '';
+                        type(accAggregation, item, name) {
+                            accAggregation[name] = accAggregation[name] || '';
 
                             if (typeof item[name] === 'string') {
-                                aggregation[name] += item[name];
+                                accAggregation[name] += item[name];
                             }
                         },
                     },
@@ -214,7 +214,7 @@ describe('hammer.aggregation', () => {
                 const properties = [
                     {
                         name: 'foo',
-                        type(aggregation, item, name, lastItem) {
+                        type(accAggregation, item, name, lastItem) {
                             if (item.name === 'abc') {
                                 expect(lastItem).toBe(false);
                             }

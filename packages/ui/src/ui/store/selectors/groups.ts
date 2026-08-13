@@ -44,11 +44,11 @@ export const selectGroupsTree = createSelector([selectGroups], (groups) => {
     res[ROOT_GROUP_NAME] = root;
 
     const hasChildren: Record<string, boolean> = {};
-    forEach_(res, (item: GroupsTreeNode) => {
-        if (item === root) {
+    forEach_(res, (accItem: GroupsTreeNode) => {
+        if (accItem === root) {
             return;
         }
-        let {memberOf = []} = item;
+        let {memberOf = []} = accItem;
         if (memberOf.length === 0) {
             memberOf = [ROOT_GROUP_NAME];
         }
@@ -59,14 +59,14 @@ export const selectGroupsTree = createSelector([selectGroups], (groups) => {
              * a group might be a member of many other groups
              * i.e. different copies will have different parent field
              */
-            const itemCopy = {...item, parent};
+            const itemCopy = {...accItem, parent};
             res[parent].children.push(itemCopy);
-            item.parent = parent;
+            accItem.parent = parent;
         });
     });
-    hammer.treeList.treeForEach(res[ROOT_GROUP_NAME], (item: GroupsTreeNode, depth: number) => {
-        item.shift = depth - 1; // -1 cause <Root> is not visible
-        item.hasChildren = hasChildren[item.name!];
+    hammer.treeList.treeForEach(res[ROOT_GROUP_NAME], (accItem: GroupsTreeNode, depth: number) => {
+        accItem.shift = depth - 1; // -1 cause <Root> is not visible
+        accItem.hasChildren = hasChildren[accItem.name!];
     });
     return res;
 });
@@ -107,16 +107,16 @@ const selectGroupsTreeFilteredAndExpanded = createSelector(
             }
         });
 
-        hammer.treeList.treeForEach(res.children, (node: GroupsTreeNode) => {
-            const userInteractedWithNode = typeof expandedByUser[node.name] !== 'undefined';
+        hammer.treeList.treeForEach(res.children, (accNode: GroupsTreeNode) => {
+            const userInteractedWithNode = typeof expandedByUser[accNode.name] !== 'undefined';
 
             const expanded = userInteractedWithNode ? expandedByUser : expandedBySearch;
 
-            if (!expanded[node.name]) {
-                node.expanded = false;
-                node.children = [];
+            if (!expanded[accNode.name]) {
+                accNode.expanded = false;
+                accNode.children = [];
             } else {
-                node.expanded = true;
+                accNode.expanded = true;
             }
         });
 
