@@ -18,6 +18,7 @@ const GRAPH_COLORS_ = {
     icon: () => getCssColor('--yql-graph-icon-color'),
     warningLine: () => getCssColor('--g-color-line-warning'),
     infoLine: () => getCssColor('--g-color-line-info'),
+    genericMediumBackground: () => getCssColor('--g-color-base-float-medium'),
 };
 
 const GRAPH_BACKGROUND_COLORS_ = {
