@@ -2,7 +2,6 @@ import {type TAnchor} from '@gravity-ui/graph';
 import CpuIcon from '@gravity-ui/icons/svgs/cpu.svg';
 import format from '../../../../../common/hammer/format';
 import {
-    NoopComponent,
     YTGraphCanvasBlock,
     type YTGraphFontSize,
 } from '../../../../../components/YTGraph';
@@ -125,7 +124,6 @@ export class ComputationCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockIte
 
     renderAnchor: YTGraphCanvasBlock<FlowGraphBlockItem<'computation'>>['renderAnchor'] = (
         anchor,
-        getPosition,
     ) => {
         if (anchor.type === COMPUTATION_TIMER_IN || anchor.type === COMPUTATION_TIMER_OUT) {
             return NoopComponent.create();
@@ -138,7 +136,6 @@ export class ComputationCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockIte
                 size: 24,
                 lineWidth: 2,
                 port: this.getAnchorPort(anchor.id),
-                getPosition,
             },
             {
                 key: anchor.id,

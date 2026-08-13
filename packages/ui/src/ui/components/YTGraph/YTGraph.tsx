@@ -3,6 +3,7 @@ import isEmpty_ from 'lodash/isEmpty';
 
 import {
     ECameraScaleLevel,
+    ESelectionStrategy,
     type Graph,
     GraphState,
     type TBlockId,
@@ -41,7 +42,7 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     toolboxClassName,
     zoomOnScroll,
     autoCenter,
-    highlightConnectionsOnHover = false,
+    highlightConnectionsOnHover,
     onBlockClick,
     graphInstanceRef,
 }: YTGraphProps<B, C>) {
@@ -60,23 +61,31 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     const [hoveredBlockId, setHoveredBlockId] = React.useState<TBlockId | null>(null);
 
     React.useEffect(() => {
+        setEntities(data);
+    }, [data, setEntities]);
+
+    React.useEffect(() => {
         const highlightIds = new Set(selectedBlocks);
         if (highlightConnectionsOnHover && hoveredBlockId) {
             highlightIds.add(hoveredBlockId);
         }
-        const connections = !highlightIds.size
-            ? data.connections?.map((item) => ({selected: false, ...item}))
-            : data?.connections?.map((item) => {
-                  if (
-                      highlightIds.has(item.sourceBlockId!) ||
-                      highlightIds.has(item.targetBlockId!)
-                  ) {
-                      return {selected: true, ...item};
-                  }
-                  return {selected: false, ...item};
-              });
-        setEntities({...data, connections});
-    }, [data, selectedBlocks, hoveredBlockId, highlightConnectionsOnHover, setEntities]);
+        const store = graph.rootStore.connectionsList;
+
+        const connectionIds = store.$connections.value
+            .filter((connection) => {
+                return (
+                    highlightIds.has(connection.sourceBlockId) ||
+                    highlightIds.has(connection.targetBlockId)
+                );
+            })
+            .map((connection) => connection.id);
+
+        store.connectionSelectionBucket.updateSelection(
+            connectionIds,
+            true,
+            ESelectionStrategy.REPLACE,
+        );
+    }, [selectedBlocks, hoveredBlockId, highlightConnectionsOnHover, graph]);
 
     React.useEffect(() => {
         if (!highlightConnectionsOnHover) {
