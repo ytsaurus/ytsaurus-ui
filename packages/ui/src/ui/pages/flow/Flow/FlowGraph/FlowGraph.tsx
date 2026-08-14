@@ -198,7 +198,14 @@ function FlowGraphDataButton() {
 function renderContent({item, ...rest}: {item: FlowGraphBlock; detailed?: boolean}) {
     switch (item.is) {
         case 'computation':
-            return <Computation className={block('item')} item={item} {...rest} />;
+            return (
+                <Computation
+                    className={block('item')}
+                    item={item}
+                    showPartitionsDistribution
+                    {...rest}
+                />
+            );
         case 'stream':
             return <Stream className={block('item')} item={item} {...rest} />;
         case 'computation-group':

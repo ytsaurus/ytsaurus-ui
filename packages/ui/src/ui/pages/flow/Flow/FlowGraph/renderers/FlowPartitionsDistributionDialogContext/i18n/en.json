@@ -1,0 +1,10 @@
+{
+  "title_distribution": "Partitions distribution: {{computation}}",
+  "context_partitions-count": "{{count}} partitions",
+  "context_no-partitions": "There are no partitions to display",
+  "context_all-values-equal": "All partitions have the same value: {{value}}",
+  "cpu_usage": "CPU usage",
+  "memory_usage": "Memory usage",
+  "messages_per_second": "Messages per second",
+  "bytes_per_second": "Bytes per second"
+}
