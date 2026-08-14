@@ -1,4 +1,6 @@
-import {Flex, Progress, type ProgressTheme, Text} from '@gravity-ui/uikit';
+import {ChartColumn} from '@gravity-ui/icons';
+import {Button, Flex, Icon, Progress, type ProgressTheme, Text} from '@gravity-ui/uikit';
+import {Tooltip} from '@ytsaurus/components';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {type FlowComputationType} from '../../../../../../shared/yt-types';
@@ -10,6 +12,7 @@ import {selectFlowPipelinePath} from '../../../../../store/selectors/flow/filter
 import {makeFlowLink} from '../../../../../utils/app-url';
 import {addProgressStackSpacers} from '../../../../../utils/progress';
 import {type FlowGraphBlockItem} from '../FlowGraph';
+import i18n from '../i18n';
 import './Computation.scss';
 import {
     FlowCaption1,
@@ -18,6 +21,7 @@ import {
     TextWithHighConsumption,
 } from './FlowGraphRenderer';
 import {FlowMeta} from './FlowMeta';
+import {useFlowPartitionsDistributionDialogContext} from './FlowPartitionsDistributionDialogContext/FlowPartitionsDistributionDialogContext';
 
 const block = cn('yt-flow-computation');
 
@@ -26,10 +30,17 @@ type ComputationProps = {
 
     detailed?: boolean;
 
+    showPartitionsDistribution?: boolean;
+
     item: Omit<FlowGraphBlockItem<'computation'>, 'is'>;
 };
 
-export function Computation({detailed, item, className}: ComputationProps) {
+export function Computation({
+    detailed,
+    item,
+    className,
+    showPartitionsDistribution,
+}: ComputationProps) {
     const path = useSelector(selectFlowPipelinePath);
 
     const {cpu_usage, memory_usage, highlight_cpu_usage, hightlight_memory_usage} = item.meta ?? {};
@@ -87,7 +98,10 @@ export function Computation({detailed, item, className}: ComputationProps) {
                     },
                 ]}
             />
-            <ComputaionProgress stats={item.meta?.partitions_stats} />
+            <ComputaionProgress
+                stats={item.meta?.partitions_stats}
+                computationId={showPartitionsDistribution ? item.name : undefined}
+            />
             {detailed && <FlowMessages data={item.meta.messages} />}
         </div>
     );
@@ -95,6 +109,7 @@ export function Computation({detailed, item, className}: ComputationProps) {
 
 type ComputationProgressProps = {
     stats?: FlowComputationType['partitions_stats'];
+    computationId?: string;
 };
 
 type FlowComputationPartitionStates = keyof Required<
@@ -107,7 +122,8 @@ const STATE_TO_THEME: Record<FlowComputationPartitionStates, ProgressTheme> = {
     interrupted: 'default',
 };
 
-function ComputaionProgress({stats}: ComputationProgressProps) {
+function ComputaionProgress({stats, computationId}: ComputationProgressProps) {
+    const {setVisibleDistribution} = useFlowPartitionsDistributionDialogContext();
     const {count = NaN, count_by_state} = stats ?? {};
     const {stack, history} = React.useMemo(() => {
         const history: ComputationProgressHistoryProps['data'] = [];
@@ -132,6 +148,18 @@ function ComputaionProgress({stats}: ComputationProgressProps) {
                         partitions
                     </Text>
                 </FlowCaption2>
+                {computationId !== undefined && count > 0 && (
+                    <Tooltip content={i18n('action_partitions-distribution')}>
+                        <Button
+                            view="flat-secondary"
+                            size="xs"
+                            onClick={() => setVisibleDistribution(computationId)}
+                            extraProps={{'aria-label': i18n('action_partitions-distribution')}}
+                        >
+                            <Icon data={ChartColumn} size={12} />
+                        </Button>
+                    </Tooltip>
+                )}
                 <ComputationProgressHistory data={history} />
             </Flex>
         </div>
