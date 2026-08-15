@@ -2,8 +2,8 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import {selectTabletsActiveBundleData} from '../../../store/selectors/tablet_cell_bundles';
 import {useSelector} from '../../../store/redux-hooks';
-import {MetaTable, type MetaTableItem} from '@ytsaurus/components';
-import {Progress} from '@gravity-ui/uikit';
+import {MetaTable, type MetaTableItem, Tooltip} from '@ytsaurus/components';
+import {Flex, Progress} from '@gravity-ui/uikit';
 
 // @ts-ignore
 import hammer from '@ytsaurus/interface-helpers/lib/hammer';
@@ -11,6 +11,7 @@ import ypath from '../../../common/thor/ypath';
 
 import AccountLink from '../../accounts/AccountLink';
 import {Health} from '../../../components/Health/Health';
+import Icon from '../../../components/Icon/Icon';
 import {calcProgressProps} from '../../../utils/utils';
 import {
     selectCluster,
@@ -47,7 +48,16 @@ export default function BundleGeneralMeta() {
         ...(UIFactory.getExtraMetaTableItemsForBundle({bundle: bundleData, clusterUiConfig}) || []),
         {
             key: i18n('field_health'),
-            value: <Health value={bundleData.health} />,
+            value: (
+                <Flex alignItems="center" gap={1}>
+                    <Health value={bundleData.health} />
+                    {bundleData.health === 'failed' && (
+                        <Tooltip useFlex content={i18n('context_failed-health')}>
+                            <Icon awesome="exclamation-triangle" color="warning" />
+                        </Tooltip>
+                    )}
+                </Flex>
+            ),
         },
         {
             key: i18n('field_tablet-cells'),
