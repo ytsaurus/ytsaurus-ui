@@ -2,6 +2,7 @@
   "alert_no-selected-bundles": "You don't have any selected bundles",
   "alert_load-bundle-controller-details-error": "Cannot load bundle controller details for \"{{bundle}}\".",
   "context_choose-bundle": "Please choose one to display charts",
+  "context_failed-health": "Go to the Tablet cells tab to investigate the causes of tablet cell issues.",
   "title_general": "General",
   "title_bundle-configuration": "Bundle configuration",
   "field_health": "Health",
