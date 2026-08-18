@@ -3,10 +3,8 @@ import React from 'react';
 import {Route, Switch, useRouteMatch} from 'react-router';
 import {Page} from '../../../../../shared/constants/settings';
 import Tabs from '../../../../components/Tabs/Tabs';
-import {YT} from '../../../../config/yt-config';
 import {FlowEntityTitle} from '../../../../pages/flow/flow-components/FlowEntityHeader';
 import {FlowError} from '../../../../pages/flow/flow-components/FlowError/FlowError';
-import {FlowMessagesCollapsible} from '../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
 import {
     FlowPathMeta,
     getLoadedDataMetaItems,
@@ -34,11 +32,9 @@ type FlowComputationExtraTab = {
     component: React.ComponentType<FlowComputationMonitorProps>;
 };
 
-const isLocalMode = Boolean(YT.isLocalCluster);
-
-const extraTabs: Array<FlowComputationExtraTab> = isLocalMode
-    ? []
-    : [{value: 'state', title: i18nFlowState('mode_state'), component: FlowComputationStateTab}];
+const extraTabs: Array<FlowComputationExtraTab> = [
+    {value: 'state', title: i18nFlowState('mode_state'), component: FlowComputationStateTab},
+];
 
 export function FlowComputation() {
     const dispatch = useDispatch();
@@ -166,15 +162,11 @@ function FlowComputationDetails({computation}: {computation: string}) {
             {Boolean(error) && <FlowError error={error} />}
             <FlowComputationPerformance data={data} onClick={onClick} />
             <div className={block('messages')}>
-                {isLocalMode ? (
-                    <FlowMessagesCollapsible messages={data?.messages} />
-                ) : (
-                    <FlowComputationMessages
-                        path={pipeline_path}
-                        computation={computation}
-                        messages={data?.messages}
-                    />
-                )}
+                <FlowComputationMessages
+                    path={pipeline_path}
+                    computation={computation}
+                    messages={data?.messages}
+                />
             </div>
             <FlowComputationPartitions partitions={data?.partitions} />
             <div ref={scrollToRef} />
