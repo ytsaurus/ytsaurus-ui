@@ -14,6 +14,7 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {configureUIFactory} from '../../UIFactory';
 import {appReducers} from '../../store/reducers/index.main';
 import {rootApi} from '../../store/api';
+import {setWindowStore} from '../../store/window-store';
 import {defaultUIFactory} from '../../UIFactory/default-ui-factory';
 import {AppThemeFont} from '../../containers/App/AppThemeFont';
 import ModalErrors from '../../containers/ModalErrors/ModalErrors';
@@ -37,6 +38,7 @@ beforeMount(async ({App}) => {
             getDefaultMiddleware({serializableCheck: false}).concat(rootApi.middleware),
         devTools: process.env.NODE_ENV !== 'production',
     });
+    setWindowStore(store);
     registerPlugins();
 
     return (
