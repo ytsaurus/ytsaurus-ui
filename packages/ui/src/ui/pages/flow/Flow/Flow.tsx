@@ -11,7 +11,6 @@ import Tabs from '../../../components/Tabs/Tabs';
 import {YTErrorInline} from '../../../containers/YTErrorInline/YTErrorInline';
 import {useUpdater} from '../../../hooks/use-updater';
 import format from '../../../common/hammer/format';
-import {YT} from '../../../config/yt-config';
 import {
     useFlowAttributes,
     useFlowLeaderControllerName,
@@ -49,11 +48,9 @@ type FlowPipelineExtraTab = {
     component: React.ComponentType<{pipeline_path: string}>;
 };
 
-const isLocalMode = Boolean(YT.isLocalCluster);
-
-const extraTabs: Array<FlowPipelineExtraTab> = isLocalMode
-    ? []
-    : [{value: 'state', title: i18nFlowState('mode_state'), component: FlowPipelineStateTab}];
+const extraTabs: Array<FlowPipelineExtraTab> = [
+    {value: 'state', title: i18nFlowState('mode_state'), component: FlowPipelineStateTab},
+];
 
 export function Flow() {
     const currentComputation = useSelector(selectFlowCurrentComputation);
