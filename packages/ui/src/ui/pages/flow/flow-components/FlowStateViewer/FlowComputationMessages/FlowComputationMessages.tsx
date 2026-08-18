@@ -1,9 +1,15 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {Flex, Table, type TableColumnConfig, Text} from '@gravity-ui/uikit';
+import {Flex, Text} from '@gravity-ui/uikit';
 
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
+import {
+    DataTableGravity,
+    TableCell,
+    type tanstack,
+    useTable,
+} from '../../../../../components/DataTableGravity';
 import {RoutedLink} from '../../../../../containers/RoutedLink/RoutedLink';
 import {FlowMessagesCollapsible} from '../../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
 import {selectCluster} from '../../../../../store/selectors/global';
@@ -46,52 +52,66 @@ export function FlowComputationMessages({
     const keyColumns = getComputationKeyColumns(staticSpec, computation);
     const allKeyColumns = getComputationGroupByColumns(staticSpec, computation);
 
-    const columns = React.useMemo<Array<TableColumnConfig<FlowHeavyHitterEntry>>>(
+    const columns = React.useMemo<Array<tanstack.ColumnDef<FlowHeavyHitterEntry>>>(
         () => [
             {
                 id: 'keyText',
-                name: () => i18n('column_key'),
-                template: (row) => {
-                    const tokens = parseHeavyHitterKeyText(row.keyText);
+                header: () => i18n('column_key'),
+                size: 480,
+                accessorFn: (row) => row.keyText,
+                cell: ({row: {original}}) => {
+                    const tokens = parseHeavyHitterKeyText(original.keyText);
                     const keyValues =
                         tokens && keyValuesFromRowKey(tokens, keyColumns, allKeyColumns);
-                    if (!keyValues) {
-                        return row.keyText;
-                    }
                     return (
-                        <RoutedLink
-                            href={buildHeavyHitterStateLink(cluster, path, computation, {
-                                keyValues,
-                            })}
-                            title={i18n('action_open-in-state')}
-                        >
-                            {row.keyText}
-                        </RoutedLink>
+                        <TableCell>
+                            {keyValues ? (
+                                <RoutedLink
+                                    href={buildHeavyHitterStateLink(cluster, path, computation, {
+                                        keyValues,
+                                    })}
+                                    title={i18n('action_open-in-state')}
+                                >
+                                    {original.keyText}
+                                </RoutedLink>
+                            ) : (
+                                original.keyText
+                            )}
+                        </TableCell>
                     );
                 },
             },
             {
                 id: 'ratio',
-                name: () => i18n('column_ratio'),
-                template: (row) => String(row.ratio),
+                header: () => i18n('column_ratio'),
+                size: 120,
+                accessorFn: (row) => row.ratio,
+                cell: ({row: {original}}) => <TableCell>{String(original.ratio)}</TableCell>,
             },
             {
                 id: 'partitionId',
-                name: () => i18n('column_partition'),
-                template: (row) => (
-                    <RoutedLink
-                        href={buildHeavyHitterStateLink(cluster, path, computation, {
-                            partitionId: row.partitionId,
-                        })}
-                        title={i18n('action_open-in-state')}
-                    >
-                        {row.partitionId}
-                    </RoutedLink>
+                header: () => i18n('column_partition'),
+                size: 320,
+                accessorFn: (row) => row.partitionId,
+                cell: ({row: {original}}) => (
+                    <TableCell>
+                        <RoutedLink
+                            href={buildHeavyHitterStateLink(cluster, path, computation, {
+                                partitionId: original.partitionId,
+                            })}
+                            title={i18n('action_open-in-state')}
+                        >
+                            {original.partitionId}
+                        </RoutedLink>
+                    </TableCell>
                 ),
             },
         ],
         [cluster, path, computation, keyColumns, allKeyColumns],
     );
+
+    const entries = React.useMemo(() => heavyHitters?.entries ?? [], [heavyHitters]);
+    const table = useTable({columns, data: entries});
 
     return (
         <React.Fragment>
@@ -100,10 +120,10 @@ export function FlowComputationMessages({
                 <CollapsibleSection name={heavyHitters.title || i18n('title_heavy-hitters')}>
                     <Flex direction="column" gap={2} className={block()}>
                         {heavyHitters.entries.length > 0 && (
-                            <Table
-                                data={heavyHitters.entries}
-                                columns={columns}
-                                width="max"
+                            <DataTableGravity
+                                table={table}
+                                virtualized
+                                rowHeight={40}
                                 className={block('table')}
                             />
                         )}

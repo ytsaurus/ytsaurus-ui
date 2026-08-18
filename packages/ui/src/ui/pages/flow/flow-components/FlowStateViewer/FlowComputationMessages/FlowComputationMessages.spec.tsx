@@ -54,6 +54,33 @@ jest.mock(
     }),
 );
 
+jest.mock('../../../../../components/DataTableGravity', () => {
+    type MockCell = {
+        id: string;
+        column: {columnDef: {cell: (context: unknown) => React.ReactNode}};
+        getContext: () => unknown;
+    };
+    type MockRow = {id: string; getVisibleCells: () => Array<MockCell>};
+    return {
+        __esModule: true,
+        useTable: jest.requireActual('@gravity-ui/table').useTable,
+        TableCell: ({children}: {children: React.ReactNode}) => <div>{children}</div>,
+        DataTableGravity: ({table}: {table: {getRowModel: () => {rows: Array<MockRow>}}}) => (
+            <div>
+                {table.getRowModel().rows.map((row) => (
+                    <div key={row.id}>
+                        {row.getVisibleCells().map((cell) => (
+                            <span key={cell.id}>
+                                {cell.column.columnDef.cell(cell.getContext())}
+                            </span>
+                        ))}
+                    </div>
+                ))}
+            </div>
+        ),
+    };
+});
+
 jest.mock('./i18n', () => ({
     __esModule: true,
     default: (key: string) => key,
