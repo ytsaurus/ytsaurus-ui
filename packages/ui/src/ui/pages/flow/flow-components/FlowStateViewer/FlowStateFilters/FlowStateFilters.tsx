@@ -16,7 +16,7 @@ import {
     reconcileStateName,
     reconcileStateTarget,
     resolveKeySchema,
-} from '../helpers';
+} from '../state-filters';
 import i18n from './i18n';
 import i18nApiValues from '../i18n-api-values';
 import type {FlowStateFiltersValue} from '../types';

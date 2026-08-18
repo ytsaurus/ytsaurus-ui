@@ -26,14 +26,16 @@ import {useSelector} from '../../../../../store/redux-hooks';
 
 import {isAnnotatedBigInteger} from '../../../../../store/api/yt/flow/read-states-normalize';
 import {
-    buildCompactYsonSettings,
     flattenReadStatesResponse,
     getStateRowId,
     isRowDeletable,
     selectDeletableRows,
+} from '../state-requests';
+import {
+    buildCompactYsonSettings,
     serializeRawStateValue,
     stringifyStateValue,
-} from '../helpers';
+} from '../state-values';
 import i18n from './i18n';
 import i18nApiValues from '../i18n-api-values';
 import type {
