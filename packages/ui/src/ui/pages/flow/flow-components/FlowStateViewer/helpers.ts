@@ -29,6 +29,7 @@ import type {
     GetPipelineStateData,
 } from '../../../../../shared/yt-types';
 import type {YsonSettings} from '../../../../components/Yson/Yson';
+import ypath from '../../../../common/thor/ypath';
 import {
     BIG_INTEGER_RANGES,
     isAnnotatedBigInteger,
@@ -49,10 +50,7 @@ export function seedStateFilters(
 }
 
 function extractGroupByColumns(groupBySchema: unknown): Array<FlowKeyColumn> {
-    const columns =
-        groupBySchema && typeof groupBySchema === 'object' && '$value' in groupBySchema
-            ? (groupBySchema as {$value: unknown}).$value
-            : groupBySchema;
+    const columns = ypath.getValue(groupBySchema);
     return Array.isArray(columns) ? (columns as Array<FlowKeyColumn>) : [];
 }
 
@@ -85,13 +83,11 @@ function getJoinerKeyOverrideColumns(
     if (!spec?.computations || !computationId || !stateName) {
         return [];
     }
-    const joiner = readYsonField(
-        spec.computations[computationId]?.external_state_joiners,
-        stateName,
-    );
-    return extractGroupByColumns(
-        readYsonField(readYsonField(joiner, 'join_on'), 'key_schema_override'),
-    );
+    const joiner = ypath.getValue(spec.computations[computationId]?.external_state_joiners)?.[
+        stateName
+    ];
+    const joinOn = ypath.getValue(joiner)?.join_on;
+    return extractGroupByColumns(ypath.getValue(joinOn)?.key_schema_override);
 }
 
 function isDeclaredManager(
@@ -103,7 +99,7 @@ function isDeclaredManager(
         return false;
     }
     return (
-        readYsonField(spec.computations[computationId]?.external_state_managers, stateName) !==
+        ypath.getValue(spec.computations[computationId]?.external_state_managers)?.[stateName] !==
         undefined
     );
 }
@@ -165,7 +161,11 @@ export function getComputationStateNames(
     if (target === 'external_key_state') {
         return managerNames;
     }
-    const joinerNames = readYsonFieldNames(computation?.external_state_joiners);
+    const joiners = ypath.getValue(computation?.external_state_joiners);
+    const joinerNames =
+        joiners && typeof joiners === 'object' && !Array.isArray(joiners)
+            ? Object.keys(joiners)
+            : [];
     return [...new Set([...managerNames, ...joinerNames])];
 }
 
@@ -742,30 +742,6 @@ export function buildRowFilterUpdate(
     }
 }
 
-function unwrapYsonNode(node: unknown): {value: unknown; attributes: Record<string, unknown>} {
-    if (node && typeof node === 'object' && '$value' in node) {
-        const wrapped = node as {$value: unknown; $attributes?: Record<string, unknown>};
-        return {value: wrapped.$value, attributes: wrapped.$attributes ?? {}};
-    }
-    return {value: node, attributes: {}};
-}
-
-function readYsonField(node: unknown, field: string): unknown {
-    const {value} = unwrapYsonNode(node);
-    if (!value || typeof value !== 'object' || Array.isArray(value)) {
-        return undefined;
-    }
-    return (value as Record<string, unknown>)[field];
-}
-
-function readYsonFieldNames(node: unknown): Array<string> {
-    const {value} = unwrapYsonNode(node);
-    if (!value || typeof value !== 'object' || Array.isArray(value)) {
-        return [];
-    }
-    return Object.keys(value);
-}
-
 export function resolveStateStoragePath(
     row: FlowStateResultRow,
     pipelinePath: string,
@@ -785,13 +761,13 @@ export function resolveStateStoragePath(
         row.section === 'external_key_state'
             ? computation?.external_state_managers
             : computation?.external_state_joiners;
-    const declaration = readYsonField(declarations, row.stateName);
-    const pathNode = readYsonField(readYsonField(declaration, 'parameters'), 'path');
-    const {value: path, attributes} = unwrapYsonNode(pathNode);
+    const declaration = ypath.getValue(declarations)?.[row.stateName];
+    const pathNode = ypath.getValue(ypath.getValue(declaration)?.parameters)?.path;
+    const path = ypath.getValue(pathNode);
     if (typeof path !== 'string' || !path.length) {
         return undefined;
     }
-    const cluster = attributes['cluster'];
+    const cluster = ypath.getAttributes(pathNode)['cluster'];
     return {path, cluster: typeof cluster === 'string' ? cluster : undefined};
 }
 
@@ -802,14 +778,14 @@ const KEY_TOKEN_ID_PATTERN = /^(\d+)#([\s\S]*)$/;
 function parseHeavyHittersMessage(
     message: FlowMessageType,
 ): FlowHeavyHittersMessageData | undefined {
-    const {value: list} = unwrapYsonNode(message.yson);
+    const list = ypath.getValue(message.yson);
     if (!Array.isArray(list)) {
         return undefined;
     }
     const entries: Array<FlowHeavyHitterEntry> = [];
     const unparsedEntries: Array<string> = [];
     for (const item of list) {
-        const {value: line} = unwrapYsonNode(item);
+        const line = ypath.getValue(item);
         if (typeof line !== 'string') {
             unparsedEntries.push(JSON.stringify(line));
             continue;
