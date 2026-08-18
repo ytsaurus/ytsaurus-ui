@@ -27,10 +27,10 @@ jest.mock('../../../../../store/selectors/global', () => ({
     selectCluster: () => 'hahn',
 }));
 
-jest.mock('../../../../../containers/Link/Link', () => ({
+jest.mock('../../../../../containers/RoutedLink/RoutedLink', () => ({
     __esModule: true,
-    default: ({children, url}: {children: React.ReactNode; url: string}) => (
-        <a href={url}>{children}</a>
+    RoutedLink: ({children, href}: {children: React.ReactNode; href?: string}) => (
+        <a href={href}>{children}</a>
     ),
 }));
 
