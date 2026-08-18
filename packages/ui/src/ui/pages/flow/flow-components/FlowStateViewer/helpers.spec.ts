@@ -46,12 +46,11 @@ import {
 } from './helpers';
 import type {
     FlowDeleteDialogState,
-    FlowDeleteStatesBody,
     FlowKeySchemaResolution,
     FlowStateFiltersValue,
     FlowStateResultRow,
-    FlowStaticSpec,
 } from './types';
+import type {FlowDeleteStatesBody, FlowStaticSpec} from '../../../../../shared/yt-types';
 
 const unipika = require('@gravity-ui/unipika/lib/unipika') as {
     formatFromYSON: (node: unknown, settings: Record<string, unknown>) => string;

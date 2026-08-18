@@ -2,7 +2,7 @@
 import React from 'react';
 import {act, render, screen} from '@testing-library/react';
 
-import type {FlowStaticSpec} from '../types';
+import type {FlowStaticSpec} from '../../../../../../shared/yt-types';
 
 class ResizeObserverStub {
     observe() {}

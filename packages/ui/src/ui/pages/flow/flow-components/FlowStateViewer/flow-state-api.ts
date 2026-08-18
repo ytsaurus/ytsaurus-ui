@@ -2,13 +2,12 @@ import {TYPED_INPUT_FORMAT, TYPED_OUTPUT_FORMAT} from '../../../../constants';
 import {YTApiId, ytApiV4, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 
 import {normalizeReadStatesResponse} from './helpers';
+import type {FlowPipelineSpecData} from './types';
 import type {
     FlowDeleteStatesBody,
     FlowDeleteStatesResponse,
-    FlowPipelineSpecData,
-    FlowPipelineStateValue,
     FlowReadStatesBody,
-} from './types';
+} from '../../../../../shared/yt-types';
 
 type FlowStateExecuteFn = (
     id: string,
@@ -46,9 +45,7 @@ export function flowDeleteStates(pipeline_path: string, body: FlowDeleteStatesBo
 }
 
 export function fetchPipelineState(pipeline_path: string) {
-    return ytApiV4.getPipelineState({
-        parameters: {pipeline_path},
-    }) as Promise<FlowPipelineStateValue>;
+    return ytApiV4.getPipelineState({parameters: {pipeline_path}});
 }
 
 export function fetchSpec(pipeline_path: string) {

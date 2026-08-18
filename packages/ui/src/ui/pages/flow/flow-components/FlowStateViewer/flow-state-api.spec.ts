@@ -1,7 +1,7 @@
 import {TYPED_INPUT_FORMAT, TYPED_OUTPUT_FORMAT} from '../../../../constants';
 
 import {buildStateAccessBody} from './helpers';
-import type {FlowKeyColumn} from './types';
+import type {FlowKeyColumn} from '../../../../../shared/yt-types';
 
 jest.mock('../../../../rum/rum-wrap-api', () => ({
     YTApiId: {flowExecute: 'flowExecute'},

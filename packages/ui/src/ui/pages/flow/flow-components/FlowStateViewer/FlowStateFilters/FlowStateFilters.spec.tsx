@@ -5,7 +5,8 @@ import React from 'react';
 import {fireEvent, render, screen} from '@testing-library/react';
 import {ThemeProvider} from '@gravity-ui/uikit';
 
-import type {FlowStateFiltersValue, FlowStaticSpec} from '../types';
+import type {FlowStateFiltersValue} from '../types';
+import type {FlowStaticSpec} from '../../../../../../shared/yt-types';
 
 class ResizeObserverStub {
     observe() {}

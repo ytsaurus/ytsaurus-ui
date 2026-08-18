@@ -20,8 +20,8 @@ import {
     splitHeavyHittersMessages,
 } from '../helpers';
 import i18n from './i18n';
-import type {FlowHeavyHitterEntry, FlowStaticSpec} from '../types';
-import type {FlowMessageType} from '../../../../../../shared/yt-types';
+import type {FlowHeavyHitterEntry} from '../types';
+import type {FlowMessageType, FlowStaticSpec} from '../../../../../../shared/yt-types';
 
 import './FlowComputationMessages.scss';
 

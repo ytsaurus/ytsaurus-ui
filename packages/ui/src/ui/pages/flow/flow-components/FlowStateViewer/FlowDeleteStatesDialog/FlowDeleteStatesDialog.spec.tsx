@@ -5,7 +5,8 @@ import React from 'react';
 import {act, fireEvent, render, screen} from '@testing-library/react';
 import {ThemeProvider} from '@gravity-ui/uikit';
 
-import type {FlowPipelineStateValue, FlowStateResultRow} from '../types';
+import type {FlowStateResultRow} from '../types';
+import type {GetPipelineStateData} from '../../../../../../shared/yt-types';
 
 class ResizeObserverStub {
     observe() {}
@@ -65,7 +66,7 @@ function previewButton() {
     return screen.getByRole('button', {name: 'action_preview'}) as HTMLButtonElement;
 }
 
-async function renderDialog(pipelineState: FlowPipelineStateValue, onCommitted = jest.fn()) {
+async function renderDialog(pipelineState: GetPipelineStateData, onCommitted = jest.fn()) {
     mockFetchPipelineState.mockResolvedValue(pipelineState);
     await act(async () => {
         render(

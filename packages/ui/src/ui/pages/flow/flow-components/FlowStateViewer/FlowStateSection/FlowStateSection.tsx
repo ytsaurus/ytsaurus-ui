@@ -37,8 +37,8 @@ import type {
     FlowStateFiltersValue,
     FlowStateResultRow,
     FlowStateRowFilterField,
-    FlowStaticSpec,
 } from '../types';
+import type {FlowStaticSpec} from '../../../../../../shared/yt-types';
 
 import './FlowStateSection.scss';
 
