@@ -1,7 +1,6 @@
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {Route, Switch, useRouteMatch} from 'react-router';
-import {Page} from '../../../../../shared/constants/settings';
 import Tabs from '../../../../components/Tabs/Tabs';
 import {FlowEntityTitle} from '../../../../pages/flow/flow-components/FlowEntityHeader';
 import {FlowError} from '../../../../pages/flow/flow-components/FlowError/FlowError';
@@ -18,6 +17,7 @@ import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {selectFlowPipelinePath} from '../../../../store/selectors/flow/filters';
 import {selectCluster} from '../../../../store/selectors/global/cluster';
 import UIFactory, {type FlowComputationMonitorProps} from '../../../../UIFactory';
+import {makeFlowComputationTabLink} from '../../../../utils/app-url';
 import './FlowComputation.scss';
 import {FlowComputationPartitions} from './FlowComputationPartitions';
 import {FlowComputationPerformance} from './FlowComputationPerformance/FlowComputationPerformance';
@@ -119,20 +119,20 @@ function FlowComputationTabs({computation}: {computation: string}) {
                 {
                     value: 'details',
                     text: i18n('details'),
-                    url: `/${cluster}/${Page.FLOWS}/computations/${encodeURIComponent(computation)}/details`,
+                    url: makeFlowComputationTabLink({cluster, computation, tab: 'details'}),
                     routed: true,
                     show: true,
                 },
                 {
                     value: 'monitor',
                     text: i18n('monitoring'),
-                    url: `/${cluster}/${Page.FLOWS}/computations/${encodeURIComponent(computation)}/monitor`,
+                    url: makeFlowComputationTabLink({cluster, computation, tab: 'monitor'}),
                     show: true,
                 },
                 ...extraTabs.map((tab) => ({
                     value: tab.value,
                     text: tab.title,
-                    url: `/${cluster}/${Page.FLOWS}/computations/${encodeURIComponent(computation)}/${tab.value}`,
+                    url: makeFlowComputationTabLink({cluster, computation, tab: tab.value}),
                     show: true,
                 })),
             ]}
