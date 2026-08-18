@@ -397,5 +397,3 @@ export function FlowStateResults({
         </Flex>
     );
 }
-
-export default FlowStateResults;

@@ -243,5 +243,3 @@ export function FlowStateFilters({
         </Flex>
     );
 }
-
-export default FlowStateFilters;

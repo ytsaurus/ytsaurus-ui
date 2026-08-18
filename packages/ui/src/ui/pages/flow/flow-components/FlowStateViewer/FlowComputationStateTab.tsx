@@ -3,10 +3,10 @@ import {useLocation} from 'react-router';
 
 import {type FlowComputationMonitorProps} from '../../../../UIFactory';
 
-import FlowStateSection from './FlowStateSection/FlowStateSection';
+import {FlowStateSection} from './FlowStateSection/FlowStateSection';
 import {parseHeavyHitterStateSeed} from './heavy-hitters';
 
-function FlowComputationStateTab({path, computation}: FlowComputationMonitorProps) {
+export function FlowComputationStateTab({path, computation}: FlowComputationMonitorProps) {
     const {search} = useLocation();
     const initialFilters = React.useMemo(
         () => parseHeavyHitterStateSeed(new URLSearchParams(search).get('heavyHitterSeed')),
@@ -22,5 +22,3 @@ function FlowComputationStateTab({path, computation}: FlowComputationMonitorProp
         />
     );
 }
-
-export default FlowComputationStateTab;

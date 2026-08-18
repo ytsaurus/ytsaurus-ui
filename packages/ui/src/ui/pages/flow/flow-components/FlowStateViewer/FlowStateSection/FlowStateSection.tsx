@@ -144,5 +144,3 @@ export function FlowStateSection({
         </React.Fragment>
     );
 }
-
-export default FlowStateSection;

@@ -11,8 +11,8 @@ import {
     FlowPathMeta,
     getLoadedDataMetaItems,
 } from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
-import FlowComputationStateTab from '../../flow-components/FlowStateViewer/FlowComputationStateTab';
-import FlowComputationMessages from '../../flow-components/FlowStateViewer/FlowComputationMessages/FlowComputationMessages';
+import {FlowComputationStateTab} from '../../flow-components/FlowStateViewer/FlowComputationStateTab';
+import {FlowComputationMessages} from '../../flow-components/FlowStateViewer/FlowComputationMessages/FlowComputationMessages';
 import i18nFlowState from '../../flow-components/FlowStateViewer/i18n';
 import {useFlowExecuteQuery} from '../../../../store/api/yt';
 import {filtersSlice} from '../../../../store/reducers/flow/filters';

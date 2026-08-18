@@ -84,5 +84,3 @@ export function FlowStateKeyBuilder({columns, values, onChange}: FlowStateKeyBui
         </Flex>
     );
 }
-
-export default FlowStateKeyBuilder;
