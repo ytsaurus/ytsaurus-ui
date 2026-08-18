@@ -30,7 +30,7 @@ import {selectCluster} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 import {makeTabProps} from '../../../utils';
 import {FlowEntityTitle} from '../flow-components/FlowEntityHeader';
-import FlowPipelineStateTab from '../flow-components/FlowStateViewer/FlowPipelineStateTab';
+import {FlowPipelineStateTab} from '../flow-components/FlowStateViewer/FlowPipelineStateTab';
 import i18nFlowState from '../flow-components/FlowStateViewer/i18n';
 import i18n from '../i18n';
 import './Flow.scss';

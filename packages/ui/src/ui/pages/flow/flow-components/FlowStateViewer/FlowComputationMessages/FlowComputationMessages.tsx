@@ -138,5 +138,3 @@ export function FlowComputationMessages({
         </React.Fragment>
     );
 }
-
-export default FlowComputationMessages;

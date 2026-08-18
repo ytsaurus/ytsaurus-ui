@@ -99,5 +99,3 @@ export function FlowDeleteStatesDialog({
         </Dialog>
     );
 }
-
-export default FlowDeleteStatesDialog;
