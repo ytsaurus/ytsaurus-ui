@@ -9,8 +9,6 @@ import type {
     FlowRowKeySchema,
     FlowStateFiltersValue,
     FlowStateNameInputMode,
-    FlowStateReadEvent,
-    FlowStateReadState,
     FlowStateResultRow,
     FlowStateRowFilterField,
     FlowStateStorageLocation,
@@ -31,6 +29,11 @@ import type {
     GetPipelineStateData,
 } from '../../../../../shared/yt-types';
 import type {YsonSettings} from '../../../../components/Yson/Yson';
+import {
+    BIG_INTEGER_RANGES,
+    isAnnotatedBigInteger,
+    isBigIntegerType,
+} from '../../../../store/api/yt/flow/read-states-normalize';
 
 export function seedStateFilters(
     fixedComputationId: string | undefined,
@@ -223,15 +226,6 @@ const INTEGER_RANGES: Record<string, {min: number; max: number}> = {
     uint16: {min: 0, max: 65535},
     uint32: {min: 0, max: 4294967295},
 };
-
-const BIG_INTEGER_RANGES = {
-    int64: {min: BigInt('-9223372036854775808'), max: BigInt('9223372036854775807')},
-    uint64: {min: BigInt('0'), max: BigInt('18446744073709551615')},
-};
-
-function isBigIntegerType(type: string): type is keyof typeof BIG_INTEGER_RANGES {
-    return type === 'int64' || type === 'uint64';
-}
 
 function castIntegerKey(
     column: FlowKeyColumn,
@@ -540,41 +534,6 @@ export function isDeleteCommitted(response: FlowDeleteStatesResponse): boolean {
 
 export const AUTO_LOAD_DEBOUNCE_MS = 400;
 
-export const INITIAL_READ_STATE: FlowStateReadState = {revision: 0, requestId: 0};
-
-export function flowStateReadReducer(
-    state: FlowStateReadState,
-    event: FlowStateReadEvent,
-): FlowStateReadState {
-    switch (event.type) {
-        case 'filters-changed':
-            return event.hasScope
-                ? {
-                      revision: state.revision + 1,
-                      requestId: event.requestId,
-                      response: state.response,
-                  }
-                : {revision: state.revision + 1, requestId: event.requestId};
-        case 'load-started':
-            return {
-                revision: state.revision,
-                requestId: event.requestId,
-                loadingRequestId: event.requestId,
-                response: state.response,
-            };
-        case 'load-succeeded':
-            return event.requestId === state.requestId
-                ? {revision: state.revision, requestId: state.requestId, response: event.response}
-                : state;
-        case 'load-failed':
-            return event.requestId === state.requestId
-                ? {revision: state.revision, requestId: state.requestId, error: event.error}
-                : state;
-        default:
-            return state;
-    }
-}
-
 export const CLOSED_DELETE_DIALOG_STATE: FlowDeleteDialogState = {session: 0, force: false};
 
 export function flowDeleteDialogReducer(
@@ -583,7 +542,7 @@ export function flowDeleteDialogReducer(
 ): FlowDeleteDialogState {
     switch (event.type) {
         case 'opened':
-            return {session: event.session, force: false, busy: 'state'};
+            return {session: event.session, force: false};
         case 'closed':
             return {session: event.session, force: false};
         case 'force-changed':
@@ -597,10 +556,6 @@ export function flowDeleteDialogReducer(
                 failed: undefined,
                 error: undefined,
             };
-        case 'pipeline-state-loaded':
-            return event.session === state.session
-                ? {...state, pipelineState: event.pipelineState, busy: undefined}
-                : state;
         case 'preview-loaded':
             return event.session === state.session
                 ? {
@@ -634,91 +589,6 @@ export function clampLimit(value: number): number {
         return DEFAULT_STATE_LIMIT;
     }
     return Math.min(MAX_STATE_LIMIT, Math.max(1, Math.trunc(value)));
-}
-
-function isPlainObject(node: unknown): node is Record<string, unknown> {
-    return typeof node === 'object' && node !== null && !Array.isArray(node);
-}
-
-export function isAnnotatedBigInteger(node: unknown): node is FlowAnnotatedInteger {
-    return (
-        isPlainObject(node) &&
-        (node.$type === 'int64' || node.$type === 'uint64') &&
-        typeof node.$value === 'string'
-    );
-}
-
-const MIN_SAFE_BIG = BigInt(Number.MIN_SAFE_INTEGER);
-const MAX_SAFE_BIG = BigInt(Number.MAX_SAFE_INTEGER);
-
-function parseBigIntegerInRange(
-    type: keyof typeof BIG_INTEGER_RANGES,
-    value: string,
-): bigint | undefined {
-    const pattern = type === 'uint64' ? /^\d+$/ : /^-?\d+$/;
-    if (!pattern.test(value)) {
-        return undefined;
-    }
-    const parsed = BigInt(value);
-    const range = BIG_INTEGER_RANGES[type];
-    return parsed < range.min || parsed > range.max ? undefined : parsed;
-}
-
-function normalizeAnnotatedScalar(type: string, value: string): unknown {
-    switch (type) {
-        case 'int64':
-        case 'uint64': {
-            const parsed = parseBigIntegerInRange(type, value);
-            if (parsed === undefined) {
-                return {$type: type, $value: value};
-            }
-            return parsed >= MIN_SAFE_BIG && parsed <= MAX_SAFE_BIG
-                ? Number(parsed)
-                : {$type: type, $value: value};
-        }
-        case 'double':
-            return Number(value);
-        case 'boolean':
-            return value === 'true';
-        default:
-            return value;
-    }
-}
-
-const ANNOTATION_KEYS = new Set(['$type', '$value', '$attributes']);
-
-export function normalizeAnnotatedValue(node: unknown): unknown {
-    if (Array.isArray(node)) {
-        return node.map(normalizeAnnotatedValue);
-    }
-    if (!isPlainObject(node)) {
-        return node;
-    }
-    const nodeKeys = Object.keys(node);
-    const isAnnotationWrapper =
-        nodeKeys.length > 0 && nodeKeys.every((key) => ANNOTATION_KEYS.has(key));
-    if (isAnnotationWrapper) {
-        const type = node.$type;
-        const rawValue = node.$value;
-        const value =
-            typeof type === 'string' && typeof rawValue === 'string'
-                ? normalizeAnnotatedScalar(type, rawValue)
-                : normalizeAnnotatedValue(rawValue);
-        if (!('$attributes' in node)) {
-            return value;
-        }
-        const attributes = normalizeAnnotatedValue(node.$attributes);
-        return isAnnotatedBigInteger(value)
-            ? {$attributes: attributes, ...value}
-            : {$attributes: attributes, $value: value};
-    }
-    return Object.fromEntries(
-        Object.entries(node).map(([field, child]) => [field, normalizeAnnotatedValue(child)]),
-    );
-}
-
-export function normalizeReadStatesResponse(response: unknown): FlowReadStatesResponse {
-    return normalizeAnnotatedValue(response) as FlowReadStatesResponse;
 }
 
 function replaceAnnotatedIntegers(_key: string, value: unknown): unknown {

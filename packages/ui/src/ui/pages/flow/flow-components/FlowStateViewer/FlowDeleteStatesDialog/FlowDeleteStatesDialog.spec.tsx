@@ -20,7 +20,7 @@ window.matchMedia = (() => ({
     removeEventListener: () => {},
 })) as unknown as typeof window.matchMedia;
 
-const mockFetchPipelineState = jest.fn();
+const mockUsePipelineState = jest.fn();
 const mockFlowDeleteStates = jest.fn();
 
 jest.mock('../../../../../i18n', () => ({
@@ -43,10 +43,12 @@ jest.mock('../FlowStateResults/FlowStateResults', () => ({
     },
 }));
 
-jest.mock('../flow-state-api', () => ({
+jest.mock('../../../../../store/api/yt/flow', () => ({
     __esModule: true,
-    fetchPipelineState: (...args: Array<unknown>) => mockFetchPipelineState(...args),
-    flowDeleteStates: (...args: Array<unknown>) => mockFlowDeleteStates(...args),
+    useFlowPipelineStateQuery: (...args: Array<unknown>) => mockUsePipelineState(...args),
+    useFlowDeleteStatesMutation: () => [
+        (args: unknown) => ({unwrap: () => mockFlowDeleteStates(args)}),
+    ],
 }));
 
 import {FlowDeleteStatesDialog} from './FlowDeleteStatesDialog';
@@ -67,7 +69,11 @@ function previewButton() {
 }
 
 async function renderDialog(pipelineState: GetPipelineStateData, onCommitted = jest.fn()) {
-    mockFetchPipelineState.mockResolvedValue(pipelineState);
+    mockUsePipelineState.mockReturnValue({
+        data: pipelineState,
+        error: undefined,
+        isFetching: false,
+    });
     await act(async () => {
         render(
             <ThemeProvider theme="light">
@@ -110,10 +116,10 @@ describe('FlowDeleteStatesDialog delete gate', () => {
             fireEvent.click(deleteButton());
         });
 
-        expect(mockFlowDeleteStates).toHaveBeenLastCalledWith(
-            '//pipeline',
-            expect.objectContaining({commit: true, force: false, name: '/counter'}),
-        );
+        expect(mockFlowDeleteStates).toHaveBeenLastCalledWith({
+            parameters: {pipeline_path: '//pipeline'},
+            body: expect.objectContaining({commit: true, force: false, name: '/counter'}),
+        });
         expect(onCommitted).toHaveBeenCalledTimes(1);
         expect(screen.getByText('text_committed')).not.toBeNull();
     });
@@ -151,10 +157,10 @@ describe('FlowDeleteStatesDialog delete gate', () => {
             fireEvent.click(deleteButton());
         });
 
-        expect(mockFlowDeleteStates).toHaveBeenLastCalledWith(
-            '//pipeline',
-            expect.objectContaining({commit: true, force: true}),
-        );
+        expect(mockFlowDeleteStates).toHaveBeenLastCalledWith({
+            parameters: {pipeline_path: '//pipeline'},
+            body: expect.objectContaining({commit: true, force: true}),
+        });
     });
 
     it('does not commit when the preview reports row errors', async () => {

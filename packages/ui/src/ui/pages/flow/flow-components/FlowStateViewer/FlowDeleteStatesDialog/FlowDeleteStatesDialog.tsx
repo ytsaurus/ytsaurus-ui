@@ -5,7 +5,10 @@ import {Alert, Button, Checkbox, Dialog, Flex, Loader, Text} from '@gravity-ui/u
 import {YTErrorBlock, type YTErrorBlockProps} from '../../../../../containers/Block/Block';
 
 import {KIND_LABEL_KEYS} from '../FlowStateResults/FlowStateResults';
-import {fetchPipelineState, flowDeleteStates} from '../flow-state-api';
+import {
+    useFlowDeleteStatesMutation,
+    useFlowPipelineStateQuery,
+} from '../../../../../store/api/yt/flow';
 import {
     CLOSED_DELETE_DIALOG_STATE,
     aggregateMatchedTotal,
@@ -89,24 +92,25 @@ export function FlowDeleteStatesDialog({
         CLOSED_DELETE_DIALOG_STATE,
     );
     const sessionRef = React.useRef(0);
+    const [deleteStates] = useFlowDeleteStatesMutation();
+
+    const {
+        data: pipelineState,
+        error: pipelineStateError,
+        isFetching: pipelineStateLoading,
+    } = useFlowPipelineStateQuery(
+        {parameters: {pipeline_path}},
+        {skip: !visible, refetchOnMountOrArgChange: true},
+    );
 
     React.useEffect(() => {
         const session = ++sessionRef.current;
-        if (!visible) {
-            dispatch({type: 'closed', session});
-            return;
-        }
-        dispatch({type: 'opened', session});
-        fetchPipelineState(pipeline_path)
-            .then((pipelineState) =>
-                dispatch({type: 'pipeline-state-loaded', session, pipelineState}),
-            )
-            .catch((reason) => dispatch({type: 'request-failed', session, error: reason}));
-    }, [visible, pipeline_path]);
+        dispatch(visible ? {type: 'opened', session} : {type: 'closed', session});
+    }, [visible]);
 
     const {force, busy, preview, previewSnapshot, committed, failed, error} = dialog;
-    const gate = deleteStatesGate(dialog.pipelineState);
-    const stateReady = dialog.pipelineState !== undefined;
+    const gate = deleteStatesGate(pipelineState);
+    const stateReady = pipelineState !== undefined && !pipelineStateLoading;
     const bodyKey = JSON.stringify(rows.map(getStateRowId));
     const previewValid = isDeletePreviewCommittable(preview, previewSnapshot, bodyKey, force);
     const canPreview = stateReady && !gate.blocked && busy === undefined && rows.length > 0;
@@ -117,7 +121,7 @@ export function FlowDeleteStatesDialog({
     const runDeleteStates = (commit: boolean) => {
         const session = sessionRef.current;
         dispatch({type: 'run-started', commit});
-        runRowDeletes(rows, (body) => flowDeleteStates(pipeline_path, body), {
+        runRowDeletes(rows, (body) => deleteStates({parameters: {pipeline_path}, body}).unwrap(), {
             force,
             commit,
             isCancelled: () => sessionRef.current !== session,
@@ -143,8 +147,8 @@ export function FlowDeleteStatesDialog({
             );
         }
         if (!stateReady) {
-            return error ? (
-                <YTErrorBlock error={error as YTErrorBlockProps['error']} />
+            return pipelineStateError ? (
+                <YTErrorBlock error={pipelineStateError as YTErrorBlockProps['error']} />
             ) : (
                 <Loader size="m" />
             );

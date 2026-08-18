@@ -1,9 +1,7 @@
 import type {
     FlowDeleteStatesResponse,
     FlowKeyColumn,
-    FlowReadStatesResponse,
     FlowStateTarget,
-    GetPipelineStateData,
 } from '../../../../../shared/yt-types';
 
 export type FlowStateNameInputMode = 'declared-only' | 'suggested' | 'free-form';
@@ -53,27 +51,12 @@ export type FlowStateResultRow = {
     value: unknown;
 };
 
-export type FlowStateReadState = {
-    revision: number;
-    requestId: number;
-    loadingRequestId?: number;
-    response?: FlowReadStatesResponse;
-    error?: unknown;
-};
-
-export type FlowStateReadEvent =
-    | {type: 'filters-changed'; hasScope: boolean; requestId: number}
-    | {type: 'load-started'; requestId: number}
-    | {type: 'load-succeeded'; requestId: number; response: FlowReadStatesResponse}
-    | {type: 'load-failed'; requestId: number; error: unknown};
-
 export type FlowDeleteDialogSnapshot = {bodyKey: string; force: boolean};
 
 export type FlowDeleteDialogState = {
     session: number;
     force: boolean;
-    busy?: 'state' | 'preview' | 'delete';
-    pipelineState?: GetPipelineStateData;
+    busy?: 'preview' | 'delete';
     preview?: Array<FlowRowDeleteOutcome>;
     previewSnapshot?: FlowDeleteDialogSnapshot;
     committed?: Array<FlowRowDeleteOutcome>;
@@ -86,7 +69,6 @@ export type FlowDeleteDialogEvent =
     | {type: 'closed'; session: number}
     | {type: 'force-changed'; force: boolean}
     | {type: 'run-started'; commit: boolean}
-    | {type: 'pipeline-state-loaded'; session: number; pipelineState: GetPipelineStateData}
     | {
           type: 'preview-loaded';
           session: number;
@@ -100,8 +82,6 @@ export type FlowDeleteDialogEvent =
           expected: number;
       }
     | {type: 'request-failed'; session: number; error: unknown};
-
-export type FlowPipelineSpecData = {spec?: unknown};
 
 export type FlowKeySchemaResolution = {
     keyColumns: Array<FlowKeyColumn>;

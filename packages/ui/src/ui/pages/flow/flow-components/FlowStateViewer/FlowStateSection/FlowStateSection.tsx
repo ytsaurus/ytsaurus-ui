@@ -2,10 +2,13 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import {Alert} from '@gravity-ui/uikit';
+import {skipToken} from '@reduxjs/toolkit/query';
 
 import {type tanstack} from '../../../../../components/DataTableGravity';
+import {useDebouncedValue} from '../../../../../hooks/useDebouncedValue';
 import {YTApiId} from '../../../../../rum/rum-wrap-api';
-import {checkPermission} from '../../../../../store/api/yt/checkPermissions/endpoint';
+import {useCheckPermissionQuery} from '../../../../../store/api/yt/checkPermissions';
+import {useFlowReadStatesQuery, useFlowStaticSpecQuery} from '../../../../../store/api/yt/flow';
 import {FlowTab} from '../../../../../store/reducers/flow/filters';
 import {selectCluster, selectCurrentUserName} from '../../../../../store/selectors/global';
 import {makeFlowLink} from '../../../../../utils/app-url/makeFlowLink';
@@ -15,14 +18,11 @@ import {useSelector} from '../../../../../store/redux-hooks';
 import {FlowDeleteStatesDialog} from '../FlowDeleteStatesDialog/FlowDeleteStatesDialog';
 import {FlowStateFilters} from '../FlowStateFilters/FlowStateFilters';
 import {FlowStateResults} from '../FlowStateResults/FlowStateResults';
-import {fetchSpec, flowReadStates} from '../flow-state-api';
 import {
     AUTO_LOAD_DEBOUNCE_MS,
-    INITIAL_READ_STATE,
     buildRowFilterUpdate,
     buildStateReadBody,
     flattenReadStatesResponse,
-    flowStateReadReducer,
     getComputationStateNames,
     isWriteDeniedByPermission,
     resolveKeySchema,
@@ -38,7 +38,6 @@ import type {
     FlowStateResultRow,
     FlowStateRowFilterField,
 } from '../types';
-import type {FlowStaticSpec} from '../../../../../../shared/yt-types';
 
 import './FlowStateSection.scss';
 
@@ -50,15 +49,6 @@ export type FlowStateSectionProps = {
     initialFilters?: Partial<FlowStateFiltersValue>;
 };
 
-function useDebouncedValue<T>(value: T, delayMs: number): T {
-    const [debounced, setDebounced] = React.useState(value);
-    React.useEffect(() => {
-        const timer = window.setTimeout(() => setDebounced(value), delayMs);
-        return () => window.clearTimeout(timer);
-    }, [value, delayMs]);
-    return debounced;
-}
-
 export function FlowStateSection({
     pipeline_path,
     fixedComputationId,
@@ -67,115 +57,54 @@ export function FlowStateSection({
     const [filters, setFilters] = React.useState<FlowStateFiltersValue>(() =>
         seedStateFilters(fixedComputationId, initialFilters),
     );
-    const [staticSpec, setStaticSpec] = React.useState<FlowStaticSpec>();
-    const [readState, dispatchRead] = React.useReducer(flowStateReadReducer, INITIAL_READ_STATE);
-    const [validationError, setValidationError] = React.useState<string>();
     const [rowSelection, setRowSelection] = React.useState<tanstack.RowSelectionState>({});
     const [deleteRows, setDeleteRows] = React.useState<Array<FlowStateResultRow>>();
     const [deleteVisible, setDeleteVisible] = React.useState(false);
-    const [writeDenied, setWriteDenied] = React.useState(true);
     const login = useSelector(selectCurrentUserName);
     const cluster = useSelector(selectCluster);
 
-    const loadStaticSpec = React.useCallback(() => {
-        let cancelled = false;
-        fetchSpec(pipeline_path)
-            .then((data) => {
-                if (!cancelled) {
-                    setStaticSpec(data.spec as FlowStaticSpec);
-                }
-            })
-            .catch(() => {
-                if (!cancelled) {
-                    setStaticSpec(undefined);
-                }
-            });
-        return () => {
-            cancelled = true;
-        };
-    }, [pipeline_path]);
-
-    React.useEffect(() => loadStaticSpec(), [loadStaticSpec]);
-
-    React.useEffect(() => {
-        let cancelled = false;
-        checkPermission({
-            id: YTApiId.checkPermissions,
-            parameters: {path: pipeline_path, user: login, permission: 'write'},
-        })
-            .then((result) => {
-                if (!cancelled) {
-                    setWriteDenied(isWriteDeniedByPermission(result));
-                }
-            })
-            .catch(() => {
-                if (!cancelled) {
-                    setWriteDenied(true);
-                }
-            });
-        return () => {
-            cancelled = true;
-        };
-    }, [pipeline_path, login]);
+    const {data: staticSpec} = useFlowStaticSpecQuery({parameters: {pipeline_path}});
+    const permissionResult = useCheckPermissionQuery({
+        id: YTApiId.checkPermissions,
+        parameters: {path: pipeline_path, user: login, permission: 'write'},
+    });
+    const writeDenied = isWriteDeniedByPermission(permissionResult);
 
     const hasScope = Boolean(filters.computationId || filters.partitionId);
-    const loading = readState.loadingRequestId !== undefined;
-
-    const revisionRef = React.useRef(readState.revision);
-    revisionRef.current = readState.revision;
-    const nextRequestIdRef = React.useRef(readState.requestId);
-    const lastRequestRef = React.useRef<string>();
-
-    const runRead = React.useCallback(
-        (current: FlowStateFiltersValue, dedupe: boolean) => {
-            const built = buildStateReadBody(
-                current,
-                resolveKeySchema(
-                    staticSpec,
-                    current.computationId,
-                    current.stateName,
-                    current.target,
-                ),
-            );
-            if ('error' in built) {
-                setValidationError(i18n(built.error.errorKey, built.error.params));
-                return;
-            }
-            setValidationError(undefined);
-            const body = {...built.body, limit: current.limit};
-            const revision = revisionRef.current;
-            const requestKey = `${revision}:${JSON.stringify(body)}`;
-            if (dedupe && lastRequestRef.current === requestKey) {
-                return;
-            }
-            lastRequestRef.current = requestKey;
-            const requestId = ++nextRequestIdRef.current;
-            dispatchRead({type: 'load-started', requestId});
-            flowReadStates(pipeline_path, body)
-                .then((response) => dispatchRead({type: 'load-succeeded', requestId, response}))
-                .catch((error) => dispatchRead({type: 'load-failed', requestId, error}));
-        },
-        [staticSpec, pipeline_path],
-    );
-
     const debouncedFilters = useDebouncedValue(filters, AUTO_LOAD_DEBOUNCE_MS);
-
-    React.useEffect(() => {
-        if (!debouncedFilters.computationId && !debouncedFilters.partitionId) {
-            setValidationError(undefined);
-            return;
-        }
-        runRead(debouncedFilters, true);
-    }, [debouncedFilters, runRead]);
+    const hasDebouncedScope = Boolean(
+        debouncedFilters.computationId || debouncedFilters.partitionId,
+    );
+    const built = hasDebouncedScope
+        ? buildStateReadBody(
+              debouncedFilters,
+              resolveKeySchema(
+                  staticSpec,
+                  debouncedFilters.computationId,
+                  debouncedFilters.stateName,
+                  debouncedFilters.target,
+              ),
+          )
+        : undefined;
+    const validationError =
+        built && 'error' in built ? i18n(built.error.errorKey, built.error.params) : undefined;
+    const {
+        data,
+        error,
+        isFetching: loading,
+        refetch,
+    } = useFlowReadStatesQuery(
+        built && 'body' in built
+            ? {parameters: {pipeline_path}, body: {...built.body, limit: debouncedFilters.limit}}
+            : skipToken,
+    );
+    const response = hasDebouncedScope ? data : undefined;
 
     React.useEffect(() => {
         setRowSelection({});
-    }, [readState.response]);
+    }, [response]);
 
-    const rows = React.useMemo(
-        () => flattenReadStatesResponse(readState.response),
-        [readState.response],
-    );
+    const rows = React.useMemo(() => flattenReadStatesResponse(response), [response]);
     const selectedRows = React.useMemo(
         () => selectDeletableRows(rows, rowSelection),
         [rows, rowSelection],
@@ -184,11 +113,6 @@ export function FlowStateSection({
     const handleFiltersChange = React.useCallback((next: FlowStateFiltersValue) => {
         setFilters(next);
         setRowSelection({});
-        dispatchRead({
-            type: 'filters-changed',
-            hasScope: Boolean(next.computationId || next.partitionId),
-            requestId: ++nextRequestIdRef.current,
-        });
     }, []);
 
     const handleReset = () => {
@@ -242,7 +166,7 @@ export function FlowStateSection({
 
     const handleDeleteCommitted = () => {
         setRowSelection({});
-        runRead(filters, false);
+        refetch();
     };
 
     return (
@@ -258,9 +182,9 @@ export function FlowStateSection({
             {!hasScope && <Alert theme="info" message={i18n('alert_pick-scope')} />}
             {validationError && <Alert theme="warning" message={validationError} />}
             <FlowStateResults
-                response={readState.response}
+                response={response}
                 loading={loading}
-                error={readState.error}
+                error={error}
                 handlers={cellHandlers}
                 rowSelection={rowSelection}
                 onRowSelectionChange={setRowSelection}
