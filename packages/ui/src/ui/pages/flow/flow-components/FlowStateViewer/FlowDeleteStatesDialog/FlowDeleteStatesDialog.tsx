@@ -1,30 +1,12 @@
 import React from 'react';
 
-import {Alert, Button, Checkbox, Dialog, Flex, Loader, Text} from '@gravity-ui/uikit';
+import {Button, Dialog, Flex} from '@gravity-ui/uikit';
 
-import {YTErrorBlock, type YTErrorBlockProps} from '../../../../../containers/Block/Block';
-
-import {KIND_LABEL_KEYS} from '../FlowStateResults/FlowStateResults';
-import {
-    useFlowDeleteStatesMutation,
-    useFlowPipelineStateQuery,
-} from '../../../../../store/api/yt/flow';
-import {
-    CLOSED_DELETE_DIALOG_STATE,
-    aggregateMatchedTotal,
-    countCommitted,
-    deleteStatesGate,
-    flowDeleteDialogReducer,
-    isDeletePreviewCommittable,
-    runRowDeletes,
-} from '../state-delete';
-import {getStateRowId} from '../state-requests';
-import {stringifyStateValue} from '../state-values';
+import {DeleteStatesStatus} from './DeleteStatesStatus';
+import {RowsSummary} from './RowsSummary';
+import {useFlowDeleteStates} from './use-flow-delete-states';
 import i18n from './i18n';
-import i18nApiValues from '../i18n-api-values';
-import type {FlowRowDeleteOutcome, FlowStateResultRow} from '../types';
-
-const MAX_LISTED_ROWS = 20;
+import type {FlowStateResultRow} from '../types';
 
 export type FlowDeleteStatesDialogProps = {
     visible: boolean;
@@ -34,52 +16,6 @@ export type FlowDeleteStatesDialogProps = {
     onCommitted: () => void;
 };
 
-function RowsSummary({rows}: {rows: Array<FlowStateResultRow>}) {
-    const listed = rows.slice(0, MAX_LISTED_ROWS);
-    return (
-        <Flex direction="column" gap={1}>
-            <Alert
-                theme="warning"
-                message={i18n('text_delete-selected-explanation', {count: String(rows.length)})}
-            />
-            {listed.map((row) => (
-                <Flex key={getStateRowId(row)} gap={2} wrap>
-                    <Text color="secondary">{i18nApiValues(KIND_LABEL_KEYS[row.section])}</Text>
-                    <Text>{row.computationId ?? ''}</Text>
-                    {row.partitionId !== undefined && <Text>{row.partitionId}</Text>}
-                    {row.key !== undefined && <Text>{stringifyStateValue(row.key)}</Text>}
-                    <Text>{row.stateName}</Text>
-                </Flex>
-            ))}
-            {rows.length > MAX_LISTED_ROWS && (
-                <Text color="secondary">
-                    {i18n('text_and-n-more', {count: String(rows.length - MAX_LISTED_ROWS)})}
-                </Text>
-            )}
-        </Flex>
-    );
-}
-
-function OutcomesSummary({outcomes}: {outcomes: Array<FlowRowDeleteOutcome>}) {
-    return (
-        <Flex direction="column" gap={1}>
-            <Text variant="subheader-2">
-                {i18n('text_matched-total')}: {aggregateMatchedTotal(outcomes)}
-            </Text>
-            {outcomes.map(({rowId, response, error}) => (
-                <React.Fragment key={rowId}>
-                    {error !== undefined && (
-                        <YTErrorBlock error={error as YTErrorBlockProps['error']} />
-                    )}
-                    {(response?.errors ?? []).map((message, index) => (
-                        <YTErrorBlock key={`${index}:${message}`} error={{message}} />
-                    ))}
-                </React.Fragment>
-            ))}
-        </Flex>
-    );
-}
-
 export function FlowDeleteStatesDialog({
     visible,
     onClose,
@@ -87,108 +23,22 @@ export function FlowDeleteStatesDialog({
     rows,
     onCommitted,
 }: FlowDeleteStatesDialogProps) {
-    const [dialog, dispatch] = React.useReducer(
-        flowDeleteDialogReducer,
-        CLOSED_DELETE_DIALOG_STATE,
-    );
-    const sessionRef = React.useRef(0);
-    const [deleteStates] = useFlowDeleteStatesMutation();
-
     const {
-        data: pipelineState,
-        error: pipelineStateError,
-        isFetching: pipelineStateLoading,
-    } = useFlowPipelineStateQuery(
-        {parameters: {pipeline_path}},
-        {skip: !visible, refetchOnMountOrArgChange: true},
-    );
-
-    React.useEffect(() => {
-        const session = ++sessionRef.current;
-        dispatch(visible ? {type: 'opened', session} : {type: 'closed', session});
-    }, [visible]);
-
-    const {force, busy, preview, previewSnapshot, committed, failed, error} = dialog;
-    const gate = deleteStatesGate(pipelineState);
-    const stateReady = pipelineState !== undefined && !pipelineStateLoading;
-    const bodyKey = JSON.stringify(rows.map(getStateRowId));
-    const previewValid = isDeletePreviewCommittable(preview, previewSnapshot, bodyKey, force);
-    const canPreview = stateReady && !gate.blocked && busy === undefined && rows.length > 0;
-    const canDelete =
-        previewValid && !gate.blocked && (!gate.requiresForce || force) && busy === undefined;
-    const deleting = busy === 'delete';
-
-    const runDeleteStates = (commit: boolean) => {
-        const session = sessionRef.current;
-        dispatch({type: 'run-started', commit});
-        runRowDeletes(rows, (body) => deleteStates({parameters: {pipeline_path}, body}).unwrap(), {
-            force,
-            commit,
-            isCancelled: () => sessionRef.current !== session,
-        }).then((outcomes) => {
-            dispatch(
-                commit
-                    ? {type: 'delete-finished', session, outcomes, expected: rows.length}
-                    : {type: 'preview-loaded', session, outcomes, snapshot: {bodyKey, force}},
-            );
-            if (commit && countCommitted(outcomes) > 0) {
-                onCommitted();
-            }
-        });
-    };
-
-    const renderStatus = () => {
-        if (committed) {
-            return (
-                <React.Fragment>
-                    <Alert theme="success" message={i18n('text_committed')} />
-                    <OutcomesSummary outcomes={committed} />
-                </React.Fragment>
-            );
-        }
-        if (!stateReady) {
-            return pipelineStateError ? (
-                <YTErrorBlock error={pipelineStateError as YTErrorBlockProps['error']} />
-            ) : (
-                <Loader size="m" />
-            );
-        }
-        return (
-            <React.Fragment>
-                {gate.blocked && <Alert theme="warning" message={i18n('alert_pipeline-running')} />}
-                {gate.requiresForce && (
-                    <React.Fragment>
-                        <Alert theme="warning" message={i18n('alert_force-paused')} />
-                        <Checkbox
-                            checked={force}
-                            onUpdate={(next) => dispatch({type: 'force-changed', force: next})}
-                        >
-                            {i18n('label_force')}
-                        </Checkbox>
-                    </React.Fragment>
-                )}
-                {preview && (
-                    <React.Fragment>
-                        <Alert theme="info" message={i18n('text_preview-only')} />
-                        <OutcomesSummary outcomes={preview} />
-                    </React.Fragment>
-                )}
-                {failed && (
-                    <React.Fragment>
-                        <Alert theme="danger" message={i18n('alert_delete-failed')} />
-                        <Text>
-                            {i18n('text_deleted-count', {
-                                done: String(countCommitted(failed)),
-                                total: String(rows.length),
-                            })}
-                        </Text>
-                        <OutcomesSummary outcomes={failed} />
-                    </React.Fragment>
-                )}
-                {error ? <YTErrorBlock error={error as YTErrorBlockProps['error']} /> : null}
-            </React.Fragment>
-        );
-    };
+        force,
+        busy,
+        preview,
+        committed,
+        failed,
+        error,
+        pipelineStateError,
+        gate,
+        stateReady,
+        canPreview,
+        canDelete,
+        deleting,
+        setForce,
+        runDeleteStates,
+    } = useFlowDeleteStates({visible, pipeline_path, rows, onCommitted});
 
     return (
         <Dialog
@@ -206,7 +56,18 @@ export function FlowDeleteStatesDialog({
             <Dialog.Body>
                 <Flex direction="column" gap={3}>
                     <RowsSummary rows={rows} />
-                    {renderStatus()}
+                    <DeleteStatesStatus
+                        committed={committed}
+                        stateReady={stateReady}
+                        gate={gate}
+                        force={force}
+                        onForceChange={setForce}
+                        preview={preview}
+                        failed={failed}
+                        error={error}
+                        pipelineStateError={pipelineStateError}
+                        totalRows={rows.length}
+                    />
                     {committed ? (
                         <Flex justifyContent="flex-end">
                             <Button onClick={() => onClose()}>{i18n('action_close')}</Button>
