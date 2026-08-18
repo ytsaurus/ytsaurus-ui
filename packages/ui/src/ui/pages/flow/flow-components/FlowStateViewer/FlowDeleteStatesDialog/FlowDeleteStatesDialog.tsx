@@ -15,11 +15,11 @@ import {
     countCommitted,
     deleteStatesGate,
     flowDeleteDialogReducer,
-    getStateRowId,
     isDeletePreviewCommittable,
     runRowDeletes,
-    stringifyStateValue,
-} from '../helpers';
+} from '../state-delete';
+import {getStateRowId} from '../state-requests';
+import {stringifyStateValue} from '../state-values';
 import i18n from './i18n';
 import i18nApiValues from '../i18n-api-values';
 import type {FlowRowDeleteOutcome, FlowStateResultRow} from '../types';

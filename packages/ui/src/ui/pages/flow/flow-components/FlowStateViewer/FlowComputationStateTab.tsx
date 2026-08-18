@@ -4,7 +4,7 @@ import {useLocation} from 'react-router';
 import {type FlowComputationMonitorProps} from '../../../../UIFactory';
 
 import FlowStateSection from './FlowStateSection/FlowStateSection';
-import {parseHeavyHitterStateSeed} from './helpers';
+import {parseHeavyHitterStateSeed} from './heavy-hitters';
 
 function FlowComputationStateTab({path, computation}: FlowComputationMonitorProps) {
     const {search} = useLocation();

@@ -11,14 +11,13 @@ import {selectCluster} from '../../../../../store/selectors/global';
 import {useSelector} from '../../../../../store/redux-hooks';
 
 import {useFlowStaticSpecQuery} from '../../../../../store/api/yt/flow';
+import {getComputationGroupByColumns, getComputationKeyColumns} from '../state-filters';
+import {keyValuesFromRowKey} from '../state-values';
 import {
     buildHeavyHitterStateLink,
-    getComputationGroupByColumns,
-    getComputationKeyColumns,
-    keyValuesFromRowKey,
     parseHeavyHitterKeyText,
     splitHeavyHittersMessages,
-} from '../helpers';
+} from '../heavy-hitters';
 import i18n from './i18n';
 import type {FlowHeavyHitterEntry} from '../types';
 import type {FlowMessageType} from '../../../../../../shared/yt-types';

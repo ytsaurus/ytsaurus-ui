@@ -5,7 +5,7 @@ import {Flex, TextInput} from '@gravity-ui/uikit';
 
 import {SelectSingle} from '../../../../../components/Select/Select';
 
-import {castKeyValue} from '../helpers';
+import {castKeyValue} from '../state-filters';
 import i18n from './i18n';
 import type {FlowKeyColumn} from '../../../../../../shared/yt-types';
 

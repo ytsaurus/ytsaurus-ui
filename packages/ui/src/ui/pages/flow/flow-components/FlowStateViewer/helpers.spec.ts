@@ -1,44 +1,53 @@
 import {
-    CLOSED_DELETE_DIALOG_STATE,
-    aggregateMatchedTotal,
-    areAllCommitted,
-    areOutcomesClean,
-    buildCompactYsonSettings,
-    buildHeavyHitterStateLink,
-    buildRowDeleteBody,
-    buildRowFilterUpdate,
-    buildStateAccessBody,
-    buildStateReadBody,
     castKeyValue,
     clampLimit,
-    countCommitted,
-    deleteStatesGate,
-    flattenReadStatesResponse,
-    flowDeleteDialogReducer,
     getAvailableStateTargets,
     getComputationGroupByColumns,
     getComputationKeyColumns,
     getComputationStateNames,
     getStateNameInputMode,
     getStateNameSelectItems,
-    getStateRowId,
-    isDeletePreviewCommittable,
-    isWriteDeniedByPermission,
-    keyValuesFromRowKey,
-    parseHeavyHitterKeyText,
-    parseHeavyHitterStateSeed,
     reconcileStateName,
     reconcileStateTarget,
     resolveKeySchema,
     resolveRowKeySchema,
-    resolveStateStoragePath,
-    runRowDeletes,
     seedStateFilters,
+} from './state-filters';
+import {
+    buildStateAccessBody,
+    buildStateReadBody,
+    flattenReadStatesResponse,
+    getStateRowId,
     selectDeletableRows,
+} from './state-requests';
+import {
+    CLOSED_DELETE_DIALOG_STATE,
+    aggregateMatchedTotal,
+    areAllCommitted,
+    areOutcomesClean,
+    buildRowDeleteBody,
+    countCommitted,
+    deleteStatesGate,
+    flowDeleteDialogReducer,
+    isDeletePreviewCommittable,
+    isWriteDeniedByPermission,
+    runRowDeletes,
+} from './state-delete';
+import {
+    buildCompactYsonSettings,
+    buildRowFilterUpdate,
+    keyValuesFromRowKey,
+    resolveStateStoragePath,
     serializeRawStateValue,
-    splitHeavyHittersMessages,
     stringifyStateValue,
-} from './helpers';
+} from './state-values';
+import {
+    buildHeavyHitterStateLink,
+    parseHeavyHitterEntry,
+    parseHeavyHitterKeyText,
+    parseHeavyHitterStateSeed,
+    splitHeavyHittersMessages,
+} from './heavy-hitters';
 import {
     isAnnotatedBigInteger,
     normalizeAnnotatedValue,
@@ -1824,5 +1833,29 @@ describe('parseHeavyHitterStateSeed', () => {
         expect(
             parseHeavyHitterStateSeed(JSON.stringify({partitionId: 5, keyValues: {a: '1', b: 2}})),
         ).toEqual({keyValues: {a: '1'}});
+    });
+});
+
+describe('parseHeavyHitterEntry', () => {
+    it('parses a well-formed entry', () => {
+        expect(parseHeavyHitterEntry('Key=[1#a], Ratio=0.25, PartitionId=p-3')).toEqual({
+            keyText: '[1#a]',
+            ratio: 0.25,
+            partitionId: 'p-3',
+        });
+    });
+
+    it('keeps the last separators so a key may contain them', () => {
+        expect(parseHeavyHitterEntry('Key=[x, Ratio=y], Ratio=0.5, PartitionId=p-1')).toEqual({
+            keyText: '[x, Ratio=y]',
+            ratio: 0.5,
+            partitionId: 'p-1',
+        });
+    });
+
+    it('returns undefined for malformed lines', () => {
+        expect(parseHeavyHitterEntry('Key=[1], Ratio=abc, PartitionId=p-1')).toBeUndefined();
+        expect(parseHeavyHitterEntry('Key=[1], Ratio=0.5, PartitionId=')).toBeUndefined();
+        expect(parseHeavyHitterEntry('nonsense')).toBeUndefined();
     });
 });
