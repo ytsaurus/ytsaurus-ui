@@ -41,13 +41,7 @@ export const TYPED_OUTPUT_FORMAT = {
     },
 };
 
-export const TYPED_INPUT_FORMAT = {
-    $value: 'json' as const,
-    $attributes: {
-        stringify: true,
-        annotate_with_types: true,
-    },
-};
+export const TYPED_INPUT_FORMAT = TYPED_OUTPUT_FORMAT;
 
 // Menu
 const MENU_PREFIX = createPrefix('MENU');
