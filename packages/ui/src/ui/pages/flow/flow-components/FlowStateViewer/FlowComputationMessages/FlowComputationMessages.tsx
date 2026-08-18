@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 import {Flex, Table, type TableColumnConfig, Text} from '@gravity-ui/uikit';
 
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
-import Link from '../../../../../containers/Link/Link';
+import {RoutedLink} from '../../../../../containers/RoutedLink/RoutedLink';
 import {FlowMessagesCollapsible} from '../../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
 import {selectCluster} from '../../../../../store/selectors/global';
 
@@ -59,13 +59,14 @@ export function FlowComputationMessages({
                         return row.keyText;
                     }
                     return (
-                        <Link
-                            url={buildHeavyHitterStateLink(cluster, path, computation, {keyValues})}
-                            routed
+                        <RoutedLink
+                            href={buildHeavyHitterStateLink(cluster, path, computation, {
+                                keyValues,
+                            })}
                             title={i18n('action_open-in-state')}
                         >
                             {row.keyText}
-                        </Link>
+                        </RoutedLink>
                     );
                 },
             },
@@ -78,15 +79,14 @@ export function FlowComputationMessages({
                 id: 'partitionId',
                 name: () => i18n('column_partition'),
                 template: (row) => (
-                    <Link
-                        url={buildHeavyHitterStateLink(cluster, path, computation, {
+                    <RoutedLink
+                        href={buildHeavyHitterStateLink(cluster, path, computation, {
                             partitionId: row.partitionId,
                         })}
-                        routed
                         title={i18n('action_open-in-state')}
                     >
                         {row.partitionId}
-                    </Link>
+                    </RoutedLink>
                 ),
             },
         ],

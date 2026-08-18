@@ -17,7 +17,7 @@ import {
 import {Yson, type YsonSettings} from '../../../../../components/Yson/Yson';
 import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
 import {YTErrorBlock, type YTErrorBlockProps} from '../../../../../containers/Block/Block';
-import Link from '../../../../../containers/Link/Link';
+import {RoutedLink} from '../../../../../containers/RoutedLink/RoutedLink';
 import {selectCluster} from '../../../../../store/selectors/global';
 import {selectFlowSpecYsonSettings} from '../../../../../store/selectors/thor/unipika';
 import {genNavigationUrl} from '../../../../../utils/navigation/navigation';
@@ -154,16 +154,15 @@ function useResultColumns({
                             <CopyButton text={original.computationId ?? ''} />
                             {original.computationId && (
                                 <span className={block('hover-action')}>
-                                    <Link
+                                    <RoutedLink
                                         className={block('row-link')}
-                                        url={handlers.resolveComputationLink(
+                                        href={handlers.resolveComputationLink(
                                             original.computationId,
                                         )}
-                                        routed
                                         title={i18n('link_open-computation-page')}
                                     >
                                         <Icon data={ArrowUpRightFromSquare} size={14} />
-                                    </Link>
+                                    </RoutedLink>
                                 </span>
                             )}
                         </Flex>
@@ -218,17 +217,16 @@ function useResultColumns({
                                 <CopyButton text={original.stateName} />
                                 {location && (
                                     <span className={block('hover-action')}>
-                                        <Link
+                                        <RoutedLink
                                             className={block('row-link')}
-                                            url={genNavigationUrl({
+                                            href={genNavigationUrl({
                                                 cluster: location.cluster ?? cluster,
                                                 path: location.path,
                                             })}
-                                            routed
                                             title={location.path}
                                         >
                                             <Icon data={Database} size={14} />
-                                        </Link>
+                                        </RoutedLink>
                                     </span>
                                 )}
                             </Flex>
