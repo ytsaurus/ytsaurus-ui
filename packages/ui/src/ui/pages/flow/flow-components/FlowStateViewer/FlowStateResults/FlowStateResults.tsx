@@ -24,11 +24,11 @@ import {genNavigationUrl} from '../../../../../utils/navigation/navigation';
 
 import {useSelector} from '../../../../../store/redux-hooks';
 
+import {isAnnotatedBigInteger} from '../../../../../store/api/yt/flow/read-states-normalize';
 import {
     buildCompactYsonSettings,
     flattenReadStatesResponse,
     getStateRowId,
-    isAnnotatedBigInteger,
     isRowDeletable,
     selectDeletableRows,
     serializeRawStateValue,

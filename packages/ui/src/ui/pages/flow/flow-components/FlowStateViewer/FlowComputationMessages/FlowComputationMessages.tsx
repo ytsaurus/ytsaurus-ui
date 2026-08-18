@@ -10,7 +10,7 @@ import {selectCluster} from '../../../../../store/selectors/global';
 
 import {useSelector} from '../../../../../store/redux-hooks';
 
-import {fetchSpec} from '../flow-state-api';
+import {useFlowStaticSpecQuery} from '../../../../../store/api/yt/flow';
 import {
     buildHeavyHitterStateLink,
     getComputationGroupByColumns,
@@ -21,7 +21,7 @@ import {
 } from '../helpers';
 import i18n from './i18n';
 import type {FlowHeavyHitterEntry} from '../types';
-import type {FlowMessageType, FlowStaticSpec} from '../../../../../../shared/yt-types';
+import type {FlowMessageType} from '../../../../../../shared/yt-types';
 
 import './FlowComputationMessages.scss';
 
@@ -33,30 +33,6 @@ export type FlowComputationMessagesProps = {
     messages?: Array<FlowMessageType>;
 };
 
-function useStaticSpec(pipelinePath: string): FlowStaticSpec | undefined {
-    const [staticSpec, setStaticSpec] = React.useState<FlowStaticSpec>();
-
-    React.useEffect(() => {
-        let cancelled = false;
-        fetchSpec(pipelinePath)
-            .then((data) => {
-                if (!cancelled) {
-                    setStaticSpec(data.spec as FlowStaticSpec);
-                }
-            })
-            .catch(() => {
-                if (!cancelled) {
-                    setStaticSpec(undefined);
-                }
-            });
-        return () => {
-            cancelled = true;
-        };
-    }, [pipelinePath]);
-
-    return staticSpec;
-}
-
 export function FlowComputationMessages({
     path,
     computation,
@@ -67,7 +43,7 @@ export function FlowComputationMessages({
         () => splitHeavyHittersMessages(messages),
         [messages],
     );
-    const staticSpec = useStaticSpec(path);
+    const {data: staticSpec} = useFlowStaticSpecQuery({parameters: {pipeline_path: path}});
     const keyColumns = getComputationKeyColumns(staticSpec, computation);
     const allKeyColumns = getComputationGroupByColumns(staticSpec, computation);
 

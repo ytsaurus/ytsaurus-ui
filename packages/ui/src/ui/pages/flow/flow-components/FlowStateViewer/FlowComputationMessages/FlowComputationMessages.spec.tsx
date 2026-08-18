@@ -11,11 +11,12 @@ class ResizeObserverStub {
 }
 (global as unknown as {ResizeObserver: unknown}).ResizeObserver = ResizeObserverStub;
 
-const mockFetchSpec = jest.fn();
+const mockUseStaticSpec = jest.fn();
 const mockCollapsibleMessages = jest.fn();
 
-jest.mock('../flow-state-api', () => ({
-    fetchSpec: (...args: Array<unknown>) => mockFetchSpec(...args),
+jest.mock('../../../../../store/api/yt/flow', () => ({
+    __esModule: true,
+    useFlowStaticSpecQuery: (...args: Array<unknown>) => mockUseStaticSpec(...args),
 }));
 
 jest.mock('../../../../../store/redux-hooks', () => ({
@@ -93,7 +94,7 @@ async function renderMessages() {
 
 beforeEach(() => {
     jest.clearAllMocks();
-    mockFetchSpec.mockResolvedValue({spec: staticSpec});
+    mockUseStaticSpec.mockReturnValue({data: staticSpec});
 });
 
 it('links the heavy hitter key to the state tab seeded with the resolved key columns', async () => {
@@ -131,7 +132,7 @@ it('hides the heavy hitters message from the raw message list', async () => {
 });
 
 it('renders the key as plain text when the static spec is unavailable', async () => {
-    mockFetchSpec.mockRejectedValue(new Error('no spec'));
+    mockUseStaticSpec.mockReturnValue({data: undefined});
     await renderMessages();
 
     const keyText =

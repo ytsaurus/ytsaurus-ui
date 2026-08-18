@@ -1,6 +1,5 @@
 import {
     CLOSED_DELETE_DIALOG_STATE,
-    INITIAL_READ_STATE,
     aggregateMatchedTotal,
     areAllCommitted,
     areOutcomesClean,
@@ -16,7 +15,6 @@ import {
     deleteStatesGate,
     flattenReadStatesResponse,
     flowDeleteDialogReducer,
-    flowStateReadReducer,
     getAvailableStateTargets,
     getComputationGroupByColumns,
     getComputationKeyColumns,
@@ -24,12 +22,9 @@ import {
     getStateNameInputMode,
     getStateNameSelectItems,
     getStateRowId,
-    isAnnotatedBigInteger,
     isDeletePreviewCommittable,
     isWriteDeniedByPermission,
     keyValuesFromRowKey,
-    normalizeAnnotatedValue,
-    normalizeReadStatesResponse,
     parseHeavyHitterKeyText,
     parseHeavyHitterStateSeed,
     reconcileStateName,
@@ -44,6 +39,11 @@ import {
     splitHeavyHittersMessages,
     stringifyStateValue,
 } from './helpers';
+import {
+    isAnnotatedBigInteger,
+    normalizeAnnotatedValue,
+    normalizeReadStatesResponse,
+} from '../../../../store/api/yt/flow/read-states-normalize';
 import type {
     FlowDeleteDialogState,
     FlowKeySchemaResolution,
@@ -1133,143 +1133,6 @@ describe('buildCompactYsonSettings', () => {
     });
 });
 
-describe('flowStateReadReducer', () => {
-    const scopeA = {key_states: [{computation_id: 'A', key: [1], states: {'/s': 1}}]};
-    const scopeB = {key_states: [{computation_id: 'B', key: [2], states: {'/s': 2}}]};
-
-    it('renders a response that still belongs to the filters on screen', () => {
-        let state = flowStateReadReducer(INITIAL_READ_STATE, {type: 'load-started', requestId: 1});
-        state = flowStateReadReducer(state, {
-            type: 'load-succeeded',
-            requestId: 1,
-            response: scopeA,
-        });
-        expect(state.response).toEqual(scopeA);
-        expect(state.loadingRequestId).toBeUndefined();
-    });
-
-    it('never renders a superseded response as the new scope result', () => {
-        let state = flowStateReadReducer(INITIAL_READ_STATE, {type: 'load-started', requestId: 1});
-        state = flowStateReadReducer(state, {
-            type: 'filters-changed',
-            hasScope: true,
-            requestId: 2,
-        });
-        state = flowStateReadReducer(state, {type: 'load-started', requestId: 3});
-        state = flowStateReadReducer(state, {
-            type: 'load-succeeded',
-            requestId: 3,
-            response: scopeB,
-        });
-        state = flowStateReadReducer(state, {
-            type: 'load-succeeded',
-            requestId: 1,
-            response: scopeA,
-        });
-        expect(state.response).toEqual(scopeB);
-    });
-
-    it('drops a late error raised for filters the user already left', () => {
-        let state = flowStateReadReducer(INITIAL_READ_STATE, {type: 'load-started', requestId: 1});
-        state = flowStateReadReducer(state, {
-            type: 'filters-changed',
-            hasScope: true,
-            requestId: 2,
-        });
-        state = flowStateReadReducer(state, {
-            type: 'load-failed',
-            requestId: 1,
-            error: new Error('scope A failed'),
-        });
-        expect(state.error).toBeUndefined();
-    });
-
-    it('keeps the previous rows while new filters are being debounced', () => {
-        let state = flowStateReadReducer(INITIAL_READ_STATE, {type: 'load-started', requestId: 1});
-        state = flowStateReadReducer(state, {
-            type: 'load-succeeded',
-            requestId: 1,
-            response: scopeA,
-        });
-        state = flowStateReadReducer(state, {
-            type: 'filters-changed',
-            hasScope: true,
-            requestId: 2,
-        });
-        expect(state.response).toEqual(scopeA);
-        expect(state.error).toBeUndefined();
-        expect(state.loadingRequestId).toBeUndefined();
-    });
-
-    it('keeps the previous rows while the next load is in flight', () => {
-        let state = flowStateReadReducer(INITIAL_READ_STATE, {type: 'load-started', requestId: 1});
-        state = flowStateReadReducer(state, {
-            type: 'load-succeeded',
-            requestId: 1,
-            response: scopeA,
-        });
-        state = flowStateReadReducer(state, {
-            type: 'filters-changed',
-            hasScope: true,
-            requestId: 2,
-        });
-        state = flowStateReadReducer(state, {type: 'load-started', requestId: 2});
-        expect(state.response).toEqual(scopeA);
-        expect(state.loadingRequestId).toBe(state.requestId);
-    });
-
-    it('drops the rows when the scope is cleared', () => {
-        let state = flowStateReadReducer(INITIAL_READ_STATE, {type: 'load-started', requestId: 1});
-        state = flowStateReadReducer(state, {
-            type: 'load-succeeded',
-            requestId: 1,
-            response: scopeA,
-        });
-        state = flowStateReadReducer(state, {
-            type: 'filters-changed',
-            hasScope: false,
-            requestId: 2,
-        });
-        expect(state.response).toBeUndefined();
-    });
-
-    it('replaces the retained rows with a hard error', () => {
-        let state = flowStateReadReducer(INITIAL_READ_STATE, {type: 'load-started', requestId: 1});
-        state = flowStateReadReducer(state, {
-            type: 'load-succeeded',
-            requestId: 1,
-            response: scopeA,
-        });
-        state = flowStateReadReducer(state, {type: 'load-started', requestId: 2});
-        state = flowStateReadReducer(state, {
-            type: 'load-failed',
-            requestId: 2,
-            error: new Error('hard failure'),
-        });
-        expect(state.response).toBeUndefined();
-        expect(state.error).toBeDefined();
-        expect(state.loadingRequestId).toBeUndefined();
-    });
-
-    it('keeps the newer response when two same-revision requests resolve out of order', () => {
-        let state = flowStateReadReducer(INITIAL_READ_STATE, {type: 'load-started', requestId: 1});
-        const revisionBeforeSecondRequest = state.revision;
-        state = flowStateReadReducer(state, {type: 'load-started', requestId: 2});
-        expect(state.revision).toBe(revisionBeforeSecondRequest);
-        state = flowStateReadReducer(state, {
-            type: 'load-succeeded',
-            requestId: 2,
-            response: scopeB,
-        });
-        state = flowStateReadReducer(state, {
-            type: 'load-succeeded',
-            requestId: 1,
-            response: scopeA,
-        });
-        expect(state.response).toEqual(scopeB);
-    });
-});
-
 describe('flowDeleteDialogReducer', () => {
     const bodyKey = '["key_state|c1|||/s"]';
     const snapshot = {bodyKey, force: false};
@@ -1285,11 +1148,9 @@ describe('flowDeleteDialogReducer', () => {
     }
 
     function openedAndPreviewing(session: number): FlowDeleteDialogState {
-        let state = flowDeleteDialogReducer(CLOSED_DELETE_DIALOG_STATE, {type: 'opened', session});
-        state = flowDeleteDialogReducer(state, {
-            type: 'pipeline-state-loaded',
+        const state = flowDeleteDialogReducer(CLOSED_DELETE_DIALOG_STATE, {
+            type: 'opened',
             session,
-            pipelineState: 'Stopped',
         });
         return flowDeleteDialogReducer(state, {type: 'run-started', commit: false});
     }
@@ -1308,11 +1169,6 @@ describe('flowDeleteDialogReducer', () => {
         let state = openedAndPreviewing(1);
         state = flowDeleteDialogReducer(state, {type: 'closed', session: 2});
         state = flowDeleteDialogReducer(state, {type: 'opened', session: 3});
-        state = flowDeleteDialogReducer(state, {
-            type: 'pipeline-state-loaded',
-            session: 3,
-            pipelineState: 'Stopped',
-        });
         state = flowDeleteDialogReducer(state, {
             type: 'preview-loaded',
             session: 1,

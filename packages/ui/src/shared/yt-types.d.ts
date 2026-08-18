@@ -698,6 +698,29 @@ export type FlowExecuteTypes = {
         };
         ResponseType: unknown;
     };
+    'read-states': {
+        ParamsType: {
+            flow_command: 'read-states';
+            pipeline_path: string;
+            input_format: unknown;
+            output_format: unknown;
+        };
+        BodyType: {
+            body: FlowReadStatesBody;
+        };
+        ResponseType: unknown;
+    };
+    'delete-states': {
+        ParamsType: {
+            flow_command: 'delete-states';
+            pipeline_path: string;
+            input_format: unknown;
+        };
+        BodyType: {
+            body: FlowDeleteStatesBody;
+        };
+        ResponseType: FlowDeleteStatesResponse;
+    };
 };
 
 export type Uint64 = string | number | {$type: 'uint64'; $value: string};
