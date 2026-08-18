@@ -19,7 +19,8 @@ import {
 } from '../helpers';
 import i18n from './i18n';
 import i18nApiValues from '../i18n-api-values';
-import type {FlowStateFiltersValue, FlowStateTarget, FlowStaticSpec} from '../types';
+import type {FlowStateFiltersValue} from '../types';
+import type {FlowStateTarget, FlowStaticSpec} from '../../../../../../shared/yt-types';
 
 import './FlowStateFilters.scss';
 

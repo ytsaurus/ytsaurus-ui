@@ -1,19 +1,12 @@
 import type {
-    FlowAnnotatedInteger,
     FlowDeleteDialogEvent,
     FlowDeleteDialogState,
-    FlowDeleteStatesBody,
-    FlowDeleteStatesResponse,
     FlowHeavyHitterEntry,
     FlowHeavyHitterStateSeed,
     FlowHeavyHittersMessageData,
-    FlowKeyColumn,
     FlowKeySchemaResolution,
-    FlowPipelineStateValue,
-    FlowReadStatesResponse,
     FlowRowDeleteOutcome,
     FlowRowKeySchema,
-    FlowStateAccessBody,
     FlowStateFiltersValue,
     FlowStateNameInputMode,
     FlowStateReadEvent,
@@ -21,13 +14,22 @@ import type {
     FlowStateResultRow,
     FlowStateRowFilterField,
     FlowStateStorageLocation,
-    FlowStateTarget,
     FlowStateValidationError,
-    FlowStaticSpec,
 } from './types';
 
 import {Page} from '../../../../../shared/constants/settings';
-import type {FlowMessageType} from '../../../../../shared/yt-types';
+import type {
+    FlowAnnotatedInteger,
+    FlowDeleteStatesBody,
+    FlowDeleteStatesResponse,
+    FlowKeyColumn,
+    FlowMessageType,
+    FlowReadStatesResponse,
+    FlowStateAccessBody,
+    FlowStateTarget,
+    FlowStaticSpec,
+    GetPipelineStateData,
+} from '../../../../../shared/yt-types';
 import type {YsonSettings} from '../../../../components/Yson/Yson';
 
 export function seedStateFilters(
@@ -400,7 +402,7 @@ export function flattenReadStatesResponse(
     return rows;
 }
 
-export function deleteStatesGate(current: FlowPipelineStateValue | undefined): {
+export function deleteStatesGate(current: GetPipelineStateData | undefined): {
     blocked: boolean;
     requiresForce: boolean;
 } {

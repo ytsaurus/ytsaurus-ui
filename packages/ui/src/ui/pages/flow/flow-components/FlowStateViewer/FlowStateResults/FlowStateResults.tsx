@@ -37,12 +37,12 @@ import {
 import i18n from './i18n';
 import i18nApiValues from '../i18n-api-values';
 import type {
-    FlowReadStatesResponse,
     FlowStateCellHandlers,
     FlowStateResultRow,
     FlowStateResultSection,
     FlowStateRowFilterField,
 } from '../types';
+import type {FlowReadStatesResponse} from '../../../../../../shared/yt-types';
 
 import './FlowStateResults.scss';
 

@@ -7,7 +7,7 @@ import {SelectSingle} from '../../../../../components/Select/Select';
 
 import {castKeyValue} from '../helpers';
 import i18n from './i18n';
-import type {FlowKeyColumn} from '../types';
+import type {FlowKeyColumn} from '../../../../../../shared/yt-types';
 
 import './FlowStateKeyBuilder.scss';
 
