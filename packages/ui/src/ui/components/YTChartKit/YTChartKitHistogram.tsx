@@ -164,9 +164,9 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
                             <div>
                                 <ColorCircle color={color ?? 'magenta'} />
                                 {i18n('context_observations-in-range', {
-                                    count: <b key="count">{format.Number(y, {digits: 0})}</b>,
-                                    from: <b key="from">{fmt(l)}</b>,
-                                    to: <b key="to">{fmt(r)}</b>,
+                                    count: format.Number(y, {digits: 0}),
+                                    from: fmt(l),
+                                    to: fmt(r),
                                 })}
                             </div>
                         </React.Fragment>
