@@ -53,7 +53,7 @@ import {
     addComputationInOut,
     addFlowConnection,
     applyConnectionStyle,
-    getStreamsSummmaryByAnchorType,
+    getStreamsSummmaryByAnchorType as getStreamsSummaryByAnchorType,
     isComputationAnchorType,
     isFlowComputationOrGroup,
     makeBlock,
@@ -179,7 +179,7 @@ function useFlowGraphEvents(graph?: Graph) {
             }
 
             lastSelectedAnchorRef.current = id;
-            const summary = getStreamsSummmaryByAnchorType(block.meta, type);
+            const summary = getStreamsSummaryByAnchorType(block.meta, type);
             if (summary) {
                 setVisibleMessages(summary.messages);
                 requestAnimationFrame(() => {
