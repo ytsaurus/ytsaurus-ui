@@ -43,7 +43,7 @@ import {ComputationCanvasBlock} from './renderers/ComputationCanvas';
 import {ComputationGroupCanvasBlock} from './renderers/ComputationGroupCanvas';
 import {FlowGraphAnchors} from './renderers/FlowGraphAnchors/FlowGraphAnchors';
 import {STATUS_TO_BG_THEME} from './renderers/FlowGraphRenderer';
-import {useFlowMessagesDialogContext} from './renderers/FlowMessagesDialogContext/FlowMessagesDialogContext';
+import {useFlowMessagesDialogContext} from './renderers/FlowMessagesDialogContext/FlowMessagesDialogContextState';
 import {Sink} from './renderers/Sink';
 import {SinkCanvasBlock} from './renderers/SinkCanvas';
 import {Stream} from './renderers/Stream';
@@ -53,7 +53,7 @@ import {
     addComputationInOut,
     addFlowConnection,
     applyConnectionStyle,
-    getStreamsSummmaryByAnchorType,
+    getStreamsSummaryByAnchorType,
     isComputationAnchorType,
     isFlowComputationOrGroup,
     makeBlock,
@@ -138,8 +138,12 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
                 data={useGroups && !zoomToState ? groups : data}
                 renderBlock={({className, data, graph}) => {
                     return (
-                        <GraphBlock graph={graph} block={data} className={block('graph-block')}>
-                            <Flex className={block('item-container', className)}>
+                        <GraphBlock
+                            graph={graph}
+                            block={data}
+                            className={block('graph-block', className)}
+                        >
+                            <Flex className={block('item-container')}>
                                 {renderContent({item: data})}
                             </Flex>
                             <FlowGraphAnchors graph={graph} data={data} />
@@ -164,7 +168,6 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
 
 function useFlowGraphEvents(graph?: Graph) {
     const {setVisibleMessages} = useFlowMessagesDialogContext();
-    const lastSelectedAnchorRef = React.useRef<string>();
 
     useGraphEvents(graph ?? null, {
         onBlockAnchorSelectionChange({anchor: {id, blockId, type}, selected}) {
@@ -178,8 +181,7 @@ function useFlowGraphEvents(graph?: Graph) {
                 return;
             }
 
-            lastSelectedAnchorRef.current = id;
-            const summary = getStreamsSummmaryByAnchorType(block.meta, type);
+            const summary = getStreamsSummaryByAnchorType(block.meta, type);
             if (summary) {
                 setVisibleMessages(summary.messages);
                 requestAnimationFrame(() => {

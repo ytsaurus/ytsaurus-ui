@@ -13,7 +13,7 @@ export function FlowMessagesDialogContext({children}: {children: React.ReactNode
     return (
         <FlowMessagesDialogCtx.Provider value={{data, setVisibleMessages}}>
             {children}
-            {data.length! > 0 && (
+            {data.length > 0 && (
                 <DialogWrapper
                     className={block('messages-dialog')}
                     open={true}

@@ -1,10 +1,7 @@
 import {type TAnchor} from '@gravity-ui/graph';
 import CpuIcon from '@gravity-ui/icons/svgs/cpu.svg';
 import format from '../../../../../common/hammer/format';
-import {
-    YTGraphCanvasBlock,
-    type YTGraphFontSize,
-} from '../../../../../components/YTGraph';
+import {YTGraphCanvasBlock, type YTGraphFontSize} from '../../../../../components/YTGraph';
 import {type FlowGraphBlockItem} from '../FlowGraph';
 import {
     COMPUTATION_IN,
