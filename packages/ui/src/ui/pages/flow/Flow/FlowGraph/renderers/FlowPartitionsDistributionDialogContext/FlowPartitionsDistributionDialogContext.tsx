@@ -17,6 +17,15 @@ const block = cn('yt-flow-partitions-distribution');
 const METRICS = ['cpu_usage', 'memory_usage', 'messages_per_second', 'bytes_per_second'] as const;
 type DistributionMetric = (typeof METRICS)[number];
 
+// A meaningful full scale of a metric for a single partition. The histogram bar is never
+// narrower than 10% of it, so negligible differences between partitions do not look like a skew.
+const METRIC_FULL_SCALE: Record<DistributionMetric, number> = {
+    cpu_usage: 1, // one cpu core
+    memory_usage: 1024 ** 3, // 1 GB
+    messages_per_second: 1000, // recommended limit for a single partition
+    bytes_per_second: 1024 ** 2, // recommended limit for a single partition
+};
+
 type FlowPartitionsDistributionDialogContextValue = {
     computationId?: string;
     setVisibleDistribution: (computationId?: string) => void;
@@ -112,6 +121,10 @@ function FlowPartitionsDistributionContent({computationId}: {computationId: stri
                     <YTChartKitHistogram
                         data={values}
                         xPlotLines={{average: data?.performance_metrics?.average?.[metric]}}
+                        minBarWidth={METRIC_FULL_SCALE[metric] / 10}
+                        seriesName={i18n('field_partitions')}
+                        xAxisTitle={i18n(metric)}
+                        yAxisTitle={i18n('field_partitions')}
                     />
                 )}
             </div>

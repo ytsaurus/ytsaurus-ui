@@ -3,6 +3,7 @@
   "context_partitions-count": "{{count}} partitions",
   "context_no-partitions": "There are no partitions to display",
   "context_all-values-equal": "All partitions have the same value: {{value}}",
+  "field_partitions": "Partitions",
   "cpu_usage": "CPU usage",
   "memory_usage": "Memory usage",
   "messages_per_second": "Messages per second",

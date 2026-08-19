@@ -18,13 +18,38 @@ export type YTChartKitHistogramProps = {
     /** by default it uses 10 */
     barCount?: number;
     xPlotLines?: Record<string, number | undefined>;
+    /**
+     * When defined the bars are aligned to zero and no bar is narrower than the value.
+     * It prevents magnification of negligible differences between the values.
+     */
+    minBarWidth?: number;
+    /** by default it uses 'Observations' */
+    seriesName?: string;
+    xAxisTitle?: string;
+    yAxisTitle?: string;
 };
 
 export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
     const {
-        memoizedArgs: [data = [], barCount = 10, xPlotLines = {}],
+        memoizedArgs: [
+            data = [],
+            barCount = 10,
+            xPlotLines = {},
+            minBarWidth,
+            seriesName,
+            xAxisTitle,
+            yAxisTitle,
+        ],
         incarnation,
-    } = useMemoizedArgsWithIncarnaction(props.data, props.barCount, props.xPlotLines);
+    } = useMemoizedArgsWithIncarnaction(
+        props.data,
+        props.barCount,
+        props.xPlotLines,
+        props.minBarWidth,
+        props.seriesName,
+        props.xAxisTitle,
+        props.yAxisTitle,
+    );
 
     const chartData = React.useMemo(() => {
         const {min, max} = data.reduce(
@@ -36,18 +61,27 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
             {min: Infinity, max: -Infinity},
         );
 
-        const effectiveMax = max + (max - min) * 0.001;
+        const from = minBarWidth === undefined ? min : 0;
+        const effectiveMax = max + (max - from) * 0.001;
 
-        const step = (effectiveMax - min) / barCount;
+        let step = (effectiveMax - from) / barCount;
+        let count = barCount;
+        if (minBarWidth !== undefined && step < minBarWidth) {
+            step = minBarWidth;
+            count = Math.max(1, Math.ceil((effectiveMax - from) / step));
+        }
+
+        const to = from + step * count;
+
         let maxSum = 0;
         const values = data.reduce(
             (acc, v) => {
-                const index = Math.floor((v - min) / step);
+                const index = Math.min(count - 1, Math.floor((v - from) / step));
                 acc[index] += 1;
                 maxSum = Math.max(maxSum, acc[index]);
                 return acc;
             },
-            Array.from({length: barCount}, () => 0),
+            Array.from({length: count}, () => 0),
         );
 
         const plotLinesMax = maxSum * 1.05;
@@ -55,7 +89,7 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
             // TODO: fixme whem when https://github.com/gravity-ui/charts/issues/87 is ready
             // isInRange value  should be calculated as
             // const isInRange = value !== undefined;
-            const isInRange = value !== undefined && value >= min && value <= max;
+            const isInRange = value !== undefined && value >= from && value <= to;
             if (isInRange) {
                 acc.push({
                     type: 'line',
@@ -78,13 +112,15 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
         const res: ChartData = {
             legend: {enabled: true},
             xAxis: {
-                min,
+                min: from,
+                title: xAxisTitle === undefined ? undefined : {text: xAxisTitle},
                 // TODO: uncomment the line below when https://github.com/gravity-ui/charts/issues/87 is ready
-                // max,
+                // max: to,
             },
             yAxis: [
                 {
-                    min,
+                    min: 0,
+                    title: yAxisTitle === undefined ? undefined : {text: yAxisTitle},
                     // TODO: uncomment the line below when https://github.com/gravity-ui/charts/issues/87 is ready
                     // max: plotLinesMax,
                 },
@@ -93,10 +129,10 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
                 data: [
                     {
                         type: 'bar-x',
-                        name: i18n('field_observations'),
+                        name: seriesName ?? i18n('field_observations'),
                         data: values.map((value, index) => {
                             return {
-                                x: min + step * index + step * 0.5,
+                                x: from + step * index + step * 0.5,
                                 y: value,
                                 index,
                             };
@@ -120,7 +156,7 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
                     } = barData as TooltipDataChunkBarX;
 
                     const {y, index} = data as typeof data & {index: number};
-                    const l = min + step * index;
+                    const l = from + step * index;
                     const r = l + step;
 
                     return (
@@ -139,7 +175,7 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
             },
         };
         return res;
-    }, [data, barCount]);
+    }, [data, barCount, xPlotLines, minBarWidth, seriesName, xAxisTitle, yAxisTitle]);
 
     return <YTChartKitLazy key={incarnation} type="gravity-charts" data={chartData} />;
 }
