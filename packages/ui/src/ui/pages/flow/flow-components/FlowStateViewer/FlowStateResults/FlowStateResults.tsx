@@ -133,7 +133,6 @@ function useResultColumns({
                             label={i18nApiValues(KIND_LABEL_KEYS[original.section])}
                             handlers={handlers}
                         />
-                        <CopyButton text={original.section} />
                     </TableCell>
                 ),
             },
