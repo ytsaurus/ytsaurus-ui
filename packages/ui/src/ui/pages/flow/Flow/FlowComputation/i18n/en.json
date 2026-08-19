@@ -13,5 +13,6 @@
   "partition": "Partition",
   "search-partition-by-id": "Search partition by Id...",
   "state": "State",
-  "worker": "Worker"
+  "worker": "Worker",
+  "title_partitions": "Partitions"
 }

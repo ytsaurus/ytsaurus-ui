@@ -1,0 +1,17 @@
+{
+  "action_preview": "Preview",
+  "action_delete": "Delete",
+  "action_cancel": "Cancel",
+  "action_close": "Close",
+  "label_force": "Force",
+  "alert_pipeline-running": "The pipeline is working — stop or pause it before deleting states",
+  "alert_force-paused": "The pipeline is paused; deletion requires Force",
+  "alert_delete-failed": "Deletion did not complete",
+  "text_delete-selected-explanation": "These {{count}} state rows will be permanently deleted from the pipeline state storage",
+  "text_and-n-more": "and {{count}} more",
+  "text_deleted-count": "Deleted {{done}} of {{total}} selected rows",
+  "text_matched-total": "Matched rows",
+  "text_preview-only": "Dry run — nothing was deleted",
+  "text_committed": "Deleted",
+  "title_delete-states": "Delete states"
+}

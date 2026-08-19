@@ -697,6 +697,115 @@ export type FlowExecuteTypes = {
         };
         ResponseType: unknown;
     };
+    'read-states': {
+        ParamsType: {
+            flow_command: 'read-states';
+            pipeline_path: string;
+            input_format: unknown;
+            output_format: unknown;
+        };
+        BodyType: {
+            body: FlowReadStatesBody;
+        };
+        ResponseType: unknown;
+    };
+    'delete-states': {
+        ParamsType: {
+            flow_command: 'delete-states';
+            pipeline_path: string;
+            input_format: unknown;
+        };
+        BodyType: {
+            body: FlowDeleteStatesBody;
+        };
+        ResponseType: FlowDeleteStatesResponse;
+    };
+};
+
+export type Uint64 = string | number | {$type: 'uint64'; $value: string};
+
+export type FlowAnnotatedInteger = Exclude<Int64 | Uint64, string | number>;
+
+type FlowSpecNode<T> = CypressNodeRaw<Record<string, unknown>, T>;
+
+export type FlowKeyColumn = {
+    name: string;
+    type: string;
+    expression?: string;
+    required?: boolean;
+};
+
+export type FlowGroupBySchema = FlowSpecNode<Array<FlowKeyColumn>>;
+
+export type FlowStateJoinSpec = {
+    key_schema_override?: FlowGroupBySchema;
+    key_provider_streams?: FlowSpecNode<Array<string>>;
+};
+
+export type FlowExternalStateJoinerSpec = {
+    join_on?: FlowSpecNode<FlowStateJoinSpec>;
+    parameters?: unknown;
+};
+
+export type FlowStaticSpecComputation = {
+    group_by_schema?: FlowGroupBySchema;
+    external_state_managers?: Record<string, unknown>;
+    external_state_joiners?: FlowSpecNode<
+        Record<string, FlowSpecNode<FlowExternalStateJoinerSpec>>
+    >;
+    heavy_hitters?: unknown;
+};
+
+export type FlowStaticSpec = {
+    computations?: Record<string, FlowStaticSpecComputation>;
+};
+
+export type FlowStateTarget = 'all' | 'key_state' | 'partition_state' | 'external_key_state';
+
+export type FlowStateAccessBody = {
+    computation_id?: string;
+    partition_id?: string;
+    key?: unknown;
+    name?: string;
+    target?: FlowStateTarget;
+};
+
+export type FlowReadStatesBody = FlowStateAccessBody & {limit?: number};
+export type FlowDeleteStatesBody = FlowStateAccessBody & {force?: boolean; commit?: boolean};
+
+export type FlowKeyStateRow = {
+    computation_id: string;
+    key: unknown;
+    states: Record<string, unknown>;
+};
+
+export type FlowPartitionStateRow = {
+    computation_id?: string;
+    partition_id: string;
+    states: Record<string, unknown>;
+};
+
+export type FlowReadStatesResponse = {
+    key_states?: Array<FlowKeyStateRow>;
+    partition_states?: Array<FlowPartitionStateRow>;
+    external_key_states?: Array<FlowKeyStateRow>;
+    joined_external_key_states?: Array<FlowKeyStateRow>;
+    errors?: Array<string>;
+};
+
+export type FlowMatchedStatesBucket = {
+    total: number;
+    details?: Record<string, Record<string, number>>;
+};
+
+export type FlowDeleteStatesResponse = {
+    committed?: boolean;
+    matched_states?: {
+        key_states?: FlowMatchedStatesBucket;
+        partition_states?: FlowMatchedStatesBucket;
+        external_key_states?: FlowMatchedStatesBucket;
+    };
+    errors?: Array<string>;
 };
 
 export type FlowPartitionDetailsType = FlowComputationPartitionType & {
