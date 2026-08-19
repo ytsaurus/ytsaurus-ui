@@ -1,6 +1,10 @@
 import React from 'react';
 
-import {type ChartData, type TooltipDataChunkBarX} from '@gravity-ui/chartkit/gravity-charts';
+import {
+    type ChartData,
+    type LineSeries,
+    type TooltipDataChunkBarX,
+} from '@gravity-ui/chartkit/gravity-charts';
 
 import format from '../../common/hammer/format';
 import {ColorCircle} from '../../components/ColorCircle/ColorCircle';
@@ -13,6 +17,7 @@ export type YTChartKitHistogramProps = {
     data?: Array<number>;
     /** by default it uses 10 */
     barCount?: number;
+    xPlotLines?: Record<string, number | undefined>;
     /**
      * Fixed width of a bar, the bars are aligned to zero.
      * When the values do not fit into |maxBarCount| bars the width grows by a whole number of times.
@@ -31,6 +36,7 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
         memoizedArgs: [
             data = [],
             barCount = 10,
+            xPlotLines = {},
             barWidth,
             maxBarCount = 50,
             seriesName,
@@ -41,6 +47,7 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
     } = useMemoizedArgsWithIncarnaction(
         props.data,
         props.barCount,
+        props.xPlotLines,
         props.barWidth,
         props.maxBarCount,
         props.seriesName,
@@ -69,14 +76,36 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
             count = Math.max(1, Math.ceil((effectiveMax - from) / step));
         }
 
+        let maxSum = 0;
         const values = data.reduce(
             (acc, v) => {
                 const index = Math.min(count - 1, Math.floor((v - from) / step));
                 acc[index] += 1;
+                maxSum = Math.max(maxSum, acc[index]);
                 return acc;
             },
             Array.from({length: count}, () => 0),
         );
+
+        const to = from + step * count;
+        const plotLinesMax = maxSum * 1.05;
+        const plotLines = Object.entries(xPlotLines).reduce((acc, [name, value]) => {
+            // TODO: fixme whem when https://github.com/gravity-ui/charts/issues/87 is ready
+            // isInRange value  should be calculated as
+            // const isInRange = value !== undefined;
+            const isInRange = value !== undefined && value >= from && value <= to;
+            if (isInRange) {
+                acc.push({
+                    type: 'line',
+                    name: format.ReadableField(name),
+                    data: [
+                        {x: value, y: 0},
+                        {x: value, y: plotLinesMax},
+                    ],
+                });
+            }
+            return acc;
+        }, [] as Array<LineSeries>);
 
         const fmt = (v?: number | string) => {
             return format.NumberSmart(v, {significantDigits: 3});
@@ -85,12 +114,12 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
         const name = seriesName ?? i18n('field_observations');
 
         const res: ChartData = {
-            legend: {enabled: false},
+            legend: {enabled: plotLines.length > 0},
             xAxis: {
                 min: from,
                 title: xAxisTitle === undefined ? undefined : {text: xAxisTitle},
                 // TODO: uncomment the line below when https://github.com/gravity-ui/charts/issues/87 is ready
-                // max: from + step * count,
+                // max: to,
             },
             yAxis: [
                 {
@@ -111,6 +140,7 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
                             };
                         }),
                     },
+                    ...plotLines,
                 ],
             },
             tooltip: {
@@ -145,7 +175,7 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
             },
         };
         return res;
-    }, [data, barCount, barWidth, maxBarCount, seriesName, xAxisTitle, yAxisTitle]);
+    }, [data, barCount, xPlotLines, barWidth, maxBarCount, seriesName, xAxisTitle, yAxisTitle]);
 
     return <YTChartKitLazy key={incarnation} type="gravity-charts" data={chartData} />;
 }
