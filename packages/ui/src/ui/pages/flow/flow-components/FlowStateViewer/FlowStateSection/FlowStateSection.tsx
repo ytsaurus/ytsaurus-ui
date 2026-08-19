@@ -4,7 +4,6 @@ import cn from 'bem-cn-lite';
 import {Alert} from '@gravity-ui/uikit';
 
 import {type tanstack} from '../../../../../components/DataTableGravity';
-import WithStickyToolbar from '../../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {YTApiId} from '../../../../../rum/rum-wrap-api';
 import {useCheckPermissionQuery} from '../../../../../store/api/yt/checkPermissions';
 import {selectCurrentUserName} from '../../../../../store/selectors/global';
@@ -102,36 +101,30 @@ export function FlowStateSection({
 
     return (
         <React.Fragment>
-            <WithStickyToolbar
-                hideToolbarShadow
-                className={block()}
-                toolbar={
-                    <FlowStateFilters
-                        pipeline_path={pipeline_path}
-                        value={filters}
-                        onChange={handleFiltersChange}
-                        onReset={handleReset}
-                        fixedComputationId={fixedComputationId}
-                        staticSpec={staticSpec}
+            <div className={block()}>
+                <FlowStateFilters
+                    pipeline_path={pipeline_path}
+                    value={filters}
+                    onChange={handleFiltersChange}
+                    onReset={handleReset}
+                    fixedComputationId={fixedComputationId}
+                    staticSpec={staticSpec}
+                />
+                <div className={block('content')}>
+                    {!hasScope && <Alert theme="info" message={i18n('alert_pick-scope')} />}
+                    {validationError && <Alert theme="warning" message={validationError} />}
+                    <FlowStateResults
+                        response={response}
+                        loading={loading}
+                        error={error}
+                        handlers={cellHandlers}
+                        rowSelection={rowSelection}
+                        onRowSelectionChange={setRowSelection}
+                        writeDenied={writeDenied}
+                        onDeleteSelected={handleDeleteSelected}
                     />
-                }
-                content={
-                    <div className={block('content')}>
-                        {!hasScope && <Alert theme="info" message={i18n('alert_pick-scope')} />}
-                        {validationError && <Alert theme="warning" message={validationError} />}
-                        <FlowStateResults
-                            response={response}
-                            loading={loading}
-                            error={error}
-                            handlers={cellHandlers}
-                            rowSelection={rowSelection}
-                            onRowSelectionChange={setRowSelection}
-                            writeDenied={writeDenied}
-                            onDeleteSelected={handleDeleteSelected}
-                        />
-                    </div>
-                }
-            />
+                </div>
+            </div>
             {deleteRows && (
                 <FlowDeleteStatesDialog
                     visible={deleteVisible}
