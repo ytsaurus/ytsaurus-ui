@@ -1,6 +1,6 @@
 import {
     type FlowComputationType,
-    type FlowExtendedStremType,
+    type FlowExtendedStreamType,
     type FlowMessageType,
 } from '../../../../shared/yt-types';
 
@@ -16,7 +16,7 @@ export type FlowComputationUIStreamsSummary = {
 
     messages: Array<FlowMessageType>;
 
-    extendedStreams: Map<string, FlowExtendedStremType>;
+    extendedStreams: Map<string, FlowExtendedStreamType>;
 };
 
 export type FlowComputationRuntimeType = FlowComputationType & {

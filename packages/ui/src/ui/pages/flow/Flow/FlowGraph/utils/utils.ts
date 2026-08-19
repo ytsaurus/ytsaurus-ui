@@ -2,7 +2,7 @@ import {type TAnchor, type TBlock, type TBlockId, type TConnection} from '@gravi
 import {v4 as uuidv4} from 'uuid';
 import {
     type FlowComputationType,
-    type FlowExtendedStremType,
+    type FlowExtendedStreamType,
 } from '../../../../../../shared/yt-types';
 import {GRAPH_COLORS} from '../../../../../components/YTGraph/constants';
 import {type YTGraphBlock} from '../../../../../components/YTGraph/types';
@@ -18,7 +18,7 @@ export function applyConnectionStyle(
     {
         drained,
         backpressure_detected,
-    }: Partial<Pick<FlowExtendedStremType, 'drained' | 'backpressure_detected'>>,
+    }: Partial<Pick<FlowExtendedStreamType, 'drained' | 'backpressure_detected'>>,
 ) {
     dst.styles = Object.assign(
         {},
@@ -84,7 +84,7 @@ function makeFlowStreamsSummary(): FlowComputationUIStreamsSummary {
         drained: false,
         backpressureDetected: false,
         messages: [],
-        extendedStreams: new Map<string, FlowExtendedStremType>(),
+        extendedStreams: new Map<string, FlowExtendedStreamType>(),
     };
 }
 
@@ -97,7 +97,7 @@ export function makeFlowComputationRuntimeData(
 
     function collectStreamsSummary(
         dstSummary: FlowComputationUIStreamsSummary,
-        info: Array<FlowExtendedStremType>,
+        info: Array<FlowExtendedStreamType>,
     ) {
         return info.reduce((acc, item) => {
             dstSummary.drained = dstSummary.drained || item.drained;
@@ -185,7 +185,7 @@ export function hasVisibleStreamsSummaryDetails(
     return data.messages.length > 0 || data.drained || data.backpressureDetected;
 }
 
-export function getStreamsSummmaryByAnchorType(
+export function getStreamsSummaryByAnchorType(
     block: FlowComputationRuntimeType,
     type: FlowComputationAnchorType,
 ) {
