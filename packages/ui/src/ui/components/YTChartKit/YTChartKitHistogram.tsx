@@ -1,10 +1,6 @@
 import React from 'react';
 
-import {
-    type ChartData,
-    type LineSeries,
-    type TooltipDataChunkBarX,
-} from '@gravity-ui/chartkit/gravity-charts';
+import {type ChartData, type TooltipDataChunkBarX} from '@gravity-ui/chartkit/gravity-charts';
 
 import format from '../../common/hammer/format';
 import {ColorCircle} from '../../components/ColorCircle/ColorCircle';
@@ -17,12 +13,13 @@ export type YTChartKitHistogramProps = {
     data?: Array<number>;
     /** by default it uses 10 */
     barCount?: number;
-    xPlotLines?: Record<string, number | undefined>;
     /**
-     * When defined the bars are aligned to zero and no bar is narrower than the value.
-     * It prevents magnification of negligible differences between the values.
+     * Fixed width of a bar, the bars are aligned to zero.
+     * When the values do not fit into |maxBarCount| bars the width grows by a whole number of times.
      */
-    minBarWidth?: number;
+    barWidth?: number;
+    /** by default it uses 50, it is used with |barWidth| only */
+    maxBarCount?: number;
     /** by default it uses 'Observations' */
     seriesName?: string;
     xAxisTitle?: string;
@@ -34,8 +31,8 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
         memoizedArgs: [
             data = [],
             barCount = 10,
-            xPlotLines = {},
-            minBarWidth,
+            barWidth,
+            maxBarCount = 50,
             seriesName,
             xAxisTitle,
             yAxisTitle,
@@ -44,8 +41,8 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
     } = useMemoizedArgsWithIncarnaction(
         props.data,
         props.barCount,
-        props.xPlotLines,
-        props.minBarWidth,
+        props.barWidth,
+        props.maxBarCount,
         props.seriesName,
         props.xAxisTitle,
         props.yAxisTitle,
@@ -61,75 +58,51 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
             {min: Infinity, max: -Infinity},
         );
 
-        const from = minBarWidth === undefined ? min : 0;
+        const from = barWidth === undefined ? min : 0;
         const effectiveMax = max + (max - from) * 0.001;
 
         let step = (effectiveMax - from) / barCount;
         let count = barCount;
-        if (minBarWidth !== undefined && step < minBarWidth) {
-            step = minBarWidth;
+        if (barWidth !== undefined) {
+            const times = Math.ceil((effectiveMax - from) / (barWidth * maxBarCount));
+            step = barWidth * Math.max(1, times);
             count = Math.max(1, Math.ceil((effectiveMax - from) / step));
         }
 
-        const to = from + step * count;
-
-        let maxSum = 0;
         const values = data.reduce(
             (acc, v) => {
                 const index = Math.min(count - 1, Math.floor((v - from) / step));
                 acc[index] += 1;
-                maxSum = Math.max(maxSum, acc[index]);
                 return acc;
             },
             Array.from({length: count}, () => 0),
         );
 
-        const plotLinesMax = maxSum * 1.05;
-        const plotLines = Object.entries(xPlotLines).reduce((acc, [name, value]) => {
-            // TODO: fixme whem when https://github.com/gravity-ui/charts/issues/87 is ready
-            // isInRange value  should be calculated as
-            // const isInRange = value !== undefined;
-            const isInRange = value !== undefined && value >= from && value <= to;
-            if (isInRange) {
-                acc.push({
-                    type: 'line',
-                    name: format.ReadableField(name),
-                    data: isInRange
-                        ? [
-                              {x: value, y: 0},
-                              {x: value, y: plotLinesMax},
-                          ]
-                        : [],
-                });
-            }
-            return acc;
-        }, [] as Array<LineSeries>);
-
         const fmt = (v?: number | string) => {
-            return format.Number(v, {digits: 2});
+            return format.NumberSmart(v, {significantDigits: 3});
         };
 
+        const name = seriesName ?? i18n('field_observations');
+
         const res: ChartData = {
-            legend: {enabled: true},
+            legend: {enabled: false},
             xAxis: {
                 min: from,
                 title: xAxisTitle === undefined ? undefined : {text: xAxisTitle},
                 // TODO: uncomment the line below when https://github.com/gravity-ui/charts/issues/87 is ready
-                // max: to,
+                // max: from + step * count,
             },
             yAxis: [
                 {
                     min: 0,
                     title: yAxisTitle === undefined ? undefined : {text: yAxisTitle},
-                    // TODO: uncomment the line below when https://github.com/gravity-ui/charts/issues/87 is ready
-                    // max: plotLinesMax,
                 },
             ],
             series: {
                 data: [
                     {
                         type: 'bar-x',
-                        name: seriesName ?? i18n('field_observations'),
+                        name,
                         data: values.map((value, index) => {
                             return {
                                 x: from + step * index + step * 0.5,
@@ -138,7 +111,6 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
                             };
                         }),
                     },
-                    ...plotLines,
                 ],
             },
             tooltip: {
@@ -157,17 +129,15 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
 
                     const {y, index} = data as typeof data & {index: number};
                     const l = from + step * index;
-                    const r = l + step;
 
                     return (
                         <React.Fragment>
                             <div>
                                 <ColorCircle color={color ?? 'magenta'} />
-                                {i18n('context_observations-in-range', {
-                                    count: format.Number(y, {digits: 0}),
-                                    from: fmt(l),
-                                    to: fmt(r),
-                                })}
+                                {name}: <b>{format.Number(y, {digits: 0})}</b>
+                            </div>
+                            <div>
+                                {fmt(l)} &ndash; {fmt(l + step)}
                             </div>
                         </React.Fragment>
                     );
@@ -175,7 +145,7 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
             },
         };
         return res;
-    }, [data, barCount, xPlotLines, minBarWidth, seriesName, xAxisTitle, yAxisTitle]);
+    }, [data, barCount, barWidth, maxBarCount, seriesName, xAxisTitle, yAxisTitle]);
 
     return <YTChartKitLazy key={incarnation} type="gravity-charts" data={chartData} />;
 }

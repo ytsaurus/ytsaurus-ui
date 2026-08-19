@@ -4,7 +4,7 @@ import React from 'react';
 import format from '../../../../../../common/hammer/format';
 import {DialogWrapper} from '../../../../../../components/DialogWrapper/DialogWrapper';
 import Loader from '../../../../../../components/Loader/Loader';
-import {YTChartKitHistogram} from '../../../../../../components/YTChartKit';
+import {YTChartKitBars, YTChartKitHistogram} from '../../../../../../components/YTChartKit';
 import {FlowError} from '../../../../../../pages/flow/flow-components/FlowError/FlowError';
 import {useFlowExecuteQuery} from '../../../../../../store/api/yt';
 import {useSelector} from '../../../../../../store/redux-hooks';
@@ -17,13 +17,22 @@ const block = cn('yt-flow-partitions-distribution');
 const METRICS = ['cpu_usage', 'memory_usage', 'messages_per_second', 'bytes_per_second'] as const;
 type DistributionMetric = (typeof METRICS)[number];
 
-// A meaningful full scale of a metric for a single partition. The histogram bar is never
-// narrower than 10% of it, so negligible differences between partitions do not look like a skew.
-const METRIC_FULL_SCALE: Record<DistributionMetric, number> = {
-    cpu_usage: 1, // one cpu core
-    memory_usage: 1024 ** 3, // 1 GB
-    messages_per_second: 1000, // recommended limit for a single partition
-    bytes_per_second: 1024 ** 2, // recommended limit for a single partition
+const VIEWS = ['by-partition', 'distribution'] as const;
+type DistributionView = (typeof VIEWS)[number];
+
+type MetricSettings = {
+    /** multiplier to convert the value to the unit displayed on charts */
+    scale: number;
+    /** width of a histogram bar in the displayed unit */
+    barWidth: number;
+    unit?: 'unit_cores' | 'unit_megabytes' | 'unit_kilobytes-per-second';
+};
+
+const METRIC_SETTINGS: Record<DistributionMetric, MetricSettings> = {
+    cpu_usage: {scale: 1, barWidth: 0.1, unit: 'unit_cores'},
+    memory_usage: {scale: 1 / 1024 ** 2, barWidth: 100, unit: 'unit_megabytes'},
+    messages_per_second: {scale: 1, barWidth: 100},
+    bytes_per_second: {scale: 1 / 1024, barWidth: 100, unit: 'unit_kilobytes-per-second'},
 };
 
 type FlowPartitionsDistributionDialogContextValue = {
@@ -70,6 +79,7 @@ export function FlowPartitionsDistributionDialogContext({children}: {children: R
 function FlowPartitionsDistributionContent({computationId}: {computationId: string}) {
     const pipeline_path = useSelector(selectFlowPipelinePath);
     const [metric, setMetric] = React.useState<DistributionMetric>('cpu_usage');
+    const [view, setView] = React.useState<DistributionView>('by-partition');
 
     const {data, error, isLoading} = useFlowExecuteQuery<'describe-computation'>({
         parameters: {
@@ -81,12 +91,24 @@ function FlowPartitionsDistributionContent({computationId}: {computationId: stri
         },
     });
 
-    const {values, allEqual} = React.useMemo(() => {
-        const res = (data?.partitions?.map((partition) => partition[metric]) ?? []).filter(
-            Number.isFinite,
-        );
-        return {values: res, allEqual: res.every((value) => value === res[0])};
-    }, [data, metric]);
+    const {scale, barWidth, unit} = METRIC_SETTINGS[metric];
+
+    const {items, stats} = React.useMemo(() => {
+        const items = (data?.partitions ?? [])
+            .filter((partition) => Number.isFinite(partition[metric]))
+            .map((partition) => ({name: partition.partition_id, value: partition[metric] * scale}))
+            .sort((l, r) => r.value - l.value);
+
+        const stats = !items.length
+            ? undefined
+            : {
+                  max: items[0].value,
+                  min: items[items.length - 1].value,
+                  average: items.reduce((acc, {value}) => acc + value, 0) / items.length,
+              };
+
+        return {items, stats};
+    }, [data, metric, scale]);
 
     if (isLoading) {
         return <Loader visible centered />;
@@ -96,34 +118,49 @@ function FlowPartitionsDistributionContent({computationId}: {computationId: stri
         return <FlowError error={error} />;
     }
 
+    const formatValue = (value: number) => {
+        const res = format.NumberSmart(value, {significantDigits: 3});
+        return unit === undefined ? res : `${res} ${i18n(unit)}`;
+    };
+
+    const valueTitle = unit === undefined ? i18n(metric) : `${i18n(metric)}, ${i18n(unit)}`;
+
     return (
         <Flex direction="column" gap={3}>
-            <Flex gap={4} alignItems="center">
+            <Flex gap={4} alignItems="center" wrap>
                 <SegmentedRadioGroup<DistributionMetric>
                     value={metric}
                     onUpdate={setMetric}
                     options={METRICS.map((value) => ({value, content: i18n(value)}))}
                 />
-                <Text color="secondary">
-                    {i18n('context_partitions-count', {count: values.length})}
-                </Text>
+                <SegmentedRadioGroup<DistributionView>
+                    value={view}
+                    onUpdate={setView}
+                    options={VIEWS.map((value) => ({value, content: i18n(value)}))}
+                />
             </Flex>
+            <Text color="secondary">
+                {i18n('context_partitions-count', {count: items.length})}
+                {stats &&
+                    ` · ${i18n('field_min')} ${formatValue(stats.min)}` +
+                        ` · ${i18n('field_average')} ${formatValue(stats.average)}` +
+                        ` · ${i18n('field_max')} ${formatValue(stats.max)}`}
+            </Text>
             <div className={block('chart')}>
-                {!values.length ? (
+                {!items.length ? (
                     <Text color="secondary">{i18n('context_no-partitions')}</Text>
-                ) : allEqual ? (
-                    <Text color="secondary">
-                        {i18n('context_all-values-equal', {
-                            value: format.Number(values[0], {digits: 2}),
-                        })}
-                    </Text>
+                ) : view === 'by-partition' ? (
+                    <YTChartKitBars
+                        data={items}
+                        xAxisTitle={i18n('axis_partitions')}
+                        yAxisTitle={valueTitle}
+                    />
                 ) : (
                     <YTChartKitHistogram
-                        data={values}
-                        xPlotLines={{average: data?.performance_metrics?.average?.[metric]}}
-                        minBarWidth={METRIC_FULL_SCALE[metric] / 10}
+                        data={items.map(({value}) => value)}
+                        barWidth={barWidth}
                         seriesName={i18n('field_partitions')}
-                        xAxisTitle={i18n(metric)}
+                        xAxisTitle={valueTitle}
                         yAxisTitle={i18n('field_partitions')}
                     />
                 )}

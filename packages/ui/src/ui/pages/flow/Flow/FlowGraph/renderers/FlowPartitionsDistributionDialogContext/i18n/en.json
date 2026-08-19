@@ -2,10 +2,18 @@
   "title_distribution": "Partitions distribution: {{computation}}",
   "context_partitions-count": "{{count}} partitions",
   "context_no-partitions": "There are no partitions to display",
-  "context_all-values-equal": "All partitions have the same value: {{value}}",
   "field_partitions": "Partitions",
+  "field_min": "min",
+  "field_average": "average",
+  "field_max": "max",
+  "axis_partitions": "Partitions, sorted by value",
+  "by-partition": "By partition",
+  "distribution": "Distribution",
   "cpu_usage": "CPU usage",
   "memory_usage": "Memory usage",
   "messages_per_second": "Messages per second",
-  "bytes_per_second": "Bytes per second"
+  "bytes_per_second": "Bytes per second",
+  "unit_cores": "cores",
+  "unit_megabytes": "MB",
+  "unit_kilobytes-per-second": "KB/s"
 }
