@@ -198,6 +198,7 @@ function FlowGraphDataButton() {
 function renderContent({item, ...rest}: {item: FlowGraphBlock; detailed?: boolean}) {
     switch (item.is) {
         case 'computation':
+        case 'computation-group':
             return (
                 <Computation
                     className={block('item')}
@@ -208,8 +209,6 @@ function renderContent({item, ...rest}: {item: FlowGraphBlock; detailed?: boolea
             );
         case 'stream':
             return <Stream className={block('item')} item={item} {...rest} />;
-        case 'computation-group':
-            return <Computation className={block('item')} item={item} {...rest} />;
         case 'sink':
             return <Sink className={block('item')} item={item} {...rest} />;
     }
