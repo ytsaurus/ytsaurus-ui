@@ -1,5 +1,5 @@
 import {type Graph, type TAnchor} from '@gravity-ui/graph';
-import {GraphBlockAnchor} from '@gravity-ui/graph/build/react-components';
+import {GraphBlockAnchor} from '@gravity-ui/graph/react';
 import ArrowShapeRightToLineIcon from '@gravity-ui/icons/svgs/arrow-shape-right-to-line.svg';
 import CircleInfoIcon from '@gravity-ui/icons/svgs/circle-info.svg';
 import FlagIcon from '@gravity-ui/icons/svgs/flag.svg';
@@ -15,7 +15,7 @@ import {
     COMPUTATION_TIMER_IN,
     COMPUTATION_TIMER_OUT,
     type FlowComputationAnchorType,
-    getStreamsSummmaryByAnchorType,
+    getStreamsSummaryByAnchorType,
     hasVisibleStreamsSummaryDetails,
     isFlowComputationOrGroup,
 } from '../../utils/utils';
@@ -35,7 +35,7 @@ export function FlowGraphAnchors({graph, data}: {graph: Graph; data: FlowGraphBl
                 if (!isFlowComputationOrGroup(data)) {
                     return null;
                 }
-                const summary = getStreamsSummmaryByAnchorType(
+                const summary = getStreamsSummaryByAnchorType(
                     data.meta,
                     anchor.type as FlowComputationAnchorType,
                 );

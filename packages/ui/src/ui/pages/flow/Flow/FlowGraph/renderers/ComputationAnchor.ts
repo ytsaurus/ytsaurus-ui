@@ -1,7 +1,7 @@
 import {Anchor, ECameraScaleLevel} from '@gravity-ui/graph';
 import {GRAPH_COLORS} from '../../../../../components/YTGraph/constants';
 import {type FlowComputationRuntimeType} from '../../types';
-import {getStreamsSummmaryByAnchorType, hasVisibleStreamsSummaryDetails} from '../utils/utils';
+import {getStreamsSummaryByAnchorType, hasVisibleStreamsSummaryDetails} from '../utils/utils';
 
 export class ComputationAnchor extends Anchor {
     getStreamsSummmaryDetails() {
@@ -9,7 +9,7 @@ export class ComputationAnchor extends Anchor {
 
         const {type} = this.connectedState.state;
 
-        return getStreamsSummmaryByAnchorType(meta, type);
+        return getStreamsSummaryByAnchorType(meta, type);
     }
 
     render() {

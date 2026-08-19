@@ -8,9 +8,10 @@ const PADDING = 50;
 
 type Size = {width: number; height: number};
 
-export class FlowGroupBlock
-    implements YTGraphBlock<'computation-group', FlowComputationRuntimeType>
-{
+export class FlowGroupBlock implements YTGraphBlock<
+    'computation-group',
+    FlowComputationRuntimeType
+> {
     meta: FlowComputationRuntimeType;
     id: string;
     name: string;
