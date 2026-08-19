@@ -8,35 +8,35 @@ export const cleanupQueryForDraft = (query: QueryItem): QueryItem => {
     };
 };
 
-export const prepareQueryPlanIds = (query: QueryItem, defaultQueryACO: string): QueryItem => {
-    if (isSingleProgress(query.progress)) {
-        const nodes = query.progress?.yql_plan?.Basic.nodes;
-        const links = query.progress?.yql_plan?.Basic.links;
-        const operations = query.progress?.yql_plan?.Detailed?.Operations;
+export const prepareQueryPlanIds = (draftQuery: QueryItem, defaultQueryACO: string): QueryItem => {
+    if (isSingleProgress(draftQuery.progress)) {
+        const nodes = draftQuery.progress?.yql_plan?.Basic.nodes;
+        const links = draftQuery.progress?.yql_plan?.Basic.links;
+        const operations = draftQuery.progress?.yql_plan?.Detailed?.Operations;
         if (nodes) {
-            nodes.forEach((node) => {
-                node.id = String(node.id);
+            nodes.forEach((draftNode) => {
+                draftNode.id = String(draftNode.id);
             });
         }
         if (links) {
-            links.forEach((link) => {
-                link.source = String(link.source);
-                link.target = String(link.target);
+            links.forEach((draftLink) => {
+                draftLink.source = String(draftLink.source);
+                draftLink.target = String(draftLink.target);
             });
         }
         if (operations) {
-            operations.forEach((operation) => {
-                operation.Id = String(operation.Id);
-                if (operation.DependsOn) {
-                    operation.DependsOn = operation.DependsOn.map(String);
+            operations.forEach((draftOperation) => {
+                draftOperation.Id = String(draftOperation.Id);
+                if (draftOperation.DependsOn) {
+                    draftOperation.DependsOn = draftOperation.DependsOn.map(String);
                 }
             });
         }
     }
 
-    if (!query.access_control_objects) {
-        query.access_control_objects = [defaultQueryACO];
+    if (!draftQuery.access_control_objects) {
+        draftQuery.access_control_objects = [defaultQueryACO];
     }
 
-    return query;
+    return draftQuery;
 };

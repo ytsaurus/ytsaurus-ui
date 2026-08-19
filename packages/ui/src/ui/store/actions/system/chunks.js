@@ -118,8 +118,8 @@ function prepareChunkCells(chunks) {
         };
     });
 
-    forEach_(chunkTypes, (type) => {
-        type = type.name;
+    forEach_(chunkTypes, (chunkType) => {
+        const type = chunkType.name;
 
         if (chunks[type]) {
             // Some chunks types may not exist on cluster, e.g. foreign chunks

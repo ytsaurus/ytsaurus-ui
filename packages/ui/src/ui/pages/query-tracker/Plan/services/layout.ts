@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign -- layout operates on private mutable graph structures */
+
 type ID = string & {__brand: 'NodeId'};
 
 export type Edge<NodeId> = {

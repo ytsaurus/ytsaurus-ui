@@ -429,23 +429,23 @@ export function updateProgress(
 export function updateColors(nodes: DataSet<ProcessedNode>, colors: GraphColors) {
     const itemsToUpdate: ProcessedNode[] = [];
     nodes.forEach(
-        (node) => {
-            if (node.type === 'in' || node.type === 'out') {
-                node.image = drawTable(colors);
+        (draftNode) => {
+            if (draftNode.type === 'in' || draftNode.type === 'out') {
+                draftNode.image = drawTable(colors);
             } else {
-                const detail = node.progress;
+                const detail = draftNode.progress;
 
-                node.font = {
+                draftNode.font = {
                     color: detail?.remoteId ? colors.text.link : colors.text.label,
                 };
 
                 if (detail) {
-                    node.image = drawCircle({type: 'update', node: detail, colors});
+                    draftNode.image = drawCircle({type: 'update', node: detail, colors});
                 } else {
-                    node.image = drawCircle({type: 'new', colors});
+                    draftNode.image = drawCircle({type: 'new', colors});
                 }
             }
-            itemsToUpdate.push(node);
+            itemsToUpdate.push(draftNode);
         },
         {
             filter(item) {
@@ -652,11 +652,11 @@ export function drawRunningIcon(progress: NodeProgress | undefined, {operation}:
 
 export function handleRefs<T>(...refs: (React.Ref<T> | undefined)[]) {
     return (node: T) => {
-        refs.forEach((ref) => {
-            if (typeof ref === 'function') {
-                ref(node);
-            } else if (ref) {
-                (ref.current as T) = node;
+        refs.forEach((draftRef) => {
+            if (typeof draftRef === 'function') {
+                draftRef(node);
+            } else if (draftRef) {
+                (draftRef.current as T) = node;
             }
         });
     };

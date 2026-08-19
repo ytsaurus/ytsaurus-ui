@@ -116,11 +116,11 @@ function calcChildrenIntegrals(
         childrenFlowCPU?: number;
         childrenBurstCPU?: number;
     },
-    dst: Record<PoolName, PoolExtraInfo>,
+    draftDst: Record<PoolName, PoolExtraInfo>,
 ) {
     const {children, name} = pool;
     if (!children?.length) {
-        const res = (dst[name] = {
+        const res = (draftDst[name] = {
             childrenBurstCPU: 0,
             childrenFlowCPU: 0,
         });
@@ -133,15 +133,15 @@ function calcChildrenIntegrals(
     };
     for (let i = 0; i < children.length; ++i) {
         const item = children[i];
-        const itemExtraInfo = calcChildrenIntegrals(item, dst);
+        const itemExtraInfo = calcChildrenIntegrals(item, draftDst);
 
-        dst[item.name] = itemExtraInfo;
+        draftDst[item.name] = itemExtraInfo;
 
         res.childrenFlowCPU += item.flowCPU || 0 + itemExtraInfo.childrenFlowCPU;
         res.childrenBurstCPU += item.burstCPU || 0 + itemExtraInfo.childrenBurstCPU;
     }
 
-    dst[name] = res;
+    draftDst[name] = res;
     return res;
 }
 

@@ -191,13 +191,13 @@ type VisibleColumns = Array<ColumnName>;
 
 const prepareTableProps = ({visibleColumns}: {visibleColumns: VisibleColumns}) => {
     const columns = visibleColumns.reduce(
-        (ret, col) => {
-            ret[col] = {
+        (accRet, col) => {
+            accRet[col] = {
                 sort: false,
                 align: 'right',
             };
 
-            return ret;
+            return accRet;
         },
         {
             name: {

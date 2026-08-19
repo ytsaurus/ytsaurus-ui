@@ -177,11 +177,11 @@ type ExtendedCalculatedInfo = 'alerts_online' | 'alerts_offline';
 
 function increaseFlagCounter<
     K extends keyof RackInfo['nodes'][number]['$attributes'] | ExtendedCalculatedInfo,
->(dst: Partial<Record<K, number>>, name: K, attrs: Record<K, boolean>) {
-    if (dst[name] === undefined) {
-        dst[name] = attrs[name] ? 1 : 0;
+>(draftDst: Partial<Record<K, number>>, name: K, attrs: Record<K, boolean>) {
+    if (draftDst[name] === undefined) {
+        draftDst[name] = attrs[name] ? 1 : 0;
     } else {
-        dst[name]! += attrs[name] ? 1 : 0;
+        draftDst[name]! += attrs[name] ? 1 : 0;
     }
 }
 

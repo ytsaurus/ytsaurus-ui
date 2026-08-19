@@ -84,7 +84,7 @@ export function setPoolsAndWeights(
 
         const params = reduce_(
             pools,
-            (res, pool, tree) => {
+            (accRes, pool, tree) => {
                 const old = poolTrees[tree] || {};
                 const treeParams = {};
 
@@ -128,9 +128,9 @@ export function setPoolsAndWeights(
                 }
 
                 if (Object.keys(treeParams).length > 0) {
-                    res[tree] = treeParams;
+                    accRes[tree] = treeParams;
                 }
-                return res;
+                return accRes;
             },
             {},
         );

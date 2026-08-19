@@ -6,8 +6,8 @@ import {appendInnerErrors} from '../../utils/errors';
 const yson = unipika.utils.yson;
 
 /** @deprecated */
-function convertToNumberOld(value: number | string, defaultValue?: number): number | undefined {
-    value = yson.value(value);
+function convertToNumberOld(_value: number | string, defaultValue?: number): number | undefined {
+    const value = yson.value(_value);
 
     const type = unipika.utils.type(value);
 

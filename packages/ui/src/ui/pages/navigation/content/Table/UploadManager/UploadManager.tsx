@@ -373,13 +373,13 @@ class UploadManager extends React.Component<Props, State> {
         this.setState({progress: {inProgress: true, event}});
     };
 
-    onStopUpload(error?: State['error']) {
+    onStopUpload(_error?: State['error']) {
         this.setState({progress: {inProgress: false}});
-        if (!error) {
+        if (!_error) {
             this.props.updateView();
             this.props.handleClose();
-        } else if (!axios.isCancel(error) && (!error || error.code !== 'cancelled')) {
-            error = error.response?.data || error;
+        } else if (!axios.isCancel(_error) && (!_error || _error.code !== 'cancelled')) {
+            const error = _error.response?.data || _error;
             this.setState({error});
         }
     }

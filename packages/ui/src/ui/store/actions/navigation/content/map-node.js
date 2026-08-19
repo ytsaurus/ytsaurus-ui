@@ -307,9 +307,9 @@ export function selectAll(isAllSelected) {
 
             selected = reduce_(
                 allNodes,
-                (res, node) => {
-                    res[ypath.getValue(node)] = true;
-                    return res;
+                (accRes, node) => {
+                    accRes[ypath.getValue(node)] = true;
+                    return accRes;
                 },
                 {},
             );

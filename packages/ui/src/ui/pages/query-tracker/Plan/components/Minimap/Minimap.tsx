@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign -- minimap layout mutates its owned radar geometry */
+
 import * as React from 'react';
 
 import {Card} from '@gravity-ui/uikit';

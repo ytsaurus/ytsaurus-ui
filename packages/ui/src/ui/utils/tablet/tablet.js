@@ -28,9 +28,8 @@ export const histogramItems = {
 
 export function preparePartitions(contents) {
     const partitions = map_(contents.partitions, (partition, index) => {
-        partition.attributes = Object.assign({}, partition);
-        partition.index = index;
-        return new Partition(partition);
+        const preparedPartition = {...partition, attributes: {...partition}, index};
+        return new Partition(preparedPartition);
     });
 
     const eden = new Partition(

@@ -663,19 +663,19 @@ export function useSettingsDescription(): Array<SettingsPage> {
 
     const res = React.useMemo(() => {
         const extPages: Record<string, SettingsPage> = mapById(externalSettings);
-        return produce(settings, (pages) => {
-            forEach_(pages, (page) => {
+        return produce(settings, (draftPages) => {
+            forEach_(draftPages, (page) => {
                 const extPage = extPages[page.id];
                 if (extPage) {
                     delete extPages[page.id];
                     const extSections = mapById(extPage.sections);
-                    forEach_(page.sections, (section) => {
-                        const s = extSections[section.id];
+                    forEach_(page.sections, (draftSection) => {
+                        const s = extSections[draftSection.id];
                         if (s) {
-                            delete extSections[section.id];
+                            delete extSections[draftSection.id];
                             const extIdsMap = new Map(s.items.map((i) => [i.id, i]));
-                            const newItems = section.items.filter((i) => !extIdsMap.has(i.id));
-                            section.items = [...newItems, ...s.items];
+                            const newItems = draftSection.items.filter((i) => !extIdsMap.has(i.id));
+                            draftSection.items = [...newItems, ...s.items];
                         }
                     });
                     forEach_(extSections, (section) => {
@@ -684,7 +684,7 @@ export function useSettingsDescription(): Array<SettingsPage> {
                 }
             });
             forEach_(extPages, (page) => {
-                pages.splice(pages.length - 1, 0, page);
+                draftPages.splice(draftPages.length - 1, 0, page);
             });
         });
     }, [settings, externalSettings]);

@@ -119,8 +119,8 @@ export function getAgents() {
             attributes: ['annotations', 'maintenance', 'maintenance_message'],
             ...USE_SUPRESS_SYNC,
         })
-        .then((hosts) => {
-            hosts = hosts || [];
+        .then((_hosts) => {
+            const hosts = _hosts || [];
             const res = sortBy_(hosts, (host) => {
                 return ypath.getValue(host, '');
             });

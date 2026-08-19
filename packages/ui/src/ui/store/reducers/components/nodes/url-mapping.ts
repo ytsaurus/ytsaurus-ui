@@ -43,11 +43,11 @@ const createParam = (group: string, value: string, direction: string) => ({
 const createParams = (group: string, values: Array<string>) =>
     reduce_(
         values,
-        (res, value) => {
-            res[`${value}From`] = createParam(group, value, 'from');
-            res[`${value}To`] = createParam(group, value, 'to');
+        (accRes, value) => {
+            accRes[`${value}From`] = createParam(group, value, 'from');
+            accRes[`${value}To`] = createParam(group, value, 'to');
 
-            return res;
+            return accRes;
         },
         {} as Record<string, ReturnType<typeof createParam>>,
     );

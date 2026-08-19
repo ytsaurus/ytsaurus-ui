@@ -126,13 +126,8 @@ function prepareSummary({total, error, ...versions}: DiscoverVersionsData['summa
 function prepareDetails(details: DiscoverVersionsData['details']) {
     return map_(details, (item) => {
         const calculatedState = item.offline ? 'offline' : 'online';
-        item.state = item.state ? item.state : calculatedState;
-        if (item.error) {
-            item.state = 'error';
-        }
-
-        item.banned = Boolean(item.banned);
-        return item;
+        const state = item.error ? 'error' : item.state || calculatedState;
+        return {...item, state, banned: Boolean(item.banned)};
     });
 }
 

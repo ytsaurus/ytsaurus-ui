@@ -213,7 +213,9 @@ function OdinOverview(props: OdinOverviewProps) {
         (name: string, d?: MetricData, el?: Element, index?: number) => {
             if (el) {
                 const {width, height} = el.getBoundingClientRect();
+                // eslint-disable-next-line no-param-reassign -- popup positioning expects measured dimensions on its anchor
                 (el as any).offsetWidth = width;
+                // eslint-disable-next-line no-param-reassign -- popup positioning expects measured dimensions on its anchor
                 (el as any).offsetHeight = height;
                 setTooltip({
                     metricName: name,

@@ -83,13 +83,13 @@ export const selectTabletErrorsReplicationErrors = createSelector([selectTabletE
         (acc, errors, replicaId) => {
             const errorsByTablet = reduce_(
                 errors,
-                (errAcc, error) => {
+                (accErrors, error) => {
                     const tablet_id = ypath.getValue(error.attributes, '/tablet_id');
-                    if (!errAcc[tablet_id]) {
-                        errAcc[tablet_id] = [];
+                    if (!accErrors[tablet_id]) {
+                        accErrors[tablet_id] = [];
                     }
-                    errAcc[tablet_id].push(error);
-                    return errAcc;
+                    accErrors[tablet_id].push(error);
+                    return accErrors;
                 },
                 {} as ValueOf<typeof acc>,
             );

@@ -36,27 +36,27 @@ function calculateStatusCounts(masters: Array<MasterDataItem | undefined>) {
 
     return reduce_(
         masters,
-        (result, master) => {
+        (accResult, master) => {
             if (!master || !master.state) {
-                return result;
+                return accResult;
             }
 
             switch (master.state) {
                 case 'stopped':
                 case 'unknown':
-                    result.unavailable += 1;
+                    accResult.unavailable += 1;
                     break;
                 case 'elections':
                 case 'follower_recovery':
                 case 'leader_recovery':
-                    result.recovery += 1;
+                    accResult.recovery += 1;
                     break;
                 case 'following':
                 case 'leading':
-                    result.success += 1;
+                    accResult.success += 1;
             }
 
-            return result;
+            return accResult;
         },
         initialStatusCount,
     );
