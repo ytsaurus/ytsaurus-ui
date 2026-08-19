@@ -5,11 +5,14 @@
   "column_partition": "Partition",
   "column_key": "Key",
   "column_state-name": "State",
+  "hint_state-name": "Name the computation registered this state under. Names are path-like and are chosen by the pipeline author, so a computation with a single state usually shows \"/state\".",
+  "hint_filter-already-applied": "The filters are already narrowed to this value",
+  "hint_limit-reached": "The read returned as many rows as the Limit of {{limit}} allows; raise Limit to load more",
   "column_value": "Value",
   "text_no-results": "No states loaded",
   "text_selected-rows": "Selected: {{count}}",
   "action_delete": "Delete",
   "alert_no-write-permission": "Deleting states requires write permission on the pipeline",
-  "label_raw-yson": "Raw YSON",
+  "label_raw-response": "Raw response",
   "label_rows": "rows"
 }

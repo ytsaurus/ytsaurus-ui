@@ -49,6 +49,7 @@ export function useFlowStateRead({
     return {
         filters,
         setFilters,
+        appliedLimit: debouncedFilters.limit,
         staticSpec,
         hasScope: Boolean(filters.computationId || filters.partitionId),
         validationError,

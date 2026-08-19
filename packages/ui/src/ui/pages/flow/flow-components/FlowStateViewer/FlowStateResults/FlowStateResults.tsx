@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import {ArrowUpRightFromSquare, Database} from '@gravity-ui/icons';
-import {Button, Flex, Icon, Loader, Switch, Text} from '@gravity-ui/uikit';
+import {Button, Flex, HelpMark, Icon, Loader, Switch, Text} from '@gravity-ui/uikit';
 import {ClipboardButton} from '@ytsaurus/components';
 
 import ClickableAttributesButton from '../../../../../components/AttributesButton/ClickableAttributesButton';
@@ -61,6 +61,7 @@ export const KIND_LABEL_KEYS: Record<FlowStateResultSection, FlowStateApiValueKe
 
 export type FlowStateResultsProps = {
     response?: FlowReadStatesResponse;
+    appliedLimit: number;
     loading: boolean;
     error?: unknown;
     handlers: FlowStateCellHandlers;
@@ -93,15 +94,33 @@ function FilterCellValue({
     handlers: FlowStateCellHandlers;
 }) {
     const update = handlers.getRowFilterUpdate(row, field);
-    if (!update) {
-        return <Text ellipsis>{label}</Text>;
+    if (update) {
+        return (
+            <Text ellipsis>
+                <ClickableText color="info" onClick={() => handlers.onFiltersChange(update)}>
+                    {label}
+                </ClickableText>
+            </Text>
+        );
     }
-    return (
-        <Text ellipsis>
-            <ClickableText color="info" onClick={() => handlers.onFiltersChange(update)}>
+    if (handlers.isRowFilterActive(row, field)) {
+        return (
+            <Text ellipsis color="secondary" title={i18n('hint_filter-already-applied')}>
                 {label}
-            </ClickableText>
-        </Text>
+            </Text>
+        );
+    }
+    return <Text ellipsis>{label}</Text>;
+}
+
+function ColumnHeader({title, hint}: {title: string; hint: string}) {
+    return (
+        <Flex inline gap={1} alignItems="center" wrap="nowrap">
+            {title}
+            <HelpMark iconSize="s" onClick={(event) => event.stopPropagation()}>
+                {hint}
+            </HelpMark>
+        </Flex>
     );
 }
 
@@ -199,7 +218,12 @@ function useResultColumns({
             },
             {
                 id: 'state-name',
-                header: () => i18n('column_state-name'),
+                header: () => (
+                    <ColumnHeader
+                        title={i18n('column_state-name')}
+                        hint={i18n('hint_state-name')}
+                    />
+                ),
                 size: 200,
                 accessorFn: (row) => row.stateName,
                 cell: ({row: {original}}) => {
@@ -310,6 +334,7 @@ function FlowStateResultsTable({
 
 export function FlowStateResults({
     response,
+    appliedLimit,
     loading,
     error,
     handlers,
@@ -358,6 +383,29 @@ export function FlowStateResults({
             {(response.errors ?? []).map((message, index) => (
                 <YTErrorBlock key={`${index}:${message}`} error={{message}} />
             ))}
+            <Flex gap={4} alignItems="center" justifyContent="space-between">
+                <Flex gap={3} alignItems="center">
+                    <Text color="secondary">
+                        {rows.length} {i18n('label_rows')}
+                    </Text>
+                    {rows.length >= appliedLimit && (
+                        <Text color="warning">
+                            {i18n('hint_limit-reached', {limit: String(appliedLimit)})}
+                        </Text>
+                    )}
+                </Flex>
+                <Switch
+                    checked={raw}
+                    onUpdate={(next) => {
+                        setRaw(next);
+                        if (next) {
+                            onRowSelectionChange({});
+                        }
+                    }}
+                >
+                    {i18n('label_raw-response')}
+                </Switch>
+            </Flex>
             <div className={block('content', {loading})}>
                 {loading && (
                     <div className={block('content-loader')}>
@@ -377,22 +425,6 @@ export function FlowStateResults({
                     />
                 )}
             </div>
-            <Flex gap={4} alignItems="center">
-                <Switch
-                    checked={raw}
-                    onUpdate={(next) => {
-                        setRaw(next);
-                        if (next) {
-                            onRowSelectionChange({});
-                        }
-                    }}
-                >
-                    {i18n('label_raw-yson')}
-                </Switch>
-                <Text color="secondary">
-                    {rows.length} {i18n('label_rows')}
-                </Text>
-            </Flex>
         </Flex>
     );
 }

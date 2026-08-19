@@ -111,6 +111,7 @@ export type FlowStateCellHandlers = {
         row: FlowStateResultRow,
         field: FlowStateRowFilterField,
     ) => FlowStateFiltersValue | undefined;
+    isRowFilterActive: (row: FlowStateResultRow, field: FlowStateRowFilterField) => boolean;
     onFiltersChange: (next: FlowStateFiltersValue) => void;
     resolveStoragePath: (row: FlowStateResultRow) => FlowStateStorageLocation | undefined;
     resolveComputationLink: (computationId: string) => string;
