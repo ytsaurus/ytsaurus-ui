@@ -37,10 +37,7 @@ export type FlowRowDeleteOutcome = {
 };
 
 export type FlowStateResultSection =
-    | 'key_state'
-    | 'partition_state'
-    | 'external_key_state'
-    | 'joined_external_key_state';
+    'key_state' | 'partition_state' | 'external_key_state' | 'joined_external_key_state';
 
 export type FlowStateResultRow = {
     section: FlowStateResultSection;
