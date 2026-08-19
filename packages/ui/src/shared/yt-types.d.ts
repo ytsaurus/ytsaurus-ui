@@ -879,10 +879,10 @@ export type FlowComputationType = FlowNodeBase &
         epoch_per_second: number;
     };
 
-export type FlowExtendedStremType = {
-    backpressure_detected: true;
-    completed: false;
-    drained: false;
+export type FlowExtendedStreamType = {
+    backpressure_detected: boolean;
+    completed: boolean;
+    drained: boolean;
     messages: Array<FlowMessageType>;
     stream_graph_entity_id: string;
 };
@@ -896,7 +896,7 @@ export type FlowNodeStatusType =
 export type FlowComputationstatus = 'info' | 'warning' | 'error';
 
 export type FlowComputationStreams = Record<FlowComputationStreamType, Array<StreamId>> &
-    Record<FlowComputationExtenedStreamTypes, Array<FlowExtendedStremType>>;
+    Record<FlowComputationExtendedStreamTypes, Array<FlowExtendedStreamType>>;
 
 /**
  * - Elements of sources_streams/timer_streams/output_streams should be groupped with their computation
@@ -910,7 +910,7 @@ export type FlowComputationStreams = Record<FlowComputationStreamType, Array<Str
 type FlowComputationStreamType =
     'input_streams' | 'output_streams' | 'source_streams' | 'timer_streams';
 
-type FlowComputationExtenedStreamTypes =
+type FlowComputationExtendedStreamTypes =
     | 'extended_input_streams'
     | 'extended_output_streams'
     | 'extended_source_streams'
