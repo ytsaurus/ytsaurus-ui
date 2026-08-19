@@ -1,19 +1,18 @@
-import {
-    type FlowComputationStreamType,
-    type FlowComputationType,
-} from '../../../../../../shared/yt-types';
-
+import {type FlowComputationStreamType} from '../../../../../../shared/yt-types';
 import {type YTGraphBlock} from '../../../../../components/YTGraph';
 import {rumLogError} from '../../../../../rum/rum-counter';
-
+import {type FlowComputationRuntimeType} from '../../types';
 import {type FlowGraphBlockItem} from '../FlowGraph';
 
 const PADDING = 50;
 
 type Size = {width: number; height: number};
 
-export class FlowGroupBlock implements YTGraphBlock<'computation-group', FlowComputationType> {
-    meta: FlowComputationType;
+export class FlowGroupBlock implements YTGraphBlock<
+    'computation-group',
+    FlowComputationRuntimeType
+> {
+    meta: FlowComputationRuntimeType;
     id: string;
     name: string;
 
@@ -25,7 +24,10 @@ export class FlowGroupBlock implements YTGraphBlock<'computation-group', FlowCom
     selected = false;
     anchors = [];
 
-    backgroundTheme?: YTGraphBlock<'computation-group', FlowComputationType>['backgroundTheme'];
+    backgroundTheme?: YTGraphBlock<
+        'computation-group',
+        FlowComputationRuntimeType
+    >['backgroundTheme'];
 
     sizes: {stream: Size; computation: Size};
 
@@ -37,13 +39,16 @@ export class FlowGroupBlock implements YTGraphBlock<'computation-group', FlowCom
         backgroundTheme,
     }: {
         id: string;
-        computation: FlowComputationType;
+        computation: FlowComputationRuntimeType;
         streamSize: Size;
         computationSize: Size;
-        backgroundTheme: YTGraphBlock<'computation-group', FlowComputationType>['backgroundTheme'];
+        backgroundTheme: YTGraphBlock<
+            'computation-group',
+            FlowComputationRuntimeType
+        >['backgroundTheme'];
     }) {
         this.id = id;
-        this.meta = computation;
+        this.meta = {...computation};
         this.name = computation.name;
         this.backgroundTheme = backgroundTheme;
 

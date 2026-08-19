@@ -1,0 +1,43 @@
+.yt-flow-graph-anchors {
+    left: var(--graph-block-anchor-x);
+    top: var(--graph-block-anchor-y);
+
+    &__computation-anchor {
+        --graph-block-anchor-width: 24px;
+        --graph-block-anchor-height: 24px;
+
+        &.graph-block-anchor.graph-block-anchor-selected {
+            border: unset;
+            transform: unset;
+        }
+    }
+
+    &__summary {
+        border: 1px solid var(--graph-block-border);
+        border-radius: var(--g-border-radius-xs);
+        background-color: var(--g-color-base-background);
+
+        width: 100%;
+        height: 100%;
+    }
+
+    &__summary-inner {
+        width: 100%;
+        height: 100%;
+    }
+
+    &__summary-inner_drained {
+        background-color: var(--g-color-base-info-light);
+
+        &:hover {
+            background-color: var(--g-color-base-info-light-hover);
+        }
+    }
+    &__summary-inner_backpressured {
+        background-color: var(--g-color-base-warning-light);
+
+        &:hover {
+            background-color: var(--g-color-base-warning-light-hover);
+        }
+    }
+}

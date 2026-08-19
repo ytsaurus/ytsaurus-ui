@@ -1,6 +1,6 @@
 import React, {type FC, useCallback, useState} from 'react';
 import {Loader} from '@gravity-ui/uikit';
-import {YTGraph, useConfig, useGraphScale} from '../../../../components/YTGraph';
+import {YTGraph, useGraphScale, useYTGraphConfig} from '../../../../components/YTGraph';
 import {type ProcessedGraph} from '../utils';
 import {QueriesCanvasBlock, type QueriesNodeBlock} from './QueriesNodeBlock';
 import {DetailBlock} from './DetailBlock';
@@ -24,7 +24,7 @@ type Props = {
 
 const Graph: FC<Props> = ({processedGraph}) => {
     const {scale, setScale} = useGraphScale();
-    const {config, isBlock} = useConfig<QueriesNodeBlock>(
+    const {config, isBlock} = useYTGraphConfig<QueriesNodeBlock>(
         {
             block: QueriesCanvasBlock,
         },

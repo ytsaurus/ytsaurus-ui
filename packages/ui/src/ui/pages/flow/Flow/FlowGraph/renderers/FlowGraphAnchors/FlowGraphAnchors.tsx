@@ -1,0 +1,100 @@
+import {type Graph, type TAnchor} from '@gravity-ui/graph';
+import {GraphBlockAnchor} from '@gravity-ui/graph/build/react-components';
+import ArrowShapeRightToLineIcon from '@gravity-ui/icons/svgs/arrow-shape-right-to-line.svg';
+import CircleInfoIcon from '@gravity-ui/icons/svgs/circle-info.svg';
+import FlagIcon from '@gravity-ui/icons/svgs/flag.svg';
+import {Icon, type IconProps} from '@gravity-ui/uikit';
+import cn from 'bem-cn-lite';
+import React from 'react';
+import {type FlowComputationUIStreamsSummary} from '../../../../../../pages/flow/Flow/types';
+import {type FlowGraphBlock} from '../../FlowGraph';
+import {
+    COMPUTATION_ANCHOR_SIZE,
+    COMPUTATION_IN,
+    COMPUTATION_OUT,
+    COMPUTATION_TIMER_IN,
+    COMPUTATION_TIMER_OUT,
+    type FlowComputationAnchorType,
+    getStreamsSummmaryByAnchorType,
+    hasVisibleStreamsSummaryDetails,
+    isFlowComputationOrGroup,
+} from '../../utils/utils';
+import './FlowGraphAnchors.scss';
+
+const block = cn('yt-flow-graph-anchors');
+
+export function FlowGraphAnchors({graph, data}: {graph: Graph; data: FlowGraphBlock}) {
+    const {anchors = []} = data;
+
+    return anchors.map((anchor) => {
+        switch (anchor.type) {
+            case COMPUTATION_IN:
+            case COMPUTATION_OUT:
+            case COMPUTATION_TIMER_IN:
+            case COMPUTATION_TIMER_OUT: {
+                if (!isFlowComputationOrGroup(data)) {
+                    return null;
+                }
+                const summary = getStreamsSummmaryByAnchorType(
+                    data.meta,
+                    anchor.type as FlowComputationAnchorType,
+                );
+                return hasVisibleStreamsSummaryDetails(summary) ? (
+                    <FlowComputationStreamsSummary
+                        key={anchor.type}
+                        data={summary}
+                        graph={graph}
+                        anchor={anchor}
+                    />
+                ) : null;
+            }
+            default:
+                return null;
+        }
+    });
+}
+
+const ICON_SIZE = 12;
+
+export function FlowComputationStreamsSummary({
+    data,
+    graph,
+    anchor,
+}: {
+    data: FlowComputationUIStreamsSummary;
+    graph: Graph;
+    anchor: TAnchor;
+}) {
+    const {drained, backpressureDetected: backpressured} = data;
+
+    let svgIcon = CircleInfoIcon;
+    let color: IconProps['color'] = 'secondary';
+    if (drained) {
+        svgIcon = FlagIcon;
+        color = 'info-heavy';
+    } else if (backpressured) {
+        svgIcon = ArrowShapeRightToLineIcon;
+        color = 'warning-heavy';
+    }
+
+    return (
+        <GraphBlockAnchor
+            className={block('computation-anchor')}
+            graph={graph}
+            anchor={anchor}
+            position="absolute"
+        >
+            <div className={block('summary')}>
+                <div
+                    className={block('summary-inner', {
+                        drained,
+                        backpressured,
+                    })}
+                    style={{padding: (COMPUTATION_ANCHOR_SIZE - 2 - ICON_SIZE) / 2}}
+                >
+                    <Icon data={svgIcon} size={ICON_SIZE} color={color} />
+                </div>
+            </div>
+        </GraphBlockAnchor>
+    );
+}

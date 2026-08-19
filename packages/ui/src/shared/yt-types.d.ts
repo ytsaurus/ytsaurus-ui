@@ -838,6 +838,14 @@ export type FlowComputationType = FlowNodeBase &
         epoch_per_second: number;
     };
 
+export type FlowExtendedStremType = {
+    backpressure_detected: true;
+    completed: boolean;
+    drained: boolean;
+    messages: Array<FlowMessageType>;
+    stream_graph_entity_id: string;
+};
+
 export type FlowPartitionStateType = 'completed' | 'executing' | 'transient' | 'interrupted';
 export type FlowPartitionJobStateType = 'unknown' | 'recovering' | 'working' | 'stopped';
 
@@ -846,7 +854,8 @@ export type FlowNodeStatusType =
 
 export type FlowComputationstatus = 'info' | 'warning' | 'error';
 
-export type FlowComputationStreams = Record<FlowComputationStreamType, Array<StreamId>>;
+export type FlowComputationStreams = Record<FlowComputationStreamType, Array<StreamId>> &
+    Record<FlowComputationExtendedStreamTypes, Array<FlowExtendedStremType>>;
 
 /**
  * - Elements of sources_streams/timer_streams/output_streams should be groupped with their computation
@@ -859,6 +868,12 @@ export type FlowComputationStreams = Record<FlowComputationStreamType, Array<Str
 
 type FlowComputationStreamType =
     'input_streams' | 'output_streams' | 'source_streams' | 'timer_streams';
+
+type FlowComputationExtendedStreamTypes =
+    | 'extended_input_streams'
+    | 'extended_output_streams'
+    | 'extended_source_streams'
+    | 'extended_timer_streams';
 
 export type FlowStream = FlowNodeBase & {
     bytes_per_second?: number;
