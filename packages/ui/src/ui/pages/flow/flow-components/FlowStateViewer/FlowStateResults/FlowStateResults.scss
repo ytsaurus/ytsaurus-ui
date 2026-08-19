@@ -11,6 +11,8 @@
     }
 
     &__hover-action {
+        display: inline-flex;
+        align-items: center;
         visibility: hidden;
     }
 
