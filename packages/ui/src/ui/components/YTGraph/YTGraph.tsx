@@ -42,7 +42,6 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     toolboxClassName,
     zoomOnScroll,
     autoCenter,
-    highlightConnectionsOnHover,
     onBlockClick,
     graphInstanceRef,
 }: YTGraphProps<B, C>) {
@@ -66,7 +65,7 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
 
     React.useEffect(() => {
         const highlightIds = new Set(selectedBlocks);
-        if (highlightConnectionsOnHover && hoveredBlockId) {
+        if (hoveredBlockId) {
             highlightIds.add(hoveredBlockId);
         }
         const store = graph.rootStore.connectionsList;
@@ -85,13 +84,9 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
             true,
             ESelectionStrategy.REPLACE,
         );
-    }, [selectedBlocks, hoveredBlockId, highlightConnectionsOnHover, graph]);
+    }, [selectedBlocks, hoveredBlockId, graph]);
 
     React.useEffect(() => {
-        if (!highlightConnectionsOnHover) {
-            return;
-        }
-
         const handleMouseEnter = ({detail}: GraphMouseEvent) => {
             const block = isBlock(detail.target) ? detail.target : undefined;
             setHoveredBlockId(block ? (block.state as {id: TBlockId}).id : null);
@@ -105,13 +100,7 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
             graph.off('mouseenter', handleMouseEnter);
             graph.off('mouseleave', handleMouseLeave);
         };
-    }, [graph, isBlock, highlightConnectionsOnHover]);
-
-    React.useEffect(() => {
-        if (!highlightConnectionsOnHover) {
-            setHoveredBlockId(null);
-        }
-    }, [highlightConnectionsOnHover]);
+    }, [graph, isBlock]);
 
     React.useEffect(() => {
         if (config.settings) {
