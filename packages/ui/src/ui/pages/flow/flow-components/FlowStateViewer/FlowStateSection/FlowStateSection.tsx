@@ -44,6 +44,7 @@ export function FlowStateSection({
     const {
         filters,
         setFilters,
+        appliedLimit,
         staticSpec,
         hasScope,
         validationError,
@@ -115,6 +116,7 @@ export function FlowStateSection({
                     {validationError && <Alert theme="warning" message={validationError} />}
                     <FlowStateResults
                         response={response}
+                        appliedLimit={appliedLimit}
                         loading={loading}
                         error={error}
                         handlers={cellHandlers}

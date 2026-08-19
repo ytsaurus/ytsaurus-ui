@@ -163,6 +163,23 @@ export function buildRowFilterUpdate(
     }
 }
 
+export function isRowFilterValueActive(
+    filters: FlowStateFiltersValue,
+    row: FlowStateResultRow,
+    field: FlowStateRowFilterField,
+): boolean {
+    switch (field) {
+        case 'target':
+            return row.section === filters.target;
+        case 'computation':
+            return Boolean(row.computationId) && row.computationId === filters.computationId;
+        case 'stateName':
+            return Boolean(row.stateName) && row.stateName === filters.stateName;
+        default:
+            return false;
+    }
+}
+
 export function resolveStateStoragePath(
     row: FlowStateResultRow,
     pipelinePath: string,

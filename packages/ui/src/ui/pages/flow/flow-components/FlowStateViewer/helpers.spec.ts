@@ -36,6 +36,7 @@ import {
 import {
     buildCompactYsonSettings,
     buildRowFilterUpdate,
+    isRowFilterValueActive,
     keyValuesFromRowKey,
     resolveStateStoragePath,
     serializeRawStateValue,
@@ -695,6 +696,35 @@ describe('buildRowFilterUpdate', () => {
                 context,
             ),
         ).toBeUndefined();
+    });
+});
+
+describe('isRowFilterValueActive', () => {
+    const row: FlowStateResultRow = {
+        section: 'key_state',
+        computationId: 'c1',
+        key: [7],
+        stateName: '/s',
+        value: 1,
+    };
+    it('detects the state kind the filters are narrowed to', () => {
+        expect(isRowFilterValueActive(filters({target: 'key_state'}), row, 'target')).toBe(true);
+        expect(isRowFilterValueActive(filters({target: 'all'}), row, 'target')).toBe(false);
+    });
+    it('detects the computation and the state name the filters are narrowed to', () => {
+        expect(isRowFilterValueActive(filters({computationId: 'c1'}), row, 'computation')).toBe(
+            true,
+        );
+        expect(isRowFilterValueActive(filters({computationId: 'c2'}), row, 'computation')).toBe(
+            false,
+        );
+        expect(isRowFilterValueActive(filters({stateName: '/s'}), row, 'stateName')).toBe(true);
+        expect(isRowFilterValueActive(filters({stateName: '/other'}), row, 'stateName')).toBe(
+            false,
+        );
+    });
+    it('never reports a key cell as narrowed, since clicking it stays available', () => {
+        expect(isRowFilterValueActive(filters({keyValues: {user: '7'}}), row, 'key')).toBe(false);
     });
 });
 

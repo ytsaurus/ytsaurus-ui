@@ -24,6 +24,7 @@ const response: FlowReadStatesResponse = {
 
 const handlers: FlowStateCellHandlers = {
     getRowFilterUpdate: () => undefined,
+    isRowFilterActive: (_row, field) => field === 'target',
     onFiltersChange: () => {},
     resolveStoragePath: () => ({path: '//home/flow/pipeline/state', cluster: 'hahn'}),
     resolveComputationLink: (computationId) => `/hahn/flows/computations/${computationId}/state`,
@@ -45,6 +46,7 @@ export default meta;
 type Story = StoryObj<typeof FlowStateResults>;
 
 const baseArgs = {
+    appliedLimit: 10,
     loading: false,
     handlers,
     rowSelection: {},
