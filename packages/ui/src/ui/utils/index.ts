@@ -1,3 +1,5 @@
+import type React from 'react';
+
 import fromPairs_ from 'lodash/fromPairs';
 import map_ from 'lodash/map';
 import mapValues_ from 'lodash/mapValues';
@@ -155,7 +157,7 @@ export function makeTabProps<TabName extends string>(
     Tab: Record<string, TabName>,
     settings?: Partial<Record<TabName, TabSettings>>,
     queryParams?: any,
-    titleDict: Partial<Record<TabName, string>> = {},
+    titleDict: Partial<Record<TabName, React.ReactNode>> = {},
 ) {
     return {
         items: Object.values(Tab).map<{

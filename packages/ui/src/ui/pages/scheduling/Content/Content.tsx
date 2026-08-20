@@ -60,7 +60,7 @@ function Content({match, location}: ContentProps) {
         {} as Record<string, TabSettings>,
     );
 
-    const titleDict: Record<string, string> = {
+    const titleDict: Record<string, React.ReactNode> = {
         [SchedulingTab.OVERVIEW]: i18n('title_overview'),
         [SchedulingTab.ATTRIBUTES]: i18n('title_attributes'),
     };
