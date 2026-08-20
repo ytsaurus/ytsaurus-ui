@@ -206,6 +206,10 @@ export const defaultUIFactory: UIFactory = {
         return undefined;
     },
 
+    renderSchedulingPoolMetaTable() {
+        return undefined;
+    },
+
     getExtraMetaTableItemsForComponentsNode() {
         return undefined;
     },

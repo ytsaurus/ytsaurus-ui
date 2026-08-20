@@ -25,6 +25,7 @@ import {type PoolData} from '../../../../../utils/scheduling/pool-child';
 import {calcProgressProps2} from '../../../../../utils/utils';
 
 import i18n from './i18n';
+import {SchedulingPoolMetaTable} from './SchedulingPoolMetaTable/SchedulingPoolMetaTable';
 import './SchedulingMeta.scss';
 
 const block = cn('yt-scheduling-meta');
@@ -143,7 +144,7 @@ export function SchedulingMeta() {
 
     return (
         <CollapsibleSection className={block()} name={pool.name}>
-            <MetaTable items={items} subTitles={subTitles} />
+            <SchedulingPoolMetaTable items={items} subTitles={subTitles} />
         </CollapsibleSection>
     );
 }

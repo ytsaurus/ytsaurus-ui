@@ -3,7 +3,7 @@ import {type Reducer} from 'redux';
 
 import {type DropdownMenuItem, type IconData} from '@gravity-ui/uikit';
 
-import {type MetaTableItem} from '@ytsaurus/components';
+import {type MetaTableItem, type MetaTableProps} from '@ytsaurus/components';
 import {type LocationParameters, type PathParameters} from '../store/location';
 import {type TabletBundle} from '../store/reducers/tablet_cell_bundles';
 import {type ClusterConfig, type ClusterUiConfig, type FlowWorkerData} from '../../shared/yt-types';
@@ -349,6 +349,8 @@ export interface UIFactory {
         host: string;
         physicalHost: string;
     }): React.ReactNode;
+
+    renderSchedulingPoolMetaTable(props: MetaTableProps): React.ReactNode;
 
     getComponentsNodeDashboardUrl(props: {cluster: string; host: string}): {
         url?: string;
