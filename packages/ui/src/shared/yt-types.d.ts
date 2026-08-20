@@ -639,6 +639,20 @@ export type FlowExecuteTypes = {
         BodyType: {body?: undefined};
         ResponseType: FlowDescribeComputationsData;
     };
+    'get-flow-view': {
+        ParamsType: {
+            flow_command: 'get-flow-view';
+            pipeline_path: string;
+        };
+        BodyType: {
+            body?: {path?: string; cache?: boolean};
+        };
+        /**
+         * The response is a subtree of the flow view defined by |path|.
+         * The type describes `/feedback/partition_job_statuses`, the only path used by the UI.
+         */
+        ResponseType: Record<FlowViewPartitionId, FlowViewPartitionJobStatus>;
+    };
     'describe-partition': {
         ParamsType: {
             flow_command: 'describe-partition';
@@ -696,6 +710,22 @@ export type FlowExecuteTypes = {
             body: {worker: string};
         };
         ResponseType: unknown;
+    };
+};
+
+export type FlowViewNodePerformanceMetrics = {
+    cpu_usage_current?: number;
+    cpu_usage_30s?: number;
+    cpu_usage_10m?: number;
+    memory_usage_current?: number;
+    memory_usage_30s?: number;
+    memory_usage_10m?: number;
+};
+
+export type FlowViewPartitionJobStatus = {
+    current_job_id?: FlowViewJobId;
+    current_job_status?: {
+        performance_metrics?: FlowViewNodePerformanceMetrics;
     };
 };
 
