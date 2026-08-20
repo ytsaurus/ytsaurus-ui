@@ -8,6 +8,7 @@ import {DEFAULT_UPDATER_TIMEOUT} from '../../../../hooks/use-updater';
 
 import {ytApi} from '../ytApi';
 import {type MutationOptions, type OverrideDataType, type UseQueryOptions} from '../types';
+import {getEffectiveClusterArgs, useEffectiveClusterArgs} from '../utils';
 
 import {type BatchApiArgs, type BatchApiResults, executeBatchV3} from './endpoint';
 
@@ -63,7 +64,6 @@ export function useFetchBatchQuery<T>(
     options?: UseQueryOptions<BatchQueryResult, BatchApiArgs>,
 ) {
     const useAutoRefresh = useSelector(selectUseAutoRefresh);
-    const cluster = useSelector(selectCluster);
 
     const defaultOptions = {
         pollingInterval: useAutoRefresh ? DEFAULT_UPDATER_TIMEOUT : undefined,
@@ -75,15 +75,9 @@ export function useFetchBatchQuery<T>(
         ...options,
     };
 
-    const customArgs =
-        'setup' in args
-            ? args
-            : {
-                  ...args,
-                  cluster,
-              };
+    const effectiveArgs = useEffectiveClusterArgs(args);
 
-    const res = batchApi.useFetchBatchQuery(customArgs, customOptions);
+    const res = batchApi.useFetchBatchQuery(effectiveArgs, customOptions);
     return res as OverrideDataType<typeof res, BatchApiResults<T>>;
 }
 
@@ -132,11 +126,10 @@ type BatchMutationReturnType = TypedUseMutationResult<
 export function useUpdateBatchMutation<T>(
     options?: MutationOptions<BatchMutationReturnType, BatchMutationDefinition>,
 ) {
+    const currentCluster = useSelector(selectCluster);
     const [updateFn, result] = batchApi.useUpdateBatchMutation(options);
-    // cluster param makes no sense for mutation requests
     const typedUpdateFn = async (args: Omit<BatchApiArgs, 'cluster'>) => {
-        // adding cluster param for types compatibility
-        const response = await updateFn({...args, cluster: ''});
+        const response = await updateFn(getEffectiveClusterArgs(args, currentCluster));
         if (response.data) {
             return {
                 data: response.data as BatchApiResults<T> | undefined,
