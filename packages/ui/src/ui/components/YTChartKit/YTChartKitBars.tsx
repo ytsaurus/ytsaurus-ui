@@ -23,6 +23,7 @@ export function YTChartKitBars(props: YTChartKitBarsProps) {
 
     const chartData = React.useMemo(() => {
         const res: ChartData = {
+            chart: {zoom: {enabled: true}},
             legend: {enabled: false},
             xAxis: {
                 min: 0,

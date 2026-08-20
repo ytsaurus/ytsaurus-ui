@@ -13,6 +13,10 @@
   "memory_usage": "Memory usage",
   "messages_per_second": "Messages per second",
   "bytes_per_second": "Bytes per second",
+  "hint_cpu_usage": "CPU time consumed by the job of a partition, averaged over 10 minutes and recalculated to vCPU.",
+  "hint_memory_usage": "Heap allocated by the job of a partition, including its companion process, averaged over 10 minutes. The allocator samples allocations, so values of a few megabytes are within the error.",
+  "hint_messages_per_second": "Rate of messages read from the input streams of a partition. Computations without input streams (sources) report zero.",
+  "hint_bytes_per_second": "Rate of bytes read from the input streams of a partition. Computations without input streams (sources) report zero.",
   "unit_cores": "cores",
   "unit_megabytes": "MB",
   "unit_kilobytes-per-second": "KB/s"

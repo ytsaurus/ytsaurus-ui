@@ -114,6 +114,7 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
         const name = seriesName ?? i18n('field_observations');
 
         const res: ChartData = {
+            chart: {zoom: {enabled: true}},
             legend: {enabled: plotLines.length > 0},
             xAxis: {
                 min: from,

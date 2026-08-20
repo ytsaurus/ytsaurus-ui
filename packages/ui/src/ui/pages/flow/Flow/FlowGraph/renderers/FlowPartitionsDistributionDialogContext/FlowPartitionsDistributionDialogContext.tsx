@@ -26,13 +26,29 @@ type MetricSettings = {
     /** width of a histogram bar in the displayed unit */
     barWidth: number;
     unit?: 'unit_cores' | 'unit_megabytes' | 'unit_kilobytes-per-second';
+    /** describes how the value is measured */
+    hint:
+        | 'hint_cpu_usage'
+        | 'hint_memory_usage'
+        | 'hint_messages_per_second'
+        | 'hint_bytes_per_second';
 };
 
 const METRIC_SETTINGS: Record<DistributionMetric, MetricSettings> = {
-    cpu_usage: {scale: 1, barWidth: 0.1, unit: 'unit_cores'},
-    memory_usage: {scale: 1 / 1024 ** 2, barWidth: 100, unit: 'unit_megabytes'},
-    messages_per_second: {scale: 1, barWidth: 100},
-    bytes_per_second: {scale: 1 / 1024, barWidth: 100, unit: 'unit_kilobytes-per-second'},
+    cpu_usage: {scale: 1, barWidth: 0.1, unit: 'unit_cores', hint: 'hint_cpu_usage'},
+    memory_usage: {
+        scale: 1 / 1024 ** 2,
+        barWidth: 100,
+        unit: 'unit_megabytes',
+        hint: 'hint_memory_usage',
+    },
+    messages_per_second: {scale: 1, barWidth: 100, hint: 'hint_messages_per_second'},
+    bytes_per_second: {
+        scale: 1 / 1024,
+        barWidth: 100,
+        unit: 'unit_kilobytes-per-second',
+        hint: 'hint_bytes_per_second',
+    },
 };
 
 type FlowPartitionsDistributionDialogContextValue = {
@@ -91,7 +107,7 @@ function FlowPartitionsDistributionContent({computationId}: {computationId: stri
         },
     });
 
-    const {scale, barWidth, unit} = METRIC_SETTINGS[metric];
+    const {scale, barWidth, unit, hint} = METRIC_SETTINGS[metric];
 
     const {items, stats} = React.useMemo(() => {
         const items = (data?.partitions ?? [])
@@ -145,6 +161,9 @@ function FlowPartitionsDistributionContent({computationId}: {computationId: stri
                     ` · ${i18n('field_min')} ${formatValue(stats.min)}` +
                         ` · ${i18n('field_average')} ${formatValue(stats.average)}` +
                         ` · ${i18n('field_max')} ${formatValue(stats.max)}`}
+            </Text>
+            <Text variant="caption-2" color="secondary">
+                {i18n(hint)}
             </Text>
             <div className={block('chart')}>
                 {!items.length ? (
