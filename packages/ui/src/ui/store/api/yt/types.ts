@@ -17,7 +17,8 @@ export type YTEndpointApiArgs<CommandParameters> = ClusterOrSetup &
 
 export type ClusterOrSetup =
     // cluster or setup param should be required for the case of selection
-    {cluster?: string} | {setup: Omit<YTApiSetup, 'proxy'> & Pick<Required<YTApiSetup>, 'proxy'>};
+    | {cluster?: string; setup?: never}
+    | {setup: Omit<YTApiSetup, 'proxy'> & Pick<Required<YTApiSetup>, 'proxy'>; cluster?: never};
 
 export type OverrideDataType<T extends {data?: unknown}, Data> = Omit<T, 'data' | 'error'> & {
     data?: Data;

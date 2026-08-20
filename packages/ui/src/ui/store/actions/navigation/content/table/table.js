@@ -150,9 +150,6 @@ function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPrelo
                             ],
                         },
                     },
-                    table_reader: {
-                        workload_descriptor: {category: 'user_interactive'},
-                    },
                     transaction,
                     output_format: outputFormat,
                 },
@@ -311,9 +308,6 @@ async function loadStaticTable(requestOutputFormat, state, type, useZeroRangeFor
 
     const parameters = prepareRequest({
         path,
-        table_reader: {
-            workload_descriptor: {category: 'user_interactive'},
-        },
         transaction,
         output_format: outputFormat,
         relativePath: useZeroRangeForPreload
