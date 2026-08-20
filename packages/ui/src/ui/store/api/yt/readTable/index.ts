@@ -1,13 +1,9 @@
 import {DEFAULT_UPDATER_TIMEOUT} from '../../../../hooks/use-updater';
 import {useSelector} from '../../../../store/redux-hooks';
-import {
-    getClusterConfigByName,
-    getClusterProxy,
-    selectCluster,
-} from '../../../../store/selectors/global/cluster';
 import {selectUseAutoRefresh} from '../../../../store/selectors/settings/settings-ts';
 import {type ReadTableResult} from '../../../actions/navigation/content/table/readTable';
 import {type OverrideDataType} from '../types';
+import {useEffectiveClusterArgs} from '../utils';
 import {ytApi} from '../ytApi';
 import {readTable} from './endpoint';
 
@@ -28,20 +24,13 @@ export function useReadTableQuery<RowT extends Record<string, unknown>>({
     ...args
 }: Parameters<typeof readTable>[0] & {cluster?: string}) {
     const useAutoRefresh = useSelector(selectUseAutoRefresh);
-    const currentCluster = useSelector(selectCluster);
-
     const options = {
         pollingInterval: useAutoRefresh ? DEFAULT_UPDATER_TIMEOUT : undefined,
         skipPollingIfUnfocused: true,
     };
 
-    const {cluster, setup, ...rest} = args;
+    const effectiveArgs = useEffectiveClusterArgs(args);
 
-    const effectiveCluster = cluster ?? currentCluster;
-    const effectiveSetup = effectiveCluster
-        ? {proxy: getClusterProxy(getClusterConfigByName(effectiveCluster)), ...setup}
-        : setup;
-
-    const res = readTableApi.useReadTableQuery({...rest, setup: effectiveSetup}, options);
+    const res = readTableApi.useReadTableQuery(effectiveArgs, options);
     return res as OverrideDataType<typeof res, ReadTableResponse<RowT>>;
 }
