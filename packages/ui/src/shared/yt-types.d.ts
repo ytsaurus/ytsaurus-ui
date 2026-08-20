@@ -722,10 +722,20 @@ export type FlowViewNodePerformanceMetrics = {
     memory_usage_10m?: number;
 };
 
+/** A key of the input stream with its fraction of the input of the partition. */
+export type FlowViewHeavyHitter = [ratio: number, key: unknown];
+
+export type FlowViewInputStreamMetrics = {
+    messages_per_second?: number;
+    bytes_per_second?: number;
+    heavy_hitters?: Array<FlowViewHeavyHitter>;
+};
+
 export type FlowViewPartitionJobStatus = {
     current_job_id?: FlowViewJobId;
     current_job_status?: {
         performance_metrics?: FlowViewNodePerformanceMetrics;
+        input_metrics?: {global?: FlowViewInputStreamMetrics};
     };
 };
 

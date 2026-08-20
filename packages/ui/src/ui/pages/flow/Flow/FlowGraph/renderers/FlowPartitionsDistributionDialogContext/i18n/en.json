@@ -2,6 +2,8 @@
   "title_distribution": "Partitions distribution: {{computation}}",
   "context_partitions-count": "{{count}} partitions",
   "context_no-partitions": "There are no partitions to display",
+  "context_no-heavy-hitters": "There are no heavy hitters",
+  "context_heavy-hitters": "Keys that take a noticeable part of the input of their partition. More partitions cannot split such a key, a dominating one requires a change of the grouping key.",
   "context_window": "'now' is the latest measurement, '30 s' and '10 min' are exponential averages with the corresponding half-life",
   "context_single-window": "The metric is always averaged over the heavy-hitters window of the computation, 5 minutes by default",
   "field_partitions": "Partitions",
@@ -11,6 +13,7 @@
   "axis_partitions": "Partitions, sorted by value",
   "by-partition": "By partition",
   "distribution": "Distribution",
+  "heavy-hitters": "Heavy hitters",
   "now": "now",
   "30s": "30 s",
   "10m": "10 min",
@@ -24,5 +27,6 @@
   "hint_bytes_per_second": "Bytes read from the input streams of a partition; zero for computations without input streams.",
   "unit_vcpu": "vCPU",
   "unit_megabytes": "MB",
-  "unit_kilobytes-per-second": "KB/s"
+  "unit_kilobytes-per-second": "KB/s",
+  "unit_messages-per-second": "msg/s"
 }

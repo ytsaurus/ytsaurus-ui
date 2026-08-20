@@ -1,11 +1,16 @@
 import {Flex, SegmentedRadioGroup, Text} from '@gravity-ui/uikit';
 import {Tooltip} from '@ytsaurus/components';
 import cn from 'bem-cn-lite';
+import minBy_ from 'lodash/minBy';
 import React from 'react';
 import {
     type FlowComputationDetailsType,
     type FlowViewNodePerformanceMetrics,
 } from '../../../../../../../shared/yt-types';
+import {FlowTab} from '../../../../../../store/reducers/flow/filters';
+import {makeFlowLink} from '../../../../../../utils/app-url';
+import Link from '../../../../../../containers/Link/Link';
+import {Yson} from '../../../../../../components/Yson/Yson';
 import format from '../../../../../../common/hammer/format';
 import {DialogWrapper} from '../../../../../../components/DialogWrapper/DialogWrapper';
 import Loader from '../../../../../../components/Loader/Loader';
@@ -22,7 +27,7 @@ const block = cn('yt-flow-partitions-distribution');
 const METRICS = ['cpu_usage', 'memory_usage', 'messages_per_second', 'bytes_per_second'] as const;
 type DistributionMetric = (typeof METRICS)[number];
 
-const VIEWS = ['by-partition', 'distribution'] as const;
+const VIEWS = ['by-partition', 'distribution', 'heavy-hitters'] as const;
 type DistributionView = (typeof VIEWS)[number];
 
 const WINDOWS = ['now', '30s', '10m'] as const;
@@ -153,35 +158,46 @@ function FlowPartitionsDistributionContent({computationId}: {computationId: stri
         return <FlowError error={error} />;
     }
 
-    const controls = (
-        <Flex gap={4} alignItems="center" wrap>
-            <SegmentedRadioGroup<DistributionMetric>
-                value={metric}
-                onUpdate={setMetric}
-                options={METRICS.map((value) => ({value, content: i18n(value)}))}
-            />
-            <SegmentedRadioGroup<DistributionView>
-                value={view}
-                onUpdate={setView}
-                options={VIEWS.map((value) => ({value, content: i18n(value)}))}
-            />
-            <Tooltip content={i18n(windowFields ? 'context_window' : 'context_single-window')}>
-                <SegmentedRadioGroup<DistributionWindow>
-                    value={metricWindow}
-                    onUpdate={setMetricWindow}
-                    disabled={!windowFields}
-                    options={WINDOWS.map((value) => ({value, content: i18n(value)}))}
-                />
-            </Tooltip>
-        </Flex>
-    );
+    const heavyHitters = view === 'heavy-hitters';
 
     return (
         <Flex direction="column" gap={3}>
-            {controls}
-            {flowViewFields ? (
+            <Flex gap={4} alignItems="center" wrap>
+                <SegmentedRadioGroup<DistributionView>
+                    value={view}
+                    onUpdate={setView}
+                    options={VIEWS.map((value) => ({value, content: i18n(value)}))}
+                />
+                {!heavyHitters && (
+                    <SegmentedRadioGroup<DistributionMetric>
+                        value={metric}
+                        onUpdate={setMetric}
+                        options={METRICS.map((value) => ({value, content: i18n(value)}))}
+                    />
+                )}
+                {!heavyHitters && (
+                    <Tooltip
+                        content={i18n(windowFields ? 'context_window' : 'context_single-window')}
+                    >
+                        <SegmentedRadioGroup<DistributionWindow>
+                            value={metricWindow}
+                            onUpdate={setMetricWindow}
+                            disabled={!windowFields}
+                            options={WINDOWS.map((value) => ({value, content: i18n(value)}))}
+                        />
+                    </Tooltip>
+                )}
+            </Flex>
+            {heavyHitters ? (
+                <FlowViewHeavyHitters
+                    pipeline_path={pipeline_path}
+                    computationId={computationId}
+                    partitions={partitions}
+                />
+            ) : flowViewFields ? (
                 <FlowViewPartitionsCharts
                     pipeline_path={pipeline_path}
+                    computationId={computationId}
                     partitions={partitions}
                     fields={flowViewFields}
                     metric={metric}
@@ -190,6 +206,7 @@ function FlowPartitionsDistributionContent({computationId}: {computationId: stri
             ) : (
                 <PartitionsCharts
                     items={makeItems(partitions, (partition) => partition[metric], metric)}
+                    computationId={computationId}
                     metric={metric}
                     view={view}
                 />
@@ -199,9 +216,25 @@ function FlowPartitionsDistributionContent({computationId}: {computationId: stri
 }
 
 type PartitionsProps = {
+    computationId: string;
     metric: DistributionMetric;
     view: DistributionView;
 };
+
+type FlowViewProps = {
+    pipeline_path: string;
+    partitions?: FlowComputationDetailsType['partitions'];
+};
+
+function useFlowViewJobStatuses(pipeline_path: string) {
+    return useFlowExecuteQuery<'get-flow-view'>({
+        parameters: {
+            flow_command: 'get-flow-view',
+            pipeline_path,
+        },
+        body: {path: '/feedback/partition_job_statuses', cache: true},
+    });
+}
 
 //! Loads the metrics of the recent windows, describe-computation provides the most smoothed ones only.
 function FlowViewPartitionsCharts({
@@ -209,18 +242,11 @@ function FlowViewPartitionsCharts({
     partitions,
     fields,
     ...rest
-}: PartitionsProps & {
-    pipeline_path: string;
-    partitions?: FlowComputationDetailsType['partitions'];
-    fields: Array<keyof FlowViewNodePerformanceMetrics>;
-}) {
-    const {data, error, isLoading} = useFlowExecuteQuery<'get-flow-view'>({
-        parameters: {
-            flow_command: 'get-flow-view',
-            pipeline_path,
-        },
-        body: {path: '/feedback/partition_job_statuses', cache: true},
-    });
+}: PartitionsProps &
+    FlowViewProps & {
+        fields: Array<keyof FlowViewNodePerformanceMetrics>;
+    }) {
+    const {data, error, isLoading} = useFlowViewJobStatuses(pipeline_path);
 
     const items = React.useMemo(() => {
         return makeItems(
@@ -246,17 +272,28 @@ function FlowViewPartitionsCharts({
     return <PartitionsCharts items={items} {...rest} />;
 }
 
-function PartitionsCharts({items, metric, view}: PartitionsProps & {items: Array<PartitionValue>}) {
+function PartitionsCharts({
+    items,
+    computationId,
+    metric,
+    view,
+}: PartitionsProps & {items: Array<PartitionValue>}) {
     const {barWidth, unit, hint} = METRIC_SETTINGS[metric];
 
     const stats = React.useMemo(() => {
-        return !items.length
-            ? undefined
-            : {
-                  max: items[0].value,
-                  min: items[items.length - 1].value,
-                  average: items.reduce((acc, {value}) => acc + value, 0) / items.length,
-              };
+        if (!items.length) {
+            return undefined;
+        }
+        const sum = items.reduce((acc, {value}) => acc + value, 0);
+        const average = sum / items.length;
+        return {
+            max: items[0],
+            min: items[items.length - 1],
+            average: {
+                value: average,
+                name: minBy_(items, ({value}) => Math.abs(value - average))?.name ?? items[0].name,
+            },
+        };
     }, [items]);
 
     const formatValue = (value: number) => {
@@ -271,9 +308,17 @@ function PartitionsCharts({items, metric, view}: PartitionsProps & {items: Array
             <Text color="secondary">
                 {i18n('context_partitions-count', {count: items.length})}
                 {stats &&
-                    ` · ${i18n('field_min')} ${formatValue(stats.min)}` +
-                        ` · ${i18n('field_average')} ${formatValue(stats.average)}` +
-                        ` · ${i18n('field_max')} ${formatValue(stats.max)}`}
+                    (['min', 'average', 'max'] as const).map((key) => (
+                        <React.Fragment key={key}>
+                            {` · ${i18n(`field_${key}`)} `}
+                            <PartitionLink
+                                computationId={computationId}
+                                partitionId={stats[key].name}
+                            >
+                                {formatValue(stats[key].value)}
+                            </PartitionLink>
+                        </React.Fragment>
+                    ))}
             </Text>
             <Text variant="caption-2" color="secondary">
                 {i18n(hint)}
@@ -298,6 +343,91 @@ function PartitionsCharts({items, metric, view}: PartitionsProps & {items: Array
                 )}
             </div>
         </React.Fragment>
+    );
+}
+
+//! Keys that take a noticeable part of the input of their partition. More partitions cannot split
+//! such a key, so a dominating key requires a change of the grouping key of the pipeline.
+function FlowViewHeavyHitters({
+    pipeline_path,
+    computationId,
+    partitions,
+}: FlowViewProps & {computationId: string}) {
+    const {data, error, isLoading} = useFlowViewJobStatuses(pipeline_path);
+
+    const items = React.useMemo(() => {
+        const res = (partitions ?? []).flatMap((partition) => {
+            const metrics = data?.[partition.partition_id]?.current_job_status?.input_metrics;
+            const messagesPerSecond = metrics?.global?.messages_per_second ?? 0;
+            return (metrics?.global?.heavy_hitters ?? []).map(([ratio, key]) => ({
+                key,
+                ratio,
+                messagesPerSecond: ratio * messagesPerSecond,
+                partitionId: partition.partition_id,
+            }));
+        });
+        return res.sort((l, r) => r.messagesPerSecond - l.messagesPerSecond);
+    }, [data, partitions]);
+
+    if (isLoading) {
+        return <Loader visible centered />;
+    }
+
+    if (error) {
+        return <FlowError error={error} />;
+    }
+
+    if (!items.length) {
+        return <Text color="secondary">{i18n('context_no-heavy-hitters')}</Text>;
+    }
+
+    return (
+        <Flex direction="column" gap={2}>
+            <Text variant="caption-2" color="secondary">
+                {i18n('context_heavy-hitters')}
+            </Text>
+            {items.map(({key, ratio, messagesPerSecond, partitionId}, index) => (
+                <Flex key={index} gap={4} alignItems="center" wrap>
+                    <Yson value={key} inline />
+                    <Text color="secondary">
+                        {`${format.Percent(ratio * 100)} · ${format.Number(messagesPerSecond, {
+                            digits: 2,
+                        })} ${i18n('unit_messages-per-second')}`}
+                    </Text>
+                    <PartitionLink computationId={computationId} partitionId={partitionId}>
+                        {partitionId}
+                    </PartitionLink>
+                </Flex>
+            ))}
+        </Flex>
+    );
+}
+
+function PartitionLink({
+    computationId,
+    partitionId,
+    children,
+}: {
+    computationId: string;
+    partitionId: string;
+    children: React.ReactNode;
+}) {
+    const path = useSelector(selectFlowPipelinePath);
+    const {setVisibleDistribution} = useFlowPartitionsDistributionDialogContext();
+    return (
+        <Link
+            routed
+            routedPreserveLocation
+            url={makeFlowLink({
+                path,
+                tab: FlowTab.COMPUTATIONS,
+                computation: computationId,
+                partitionIdFilter: partitionId,
+            })}
+            onClick={() => setVisibleDistribution(undefined)}
+        >
+            {children}
+        </Link>
     );
 }
 
