@@ -88,7 +88,7 @@ export interface ReducersAndUrlMapping {
 
 export interface SchedulingExtraTab {
     name: string;
-    title?: string;
+    title?: React.ReactNode;
     component?: React.ComponentType<any>;
     /**
      * Allows to redefine link of corresponding tab
