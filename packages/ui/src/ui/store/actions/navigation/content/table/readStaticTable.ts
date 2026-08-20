@@ -1,5 +1,6 @@
+import {type YTApiIdType} from '../../../../../../shared/constants/yt-api-id';
 import ypath from '../../../../../common/thor/ypath';
-import {ytApiV3} from '../../../../../rum/rum-wrap-api';
+import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
 import {
     getParsedError,
     parseErrorFromResponse,
@@ -13,15 +14,22 @@ import {
     tableReadSetup,
 } from './readTable';
 
+type ReadStaticTableParameters = ReadTableParameters<{path: string}> & {id?: YTApiIdType};
+
 export async function readStaticTable({
+    id = YTApiId.tableRead,
     setup,
     parameters,
     cancellation,
     reverseRows,
-}: ReadTableParameters<{path: string}>): Promise<ReadTableResult> {
-    const tmp = await ytApiV3.readTable({
+}: ReadStaticTableParameters): Promise<ReadTableResult> {
+    const tmp = await ytApiV3Id.readTable(id, {
         setup: {...setup, ...tableReadSetup},
-        parameters: {...parameters, ...tableReadParameters},
+        parameters: {
+            ...parameters,
+            ...tableReadParameters,
+            ...{table_reader: {workload_descriptor: {category: 'user_interactive'}}},
+        },
         cancellation,
     });
 
