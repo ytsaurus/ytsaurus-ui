@@ -12,8 +12,9 @@ import {type ApiMethodParams, type YTApiSetup} from '../../../rum/rum-wrap-api';
 
 // YT API Utility Types
 
-export type YTEndpointApiArgs<CommandParameters> = ClusterOrSetup &
-    Omit<ApiMethodParams<CommandParameters>, 'setup'>;
+export type YTEndpointApiArgs<CommandParameters> = ApiMethodParams<CommandParameters> & {
+    cluster?: string;
+};
 
 export type ClusterOrSetup =
     // cluster or setup param should be required for the case of selection
