@@ -15,7 +15,7 @@ const b = block('elements-modal');
 interface SimpleModalProps {
     visible?: boolean;
     loading?: boolean;
-    title?: string;
+    title?: React.ReactNode;
     size?: 's' | 'm' | 'l';
     borderless?: boolean;
     onCancel: () => void;
@@ -37,8 +37,9 @@ class SimpleModal extends Component<SimpleModalProps> {
 
     renderHeader() {
         const {title, onCancel, className} = this.props;
+        const htmlTitle = typeof title === 'string' ? title : undefined;
         return (
-            <div className={b('header', {mix: className})} title={title}>
+            <div className={b('header', {mix: className})} title={htmlTitle}>
                 {title}
                 <div className={b('close')}>
                     <Button
