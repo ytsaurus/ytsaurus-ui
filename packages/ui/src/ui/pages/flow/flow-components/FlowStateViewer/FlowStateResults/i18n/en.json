@@ -2,17 +2,19 @@
   "column_state-kind": "State kind",
   "column_computation": "Computation",
   "link_open-computation-page": "Open computation page",
+  "link_open-backing-storage": "Open backing storage in Navigation",
   "column_partition": "Partition",
   "column_key": "Key",
   "column_state-name": "State",
   "hint_state-name": "Name the computation registered this state under. Names are path-like and are chosen by the pipeline author, so a computation with a single state usually shows \"/state\".",
   "hint_filter-already-applied": "The filters are already narrowed to this value",
-  "hint_limit-reached": "The read returned the maximum of {{limit}} rows; narrow the filters to inspect a smaller scope",
   "column_value": "Value",
+  "tooltip_show-value": "Show value",
+  "tooltip_show-raw-response": "Show raw response",
+  "title_raw-response": "Raw read-states response",
+  "text_bounded-results": "Each response section requests at most {{limit}} entries and has no continuation. Open backing storage in Navigation for complete data; filter narrowing is not exhaustive.",
   "text_no-results": "No states loaded",
   "text_selected-rows": "Selected: {{count}}",
   "action_delete": "Delete",
-  "alert_no-write-permission": "Deleting states requires write permission on the pipeline",
-  "label_raw-response": "Raw response",
-  "label_rows": "rows"
+  "alert_no-write-permission": "Deleting states requires write permission on the pipeline"
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import {ArrowUpRightFromSquare, Database} from '@gravity-ui/icons';
-import {Button, Flex, HelpMark, Icon, Loader, Switch, Text} from '@gravity-ui/uikit';
+import {Button, Flex, HelpMark, Icon, Loader, Text} from '@gravity-ui/uikit';
 import {ClipboardButton} from '@ytsaurus/components';
 
 import ClickableAttributesButton from '../../../../../components/AttributesButton/ClickableAttributesButton';
@@ -16,7 +16,6 @@ import {
     useTable,
 } from '../../../../../components/DataTableGravity';
 import {Yson, type YsonSettings} from '../../../../../components/Yson/Yson';
-import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
 import {YTErrorBlock, type YTErrorBlockProps} from '../../../../../containers/Block/Block';
 import {RoutedLink} from '../../../../../containers/RoutedLink/RoutedLink';
 import {selectCluster} from '../../../../../store/selectors/global';
@@ -172,22 +171,15 @@ function useResultColumns({
                             label={original.computationId ?? ''}
                             handlers={handlers}
                         />
-                        <Flex gap={1} alignItems="center">
-                            <CopyButton text={original.computationId ?? ''} />
-                            {original.computationId && (
-                                <span className={block('hover-action')}>
-                                    <RoutedLink
-                                        className={block('row-link')}
-                                        href={handlers.resolveComputationLink(
-                                            original.computationId,
-                                        )}
-                                        title={i18n('link_open-computation-page')}
-                                    >
-                                        <Icon data={ArrowUpRightFromSquare} size={14} />
-                                    </RoutedLink>
-                                </span>
-                            )}
-                        </Flex>
+                        {original.computationId && (
+                            <RoutedLink
+                                className={block('row-link')}
+                                href={handlers.resolveComputationLink(original.computationId)}
+                                title={i18n('link_open-computation-page')}
+                            >
+                                <Icon data={ArrowUpRightFromSquare} size={14} />
+                            </RoutedLink>
+                        )}
                     </TableCell>
                 ),
             },
@@ -197,9 +189,8 @@ function useResultColumns({
                 size: 200,
                 accessorFn: (row) => row.partitionId ?? '',
                 cell: ({row: {original}}) => (
-                    <TableCell justifyContent="space-between">
+                    <TableCell>
                         <Text ellipsis>{original.partitionId ?? ''}</Text>
-                        <CopyButton text={original.partitionId ?? ''} />
                     </TableCell>
                 ),
             },
@@ -216,7 +207,6 @@ function useResultColumns({
                             label={stringifyStateValue(original.key)}
                             handlers={handlers}
                         />
-                        <CopyButton text={serializeRawStateValue(original.key)} />
                     </TableCell>
                 ),
             },
@@ -240,23 +230,19 @@ function useResultColumns({
                                 label={original.stateName}
                                 handlers={handlers}
                             />
-                            <Flex gap={1} alignItems="center">
-                                <CopyButton text={original.stateName} />
-                                {location && (
-                                    <span className={block('hover-action')}>
-                                        <RoutedLink
-                                            className={block('row-link')}
-                                            href={genNavigationUrl({
-                                                cluster: location.cluster ?? cluster,
-                                                path: location.path,
-                                            })}
-                                            title={location.path}
-                                        >
-                                            <Icon data={Database} size={14} />
-                                        </RoutedLink>
-                                    </span>
-                                )}
-                            </Flex>
+                            {location && (
+                                <RoutedLink
+                                    aria-label={i18n('link_open-backing-storage')}
+                                    className={block('row-link')}
+                                    href={genNavigationUrl({
+                                        cluster: location.cluster ?? cluster,
+                                        path: location.path,
+                                    })}
+                                    title={i18n('link_open-backing-storage')}
+                                >
+                                    <Icon data={Database} size={14} />
+                                </RoutedLink>
+                            )}
                         </TableCell>
                     );
                 },
@@ -284,10 +270,15 @@ function useResultColumns({
                                 <CopyButton text={serializeRawStateValue(original.value)} />
                                 {expandable && (
                                     <ClickableAttributesButton
+                                        aria-label={i18n('tooltip_show-value')}
                                         title={original.stateName}
                                         attributes={original.value as object}
                                         view="flat-secondary"
                                         size="s"
+                                        tooltipProps={{
+                                            placement: 'bottom-end',
+                                            content: i18n('tooltip_show-value'),
+                                        }}
                                     />
                                 )}
                             </Flex>
@@ -296,7 +287,7 @@ function useResultColumns({
                 },
             },
         ],
-        [ysonSettings, compactYsonSettings, cluster, handlers],
+        [compactYsonSettings, cluster, handlers],
     );
 }
 
@@ -349,7 +340,6 @@ export function FlowStateResults({
     writeDenied,
     onDeleteSelected,
 }: FlowStateResultsProps) {
-    const [raw, setRaw] = React.useState(false);
     const ysonSettings = useSelector(selectFlowSpecYsonSettings);
     const cluster = useSelector(selectCluster);
 
@@ -397,28 +387,21 @@ export function FlowStateResults({
             {(response.errors ?? []).map((message, index) => (
                 <YTErrorBlock key={`${index}:${message}`} error={{message}} />
             ))}
-            <Flex gap={4} alignItems="center" justifyContent="space-between">
-                <Flex gap={3} alignItems="center">
-                    <Text color="secondary">
-                        {rows.length} {i18n('label_rows')}
-                    </Text>
-                    {rows.length >= READ_STATES_LIMIT && (
-                        <Text color="warning">
-                            {i18n('hint_limit-reached', {limit: String(READ_STATES_LIMIT)})}
-                        </Text>
-                    )}
-                </Flex>
-                <Switch
-                    checked={raw}
-                    onUpdate={(next) => {
-                        setRaw(next);
-                        if (next) {
-                            onRowSelectionChange({});
-                        }
+            <Flex gap={3} alignItems="center" justifyContent="space-between">
+                <Text color="secondary">
+                    {i18n('text_bounded-results', {limit: String(READ_STATES_LIMIT)})}
+                </Text>
+                <ClickableAttributesButton
+                    aria-label={i18n('tooltip_show-raw-response')}
+                    title={i18n('title_raw-response')}
+                    attributes={response}
+                    view="flat-secondary"
+                    size="s"
+                    tooltipProps={{
+                        placement: 'bottom-end',
+                        content: i18n('tooltip_show-raw-response'),
                     }}
-                >
-                    {i18n('label_raw-response')}
-                </Switch>
+                />
             </Flex>
             <div className={block('content', {loading: refreshing})}>
                 {refreshing && (
@@ -426,18 +409,14 @@ export function FlowStateResults({
                         <Loader size="s" />
                     </div>
                 )}
-                {raw ? (
-                    <YsonWithScroll value={response} settings={ysonSettings} />
-                ) : (
-                    <FlowStateResultsTable
-                        rows={rows}
-                        ysonSettings={ysonSettings}
-                        cluster={cluster}
-                        handlers={handlers}
-                        rowSelection={rowSelection}
-                        onRowSelectionChange={onRowSelectionChange}
-                    />
-                )}
+                <FlowStateResultsTable
+                    rows={rows}
+                    ysonSettings={ysonSettings}
+                    cluster={cluster}
+                    handlers={handlers}
+                    rowSelection={rowSelection}
+                    onRowSelectionChange={onRowSelectionChange}
+                />
             </div>
         </Flex>
     );

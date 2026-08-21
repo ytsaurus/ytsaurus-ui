@@ -2,16 +2,31 @@
 import React from 'react';
 import {render, screen} from '@testing-library/react';
 
-import type {FlowStateCellHandlers} from '../types';
+import type {FlowStateCellHandlers, FlowStateResultRow} from '../types';
 import type {FlowReadStatesResponse} from '../../../../../../shared/yt-types';
 
-jest.mock('@ytsaurus/components', () => ({ClipboardButton: () => null, setLang: () => {}}));
+jest.mock('@ytsaurus/components', () => ({
+    ClipboardButton: ({text}: {text: string}) => <button data-copy-text={text} />,
+    setLang: () => {},
+}));
 
 jest.mock('../../../../../components/NoContent', () => ({
     NoContent: () => <div data-testid="no-content" />,
 }));
 
-jest.mock('../../../../../components/AttributesButton/ClickableAttributesButton', () => () => null);
+jest.mock(
+    '../../../../../components/AttributesButton/ClickableAttributesButton',
+    () =>
+        function MockClickableAttributesButton({
+            title,
+            tooltipProps,
+        }: {
+            title: string;
+            tooltipProps: {content: string};
+        }) {
+            return <button aria-label={tooltipProps.content} data-modal-title={title} />;
+        },
+);
 jest.mock('../../../../../components/ClickableText/ClickableText', () => ({
     ClickableText: ({children}: {children: React.ReactNode}) => <span>{children}</span>,
 }));
@@ -22,7 +37,9 @@ jest.mock('../../../../../components/Yson/YsonWithScroll', () => ({
     YsonWithScroll: () => null,
 }));
 jest.mock('../../../../../containers/RoutedLink/RoutedLink', () => ({
-    RoutedLink: ({children}: {children: React.ReactNode}) => <a>{children}</a>,
+    RoutedLink: ({children, ...props}: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+        <a {...props}>{children}</a>
+    ),
 }));
 
 jest.mock('../../../../../containers/Block/Block', () => ({
@@ -38,10 +55,29 @@ jest.mock('../../../../../store/selectors/thor/unipika', () => ({
 }));
 
 jest.mock('../../../../../components/DataTableGravity', () => ({
-    DataTableGravity: () => <div data-testid="results-table" />,
+    DataTableGravity: ({
+        table,
+    }: {
+        table: {
+            columns: Array<{
+                id: string;
+                cell: (props: {row: {original: FlowStateResultRow}}) => React.ReactNode;
+            }>;
+            data: Array<FlowStateResultRow>;
+        };
+    }) => (
+        <div data-testid="results-table">
+            {table.data[0] &&
+                table.columns
+                    .slice(1)
+                    .map((column) => (
+                        <div key={column.id}>{column.cell({row: {original: table.data[0]}})}</div>
+                    ))}
+        </div>
+    ),
     TableCell: ({children}: {children: React.ReactNode}) => <div>{children}</div>,
     selectionColumn: {},
-    useTable: () => ({}),
+    useTable: (options: unknown) => options,
 }));
 
 jest.mock('./i18n', () => ({
@@ -118,4 +154,60 @@ it('does not render NoContent when the response contains section errors', () => 
     renderResults({response: {errors: ['section failed']}, readSucceeded: true});
     expect(screen.getByTestId('error').textContent).toContain('section failed');
     expect(screen.queryByTestId('no-content')).toBeNull();
+});
+
+it('keeps copy and inspection on Value only and exposes raw response inspection', () => {
+    const response: FlowReadStatesResponse = {
+        key_states: [
+            {
+                computation_id: 'state',
+                key: ['account'],
+                states: {'/counter': {count: 42}},
+            },
+        ],
+    };
+
+    renderResults({response});
+
+    expect(document.querySelectorAll('[data-copy-text]')).toHaveLength(1);
+    expect(document.querySelector('[data-copy-text]')?.getAttribute('data-copy-text')).toContain(
+        'count',
+    );
+    expect(screen.getByRole('button', {name: 'tooltip_show-value'})).not.toBeNull();
+    expect(screen.getByRole('button', {name: 'tooltip_show-raw-response'})).not.toBeNull();
+    expect(
+        screen
+            .getByRole('button', {name: 'tooltip_show-raw-response'})
+            .getAttribute('data-modal-title'),
+    ).toBe('title_raw-response');
+});
+
+it('keeps computation and backing storage navigation persistently accessible', () => {
+    const response: FlowReadStatesResponse = {
+        key_states: [{computation_id: 'state', key: ['account'], states: {'/counter': 42}}],
+    };
+
+    renderResults({
+        response,
+        handlers: {
+            ...handlers,
+            resolveComputationLink: () => '/hahn/flow/state',
+            resolveStoragePath: () => ({cluster: 'hahn', path: '//home/flow/state'}),
+        },
+    });
+
+    expect(screen.getByTitle('link_open-computation-page').getAttribute('href')).toBe(
+        '/hahn/flow/state',
+    );
+    expect(screen.getByLabelText('link_open-backing-storage').getAttribute('href')).toContain(
+        '//home/flow/state',
+    );
+});
+
+it('describes the bounded response without presenting a row count or raw switch', () => {
+    renderResults({response: {partition_states: []}});
+
+    expect(screen.getByText('text_bounded-results')).not.toBeNull();
+    expect(screen.queryByText(/label_rows/)).toBeNull();
+    expect(screen.queryByRole('checkbox')).toBeNull();
 });

@@ -2,6 +2,7 @@ import React from 'react';
 import {type Meta, type StoryFn, type StoryObj} from '@storybook/react';
 
 import type {FlowReadStatesResponse} from '../../../../../../../shared/yt-types';
+import AttributesModal from '../../../../../../containers/AttributesModal/AttributesModal';
 import type {FlowStateCellHandlers} from '../../types';
 import {FlowStateResults} from '../FlowStateResults';
 
@@ -35,7 +36,7 @@ const meta: Meta<typeof FlowStateResults> = {
     component: FlowStateResults,
     decorators: [
         (Story: StoryFn) => (
-            <div style={{width: 1200, height: 320, padding: 20}}>
+            <div style={{width: '100%', maxWidth: 1200, minHeight: 320, padding: 20}}>
                 <Story />
             </div>
         ),
@@ -46,8 +47,10 @@ export default meta;
 type Story = StoryObj<typeof FlowStateResults>;
 
 const baseArgs = {
-    appliedLimit: 10,
-    loading: false,
+    hasScope: true,
+    initialLoading: false,
+    refreshing: false,
+    readSucceeded: true,
     handlers,
     rowSelection: {},
     onRowSelectionChange: () => {},
@@ -55,20 +58,76 @@ const baseArgs = {
     onDeleteSelected: () => {},
 };
 
-export const Default: Story = {
+function renderResults(args: React.ComponentProps<typeof FlowStateResults>) {
+    return (
+        <React.Fragment>
+            <FlowStateResults {...args} />
+            <AttributesModal />
+        </React.Fragment>
+    );
+}
+
+export const Populated: Story = {
     args: {...baseArgs, response},
-    render: (args) => <FlowStateResults {...args} />,
+    render: renderResults,
 };
 
-export const NoResults: Story = {
-    args: {...baseArgs, response: undefined},
-    render: (args) => <FlowStateResults {...args} />,
+export const NoScope: Story = {
+    args: {...baseArgs, hasScope: false, response: undefined, readSucceeded: false},
+    render: renderResults,
 };
 
-export const WithResponseErrors: Story = {
+export const Loading: Story = {
+    args: {...baseArgs, response: undefined, initialLoading: true, readSucceeded: false},
+    render: renderResults,
+};
+
+export const Refreshing: Story = {
+    args: {...baseArgs, response, refreshing: true},
+    render: renderResults,
+};
+
+export const SuccessfulEmpty: Story = {
+    args: {...baseArgs, response: {}},
+    render: renderResults,
+};
+
+export const TransportError: Story = {
+    args: {...baseArgs, response: undefined, readSucceeded: false, error: {message: 'Read failed'}},
+    render: renderResults,
+};
+
+export const ResponseError: Story = {
     args: {
         ...baseArgs,
         response: {...response, errors: ['state //home/flow/pipeline/state is locked']},
     },
-    render: (args) => <FlowStateResults {...args} />,
+    render: renderResults,
+};
+
+export const NarrowLongContent: Story = {
+    args: {
+        ...baseArgs,
+        response: {
+            key_states: [
+                {
+                    computation_id: 'long-computation-name-for-checkout-state-processing',
+                    key: ['4506162232340681623', 'checkout-with-an-unusually-long-key-value'],
+                    states: {
+                        '/a/very/long/state/name/that/keeps/the/table-dense': {
+                            nested: {description: 'A long value that must remain inspectable'},
+                        },
+                    },
+                },
+            ],
+        },
+    },
+    decorators: [
+        (StoryComponent: StoryFn) => (
+            <div style={{width: 480}}>
+                <StoryComponent />
+            </div>
+        ),
+    ],
+    render: renderResults,
 };
