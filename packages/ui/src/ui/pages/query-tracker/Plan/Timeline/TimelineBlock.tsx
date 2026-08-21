@@ -1,5 +1,5 @@
 import React, {type CSSProperties, type FC} from 'react';
-import {RangeDateSelection} from '@gravity-ui/date-components';
+import {RangeDateSelection} from '../../../../components/RangeDateSelection';
 import {TimelineCanvas, useTimelineEvent} from '@gravity-ui/timeline/react';
 import {type Timeline} from '@gravity-ui/timeline';
 import {type DateTime, dateTimeParse} from '../../../../utils/date-utils';

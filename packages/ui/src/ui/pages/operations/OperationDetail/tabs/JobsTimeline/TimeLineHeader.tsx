@@ -13,7 +13,7 @@ import {
     setInterval,
 } from '../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
 import {type DateTime, dateTimeParse} from '../../../../../utils/date-utils';
-import {RangeDateSelection} from '@gravity-ui/date-components';
+import {RangeDateSelection} from '../../../../../components/RangeDateSelection';
 import ChevronsExpandToLinesIcon from '@gravity-ui/icons/svgs/chevrons-expand-to-lines.svg';
 import {resetInterval} from '../../../../../store/actions/operations/jobs-timeline';
 
