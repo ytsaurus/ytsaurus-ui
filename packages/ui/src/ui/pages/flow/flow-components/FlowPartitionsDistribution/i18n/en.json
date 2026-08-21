@@ -1,4 +1,5 @@
 {
+  "action_partitions-distribution": "Partitions distribution",
   "title_distribution": "Partitions distribution: {{computation}}",
   "context_partitions-count": "{{count}} partitions",
   "context_no-partitions": "There are no partitions to display",

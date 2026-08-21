@@ -1,4 +1,5 @@
-import {Flex, SegmentedRadioGroup, Text} from '@gravity-ui/uikit';
+import {ChartColumn} from '@gravity-ui/icons';
+import {Button, Flex, Icon, SegmentedRadioGroup, Text} from '@gravity-ui/uikit';
 import {Tooltip} from '@ytsaurus/components';
 import cn from 'bem-cn-lite';
 import minBy_ from 'lodash/minBy';
@@ -6,20 +7,20 @@ import React from 'react';
 import {
     type FlowComputationDetailsType,
     type FlowViewNodePerformanceMetrics,
-} from '../../../../../../../shared/yt-types';
-import {FlowTab} from '../../../../../../store/reducers/flow/filters';
-import {makeFlowLink} from '../../../../../../utils/app-url';
-import Link from '../../../../../../containers/Link/Link';
-import {Yson} from '../../../../../../components/Yson/Yson';
-import format from '../../../../../../common/hammer/format';
-import {DialogWrapper} from '../../../../../../components/DialogWrapper/DialogWrapper';
-import Loader from '../../../../../../components/Loader/Loader';
-import {YTChartKitBars, YTChartKitHistogram} from '../../../../../../components/YTChartKit';
-import {FlowError} from '../../../../../../pages/flow/flow-components/FlowError/FlowError';
-import {useFlowExecuteQuery} from '../../../../../../store/api/yt';
-import {useSelector} from '../../../../../../store/redux-hooks';
-import {selectFlowPipelinePath} from '../../../../../../store/selectors/flow/filters';
-import './FlowPartitionsDistributionDialogContext.scss';
+} from '../../../../../shared/yt-types';
+import {FlowTab} from '../../../../store/reducers/flow/filters';
+import {makeFlowLink} from '../../../../utils/app-url';
+import Link from '../../../../containers/Link/Link';
+import {Yson} from '../../../../components/Yson/Yson';
+import format from '../../../../common/hammer/format';
+import {DialogWrapper} from '../../../../components/DialogWrapper/DialogWrapper';
+import Loader from '../../../../components/Loader/Loader';
+import {YTChartKitBars, YTChartKitHistogram} from '../../../../components/YTChartKit';
+import {FlowError} from '../FlowError/FlowError';
+import {useFlowExecuteQuery} from '../../../../store/api/yt';
+import {useSelector} from '../../../../store/redux-hooks';
+import {selectFlowPipelinePath} from '../../../../store/selectors/flow/filters';
+import './FlowPartitionsDistribution.scss';
 import i18n from './i18n';
 
 const block = cn('yt-flow-partitions-distribution');
@@ -100,6 +101,22 @@ export function useFlowPartitionsDistributionDialogContext() {
     return {setVisibleDistribution};
 }
 
+export function FlowPartitionsDistributionButton({computationId}: {computationId: string}) {
+    const {setVisibleDistribution} = useFlowPartitionsDistributionDialogContext();
+    return (
+        <Tooltip content={i18n('action_partitions-distribution')}>
+            <Button
+                view="flat-info"
+                size="xs"
+                onClick={() => setVisibleDistribution(computationId)}
+                extraProps={{'aria-label': i18n('action_partitions-distribution')}}
+            >
+                <Icon data={ChartColumn} size={12} />
+            </Button>
+        </Tooltip>
+    );
+}
+
 export function FlowPartitionsDistributionDialogContext({children}: {children: React.ReactNode}) {
     const [computationId, setVisibleDistribution] = React.useState<string>();
     return (
@@ -117,7 +134,7 @@ export function FlowPartitionsDistributionDialogContext({children}: {children: R
                         caption={i18n('title_distribution', {computation: computationId})}
                     />
                     <DialogWrapper.Body className={block('body')}>
-                        <FlowPartitionsDistributionContent computationId={computationId} />
+                        <FlowPartitionsDistribution computationId={computationId} />
                     </DialogWrapper.Body>
                 </DialogWrapper>
             )}
@@ -125,7 +142,7 @@ export function FlowPartitionsDistributionDialogContext({children}: {children: R
     );
 }
 
-function FlowPartitionsDistributionContent({computationId}: {computationId: string}) {
+export function FlowPartitionsDistribution({computationId}: {computationId: string}) {
     const pipeline_path = useSelector(selectFlowPipelinePath);
     const [metric, setMetric] = React.useState<DistributionMetric>('cpu_usage');
     const [view, setView] = React.useState<DistributionView>('by-partition');

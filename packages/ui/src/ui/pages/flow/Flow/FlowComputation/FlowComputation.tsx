@@ -6,6 +6,7 @@ import Tabs from '../../../../components/Tabs/Tabs';
 import {FlowEntityTitle} from '../../../../pages/flow/flow-components/FlowEntityHeader';
 import {FlowError} from '../../../../pages/flow/flow-components/FlowError/FlowError';
 import {FlowMessagesCollapsible} from '../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
+import {FlowPartitionsDistribution} from '../../../../pages/flow/flow-components/FlowPartitionsDistribution/FlowPartitionsDistribution';
 import {
     FlowPathMeta,
     getLoadedDataMetaItems,
@@ -50,6 +51,11 @@ export function FlowComputation() {
                     path={`${path}/details`}
                     render={() => <FlowComputationDetails computation={computation} />}
                 />
+                <Route
+                    exact
+                    path={`${path}/distribution`}
+                    render={() => <FlowComputationDistribution computation={computation} />}
+                />
                 <Route exact path={`${path}/partition/:partition?`} component={FlowPartition} />
                 {Boolean(monitoringComponent) && (
                     <Route
@@ -78,6 +84,13 @@ function FlowComputationTabs({computation}: {computation: string}) {
                     value: 'details',
                     text: i18n('details'),
                     url: `/${cluster}/${Page.FLOWS}/computations/${encodeURIComponent(computation)}/details`,
+                    routed: true,
+                    show: true,
+                },
+                {
+                    value: 'distribution',
+                    text: i18n('distribution'),
+                    url: `/${cluster}/${Page.FLOWS}/computations/${encodeURIComponent(computation)}/distribution`,
                     routed: true,
                     show: true,
                 },
@@ -118,6 +131,21 @@ function FlowComputationDetails({computation}: {computation: string}) {
             </div>
             <FlowComputationPartitions partitions={data?.partitions} />
             <div ref={scrollToRef} />
+        </>
+    );
+}
+
+function FlowComputationDistribution({computation}: {computation: string}) {
+    const pipeline_path = useSelector(selectFlowPipelinePath);
+
+    const {data} = useFlowComputationData({computation, pipeline_path});
+
+    return (
+        <>
+            <FlowEntityTitle title={computation} status={data?.status} />
+            <FlowComputationMeta computation={computation} pipeline_path={pipeline_path} />
+            <FlowComputationTabs computation={computation} />
+            <FlowPartitionsDistribution computationId={computation} />
         </>
     );
 }

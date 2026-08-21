@@ -4,6 +4,5 @@
   "context_high-consumption": "High consumption",
   "field_zoom-to": "Zoom to:",
   "action_graph-data": "Graph data",
-  "action_messages": "Messages ({{count}})",
-  "action_partitions-distribution": "Partitions distribution"
+  "action_messages": "Messages ({{count}})"
 }

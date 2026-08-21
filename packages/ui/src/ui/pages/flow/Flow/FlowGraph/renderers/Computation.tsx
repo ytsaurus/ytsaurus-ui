@@ -1,6 +1,4 @@
-import {ChartColumn} from '@gravity-ui/icons';
-import {Button, Flex, Icon, Progress, type ProgressTheme, Text} from '@gravity-ui/uikit';
-import {Tooltip} from '@ytsaurus/components';
+import {Flex, Progress, type ProgressTheme, Text} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {type FlowComputationType} from '../../../../../../shared/yt-types';
@@ -11,8 +9,8 @@ import {useSelector} from '../../../../../store/redux-hooks';
 import {selectFlowPipelinePath} from '../../../../../store/selectors/flow/filters';
 import {makeFlowLink} from '../../../../../utils/app-url';
 import {addProgressStackSpacers} from '../../../../../utils/progress';
+import {FlowPartitionsDistributionButton} from '../../../flow-components/FlowPartitionsDistribution/FlowPartitionsDistribution';
 import {type FlowGraphBlockItem} from '../FlowGraph';
-import i18n from '../i18n';
 import './Computation.scss';
 import {
     FlowCaption1,
@@ -21,7 +19,6 @@ import {
     TextWithHighConsumption,
 } from './FlowGraphRenderer';
 import {FlowMeta} from './FlowMeta';
-import {useFlowPartitionsDistributionDialogContext} from './FlowPartitionsDistributionDialogContext/FlowPartitionsDistributionDialogContext';
 
 const block = cn('yt-flow-computation');
 
@@ -123,7 +120,6 @@ const STATE_TO_THEME: Record<FlowComputationPartitionStates, ProgressTheme> = {
 };
 
 function ComputaionProgress({stats, computationId}: ComputationProgressProps) {
-    const {setVisibleDistribution} = useFlowPartitionsDistributionDialogContext();
     const {count = NaN, count_by_state} = stats ?? {};
     const {stack, history} = React.useMemo(() => {
         const history: ComputationProgressHistoryProps['data'] = [];
@@ -149,16 +145,7 @@ function ComputaionProgress({stats, computationId}: ComputationProgressProps) {
                     </Text>
                 </FlowCaption2>
                 {computationId !== undefined && count > 0 && (
-                    <Tooltip content={i18n('action_partitions-distribution')}>
-                        <Button
-                            view="flat-secondary"
-                            size="xs"
-                            onClick={() => setVisibleDistribution(computationId)}
-                            extraProps={{'aria-label': i18n('action_partitions-distribution')}}
-                        >
-                            <Icon data={ChartColumn} size={12} />
-                        </Button>
-                    </Tooltip>
+                    <FlowPartitionsDistributionButton computationId={computationId} />
                 )}
                 <ComputationProgressHistory data={history} />
             </Flex>
