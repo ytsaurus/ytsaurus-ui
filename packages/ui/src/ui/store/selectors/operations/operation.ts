@@ -80,7 +80,8 @@ export const selectOperationId = (state: RootState) =>
 export const selectOperationTasks = createSelector(
     [selectOperation],
     (operation): Array<OperationTask> | undefined => {
-        return ypath.getValue(operation, '/@progress/tasks');
+        const progress = ypath.getValue(operation, '/@progress') || undefined;
+        return ypath.getValue(progress, '/tasks');
     },
 );
 export const selectOperationTasksNames = createSelector(

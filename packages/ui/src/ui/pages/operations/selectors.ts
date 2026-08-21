@@ -177,7 +177,7 @@ export class ListOperationSelector extends OperationSelector {
         this.finishTime = ypath.getValue(attributes, '/finish_time');
         this.duration = (moment(this.finishTime) as any) - (moment(this.startTime) as any);
 
-        const progress = ypath.getValue(attributes, '/brief_progress');
+        const progress = ypath.getValue(attributes, '/brief_progress') || undefined;
         const jobs = (this.jobs = ypath.getValue(progress, '/jobs'));
 
         if (typeof jobs !== 'undefined') {
@@ -291,7 +291,7 @@ export class DetailedOperationSelector extends OperationSelector {
 
         this.computePools(attributes);
 
-        const progress = ypath.getValue(attributes, '/progress');
+        const progress = ypath.getValue(attributes, '/progress') || undefined;
         const jobs = (this.jobs = ypath.getValue(progress, '/jobs'));
 
         if (typeof jobs !== 'undefined') {

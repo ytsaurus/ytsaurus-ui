@@ -8,12 +8,17 @@ import sortBy_ from 'lodash/sortBy';
 import ypath from '../../../../common/thor/ypath';
 import i18n from './i18n';
 
+export function getOperationProgress(operation) {
+    return ypath.getValue(operation, '/@progress') || undefined;
+}
+
 function prepareGraphData(operation) {
     if (hasProgressTasks(operation)) {
         return prepareGraphDataByTasks(operation);
     }
 
-    const dataFlowGraph = ypath.getValue(operation, '/@progress/data_flow_graph');
+    const progress = getOperationProgress(operation);
+    const dataFlowGraph = ypath.getValue(progress, '/data_flow_graph');
     const jobTypeOrder = ypath.getValue(dataFlowGraph, '/topological_ordering');
     const statistics = ypath.getValue(dataFlowGraph, '/edges');
 
@@ -35,8 +40,9 @@ function prepareGraphData(operation) {
 }
 
 function prepareGraphDataByTasks(operation) {
-    const dataFlow = ypath.getValue(operation, '/@progress/data_flow');
-    const tasks = ypath.getValue(operation, '/@progress/tasks');
+    const progress = getOperationProgress(operation);
+    const dataFlow = ypath.getValue(progress, '/data_flow');
+    const tasks = ypath.getValue(progress, '/tasks');
 
     const res = reduce_(
         dataFlow,
@@ -93,15 +99,12 @@ function isEmptyStatistics(stats) {
 }
 
 export function prepareCompletedUsage(operation) {
-    const progress = ypath.getValue(operation, '/@progress');
+    const progress = getOperationProgress(operation);
 
     if (progress) {
         let statistics = [];
 
-        const estimatedInputStatistics = ypath.getValue(
-            operation,
-            '/@progress/estimated_input_statistics',
-        );
+        const estimatedInputStatistics = ypath.getValue(progress, '/estimated_input_statistics');
 
         if (estimatedInputStatistics) {
             statistics.push({
@@ -124,5 +127,6 @@ export function prepareIntermediateUsage(operation, intermediate) {
 }
 
 export function hasProgressTasks(operation) {
-    return ypath.getValue(operation, '/@progress/tasks');
+    const progress = getOperationProgress(operation);
+    return ypath.getValue(progress, '/tasks');
 }
