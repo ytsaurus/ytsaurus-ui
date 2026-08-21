@@ -9,6 +9,7 @@
   "hint_state-name": "Name the computation registered this state under. Names are path-like and are chosen by the pipeline author, so a computation with a single state usually shows \"/state\".",
   "hint_filter-already-applied": "The filters are already narrowed to this value",
   "column_value": "Value",
+  "action_copy-value": "Copy value",
   "tooltip_show-value": "Show value",
   "tooltip_show-raw-response": "Show raw response",
   "title_raw-response": "Raw read-states response",
@@ -17,5 +18,7 @@
   "text_selected-rows": "Selected: {{count}}",
   "action_delete": "Delete",
   "action_delete-row": "Delete state row",
-  "alert_no-write-permission": "Deleting states requires write permission on the pipeline"
+  "alert_no-write-permission": "Deleting states requires write permission on the pipeline",
+  "status_loading": "Loading states",
+  "status_refreshing": "Refreshing states"
 }

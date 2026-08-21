@@ -41,7 +41,7 @@ export function FlowStateKeyBuilder({columns, values, onChange}: FlowStateKeyBui
                 <TextInput
                     className={block('raw-input')}
                     label={i18n('field_raw-key')}
-                    placeholder="[foo; bar; baz]"
+                    placeholder={i18n('placeholder_raw-key')}
                     value={rawDraft}
                     hasClear
                     validationState={validationError ? 'invalid' : undefined}

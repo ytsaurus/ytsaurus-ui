@@ -10,6 +10,7 @@
   "validation_key-target-mismatch": "A key only addresses key states; change Target",
   "validation_no-scope": "Select a computation or a partition first",
   "field_raw-key": "Raw key",
+  "placeholder_raw-key": "[foo; bar; baz]",
   "action_edit-key-fields": "Edit fields",
   "title_edit-key-fields": "Edit key fields",
   "action_apply-key-fields": "Apply"

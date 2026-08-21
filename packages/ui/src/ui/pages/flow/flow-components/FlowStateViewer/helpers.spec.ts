@@ -50,7 +50,11 @@ import {
     normalizeReadStatesResponse,
 } from '../../../../store/api/yt/flow/read-states-normalize';
 import type {FlowKeySchemaResolution, FlowStateFiltersValue, FlowStateResultRow} from './types';
-import type {FlowDeleteStatesBody, FlowStaticSpec} from '../../../../../shared/yt-types';
+import type {
+    FlowDeleteStatesBody,
+    FlowDeleteStatesResponse,
+    FlowStaticSpec,
+} from '../../../../../shared/yt-types';
 
 const unipika = require('@gravity-ui/unipika/lib/unipika') as {
     formatFromYSON: (node: unknown, settings: Record<string, unknown>) => string;
@@ -330,6 +334,20 @@ describe('buildStateAccessBody', () => {
                 target: 'key_state',
             },
         });
+    });
+    it('preserves a __proto__ key column as an own literal property', () => {
+        const built = buildStateAccessBody(
+            filters({
+                computationId: 'state',
+                keyValues: Object.fromEntries([['__proto__', 'literal']]),
+            }),
+            [{name: '__proto__', type: 'string'}],
+        );
+
+        expect(
+            Object.prototype.hasOwnProperty.call('body' in built && built.body.key, '__proto__'),
+        ).toBe(true);
+        expect(JSON.stringify('body' in built && built.body.key)).toBe('{"__proto__":"literal"}');
     });
     it('omits target=all', () => {
         expect(buildStateAccessBody(filters({computationId: 'c1'}), [])).toEqual({
@@ -893,6 +911,25 @@ describe('runRowDeletes', () => {
         expect(outcomes).toEqual([]);
         expect(execute).not.toHaveBeenCalled();
     });
+    it('drops an outcome when cancellation happens during the request', async () => {
+        let resolveDelete: ((value: FlowDeleteStatesResponse) => void) | undefined;
+        let cancelled = false;
+        const execute = jest.fn(
+            () =>
+                new Promise<FlowDeleteStatesResponse>((resolve) => {
+                    resolveDelete = resolve;
+                }),
+        );
+        const pending = runRowDeletes([keyRow], execute, {
+            force: false,
+            isCancelled: () => cancelled,
+        });
+
+        cancelled = true;
+        resolveDelete?.({committed: true});
+
+        expect(await pending).toEqual([]);
+    });
 });
 
 describe('delete outcome aggregation', () => {
@@ -1037,6 +1074,12 @@ describe('isWriteDeniedByPermission', () => {
     });
     it('fails closed when the permission check resolves with an error envelope', () => {
         expect(isWriteDeniedByPermission({})).toBe(true);
+    });
+    it('denies a cached allow while permission is fetching or errored', () => {
+        expect(isWriteDeniedByPermission({data: {action: 'allow'}, isFetching: true})).toBe(true);
+        expect(
+            isWriteDeniedByPermission({data: {action: 'allow'}, error: new Error('stale')}),
+        ).toBe(true);
     });
 });
 

@@ -1,12 +1,14 @@
 /** @jest-environment jsdom */
 import React from 'react';
-import {act, fireEvent, render, screen} from '@testing-library/react';
+import {act, fireEvent, render, renderHook, screen} from '@testing-library/react';
 
 import type {FlowStateResultRow} from '../types';
 import type {GetPipelineStateData} from '../../../../../../shared/yt-types';
 
 const mockUsePipelineState = jest.fn();
 const mockFlowDeleteStates = jest.fn();
+const mockPermissionRefetch = jest.fn();
+const mockPipelineStateRefetch = jest.fn();
 
 jest.mock('../../../../../i18n', () => ({
     __esModule: true,
@@ -30,6 +32,7 @@ jest.mock('../../../../../store/api/yt/flow', () => ({
     ],
 }));
 jest.mock('../../../../../containers/Dialog', () => ({
+    makeFormSubmitError: (error: unknown) => ({validationErrors: {form: error}}),
     YTDFDialog: (() => {
         const MockReact = jest.requireActual('react');
         return function MockYTDFDialog(props: {
@@ -37,13 +40,18 @@ jest.mock('../../../../../containers/Dialog', () => ({
             fields: Array<{name: string; type: string; extras?: {children?: React.ReactNode}}>;
             initialValues: {force: boolean};
             isApplyDisabled: (state: {values: {force: boolean}; submitting: boolean}) => boolean;
-            onAdd: (form: {getState: () => {values: {force: boolean}}}) => Promise<void>;
-            onClose: () => void;
+            onAdd: (form: {
+                getState: () => {values: {force: boolean}; submitting: boolean};
+            }) => Promise<{validationErrors?: unknown} | undefined | void>;
+            onClose: (form: {
+                getState: () => {values: {force: boolean}; submitting: boolean};
+            }) => void;
             footerProps: {textApply: string; textCancel: string};
         }) {
             const [force, setForce] = MockReact.useState(props.initialValues.force);
             const [submitting, setSubmitting] = MockReact.useState(false);
             if (!props.visible) return null;
+            const form = {getState: () => ({values: {force}, submitting})};
             return (
                 <div role="dialog">
                     {props.fields.map((field) =>
@@ -62,13 +70,25 @@ jest.mock('../../../../../containers/Dialog', () => ({
                             </MockReact.Fragment>
                         ),
                     )}
-                    <button onClick={props.onClose}>{props.footerProps.textCancel}</button>
+                    <button onClick={() => props.onClose(form)}>
+                        {props.footerProps.textCancel}
+                    </button>
+                    <button onClick={() => props.onClose(form)}>Escape close</button>
+                    <button onClick={() => props.onClose(form)}>Header close</button>
+                    <button onClick={() => props.onClose(form)}>Backdrop close</button>
                     <button
                         disabled={props.isApplyDisabled({values: {force}, submitting})}
                         onClick={async () => {
                             setSubmitting(true);
-                            await props.onAdd({getState: () => ({values: {force}})});
+                            const response = await props.onAdd({
+                                getState: () => ({values: {force}, submitting: true}),
+                            });
                             setSubmitting(false);
+                            if (!response?.validationErrors) {
+                                props.onClose({
+                                    getState: () => ({values: {force}, submitting: false}),
+                                });
+                            }
                         }}
                     >
                         {props.footerProps.textApply}
@@ -80,6 +100,7 @@ jest.mock('../../../../../containers/Dialog', () => ({
 }));
 
 import {FlowDeleteStatesDialog} from './FlowDeleteStatesDialog';
+import {useFlowDeleteStates} from './use-flow-delete-states';
 
 const rows: Array<FlowStateResultRow> = [
     {section: 'key_state', computationId: 'state', key: [1], stateName: '/counter', value: 1},
@@ -92,13 +113,27 @@ function deleteButton() {
 
 function renderDialog(
     pipelineState: GetPipelineStateData | undefined,
-    options: {onClose?: jest.Mock; onCommitted?: jest.Mock; isFetching?: boolean} = {},
+    options: {
+        onClose?: jest.Mock;
+        onCommitted?: jest.Mock;
+        isFetching?: boolean;
+        pipelineError?: unknown;
+        permission?: {data?: {action?: 'allow' | 'deny'}; error?: unknown; isFetching?: boolean};
+    } = {},
 ) {
     mockUsePipelineState.mockReturnValue({
         data: pipelineState,
-        error: undefined,
+        error: options.pipelineError,
         isFetching: options.isFetching ?? false,
+        refetch: mockPipelineStateRefetch,
     });
+    const permission = {
+        data: {action: 'allow' as const},
+        error: undefined,
+        isFetching: false,
+        refetch: mockPermissionRefetch,
+        ...options.permission,
+    };
     const onClose = options.onClose ?? jest.fn();
     const onCommitted = options.onCommitted ?? jest.fn();
     render(
@@ -107,6 +142,7 @@ function renderDialog(
             onClose={onClose}
             pipeline_path="//pipeline"
             rows={rows}
+            permission={permission}
             onCommitted={onCommitted}
         />,
     );
@@ -115,6 +151,8 @@ function renderDialog(
 
 beforeEach(() => {
     jest.clearAllMocks();
+    mockPermissionRefetch.mockReturnValue({unwrap: () => Promise.resolve({action: 'allow'})});
+    mockPipelineStateRefetch.mockReturnValue({unwrap: () => Promise.resolve('Stopped')});
 });
 
 it('sends one-step committed deletes and closes after full success', async () => {
@@ -170,7 +208,13 @@ it('keeps the dialog open and reports outcomes after a partial failure', async (
 
     await act(async () => fireEvent.click(deleteButton()));
 
-    expect(callbacks.onCommitted).not.toHaveBeenCalled();
+    expect(callbacks.onCommitted).toHaveBeenCalledWith(
+        [
+            expect.objectContaining({response: {committed: true}}),
+            expect.objectContaining({response: {committed: false, errors: ['locked']}}),
+        ],
+        false,
+    );
     expect(callbacks.onClose).not.toHaveBeenCalled();
     expect(screen.getByText('alert_delete-failed')).not.toBeNull();
     expect(screen.getByText('locked')).not.toBeNull();
@@ -179,4 +223,114 @@ it('keeps the dialog open and reports outcomes after a partial failure', async (
 it('disables Delete while pipeline state is loading', () => {
     renderDialog(undefined, {isFetching: true});
     expect(deleteButton().disabled).toBe(true);
+});
+
+it('disables Delete for a cached Stopped state with a query error', () => {
+    renderDialog('Stopped', {pipelineError: new Error('state unavailable')});
+    expect(deleteButton().disabled).toBe(true);
+});
+
+it('disables Delete for a cached allow while permission is refreshing', () => {
+    renderDialog('Stopped', {permission: {data: {action: 'allow'}, isFetching: true}});
+    expect(deleteButton().disabled).toBe(true);
+});
+
+it('issues no mutation when fresh permission is revoked at Apply time', async () => {
+    mockPermissionRefetch.mockReturnValue({unwrap: () => Promise.resolve({action: 'deny'})});
+    const callbacks = renderDialog('Stopped');
+
+    await act(async () => fireEvent.click(deleteButton()));
+
+    expect(mockFlowDeleteStates).not.toHaveBeenCalled();
+    expect(callbacks.onCommitted).not.toHaveBeenCalled();
+    expect(callbacks.onClose).not.toHaveBeenCalled();
+});
+
+it('issues no mutation when the fresh pipeline state becomes Working', async () => {
+    mockPipelineStateRefetch.mockReturnValue({unwrap: () => Promise.resolve('Working')});
+    const callbacks = renderDialog('Stopped');
+
+    await act(async () => fireEvent.click(deleteButton()));
+
+    expect(mockFlowDeleteStates).not.toHaveBeenCalled();
+    expect(callbacks.onCommitted).not.toHaveBeenCalled();
+    expect(callbacks.onClose).not.toHaveBeenCalled();
+});
+
+it('issues no mutation when a fresh gate request fails', async () => {
+    mockPermissionRefetch.mockReturnValue({
+        unwrap: () => Promise.reject(new Error('permission unavailable')),
+    });
+    const callbacks = renderDialog('Stopped');
+
+    await act(async () => fireEvent.click(deleteButton()));
+
+    expect(mockFlowDeleteStates).not.toHaveBeenCalled();
+    expect(callbacks.onCommitted).not.toHaveBeenCalled();
+    expect(callbacks.onClose).not.toHaveBeenCalled();
+});
+
+it('blocks Cancel, Escape, header and backdrop close while submitting, then auto-closes once', async () => {
+    let resolveFirstDelete: ((value: {committed: true}) => void) | undefined;
+    mockFlowDeleteStates
+        .mockImplementationOnce(
+            () =>
+                new Promise((resolve) => {
+                    resolveFirstDelete = resolve;
+                }),
+        )
+        .mockResolvedValue({committed: true});
+    const callbacks = renderDialog('Stopped');
+
+    fireEvent.click(deleteButton());
+    await act(async () => Promise.resolve());
+    fireEvent.click(screen.getByRole('button', {name: 'action_cancel'}));
+    fireEvent.click(screen.getByRole('button', {name: 'Escape close'}));
+    fireEvent.click(screen.getByRole('button', {name: 'Header close'}));
+    fireEvent.click(screen.getByRole('button', {name: 'Backdrop close'}));
+    expect(callbacks.onClose).not.toHaveBeenCalled();
+
+    await act(async () => {
+        resolveFirstDelete?.({committed: true});
+    });
+
+    expect(callbacks.onCommitted).toHaveBeenCalledTimes(1);
+    expect(callbacks.onClose).toHaveBeenCalledTimes(1);
+});
+
+it('rejects an old in-flight delete session after the dialog closes', async () => {
+    let resolveDelete: ((value: {committed: true}) => void) | undefined;
+    mockFlowDeleteStates.mockImplementation(
+        () =>
+            new Promise((resolve) => {
+                resolveDelete = resolve;
+            }),
+    );
+    mockUsePipelineState.mockReturnValue({
+        data: 'Stopped',
+        error: undefined,
+        isFetching: false,
+        refetch: mockPipelineStateRefetch,
+    });
+    const permission = {
+        data: {action: 'allow' as const},
+        error: undefined,
+        isFetching: false,
+        refetch: mockPermissionRefetch,
+    };
+    const {result, rerender} = renderHook(
+        ({visible}) =>
+            useFlowDeleteStates({visible, pipeline_path: '//pipeline', rows, permission}),
+        {initialProps: {visible: true}},
+    );
+
+    let pending: ReturnType<typeof result.current.runDeleteStates> | undefined;
+    await act(async () => {
+        pending = result.current.runDeleteStates(false);
+        await Promise.resolve();
+    });
+    rerender({visible: false});
+    await act(async () => resolveDelete?.({committed: true}));
+
+    await expect(pending).resolves.toEqual(expect.objectContaining({status: 'stale'}));
 });

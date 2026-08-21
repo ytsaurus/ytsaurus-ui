@@ -13,7 +13,7 @@
     &__hover-action {
         display: inline-flex;
         align-items: center;
-        visibility: hidden;
+        opacity: 0;
     }
 
     &__row-link {
@@ -21,8 +21,13 @@
         align-items: center;
     }
 
-    .yt-gravity-table__row:hover .yt-flow-state-results__hover-action {
-        visibility: visible;
+    .yt-gravity-table__row:hover .yt-flow-state-results__hover-action,
+    .yt-gravity-table__row:focus-within .yt-flow-state-results__hover-action {
+        opacity: 1;
+    }
+
+    &__table-pane {
+        overflow-x: auto;
     }
 
     &__content {
@@ -40,5 +45,17 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    &__status-label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
     }
 }

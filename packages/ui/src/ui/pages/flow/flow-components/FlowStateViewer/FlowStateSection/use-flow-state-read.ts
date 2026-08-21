@@ -55,6 +55,7 @@ export function useFlowStateRead({
     }, [fixedComputationId, initialFilters, staticSpec]);
 
     const debouncedFilters = useDebouncedValue(filters, AUTO_LOAD_DEBOUNCE_MS);
+    const debouncePending = filters !== debouncedFilters;
     const hasDebouncedScope = Boolean(
         debouncedFilters.computationId || debouncedFilters.partitionId,
     );
@@ -86,8 +87,10 @@ export function useFlowStateRead({
         validationError,
         response,
         initialLoading: hasDebouncedScope && isFetching && !response,
-        refreshing: hasDebouncedScope && isFetching && Boolean(response),
-        readSucceeded: hasDebouncedScope && isSuccess && !isFetching && Boolean(response),
+        debouncePending,
+        refreshing: hasDebouncedScope && Boolean(response) && (debouncePending || isFetching),
+        readSucceeded:
+            hasDebouncedScope && !debouncePending && isSuccess && !isFetching && Boolean(response),
         error,
         refetch,
     };

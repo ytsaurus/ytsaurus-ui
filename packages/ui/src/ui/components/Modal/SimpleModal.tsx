@@ -7,6 +7,7 @@ import {Button, Loader} from '@gravity-ui/uikit';
 import {ModalWrapper} from '../ModalWrapper/ModalWrapper';
 
 import withHandledScrollBar from '../../hocs/components/Modal/withHandledScrollBar';
+import i18n from './i18n';
 
 import './Modal.scss';
 
@@ -46,6 +47,8 @@ class SimpleModal extends Component<SimpleModalProps> {
                         qa="simple-modal-close"
                         view="flat-secondary"
                         size="l"
+                        aria-label={i18n('action_close')}
+                        title={i18n('action_close')}
                         onClick={onCancel}
                     >
                         <Icon awesome="times" face="light" />

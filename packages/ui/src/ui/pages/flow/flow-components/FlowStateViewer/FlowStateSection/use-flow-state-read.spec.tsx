@@ -6,10 +6,6 @@ import type {FlowStaticSpec} from '../../../../../../shared/yt-types';
 const mockUseStaticSpec = jest.fn();
 const mockUseReadStates = jest.fn();
 
-jest.mock('../../../../../hooks/useDebouncedValue', () => ({
-    useDebouncedValue: <T,>(value: T) => value,
-}));
-
 jest.mock('../../../../../store/api/yt/flow', () => ({
     useFlowStaticSpecQuery: (...args: Array<unknown>) => mockUseStaticSpec(...args),
     useFlowReadStatesQuery: (...args: Array<unknown>) => mockUseReadStates(...args),
@@ -20,6 +16,7 @@ jest.mock('./i18n', () => ({
     default: (key: string) => key,
 }));
 
+import {AUTO_LOAD_DEBOUNCE_MS} from '../state-requests';
 import {useFlowStateRead} from './use-flow-state-read';
 
 const staticSpec: FlowStaticSpec = {
@@ -27,6 +24,7 @@ const staticSpec: FlowStaticSpec = {
 };
 
 beforeEach(() => {
+    jest.useFakeTimers();
     jest.clearAllMocks();
     mockUseStaticSpec.mockReturnValue({data: undefined});
     mockUseReadStates.mockReturnValue({
@@ -36,6 +34,10 @@ beforeEach(() => {
         isSuccess: false,
         refetch: jest.fn(),
     });
+});
+
+afterEach(() => {
+    jest.useRealTimers();
 });
 
 it('selects the first computation once when describe data arrives', () => {
@@ -94,4 +96,29 @@ it('always sends the fixed read bound', () => {
         parameters: {pipeline_path: '//pipeline'},
         body: {computation_id: 'fixed', limit: 10},
     });
+});
+
+it('treats a pending debounce as refreshing retained data', () => {
+    mockUseReadStates.mockReturnValue({
+        data: {partition_states: []},
+        error: undefined,
+        isFetching: false,
+        isSuccess: true,
+        refetch: jest.fn(),
+    });
+    const {result} = renderHook(() =>
+        useFlowStateRead({pipeline_path: '//pipeline', fixedComputationId: 'fixed'}),
+    );
+
+    act(() => result.current.setFilters((current) => ({...current, stateName: '/next'})));
+
+    expect(result.current.debouncePending).toBe(true);
+    expect(result.current.refreshing).toBe(true);
+    expect(result.current.readSucceeded).toBe(false);
+
+    act(() => jest.advanceTimersByTime(AUTO_LOAD_DEBOUNCE_MS));
+
+    expect(result.current.debouncePending).toBe(false);
+    expect(result.current.refreshing).toBe(false);
+    expect(result.current.readSucceeded).toBe(true);
 });

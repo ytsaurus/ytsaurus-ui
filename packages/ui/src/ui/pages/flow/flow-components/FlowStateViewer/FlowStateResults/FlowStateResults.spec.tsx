@@ -6,7 +6,12 @@ import type {FlowStateCellHandlers, FlowStateResultRow} from '../types';
 import type {FlowReadStatesResponse} from '../../../../../../shared/yt-types';
 
 jest.mock('@ytsaurus/components', () => ({
-    ClipboardButton: ({text}: {text: string}) => <button data-copy-text={text} />,
+    ClipboardButton: ({
+        text,
+        ...props
+    }: {text: string} & React.ButtonHTMLAttributes<HTMLButtonElement>) => (
+        <button data-copy-text={text} {...props} />
+    ),
     setLang: () => {},
 }));
 
@@ -32,9 +37,6 @@ jest.mock('../../../../../components/ClickableText/ClickableText', () => ({
 }));
 jest.mock('../../../../../components/Yson/Yson', () => ({
     Yson: () => null,
-}));
-jest.mock('../../../../../components/Yson/YsonWithScroll', () => ({
-    YsonWithScroll: () => null,
 }));
 jest.mock('../../../../../containers/RoutedLink/RoutedLink', () => ({
     RoutedLink: ({children, ...props}: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
@@ -129,6 +131,7 @@ it('does not render empty results without a scope', () => {
 it('renders a loader during the initial scoped read', () => {
     renderResults({initialLoading: true});
     expect(document.querySelector('.g-loader')).not.toBeNull();
+    expect(screen.getByRole('status').textContent).toContain('status_loading');
     expect(screen.queryByTestId('no-content')).toBeNull();
 });
 
@@ -140,6 +143,10 @@ it('keeps stale populated results visible while refreshing', () => {
     };
     renderResults({response, refreshing: true});
     expect(screen.getByTestId('results-table')).not.toBeNull();
+    expect(screen.getByRole('status').textContent).toContain('status_refreshing');
+    const content = screen.getByTestId('results-content');
+    expect(content.getAttribute('aria-busy')).toBe('true');
+    expect(content.hasAttribute('inert')).toBe(true);
     expect(screen.queryByTestId('no-content')).toBeNull();
 });
 
@@ -174,6 +181,9 @@ it('keeps copy and inspection on Value only and exposes raw response inspection'
     renderResults({response});
 
     expect(document.querySelectorAll('[data-copy-text]')).toHaveLength(1);
+    const copy = screen.getByRole('button', {name: 'action_copy-value'});
+    copy.focus();
+    expect(document.activeElement).toBe(copy);
     expect(document.querySelector('[data-copy-text]')?.getAttribute('data-copy-text')).toContain(
         'count',
     );

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {test} from '../../../../../../playwright-components/core';
+import {expect, test} from '../../../../../../playwright-components/core';
 
 import {FlowStateResultsStories} from '../__stories__';
 
@@ -48,4 +48,33 @@ test('FlowStateResults: Response error', async ({mount, expectScreenshot}) => {
 test('FlowStateResults: Narrow long content', async ({mount, expectScreenshot}) => {
     await mount(<FlowStateResultsStories.NarrowLongContent />, {width: 480});
     await expectScreenshot();
+});
+
+test('FlowStateResults: Value copy is keyboard reachable', async ({mount, page}) => {
+    await mount(<FlowStateResultsStories.Populated />);
+    const copy = page.getByRole('button', {name: 'Copy value'}).first();
+
+    await copy.focus();
+
+    await expect(copy).toBeFocused();
+});
+
+test('FlowStateResults: Narrow delete remains keyboard reachable', async ({mount, page}) => {
+    await mount(<FlowStateResultsStories.NarrowLongContent />, {width: 480});
+    const deleteButton = page.getByRole('button', {name: 'Delete state row'});
+
+    await expect(deleteButton).toBeInViewport();
+    await deleteButton.focus();
+    await expect(deleteButton).toBeFocused();
+    await deleteButton.press('Enter');
+});
+
+test('FlowStateResults: Refreshing rows are inert', async ({mount, page}) => {
+    await mount(<FlowStateResultsStories.Refreshing />);
+    const content = page.locator('[data-testid="results-content"]');
+    const deleteButton = page.getByRole('button', {name: 'Delete state row'}).first();
+
+    await expect(content).toHaveAttribute('inert', '');
+    await deleteButton.focus();
+    await expect(deleteButton).not.toBeFocused();
 });

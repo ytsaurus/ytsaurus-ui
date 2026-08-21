@@ -26,6 +26,7 @@ export type FlowStateReadResult = {
     validationError: string | undefined;
     response: FlowReadStatesResponse | undefined;
     initialLoading: boolean;
+    debouncePending: boolean;
     refreshing: boolean;
     readSucceeded: boolean;
     error: unknown;

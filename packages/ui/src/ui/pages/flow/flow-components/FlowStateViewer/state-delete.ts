@@ -21,9 +21,24 @@ export function deleteStatesGate(current: GetPipelineStateData | undefined): {
     return {blocked: true, requiresForce: false};
 }
 
-export function isWriteDeniedByPermission(result: {data?: {action?: 'allow' | 'deny'}}): boolean {
-    return result.data?.action !== 'allow';
+export function isWriteDeniedByPermission(result: {
+    data?: {action?: 'allow' | 'deny'};
+    error?: unknown;
+    isFetching?: boolean;
+}): boolean {
+    return result.data?.action !== 'allow' || Boolean(result.error) || Boolean(result.isFetching);
 }
+
+export type FlowDeletePermissionQuery = {
+    data?: {action?: 'allow' | 'deny'};
+    error?: unknown;
+    isFetching?: boolean;
+    refetch: () => {unwrap: () => Promise<{action: 'allow' | 'deny'} | undefined>};
+};
+
+export type FlowDeleteStatesRunResult =
+    | {session: number; status: 'blocked' | 'stale'}
+    | {session: number; status: 'completed'; outcomes: Array<FlowRowDeleteOutcome>};
 
 export function buildRowDeleteBody(row: FlowStateResultRow): FlowStateAccessBody {
     if (!isRowDeletable(row)) {
@@ -57,11 +72,17 @@ export async function runRowDeletes(
                 force: options.force,
                 commit: true,
             });
+            if (options.isCancelled?.()) {
+                break;
+            }
             outcomes.push({rowId, response});
             if (!isDeleteCommitted(response)) {
                 break;
             }
         } catch (error) {
+            if (options.isCancelled?.()) {
+                break;
+            }
             outcomes.push({rowId, error});
             break;
         }

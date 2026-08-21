@@ -14,11 +14,29 @@ export type FlowStateKeyDialogProps = {
     onClose: () => void;
 };
 
-function normalizeValues(
+export function getKeyFieldId(index: number): string {
+    return `key_${index}`;
+}
+
+export function toKeyFormValues(
     columns: Array<FlowKeyColumn>,
     values: Record<string, string>,
 ): Record<string, string> {
-    return Object.fromEntries(columns.map(({name}) => [name, values[name] ?? '']));
+    return Object.fromEntries(
+        columns.map(({name}, index) => [
+            getKeyFieldId(index),
+            Object.prototype.hasOwnProperty.call(values, name) ? values[name] : '',
+        ]),
+    );
+}
+
+export function toSchemaValues(
+    columns: Array<FlowKeyColumn>,
+    formValues: Record<string, string>,
+): Record<string, string> {
+    return Object.fromEntries(
+        columns.map(({name}, index) => [name, formValues[getKeyFieldId(index)] ?? '']),
+    );
 }
 
 export function FlowStateKeyDialog({
@@ -30,8 +48,8 @@ export function FlowStateKeyDialog({
 }: FlowStateKeyDialogProps) {
     const fields = React.useMemo<Array<DialogField<Record<string, string>>>>(
         () =>
-            columns.map((column) => ({
-                name: column.name,
+            columns.map((column, index) => ({
+                name: getKeyFieldId(index),
                 type: 'text',
                 caption: `${column.name} (${column.type})`,
                 validator: (value: string) => {
@@ -54,22 +72,25 @@ export function FlowStateKeyDialog({
             headerProps={{title: i18n('title_edit-key-fields')}}
             footerProps={{textApply: i18n('action_apply-key-fields')}}
             pristineSubmittable
-            initialValues={normalizeValues(columns, values)}
+            initialValues={toKeyFormValues(columns, values)}
             fields={fields}
             validate={(nextValues) => {
-                const normalized = normalizeValues(columns, nextValues);
-                const filledColumns = columns.filter(({name}) => normalized[name].trim());
+                const normalized = toKeyFormValues(columns, toSchemaValues(columns, nextValues));
+                const filledColumns = columns.filter((_column, index) =>
+                    normalized[getKeyFieldId(index)].trim(),
+                );
                 if (filledColumns.length === 0 || filledColumns.length === columns.length) {
                     return undefined;
                 }
                 return Object.fromEntries(
                     columns
-                        .filter(({name}) => !normalized[name].trim())
-                        .map(({name}) => [name, i18n('validation_fill-all-keys')]),
+                        .map((_column, index) => getKeyFieldId(index))
+                        .filter((fieldId) => !normalized[fieldId].trim())
+                        .map((fieldId) => [fieldId, i18n('validation_fill-all-keys')]),
                 );
             }}
             onAdd={(form) => {
-                onApply(normalizeValues(columns, form.getState().values));
+                onApply(toSchemaValues(columns, form.getState().values));
                 onClose();
                 return Promise.resolve();
             }}

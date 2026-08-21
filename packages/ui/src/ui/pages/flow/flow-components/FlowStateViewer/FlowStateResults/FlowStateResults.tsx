@@ -80,7 +80,12 @@ function CopyButton({text}: {text: string}) {
     }
     return (
         <span className={block('hover-action')}>
-            <ClipboardButton text={text} view="flat-secondary" />
+            <ClipboardButton
+                text={text}
+                view="flat-secondary"
+                aria-label={i18n('action_copy-value')}
+                title={i18n('action_copy-value')}
+            />
         </span>
     );
 }
@@ -357,7 +362,11 @@ function FlowStateResultsTable({
         getRowId: (row) => getStateRowId(row),
     });
 
-    return <DataTableGravity table={table} virtualized rowHeight={40} />;
+    return (
+        <div className={block('table-pane')}>
+            <DataTableGravity table={table} virtualized rowHeight={40} />
+        </div>
+    );
 }
 
 export function FlowStateResults({
@@ -375,6 +384,7 @@ export function FlowStateResults({
 }: FlowStateResultsProps) {
     const ysonSettings = useSelector(selectFlowSpecYsonSettings);
     const cluster = useSelector(selectCluster);
+    const contentRef = React.useRef<HTMLDivElement>(null);
 
     const rows = React.useMemo(() => flattenReadStatesResponse(response), [response]);
     const selectedCount = React.useMemo(
@@ -382,12 +392,29 @@ export function FlowStateResults({
         [rows, rowSelection],
     );
 
+    React.useEffect(() => {
+        const content = contentRef.current;
+        if (!content) {
+            return;
+        }
+        if (refreshing) {
+            content.setAttribute('inert', '');
+        } else {
+            content.removeAttribute('inert');
+        }
+    }, [refreshing]);
+
     if (error) {
         return <YTErrorBlock error={error as YTErrorBlockProps['error']} />;
     }
 
     if (initialLoading) {
-        return <Loader size="m" />;
+        return (
+            <div role="status">
+                <Loader size="m" />
+                <span className={block('status-label')}>{i18n('status_loading')}</span>
+            </div>
+        );
     }
 
     if (!hasScope || !response) {
@@ -436,10 +463,16 @@ export function FlowStateResults({
                     }}
                 />
             </Flex>
-            <div className={block('content', {loading: refreshing})}>
+            <div
+                ref={contentRef}
+                data-testid="results-content"
+                className={block('content', {loading: refreshing})}
+                aria-busy={refreshing}
+            >
                 {refreshing && (
-                    <div className={block('content-loader')}>
+                    <div className={block('content-loader')} role="status">
                         <Loader size="s" />
+                        <span className={block('status-label')}>{i18n('status_refreshing')}</span>
                     </div>
                 )}
                 <FlowStateResultsTable

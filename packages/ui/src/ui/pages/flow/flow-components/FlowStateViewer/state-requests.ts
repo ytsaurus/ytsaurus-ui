@@ -33,15 +33,15 @@ export function buildStateAccessBody(
             if (filters.target === 'partition_state') {
                 return {error: {errorKey: 'validation_key-target-mismatch'}};
             }
-            const key: Record<string, unknown> = {};
+            const keyEntries: Array<[string, unknown]> = [];
             for (const column of filledColumns) {
                 const casted = castKeyValue(column, filters.keyValues[column.name]);
                 if ('error' in casted) {
                     return casted;
                 }
-                key[column.name] = casted.value;
+                keyEntries.push([column.name, casted.value]);
             }
-            body.key = key;
+            body.key = Object.fromEntries(keyEntries);
         }
     } else {
         return {error: {errorKey: 'validation_no-scope'}};

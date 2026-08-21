@@ -14,11 +14,11 @@ import {FlowDeleteStatesDialog} from '../FlowDeleteStatesDialog/FlowDeleteStates
 import {FlowStateFilters} from '../FlowStateFilters/FlowStateFilters';
 import {FlowStateResults} from '../FlowStateResults/FlowStateResults';
 import {seedStateFilters} from '../state-filters';
-import {isWriteDeniedByPermission} from '../state-delete';
+import {isDeleteCommitted, isWriteDeniedByPermission} from '../state-delete';
 import {useFlowStateCellHandlers} from './use-flow-state-cell-handlers';
 import {useFlowStateRead} from './use-flow-state-read';
 import i18n from './i18n';
-import type {FlowStateFiltersValue, FlowStateResultRow} from '../types';
+import type {FlowRowDeleteOutcome, FlowStateFiltersValue, FlowStateResultRow} from '../types';
 
 import './FlowStateSection.scss';
 
@@ -81,12 +81,34 @@ export function FlowStateSection({
     });
 
     const handleDeleteRows = (nextRows: Array<FlowStateResultRow>) => {
+        if (refreshing) {
+            return;
+        }
         setDeleteRows(nextRows);
         setDeleteVisible(true);
     };
 
-    const handleDeleteCommitted = () => {
-        setRowSelection({});
+    const handleDeleteCommitted = (
+        outcomes: Array<FlowRowDeleteOutcome>,
+        allCommitted: boolean,
+    ) => {
+        if (allCommitted) {
+            setRowSelection({});
+        } else {
+            const committedRowIds = new Set(
+                outcomes
+                    .filter(
+                        (outcome) =>
+                            outcome.response !== undefined && isDeleteCommitted(outcome.response),
+                    )
+                    .map(({rowId}) => rowId),
+            );
+            setRowSelection((current) =>
+                Object.fromEntries(
+                    Object.entries(current).filter(([rowId]) => !committedRowIds.has(rowId)),
+                ),
+            );
+        }
         refetch();
     };
 
@@ -125,6 +147,7 @@ export function FlowStateSection({
                     onClose={() => setDeleteVisible(false)}
                     pipeline_path={pipeline_path}
                     rows={deleteRows}
+                    permission={permissionResult}
                     onCommitted={handleDeleteCommitted}
                 />
             )}
