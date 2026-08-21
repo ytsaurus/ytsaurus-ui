@@ -374,6 +374,37 @@ describe('yt', function () {
             _yt.setup.unsetGlobalOption('secure');
         });
 
+        it.each([
+            ['v3', 'patch_op_spec'],
+            ['v4', 'patch_operation_spec'],
+        ])('prepares %s.patchOpSpec request', function (apiVersion, command) {
+            _yt.setup.setGlobalOption('proxy', PROXY);
+
+            const parameters = {
+                operation_id: '33ab3f-bf1df917-b35fe9ed-c70a4bf4',
+                patches: [
+                    {path: '/max_failed_job_count', value: 15},
+                    {path: '/tasks/worker/job_count', value: 10},
+                ],
+            };
+
+            deeplyCompareAjaxParameters(_yt[apiVersion].patchOpSpec(parameters), {
+                url: `https://${PROXY}/api/${apiVersion}/${command}`,
+                headers: Object.assign({}, DEFAULT_HEADERS),
+                timeout: _yt.setup.getDefaultOption('timeout'),
+                responseType: 'text',
+                method: POST_METHOD,
+                withCredentials: false,
+                withXSRFToken: false,
+                transformResponse: [_yt.core._identity],
+                xsrfCookieName: '',
+                meta: {command},
+                data: JSON.stringify(parameters),
+            });
+
+            _yt.setup.unsetGlobalOption('proxy');
+        });
+
         afterEach(function (done) {
             _yt.core._request = _request;
             done();
