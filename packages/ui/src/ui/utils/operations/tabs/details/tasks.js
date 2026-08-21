@@ -5,8 +5,8 @@ import reduce_ from 'lodash/reduce';
 
 import ypath from '../../../../common/thor/ypath';
 import hammer from '../../../../common/hammer';
-import {hasProgressTasks} from './data-flow';
-import {prepareTableColumns} from '../../../../utils/index';
+import {getOperationProgress, hasProgressTasks} from './data-flow';
+import {isNull, prepareTableColumns} from '../../../../utils/index';
 import i18n from './i18n';
 
 function sortCounters(reasonA, reasonB) {
@@ -18,6 +18,9 @@ function sortCounters(reasonA, reasonB) {
 }
 
 function prepareCategoryCounters(counters, category) {
+    if (!counters) {
+        return {total: 0};
+    }
     if (typeof counters[category] === 'object') {
         const prepared = reduce_(
             counters[category],
@@ -47,22 +50,22 @@ function prepareCategoryCounters(counters, category) {
 }
 
 function prepareCompletedStatistics(counters) {
-    const completed = counters.completed;
+    const completed = counters?.completed;
 
     return {
         interrupted: prepareCategoryCounters(completed, 'interrupted'),
         nonInterrupted: prepareCategoryCounters(completed, 'non-interrupted'), // XXX API NAMING BUG
-        total: completed['total'],
+        total: completed?.['total'],
     };
 }
 
 function prepareAbortedStatistics(counters) {
-    const aborted = counters.aborted;
+    const aborted = counters?.aborted;
 
     return {
         scheduled: prepareCategoryCounters(aborted, 'scheduled'),
         nonScheduled: prepareCategoryCounters(aborted, 'non_scheduled'),
-        total: aborted['total'],
+        total: aborted?.['total'],
     };
 }
 
@@ -86,7 +89,10 @@ export function prepareDataFromGraph(operation) {
         return prepareDataFromGraphByTasks(operation);
     }
 
-    const dataFlowGraph = ypath.getValue(operation, '/@progress/data_flow_graph');
+    const progress = getOperationProgress(operation);
+    const dataFlowGraph = isNull(progress)
+        ? undefined
+        : ypath.getValue(progress, '/data_flow_graph');
     let jobTypeOrder = ypath.getValue(dataFlowGraph, '/topological_ordering');
     const countersByType = ypath.getValue(dataFlowGraph, '/vertices');
     let data = [];
@@ -123,7 +129,8 @@ export function prepareDataFromGraph(operation) {
 }
 
 function prepareDataFromGraphByTasks(operation) {
-    const tasks = ypath.getValue(operation, '/@progress/tasks');
+    const progress = getOperationProgress(operation);
+    const tasks = isNull(progress) ? undefined : ypath.getValue(progress, '/tasks');
 
     const res = map_(tasks, (task) => {
         const {task_name, job_type, job_counter} = task;
@@ -136,7 +143,9 @@ function prepareDataFromGraphByTasks(operation) {
         };
     });
 
-    const totalCounters = ypath.getValue(operation, '/@progress/total_job_counter');
+    const totalCounters = isNull(progress)
+        ? undefined
+        : ypath.getValue(progress, '/total_job_counter');
     res.push({
         type: 'total',
         caption: 'total',
