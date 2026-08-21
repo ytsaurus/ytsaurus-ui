@@ -12,6 +12,8 @@ import type {
 } from '../../../../../shared/yt-types';
 import {castKeyValue} from './state-filters';
 
+export const READ_STATES_LIMIT = 10;
+
 export function buildStateAccessBody(
     filters: FlowStateFiltersValue,
     keyColumns: Array<FlowKeyColumn>,

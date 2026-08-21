@@ -44,12 +44,13 @@ export function FlowStateSection({
     const {
         filters,
         setFilters,
-        appliedLimit,
         staticSpec,
         hasScope,
         validationError,
         response,
-        loading,
+        initialLoading,
+        refreshing,
+        readSucceeded,
         error,
         refetch,
     } = useFlowStateRead({pipeline_path, fixedComputationId, initialFilters});
@@ -115,9 +116,11 @@ export function FlowStateSection({
                     {!hasScope && <Alert theme="info" message={i18n('alert_pick-scope')} />}
                     {validationError && <Alert theme="warning" message={validationError} />}
                     <FlowStateResults
+                        hasScope={hasScope}
                         response={response}
-                        appliedLimit={appliedLimit}
-                        loading={loading}
+                        initialLoading={initialLoading}
+                        refreshing={refreshing}
+                        readSucceeded={readSucceeded}
                         error={error}
                         handlers={cellHandlers}
                         rowSelection={rowSelection}

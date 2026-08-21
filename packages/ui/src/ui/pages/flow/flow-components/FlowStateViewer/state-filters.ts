@@ -26,7 +26,6 @@ export function seedStateFilters(
     return {
         keyValues: {},
         target: 'all',
-        limit: 10,
         ...initialFilters,
         computationId: fixedComputationId ?? initialFilters?.computationId,
     };
@@ -291,14 +290,4 @@ export function castKeyValue(
         default:
             return {value: raw};
     }
-}
-
-const DEFAULT_STATE_LIMIT = 10;
-const MAX_STATE_LIMIT = 10000;
-
-export function clampLimit(value: number): number {
-    if (!Number.isFinite(value)) {
-        return DEFAULT_STATE_LIMIT;
-    }
-    return Math.min(MAX_STATE_LIMIT, Math.max(1, Math.trunc(value)));
 }

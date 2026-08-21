@@ -7,6 +7,7 @@ import {ClipboardButton} from '@ytsaurus/components';
 
 import ClickableAttributesButton from '../../../../../components/AttributesButton/ClickableAttributesButton';
 import {ClickableText} from '../../../../../components/ClickableText/ClickableText';
+import {NoContent} from '../../../../../components/NoContent';
 import {
     DataTableGravity,
     TableCell,
@@ -26,6 +27,7 @@ import {useSelector} from '../../../../../store/redux-hooks';
 
 import {isAnnotatedBigInteger} from '../../../../../store/api/yt/flow/read-states-normalize';
 import {
+    READ_STATES_LIMIT,
     flattenReadStatesResponse,
     getStateRowId,
     isRowDeletable,
@@ -60,9 +62,11 @@ export const KIND_LABEL_KEYS: Record<FlowStateResultSection, FlowStateApiValueKe
 };
 
 export type FlowStateResultsProps = {
+    hasScope: boolean;
     response?: FlowReadStatesResponse;
-    appliedLimit: number;
-    loading: boolean;
+    initialLoading: boolean;
+    refreshing: boolean;
+    readSucceeded: boolean;
     error?: unknown;
     handlers: FlowStateCellHandlers;
     rowSelection: tanstack.RowSelectionState;
@@ -333,9 +337,11 @@ function FlowStateResultsTable({
 }
 
 export function FlowStateResults({
+    hasScope,
     response,
-    appliedLimit,
-    loading,
+    initialLoading,
+    refreshing,
+    readSucceeded,
     error,
     handlers,
     rowSelection,
@@ -357,8 +363,16 @@ export function FlowStateResults({
         return <YTErrorBlock error={error as YTErrorBlockProps['error']} />;
     }
 
-    if (!response) {
-        return loading ? <Loader size="m" /> : <Text color="hint">{i18n('text_no-results')}</Text>;
+    if (initialLoading) {
+        return <Loader size="m" />;
+    }
+
+    if (!hasScope || !response) {
+        return null;
+    }
+
+    if (readSucceeded && !refreshing && rows.length === 0 && (response.errors ?? []).length === 0) {
+        return <NoContent hint={i18n('text_no-results')} />;
     }
 
     return (
@@ -388,9 +402,9 @@ export function FlowStateResults({
                     <Text color="secondary">
                         {rows.length} {i18n('label_rows')}
                     </Text>
-                    {rows.length >= appliedLimit && (
+                    {rows.length >= READ_STATES_LIMIT && (
                         <Text color="warning">
-                            {i18n('hint_limit-reached', {limit: String(appliedLimit)})}
+                            {i18n('hint_limit-reached', {limit: String(READ_STATES_LIMIT)})}
                         </Text>
                     )}
                 </Flex>
@@ -406,8 +420,8 @@ export function FlowStateResults({
                     {i18n('label_raw-response')}
                 </Switch>
             </Flex>
-            <div className={block('content', {loading})}>
-                {loading && (
+            <div className={block('content', {loading: refreshing})}>
+                {refreshing && (
                     <div className={block('content-loader')}>
                         <Loader size="s" />
                     </div>

@@ -1,6 +1,5 @@
 import {
     castKeyValue,
-    clampLimit,
     getAvailableStateTargets,
     getComputationGroupByColumns,
     getComputationKeyColumns,
@@ -91,7 +90,7 @@ const joinedSpec: FlowStaticSpec = {
 };
 
 function filters(overrides: Partial<FlowStateFiltersValue>): FlowStateFiltersValue {
-    return {keyValues: {}, target: 'all', limit: 10, ...overrides};
+    return {keyValues: {}, target: 'all', ...overrides};
 }
 
 describe('getComputationKeyColumns', () => {
@@ -1096,23 +1095,6 @@ describe('isDeletePreviewCommittable', () => {
     it('is not committable when the snapshot rows or force drifted', () => {
         expect(isDeletePreviewCommittable([cleanOutcome], snapshot, 'other', false)).toBe(false);
         expect(isDeletePreviewCommittable([cleanOutcome], snapshot, 'b', true)).toBe(false);
-    });
-});
-
-describe('clampLimit', () => {
-    it('keeps values inside the range', () => {
-        expect(clampLimit(25)).toBe(25);
-    });
-    it('clamps below one and above the maximum', () => {
-        expect(clampLimit(0)).toBe(1);
-        expect(clampLimit(-5)).toBe(1);
-        expect(clampLimit(50000)).toBe(10000);
-    });
-    it('falls back to the default for NaN', () => {
-        expect(clampLimit(Number.NaN)).toBe(10);
-    });
-    it('truncates fractional values', () => {
-        expect(clampLimit(3.9)).toBe(3);
     });
 });
 

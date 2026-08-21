@@ -43,7 +43,6 @@ const staticSpec: FlowStaticSpec = {
 const baseValue: FlowStateFiltersValue = {
     computationId: 'comp1',
     target: 'all',
-    limit: 10,
     keyValues: {},
 };
 

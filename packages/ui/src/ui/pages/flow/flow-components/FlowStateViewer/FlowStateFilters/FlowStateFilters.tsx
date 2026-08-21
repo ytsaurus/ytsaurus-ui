@@ -1,14 +1,13 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {Button, Card, Flex, HelpMark, Select, Text, TextInput} from '@gravity-ui/uikit';
+import {Button, Card, Flex, Select, Text, TextInput} from '@gravity-ui/uikit';
 
 import {SelectSingle} from '../../../../../components/Select/Select';
 import {useFlowExecuteQuery} from '../../../../../store/api/yt/flow';
 
 import {FlowStateKeyBuilder} from '../FlowStateKeyBuilder/FlowStateKeyBuilder';
 import {
-    clampLimit,
     getAvailableStateTargets,
     getComputationStateNames,
     getStateNameInputMode,
@@ -208,16 +207,6 @@ export function FlowStateFilters({
                         onChange={(stateName) => onChange({...value, stateName})}
                     />
                 )}
-                <Flex gap={1} alignItems="center">
-                    <TextInput
-                        className={block('control', {narrow: true})}
-                        label={i18n('field_limit')}
-                        type="number"
-                        value={String(value.limit)}
-                        onUpdate={(raw) => onChange({...value, limit: clampLimit(Number(raw))})}
-                    />
-                    <HelpMark iconSize="s">{i18n('hint_limit')}</HelpMark>
-                </Flex>
                 <Button view="outlined" onClick={onReset}>
                     {i18n('action_reset-filters')}
                 </Button>

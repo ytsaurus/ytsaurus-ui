@@ -1,7 +1,11 @@
+import type React from 'react';
+
 import type {
     FlowDeleteStatesResponse,
     FlowKeyColumn,
+    FlowReadStatesResponse,
     FlowStateTarget,
+    FlowStaticSpec,
 } from '../../../../../shared/yt-types';
 
 export type FlowStateNameInputMode = 'declared-only' | 'suggested' | 'free-form';
@@ -12,7 +16,20 @@ export type FlowStateFiltersValue = {
     keyValues: Record<string, string>;
     stateName?: string;
     target: FlowStateTarget;
-    limit: number;
+};
+
+export type FlowStateReadResult = {
+    filters: FlowStateFiltersValue;
+    setFilters: React.Dispatch<React.SetStateAction<FlowStateFiltersValue>>;
+    staticSpec: FlowStaticSpec | undefined;
+    hasScope: boolean;
+    validationError: string | undefined;
+    response: FlowReadStatesResponse | undefined;
+    initialLoading: boolean;
+    refreshing: boolean;
+    readSucceeded: boolean;
+    error: unknown;
+    refetch: () => void;
 };
 
 export type FlowStateValidationErrorKey =

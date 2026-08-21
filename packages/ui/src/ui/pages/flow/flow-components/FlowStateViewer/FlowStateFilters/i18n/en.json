@@ -2,8 +2,6 @@
   "field_computation": "Computation",
   "field_partition": "Partition",
   "field_state-name": "State name",
-  "field_limit": "Limit",
-  "hint_limit": "Maximum number of states the pipeline is asked to return. The read has no continuation, so the only way to see more is to raise this value or narrow the filters.",
   "field_key": "Key",
   "action_reset-filters": "Reset filters",
   "hint_target-unavailable": "The selected computation has no state of this kind"
