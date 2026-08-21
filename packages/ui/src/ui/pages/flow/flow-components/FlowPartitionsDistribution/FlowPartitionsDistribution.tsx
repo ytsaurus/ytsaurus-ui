@@ -354,6 +354,7 @@ function PartitionsCharts({
                         data={items.map(({value}) => value)}
                         barWidth={barWidth}
                         seriesName={i18n('field_partitions')}
+                        yAxisMin={0}
                         xAxisTitle={valueTitle}
                         yAxisTitle={i18n('field_partitions')}
                     />

@@ -13,7 +13,7 @@
   "field_max": "max",
   "axis_partitions": "Partitions, sorted by value",
   "by-partition": "By partition",
-  "distribution": "Distribution",
+  "distribution": "Histogram",
   "heavy-hitters": "Heavy hitters",
   "now": "now",
   "30s": "30 s",

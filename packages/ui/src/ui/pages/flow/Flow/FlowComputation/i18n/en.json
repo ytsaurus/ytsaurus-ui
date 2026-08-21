@@ -3,7 +3,7 @@
   "cpu-usage": "CPU usage",
   "computation": "Computation",
   "details": "Details",
-  "distribution": "Distribution",
+  "distribution": "Partitions distribution",
   "health": "Health",
   "job-state": "Job state",
   "key-range": "Key/Range",
