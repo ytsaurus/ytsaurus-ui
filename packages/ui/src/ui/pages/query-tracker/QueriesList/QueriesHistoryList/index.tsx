@@ -4,20 +4,11 @@ import {useUpdater} from '../../../../hooks/use-updater';
 import block from 'bem-cn-lite';
 
 import './QueriesHistoryList.scss';
-import {
-    loadNextQueriesList,
-    requestQueriesList,
-} from '../../../../store/actions/query-tracker/queriesList';
+import {requestQueriesList} from '../../../../store/actions/query-tracker/queriesList';
 import {QUERY_POLLING_INTERVAL} from '../../../../constants/queries';
 import {HistoryList} from './HistoryList';
-import {
-    selectIsFullTextSearchMode,
-    selectIsQueriesListLoading,
-    selectPaginationIsVisible,
-} from '../../../../store/selectors/query-tracker/queriesList';
+import {selectIsFullTextSearchMode} from '../../../../store/selectors/query-tracker/queriesList';
 import {FullTextSearch} from './FullTextSearch';
-import {InfiniteScrollLoader} from '../../../../components/InfiniteScrollLoader';
-import {QueriesHistoryCursorDirection} from '../../../../store/reducers/query-tracker/query-tracker-contants';
 
 const b = block('queries-history-list');
 
@@ -34,26 +25,12 @@ function QueriesHistoryListUpdater() {
 }
 
 export function QueriesHistoryList() {
-    const dispatch = useDispatch();
-    const isLoading = useSelector(selectIsQueriesListLoading);
     const isFullTextSearchMode = useSelector(selectIsFullTextSearchMode);
-    const showPagination = useSelector(selectPaginationIsVisible);
-
-    const handleLoadMore = () => {
-        dispatch(loadNextQueriesList(QueriesHistoryCursorDirection.PAST));
-    };
 
     return (
         <div className={b()}>
             <QueriesHistoryListUpdater />
             {isFullTextSearchMode ? <FullTextSearch /> : <HistoryList />}
-            {showPagination && (
-                <InfiniteScrollLoader
-                    className={b('pagination')}
-                    loading={isLoading}
-                    onLoadMore={handleLoadMore}
-                />
-            )}
         </div>
     );
 }

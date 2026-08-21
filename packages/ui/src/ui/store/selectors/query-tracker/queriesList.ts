@@ -5,7 +5,6 @@ import {type QueriesListParams, type QueryItem} from '../../../types/query-track
 import {isQueryProgress} from '../../../pages/query-tracker/utils/query';
 import {
     DefaultQueriesListFilter,
-    QueriesListAuthorFilter,
     QueriesListFilterPresets,
     QueriesListMode,
 } from '../../../types/query-tracker/queryList';
@@ -13,14 +12,6 @@ import {selectSettingsData} from '../settings/settings-base';
 import {selectIsVcsVisible} from './vcs';
 import groupBy_ from 'lodash/groupBy';
 import moment from 'moment';
-import intersectionBy_ from 'lodash/intersectionBy';
-import {
-    ActionColumns,
-    AllColumns,
-    AuthorColumns,
-    MyColumns,
-    NameColumns,
-} from '../../../pages/query-tracker/QueriesList/QueriesHistoryList/Columns/columns';
 import {selectIsSupportedTutorials} from './queryAco';
 
 export const selectQueriesListState = (state: RootState) => state.queryTracker.list;
@@ -36,7 +27,7 @@ export const selectQueriesListSearchMode = (state: RootState) =>
 
 export const selectQueriesFilters = (state: RootState) =>
     selectQueriesListState(state).filter || {};
-export const selectPaginationIsVisible = (state: RootState) => {
+export const selectHasNextPage = (state: RootState) => {
     const hasMore = selectHasQueriesListMore(state);
     const items = selectQueriesList(state);
 
@@ -79,33 +70,6 @@ export const selectQueriesListTabs = createSelector([selectIsVcsVisible], (vcsVi
         ? queriesListMode
         : queriesListMode.filter((item) => item !== QueriesListMode.VCS);
 });
-
-export const selectQueryListColumns = createSelector(
-    [selectQueriesFilters, selectQueryListHistoryColumns],
-    (filter, selectedColumns) => {
-        const ALL_COLUMN_NAMES = intersectionBy_(AllColumns, MyColumns, 'name').map(
-            (item) => item.name,
-        );
-        const EXCLUDED_COLUMNS = [NameColumns.name, AuthorColumns.name, ActionColumns.name];
-        const currentColumnsPreset =
-            filter.user === QueriesListAuthorFilter.My ? MyColumns : AllColumns;
-
-        const selectedColumnNames = new Set(
-            Array.isArray(selectedColumns) ? selectedColumns : ALL_COLUMN_NAMES,
-        );
-
-        selectedColumnNames.add(NameColumns.name);
-        selectedColumnNames.add(AuthorColumns.name);
-        selectedColumnNames.add(ActionColumns.name);
-
-        return {
-            columns: currentColumnsPreset.filter(({name}) => selectedColumnNames.has(name)),
-            allowedColumns: currentColumnsPreset
-                .filter((item) => !EXCLUDED_COLUMNS.includes(item.name))
-                .map(({name}) => ({name, checked: selectedColumnNames.has(name)})),
-        };
-    },
-);
 
 export const selectHasCustomHistoryFilters = createSelector(
     [selectQueriesFilters, selectSettingsData],
