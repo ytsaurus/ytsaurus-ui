@@ -1,6 +1,7 @@
 import type {
     FlowKeySchemaResolution,
     FlowRowKeySchema,
+    FlowStateAccessValidationError,
     FlowStateFiltersValue,
     FlowStateNameInputMode,
     FlowStateResultRow,
@@ -212,7 +213,7 @@ const INTEGER_RANGES: Record<string, {min: number; max: number}> = {
 function castIntegerKey(
     column: FlowKeyColumn,
     trimmed: string,
-): {value: number | FlowAnnotatedInteger} | {error: FlowStateValidationError} {
+): {value: number | FlowAnnotatedInteger} | {error: FlowStateAccessValidationError} {
     const integerPattern = column.type.startsWith('uint') ? /^\d+$/ : /^-?\d+$/;
     if (!integerPattern.test(trimmed)) {
         return {
@@ -251,7 +252,7 @@ function castIntegerKey(
 export function castKeyValue(
     column: FlowKeyColumn,
     raw: string,
-): {value: unknown} | {error: FlowStateValidationError} {
+): {value: unknown} | {error: FlowStateAccessValidationError} {
     const trimmed = raw.trim();
     if (!trimmed.length) {
         return {error: {errorKey: 'validation_empty-key-value', params: {name: column.name}}};
@@ -290,4 +291,125 @@ export function castKeyValue(
         default:
             return {value: raw};
     }
+}
+
+export type RawKeyParseResult =
+    | {values: Record<string, string>; error?: never}
+    | {values?: never; error: FlowStateValidationError};
+
+function splitFlatYsonList(raw: string): Array<string> | undefined {
+    const trimmed = raw.trim();
+    if (!trimmed.startsWith('[') || !trimmed.endsWith(']')) {
+        return undefined;
+    }
+    const content = trimmed.slice(1, -1);
+    if (!content.trim()) {
+        return [];
+    }
+
+    const tokens: Array<string> = [];
+    let token = '';
+    let insideQuotes = false;
+    let escaped = false;
+    for (const character of content) {
+        if (insideQuotes) {
+            token += character;
+            if (escaped) {
+                escaped = false;
+            } else if (character === '\\') {
+                escaped = true;
+            } else if (character === '"') {
+                insideQuotes = false;
+            }
+            continue;
+        }
+        if (character === '"') {
+            insideQuotes = true;
+            token += character;
+        } else if (character === ';') {
+            tokens.push(token);
+            token = '';
+        } else if ('[]{}<>'.includes(character)) {
+            return undefined;
+        } else {
+            token += character;
+        }
+    }
+    if (insideQuotes || escaped) {
+        return undefined;
+    }
+    tokens.push(token);
+    return tokens;
+}
+
+function decodeRawKeyToken(token: string): string | undefined {
+    const trimmed = token.trim();
+    if (!trimmed.includes('"')) {
+        return trimmed;
+    }
+    if (!trimmed.startsWith('"') || !trimmed.endsWith('"')) {
+        return undefined;
+    }
+    try {
+        const decoded: unknown = JSON.parse(trimmed);
+        return typeof decoded === 'string' ? decoded : undefined;
+    } catch {
+        return undefined;
+    }
+}
+
+export function parseRawKeyDraft(raw: string, columns: Array<FlowKeyColumn>): RawKeyParseResult {
+    if (!raw.trim()) {
+        return {values: Object.fromEntries(columns.map(({name}) => [name, '']))};
+    }
+    const tokens = splitFlatYsonList(raw);
+    if (!tokens) {
+        return {error: {errorKey: 'validation_invalid-key-syntax'}};
+    }
+    if (tokens.length === 0) {
+        return {values: Object.fromEntries(columns.map(({name}) => [name, '']))};
+    }
+    if (tokens.length !== columns.length) {
+        return {
+            error: {
+                errorKey: 'validation_key-arity',
+                params: {expected: String(columns.length)},
+            },
+        };
+    }
+
+    const decoded = tokens.map(decodeRawKeyToken);
+    if (decoded.some((value) => value === undefined)) {
+        return {error: {errorKey: 'validation_invalid-key-syntax'}};
+    }
+    const values = decoded as Array<string>;
+    const filledCount = values.filter((value) => value.trim()).length;
+    if (filledCount !== 0 && filledCount !== columns.length) {
+        return {error: {errorKey: 'validation_fill-all-keys'}};
+    }
+    if (filledCount > 0) {
+        for (let index = 0; index < columns.length; index += 1) {
+            const casted = castKeyValue(columns[index], values[index]);
+            if ('error' in casted) {
+                return casted;
+            }
+        }
+    }
+    return {
+        values: Object.fromEntries(columns.map(({name}, index) => [name, values[index]])),
+    };
+}
+
+function formatRawKeyToken(value: string): string {
+    return value.trim() !== value || /[;"\\[\]{}<>]/.test(value) ? JSON.stringify(value) : value;
+}
+
+export function formatRawKeyDraft(
+    columns: Array<FlowKeyColumn>,
+    values: Record<string, string>,
+): string {
+    const orderedValues = columns.map(({name}) => values[name] ?? '');
+    return orderedValues.every((value) => !value)
+        ? ''
+        : `[${orderedValues.map(formatRawKeyToken).join('; ')}]`;
 }

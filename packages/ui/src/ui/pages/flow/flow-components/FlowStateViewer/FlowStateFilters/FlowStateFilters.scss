@@ -2,9 +2,10 @@
     &__control {
         width: 220px;
 
-        &_narrow {
-            width: 96px;
-        }
+    }
+
+    &__reset {
+        margin-inline-start: auto;
     }
 
     &__key-group {

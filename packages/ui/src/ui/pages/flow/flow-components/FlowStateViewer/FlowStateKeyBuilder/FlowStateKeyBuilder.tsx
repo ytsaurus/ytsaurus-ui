@@ -1,11 +1,10 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {Flex, TextInput} from '@gravity-ui/uikit';
+import {Button, Flex, TextInput} from '@gravity-ui/uikit';
 
-import {SelectSingle} from '../../../../../components/Select/Select';
-
-import {castKeyValue} from '../state-filters';
+import {formatRawKeyDraft, parseRawKeyDraft} from '../state-filters';
+import {FlowStateKeyDialog} from './FlowStateKeyDialog';
 import i18n from './i18n';
 import type {FlowKeyColumn} from '../../../../../../shared/yt-types';
 
@@ -19,68 +18,53 @@ export type FlowStateKeyBuilderProps = {
     onChange: (values: Record<string, string>) => void;
 };
 
-const BOOLEAN_ITEMS = [
-    {value: 'true', text: 'true'},
-    {value: 'false', text: 'false'},
-];
-
-function KeyColumnInput({
-    column,
-    value,
-    onChange,
-}: {
-    column: FlowKeyColumn;
-    value: string;
-    onChange: (value: string) => void;
-}) {
-    const [touched, setTouched] = React.useState(false);
-    const label = `${column.name} (${column.type})`;
-
-    if (column.type === 'boolean') {
-        return (
-            <SelectSingle
-                className={block('input')}
-                width="max"
-                label={label}
-                value={value || undefined}
-                items={BOOLEAN_ITEMS}
-                hasClear
-                onChange={(next) => onChange(next ?? '')}
-            />
-        );
-    }
-
-    const casted = value.trim() ? castKeyValue(column, value) : undefined;
-    const validationError =
-        touched && casted && 'error' in casted
-            ? i18n(casted.error.errorKey, casted.error.params)
-            : undefined;
-
-    return (
-        <TextInput
-            className={block('input')}
-            label={label}
-            value={value}
-            hasClear
-            validationState={validationError ? 'invalid' : undefined}
-            errorMessage={validationError}
-            onUpdate={onChange}
-            onBlur={() => setTouched(true)}
-        />
-    );
-}
-
 export function FlowStateKeyBuilder({columns, values, onChange}: FlowStateKeyBuilderProps) {
+    const formattedValues = formatRawKeyDraft(columns, values);
+    const [rawDraft, setRawDraft] = React.useState(formattedValues);
+    const [dialogVisible, setDialogVisible] = React.useState(false);
+    const parsedDraft = React.useMemo(
+        () => parseRawKeyDraft(rawDraft, columns),
+        [columns, rawDraft],
+    );
+
+    React.useEffect(() => {
+        setRawDraft(formattedValues);
+    }, [formattedValues]);
+
+    const validationError = parsedDraft.error
+        ? i18n(parsedDraft.error.errorKey, parsedDraft.error.params)
+        : undefined;
+
     return (
-        <Flex gap={2} wrap>
-            {columns.map((column) => (
-                <KeyColumnInput
-                    key={column.name}
-                    column={column}
-                    value={values[column.name] ?? ''}
-                    onChange={(next) => onChange({...values, [column.name]: next})}
+        <React.Fragment>
+            <Flex gap={2} wrap alignItems="flex-start" className={block()}>
+                <TextInput
+                    className={block('raw-input')}
+                    label={i18n('field_raw-key')}
+                    placeholder="[foo; bar; baz]"
+                    value={rawDraft}
+                    hasClear
+                    validationState={validationError ? 'invalid' : undefined}
+                    errorMessage={validationError}
+                    onUpdate={(next) => {
+                        setRawDraft(next);
+                        const parsed = parseRawKeyDraft(next, columns);
+                        if (parsed.values) {
+                            onChange(parsed.values);
+                        }
+                    }}
                 />
-            ))}
-        </Flex>
+                <Button view="outlined" onClick={() => setDialogVisible(true)}>
+                    {i18n('action_edit-key-fields')}
+                </Button>
+            </Flex>
+            <FlowStateKeyDialog
+                visible={dialogVisible}
+                columns={columns}
+                values={values}
+                onApply={onChange}
+                onClose={() => setDialogVisible(false)}
+            />
+        </React.Fragment>
     );
 }

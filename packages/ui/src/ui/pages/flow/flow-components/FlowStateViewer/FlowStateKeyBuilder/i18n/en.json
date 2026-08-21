@@ -5,6 +5,12 @@
   "validation_expects-number": "\"{{name}}\" expects a number ({{type}})",
   "validation_expects-boolean": "\"{{name}}\" expects true or false",
   "validation_fill-all-keys": "Fill every key column or none",
+  "validation_invalid-key-syntax": "Enter a flat YSON list in brackets",
+  "validation_key-arity": "Enter exactly {{expected}} key values",
   "validation_key-target-mismatch": "A key only addresses key states; change Target",
-  "validation_no-scope": "Select a computation or a partition first"
+  "validation_no-scope": "Select a computation or a partition first",
+  "field_raw-key": "Raw key",
+  "action_edit-key-fields": "Edit fields",
+  "title_edit-key-fields": "Edit key fields",
+  "action_apply-key-fields": "Apply"
 }

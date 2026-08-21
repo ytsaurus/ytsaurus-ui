@@ -110,6 +110,14 @@ export function FlowStateFilters({
     );
     const stateNames = getComputationStateNames(staticSpec, value.computationId, value.target);
     const availableTargets = getAvailableStateTargets(staticSpec, value.computationId);
+    const hasScope = Boolean(value.computationId || value.partitionId);
+    const stateNameInputMode = getStateNameInputMode(value.target);
+    const stateNameItems =
+        stateNameInputMode === 'suggested'
+            ? getStateNameSelectItems(stateNames, value.stateName)
+            : stateNames;
+    const stateNameDisabled =
+        !hasScope || (stateNameInputMode === 'declared-only' && !stateNameItems.length);
 
     const handleComputation = (computationId?: string) => {
         onChange({
@@ -158,6 +166,7 @@ export function FlowStateFilters({
                     width="max"
                     value={[value.target]}
                     multiple={false}
+                    disabled={!hasScope}
                     options={TARGET_OPTIONS.map(({value: target, textKey}) => ({
                         value: target,
                         content: i18nApiValues(textKey),
@@ -167,6 +176,9 @@ export function FlowStateFilters({
                             : i18n('hint_target-unavailable'),
                     }))}
                     onUpdate={([next]) => {
+                        if (!hasScope) {
+                            return;
+                        }
                         const target = next as FlowStateTarget;
                         onChange({
                             ...value,
@@ -180,16 +192,19 @@ export function FlowStateFilters({
                         });
                     }}
                 />
-                {getStateNameInputMode(value.target) === 'free-form' ? (
+                {stateNameInputMode === 'free-form' ? (
                     <TextInput
                         className={block('control')}
                         label={i18n('field_state-name')}
                         placeholder={i18n('field_state-name')}
                         value={value.stateName ?? ''}
+                        disabled={stateNameDisabled}
                         hasClear
-                        onUpdate={(stateName) =>
-                            onChange({...value, stateName: stateName || undefined})
-                        }
+                        onUpdate={(stateName) => {
+                            if (!stateNameDisabled) {
+                                onChange({...value, stateName: stateName || undefined});
+                            }
+                        }}
                     />
                 ) : (
                     <SelectSingle
@@ -198,16 +213,17 @@ export function FlowStateFilters({
                         label={i18n('field_state-name')}
                         placeholder={i18n('field_state-name')}
                         value={value.stateName}
-                        items={toItems(
-                            getStateNameInputMode(value.target) === 'suggested'
-                                ? getStateNameSelectItems(stateNames, value.stateName)
-                                : stateNames,
-                        )}
+                        items={toItems(stateNameItems)}
+                        disabled={stateNameDisabled}
                         hasClear
-                        onChange={(stateName) => onChange({...value, stateName})}
+                        onChange={(stateName) => {
+                            if (!stateNameDisabled) {
+                                onChange({...value, stateName});
+                            }
+                        }}
                     />
                 )}
-                <Button view="outlined" onClick={onReset}>
+                <Button className={block('reset')} view="outlined" onClick={onReset}>
                     {i18n('action_reset-filters')}
                 </Button>
             </Flex>

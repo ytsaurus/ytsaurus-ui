@@ -39,12 +39,21 @@ export type FlowStateValidationErrorKey =
     | 'validation_expects-number'
     | 'validation_expects-boolean'
     | 'validation_fill-all-keys'
+    | 'validation_invalid-key-syntax'
+    | 'validation_key-arity'
     | 'validation_key-target-mismatch'
     | 'validation_no-scope';
 
 export type FlowStateValidationError = {
     errorKey: FlowStateValidationErrorKey;
     params?: Record<string, string>;
+};
+
+export type FlowStateAccessValidationError = Omit<FlowStateValidationError, 'errorKey'> & {
+    errorKey: Exclude<
+        FlowStateValidationErrorKey,
+        'validation_invalid-key-syntax' | 'validation_key-arity'
+    >;
 };
 
 export type FlowRowDeleteOutcome = {

@@ -22,7 +22,29 @@ jest.mock('../../../../../i18n', () => ({
 
 jest.mock('../../../../../components/Select/Select', () => ({
     __esModule: true,
-    SelectSingle: () => null,
+    SelectSingle: ({
+        label,
+        disabled,
+        items = [],
+        onChange,
+    }: {
+        label: string;
+        disabled?: boolean;
+        items?: Array<{value: string}>;
+        onChange?: (value?: string) => void;
+    }) => (
+        <button
+            type="button"
+            aria-label={label}
+            disabled={disabled}
+            data-items={items.map(({value}) => value).join(',')}
+            onClick={() => onChange?.(items[0]?.value)}
+        />
+    ),
+}));
+
+jest.mock('../../../../../containers/Dialog', () => ({
+    YTDFDialog: () => null,
 }));
 
 jest.mock('../../../../../store/api/yt/flow', () => ({
@@ -46,7 +68,10 @@ const baseValue: FlowStateFiltersValue = {
     keyValues: {},
 };
 
-function renderFilters(onChange: (value: FlowStateFiltersValue) => void) {
+function renderFilters(
+    onChange: (value: FlowStateFiltersValue) => void,
+    props: Partial<React.ComponentProps<typeof FlowStateFilters>> = {},
+) {
     return render(
         <ThemeProvider theme="light">
             <FlowStateFilters
@@ -55,6 +80,7 @@ function renderFilters(onChange: (value: FlowStateFiltersValue) => void) {
                 onChange={onChange}
                 onReset={jest.fn()}
                 staticSpec={staticSpec}
+                {...props}
             />
         </ThemeProvider>,
     );
@@ -104,5 +130,46 @@ describe('FlowStateFilters kind selector', () => {
             target: 'partition_state',
             keyValues: {},
         });
+    });
+});
+
+describe('FlowStateFilters narrowing controls', () => {
+    it('does not render a Limit control', () => {
+        renderFilters(jest.fn());
+        expect(screen.queryByText('field_limit')).toBeNull();
+    });
+
+    it('disables Target and State until a computation or partition is selected', () => {
+        const onChange = jest.fn();
+        renderFilters(onChange, {value: {...baseValue, computationId: undefined}});
+
+        expect((screen.getByRole('combobox') as HTMLButtonElement).disabled).toBe(true);
+        expect(
+            (screen.getByRole('button', {name: 'field_state-name'}) as HTMLButtonElement).disabled,
+        ).toBe(true);
+        fireEvent.click(screen.getByRole('combobox'));
+        fireEvent.click(screen.getByRole('button', {name: 'field_state-name'}));
+
+        expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it('disables a declared-only State selector with no items', () => {
+        renderFilters(jest.fn(), {
+            value: {...baseValue, target: 'external_key_state'},
+        });
+
+        const state = screen.getByRole('button', {name: 'field_state-name'});
+        expect((state as HTMLButtonElement).disabled).toBe(true);
+        expect(state.getAttribute('data-items')).toBe('');
+    });
+
+    it('keeps Reset enabled and delegates restoring the seed', () => {
+        const onReset = jest.fn();
+        renderFilters(jest.fn(), {onReset});
+
+        const reset = screen.getByRole('button', {name: 'action_reset-filters'});
+        expect((reset as HTMLButtonElement).disabled).toBe(false);
+        fireEvent.click(reset);
+        expect(onReset).toHaveBeenCalledTimes(1);
     });
 });

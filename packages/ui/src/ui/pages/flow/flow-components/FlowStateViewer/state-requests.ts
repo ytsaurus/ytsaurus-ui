@@ -1,8 +1,8 @@
 import type {
     FlowKeySchemaResolution,
+    FlowStateAccessValidationError,
     FlowStateFiltersValue,
     FlowStateResultRow,
-    FlowStateValidationError,
 } from './types';
 
 import type {
@@ -17,7 +17,7 @@ export const READ_STATES_LIMIT = 10;
 export function buildStateAccessBody(
     filters: FlowStateFiltersValue,
     keyColumns: Array<FlowKeyColumn>,
-): {body: FlowStateAccessBody} | {error: FlowStateValidationError} {
+): {body: FlowStateAccessBody} | {error: FlowStateAccessValidationError} {
     const body: FlowStateAccessBody = {};
     if (filters.partitionId) {
         body.partition_id = filters.partitionId;
@@ -58,7 +58,7 @@ export function buildStateAccessBody(
 export function buildStateReadBody(
     filters: FlowStateFiltersValue,
     keySchema: FlowKeySchemaResolution,
-): {body: FlowStateAccessBody} | {error: FlowStateValidationError} {
+): {body: FlowStateAccessBody} | {error: FlowStateAccessValidationError} {
     const built = buildStateAccessBody(filters, keySchema.keyColumns);
     if ('error' in built || built.body.key === undefined || !keySchema.overrideActive) {
         return built;
