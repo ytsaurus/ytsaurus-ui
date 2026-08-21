@@ -174,7 +174,7 @@ export default function ColumnHeader<T extends string = string>(props: ColumnHea
                 )}
             </div>
             <SubColumnSelector options={props.options} order={order} onSort={onSort} />
-            {loading !== undefined && (
+            {loading && (
                 <div className={block('loader')}>
                     <Loader visible={loading} />
                 </div>
