@@ -1,0 +1,14 @@
+.yt-flow-partitions-distribution {
+    &__dialog {
+        max-height: 90vh;
+    }
+
+    &__body {
+        min-width: 50vw;
+        overflow: auto;
+    }
+
+    &__chart {
+        height: 320px;
+    }
+}

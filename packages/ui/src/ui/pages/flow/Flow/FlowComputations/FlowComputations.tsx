@@ -1,3 +1,4 @@
+import {Flex} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {Route, Switch, useRouteMatch} from 'react-router';
@@ -17,6 +18,7 @@ import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStic
 import {useSettingsColumnSizes} from '../../../../hooks/settings/use-settings-column-sizes';
 import {FlowError} from '../../../../pages/flow/flow-components/FlowError/FlowError';
 import {ShowDataButton} from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
+import {FlowPartitionsDistributionButton} from '../../../../pages/flow/flow-components/FlowPartitionsDistribution/FlowPartitionsDistribution';
 import {FlowComputation} from '../../../../pages/flow/Flow/FlowComputation/FlowComputation';
 import {FlowNodeStatus} from '../../../../pages/flow/Flow/FlowGraph/renderers/FlowGraphRenderer';
 import {useFlowExecuteQuery} from '../../../../store/api/yt';
@@ -246,11 +248,16 @@ function useFlowComputationsColumn() {
             {
                 id: 'actions',
                 header: () => null,
-                size: 50,
+                size: 80,
                 cell: ({row: {original: item}}) => {
                     return (
                         <TableCell>
-                            <ClickableAttributesButton title={item.name} attributes={item} />
+                            <Flex gap={1} alignItems="center">
+                                {Boolean(item.partitions_stats?.count) && (
+                                    <FlowPartitionsDistributionButton computationId={item.name} />
+                                )}
+                                <ClickableAttributesButton title={item.name} attributes={item} />
+                            </Flex>
                         </TableCell>
                     );
                 },
