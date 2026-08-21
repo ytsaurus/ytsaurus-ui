@@ -33,8 +33,8 @@ const selectOperationDetailsOperation = (state: RootState) => state.operations.d
 export const selectOperationStatisticsV2 = createSelector(
     [selectOperationDetailsOperation],
     (operation) => {
-        return ypath.getValue(operation, '/@progress/job_statistics_v2') as
-            StatisticTreeRoot | undefined;
+        const progress = ypath.getValue(operation, '/@progress') || undefined;
+        return ypath.getValue(progress, '/job_statistics_v2') as StatisticTreeRoot | undefined;
     },
 );
 

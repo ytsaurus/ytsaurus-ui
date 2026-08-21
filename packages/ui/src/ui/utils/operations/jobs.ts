@@ -4,7 +4,8 @@ import some_ from 'lodash/some';
 import ypath from '../../common/thor/ypath';
 
 export function hasTaskHistograms(operation: unknown) {
-    const tasks = ypath.getValue(operation, '/@progress/tasks');
+    const progress = ypath.getValue(operation, '/@progress') || undefined;
+    const tasks = ypath.getValue(progress, '/tasks');
     return some_(tasks, ({estimated_input_data_weight_histogram, input_data_weight_histogram}) => {
         return (
             !isEmpty_(estimated_input_data_weight_histogram) ||

@@ -170,7 +170,8 @@ class JobSizes extends React.Component<Props, State> {
 
     renderContent() {
         const {operation} = this.props;
-        const tasks = ypath.getValue(this.props.operation, '/@progress/tasks');
+        const progress = ypath.getValue(this.props.operation, '/@progress') || undefined;
+        const tasks = ypath.getValue(progress, '/tasks');
         return (
             <ErrorBoundary>
                 <div className={block()}>
