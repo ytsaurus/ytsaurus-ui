@@ -1,8 +1,9 @@
-import React, {type FC} from 'react';
+import React, {type FC, useCallback} from 'react';
 import {Flex, List, Loader} from '@gravity-ui/uikit';
-import {useSelector} from '../../../../../store/redux-hooks';
+import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {
     selectIsQueriesListLoading,
+    selectPaginationIsVisible,
     selectQueriesFilters,
     selectQueriesList,
 } from '../../../../../store/selectors/query-tracker/queriesList';
@@ -12,15 +13,23 @@ import {NoContent} from '@ytsaurus/components';
 import block from 'bem-cn-lite';
 import './FullTextSearch.scss';
 import i18n from './i18n';
+import {loadNextQueriesList} from '../../../../../store/actions/query-tracker/queriesList';
+import {QueriesHistoryCursorDirection} from '../../../../../store/reducers/query-tracker/query-tracker-contants';
 
 const b = block('yt-queries-full-text-search');
 const LIST_ITEM_HEIGHT = 162;
 const MAX_PREVIEW_LINES = 4;
 
 export const FullTextSearch: FC = () => {
+    const dispatch = useDispatch();
     const {filter} = useSelector(selectQueriesFilters);
     const items = useSelector(selectQueriesList);
     const isLoading = useSelector(selectIsQueriesListLoading);
+    const showPagination = useSelector(selectPaginationIsVisible);
+
+    const handleLoadMore = useCallback(() => {
+        dispatch(loadNextQueriesList(QueriesHistoryCursorDirection.PAST));
+    }, [dispatch]);
 
     if (isLoading && !items.length) {
         return (
@@ -48,6 +57,8 @@ export const FullTextSearch: FC = () => {
             itemsHeight={items.length * LIST_ITEM_HEIGHT}
             filterable={false}
             items={prepareFullTextSearchItems({items, filter, maxLines: MAX_PREVIEW_LINES})}
+            loading={showPagination}
+            onLoadMore={showPagination ? handleLoadMore : undefined}
             renderItem={(item) => {
                 return (
                     <FullTextSearchItem
