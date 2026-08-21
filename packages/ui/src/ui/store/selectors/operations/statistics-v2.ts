@@ -19,6 +19,7 @@ import {
 import format from '../../../common/hammer/format';
 
 import ypath from '../../../common/thor/ypath';
+import {isNull} from '../../../utils/index';
 import {STATISTICS_FILTER_ALL_VALUE} from '../../../constants/operations/statistics';
 import {type RootState} from '../../../store/reducers';
 import {type ValueOf} from '../../../../@types/types';
@@ -33,7 +34,8 @@ const selectOperationDetailsOperation = (state: RootState) => state.operations.d
 export const selectOperationStatisticsV2 = createSelector(
     [selectOperationDetailsOperation],
     (operation) => {
-        return ypath.getValue(operation, '/@progress/job_statistics_v2') as
+        const progress = ypath.getValue(operation, '/@progress');
+        return (isNull(progress) ? undefined : ypath.getValue(progress, '/job_statistics_v2')) as
             StatisticTreeRoot | undefined;
     },
 );

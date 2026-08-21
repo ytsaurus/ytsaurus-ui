@@ -6,6 +6,7 @@ import {createSelector} from 'reselect';
 import {formatByParams} from '../../../../shared/utils/format';
 import {type RootState} from '../../../store/reducers';
 import ypath from '../../../common/thor/ypath';
+import {isNull} from '../../../utils/index';
 import {type AlertInfo} from '../../../components/AlertEvents/AlertEvents';
 import {calculateLoadingStatus} from '../../../utils/utils';
 import {type FIX_MY_TYPE} from '../../../types';
@@ -80,7 +81,8 @@ export const selectOperationId = (state: RootState) =>
 export const selectOperationTasks = createSelector(
     [selectOperation],
     (operation): Array<OperationTask> | undefined => {
-        return ypath.getValue(operation, '/@progress/tasks');
+        const progress = ypath.getValue(operation, '/@progress');
+        return isNull(progress) ? undefined : ypath.getValue(progress, '/tasks');
     },
 );
 export const selectOperationTasksNames = createSelector(
