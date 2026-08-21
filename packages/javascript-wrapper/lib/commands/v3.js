@@ -249,6 +249,12 @@ module.exports = {
             return parameters;
         },
     },
+    patchOpSpec: {
+        name: 'patch_op_spec',
+        method: 'POST',
+        dataType: 'text',
+        useBodyForParameters: true,
+    },
     map: v2.map,
     reduce: v2.reduce,
     mapReduce: v2.mapReduce,

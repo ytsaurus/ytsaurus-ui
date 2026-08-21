@@ -73,6 +73,10 @@ module.exports = {
     suspendOperation: v3.suspendOperation,
     completeOperation: v3.completeOperation,
     updateOperationParameters: v3.updateOperationParameters,
+    patchOpSpec: {
+        ...v3.patchOpSpec,
+        name: 'patch_operation_spec',
+    },
     map: v3.map,
     reduce: v3.reduce,
     mapReduce: v3.mapReduce,
