@@ -1,5 +1,5 @@
 import React, {type CSSProperties, type FC} from 'react';
-import {RangeDateSelection} from '@gravity-ui/date-components';
+import {YTRangeDateSelection} from '../../../../components/RangeDateSelection';
 import {TimelineCanvas, useTimelineEvent} from '@gravity-ui/timeline/react';
 import {type Timeline} from '@gravity-ui/timeline';
 import {type DateTime, dateTimeParse} from '../../../../utils/date-utils';
@@ -22,7 +22,7 @@ export const TimelineBlock: FC<Props> = ({interval, timeline, style, onRangeChan
 
     return (
         <div style={style}>
-            <RangeDateSelection
+            <YTRangeDateSelection
                 value={{
                     start: dateTimeParse(interval.from)!,
                     end: dateTimeParse(interval.to)!,

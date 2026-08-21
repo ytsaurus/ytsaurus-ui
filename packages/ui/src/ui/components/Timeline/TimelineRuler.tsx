@@ -3,7 +3,8 @@ import React, {type FC} from 'react';
 import {Button} from '@gravity-ui/uikit';
 
 import cn from 'bem-cn-lite';
-import {RangeDateSelection, type RangeDateSelectionProps} from '@gravity-ui/date-components';
+import {type RangeDateSelectionProps} from '@gravity-ui/date-components';
+import {YTRangeDateSelection} from '../RangeDateSelection';
 import {type DateTime, dateTimeParse} from '../../utils/date-utils';
 
 import i18n from './i18n';
@@ -55,7 +56,7 @@ export const TimelineRuler: FC<Props> = ({
     return (
         <div className={b(null, className)}>
             <div className={b('ruler')}>
-                <RangeDateSelection
+                <YTRangeDateSelection
                     {...restProps}
                     value={{
                         start: dateTimeParse(from)!,

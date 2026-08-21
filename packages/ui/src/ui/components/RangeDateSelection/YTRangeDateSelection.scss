@@ -1,0 +1,26 @@
+.yt-range-date-selection {
+    display: flex;
+    align-items: stretch;
+
+    &__selection {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    &__buttons {
+        display: flex;
+        flex: 0 0 auto;
+        align-items: center;
+        border-block: 1px solid var(--g-color-line-generic);
+
+        &_position_start {
+            padding-inline-end: var(--g-spacing-half);
+            border-inline-end: 1px solid var(--g-color-line-generic);
+        }
+
+        &_position_end {
+            padding-inline-start: var(--g-spacing-half);
+            border-inline-start: 1px solid var(--g-color-line-generic);
+        }
+    }
+}
