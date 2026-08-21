@@ -1,9 +1,4 @@
-import type {
-    FlowDeleteDialogEvent,
-    FlowDeleteDialogState,
-    FlowRowDeleteOutcome,
-    FlowStateResultRow,
-} from './types';
+import type {FlowRowDeleteOutcome, FlowStateResultRow} from './types';
 
 import type {
     FlowDeleteStatesBody,
@@ -48,7 +43,7 @@ export function buildRowDeleteBody(row: FlowStateResultRow): FlowStateAccessBody
 export async function runRowDeletes(
     rows: Array<FlowStateResultRow>,
     execute: (body: FlowDeleteStatesBody) => Promise<FlowDeleteStatesResponse>,
-    options: {force: boolean; commit: boolean; isCancelled?: () => boolean},
+    options: {force: boolean; isCancelled?: () => boolean},
 ): Promise<Array<FlowRowDeleteOutcome>> {
     const outcomes: Array<FlowRowDeleteOutcome> = [];
     for (const row of rows) {
@@ -60,10 +55,10 @@ export async function runRowDeletes(
             const response = await execute({
                 ...buildRowDeleteBody(row),
                 force: options.force,
-                commit: options.commit,
+                commit: true,
             });
             outcomes.push({rowId, response});
-            if (options.commit && !isDeleteCommitted(response)) {
+            if (!isDeleteCommitted(response)) {
                 break;
             }
         } catch (error) {
@@ -72,15 +67,6 @@ export async function runRowDeletes(
         }
     }
     return outcomes;
-}
-
-export function areOutcomesClean(outcomes: Array<FlowRowDeleteOutcome>): boolean {
-    return outcomes.every(
-        (outcome) =>
-            outcome.error === undefined &&
-            outcome.response !== undefined &&
-            !outcome.response.errors?.length,
-    );
 }
 
 export function areAllCommitted(outcomes: Array<FlowRowDeleteOutcome>, expected: number): boolean {
@@ -110,67 +96,6 @@ export function aggregateMatchedTotal(outcomes: Array<FlowRowDeleteOutcome>): nu
     }, 0);
 }
 
-export function isDeletePreviewCommittable(
-    preview: Array<FlowRowDeleteOutcome> | undefined,
-    snapshot: {bodyKey: string; force: boolean} | undefined,
-    bodyKey: string,
-    force: boolean,
-): boolean {
-    return (
-        preview !== undefined &&
-        areOutcomesClean(preview) &&
-        snapshot?.bodyKey === bodyKey &&
-        snapshot?.force === force
-    );
-}
-
 export function isDeleteCommitted(response: FlowDeleteStatesResponse): boolean {
     return response.committed === true && !response.errors?.length;
-}
-
-export const CLOSED_DELETE_DIALOG_STATE: FlowDeleteDialogState = {session: 0, force: false};
-
-export function flowDeleteDialogReducer(
-    state: FlowDeleteDialogState,
-    event: FlowDeleteDialogEvent,
-): FlowDeleteDialogState {
-    switch (event.type) {
-        case 'opened':
-            return {session: event.session, force: false};
-        case 'closed':
-            return {session: event.session, force: false};
-        case 'force-changed':
-            return {...state, force: event.force};
-        case 'run-started':
-            return {
-                ...state,
-                busy: event.commit ? 'delete' : 'preview',
-                preview: event.commit ? state.preview : undefined,
-                previewSnapshot: event.commit ? state.previewSnapshot : undefined,
-                failed: undefined,
-                error: undefined,
-            };
-        case 'preview-loaded':
-            return event.session === state.session
-                ? {
-                      ...state,
-                      preview: event.outcomes,
-                      previewSnapshot: event.snapshot,
-                      busy: undefined,
-                  }
-                : state;
-        case 'delete-finished':
-            if (event.session !== state.session) {
-                return state;
-            }
-            return areAllCommitted(event.outcomes, event.expected)
-                ? {...state, committed: event.outcomes, busy: undefined}
-                : {...state, failed: event.outcomes, busy: undefined};
-        case 'request-failed':
-            return event.session === state.session
-                ? {...state, error: event.error, busy: undefined}
-                : state;
-        default:
-            return state;
-    }
 }

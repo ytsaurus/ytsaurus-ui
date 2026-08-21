@@ -20,15 +20,11 @@ import {
     selectDeletableRows,
 } from './state-requests';
 import {
-    CLOSED_DELETE_DIALOG_STATE,
     aggregateMatchedTotal,
     areAllCommitted,
-    areOutcomesClean,
     buildRowDeleteBody,
     countCommitted,
     deleteStatesGate,
-    flowDeleteDialogReducer,
-    isDeletePreviewCommittable,
     isWriteDeniedByPermission,
     runRowDeletes,
 } from './state-delete';
@@ -53,12 +49,7 @@ import {
     normalizeAnnotatedValue,
     normalizeReadStatesResponse,
 } from '../../../../store/api/yt/flow/read-states-normalize';
-import type {
-    FlowDeleteDialogState,
-    FlowKeySchemaResolution,
-    FlowStateFiltersValue,
-    FlowStateResultRow,
-} from './types';
+import type {FlowKeySchemaResolution, FlowStateFiltersValue, FlowStateResultRow} from './types';
 import type {FlowDeleteStatesBody, FlowStaticSpec} from '../../../../../shared/yt-types';
 
 const unipika = require('@gravity-ui/unipika/lib/unipika') as {
@@ -844,7 +835,6 @@ describe('runRowDeletes', () => {
         });
         const outcomes = await runRowDeletes([keyRow, partitionRow], execute, {
             force: false,
-            commit: true,
         });
         expect(outcomes).toHaveLength(2);
         expect(outcomes.every((outcome) => outcome.error === undefined)).toBe(true);
@@ -869,7 +859,7 @@ describe('runRowDeletes', () => {
         const outcomes = await runRowDeletes(
             [{...keyRow, section: 'joined_external_key_state'}, keyRow],
             execute,
-            {force: false, commit: true},
+            {force: false},
         );
         expect(execute).not.toHaveBeenCalled();
         expect(outcomes).toHaveLength(1);
@@ -882,28 +872,14 @@ describe('runRowDeletes', () => {
             .mockResolvedValue({committed: true});
         const outcomes = await runRowDeletes([keyRow, partitionRow], execute, {
             force: false,
-            commit: true,
         });
         expect(outcomes).toHaveLength(1);
         expect(execute).toHaveBeenCalledTimes(1);
-    });
-    it('collects every preview even when one carries errors', async () => {
-        const execute = jest
-            .fn()
-            .mockResolvedValueOnce({committed: false, errors: ['boom']})
-            .mockResolvedValue({committed: false});
-        const outcomes = await runRowDeletes([keyRow, partitionRow], execute, {
-            force: false,
-            commit: false,
-        });
-        expect(outcomes).toHaveLength(2);
-        expect(areOutcomesClean(outcomes)).toBe(false);
     });
     it('stops at a rejected call and records the error', async () => {
         const execute = jest.fn().mockRejectedValue(new Error('denied'));
         const outcomes = await runRowDeletes([keyRow, partitionRow], execute, {
             force: true,
-            commit: false,
         });
         expect(outcomes).toHaveLength(1);
         expect(outcomes[0].error).toBeInstanceOf(Error);
@@ -912,7 +888,6 @@ describe('runRowDeletes', () => {
         const execute = jest.fn(async () => ({committed: true}));
         const outcomes = await runRowDeletes([keyRow, partitionRow], execute, {
             force: false,
-            commit: true,
             isCancelled: () => true,
         });
         expect(outcomes).toEqual([]);
@@ -1065,39 +1040,6 @@ describe('isWriteDeniedByPermission', () => {
     });
 });
 
-describe('isDeletePreviewCommittable', () => {
-    const snapshot = {bodyKey: 'b', force: false};
-    const cleanOutcome = {rowId: 'r1', response: {committed: false}};
-    it('is committable for a clean preview matching the current rows and force', () => {
-        expect(isDeletePreviewCommittable([cleanOutcome], snapshot, 'b', false)).toBe(true);
-    });
-    it('is not committable when any outcome carries errors', () => {
-        expect(
-            isDeletePreviewCommittable(
-                [{rowId: 'r1', response: {errors: ['boom']}}],
-                snapshot,
-                'b',
-                false,
-            ),
-        ).toBe(false);
-        expect(
-            isDeletePreviewCommittable(
-                [{rowId: 'r1', error: new Error('x')}],
-                snapshot,
-                'b',
-                false,
-            ),
-        ).toBe(false);
-    });
-    it('is not committable without a preview', () => {
-        expect(isDeletePreviewCommittable(undefined, snapshot, 'b', false)).toBe(false);
-    });
-    it('is not committable when the snapshot rows or force drifted', () => {
-        expect(isDeletePreviewCommittable([cleanOutcome], snapshot, 'other', false)).toBe(false);
-        expect(isDeletePreviewCommittable([cleanOutcome], snapshot, 'b', true)).toBe(false);
-    });
-});
-
 describe('stringifyStateValue', () => {
     it('serializes scalars and objects', () => {
         expect(stringifyStateValue(7)).toBe('7');
@@ -1151,113 +1093,6 @@ describe('buildCompactYsonSettings', () => {
 
         expect(formatted).not.toMatch(/[ \u00a0]{2,}/);
         expect(formatted).not.toContain('\n');
-    });
-});
-
-describe('flowDeleteDialogReducer', () => {
-    const bodyKey = '["key_state|c1|||/s"]';
-    const snapshot = {bodyKey, force: false};
-    const cleanOutcomes = [{rowId: 'key_state|c1|||/s', response: {committed: false}}];
-
-    function deleteArmed(state: FlowDeleteDialogState): boolean {
-        return isDeletePreviewCommittable(
-            state.preview,
-            state.previewSnapshot,
-            bodyKey,
-            state.force,
-        );
-    }
-
-    function openedAndPreviewing(session: number): FlowDeleteDialogState {
-        const state = flowDeleteDialogReducer(CLOSED_DELETE_DIALOG_STATE, {
-            type: 'opened',
-            session,
-        });
-        return flowDeleteDialogReducer(state, {type: 'run-started', commit: false});
-    }
-
-    it('arms Delete once a preview settles inside the session that asked for it', () => {
-        const state = flowDeleteDialogReducer(openedAndPreviewing(1), {
-            type: 'preview-loaded',
-            session: 1,
-            outcomes: cleanOutcomes,
-            snapshot,
-        });
-        expect(deleteArmed(state)).toBe(true);
-    });
-
-    it('leaves Delete disarmed when a preview from a closed session settles after reopen', () => {
-        let state = openedAndPreviewing(1);
-        state = flowDeleteDialogReducer(state, {type: 'closed', session: 2});
-        state = flowDeleteDialogReducer(state, {type: 'opened', session: 3});
-        state = flowDeleteDialogReducer(state, {
-            type: 'preview-loaded',
-            session: 1,
-            outcomes: cleanOutcomes,
-            snapshot,
-        });
-        expect(state.preview).toBeUndefined();
-        expect(state.previewSnapshot).toBeUndefined();
-        expect(deleteArmed(state)).toBe(false);
-    });
-
-    it('ignores a delete result belonging to a closed session', () => {
-        let state = flowDeleteDialogReducer(CLOSED_DELETE_DIALOG_STATE, {
-            type: 'opened',
-            session: 1,
-        });
-        state = flowDeleteDialogReducer(state, {type: 'run-started', commit: true});
-        state = flowDeleteDialogReducer(state, {type: 'closed', session: 2});
-        state = flowDeleteDialogReducer(state, {type: 'opened', session: 3});
-        state = flowDeleteDialogReducer(state, {
-            type: 'delete-finished',
-            session: 1,
-            outcomes: [{rowId: 'r1', response: {committed: true}}],
-            expected: 1,
-        });
-        expect(state.committed).toBeUndefined();
-    });
-
-    it('disarms Delete again while a fresh preview is in flight', () => {
-        let state = flowDeleteDialogReducer(openedAndPreviewing(1), {
-            type: 'preview-loaded',
-            session: 1,
-            outcomes: cleanOutcomes,
-            snapshot,
-        });
-        state = flowDeleteDialogReducer(state, {type: 'run-started', commit: false});
-        expect(deleteArmed(state)).toBe(false);
-    });
-
-    it('reports a partial commit as failed rather than deleted', () => {
-        let state = flowDeleteDialogReducer(CLOSED_DELETE_DIALOG_STATE, {
-            type: 'opened',
-            session: 1,
-        });
-        state = flowDeleteDialogReducer(state, {type: 'run-started', commit: true});
-        const outcomes = [
-            {rowId: 'r1', response: {committed: true}},
-            {rowId: 'r2', response: {committed: true, errors: ['partition 3 failed']}},
-        ];
-        state = flowDeleteDialogReducer(state, {
-            type: 'delete-finished',
-            session: 1,
-            outcomes,
-            expected: 3,
-        });
-        expect(state.committed).toBeUndefined();
-        expect(state.failed).toEqual(outcomes);
-    });
-
-    it('reopens with force cleared so a paused delete must be re-confirmed', () => {
-        let state = flowDeleteDialogReducer(CLOSED_DELETE_DIALOG_STATE, {
-            type: 'opened',
-            session: 1,
-        });
-        state = flowDeleteDialogReducer(state, {type: 'force-changed', force: true});
-        state = flowDeleteDialogReducer(state, {type: 'closed', session: 2});
-        state = flowDeleteDialogReducer(state, {type: 'opened', session: 3});
-        expect(state.force).toBe(false);
     });
 });
 

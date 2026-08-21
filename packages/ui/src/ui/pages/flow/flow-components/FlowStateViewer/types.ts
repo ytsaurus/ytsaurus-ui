@@ -74,38 +74,6 @@ export type FlowStateResultRow = {
     value: unknown;
 };
 
-export type FlowDeleteDialogSnapshot = {bodyKey: string; force: boolean};
-
-export type FlowDeleteDialogState = {
-    session: number;
-    force: boolean;
-    busy?: 'preview' | 'delete';
-    preview?: Array<FlowRowDeleteOutcome>;
-    previewSnapshot?: FlowDeleteDialogSnapshot;
-    committed?: Array<FlowRowDeleteOutcome>;
-    failed?: Array<FlowRowDeleteOutcome>;
-    error?: unknown;
-};
-
-export type FlowDeleteDialogEvent =
-    | {type: 'opened'; session: number}
-    | {type: 'closed'; session: number}
-    | {type: 'force-changed'; force: boolean}
-    | {type: 'run-started'; commit: boolean}
-    | {
-          type: 'preview-loaded';
-          session: number;
-          outcomes: Array<FlowRowDeleteOutcome>;
-          snapshot: FlowDeleteDialogSnapshot;
-      }
-    | {
-          type: 'delete-finished';
-          session: number;
-          outcomes: Array<FlowRowDeleteOutcome>;
-          expected: number;
-      }
-    | {type: 'request-failed'; session: number; error: unknown};
-
 export type FlowKeySchemaResolution = {
     keyColumns: Array<FlowKeyColumn>;
     allKeyColumns: Array<FlowKeyColumn>;

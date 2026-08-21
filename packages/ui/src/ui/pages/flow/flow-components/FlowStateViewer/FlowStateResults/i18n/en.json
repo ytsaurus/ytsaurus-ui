@@ -16,5 +16,6 @@
   "text_no-results": "No states loaded",
   "text_selected-rows": "Selected: {{count}}",
   "action_delete": "Delete",
+  "action_delete-row": "Delete state row",
   "alert_no-write-permission": "Deleting states requires write permission on the pipeline"
 }

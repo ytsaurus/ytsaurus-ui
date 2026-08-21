@@ -13,7 +13,6 @@ import {useSelector} from '../../../../../store/redux-hooks';
 import {FlowDeleteStatesDialog} from '../FlowDeleteStatesDialog/FlowDeleteStatesDialog';
 import {FlowStateFilters} from '../FlowStateFilters/FlowStateFilters';
 import {FlowStateResults} from '../FlowStateResults/FlowStateResults';
-import {flattenReadStatesResponse, selectDeletableRows} from '../state-requests';
 import {seedStateFilters} from '../state-filters';
 import {isWriteDeniedByPermission} from '../state-delete';
 import {useFlowStateCellHandlers} from './use-flow-state-cell-handlers';
@@ -61,16 +60,6 @@ export function FlowStateSection({
     });
     const writeDenied = isWriteDeniedByPermission(permissionResult);
 
-    React.useEffect(() => {
-        setRowSelection({});
-    }, [response]);
-
-    const rows = React.useMemo(() => flattenReadStatesResponse(response), [response]);
-    const selectedRows = React.useMemo(
-        () => selectDeletableRows(rows, rowSelection),
-        [rows, rowSelection],
-    );
-
     const handleFiltersChange = React.useCallback(
         (next: FlowStateFiltersValue) => {
             setFilters(next);
@@ -91,8 +80,8 @@ export function FlowStateSection({
         onFiltersChange: handleFiltersChange,
     });
 
-    const handleDeleteSelected = () => {
-        setDeleteRows(selectedRows);
+    const handleDeleteRows = (nextRows: Array<FlowStateResultRow>) => {
+        setDeleteRows(nextRows);
         setDeleteVisible(true);
     };
 
@@ -126,7 +115,7 @@ export function FlowStateSection({
                         rowSelection={rowSelection}
                         onRowSelectionChange={setRowSelection}
                         writeDenied={writeDenied}
-                        onDeleteSelected={handleDeleteSelected}
+                        onDeleteRows={handleDeleteRows}
                     />
                 </div>
             </div>

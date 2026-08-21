@@ -1,12 +1,17 @@
 import React from 'react';
 
-import {Button, Dialog, Flex} from '@gravity-ui/uikit';
+import {Alert, Flex, Loader, Text} from '@gravity-ui/uikit';
 
-import {DeleteStatesStatus} from './DeleteStatesStatus';
+import {type DialogField, YTDFDialog} from '../../../../../containers/Dialog';
+import {YTErrorBlock, type YTErrorBlockProps} from '../../../../../containers/Block/Block';
+
+import {areAllCommitted, countCommitted} from '../state-delete';
+import {getStateRowId} from '../state-requests';
+import {OutcomesSummary} from './OutcomesSummary';
 import {RowsSummary} from './RowsSummary';
 import {useFlowDeleteStates} from './use-flow-delete-states';
 import i18n from './i18n';
-import type {FlowStateResultRow} from '../types';
+import type {FlowRowDeleteOutcome, FlowStateResultRow} from '../types';
 
 export type FlowDeleteStatesDialogProps = {
     visible: boolean;
@@ -16,6 +21,8 @@ export type FlowDeleteStatesDialogProps = {
     onCommitted: () => void;
 };
 
+type FormValues = {force: boolean};
+
 export function FlowDeleteStatesDialog({
     visible,
     onClose,
@@ -23,79 +30,93 @@ export function FlowDeleteStatesDialog({
     rows,
     onCommitted,
 }: FlowDeleteStatesDialogProps) {
-    const {
-        force,
-        busy,
-        preview,
-        committed,
-        failed,
-        error,
-        pipelineStateError,
-        gate,
-        stateReady,
-        canPreview,
-        canDelete,
-        deleting,
-        setForce,
-        runDeleteStates,
-    } = useFlowDeleteStates({visible, pipeline_path, rows, onCommitted});
+    const [outcomes, setOutcomes] = React.useState<Array<FlowRowDeleteOutcome>>();
+    const {gate, stateReady, pipelineStateError, runDeleteStates} = useFlowDeleteStates({
+        visible,
+        pipeline_path,
+        rows,
+    });
+
+    React.useEffect(() => {
+        if (visible) {
+            setOutcomes(undefined);
+        }
+    }, [visible, rows]);
+
+    const fields = React.useMemo<Array<DialogField<FormValues>>>(() => {
+        const status = (
+            <Flex direction="column" gap={3}>
+                <RowsSummary rows={rows} />
+                {!stateReady &&
+                    (pipelineStateError ? (
+                        <YTErrorBlock error={pipelineStateError as YTErrorBlockProps['error']} />
+                    ) : (
+                        <Loader size="m" />
+                    ))}
+                {stateReady && gate.blocked && (
+                    <Alert theme="warning" message={i18n('alert_pipeline-running')} />
+                )}
+                {stateReady && gate.requiresForce && (
+                    <Alert theme="warning" message={i18n('alert_force-paused')} />
+                )}
+                {outcomes && !areAllCommitted(outcomes, rows.length) && (
+                    <React.Fragment>
+                        <Alert theme="danger" message={i18n('alert_delete-failed')} />
+                        <Text>
+                            {i18n('text_deleted-count', {
+                                done: String(countCommitted(outcomes)),
+                                total: String(rows.length),
+                            })}
+                        </Text>
+                        <OutcomesSummary outcomes={outcomes} />
+                    </React.Fragment>
+                )}
+            </Flex>
+        );
+        return [
+            {name: 'summary', type: 'block', extras: {children: status}},
+            ...(gate.requiresForce
+                ? [
+                      {
+                          name: 'force' as const,
+                          type: 'checkbox' as const,
+                          extras: {children: i18n('label_force')},
+                      },
+                  ]
+                : []),
+        ];
+    }, [gate.blocked, gate.requiresForce, outcomes, pipelineStateError, rows, stateReady]);
 
     return (
-        <Dialog
-            open={visible}
-            onClose={() => {
-                if (!deleting) {
+        <YTDFDialog<FormValues>
+            key={`${visible ? 'open' : 'closed'}:${rows.map(getStateRowId).join('|')}`}
+            visible={visible}
+            size="m"
+            headerProps={{title: i18n('title_delete-states')}}
+            footerProps={{
+                textApply: i18n('action_delete'),
+                textCancel: i18n('action_cancel'),
+                propsButtonApply: {view: 'outlined-danger'},
+            }}
+            pristineSubmittable
+            initialValues={{force: false}}
+            fields={fields}
+            isApplyDisabled={({values, submitting}) =>
+                submitting ||
+                !stateReady ||
+                gate.blocked ||
+                rows.length === 0 ||
+                (gate.requiresForce && !values.force)
+            }
+            onAdd={async (form) => {
+                const nextOutcomes = await runDeleteStates(Boolean(form.getState().values.force));
+                setOutcomes(nextOutcomes);
+                if (areAllCommitted(nextOutcomes, rows.length)) {
+                    onCommitted();
                     onClose();
                 }
             }}
-            disableOutsideClick={deleting}
-            disableEscapeKeyDown={deleting}
-            size="m"
-        >
-            <Dialog.Header caption={i18n('title_delete-states')} />
-            <Dialog.Body>
-                <Flex direction="column" gap={3}>
-                    <RowsSummary rows={rows} />
-                    <DeleteStatesStatus
-                        committed={committed}
-                        stateReady={stateReady}
-                        gate={gate}
-                        force={force}
-                        onForceChange={setForce}
-                        preview={preview}
-                        failed={failed}
-                        error={error}
-                        pipelineStateError={pipelineStateError}
-                        totalRows={rows.length}
-                    />
-                    {committed ? (
-                        <Flex justifyContent="flex-end">
-                            <Button onClick={() => onClose()}>{i18n('action_close')}</Button>
-                        </Flex>
-                    ) : (
-                        <Flex gap={2} justifyContent="flex-end">
-                            <Button view="flat" disabled={deleting} onClick={() => onClose()}>
-                                {i18n('action_cancel')}
-                            </Button>
-                            <Button
-                                disabled={!canPreview}
-                                loading={busy === 'preview'}
-                                onClick={() => runDeleteStates(false)}
-                            >
-                                {i18n('action_preview')}
-                            </Button>
-                            <Button
-                                view="outlined-danger"
-                                disabled={!canDelete}
-                                loading={busy === 'delete'}
-                                onClick={() => runDeleteStates(true)}
-                            >
-                                {i18n('action_delete')}
-                            </Button>
-                        </Flex>
-                    )}
-                </Flex>
-            </Dialog.Body>
-        </Dialog>
+            onClose={onClose}
+        />
     );
 }

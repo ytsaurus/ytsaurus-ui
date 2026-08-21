@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
 import React from 'react';
-import {render, screen} from '@testing-library/react';
+import {fireEvent, render, screen} from '@testing-library/react';
 
 import type {FlowStateCellHandlers, FlowStateResultRow} from '../types';
 import type {FlowReadStatesResponse} from '../../../../../../shared/yt-types';
@@ -64,9 +64,13 @@ jest.mock('../../../../../components/DataTableGravity', () => ({
                 cell: (props: {row: {original: FlowStateResultRow}}) => React.ReactNode;
             }>;
             data: Array<FlowStateResultRow>;
+            enableMultiRowSelection: boolean;
         };
     }) => (
-        <div data-testid="results-table">
+        <div
+            data-testid="results-table"
+            data-multi-row-selection={String(table.enableMultiRowSelection)}
+        >
             {table.data[0] &&
                 table.columns
                     .slice(1)
@@ -111,7 +115,7 @@ function renderResults(props: Partial<React.ComponentProps<typeof FlowStateResul
             rowSelection={{}}
             onRowSelectionChange={() => {}}
             writeDenied={false}
-            onDeleteSelected={() => {}}
+            onDeleteRows={() => {}}
             {...props}
         />,
     );
@@ -210,4 +214,24 @@ it('describes the bounded response without presenting a row count or raw switch'
     expect(screen.getByText('text_bounded-results')).not.toBeNull();
     expect(screen.queryByText(/label_rows/)).toBeNull();
     expect(screen.queryByRole('checkbox')).toBeNull();
+});
+
+it('enables multi-row selection and exposes a rightmost row delete action', () => {
+    const onDeleteRows = jest.fn();
+    renderResults({
+        response: {
+            key_states: [{computation_id: 'state', key: [1], states: {'/counter': 42}}],
+        },
+        onDeleteRows,
+    });
+
+    const rowDeleteButton = screen.getByRole('button', {name: 'action_delete-row'});
+    rowDeleteButton.focus();
+    expect(document.activeElement).toBe(rowDeleteButton);
+    fireEvent.click(rowDeleteButton);
+
+    expect(screen.getByTestId('results-table').dataset.multiRowSelection).toBe('true');
+    expect(onDeleteRows).toHaveBeenCalledWith([
+        expect.objectContaining({section: 'key_state', stateName: '/counter'}),
+    ]);
 });

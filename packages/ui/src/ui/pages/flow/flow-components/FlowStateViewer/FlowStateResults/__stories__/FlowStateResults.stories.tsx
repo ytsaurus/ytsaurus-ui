@@ -55,7 +55,7 @@ const baseArgs = {
     rowSelection: {},
     onRowSelectionChange: () => {},
     writeDenied: false,
-    onDeleteSelected: () => {},
+    onDeleteRows: () => {},
 };
 
 function renderResults(args: React.ComponentProps<typeof FlowStateResults>) {
