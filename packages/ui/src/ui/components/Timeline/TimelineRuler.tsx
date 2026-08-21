@@ -3,7 +3,8 @@ import React, {type FC} from 'react';
 import {Button} from '@gravity-ui/uikit';
 
 import cn from 'bem-cn-lite';
-import {RangeDateSelection, type RangeDateSelectionProps} from '@gravity-ui/date-components';
+import {type RangeDateSelectionProps} from '@gravity-ui/date-components';
+import {RangeDateSelection} from '../RangeDateSelection';
 import {type DateTime, dateTimeParse} from '../../utils/date-utils';
 
 import i18n from './i18n';
@@ -24,11 +25,9 @@ type Props = {
         zoomIn?: string;
         zoomOut?: string;
     };
-    zoomFixedPoint?: number;
-    zoomSticksToNow?: boolean;
     hasNowButton?: boolean;
     onUpdate: (data: {from: number; to: number}) => void;
-} & Omit<RangeDateSelectionProps, 'onUpdate'>;
+} & Omit<RangeDateSelectionProps, 'onUpdate' | 'minDuration' | 'maxDuration'>;
 
 export const TimelineRuler: FC<Props> = ({
     from,
@@ -38,6 +37,8 @@ export const TimelineRuler: FC<Props> = ({
     hasNowButton = true,
     titles,
     onUpdate,
+    minRange,
+    maxRange,
     ...restProps
 }) => {
     const handeOnNowReset = () => {
@@ -61,6 +62,8 @@ export const TimelineRuler: FC<Props> = ({
                         start: dateTimeParse(from)!,
                         end: dateTimeParse(to)!,
                     }}
+                    minDuration={minRange}
+                    maxDuration={maxRange}
                     displayNow={displayNow}
                     onUpdate={handleOnUpdate}
                 />

@@ -36,8 +36,6 @@ export interface TimelineProps {
     hasRulerNowButton?: boolean;
     hasRulerZoomButtons?: boolean;
     wrapper?: (props: TimelineWrapperProps) => ReactNode;
-    zoomFixedPoint?: number;
-    zoomSticksToNow?: boolean;
 }
 
 export interface TimelineShortcut {
@@ -124,16 +122,7 @@ export class Timeline extends React.Component<TimelineProps> {
             return null;
         }
 
-        const {
-            from,
-            to,
-            hasRulerNowButton,
-            hasRulerZoomButtons,
-            zoomFixedPoint,
-            zoomSticksToNow,
-            minRange,
-            maxRange,
-        } = this.props;
+        const {from, to, hasRulerNowButton, hasRulerZoomButtons, minRange, maxRange} = this.props;
         return (
             <TimelineRuler
                 className={b('ruler')}
@@ -143,8 +132,6 @@ export class Timeline extends React.Component<TimelineProps> {
                 hasScaleButtons={hasRulerZoomButtons}
                 minRange={minRange}
                 maxRange={maxRange}
-                zoomFixedPoint={zoomFixedPoint}
-                zoomSticksToNow={zoomSticksToNow}
                 onUpdate={this.setTime}
             />
         );
