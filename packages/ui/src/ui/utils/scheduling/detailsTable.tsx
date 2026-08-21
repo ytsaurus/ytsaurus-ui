@@ -120,6 +120,31 @@ export const childTableItems = {
         },
         align: 'left',
     },
+    name_title: {
+        sort(item: SchedulingRowData) {
+            if (item.type === 'operation') {
+                const title = item.attributes?.title;
+                return title ? title : item.id;
+            }
+            return item.name;
+        },
+        get caption() {
+            return i18n('field_title');
+        },
+        align: 'left',
+    },
+    name_fifo: {
+        sort(item: SchedulingRowData) {
+            if (item.type === 'operation') {
+                return item.fifoIndex;
+            }
+            return item.name;
+        },
+        get caption() {
+            return i18n('field_fi');
+        },
+        align: 'left',
+    },
     type: {
         sort(item: SchedulingRowData) {
             const {type, integralType, operationType} = item;

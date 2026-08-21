@@ -758,7 +758,23 @@ function NameHeader() {
             title={i18n('title_pool-operation')}
             column="name"
             loading={loading || expandedeLoading}
-            allowUnordered
+            options={[
+                {
+                    column: 'name',
+                    title: i18n('field_sort-fifo-title'),
+                    allowUnordered: true,
+                },
+                {
+                    column: 'name_title',
+                    title: i18n('field_sort-title'),
+                    allowUnordered: true,
+                },
+                {
+                    column: 'name_fifo',
+                    title: i18n('field_sort-fifo'),
+                    allowUnordered: true,
+                },
+            ]}
         />
     );
 }
