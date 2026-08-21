@@ -13,7 +13,7 @@ import {
     setInterval,
 } from '../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
 import {type DateTime, dateTimeParse} from '../../../../../utils/date-utils';
-import {RangeDateSelection} from '@gravity-ui/date-components';
+import {YTRangeDateSelection} from '../../../../../components/RangeDateSelection';
 import ChevronsExpandToLinesIcon from '@gravity-ui/icons/svgs/chevrons-expand-to-lines.svg';
 import {resetInterval} from '../../../../../store/actions/operations/jobs-timeline';
 
@@ -59,7 +59,7 @@ export const TimeLineHeader: FC<Props> = ({className}) => {
                 >
                     <Icon data={ChevronsExpandToLinesIcon} size={16} />
                 </Button>
-                <RangeDateSelection
+                <YTRangeDateSelection
                     className={block('range-selector')}
                     value={{
                         start: dateTimeParse(interval.from)!,
