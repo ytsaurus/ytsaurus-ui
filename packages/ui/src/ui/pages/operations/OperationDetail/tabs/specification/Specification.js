@@ -195,6 +195,7 @@ function Specification({operation, operationId}) {
                 </CollapsibleSectionStateLess>
                 <EditSpecificationPatchDialog
                     operationId={operationId}
+                    resultingSpec={operation.resultingSpec}
                     visible={showEditPatch && operation.inIntermediateState()}
                     onClose={onEditPatchClose}
                 />
