@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.3.1...components-v1.3.2) (2026-08-24)
+
+
+### Bug Fixes
+
+* **Components:** read teble wrong parameters [YTFRONT-5981] ([afc3eca](https://github.com/ytsaurus/ytsaurus-ui/commit/afc3eca3a3fc4147b6c01a42cbf495f293d7c7f0))
+
 ## [1.3.1](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.3.0...components-v1.3.1) (2026-08-10)
 
 
