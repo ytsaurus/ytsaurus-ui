@@ -1,5 +1,11 @@
 {
   "title_provided-specification": "Provided specification",
   "title_unrecognized-specification": "Unrecognized specification",
-  "title_resulting-specification": "Resulting specification"
+  "title_resulting-specification": "Resulting specification",
+  "title_specification-patch": "Specification patch",
+  "title_edit-specification": "Edit specification",
+  "action_edit-specification": "Edit specification",
+  "action_apply-patch": "Apply patch",
+  "field_specification-patch": "Specification patch",
+  "context_supported-patch-paths": "Supported paths: /max_failed_job_count and /tasks/<task_name>/job_count."
 }
