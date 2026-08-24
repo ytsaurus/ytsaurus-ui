@@ -9,11 +9,9 @@ import {makeDirectDownloadPath} from '../../../../utils/navigation';
 
 export const selectDownloadPath = createSelector(
     [selectPath, selectCurrentClusterConfig, selectMergedUiSettings],
-    (cypressPath, {id: cluster, proxy, externalProxy}, uiSettings) => {
+    (cypressPath, clusterConfig, uiSettings) => {
         const path = makeDirectDownloadPath('read_file', {
-            cluster,
-            proxy,
-            externalProxy,
+            clusterConfig,
             uiSettings,
         });
         const query = [
