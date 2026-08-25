@@ -5,6 +5,8 @@ import Icon from '../../../components/Icon/Icon';
 import {useDispatch} from '../../../store/redux-hooks';
 import ReadOnlyIcon from '../../../assets/img/svg/read-only-icon.svg';
 import WarmUpIcon from '../../../assets/img/svg/warmup-icon.svg';
+import SnowflakeIcon from '@gravity-ui/icons/svgs/snowflake.svg';
+import PuzzleIcon from '@gravity-ui/icons/svgs/puzzle.svg';
 import {makeShortSystemAddress} from '../helpers/makeShortSystemAddress';
 import {Flex, Text} from '@gravity-ui/uikit';
 import {ClipboardButton, Tooltip} from '@ytsaurus/components';
@@ -46,7 +48,13 @@ export const Instance: FC<Props> = ({instance, hostType, allowVoting, allowServi
     const dispatch = useDispatch();
     const {state, $address, $physicalAddress} = instance;
     const attributes = instance.$attributes as CypressNode<
-        {read_only: boolean; voting: boolean; warming_up: boolean},
+        {
+            read_only: boolean;
+            voting: boolean;
+            warming_up: boolean;
+            frozen: boolean;
+            discombobulated: boolean;
+        },
         unknown
     >['$attributes'];
     const address = hostType === 'host' ? $address : $physicalAddress;
@@ -91,6 +99,16 @@ export const Instance: FC<Props> = ({instance, hostType, allowVoting, allowServi
                 {attributes?.warming_up && (
                     <span className={b('icon-glyph')} title={i18n('value_warming-up')}>
                         <WarmUpIcon width={14} height={14} />
+                    </span>
+                )}
+                {attributes?.frozen && (
+                    <span className={b('icon-glyph')} title={i18n('value_frozen')}>
+                        <SnowflakeIcon width={14} height={14} />
+                    </span>
+                )}
+                {attributes?.discombobulated && (
+                    <span className={b('icon-glyph')} title={i18n('value_discombobulated')}>
+                        <PuzzleIcon width={14} height={14} />
                     </span>
                 )}
             </div>
