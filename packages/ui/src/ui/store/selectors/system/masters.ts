@@ -18,6 +18,8 @@ export class MasterInstance {
         read_only?: boolean;
         voting?: boolean;
         warming_up?: boolean;
+        frozen?: boolean;
+        discombobulated?: boolean;
         state?: MasterInstanceState;
         automaton_version?: string;
         committed_version?: string;

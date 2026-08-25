@@ -20,6 +20,8 @@
   "value_maintenance": "Maintenance",
   "value_read-only": "Read only",
   "value_warming-up": "Warming up",
+  "value_frozen": "Frozen",
+  "value_discombobulated": "Discombobulated",
   "title_edit-address": "Edit {{address}}",
   "value_nonvoting": "[nonvoting]",
   "title_switch-leader-for": "Switch leader for {{cellId}}",
