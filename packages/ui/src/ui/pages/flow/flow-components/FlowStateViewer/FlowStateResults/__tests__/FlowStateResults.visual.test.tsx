@@ -70,11 +70,22 @@ test('FlowStateResults: Narrow delete remains keyboard reachable', async ({mount
 });
 
 test('FlowStateResults: Refreshing rows are inert', async ({mount, page}) => {
-    await mount(<FlowStateResultsStories.Refreshing />);
+    const selectedRowId = 'key_state|state||["4506162232340681623","checkout"]|/counter';
+    await mount(<FlowStateResultsStories.Refreshing rowSelection={{[selectedRowId]: true}} />);
     const content = page.locator('[data-testid="results-content"]');
     const deleteButton = page.getByRole('button', {name: 'Delete state row'}).first();
+    const bulkDeleteButton = page.getByRole('button', {name: 'Delete', exact: true});
+    const rawResponseButton = page.getByRole('button', {name: 'Show raw response'});
+    const status = page.getByRole('status');
 
     await expect(content).toHaveAttribute('inert', '');
-    await deleteButton.focus();
-    await expect(deleteButton).not.toBeFocused();
+    await expect(status).toHaveAttribute('aria-live', 'polite');
+    expect(
+        await content.evaluate((node) => !node.contains(document.querySelector('[role="status"]'))),
+    ).toBe(true);
+    for (const action of [bulkDeleteButton, deleteButton, rawResponseButton]) {
+        await action.focus();
+        await expect(action).not.toBeFocused();
+        await expect(action.click({timeout: 500})).rejects.toThrow();
+    }
 });

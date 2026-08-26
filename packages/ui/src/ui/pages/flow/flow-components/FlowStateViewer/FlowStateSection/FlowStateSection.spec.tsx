@@ -37,6 +37,9 @@ jest.mock('../FlowStateResults/FlowStateResults', () => ({
             <span data-testid="selected-count">
                 {Object.values(rowSelection).filter(Boolean).length}
             </span>
+            <span data-testid="second-row-selected">
+                {String(Boolean(rowSelection['key_state|state||[2]|/second']))}
+            </span>
             <button
                 onClick={() =>
                     onRowSelectionChange({
@@ -239,5 +242,18 @@ it('refreshes once and clears selection after a complete delete', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Commit all'}));
 
     expect(screen.getByTestId('selected-count').textContent).toBe('0');
+    expect(mockRefetch).toHaveBeenCalledTimes(1);
+});
+
+it('keeps unrelated selection after a complete single-row delete', () => {
+    mockResponse = makeResponse();
+    render(<FlowStateSection pipeline_path="//pipeline" />);
+    fireEvent.click(screen.getByRole('button', {name: 'Select two'}));
+    fireEvent.click(screen.getByRole('button', {name: 'Delete first row'}));
+
+    fireEvent.click(screen.getByRole('button', {name: 'Commit all'}));
+
+    expect(screen.getByTestId('selected-count').textContent).toBe('1');
+    expect(screen.getByTestId('second-row-selected').textContent).toBe('true');
     expect(mockRefetch).toHaveBeenCalledTimes(1);
 });

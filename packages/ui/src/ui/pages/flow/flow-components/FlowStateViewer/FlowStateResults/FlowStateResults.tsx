@@ -427,64 +427,67 @@ export function FlowStateResults({
 
     return (
         <Flex direction="column" gap={2} className={block()}>
-            {selectedCount > 0 && (
-                <Flex gap={3} alignItems="center">
-                    <Text color="secondary">
-                        {i18n('text_selected-rows', {count: String(selectedCount)})}
-                    </Text>
-                    <Button
-                        view="outlined-danger"
-                        disabled={writeDenied}
-                        onClick={() => onDeleteRows(selectDeletableRows(rows, rowSelection))}
-                    >
-                        {i18n('action_delete')}
-                    </Button>
-                    {writeDenied && (
-                        <Text color="secondary">{i18n('alert_no-write-permission')}</Text>
-                    )}
-                </Flex>
-            )}
-            {(response.errors ?? []).map((message, index) => (
-                <YTErrorBlock key={`${index}:${message}`} error={{message}} />
-            ))}
-            <Flex gap={3} alignItems="center" justifyContent="space-between">
-                <Text color="secondary">
-                    {i18n('text_bounded-results', {limit: String(READ_STATES_LIMIT)})}
-                </Text>
-                <ClickableAttributesButton
-                    aria-label={i18n('tooltip_show-raw-response')}
-                    title={i18n('title_raw-response')}
-                    attributes={response}
-                    view="flat-secondary"
-                    size="s"
-                    tooltipProps={{
-                        placement: 'bottom-end',
-                        content: i18n('tooltip_show-raw-response'),
-                    }}
-                />
-            </Flex>
-            <div
-                ref={contentRef}
-                data-testid="results-content"
-                className={block('content', {loading: refreshing})}
-                aria-busy={refreshing}
-            >
+            <div className={block('content', {loading: refreshing})}>
                 {refreshing && (
-                    <div className={block('content-loader')} role="status">
+                    <div className={block('content-loader')} role="status" aria-live="polite">
                         <Loader size="s" />
                         <span className={block('status-label')}>{i18n('status_refreshing')}</span>
                     </div>
                 )}
-                <FlowStateResultsTable
-                    rows={rows}
-                    ysonSettings={ysonSettings}
-                    cluster={cluster}
-                    handlers={handlers}
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={onRowSelectionChange}
-                    writeDenied={writeDenied}
-                    onDeleteRows={onDeleteRows}
-                />
+                <div ref={contentRef} data-testid="results-content" aria-busy={refreshing}>
+                    <Flex direction="column" gap={2}>
+                        {selectedCount > 0 && (
+                            <Flex gap={3} alignItems="center">
+                                <Text color="secondary">
+                                    {i18n('text_selected-rows', {count: String(selectedCount)})}
+                                </Text>
+                                <Button
+                                    view="outlined-danger"
+                                    disabled={writeDenied}
+                                    onClick={() =>
+                                        onDeleteRows(selectDeletableRows(rows, rowSelection))
+                                    }
+                                >
+                                    {i18n('action_delete')}
+                                </Button>
+                                {writeDenied && (
+                                    <Text color="secondary">
+                                        {i18n('alert_no-write-permission')}
+                                    </Text>
+                                )}
+                            </Flex>
+                        )}
+                        {(response.errors ?? []).map((message, index) => (
+                            <YTErrorBlock key={`${index}:${message}`} error={{message}} />
+                        ))}
+                        <Flex gap={3} alignItems="center" justifyContent="space-between">
+                            <Text color="secondary">
+                                {i18n('text_bounded-results', {limit: String(READ_STATES_LIMIT)})}
+                            </Text>
+                            <ClickableAttributesButton
+                                aria-label={i18n('tooltip_show-raw-response')}
+                                title={i18n('title_raw-response')}
+                                attributes={response}
+                                view="flat-secondary"
+                                size="s"
+                                tooltipProps={{
+                                    placement: 'bottom-end',
+                                    content: i18n('tooltip_show-raw-response'),
+                                }}
+                            />
+                        </Flex>
+                        <FlowStateResultsTable
+                            rows={rows}
+                            ysonSettings={ysonSettings}
+                            cluster={cluster}
+                            handlers={handlers}
+                            rowSelection={rowSelection}
+                            onRowSelectionChange={onRowSelectionChange}
+                            writeDenied={writeDenied}
+                            onDeleteRows={onDeleteRows}
+                        />
+                    </Flex>
+                </div>
             </div>
         </Flex>
     );

@@ -10,7 +10,7 @@ import type {FlowKeyColumn, FlowStaticSpec} from '../../../../../shared/yt-types
 import type {YsonSettings} from '../../../../components/Yson/Yson';
 import ypath from '../../../../common/thor/ypath';
 import {isAnnotatedBigInteger} from '../../../../store/api/yt/flow/read-states-normalize';
-import {reconcileStateName} from './state-filters';
+import {getOwnProperty, reconcileStateName} from './state-filters';
 
 function replaceAnnotatedIntegers(_key: string, value: unknown): unknown {
     return isAnnotatedBigInteger(value) ? value.$value : value;
@@ -75,11 +75,12 @@ export function keyValuesFromRowKey(
     }
     if (typeof key === 'object') {
         const record = key as Record<string, unknown>;
-        if (!columns.every((column) => column.name in record)) {
+        const values = columns.map((column) => getOwnProperty(record, column.name));
+        if (values.some((value) => value === undefined)) {
             return undefined;
         }
         return Object.fromEntries(
-            columns.map((column) => [column.name, stringifyKeyPart(record[column.name])]),
+            columns.map((column, index) => [column.name, stringifyKeyPart(values[index])]),
         );
     }
     if (columns.length === 1) {
@@ -194,17 +195,19 @@ export function resolveStateStoragePath(
     if (!row.computationId) {
         return undefined;
     }
-    const computation = spec?.computations?.[row.computationId];
-    const declarations =
+    const computation = getOwnProperty(spec?.computations, row.computationId);
+    const declarationsNode =
         row.section === 'external_key_state'
-            ? computation?.external_state_managers
-            : computation?.external_state_joiners;
-    const declaration = ypath.getValue(declarations)?.[row.stateName];
-    const pathNode = ypath.getValue(ypath.getValue(declaration)?.parameters)?.path;
+            ? getOwnProperty(computation, 'external_state_managers')
+            : getOwnProperty(computation, 'external_state_joiners');
+    const declarations = ypath.getValue(declarationsNode);
+    const declaration = ypath.getValue(getOwnProperty(declarations, row.stateName));
+    const parameters = ypath.getValue(getOwnProperty(declaration, 'parameters'));
+    const pathNode = getOwnProperty(parameters, 'path');
     const path = ypath.getValue(pathNode);
     if (typeof path !== 'string' || !path.length) {
         return undefined;
     }
-    const cluster = ypath.getAttributes(pathNode)['cluster'];
+    const cluster = getOwnProperty(ypath.getAttributes(pathNode), 'cluster');
     return {path, cluster: typeof cluster === 'string' ? cluster : undefined};
 }

@@ -51,6 +51,12 @@ export function useFlowDeleteStates({
         sessionRef.current += 1;
     }, [visible, rows]);
 
+    React.useEffect(() => {
+        return () => {
+            sessionRef.current += 1;
+        };
+    }, []);
+
     const pipelineGate = deleteStatesGate(pipelineState);
     const stateReady =
         pipelineState !== undefined && !pipelineStateLoading && pipelineStateError === undefined;

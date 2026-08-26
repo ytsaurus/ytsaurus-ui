@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
 import React from 'react';
-import {act, fireEvent, render, screen} from '@testing-library/react';
+import {act, fireEvent, render, screen, waitFor, within} from '@testing-library/react';
 import {ThemeProvider} from '@gravity-ui/uikit';
 
 import type {FlowKeyColumn} from '../../../../../../shared/yt-types';
@@ -12,26 +12,18 @@ class ResizeObserverStub {
 }
 (global as unknown as {ResizeObserver: unknown}).ResizeObserver = ResizeObserverStub;
 
-type DialogProps = {
-    visible: boolean;
-    initialValues: Record<string, string>;
-    fields: Array<{
-        name: string;
-        validator?: (value: string) => string | undefined;
-    }>;
-    validate: (values: Record<string, string>) => Record<string, string> | undefined;
-    onAdd: (form: {getState: () => {values: Record<string, string>}}) => Promise<void>;
-};
+window.matchMedia = (() => ({
+    matches: false,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+})) as unknown as typeof window.matchMedia;
 
-let dialogProps: DialogProps | undefined;
-
-jest.mock('@ytsaurus/components', () => ({setLang: () => {}}));
-
-jest.mock('../../../../../containers/Dialog', () => ({
-    YTDFDialog: (props: DialogProps) => {
-        dialogProps = props;
-        return props.visible ? <div data-testid="key-dialog" /> : null;
-    },
+jest.mock('@ytsaurus/components', () => ({
+    YTText: ({children}: {children: React.ReactNode}) => <span>{children}</span>,
+    setLang: () => {},
+}));
+jest.mock('../../../../../containers/Block/Block', () => ({
+    YTErrorBlock: () => null,
 }));
 
 jest.mock('./i18n', () => ({
@@ -40,7 +32,7 @@ jest.mock('./i18n', () => ({
 }));
 
 import {FlowStateKeyBuilder} from './FlowStateKeyBuilder';
-import {getKeyFieldId} from './FlowStateKeyDialog';
+import {FlowStateKeyDialog, getKeyFieldId} from './FlowStateKeyDialog';
 import {formatRawKeyDraft, parseRawKeyDraft} from '../state-filters';
 
 const stringColumns: Array<FlowKeyColumn> = [
@@ -49,10 +41,6 @@ const stringColumns: Array<FlowKeyColumn> = [
     {name: 'third', type: 'string'},
 ];
 
-beforeEach(() => {
-    dialogProps = undefined;
-});
-
 describe('raw key parsing', () => {
     it('accepts empty input as an all-empty key', () => {
         expect(parseRawKeyDraft('', stringColumns)).toEqual({
@@ -60,14 +48,8 @@ describe('raw key parsing', () => {
         });
     });
 
-    it('parses positional values', () => {
-        expect(parseRawKeyDraft('[foo; bar; baz]', stringColumns)).toEqual({
-            values: {first: 'foo', second: 'bar', third: 'baz'},
-        });
-    });
-
     it('preserves quoted semicolons and escaped quotes', () => {
-        expect(parseRawKeyDraft('["foo;bar"; "say \\"hello\\""; baz]', stringColumns)).toEqual({
+        expect(parseRawKeyDraft('["foo;bar"; "say \\"hello\\""; "baz"]', stringColumns)).toEqual({
             values: {first: 'foo;bar', second: 'say "hello"', third: 'baz'},
         });
     });
@@ -90,26 +72,108 @@ describe('raw key parsing', () => {
         });
     });
 
-    it('rejects partial emptiness', () => {
-        expect(parseRawKeyDraft('[foo; ; baz]', stringColumns)).toEqual({
+    it('accepts identifier-form string tokens', () => {
+        expect(parseRawKeyDraft('[foo; bar; baz]', stringColumns)).toEqual({
+            values: {first: 'foo', second: 'bar', third: 'baz'},
+        });
+        expect(parseRawKeyDraft('[foo_bar; a-b; a.b]', stringColumns)).toEqual({
+            values: {first: 'foo_bar', second: 'a-b', third: 'a.b'},
+        });
+    });
+
+    it.each(['true', 'NaN', 'Infinity'])('accepts identifier-like string token %s', (value) => {
+        expect(parseRawKeyDraft(`[${value}]`, [{name: 'key', type: 'string'}])).toEqual({
+            values: {key: value},
+        });
+    });
+
+    it('rejects an identifier token for an integer column', () => {
+        expect(parseRawKeyDraft('[foo]', [{name: 'key', type: 'int64'}])).toEqual({
+            error: {errorKey: 'validation_invalid-key-syntax'},
+        });
+    });
+
+    it.each(['["foo"; ; "baz"]', '[foo; ; baz]'])('reports partial emptiness for %s', (raw) => {
+        expect(parseRawKeyDraft(raw, stringColumns)).toEqual({
             error: {errorKey: 'validation_fill-all-keys'},
         });
     });
 
-    it.each([
-        [{name: 'count', type: 'int64'}, 'hello', 'validation_expects-integer'],
-        [{name: 'enabled', type: 'boolean'}, 'yes', 'validation_expects-boolean'],
-    ] as const)('validates %s values', (column, value, errorKey) => {
-        expect(parseRawKeyDraft(`[${value}]`, [column])).toEqual({
-            error: {errorKey, params: expect.any(Object)},
+    it('reports malformed nonblank syntax before partial emptiness', () => {
+        expect(parseRawKeyDraft('[01; ; baz]', stringColumns)).toEqual({
+            error: {errorKey: 'validation_invalid-key-syntax'},
         });
     });
 
-    it('round trips values that need quoting', () => {
-        const values = {first: 'foo;bar', second: 'say "hello"', third: 'baz'};
-        expect(parseRawKeyDraft(formatRawKeyDraft(stringColumns, values), stringColumns)).toEqual({
-            values,
+    it('rejects an all-blank bracket list', () => {
+        expect(parseRawKeyDraft('[; ;]', stringColumns)).toEqual({
+            error: {errorKey: 'validation_invalid-key-syntax'},
         });
+    });
+
+    it('accepts whitespace-only input as an all-empty key', () => {
+        expect(parseRawKeyDraft('   ', stringColumns)).toEqual({
+            values: {first: '', second: '', third: ''},
+        });
+    });
+
+    it.each([
+        ['["foo"]', {name: 'key', type: 'string'}, 'foo'],
+        ['[42]', {name: 'key', type: 'int64'}, '42'],
+        ['[42u]', {name: 'key', type: 'uint64'}, '42'],
+        ['[1.5e2]', {name: 'key', type: 'double'}, '1.5e2'],
+        ['[%true]', {name: 'key', type: 'boolean'}, 'true'],
+    ] as const)('parses canonical token %s', (raw, column, value) => {
+        expect(parseRawKeyDraft(raw, [column])).toEqual({values: {key: value}});
+    });
+
+    it.each(['[]', '[ ]', '[01]', '[0x10]', '[#]', '[["nested"]]', '["foo", "bar", "baz"]'])(
+        'rejects noncanonical token list %s',
+        (raw) => {
+            expect(parseRawKeyDraft(raw, [{name: 'key', type: 'string'}]).error).toBeDefined();
+        },
+    );
+
+    it.each([
+        ['["42"]', 'int64'],
+        ['["42"]', 'uint64'],
+        ['["1.5"]', 'double'],
+        ['["true"]', 'boolean'],
+        ['[42]', 'uint64'],
+        ['[true]', 'boolean'],
+        ['[NaN]', 'double'],
+        ['[Infinity]', 'double'],
+    ])('rejects schema-compatible noncanonical token %s for %s', (raw, type) => {
+        expect(parseRawKeyDraft(raw, [{name: 'key', type}])).toEqual({
+            error: {errorKey: 'validation_invalid-key-syntax'},
+        });
+    });
+
+    it('treats a quoted empty string as present and validates it', () => {
+        expect(parseRawKeyDraft('[""]', [{name: 'key', type: 'string'}])).toEqual({
+            error: {errorKey: 'validation_empty-key-value', params: {name: 'key'}},
+        });
+    });
+
+    it('formats and round trips the canonical typed subset', () => {
+        const columns: Array<FlowKeyColumn> = [
+            {name: 'text', type: 'string'},
+            {name: 'signed', type: 'int64'},
+            {name: 'unsigned', type: 'uint64'},
+            {name: 'fraction', type: 'double'},
+            {name: 'enabled', type: 'boolean'},
+        ];
+        const values = {
+            text: 'foo; "bar"',
+            signed: '42',
+            unsigned: '42',
+            fraction: '1.5e2',
+            enabled: 'true',
+        };
+        const formatted = formatRawKeyDraft(columns, values);
+
+        expect(formatted).toBe('["foo; \\"bar\\""; 42; 42u; 1.5e2; %true]');
+        expect(parseRawKeyDraft(formatted, columns)).toEqual({values});
     });
 });
 
@@ -129,7 +193,46 @@ describe('FlowStateKeyBuilder', () => {
         expect(onChange).not.toHaveBeenCalled();
     });
 
-    it('configures a vertical typed dialog that applies all-empty values', async () => {
+    it('keeps a present-empty raw string draft invalid without changing filters', () => {
+        const onChange = jest.fn();
+        render(
+            <ThemeProvider theme="light">
+                <FlowStateKeyBuilder
+                    columns={[{name: 'key', type: 'string'}]}
+                    values={{}}
+                    onChange={onChange}
+                />
+            </ThemeProvider>,
+        );
+
+        const raw = screen.getByPlaceholderText('placeholder_raw-key');
+        fireEvent.change(raw, {target: {value: '[""]'}});
+
+        expect((raw as HTMLInputElement).value).toBe('[""]');
+        expect(onChange).not.toHaveBeenCalled();
+        expect(screen.getByText('validation_empty-key-value')).not.toBeNull();
+    });
+
+    it('uses its localized visible header as the dialog accessible name', async () => {
+        render(
+            <ThemeProvider theme="light">
+                <FlowStateKeyBuilder columns={stringColumns} values={{}} onChange={() => {}} />
+            </ThemeProvider>,
+        );
+        fireEvent.click(screen.getByRole('button', {name: 'action_edit-key-fields'}));
+
+        const dialog = await screen.findByRole('dialog', {name: 'title_edit-key-fields'});
+        const titles = within(dialog).getAllByText('title_edit-key-fields');
+        expect(titles).toHaveLength(1);
+        expect(titles[0].hidden).toBe(false);
+        expect(getComputedStyle(titles[0]).display).not.toBe('none');
+        expect(getComputedStyle(titles[0]).visibility).not.toBe('hidden');
+        const titleIds = dialog.getAttribute('aria-labelledby')?.split(/\s+/) ?? [];
+        expect(titleIds).toEqual([titles[0].id]);
+        expect(document.querySelectorAll(`[id="${titles[0].id}"]`)).toHaveLength(1);
+    });
+
+    it('renders schema fields in order and applies all-empty values', async () => {
         const onChange = jest.fn();
         render(
             <ThemeProvider theme="light">
@@ -138,22 +241,18 @@ describe('FlowStateKeyBuilder', () => {
         );
         fireEvent.click(screen.getByRole('button', {name: 'action_edit-key-fields'}));
 
-        expect(screen.getByTestId('key-dialog')).not.toBeNull();
-        expect(dialogProps?.fields.map(({name}) => name)).toEqual(['key_0', 'key_1', 'key_2']);
-        expect(dialogProps?.validate({key_0: '', key_1: '', key_2: ''})).toBeUndefined();
-        expect(dialogProps?.validate({key_0: 'value', key_1: '', key_2: ''})).toEqual({
-            key_1: 'validation_fill-all-keys',
-            key_2: 'validation_fill-all-keys',
-        });
-        await act(async () => {
-            await dialogProps?.onAdd({
-                getState: () => ({values: {key_0: '', key_1: '', key_2: ''}}),
-            });
-        });
+        const dialog = await screen.findByRole('dialog', {name: 'title_edit-key-fields'});
+        expect(
+            within(dialog)
+                .getAllByRole('textbox')
+                .map((field) => field.id),
+        ).toEqual([getKeyFieldId(0), getKeyFieldId(1), getKeyFieldId(2)]);
+        fireEvent.click(within(dialog).getByRole('button', {name: 'action_apply-key-fields'}));
+
         expect(onChange).toHaveBeenCalledWith({first: '', second: '', third: ''});
     });
 
-    it('validates and applies a complete typed key', async () => {
+    it('keeps partial and invalid typed values open with field errors', async () => {
         const columns: Array<FlowKeyColumn> = [
             {name: 'count', type: 'int64'},
             {name: 'enabled', type: 'boolean'},
@@ -166,17 +265,110 @@ describe('FlowStateKeyBuilder', () => {
         );
         fireEvent.click(screen.getByRole('button', {name: 'action_edit-key-fields'}));
 
-        expect(dialogProps?.fields[0].validator?.('nope')).toBe('validation_expects-integer');
-        expect(dialogProps?.validate({key_0: '42', key_1: 'true'})).toBeUndefined();
-        await act(async () => {
-            await dialogProps?.onAdd({
-                getState: () => ({values: {key_0: '42', key_1: 'true'}}),
-            });
-        });
+        const dialog = await screen.findByRole('dialog', {name: 'title_edit-key-fields'});
+        const [count, enabled] = within(dialog).getAllByRole('textbox');
+        fireEvent.change(count, {target: {value: '42'}});
+        fireEvent.click(within(dialog).getByRole('button', {name: 'action_apply-key-fields'}));
+        expect(within(dialog).getByText('validation_fill-all-keys')).not.toBeNull();
+        expect(onChange).not.toHaveBeenCalled();
+
+        fireEvent.change(count, {target: {value: 'nope'}});
+        fireEvent.change(enabled, {target: {value: 'true'}});
+        fireEvent.click(within(dialog).getByRole('button', {name: 'action_apply-key-fields'}));
+        expect(within(dialog).getByText('validation_expects-integer')).not.toBeNull();
+        expect(onChange).not.toHaveBeenCalled();
+
+        fireEvent.change(count, {target: {value: '42'}});
+        fireEvent.click(within(dialog).getByRole('button', {name: 'action_apply-key-fields'}));
         expect(onChange).toHaveBeenCalledWith({count: '42', enabled: 'true'});
     });
 
-    it('uses opaque field ids and restores dotted and __proto__ schema names', async () => {
+    it('trims typed values once before validation and Apply', async () => {
+        const columns: Array<FlowKeyColumn> = [
+            {name: 'count', type: 'int64'},
+            {name: 'enabled', type: 'boolean'},
+        ];
+        const onChange = jest.fn();
+        render(
+            <ThemeProvider theme="light">
+                <FlowStateKeyBuilder columns={columns} values={{}} onChange={onChange} />
+            </ThemeProvider>,
+        );
+        fireEvent.click(screen.getByRole('button', {name: 'action_edit-key-fields'}));
+        const dialog = await screen.findByRole('dialog', {name: 'title_edit-key-fields'});
+        const [count, enabled] = within(dialog).getAllByRole('textbox');
+        fireEvent.change(count, {target: {value: ' 42 '}});
+        fireEvent.change(enabled, {target: {value: ' true '}});
+        fireEvent.click(within(dialog).getByRole('button', {name: 'action_apply-key-fields'}));
+
+        expect(onChange).toHaveBeenCalledWith({count: '42', enabled: 'true'});
+    });
+
+    it('applies whitespace-only typed values as canonical empty strings', async () => {
+        const onChange = jest.fn();
+        render(
+            <ThemeProvider theme="light">
+                <FlowStateKeyBuilder columns={stringColumns} values={{}} onChange={onChange} />
+            </ThemeProvider>,
+        );
+        fireEvent.click(screen.getByRole('button', {name: 'action_edit-key-fields'}));
+        const dialog = await screen.findByRole('dialog', {name: 'title_edit-key-fields'});
+        for (const field of within(dialog).getAllByRole('textbox')) {
+            fireEvent.change(field, {target: {value: '   '}});
+        }
+        fireEvent.click(within(dialog).getByRole('button', {name: 'action_apply-key-fields'}));
+
+        expect(onChange).toHaveBeenCalledWith({first: '', second: '', third: ''});
+    });
+
+    it('preserves the current draft across equivalent prop rerenders while open', async () => {
+        const onApply = jest.fn();
+        const renderDialog = (columns: Array<FlowKeyColumn>, values: Record<string, string>) => (
+            <ThemeProvider theme="light">
+                <FlowStateKeyDialog
+                    visible
+                    columns={columns}
+                    values={values}
+                    onApply={onApply}
+                    onClose={() => {}}
+                />
+            </ThemeProvider>
+        );
+        const view = render(renderDialog([{name: 'key', type: 'string'}], {key: 'initial'}));
+        const dialog = await screen.findByRole('dialog', {name: 'title_edit-key-fields'});
+        const field = within(dialog).getByRole('textbox') as HTMLInputElement;
+        fireEvent.change(field, {target: {value: 'edited'}});
+
+        view.rerender(renderDialog([{name: 'key', type: 'string'}], {key: 'initial'}));
+
+        expect(field.value).toBe('edited');
+    });
+
+    it('initializes the draft from current props on every closed-to-open transition', async () => {
+        const renderDialog = (visible: boolean, value: string) => (
+            <ThemeProvider theme="light">
+                <FlowStateKeyDialog
+                    visible={visible}
+                    columns={[{name: 'key', type: 'string'}]}
+                    values={{key: value}}
+                    onApply={() => {}}
+                    onClose={() => {}}
+                />
+            </ThemeProvider>
+        );
+        const view = render(renderDialog(true, 'initial'));
+        let dialog = await screen.findByRole('dialog', {name: 'title_edit-key-fields'});
+        fireEvent.change(within(dialog).getByRole('textbox'), {target: {value: 'edited'}});
+        view.rerender(renderDialog(false, 'current'));
+        view.rerender(renderDialog(true, 'current'));
+        dialog = await screen.findByRole('dialog', {name: 'title_edit-key-fields'});
+
+        await waitFor(() =>
+            expect((within(dialog).getByRole('textbox') as HTMLInputElement).value).toBe('current'),
+        );
+    });
+
+    it('restores dotted and __proto__ schema names through opaque field ids', async () => {
         const columns: Array<FlowKeyColumn> = [
             {name: 'account.name', type: 'string'},
             {name: '__proto__', type: 'string'},
@@ -196,19 +388,61 @@ describe('FlowStateKeyBuilder', () => {
         );
         fireEvent.click(screen.getByRole('button', {name: 'action_edit-key-fields'}));
 
-        expect(dialogProps?.fields.map(({name}) => name)).toEqual([
-            getKeyFieldId(0),
-            getKeyFieldId(1),
-        ]);
-        expect(dialogProps?.initialValues).toEqual({key_0: 'alice', key_1: 'literal'});
-        await act(async () => {
-            await dialogProps?.onAdd({
-                getState: () => ({values: {key_0: 'bob', key_1: 'kept'}}),
-            });
-        });
+        const dialog = await screen.findByRole('dialog', {name: 'title_edit-key-fields'});
+        const [account, prototype] = within(dialog).getAllByRole(
+            'textbox',
+        ) as Array<HTMLInputElement>;
+        expect(account.id).toBe(getKeyFieldId(0));
+        expect(prototype.id).toBe(getKeyFieldId(1));
+        expect(account.value).toBe('alice');
+        expect(prototype.value).toBe('literal');
+        fireEvent.change(account, {target: {value: 'bob'}});
+        fireEvent.change(prototype, {target: {value: 'kept'}});
+        fireEvent.click(within(dialog).getByRole('button', {name: 'action_apply-key-fields'}));
+
         const applied = onChange.mock.calls[0][0];
         expect(Object.keys(applied)).toEqual(['account.name', '__proto__']);
         expect(Object.prototype.hasOwnProperty.call(applied, '__proto__')).toBe(true);
         expect(JSON.stringify(applied)).toBe('{"account.name":"bob","__proto__":"kept"}');
+    });
+
+    it('cancels without applying and resets from current values when reopened', async () => {
+        const onChange = jest.fn();
+        const view = render(
+            <ThemeProvider theme="light">
+                <FlowStateKeyBuilder
+                    columns={stringColumns}
+                    values={{first: 'initial', second: 'two', third: 'three'}}
+                    onChange={onChange}
+                />
+            </ThemeProvider>,
+        );
+        fireEvent.click(screen.getByRole('button', {name: 'action_edit-key-fields'}));
+        let dialog = await screen.findByRole('dialog', {name: 'title_edit-key-fields'});
+        fireEvent.change(within(dialog).getAllByRole('textbox')[0], {
+            target: {value: 'discarded'},
+        });
+        fireEvent.click(within(dialog).getByRole('button', {name: 'Cancel'}));
+        expect(onChange).not.toHaveBeenCalled();
+        await act(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 200));
+        });
+
+        view.rerender(
+            <ThemeProvider theme="light">
+                <FlowStateKeyBuilder
+                    columns={stringColumns}
+                    values={{first: 'current', second: 'two', third: 'three'}}
+                    onChange={onChange}
+                />
+            </ThemeProvider>,
+        );
+        fireEvent.click(screen.getByRole('button', {name: 'action_edit-key-fields'}));
+        dialog = await screen.findByRole('dialog', {name: 'title_edit-key-fields'});
+        await waitFor(() =>
+            expect((within(dialog).getAllByRole('textbox')[0] as HTMLInputElement).value).toBe(
+                'current',
+            ),
+        );
     });
 });

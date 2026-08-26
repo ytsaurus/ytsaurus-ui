@@ -4,6 +4,7 @@ import {fireEvent, render, screen} from '@testing-library/react';
 
 import type {FlowStateCellHandlers, FlowStateResultRow} from '../types';
 import type {FlowReadStatesResponse} from '../../../../../../shared/yt-types';
+import {flattenReadStatesResponse, getStateRowId} from '../state-requests';
 
 jest.mock('@ytsaurus/components', () => ({
     ClipboardButton: ({
@@ -135,18 +136,48 @@ it('renders a loader during the initial scoped read', () => {
     expect(screen.queryByTestId('no-content')).toBeNull();
 });
 
-it('keeps stale populated results visible while refreshing', () => {
+it('keeps the complete stale result region visible but inert while refreshing', () => {
     const response: FlowReadStatesResponse = {
-        partition_states: [
-            {computation_id: 'state', partition_id: 'partition', states: {'/state': 1}},
+        key_states: [
+            {
+                computation_id: 'state',
+                key: ['account'],
+                states: {'/counter': {count: 42}},
+            },
         ],
+        errors: ['section failed'],
     };
-    renderResults({response, refreshing: true});
+    const row = flattenReadStatesResponse(response)[0];
+    renderResults({
+        response,
+        refreshing: true,
+        rowSelection: {[getStateRowId(row)]: true},
+        handlers: {
+            ...handlers,
+            resolveComputationLink: () => '/hahn/flow/state',
+            resolveStoragePath: () => ({cluster: 'hahn', path: '//home/flow/state'}),
+        },
+    });
     expect(screen.getByTestId('results-table')).not.toBeNull();
-    expect(screen.getByRole('status').textContent).toContain('status_refreshing');
     const content = screen.getByTestId('results-content');
+    const status = screen.getByRole('status');
     expect(content.getAttribute('aria-busy')).toBe('true');
     expect(content.hasAttribute('inert')).toBe(true);
+    expect(status.getAttribute('aria-live')).toBe('polite');
+    expect(status.textContent).toContain('status_refreshing');
+    expect(content.contains(status)).toBe(false);
+    expect(content.contains(screen.getByText(/text_selected-rows/))).toBe(true);
+    expect(content.contains(screen.getByTestId('error'))).toBe(true);
+    expect(content.contains(screen.getByText('text_bounded-results'))).toBe(true);
+    expect(content.contains(screen.getByRole('button', {name: 'tooltip_show-raw-response'}))).toBe(
+        true,
+    );
+    expect(content.contains(screen.getByRole('button', {name: 'action_delete'}))).toBe(true);
+    expect(content.contains(screen.getByRole('button', {name: 'action_delete-row'}))).toBe(true);
+    expect(content.contains(screen.getByRole('button', {name: 'action_copy-value'}))).toBe(true);
+    expect(content.contains(screen.getByRole('button', {name: 'tooltip_show-value'}))).toBe(true);
+    expect(content.contains(screen.getByTitle('link_open-computation-page'))).toBe(true);
+    expect(content.contains(screen.getByLabelText('link_open-backing-storage'))).toBe(true);
     expect(screen.queryByTestId('no-content')).toBeNull();
 });
 

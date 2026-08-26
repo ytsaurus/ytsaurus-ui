@@ -37,14 +37,22 @@ function extractGroupByColumns(groupBySchema: unknown): Array<FlowKeyColumn> {
     return Array.isArray(columns) ? (columns as Array<FlowKeyColumn>) : [];
 }
 
+export function getOwnProperty<T>(
+    dictionary: Record<string, T> | undefined,
+    name: string | undefined,
+): T | undefined {
+    if (!dictionary || !name || !Object.prototype.hasOwnProperty.call(dictionary, name)) {
+        return undefined;
+    }
+    return dictionary[name];
+}
+
 export function getComputationGroupByColumns(
     spec: FlowStaticSpec | undefined,
     computationId: string | undefined,
 ): Array<FlowKeyColumn> {
-    if (!spec?.computations || !computationId) {
-        return [];
-    }
-    return extractGroupByColumns(spec.computations[computationId]?.group_by_schema);
+    const computation = getOwnProperty(spec?.computations, computationId);
+    return extractGroupByColumns(computation?.group_by_schema);
 }
 
 function withoutExpressionColumns(columns: Array<FlowKeyColumn>): Array<FlowKeyColumn> {
@@ -63,12 +71,9 @@ function getJoinerKeyOverrideColumns(
     computationId: string | undefined,
     stateName: string | undefined,
 ): Array<FlowKeyColumn> {
-    if (!spec?.computations || !computationId || !stateName) {
-        return [];
-    }
-    const joiner = ypath.getValue(spec.computations[computationId]?.external_state_joiners)?.[
-        stateName
-    ];
+    const computation = getOwnProperty(spec?.computations, computationId);
+    const joiners = ypath.getValue(computation?.external_state_joiners);
+    const joiner = getOwnProperty(joiners, stateName);
     const joinOn = ypath.getValue(joiner)?.join_on;
     return extractGroupByColumns(ypath.getValue(joinOn)?.key_schema_override);
 }
@@ -78,13 +83,9 @@ function isDeclaredManager(
     computationId: string | undefined,
     stateName: string | undefined,
 ): boolean {
-    if (!spec?.computations || !computationId || !stateName) {
-        return false;
-    }
-    return (
-        ypath.getValue(spec.computations[computationId]?.external_state_managers)?.[stateName] !==
-        undefined
-    );
+    const computation = getOwnProperty(spec?.computations, computationId);
+    const managers = ypath.getValue(computation?.external_state_managers);
+    return getOwnProperty(managers, stateName) !== undefined;
 }
 
 export function resolveKeySchema(
@@ -136,10 +137,10 @@ export function getComputationStateNames(
     computationId: string | undefined,
     target: FlowStateTarget,
 ): Array<string> {
-    if (!spec?.computations || !computationId) {
+    const computation = getOwnProperty(spec?.computations, computationId);
+    if (!computation) {
         return [];
     }
-    const computation = spec.computations[computationId];
     const managerNames = Object.keys(computation?.external_state_managers ?? {});
     if (target === 'external_key_state') {
         return managerNames;
@@ -342,11 +343,12 @@ function splitFlatYsonList(raw: string): Array<string> | undefined {
     return tokens;
 }
 
-function decodeRawKeyToken(token: string): string | undefined {
+const SIGNED_INTEGER_PATTERN = /^-?(?:0|[1-9][0-9]*)$/;
+const UNSIGNED_INTEGER_PATTERN = /^(?:0|[1-9][0-9]*)u$/;
+const FINITE_NUMBER_PATTERN = /^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?(?:0|[1-9][0-9]*))?$/;
+
+function decodeQuotedRawKeyToken(token: string): string | undefined {
     const trimmed = token.trim();
-    if (!trimmed.includes('"')) {
-        return trimmed;
-    }
     if (!trimmed.startsWith('"') || !trimmed.endsWith('"')) {
         return undefined;
     }
@@ -355,6 +357,40 @@ function decodeRawKeyToken(token: string): string | undefined {
         return typeof decoded === 'string' ? decoded : undefined;
     } catch {
         return undefined;
+    }
+}
+
+function decodeRawKeyToken(token: string, column: FlowKeyColumn): string | undefined {
+    const trimmed = token.trim();
+    if (!trimmed) {
+        return undefined;
+    }
+    if (trimmed.includes('"')) {
+        return column.type === 'string' ? decodeQuotedRawKeyToken(trimmed) : undefined;
+    }
+    if (column.type === 'string') {
+        return /^[A-Za-z_][A-Za-z0-9_.-]*$/.test(trimmed) ? trimmed : undefined;
+    }
+    switch (column.type) {
+        case 'int64':
+        case 'int32':
+        case 'int16':
+        case 'int8':
+            return SIGNED_INTEGER_PATTERN.test(trimmed) ? trimmed : undefined;
+        case 'uint64':
+        case 'uint32':
+        case 'uint16':
+        case 'uint8':
+            return UNSIGNED_INTEGER_PATTERN.test(trimmed) ? trimmed.slice(0, -1) : undefined;
+        case 'double':
+        case 'float':
+            return FINITE_NUMBER_PATTERN.test(trimmed) && Number.isFinite(Number(trimmed))
+                ? trimmed
+                : undefined;
+        case 'boolean':
+            return trimmed === '%true' || trimmed === '%false' ? trimmed.slice(1) : undefined;
+        default:
+            return undefined;
     }
 }
 
@@ -367,7 +403,7 @@ export function parseRawKeyDraft(raw: string, columns: Array<FlowKeyColumn>): Ra
         return {error: {errorKey: 'validation_invalid-key-syntax'}};
     }
     if (tokens.length === 0) {
-        return {values: Object.fromEntries(columns.map(({name}) => [name, '']))};
+        return {error: {errorKey: 'validation_invalid-key-syntax'}};
     }
     if (tokens.length !== columns.length) {
         return {
@@ -378,21 +414,30 @@ export function parseRawKeyDraft(raw: string, columns: Array<FlowKeyColumn>): Ra
         };
     }
 
-    const decoded = tokens.map(decodeRawKeyToken);
-    if (decoded.some((value) => value === undefined)) {
+    const values: Array<string> = [];
+    let blankCount = 0;
+    for (let index = 0; index < columns.length; index += 1) {
+        if (!tokens[index].trim()) {
+            values.push('');
+            blankCount += 1;
+            continue;
+        }
+        const value = decodeRawKeyToken(tokens[index], columns[index]);
+        if (value === undefined) {
+            return {error: {errorKey: 'validation_invalid-key-syntax'}};
+        }
+        values.push(value);
+    }
+    if (blankCount === columns.length) {
         return {error: {errorKey: 'validation_invalid-key-syntax'}};
     }
-    const values = decoded as Array<string>;
-    const filledCount = values.filter((value) => value.trim()).length;
-    if (filledCount !== 0 && filledCount !== columns.length) {
+    if (blankCount > 0) {
         return {error: {errorKey: 'validation_fill-all-keys'}};
     }
-    if (filledCount > 0) {
-        for (let index = 0; index < columns.length; index += 1) {
-            const casted = castKeyValue(columns[index], values[index]);
-            if ('error' in casted) {
-                return casted;
-            }
+    for (let index = 0; index < columns.length; index += 1) {
+        const casted = castKeyValue(columns[index], values[index]);
+        if ('error' in casted) {
+            return casted;
         }
     }
     return {
@@ -400,16 +445,33 @@ export function parseRawKeyDraft(raw: string, columns: Array<FlowKeyColumn>): Ra
     };
 }
 
-function formatRawKeyToken(value: string): string {
-    return value.trim() !== value || /[;"\\[\]{}<>]/.test(value) ? JSON.stringify(value) : value;
+function formatRawKeyToken(column: FlowKeyColumn, value: string): string {
+    switch (column.type) {
+        case 'int64':
+        case 'int32':
+        case 'int16':
+        case 'int8':
+        case 'double':
+        case 'float':
+            return value.trim();
+        case 'uint64':
+        case 'uint32':
+        case 'uint16':
+        case 'uint8':
+            return `${value.trim()}u`;
+        case 'boolean':
+            return `%${value.trim()}`;
+        default:
+            return JSON.stringify(value);
+    }
 }
 
 export function formatRawKeyDraft(
     columns: Array<FlowKeyColumn>,
     values: Record<string, string>,
 ): string {
-    const orderedValues = columns.map(({name}) => values[name] ?? '');
+    const orderedValues = columns.map(({name}) => getOwnProperty(values, name) ?? '');
     return orderedValues.every((value) => !value)
         ? ''
-        : `[${orderedValues.map(formatRawKeyToken).join('; ')}]`;
+        : `[${orderedValues.map((value, index) => formatRawKeyToken(columns[index], value)).join('; ')}]`;
 }

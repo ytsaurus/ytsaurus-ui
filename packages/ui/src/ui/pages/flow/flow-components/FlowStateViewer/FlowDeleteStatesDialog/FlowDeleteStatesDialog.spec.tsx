@@ -1,6 +1,7 @@
 /** @jest-environment jsdom */
 import React from 'react';
-import {act, fireEvent, render, renderHook, screen} from '@testing-library/react';
+import {act, fireEvent, render, renderHook, screen, waitFor, within} from '@testing-library/react';
+import {ThemeProvider} from '@gravity-ui/uikit';
 
 import type {FlowStateResultRow} from '../types';
 import type {GetPipelineStateData} from '../../../../../../shared/yt-types';
@@ -10,9 +11,27 @@ const mockFlowDeleteStates = jest.fn();
 const mockPermissionRefetch = jest.fn();
 const mockPipelineStateRefetch = jest.fn();
 
+class ResizeObserverStub {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+}
+(global as unknown as {ResizeObserver: unknown}).ResizeObserver = ResizeObserverStub;
+
+window.matchMedia = (() => ({
+    matches: false,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+})) as unknown as typeof window.matchMedia;
+
+jest.mock('@ytsaurus/components', () => ({
+    YTText: ({children}: {children: React.ReactNode}) => <span>{children}</span>,
+    setLang: () => {},
+}));
 jest.mock('../../../../../i18n', () => ({
     __esModule: true,
-    addI18Keysets: () => (key: string) => key,
+    addI18Keysets: () => (key: string, params?: Record<string, string>) =>
+        params ? `${key}:${JSON.stringify(params)}` : key,
 }));
 jest.mock('../../../../../containers/Block/Block', () => ({
     YTErrorBlock: ({error}: {error: {message?: string}}) => <div>{error?.message}</div>,
@@ -31,74 +50,6 @@ jest.mock('../../../../../store/api/yt/flow', () => ({
         (args: unknown) => ({unwrap: () => mockFlowDeleteStates(args)}),
     ],
 }));
-jest.mock('../../../../../containers/Dialog', () => ({
-    makeFormSubmitError: (error: unknown) => ({validationErrors: {form: error}}),
-    YTDFDialog: (() => {
-        const MockReact = jest.requireActual('react');
-        return function MockYTDFDialog(props: {
-            visible: boolean;
-            fields: Array<{name: string; type: string; extras?: {children?: React.ReactNode}}>;
-            initialValues: {force: boolean};
-            isApplyDisabled: (state: {values: {force: boolean}; submitting: boolean}) => boolean;
-            onAdd: (form: {
-                getState: () => {values: {force: boolean}; submitting: boolean};
-            }) => Promise<{validationErrors?: unknown} | undefined | void>;
-            onClose: (form: {
-                getState: () => {values: {force: boolean}; submitting: boolean};
-            }) => void;
-            footerProps: {textApply: string; textCancel: string};
-        }) {
-            const [force, setForce] = MockReact.useState(props.initialValues.force);
-            const [submitting, setSubmitting] = MockReact.useState(false);
-            if (!props.visible) return null;
-            const form = {getState: () => ({values: {force}, submitting})};
-            return (
-                <div role="dialog">
-                    {props.fields.map((field) =>
-                        field.type === 'checkbox' ? (
-                            <label key={field.name}>
-                                <input
-                                    type="checkbox"
-                                    checked={force}
-                                    onChange={(event) => setForce(event.target.checked)}
-                                />
-                                {field.extras?.children}
-                            </label>
-                        ) : (
-                            <MockReact.Fragment key={field.name}>
-                                {field.extras?.children}
-                            </MockReact.Fragment>
-                        ),
-                    )}
-                    <button onClick={() => props.onClose(form)}>
-                        {props.footerProps.textCancel}
-                    </button>
-                    <button onClick={() => props.onClose(form)}>Escape close</button>
-                    <button onClick={() => props.onClose(form)}>Header close</button>
-                    <button onClick={() => props.onClose(form)}>Backdrop close</button>
-                    <button
-                        disabled={props.isApplyDisabled({values: {force}, submitting})}
-                        onClick={async () => {
-                            setSubmitting(true);
-                            const response = await props.onAdd({
-                                getState: () => ({values: {force}, submitting: true}),
-                            });
-                            setSubmitting(false);
-                            if (!response?.validationErrors) {
-                                props.onClose({
-                                    getState: () => ({values: {force}, submitting: false}),
-                                });
-                            }
-                        }}
-                    >
-                        {props.footerProps.textApply}
-                    </button>
-                </div>
-            );
-        };
-    })(),
-}));
-
 import {FlowDeleteStatesDialog} from './FlowDeleteStatesDialog';
 import {useFlowDeleteStates} from './use-flow-delete-states';
 
@@ -136,23 +87,45 @@ function renderDialog(
     };
     const onClose = options.onClose ?? jest.fn();
     const onCommitted = options.onCommitted ?? jest.fn();
-    render(
-        <FlowDeleteStatesDialog
-            visible
-            onClose={onClose}
-            pipeline_path="//pipeline"
-            rows={rows}
-            permission={permission}
-            onCommitted={onCommitted}
-        />,
+    const dialog = (visible: boolean) => (
+        <ThemeProvider theme="light">
+            <FlowDeleteStatesDialog
+                visible={visible}
+                onClose={onClose}
+                pipeline_path="//pipeline"
+                rows={rows}
+                permission={permission}
+                onCommitted={onCommitted}
+            />
+        </ThemeProvider>
     );
-    return {onClose, onCommitted};
+    const view = render(dialog(true));
+    return {
+        onClose,
+        onCommitted,
+        unmount: view.unmount,
+        rerenderVisible: (visible: boolean) => view.rerender(dialog(visible)),
+    };
 }
 
 beforeEach(() => {
     jest.clearAllMocks();
     mockPermissionRefetch.mockReturnValue({unwrap: () => Promise.resolve({action: 'allow'})});
     mockPipelineStateRefetch.mockReturnValue({unwrap: () => Promise.resolve('Stopped')});
+});
+
+it('uses its localized visible header as the dialog accessible name', async () => {
+    renderDialog('Stopped');
+
+    const dialog = await screen.findByRole('dialog', {name: 'title_delete-states'});
+    const titles = within(dialog).getAllByText('title_delete-states');
+    expect(titles).toHaveLength(1);
+    expect(titles[0].hidden).toBe(false);
+    expect(getComputedStyle(titles[0]).display).not.toBe('none');
+    expect(getComputedStyle(titles[0]).visibility).not.toBe('hidden');
+    const titleIds = dialog.getAttribute('aria-labelledby')?.split(/\s+/) ?? [];
+    expect(titleIds).toEqual([titles[0].id]);
+    expect(document.querySelectorAll(`[id="${titles[0].id}"]`)).toHaveLength(1);
 });
 
 it('sends one-step committed deletes and closes after full success', async () => {
@@ -200,6 +173,22 @@ it('Cancel sends no delete requests', () => {
     expect(mockFlowDeleteStates).not.toHaveBeenCalled();
 });
 
+it('routes every idle close path through onClose', async () => {
+    const {onClose} = renderDialog('Stopped');
+    await screen.findByRole('dialog', {name: 'title_delete-states'});
+    const closeButton = screen.getByRole('button', {name: 'Close dialog'});
+    expect(screen.getAllByRole('button', {name: 'Close dialog'})).toHaveLength(1);
+
+    fireEvent.keyDown(document, {key: 'Escape'});
+    expect(onClose).toHaveBeenCalledTimes(1);
+    fireEvent.click(closeButton);
+    expect(onClose).toHaveBeenCalledTimes(2);
+    fireEvent.pointerDown(document.querySelector('.g-modal') as HTMLElement);
+    expect(onClose).toHaveBeenCalledTimes(3);
+    fireEvent.click(screen.getByRole('button', {name: 'action_cancel'}));
+    expect(onClose).toHaveBeenCalledTimes(4);
+});
+
 it('keeps the dialog open and reports outcomes after a partial failure', async () => {
     mockFlowDeleteStates
         .mockResolvedValueOnce({committed: true})
@@ -216,8 +205,59 @@ it('keeps the dialog open and reports outcomes after a partial failure', async (
         false,
     );
     expect(callbacks.onClose).not.toHaveBeenCalled();
-    expect(screen.getByText('alert_delete-failed')).not.toBeNull();
+    expect(screen.getAllByText('alert_delete-failed')).toHaveLength(2);
     expect(screen.getByText('locked')).not.toBeNull();
+});
+
+it('retries only unresolved rows while retaining cumulative committed outcomes', async () => {
+    mockFlowDeleteStates
+        .mockResolvedValueOnce({committed: true})
+        .mockResolvedValueOnce({committed: false, errors: ['locked']})
+        .mockResolvedValueOnce({committed: true});
+    const callbacks = renderDialog('Stopped');
+
+    await act(async () => fireEvent.click(deleteButton()));
+
+    expect(screen.getByText(/text_deleted-count/).textContent).toContain('1');
+    expect(callbacks.onCommitted).toHaveBeenNthCalledWith(
+        1,
+        [
+            expect.objectContaining({response: {committed: true}}),
+            expect.objectContaining({response: {committed: false, errors: ['locked']}}),
+        ],
+        false,
+    );
+
+    await waitFor(() => expect(deleteButton().disabled).toBe(false));
+    await act(async () => fireEvent.click(deleteButton()));
+
+    expect(mockFlowDeleteStates).toHaveBeenCalledTimes(3);
+    expect(mockFlowDeleteStates.mock.calls.map(([{body}]) => body.key)).toEqual([[1], [2], [2]]);
+    expect(callbacks.onCommitted).toHaveBeenNthCalledWith(
+        2,
+        [expect.objectContaining({response: {committed: true}})],
+        true,
+    );
+    expect(callbacks.onClose).toHaveBeenCalledTimes(1);
+});
+
+it('replaces only the unresolved row failure and skips zero-commit reconciliation', async () => {
+    mockFlowDeleteStates
+        .mockResolvedValueOnce({committed: true})
+        .mockResolvedValueOnce({committed: false, errors: ['locked']})
+        .mockResolvedValueOnce({committed: false, errors: ['still locked']});
+    const callbacks = renderDialog('Stopped');
+
+    await act(async () => fireEvent.click(deleteButton()));
+    await waitFor(() => expect(deleteButton().disabled).toBe(false));
+    await act(async () => fireEvent.click(deleteButton()));
+
+    expect(mockFlowDeleteStates.mock.calls.map(([{body}]) => body.key)).toEqual([[1], [2], [2]]);
+    expect(callbacks.onCommitted).toHaveBeenCalledTimes(1);
+    expect(callbacks.onClose).not.toHaveBeenCalled();
+    expect(screen.queryByText('locked')).toBeNull();
+    expect(screen.getByText('still locked')).not.toBeNull();
+    expect(screen.getByText(/text_deleted-count/).textContent).toContain('1');
 });
 
 it('disables Delete while pipeline state is loading', () => {
@@ -270,7 +310,7 @@ it('issues no mutation when a fresh gate request fails', async () => {
     expect(callbacks.onClose).not.toHaveBeenCalled();
 });
 
-it('blocks Cancel, Escape, header and backdrop close while submitting, then auto-closes once', async () => {
+it('blocks Cancel, Escape, header and backdrop close while submitting, then closes once', async () => {
     let resolveFirstDelete: ((value: {committed: true}) => void) | undefined;
     mockFlowDeleteStates
         .mockImplementationOnce(
@@ -285,9 +325,9 @@ it('blocks Cancel, Escape, header and backdrop close while submitting, then auto
     fireEvent.click(deleteButton());
     await act(async () => Promise.resolve());
     fireEvent.click(screen.getByRole('button', {name: 'action_cancel'}));
-    fireEvent.click(screen.getByRole('button', {name: 'Escape close'}));
-    fireEvent.click(screen.getByRole('button', {name: 'Header close'}));
-    fireEvent.click(screen.getByRole('button', {name: 'Backdrop close'}));
+    fireEvent.keyDown(document, {key: 'Escape'});
+    fireEvent.click(screen.getByRole('button', {name: 'Close dialog'}));
+    fireEvent.pointerDown(document.querySelector('.g-modal') as HTMLElement);
     expect(callbacks.onClose).not.toHaveBeenCalled();
 
     await act(async () => {
@@ -298,14 +338,36 @@ it('blocks Cancel, Escape, header and backdrop close while submitting, then auto
     expect(callbacks.onClose).toHaveBeenCalledTimes(1);
 });
 
+it('clears Force and the previous failure when reopened', async () => {
+    mockFlowDeleteStates
+        .mockResolvedValueOnce({committed: true})
+        .mockResolvedValueOnce({committed: false, errors: ['locked']});
+    const callbacks = renderDialog('Paused');
+
+    fireEvent.click(screen.getByRole('checkbox'));
+    await act(async () => fireEvent.click(deleteButton()));
+    expect(screen.getByText('locked')).not.toBeNull();
+
+    callbacks.rerenderVisible(false);
+    callbacks.rerenderVisible(true);
+
+    await waitFor(() =>
+        expect((screen.getByRole('checkbox') as HTMLInputElement).checked).toBe(false),
+    );
+    expect(screen.queryByText('locked')).toBeNull();
+    expect(deleteButton().disabled).toBe(true);
+});
+
 it('rejects an old in-flight delete session after the dialog closes', async () => {
     let resolveDelete: ((value: {committed: true}) => void) | undefined;
-    mockFlowDeleteStates.mockImplementation(
-        () =>
-            new Promise((resolve) => {
-                resolveDelete = resolve;
-            }),
-    );
+    mockFlowDeleteStates
+        .mockImplementationOnce(
+            () =>
+                new Promise((resolve) => {
+                    resolveDelete = resolve;
+                }),
+        )
+        .mockResolvedValue({committed: true});
     mockUsePipelineState.mockReturnValue({
         data: 'Stopped',
         error: undefined,
@@ -333,4 +395,64 @@ it('rejects an old in-flight delete session after the dialog closes', async () =
     await act(async () => resolveDelete?.({committed: true}));
 
     await expect(pending).resolves.toEqual(expect.objectContaining({status: 'stale'}));
+});
+
+it('rejects an in-flight delete session after the controller unmounts', async () => {
+    let resolveDelete: ((value: {committed: true}) => void) | undefined;
+    mockFlowDeleteStates
+        .mockImplementationOnce(
+            () =>
+                new Promise((resolve) => {
+                    resolveDelete = resolve;
+                }),
+        )
+        .mockResolvedValue({committed: true});
+    mockUsePipelineState.mockReturnValue({
+        data: 'Stopped',
+        error: undefined,
+        isFetching: false,
+        refetch: mockPipelineStateRefetch,
+    });
+    const permission = {
+        data: {action: 'allow' as const},
+        error: undefined,
+        isFetching: false,
+        refetch: mockPermissionRefetch,
+    };
+    const {result, unmount} = renderHook(() =>
+        useFlowDeleteStates({visible: true, pipeline_path: '//pipeline', rows, permission}),
+    );
+
+    let pending: ReturnType<typeof result.current.runDeleteStates> | undefined;
+    await act(async () => {
+        pending = result.current.runDeleteStates(false);
+        await Promise.resolve();
+    });
+    unmount();
+    await act(async () => resolveDelete?.({committed: true}));
+
+    await expect(pending).resolves.toEqual(expect.objectContaining({status: 'stale'}));
+    expect(mockFlowDeleteStates).toHaveBeenCalledTimes(1);
+});
+
+it('suppresses dialog continuations after unmounting during Apply', async () => {
+    let resolveDelete: ((value: {committed: true}) => void) | undefined;
+    mockFlowDeleteStates
+        .mockImplementationOnce(
+            () =>
+                new Promise((resolve) => {
+                    resolveDelete = resolve;
+                }),
+        )
+        .mockResolvedValue({committed: true});
+    const callbacks = renderDialog('Stopped');
+
+    fireEvent.click(deleteButton());
+    await act(async () => Promise.resolve());
+    callbacks.unmount();
+    await act(async () => resolveDelete?.({committed: true}));
+
+    expect(callbacks.onCommitted).not.toHaveBeenCalled();
+    expect(callbacks.onClose).not.toHaveBeenCalled();
+    expect(mockFlowDeleteStates).toHaveBeenCalledTimes(1);
 });

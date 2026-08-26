@@ -10,7 +10,7 @@ import type {
     FlowReadStatesResponse,
     FlowStateAccessBody,
 } from '../../../../../shared/yt-types';
-import {castKeyValue} from './state-filters';
+import {castKeyValue, getOwnProperty} from './state-filters';
 
 export const READ_STATES_LIMIT = 10;
 
@@ -23,9 +23,13 @@ export function buildStateAccessBody(
         body.partition_id = filters.partitionId;
     } else if (filters.computationId) {
         body.computation_id = filters.computationId;
-        const filledColumns = keyColumns.filter((column) =>
-            Boolean(filters.keyValues[column.name]?.trim()),
-        );
+        const filledColumns: Array<{column: FlowKeyColumn; value: string}> = [];
+        for (const column of keyColumns) {
+            const value = getOwnProperty(filters.keyValues, column.name);
+            if (value?.trim()) {
+                filledColumns.push({column, value});
+            }
+        }
         if (filledColumns.length) {
             if (filledColumns.length !== keyColumns.length) {
                 return {error: {errorKey: 'validation_fill-all-keys'}};
@@ -34,8 +38,8 @@ export function buildStateAccessBody(
                 return {error: {errorKey: 'validation_key-target-mismatch'}};
             }
             const keyEntries: Array<[string, unknown]> = [];
-            for (const column of filledColumns) {
-                const casted = castKeyValue(column, filters.keyValues[column.name]);
+            for (const {column, value} of filledColumns) {
+                const casted = castKeyValue(column, value);
                 if ('error' in casted) {
                     return casted;
                 }
@@ -118,7 +122,9 @@ export function selectDeletableRows(
     rows: Array<FlowStateResultRow>,
     rowSelection: Record<string, boolean>,
 ): Array<FlowStateResultRow> {
-    return rows.filter((row) => rowSelection[getStateRowId(row)] && isRowDeletable(row));
+    return rows.filter(
+        (row) => Boolean(getOwnProperty(rowSelection, getStateRowId(row))) && isRowDeletable(row),
+    );
 }
 
 export const AUTO_LOAD_DEBOUNCE_MS = 400;

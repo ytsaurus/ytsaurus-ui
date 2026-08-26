@@ -1,9 +1,12 @@
 import React from 'react';
 
-import {type DialogField, YTDFDialog} from '../../../../../containers/Dialog';
+import {Flex, TextInput} from '@gravity-ui/uikit';
+
+import {DialogWrapper} from '../../../../../components/DialogWrapper/DialogWrapper';
 
 import {castKeyValue} from '../state-filters';
 import i18n from './i18n';
+import modalI18n from '../../../../../components/Modal/i18n';
 import type {FlowKeyColumn} from '../../../../../../shared/yt-types';
 
 export type FlowStateKeyDialogProps = {
@@ -39,6 +42,32 @@ export function toSchemaValues(
     );
 }
 
+function validateKeyFormValues(
+    columns: Array<FlowKeyColumn>,
+    formValues: Record<string, string>,
+): Record<string, string> {
+    const normalized = toKeyFormValues(columns, toSchemaValues(columns, formValues));
+    const filledFieldIds = columns
+        .map((_column, index) => getKeyFieldId(index))
+        .filter((fieldId) => normalized[fieldId].trim());
+    const errors = Object.fromEntries(
+        columns.flatMap((column, index) => {
+            const fieldId = getKeyFieldId(index);
+            const value = normalized[fieldId];
+            if (!value.trim()) {
+                return filledFieldIds.length > 0 && filledFieldIds.length < columns.length
+                    ? [[fieldId, i18n('validation_fill-all-keys')]]
+                    : [];
+            }
+            const casted = castKeyValue(column, value);
+            return 'error' in casted
+                ? [[fieldId, i18n(casted.error.errorKey, casted.error.params)]]
+                : [];
+        }),
+    );
+    return errors;
+}
+
 export function FlowStateKeyDialog({
     visible,
     columns,
@@ -46,55 +75,72 @@ export function FlowStateKeyDialog({
     onApply,
     onClose,
 }: FlowStateKeyDialogProps) {
-    const fields = React.useMemo<Array<DialogField<Record<string, string>>>>(
-        () =>
-            columns.map((column, index) => ({
-                name: getKeyFieldId(index),
-                type: 'text',
-                caption: `${column.name} (${column.type})`,
-                validator: (value: string) => {
-                    if (!value?.trim()) {
-                        return undefined;
-                    }
-                    const casted = castKeyValue(column, value);
-                    return 'error' in casted
-                        ? i18n(casted.error.errorKey, casted.error.params)
-                        : undefined;
-                },
-            })),
-        [columns],
-    );
+    const titleId = React.useId();
+    const [formValues, setFormValues] = React.useState(() => toKeyFormValues(columns, values));
+    const [errors, setErrors] = React.useState<Record<string, string>>({});
+    const wasVisibleRef = React.useRef(false);
+
+    React.useEffect(() => {
+        const opening = visible && !wasVisibleRef.current;
+        wasVisibleRef.current = visible;
+        if (opening) {
+            setFormValues(toKeyFormValues(columns, values));
+            setErrors({});
+        }
+    }, [columns, values, visible]);
+
+    const handleApply = () => {
+        const normalizedFormValues = Object.fromEntries(
+            columns.map((_column, index) => {
+                const fieldId = getKeyFieldId(index);
+                return [fieldId, (formValues[fieldId] ?? '').trim()];
+            }),
+        );
+        const nextErrors = validateKeyFormValues(columns, normalizedFormValues);
+        setErrors(nextErrors);
+        if (Object.keys(nextErrors).length > 0) {
+            return;
+        }
+        onApply(toSchemaValues(columns, normalizedFormValues));
+        onClose();
+    };
 
     return (
-        <YTDFDialog<Record<string, string>>
-            visible={visible}
-            size="s"
-            headerProps={{title: i18n('title_edit-key-fields')}}
-            footerProps={{textApply: i18n('action_apply-key-fields')}}
-            pristineSubmittable
-            initialValues={toKeyFormValues(columns, values)}
-            fields={fields}
-            validate={(nextValues) => {
-                const normalized = toKeyFormValues(columns, toSchemaValues(columns, nextValues));
-                const filledColumns = columns.filter((_column, index) =>
-                    normalized[getKeyFieldId(index)].trim(),
-                );
-                if (filledColumns.length === 0 || filledColumns.length === columns.length) {
-                    return undefined;
-                }
-                return Object.fromEntries(
-                    columns
-                        .map((_column, index) => getKeyFieldId(index))
-                        .filter((fieldId) => !normalized[fieldId].trim())
-                        .map((fieldId) => [fieldId, i18n('validation_fill-all-keys')]),
-                );
-            }}
-            onAdd={(form) => {
-                onApply(toSchemaValues(columns, form.getState().values));
-                onClose();
-                return Promise.resolve();
-            }}
-            onClose={onClose}
-        />
+        <DialogWrapper open={visible} size="s" aria-labelledby={titleId} onClose={onClose}>
+            <DialogWrapper.Header caption={i18n('title_edit-key-fields')} id={titleId} />
+            <DialogWrapper.Body>
+                <Flex direction="column" gap={3}>
+                    {columns.map((column, index) => {
+                        const fieldId = getKeyFieldId(index);
+                        const error = errors[fieldId];
+                        return (
+                            <TextInput
+                                key={fieldId}
+                                id={fieldId}
+                                label={`${column.name} (${column.type})`}
+                                value={formValues[fieldId]}
+                                validationState={error ? 'invalid' : undefined}
+                                errorMessage={error}
+                                onUpdate={(value) => {
+                                    setFormValues((current) => ({...current, [fieldId]: value}));
+                                    setErrors((current) => {
+                                        const next = {...current};
+                                        delete next[fieldId];
+                                        return next;
+                                    });
+                                }}
+                            />
+                        );
+                    })}
+                </Flex>
+            </DialogWrapper.Body>
+            <DialogWrapper.Footer
+                preset="default"
+                textButtonApply={i18n('action_apply-key-fields')}
+                textButtonCancel={modalI18n('action_cancel')}
+                onClickButtonApply={handleApply}
+                onClickButtonCancel={onClose}
+            />
+        </DialogWrapper>
     );
 }

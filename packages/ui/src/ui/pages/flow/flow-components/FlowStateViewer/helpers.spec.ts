@@ -156,6 +156,48 @@ describe('getComputationStateNames', () => {
             '/joined',
         ]);
     });
+    it('ignores inherited computation, manager, and joiner declarations', () => {
+        const inheritedComputations = Object.assign(
+            Object.create({
+                toString: {
+                    group_by_schema: [{name: 'inherited', type: 'string'}],
+                },
+            }),
+            {
+                state: {
+                    group_by_schema: [{name: 'key', type: 'string'}],
+                    external_state_managers: Object.create({'/inherited-manager': {}}),
+                    external_state_joiners: Object.create({'/inherited-joiner': {}}),
+                },
+            },
+        ) as FlowStaticSpec['computations'];
+        const inheritedSpec: FlowStaticSpec = {computations: inheritedComputations};
+
+        expect(getComputationGroupByColumns(inheritedSpec, 'toString')).toEqual([]);
+        expect(getComputationStateNames(inheritedSpec, 'state', 'all')).toEqual([]);
+    });
+
+    it('resolves own declarations named toString and __proto__', () => {
+        const specialComputations = Object.fromEntries([
+            ['toString', {group_by_schema: [{name: 'own', type: 'string'}]}],
+            [
+                '__proto__',
+                {
+                    external_state_managers: Object.fromEntries([['__proto__', {}]]),
+                    external_state_joiners: Object.fromEntries([['toString', {}]]),
+                },
+            ],
+        ]) as FlowStaticSpec['computations'];
+        const specialSpec: FlowStaticSpec = {computations: specialComputations};
+
+        expect(getComputationGroupByColumns(specialSpec, 'toString')).toEqual([
+            {name: 'own', type: 'string'},
+        ]);
+        expect(getComputationStateNames(specialSpec, '__proto__', 'all')).toEqual([
+            '__proto__',
+            'toString',
+        ]);
+    });
 });
 
 describe('getAvailableStateTargets', () => {
@@ -349,6 +391,31 @@ describe('buildStateAccessBody', () => {
         ).toBe(true);
         expect(JSON.stringify('body' in built && built.body.key)).toBe('{"__proto__":"literal"}');
     });
+    it('treats missing special-name request values as absent own properties', () => {
+        expect(() =>
+            buildStateAccessBody(filters({computationId: 'state'}), [
+                {name: 'toString', type: 'string'},
+                {name: '__proto__', type: 'string'},
+            ]),
+        ).not.toThrow();
+        expect(
+            buildStateAccessBody(filters({computationId: 'state'}), [
+                {name: 'toString', type: 'string'},
+                {name: '__proto__', type: 'string'},
+            ]),
+        ).toEqual({body: {computation_id: 'state'}});
+    });
+    it('ignores inherited request key values', () => {
+        expect(
+            buildStateAccessBody(
+                filters({
+                    computationId: 'state',
+                    keyValues: Object.create({key: '7'}) as Record<string, string>,
+                }),
+                [keyColumns[1]],
+            ),
+        ).toEqual({body: {computation_id: 'state'}});
+    });
     it('omits target=all', () => {
         expect(buildStateAccessBody(filters({computationId: 'c1'}), [])).toEqual({
             body: {computation_id: 'c1'},
@@ -524,6 +591,31 @@ describe('getComputationGroupByColumns', () => {
     });
 });
 
+describe('resolveKeySchema declaration ownership', () => {
+    it('does not let an inherited manager suppress an own joiner override', () => {
+        const managers = Object.create({'/joined': {}}) as Record<string, unknown>;
+        const specWithInheritedManager: FlowStaticSpec = {
+            computations: {
+                state: {
+                    group_by_schema: [{name: 'base', type: 'string'}],
+                    external_state_managers: managers,
+                    external_state_joiners: {
+                        '/joined': {
+                            join_on: {key_schema_override: [{name: 'joined', type: 'string'}]},
+                        },
+                    },
+                },
+            },
+        };
+
+        expect(resolveKeySchema(specWithInheritedManager, 'state', '/joined', 'all')).toEqual({
+            keyColumns: [{name: 'joined', type: 'string'}],
+            allKeyColumns: [{name: 'joined', type: 'string'}],
+            overrideActive: true,
+        });
+    });
+});
+
 describe('keyValuesFromRowKey', () => {
     const columns = [
         {name: 'user', type: 'uint64'},
@@ -547,6 +639,27 @@ describe('keyValuesFromRowKey', () => {
             user: '7',
             flag: 'true',
         });
+    });
+    it('rejects inherited object-key fields', () => {
+        expect(
+            keyValuesFromRowKey(Object.create({user: 7, flag: true}), columns, allColumns),
+        ).toBeUndefined();
+    });
+    it('maps own special-name object-key fields', () => {
+        const specialColumns = [
+            {name: 'toString', type: 'string'},
+            {name: '__proto__', type: 'string'},
+        ];
+        const key = Object.fromEntries([
+            ['toString', 'method'],
+            ['__proto__', 'prototype'],
+        ]);
+        expect(keyValuesFromRowKey(key, specialColumns)).toEqual(
+            Object.fromEntries([
+                ['toString', 'method'],
+                ['__proto__', 'prototype'],
+            ]),
+        );
     });
     it('maps a scalar onto a single-column key', () => {
         expect(keyValuesFromRowKey(7, [columns[0]], [columns[0]])).toEqual({user: '7'});
@@ -828,6 +941,10 @@ describe('selectDeletableRows', () => {
     it('ignores unselected rows', () => {
         expect(selectDeletableRows([keyRow, joinedRow], {})).toEqual([]);
     });
+    it('ignores inherited selection flags', () => {
+        const selection = Object.create({[getStateRowId(keyRow)]: true}) as Record<string, boolean>;
+        expect(selectDeletableRows([keyRow], selection)).toEqual([]);
+    });
 });
 
 describe('runRowDeletes', () => {
@@ -1044,6 +1161,95 @@ describe('resolveStateStoragePath', () => {
                 undefined,
             ),
         ).toBeUndefined();
+    });
+    it('ignores inherited computation and storage-chain values', () => {
+        const inheritedComputation = Object.create({
+            external_state_managers: {'/profile': {parameters: {path: '//inherited'}}},
+        });
+        const inheritedSpec = {
+            computations: Object.assign(Object.create({inherited: inheritedComputation}), {
+                c: {
+                    external_state_managers: Object.create({
+                        '/profile': {parameters: {path: '//inherited'}},
+                    }),
+                },
+            }),
+        } as FlowStaticSpec;
+        const inheritedParameterSpec = {
+            computations: {
+                c: {
+                    external_state_managers: {
+                        '/profile': Object.create({parameters: {path: '//inherited'}}),
+                    },
+                },
+            },
+        } as FlowStaticSpec;
+        const inheritedPathSpec = {
+            computations: {
+                c: {
+                    external_state_managers: {
+                        '/profile': {parameters: Object.create({path: '//inherited'})},
+                    },
+                },
+            },
+        } as FlowStaticSpec;
+        for (const [computationId, currentSpec] of [
+            ['inherited', inheritedSpec],
+            ['c', inheritedSpec],
+            ['c', inheritedParameterSpec],
+            ['c', inheritedPathSpec],
+        ] as const) {
+            expect(
+                resolveStateStoragePath(
+                    {...baseRow, computationId, section: 'external_key_state', key: [1]},
+                    pipelinePath,
+                    currentSpec,
+                ),
+            ).toBeUndefined();
+        }
+    });
+    it('ignores an inherited cluster attribute', () => {
+        const pathNode = {
+            $attributes: Object.create({cluster: 'inherited'}),
+            $value: '//home/profiles',
+        };
+        const currentSpec = {
+            computations: {
+                c: {external_state_managers: {'/profile': {parameters: {path: pathNode}}}},
+            },
+        } as FlowStaticSpec;
+        expect(
+            resolveStateStoragePath(
+                {...baseRow, section: 'external_key_state', key: [1]},
+                pipelinePath,
+                currentSpec,
+            ),
+        ).toEqual({path: '//home/profiles', cluster: undefined});
+    });
+    it('resolves a fully own special-name storage chain', () => {
+        const pathNode = {
+            $attributes: Object.fromEntries([['cluster', 'seneca']]),
+            $value: '//home/special',
+        };
+        const declarations = Object.fromEntries([
+            ['toString', {parameters: Object.fromEntries([['path', pathNode]])}],
+        ]);
+        const computations = Object.fromEntries([
+            ['__proto__', {external_state_joiners: declarations}],
+        ]);
+        expect(
+            resolveStateStoragePath(
+                {
+                    computationId: '__proto__',
+                    section: 'joined_external_key_state',
+                    stateName: 'toString',
+                    key: [1],
+                    value: 1,
+                },
+                pipelinePath,
+                {computations} as FlowStaticSpec,
+            ),
+        ).toEqual({path: '//home/special', cluster: 'seneca'});
     });
 });
 
@@ -1394,6 +1600,19 @@ describe('resolveKeySchema', () => {
     it('reads an override wrapped in yson attributes at every level', () => {
         expect(resolveKeySchema(wrappedJoinerOverrideSpec, 'state', '/joined', 'all')).toEqual(
             overrideResolution,
+        );
+    });
+    it('does not activate an inherited joiner override', () => {
+        const inheritedJoiners = Object.create({
+            '/joined': {join_on: {key_schema_override: overrideColumns}},
+        });
+        const inheritedSpec = {
+            computations: {
+                state: {group_by_schema: keyColumns, external_state_joiners: inheritedJoiners},
+            },
+        } as FlowStaticSpec;
+        expect(resolveKeySchema(inheritedSpec, 'state', '/joined', 'all')).toEqual(
+            computationResolution,
         );
     });
     it.each(['key_state', 'partition_state'] as const)(

@@ -90,25 +90,21 @@ export function FlowStateSection({
 
     const handleDeleteCommitted = (
         outcomes: Array<FlowRowDeleteOutcome>,
-        allCommitted: boolean,
+        _allCommitted: boolean,
     ) => {
-        if (allCommitted) {
-            setRowSelection({});
-        } else {
-            const committedRowIds = new Set(
-                outcomes
-                    .filter(
-                        (outcome) =>
-                            outcome.response !== undefined && isDeleteCommitted(outcome.response),
-                    )
-                    .map(({rowId}) => rowId),
-            );
-            setRowSelection((current) =>
-                Object.fromEntries(
-                    Object.entries(current).filter(([rowId]) => !committedRowIds.has(rowId)),
-                ),
-            );
-        }
+        const committedRowIds = new Set(
+            outcomes
+                .filter(
+                    (outcome) =>
+                        outcome.response !== undefined && isDeleteCommitted(outcome.response),
+                )
+                .map(({rowId}) => rowId),
+        );
+        setRowSelection((current) =>
+            Object.fromEntries(
+                Object.entries(current).filter(([rowId]) => !committedRowIds.has(rowId)),
+            ),
+        );
         refetch();
     };
 
