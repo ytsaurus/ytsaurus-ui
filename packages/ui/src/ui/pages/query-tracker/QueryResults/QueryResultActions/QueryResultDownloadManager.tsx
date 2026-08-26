@@ -19,6 +19,12 @@ import {downloadFile} from '../../../../store/actions/navigation/content/table/d
  * TODO: get rid of inheritance from DownloadManager
  */
 export class QueryResultTableDownloadManager extends DownloadManager {
+    getDefaultFilename(): string {
+        const {queryId, resultIndex} = this.props as FIX_MY_TYPE;
+
+        return `query_result_${queryId}_${resultIndex + 1}`;
+    }
+
     getDownloadParams() {
         const {value: output_format, error} = this.getOutputFormat();
         const {format} = this.state;

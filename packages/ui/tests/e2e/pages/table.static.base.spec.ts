@@ -43,11 +43,6 @@ test('Static table: column selector work properly', async ({page}) => {
     const url = makeClusterUrl(`navigation?path=${PATH}`);
     await page.goto(url);
 
-    const emptyColHeader = await page.$(
-        '.data-table__table-wrapper th:nth-child(4) :text("empty")',
-    );
-    console.log(await emptyColHeader?.textContent());
-
     await page.click('text="Columns"');
 
     await page.click('.column-selector__list-item-check[data-item="empty"]');
@@ -67,7 +62,14 @@ test('Static table: externalProxy', async ({page}) => {
     await page.goto(url);
 
     await page.click('button[data-qa="show-download-static-table"]');
-    await page.waitForSelector(
-        `a[href^="//external.proxy.my/api/v3/read_table?path=${encodeURIComponent(PATH)}"]`,
-    );
+
+    const requestP = page.waitForRequest((req) => {
+        const downloadUrl = req.url();
+
+        return downloadUrl.includes(
+            `//external.proxy.my/api/v3/read_table?path=${encodeURIComponent(PATH)}`,
+        );
+    });
+
+    await Promise.all([requestP, page.click('button[data-qa="download-static-table"]')]);
 });

@@ -48,7 +48,6 @@ import UIFactory from '../../../../../UIFactory';
 import {makeDirectDownloadPath} from '../../../../../utils/navigation';
 import {type RootState} from '../../../../../store/reducers';
 import {type FIX_MY_TYPE} from '../../../../../types';
-import {ConfirmButton} from './ConfirmButton';
 import {type ThunkDispatch} from 'redux-thunk';
 
 const block = cn('table-download-manager');
@@ -75,8 +74,10 @@ type Props = ReduxProps &
         downloadToClipboard?: (url: string, filename: string) => Promise<void>;
     };
 
+type DownloadFormat = 'dsv' | 'schemaful_dsv' | 'csv' | 'yson' | 'json' | 'excel';
+
 type State = {
-    format: 'dsv' | 'schemaful_dsv' | 'csv' | 'yson' | 'json' | 'excel';
+    format: DownloadFormat;
     visible?: boolean;
     excelExporter: boolean;
     rowsMode: 'range' | 'all';
@@ -106,6 +107,15 @@ type State = {
 const CSV_SEPARATORS: State['separators'] = {
     record: '\n',
     field: ',',
+};
+
+const FILE_EXTENSION_BY_FORMAT: Record<DownloadFormat, string> = {
+    dsv: '.tskv',
+    schemaful_dsv: '.dsv',
+    csv: '.csv',
+    yson: '.yson',
+    json: '.json',
+    excel: '.xlsx',
 };
 
 export class DownloadManager extends React.Component<Props, State> {
@@ -154,7 +164,7 @@ export class DownloadManager extends React.Component<Props, State> {
             ysonFormat: 'text',
             columnsMode: 'all',
             schemafulDsvMissingMode: 'fail', //print_sentinel
-            filename: this.filename,
+            filename: this.getDefaultFilename(),
 
             separators: {
                 keyValue: '=',
@@ -177,6 +187,12 @@ export class DownloadManager extends React.Component<Props, State> {
             excelExporter: false,
             number_precision_mode: 'string',
         };
+    }
+
+    componentDidUpdate(prevProps: Props) {
+        if (this.props.visible && !prevProps.visible) {
+            this.setState({filename: this.getDefaultFilename()});
+        }
     }
 
     getOutputFormat() {
@@ -280,7 +296,7 @@ export class DownloadManager extends React.Component<Props, State> {
         return path + this.downloadColumns + this.downloadRows;
     }
 
-    get filename() {
+    getDefaultFilename(): string {
         const {path} = this.props;
 
         return path.split('/')[path.split('/').length - 1];
@@ -299,6 +315,15 @@ export class DownloadManager extends React.Component<Props, State> {
             ),
         );
         return {query, error};
+    }
+
+    getDownloadFilename() {
+        const {format, filename} = this.state;
+
+        const name = filename.trim() || this.getDefaultFilename();
+        const extension = FILE_EXTENSION_BY_FORMAT[format];
+
+        return name.toLowerCase().endsWith(extension) ? name : `${name}${extension}`;
     }
 
     getDownloadLink() {
@@ -390,7 +415,7 @@ export class DownloadManager extends React.Component<Props, State> {
         }));
     }
 
-    changeFormat = (format: State['format']) => this.setState({format});
+    changeFormat = (format: DownloadFormat) => this.setState({format});
     changeFilename = (filename: State['filename']) => this.setState({filename});
     changeNumRows = (numRows: State['numRows']) => this.setState({numRows});
     changeStartRow = (startRow: State['startRow']) => this.setState({startRow});
@@ -887,40 +912,56 @@ export class DownloadManager extends React.Component<Props, State> {
     }
 
     renderModalCopyButton() {
-        if (!this.props.downloadToClipboard) return null;
+        const {downloadToClipboard} = this.props;
 
-        const {filename} = this.state;
+        if (!downloadToClipboard) {
+            return null;
+        }
+
+        const filename = this.getDownloadFilename();
         const {url, error} = this.getDownloadLink();
 
+        const title = i18n('action_download-to-clipboard');
+
         return (
-            <ConfirmButton
-                filename={filename}
-                href={url}
-                title={i18n('action_download-to-clipboard')}
+            <Button
+                size="m"
+                title={title}
                 disabled={Boolean(error)}
                 qa="download-to-clipboard-static-table"
-                onClick={this.props.downloadToClipboard}
-            />
+                onClick={() => {
+                    downloadToClipboard(url, filename);
+                }}
+            >
+                {title}
+            </Button>
         );
     }
 
-    renderModalConfirmButton(classNameConfirm: string) {
-        const {filename} = this.state;
+    renderModalConfirmButton = (classNameConfirm: string) => {
+        const filename = this.getDownloadFilename();
         const {url, error} = this.getDownloadLink();
 
+        const title = i18n('action_download');
+
+        const handleDownload = () => {
+            this.props.downloadFile(url, filename);
+        };
+
         return (
-            <ConfirmButton
+            <Button
                 className={classNameConfirm}
-                filename={filename}
-                href={url}
-                title={i18n('action_download')}
+                size="m"
+                title={title}
                 disabled={Boolean(error)}
                 view="action"
                 qa="download-static-table"
-                onClick={this.props.downloadFile}
-            />
+                onClick={handleDownload}
+            >
+                {title}
+            </Button>
         );
-    }
+    };
 
     showDialog = () => {
         const {handleShow, cluster} = this.props;
@@ -954,8 +995,8 @@ export class DownloadManager extends React.Component<Props, State> {
                         onCancel={handleClose}
                         confirmText={i18n('action_download')}
                         content={this.renderContent()}
-                        footerContent={this.renderModalCopyButton.bind(this)()}
-                        renderCustomConfirm={this.renderModalConfirmButton.bind(this)}
+                        footerContent={this.renderModalCopyButton()}
+                        renderCustomConfirm={this.renderModalConfirmButton}
                     />
                 )}
             </div>
