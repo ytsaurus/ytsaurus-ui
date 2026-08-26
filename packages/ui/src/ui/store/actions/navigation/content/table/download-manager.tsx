@@ -17,13 +17,14 @@ import {type YTError} from '../../../../../types';
 import {toaster} from '../../../../../utils/toaster';
 import i18n from './i18n';
 
-const requestDownloadFile = async (url: string) =>
-    axios({
+const requestDownloadFile = async (url: string) => {
+    return axios<Blob>({
         method: 'get',
         url,
         responseType: 'blob',
         withCredentials: true,
     });
+};
 
 const HIDING_TIMING = 5000;
 
