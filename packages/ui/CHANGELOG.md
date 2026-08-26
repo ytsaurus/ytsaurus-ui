@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.23.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.22.0...ui-v3.23.0) (2026-08-26)
+
+
+### Features
+
+* **Scheduling:** add pool sort filter [YTFRONT-5930] ([1896c53](https://github.com/ytsaurus/ytsaurus-ui/commit/1896c53e5fd17fe63da3bc3c1fb4dc97385d1cdc))
+* **System:** add new master status icons [YTFRONT-5992] ([af32c83](https://github.com/ytsaurus/ytsaurus-ui/commit/af32c832db22c227ff5c1ad060041b79d0b7fc75))
+
+
+### Bug Fixes
+
+* **Navigation:** broken download path [YTFRONT-5990] ([e710716](https://github.com/ytsaurus/ytsaurus-ui/commit/e710716fd493e248621e4048b0f17f59c876f8b4))
+* **Oerations:** vanilla operation statuses [YTFRONT-5967] ([f987558](https://github.com/ytsaurus/ytsaurus-ui/commit/f98755882c5a92ea1addf44ffe061a77281ee472))
+* **Operations:** progress can be null [YTFRONT-5928] ([856f188](https://github.com/ytsaurus/ytsaurus-ui/commit/856f188b057909ef6630a2edb62027c6bdcbd903))
+* **Queries:** double scroll [YTFRONT-5943] ([291e254](https://github.com/ytsaurus/ytsaurus-ui/commit/291e254580d8c6f500bdc70227afd7a55cb68c32))
+* **UI:** range date selector buttons [YTFRONT-5755] ([6c482c1](https://github.com/ytsaurus/ytsaurus-ui/commit/6c482c1ca7aee5935e719d3746d76c22e16a9668))
+
 ## [3.22.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.21.1...ui-v3.22.0) (2026-08-19)
 
 
