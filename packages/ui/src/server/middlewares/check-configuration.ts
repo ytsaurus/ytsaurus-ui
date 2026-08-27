@@ -19,7 +19,7 @@ export function createConfigurationErrorsMidleware({ctx, config}: NodeKit) {
     const configurationErrors: Array<string> = [];
     if (process.env.YT_AUTH_CLUSTER_ID) {
         ctx.logError(
-            'The YT_AUTH_CLUSTER_ID environment variable is depricated, please replace it with ALLOW_PASSWORD_AUTH',
+            'The YT_AUTH_CLUSTER_ID environment variable is deprecated, please replace it with ALLOW_PASSWORD_AUTH',
         );
     }
 

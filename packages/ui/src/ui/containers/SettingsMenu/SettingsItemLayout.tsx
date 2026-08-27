@@ -5,7 +5,7 @@ import './SettingsItemLayout.scss';
 
 const block = cn('yt-settings-item');
 
-export type SettingsItemLayotProps = {
+export type SettingsItemLayoutProps = {
     children: React.ReactNode;
 
     title?: string;
@@ -13,7 +13,12 @@ export type SettingsItemLayotProps = {
     oneLine?: boolean;
 };
 
-export function SettingsItemLayot({title, children, description, oneLine}: SettingsItemLayotProps) {
+export function SettingsItemLayout({
+    title,
+    children,
+    description,
+    oneLine,
+}: SettingsItemLayoutProps) {
     return (
         <div
             className={block({
