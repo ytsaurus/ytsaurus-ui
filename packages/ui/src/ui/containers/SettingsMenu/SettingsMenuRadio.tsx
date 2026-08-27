@@ -23,6 +23,11 @@ interface BaseProps {
     get(): unknown;
 }
 
+/**
+ * @deprecated
+ * Uses the legacy `settingName`/`settingNS` pattern.
+ * Use `SettingsMenuRadioByKey` instead.
+ */
 export const SettingsMenuRadioBase = (props: BaseProps) => {
     const {
         name,
@@ -123,4 +128,9 @@ const mapStateToProps = (state: RootState) => {
 
 const connector = connect(mapStateToProps, {setSetting});
 
+/**
+ * @deprecated
+ * Uses the legacy `settingName`/`settingNS` pattern.
+ * Use `SettingsMenuRadioByKey` instead.
+ */
 export default connector(SettingsMenuRadio);

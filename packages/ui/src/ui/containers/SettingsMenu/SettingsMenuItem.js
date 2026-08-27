@@ -94,4 +94,10 @@ function mapStateToProps(state) {
     };
 }
 
+/**
+ * @deprecated
+ * Uses the legacy `settingName`/`settingNS` pattern.
+ * Use `BooleanSettingItem` instead. Note: it does not yet support the
+ * `useSwitch`/`annotationHighlight` variants of this component — extend it if you need those.
+ */
 export default connect(mapStateToProps, {setSetting})(SettingsMenuItem);

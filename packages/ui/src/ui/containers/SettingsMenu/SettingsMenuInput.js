@@ -75,4 +75,10 @@ const mapStateToProps = (state) => {
     };
 };
 
+/**
+ * @deprecated
+ * Uses the legacy `settingName`/`settingNS` pattern.
+ * There is no by-key replacement yet — a new component needs to be implemented following the
+ * `settingKey` pattern, see `BooleanSettingItem` for reference.
+ */
 export default connect(mapStateToProps, {setSetting})(SettingsMenuInput);
