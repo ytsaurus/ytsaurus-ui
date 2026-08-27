@@ -4,7 +4,7 @@ import moment from 'moment';
 
 import ypath from '../../common/thor/ypath';
 import hammer from '../../common/hammer';
-import {isNull} from '../../utils';
+import {isNullable} from '../../utils';
 import {createSelector} from 'reselect';
 import {remoteInputUrl} from '../../utils/operations/tabs/details/specification/specification';
 import {type FIX_MY_TYPE} from '../../types';
@@ -179,7 +179,9 @@ export class ListOperationSelector extends OperationSelector {
         this.duration = (moment(this.finishTime) as any) - (moment(this.startTime) as any);
 
         const progress = ypath.getValue(attributes, '/brief_progress');
-        const jobs = (this.jobs = isNull(progress) ? undefined : ypath.getValue(progress, '/jobs'));
+        const jobs = (this.jobs = isNullable(progress)
+            ? undefined
+            : ypath.getValue(progress, '/jobs'));
 
         if (typeof jobs !== 'undefined') {
             this.completedJobs =
@@ -293,7 +295,9 @@ export class DetailedOperationSelector extends OperationSelector {
         this.computePools(attributes);
 
         const progress = ypath.getValue(attributes, '/progress');
-        const jobs = (this.jobs = isNull(progress) ? undefined : ypath.getValue(progress, '/jobs'));
+        const jobs = (this.jobs = isNullable(progress)
+            ? undefined
+            : ypath.getValue(progress, '/jobs'));
 
         if (typeof jobs !== 'undefined') {
             this.completedJobs =
@@ -314,7 +318,7 @@ export class DetailedOperationSelector extends OperationSelector {
                 : 0;
         }
 
-        this.live_preview = isNull(progress)
+        this.live_preview = isNullable(progress)
             ? undefined
             : ypath.getValue(progress, '/live_preview');
     }

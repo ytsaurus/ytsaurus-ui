@@ -10,7 +10,7 @@ import Multimeter from '../../../../../components/Multimeter/Multimeter';
 import {SubjectCard} from '../../../../../components/SubjectLink/SubjectLink';
 
 import {type TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
-import {isNull} from '../../../../../utils';
+import {isNullable} from '../../../../../utils';
 import {selectTargetQueue} from '../../../../../store/selectors/navigation/tabs/consumer';
 
 import i18n from './i18n';
@@ -44,7 +44,7 @@ const Meta: React.FC<Props> = ({owner, partitionCount, readDataWeightRate, readR
                             key: 'owner',
                             label: i18n('field_owner'),
                             value: owner && <SubjectCard name={owner} />,
-                            visible: !isNull(owner),
+                            visible: !isNullable(owner),
                         },
                     ],
                     [
@@ -57,13 +57,13 @@ const Meta: React.FC<Props> = ({owner, partitionCount, readDataWeightRate, readR
                                     text={vital ? i18n('value_true') : i18n('value_false')}
                                 />
                             ),
-                            visible: !isNull(vital),
+                            visible: !isNullable(vital),
                         },
                         {
                             key: 'partition-count',
                             label: i18n('field_partition-count'),
                             value: partitionCount,
-                            visible: !isNull(partitionCount),
+                            visible: !isNullable(partitionCount),
                         },
                     ],
                     [
@@ -77,7 +77,7 @@ const Meta: React.FC<Props> = ({owner, partitionCount, readDataWeightRate, readR
                                     format={format.BytesPerSecond}
                                 />
                             ),
-                            visible: !isNull(readDataWeightRate),
+                            visible: !isNullable(readDataWeightRate),
                         },
                         {
                             key: 'read-row-count-rate',
@@ -89,7 +89,7 @@ const Meta: React.FC<Props> = ({owner, partitionCount, readDataWeightRate, readR
                                     format={format.RowsPerSecond}
                                 />
                             ),
-                            visible: !isNull(readRowCountRate),
+                            visible: !isNullable(readRowCountRate),
                         },
                     ],
                 ]}

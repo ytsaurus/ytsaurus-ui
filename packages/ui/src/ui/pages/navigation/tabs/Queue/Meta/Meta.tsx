@@ -6,7 +6,7 @@ import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary
 import {MetaTable} from '@ytsaurus/components';
 import Multimeter from '../../../../../components/Multimeter/Multimeter';
 import {type TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
-import {isNull} from '../../../../../utils';
+import {isNullable} from '../../../../../utils';
 
 import i18n from './i18n';
 import './Meta.scss';
@@ -37,13 +37,13 @@ const Meta: React.VFC<Props> = ({
                             key: 'partition-count',
                             label: i18n('field_partition-count'),
                             value: partitionCount,
-                            visible: !isNull(partitionCount),
+                            visible: !isNullable(partitionCount),
                         },
                         {
                             key: 'family',
                             label: i18n('field_family'),
                             value: family,
-                            visible: !isNull(family),
+                            visible: !isNullable(family),
                         },
                     ],
                     [
@@ -57,7 +57,7 @@ const Meta: React.VFC<Props> = ({
                                     format={format.RowsPerSecond}
                                 />
                             ),
-                            visible: !isNull(writeRowCountRate),
+                            visible: !isNullable(writeRowCountRate),
                         },
                         {
                             key: 'write-data-weight-rate',
@@ -69,7 +69,7 @@ const Meta: React.VFC<Props> = ({
                                     format={format.BytesPerSecond}
                                 />
                             ),
-                            visible: !isNull(writeDataWeightRate),
+                            visible: !isNullable(writeDataWeightRate),
                         },
                     ],
                 ]}
