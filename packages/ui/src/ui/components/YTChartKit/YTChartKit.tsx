@@ -9,7 +9,7 @@ import ChartKit, {
 import {YagrPlugin} from '@gravity-ui/chartkit/yagr';
 import {GravityChartsPlugin} from '@gravity-ui/chartkit/gravity-charts';
 
-import '@gravity-ui/yagr/dist/index.css';
+import '@gravity-ui/yagr/index.css';
 
 settings.set({plugins: [...settings.get('plugins'), YagrPlugin, GravityChartsPlugin]});
 

@@ -9,6 +9,15 @@
         font-weight: var(--yt-font-weight-bold);
     }
 
+    // @gravity-ui/table ships BaseTable.css (`.gt-table__cell{padding:0}`) and Table.css
+    // (`.gt-styled-table__cell{padding:var(--_--cell-padding)}`) with equal specificity;
+    // which one wins depends on CSS chunk order in the production build, so pin it here.
+    .gt-table__cell,
+    .gt-table__header-cell,
+    .gt-table__footer-cell {
+        padding: var(--_--cell-padding);
+    }
+
     .gt-table__header_sticky {
         z-index: 2;
     }
