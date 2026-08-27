@@ -25,13 +25,6 @@ jest.mock('@ytsaurus/components', () => ({
 jest.mock('../../../../../containers/Block/Block', () => ({
     YTErrorBlock: () => null,
 }));
-jest.mock('@gravity-ui/icons/svgs/pencil.svg', () => ({__esModule: true, default: () => <svg />}), {
-    virtual: true,
-});
-jest.mock('@gravity-ui/icons/svgs/xmark.svg', () => ({__esModule: true, default: () => <svg />}), {
-    virtual: true,
-});
-
 jest.mock('./i18n', () => ({
     __esModule: true,
     default: (key: string) => key,

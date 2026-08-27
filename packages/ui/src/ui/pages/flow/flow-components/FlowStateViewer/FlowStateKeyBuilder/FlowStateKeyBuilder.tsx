@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
+import {Pencil as PencilIcon} from '@gravity-ui/icons';
 import {Button, Flex, Icon, TextInput, Tooltip} from '@gravity-ui/uikit';
 
 import {formatRawKeyDraft, parseRawKeyDraft} from '../state-filters';

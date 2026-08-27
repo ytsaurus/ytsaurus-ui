@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';
+import {Xmark as XmarkIcon} from '@gravity-ui/icons';
 import {Button, Icon, Tooltip} from '@gravity-ui/uikit';
 
 import modalI18n from '../../../../components/Modal/i18n';

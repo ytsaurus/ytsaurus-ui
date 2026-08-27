@@ -36,9 +36,6 @@ jest.mock('../../../../../i18n', () => ({
 jest.mock('../../../../../containers/Block/Block', () => ({
     YTErrorBlock: ({error}: {error: {message?: string}}) => <div>{error?.message}</div>,
 }));
-jest.mock('@gravity-ui/icons/svgs/xmark.svg', () => ({__esModule: true, default: () => <svg />}), {
-    virtual: true,
-});
 jest.mock('../FlowStateResults/FlowStateResults', () => ({
     KIND_LABEL_KEYS: {
         key_state: 'key',
