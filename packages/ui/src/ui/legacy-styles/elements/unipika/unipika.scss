@@ -12,6 +12,14 @@
     }
 }
 
+// @gravity-ui/table's Table.css sets `.gt-styled-table__cell{border-block-start:1px solid ...}`
+// with the same specificity as this reset for @gravity-ui/react-unipika's internal table cells;
+// which one wins depends on CSS chunk order in the production build, so pin it here.
+
+.g-ru-table .g-ru-table__cell {
+    border-width: 0;
+}
+
 .unipika-wrapper .unipika,
 .g-ru-react-unipika .unipika {
     margin: 0;
