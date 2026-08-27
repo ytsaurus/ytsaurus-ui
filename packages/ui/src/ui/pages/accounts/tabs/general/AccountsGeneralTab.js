@@ -65,7 +65,7 @@ import {
     selectAccountsAbcServiceIdSlugFilter,
     selectActiveAccountAggregationRow,
 } from '../../../../store/selectors/accounts/accounts';
-import {isNull} from '../../../../utils';
+import {isNullable} from '../../../../utils';
 import {DASHBOARD_VIEW_CONTEXT} from '../../../../constants/index';
 import {AccountResourceName} from '../../../../constants/accounts/accounts';
 
@@ -95,7 +95,7 @@ const b = block('accounts');
 const progressTooltipClassname = b('progress-tooltip');
 
 function Bytes({bytes, isAggregation}) {
-    if (isNull(bytes)) {
+    if (isNullable(bytes)) {
         return hammer.format.NO_VALUE;
     }
 

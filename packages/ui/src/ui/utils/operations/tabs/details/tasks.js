@@ -6,7 +6,7 @@ import reduce_ from 'lodash/reduce';
 import ypath from '../../../../common/thor/ypath';
 import hammer from '../../../../common/hammer';
 import {getOperationProgress, hasProgressTasks} from './data-flow';
-import {isNull, prepareTableColumns} from '../../../../utils/index';
+import {isNullable, prepareTableColumns} from '../../../../utils/index';
 import i18n from './i18n';
 
 function sortCounters(reasonA, reasonB) {
@@ -90,7 +90,7 @@ export function prepareDataFromGraph(operation) {
     }
 
     const progress = getOperationProgress(operation);
-    const dataFlowGraph = isNull(progress)
+    const dataFlowGraph = isNullable(progress)
         ? undefined
         : ypath.getValue(progress, '/data_flow_graph');
     let jobTypeOrder = ypath.getValue(dataFlowGraph, '/topological_ordering');
@@ -130,7 +130,7 @@ export function prepareDataFromGraph(operation) {
 
 function prepareDataFromGraphByTasks(operation) {
     const progress = getOperationProgress(operation);
-    const tasks = isNull(progress) ? undefined : ypath.getValue(progress, '/tasks');
+    const tasks = isNullable(progress) ? undefined : ypath.getValue(progress, '/tasks');
 
     const res = map_(tasks, (task) => {
         const {task_name, job_type, job_counter} = task;
@@ -143,7 +143,7 @@ function prepareDataFromGraphByTasks(operation) {
         };
     });
 
-    const totalCounters = isNull(progress)
+    const totalCounters = isNullable(progress)
         ? undefined
         : ypath.getValue(progress, '/total_job_counter');
     res.push({

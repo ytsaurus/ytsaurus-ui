@@ -9,7 +9,7 @@ import {Progress} from '@gravity-ui/uikit';
 
 import hammer from '../../../../common/hammer';
 import Account from '../../../../pages/accounts/selector';
-import {isNull} from '../../../../utils';
+import {isNullable} from '../../../../utils';
 
 import {getDefaultSerieColor} from '../../../../constants/colors';
 import {getAccountName} from '../../../../store/selectors/accounts/accounts';
@@ -91,7 +91,7 @@ function ProgressStackImpl({treeItem, infoGetter, useChildren, className, format
             useChildren,
             infoGetter,
         );
-        if (isNull(value) && isNull(progressStack)) {
+        if (isNullable(value) && isNullable(progressStack)) {
             return hammer.format.NO_VALUE;
         }
         const progressValue =

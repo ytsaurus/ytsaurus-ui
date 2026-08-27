@@ -6,7 +6,7 @@ import some_ from 'lodash/some';
 import sortBy_ from 'lodash/sortBy';
 
 import ypath from '../../../../common/thor/ypath';
-import {isNull} from '../../../index';
+import {isNullable} from '../../../index';
 import i18n from './i18n';
 
 export function getOperationProgress(operation) {
@@ -19,7 +19,7 @@ function prepareGraphData(operation) {
     }
 
     const progress = getOperationProgress(operation);
-    const dataFlowGraph = isNull(progress)
+    const dataFlowGraph = isNullable(progress)
         ? undefined
         : ypath.getValue(progress, '/data_flow_graph');
     const jobTypeOrder = ypath.getValue(dataFlowGraph, '/topological_ordering');
@@ -44,8 +44,8 @@ function prepareGraphData(operation) {
 
 function prepareGraphDataByTasks(operation) {
     const progress = getOperationProgress(operation);
-    const dataFlow = isNull(progress) ? undefined : ypath.getValue(progress, '/data_flow');
-    const tasks = isNull(progress) ? undefined : ypath.getValue(progress, '/tasks');
+    const dataFlow = isNullable(progress) ? undefined : ypath.getValue(progress, '/data_flow');
+    const tasks = isNullable(progress) ? undefined : ypath.getValue(progress, '/tasks');
 
     const res = reduce_(
         dataFlow,
@@ -131,5 +131,5 @@ export function prepareIntermediateUsage(operation, intermediate) {
 
 export function hasProgressTasks(operation) {
     const progress = getOperationProgress(operation);
-    return isNull(progress) ? undefined : ypath.getValue(progress, '/tasks');
+    return isNullable(progress) ? undefined : ypath.getValue(progress, '/tasks');
 }

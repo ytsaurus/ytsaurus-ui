@@ -21,7 +21,7 @@ import {selectOperationDetailsLoadingStatus} from '../../../../../../store/selec
 import {useAppRumMeasureStart} from '../../../../../../rum/rum-app-measures';
 import {RumMeasureTypes} from '../../../../../../rum/rum-measure-types';
 import {isFinalLoadingStatus} from '../../../../../../utils/utils';
-import {isNull} from '../../../../../../utils';
+import {isNullable} from '../../../../../../utils';
 import {useRumMeasureStop} from '../../../../../../rum/RumUiContext';
 import {type RootState} from '../../../../../../store/reducers';
 import YTHistogram, {
@@ -172,7 +172,7 @@ class JobSizes extends React.Component<Props, State> {
     renderContent() {
         const {operation} = this.props;
         const progress = ypath.getValue(this.props.operation, '/@progress');
-        const tasks = isNull(progress) ? undefined : ypath.getValue(progress, '/tasks');
+        const tasks = isNullable(progress) ? undefined : ypath.getValue(progress, '/tasks');
         return (
             <ErrorBoundary>
                 <div className={block()}>
