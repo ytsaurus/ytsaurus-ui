@@ -148,6 +148,12 @@ test('FlowStateKeyDialog: visible title and vertical fields', async ({mount, pag
         document.body.classList.add('theme-dark');
     });
     await page.emulateMedia({colorScheme: 'dark'});
+    await expect(page.locator('body')).toHaveClass(/g-root_theme_dark/);
+    await expect(close).toHaveCSS('color', 'rgba(255, 255, 255, 0.85)');
+    await expect(dialog.getByRole('button', {name: 'Cancel'})).toHaveCSS(
+        'color',
+        'rgba(255, 255, 255, 0.85)',
+    );
     const darkTextStyles = await accountName.evaluate(
         (name, type) => {
             const nameStyle = getComputedStyle(name);
