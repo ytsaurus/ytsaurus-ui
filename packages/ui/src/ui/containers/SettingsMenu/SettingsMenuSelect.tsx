@@ -14,7 +14,7 @@ import SelectFacade, {
 import {setSettingByKey} from '../../store/actions/settings';
 import {selectSettingsData} from '../../store/selectors/settings/settings-base';
 
-import {SettingsItemLayot, type SettingsItemLayotProps} from './SettingsItemLayout';
+import {SettingsItemLayout, type SettingsItemLayoutProps} from './SettingsItemLayout';
 
 import './SettingsMenu.scss';
 
@@ -125,7 +125,7 @@ export function SettingMenuMultiSelectByKey<
 }
 
 type SettingsMenuRadioByKeyProps<K extends KeysByType<DescribedSettings, string>> = Omit<
-    SettingsItemLayotProps,
+    SettingsItemLayoutProps,
     'children'
 > & {
     settingKey: K;
@@ -140,14 +140,14 @@ export function SettingsMenuRadioByKey<K extends KeysByType<DescribedSettings, s
     const {value, onUpdate} = useSettingByKey(settingKey);
 
     return (
-        <SettingsItemLayot {...rest}>
+        <SettingsItemLayout {...rest}>
             <SegmentedRadioGroup
                 options={options}
                 value={value}
                 onUpdate={onUpdate}
                 qa={settingKey}
             />
-        </SettingsItemLayot>
+        </SettingsItemLayout>
     );
 }
 

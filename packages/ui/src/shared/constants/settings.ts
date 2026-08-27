@@ -1,6 +1,6 @@
 import {createNS, createNestedNS} from '../utils/settings';
 
-// @depricated Please use `settings-types.ts` to add new options
+// @deprecated Please use `settings-types.ts` to add new options
 export const Page = {
     BAN: 'ban',
     JOB: 'job',
@@ -24,7 +24,7 @@ export const Page = {
     CHYT: 'chyt',
 } as const;
 
-// @depricated Please use `settings-types.ts` to add new options
+// @deprecated Please use `settings-types.ts` to add new options
 export const SettingName = {
     LOCAL: {
         FAVOURITES: 'favourites',
@@ -139,7 +139,7 @@ const SCHEDULING = createNestedNS('scheduling', GLOBAL);
 const QUERY_TRACKER = createNestedNS('queryTracker', GLOBAL);
 const CHYT = createNestedNS('chyt', GLOBAL);
 
-// @depricated Please use `settings-types.ts` to add new options
+// @deprecated Please use `settings-types.ts` to add new options
 export const NAMESPACES = {
     GLOBAL,
     LOCAL,

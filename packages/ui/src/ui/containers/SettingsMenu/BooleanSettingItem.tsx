@@ -8,9 +8,12 @@ import {type KeysByType} from '../../../@types/types';
 
 import {selectSettingsData} from '../../store/selectors/settings/settings-base';
 import {setSettingByKey} from '../../store/actions/settings';
-import {SettingsItemLayot, type SettingsItemLayotProps} from './SettingsItemLayout';
+import {SettingsItemLayout, type SettingsItemLayoutProps} from './SettingsItemLayout';
 
-export type BooleanSettingItemProps<T> = {settingKey: T} & Omit<SettingsItemLayotProps, 'children'>;
+export type BooleanSettingItemProps<T> = {settingKey: T} & Omit<
+    SettingsItemLayoutProps,
+    'children'
+>;
 
 export function BooleanSettingItem<T extends KeysByType<DescribedSettings, boolean>>({
     settingKey,
@@ -20,7 +23,7 @@ export function BooleanSettingItem<T extends KeysByType<DescribedSettings, boole
     const {[settingKey]: checked} = useSelector(selectSettingsData);
 
     return (
-        <SettingsItemLayot {...rest}>
+        <SettingsItemLayout {...rest}>
             <Checkbox
                 content={rest.title}
                 checked={Boolean(checked)}
@@ -29,6 +32,6 @@ export function BooleanSettingItem<T extends KeysByType<DescribedSettings, boole
                 }}
                 qa={settingKey}
             />
-        </SettingsItemLayot>
+        </SettingsItemLayout>
     );
 }
