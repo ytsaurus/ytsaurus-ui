@@ -1,7 +1,8 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {Button, Flex, TextInput} from '@gravity-ui/uikit';
+import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
+import {Button, Flex, Icon, TextInput, Tooltip} from '@gravity-ui/uikit';
 
 import {formatRawKeyDraft, parseRawKeyDraft} from '../state-filters';
 import {FlowStateKeyDialog} from './FlowStateKeyDialog';
@@ -37,7 +38,7 @@ export function FlowStateKeyBuilder({columns, values, onChange}: FlowStateKeyBui
 
     return (
         <React.Fragment>
-            <Flex gap={2} wrap alignItems="flex-start" className={block()}>
+            <Flex gap={2} alignItems="flex-start" className={block()}>
                 <TextInput
                     className={block('raw-input')}
                     label={i18n('field_raw-key')}
@@ -54,9 +55,16 @@ export function FlowStateKeyBuilder({columns, values, onChange}: FlowStateKeyBui
                         }
                     }}
                 />
-                <Button view="outlined" onClick={() => setDialogVisible(true)}>
-                    {i18n('action_edit-key-fields')}
-                </Button>
+                <Tooltip content={i18n('action_edit-key-fields')}>
+                    <Button
+                        className={block('launcher')}
+                        view="flat-secondary"
+                        aria-label={i18n('action_edit-key-fields')}
+                        onClick={() => setDialogVisible(true)}
+                    >
+                        <Icon data={PencilIcon} size={16} />
+                    </Button>
+                </Tooltip>
             </Flex>
             <FlowStateKeyDialog
                 visible={dialogVisible}

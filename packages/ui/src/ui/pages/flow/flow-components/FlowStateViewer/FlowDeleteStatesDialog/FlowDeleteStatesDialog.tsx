@@ -5,6 +5,7 @@ import {Alert, Checkbox, Flex, Loader, Text} from '@gravity-ui/uikit';
 import {YTErrorBlock, type YTErrorBlockProps} from '../../../../../containers/Block/Block';
 import {DialogWrapper} from '../../../../../components/DialogWrapper/DialogWrapper';
 
+import {FlowDialogCloseButton} from '../FlowDialogCloseButton';
 import {
     type FlowDeletePermissionQuery,
     areAllCommitted,
@@ -134,8 +135,18 @@ export function FlowDeleteStatesDialog({
         (gate.requiresForce && !force);
 
     return (
-        <DialogWrapper open={visible} size="m" aria-labelledby={titleId} onClose={handleClose}>
-            <DialogWrapper.Header caption={i18n('title_delete-states')} id={titleId} />
+        <DialogWrapper
+            open={visible}
+            size="m"
+            aria-labelledby={titleId}
+            hasCloseButton={false}
+            onClose={handleClose}
+        >
+            <DialogWrapper.Header
+                caption={i18n('title_delete-states')}
+                id={titleId}
+                insertAfter={<FlowDialogCloseButton disabled={submitting} onClick={handleClose} />}
+            />
             <DialogWrapper.Body>
                 <Flex direction="column" gap={3}>
                     <RowsSummary rows={rows} />

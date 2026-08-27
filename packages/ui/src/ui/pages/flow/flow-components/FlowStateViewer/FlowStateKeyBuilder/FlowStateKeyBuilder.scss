@@ -3,6 +3,16 @@
 
     &__raw-input {
         flex: 1;
-        min-width: 240px;
+        min-width: 0;
+    }
+
+    &__launcher {
+        flex: none;
+    }
+}
+
+.yt-flow-state-key-dialog {
+    &__field {
+        width: 100%;
     }
 }

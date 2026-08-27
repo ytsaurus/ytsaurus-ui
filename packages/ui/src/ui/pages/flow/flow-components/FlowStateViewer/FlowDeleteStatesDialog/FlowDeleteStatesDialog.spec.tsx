@@ -36,6 +36,9 @@ jest.mock('../../../../../i18n', () => ({
 jest.mock('../../../../../containers/Block/Block', () => ({
     YTErrorBlock: ({error}: {error: {message?: string}}) => <div>{error?.message}</div>,
 }));
+jest.mock('@gravity-ui/icons/svgs/xmark.svg', () => ({__esModule: true, default: () => <svg />}), {
+    virtual: true,
+});
 jest.mock('../FlowStateResults/FlowStateResults', () => ({
     KIND_LABEL_KEYS: {
         key_state: 'key',
@@ -175,9 +178,11 @@ it('Cancel sends no delete requests', () => {
 
 it('routes every idle close path through onClose', async () => {
     const {onClose} = renderDialog('Stopped');
-    await screen.findByRole('dialog', {name: 'title_delete-states'});
-    const closeButton = screen.getByRole('button', {name: 'Close dialog'});
-    expect(screen.getAllByRole('button', {name: 'Close dialog'})).toHaveLength(1);
+    const dialog = await screen.findByRole('dialog', {name: 'title_delete-states'});
+    const closeButton = within(dialog).getByRole('button', {name: 'action_close'});
+    expect(within(dialog).getAllByRole('button', {name: 'action_close'})).toHaveLength(1);
+    expect(within(dialog).queryByRole('button', {name: 'Close dialog'})).toBeNull();
+    expect(within(dialog).queryByRole('button', {name: '[object Object]'})).toBeNull();
 
     fireEvent.keyDown(document, {key: 'Escape'});
     expect(onClose).toHaveBeenCalledTimes(1);
@@ -326,7 +331,7 @@ it('blocks Cancel, Escape, header and backdrop close while submitting, then clos
     await act(async () => Promise.resolve());
     fireEvent.click(screen.getByRole('button', {name: 'action_cancel'}));
     fireEvent.keyDown(document, {key: 'Escape'});
-    fireEvent.click(screen.getByRole('button', {name: 'Close dialog'}));
+    fireEvent.click(screen.getByRole('button', {name: 'action_close'}));
     fireEvent.pointerDown(document.querySelector('.g-modal') as HTMLElement);
     expect(callbacks.onClose).not.toHaveBeenCalled();
 

@@ -1,13 +1,19 @@
 import React from 'react';
+import cn from 'bem-cn-lite';
 
-import {Flex, TextInput} from '@gravity-ui/uikit';
+import {Flex, Text, TextInput} from '@gravity-ui/uikit';
 
 import {DialogWrapper} from '../../../../../components/DialogWrapper/DialogWrapper';
 
+import {FlowDialogCloseButton} from '../FlowDialogCloseButton';
 import {castKeyValue} from '../state-filters';
 import i18n from './i18n';
 import modalI18n from '../../../../../components/Modal/i18n';
 import type {FlowKeyColumn} from '../../../../../../shared/yt-types';
+
+import './FlowStateKeyBuilder.scss';
+
+const block = cn('yt-flow-state-key-dialog');
 
 export type FlowStateKeyDialogProps = {
     visible: boolean;
@@ -106,30 +112,52 @@ export function FlowStateKeyDialog({
     };
 
     return (
-        <DialogWrapper open={visible} size="s" aria-labelledby={titleId} onClose={onClose}>
-            <DialogWrapper.Header caption={i18n('title_edit-key-fields')} id={titleId} />
+        <DialogWrapper
+            open={visible}
+            size="s"
+            aria-labelledby={titleId}
+            hasCloseButton={false}
+            onClose={onClose}
+        >
+            <DialogWrapper.Header
+                caption={i18n('title_edit-key-fields')}
+                id={titleId}
+                insertAfter={<FlowDialogCloseButton onClick={onClose} />}
+            />
             <DialogWrapper.Body>
                 <Flex direction="column" gap={3}>
                     {columns.map((column, index) => {
                         const fieldId = getKeyFieldId(index);
                         const error = errors[fieldId];
                         return (
-                            <TextInput
+                            <Flex
                                 key={fieldId}
-                                id={fieldId}
-                                label={`${column.name} (${column.type})`}
-                                value={formValues[fieldId]}
-                                validationState={error ? 'invalid' : undefined}
-                                errorMessage={error}
-                                onUpdate={(value) => {
-                                    setFormValues((current) => ({...current, [fieldId]: value}));
-                                    setErrors((current) => {
-                                        const next = {...current};
-                                        delete next[fieldId];
-                                        return next;
-                                    });
-                                }}
-                            />
+                                direction="column"
+                                gap={1}
+                                className={block('field')}
+                            >
+                                <TextInput
+                                    id={fieldId}
+                                    label={column.name}
+                                    value={formValues[fieldId]}
+                                    validationState={error ? 'invalid' : undefined}
+                                    errorMessage={error}
+                                    onUpdate={(value) => {
+                                        setFormValues((current) => ({
+                                            ...current,
+                                            [fieldId]: value,
+                                        }));
+                                        setErrors((current) => {
+                                            const next = {...current};
+                                            delete next[fieldId];
+                                            return next;
+                                        });
+                                    }}
+                                />
+                                <Text variant="caption-1" color="secondary">
+                                    {column.type}
+                                </Text>
+                            </Flex>
                         );
                     })}
                 </Flex>

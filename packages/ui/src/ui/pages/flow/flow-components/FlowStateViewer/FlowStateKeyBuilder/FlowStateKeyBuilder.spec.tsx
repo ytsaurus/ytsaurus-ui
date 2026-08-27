@@ -25,6 +25,12 @@ jest.mock('@ytsaurus/components', () => ({
 jest.mock('../../../../../containers/Block/Block', () => ({
     YTErrorBlock: () => null,
 }));
+jest.mock('@gravity-ui/icons/svgs/pencil.svg', () => ({__esModule: true, default: () => <svg />}), {
+    virtual: true,
+});
+jest.mock('@gravity-ui/icons/svgs/xmark.svg', () => ({__esModule: true, default: () => <svg />}), {
+    virtual: true,
+});
 
 jest.mock('./i18n', () => ({
     __esModule: true,
@@ -178,6 +184,21 @@ describe('raw key parsing', () => {
 });
 
 describe('FlowStateKeyBuilder', () => {
+    it('opens typed key editing from an icon-only named launcher', async () => {
+        render(
+            <ThemeProvider theme="light">
+                <FlowStateKeyBuilder columns={stringColumns} values={{}} onChange={() => {}} />
+            </ThemeProvider>,
+        );
+
+        const launcher = screen.getByRole('button', {name: 'action_edit-key-fields'});
+        expect(launcher.querySelector('svg')).not.toBeNull();
+        expect(launcher.textContent).toBe('');
+        fireEvent.click(launcher);
+
+        expect(await screen.findByRole('dialog', {name: 'title_edit-key-fields'})).not.toBeNull();
+    });
+
     it('keeps an invalid raw draft visible without changing filters', () => {
         const onChange = jest.fn();
         render(
@@ -250,6 +271,43 @@ describe('FlowStateKeyBuilder', () => {
         fireEvent.click(within(dialog).getByRole('button', {name: 'action_apply-key-fields'}));
 
         expect(onChange).toHaveBeenCalledWith({first: '', second: '', third: ''});
+    });
+
+    it('keeps field names primary and renders types as separate captions', async () => {
+        render(
+            <ThemeProvider theme="light">
+                <FlowStateKeyBuilder
+                    columns={[{name: 'count', type: 'int64'}]}
+                    values={{}}
+                    onChange={() => {}}
+                />
+            </ThemeProvider>,
+        );
+        fireEvent.click(screen.getByRole('button', {name: 'action_edit-key-fields'}));
+
+        const dialog = await screen.findByRole('dialog', {name: 'title_edit-key-fields'});
+        expect(within(dialog).getByRole('textbox', {name: 'count'})).not.toBeNull();
+        expect(within(dialog).getByText('int64', {selector: 'span'})).not.toBeNull();
+        expect(within(dialog).queryByText('count (int64)')).toBeNull();
+    });
+
+    it('closes from the exact localized close control without applying', async () => {
+        const onChange = jest.fn();
+        render(
+            <ThemeProvider theme="light">
+                <FlowStateKeyBuilder columns={stringColumns} values={{}} onChange={onChange} />
+            </ThemeProvider>,
+        );
+        fireEvent.click(screen.getByRole('button', {name: 'action_edit-key-fields'}));
+        const dialog = await screen.findByRole('dialog', {name: 'title_edit-key-fields'});
+
+        const close = within(dialog).getByRole('button', {name: 'Close'});
+        expect(within(dialog).getAllByRole('button', {name: 'Close'})).toHaveLength(1);
+        expect(within(dialog).queryByRole('button', {name: 'Close dialog'})).toBeNull();
+        expect(within(dialog).queryByRole('button', {name: '[object Object]'})).toBeNull();
+        fireEvent.click(close);
+
+        expect(onChange).not.toHaveBeenCalled();
     });
 
     it('keeps partial and invalid typed values open with field errors', async () => {
