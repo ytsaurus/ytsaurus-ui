@@ -12,7 +12,7 @@
 ### Bug Fixes
 
 * **Navigation:** broken download path [YTFRONT-5990] ([e710716](https://github.com/ytsaurus/ytsaurus-ui/commit/e710716fd493e248621e4048b0f17f59c876f8b4))
-* **Oerations:** vanilla operation statuses [YTFRONT-5967] ([f987558](https://github.com/ytsaurus/ytsaurus-ui/commit/f98755882c5a92ea1addf44ffe061a77281ee472))
+* **Operations:** vanilla operation statuses [YTFRONT-5967] ([f987558](https://github.com/ytsaurus/ytsaurus-ui/commit/f98755882c5a92ea1addf44ffe061a77281ee472))
 * **Operations:** progress can be null [YTFRONT-5928] ([856f188](https://github.com/ytsaurus/ytsaurus-ui/commit/856f188b057909ef6630a2edb62027c6bdcbd903))
 * **Queries:** double scroll [YTFRONT-5943] ([291e254](https://github.com/ytsaurus/ytsaurus-ui/commit/291e254580d8c6f500bdc70227afd7a55cb68c32))
 * **UI:** range date selector buttons [YTFRONT-5755] ([6c482c1](https://github.com/ytsaurus/ytsaurus-ui/commit/6c482c1ca7aee5935e719d3746d76c22e16a9668))
@@ -2653,7 +2653,7 @@
 ## [1.0.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v0.23.0...ui-v1.0.0) (2023-10-09)
 
 
-### ⚠ BREAKING CHANGES 
+### ⚠ BREAKING CHANGES
 
 * update @gravity-ui/uikit v5
 
