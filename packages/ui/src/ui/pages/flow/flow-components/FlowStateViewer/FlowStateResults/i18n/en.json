@@ -9,6 +9,7 @@
   "hint_state-name": "Name the computation registered this state under. Names are path-like and are chosen by the pipeline author, so a computation with a single state usually shows \"/state\".",
   "column_value": "Value",
   "action_copy-value": "Copy value",
+  "action_copy-key": "Copy key",
   "tooltip_show-value": "Show value",
   "tooltip_show-raw-response": "Show raw response",
   "title_raw-response": "Raw read-states response",

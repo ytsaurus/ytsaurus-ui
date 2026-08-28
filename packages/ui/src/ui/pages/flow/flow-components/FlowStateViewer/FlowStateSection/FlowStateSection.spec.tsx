@@ -22,6 +22,7 @@ jest.mock('./use-flow-state-read', () => ({
     useFlowStateRead: () => mockUseFlowStateRead(),
 }));
 jest.mock('../FlowStateResults/FlowStateResults', () => ({
+    FlowStateResultsActions: () => null,
     FlowStateResults: ({
         response: currentResponse,
         rowSelection,

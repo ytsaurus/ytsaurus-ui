@@ -140,28 +140,41 @@ describe('FlowStateFilters kind selector', () => {
 });
 
 describe('FlowStateFilters narrowing controls', () => {
-    it('orders all narrowing controls in one wrapping row', () => {
+    it('keeps scope controls on the first row and key plus utilities on the second row', () => {
         renderFilters(jest.fn(), {
             staticSpec: {
                 computations: {
                     comp1: {group_by_schema: [{name: 'user_id', type: 'uint64'}]},
                 },
             },
+            actions: (
+                <React.Fragment>
+                    <button aria-label="show-raw" />
+                    <button aria-label="bounded-info" />
+                </React.Fragment>
+            ),
         });
 
-        const controls = [
+        const primaryControls = [
             screen.getByRole('button', {name: 'field_computation'}),
             screen.getByRole('combobox', {name: 'field_state-kind'}),
             screen.getByRole('button', {name: 'field_state-name'}),
             screen.getByRole('button', {name: 'field_partition'}),
+        ];
+        const secondaryControls = [
             screen.getByRole('textbox', {name: 'field_raw-key'}),
             screen.getByRole('button', {name: 'action_reset-filters'}),
+            screen.getByRole('button', {name: 'show-raw'}),
+            screen.getByRole('button', {name: 'bounded-info'}),
         ];
-        for (let index = 1; index < controls.length; index += 1) {
-            expect(controls[index - 1].compareDocumentPosition(controls[index])).toBe(
-                Node.DOCUMENT_POSITION_FOLLOWING,
-            );
-        }
+        const primaryRow = document.querySelector('.yt-flow-state-filters__row_primary');
+        const secondaryRow = document.querySelector('.yt-flow-state-filters__row_secondary');
+
+        expect(primaryRow).not.toBeNull();
+        expect(secondaryRow).not.toBeNull();
+        expect(primaryControls.every((control) => primaryRow?.contains(control))).toBe(true);
+        expect(secondaryControls.every((control) => secondaryRow?.contains(control))).toBe(true);
+        expect(primaryRow?.contains(secondaryControls[0])).toBe(false);
     });
 
     it('does not render a Limit control', () => {

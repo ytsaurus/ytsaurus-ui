@@ -12,7 +12,7 @@ import {useSelector} from '../../../../../store/redux-hooks';
 
 import {FlowDeleteStatesDialog} from '../FlowDeleteStatesDialog/FlowDeleteStatesDialog';
 import {FlowStateFilters} from '../FlowStateFilters/FlowStateFilters';
-import {FlowStateResults} from '../FlowStateResults/FlowStateResults';
+import {FlowStateResults, FlowStateResultsActions} from '../FlowStateResults/FlowStateResults';
 import {seedStateFilters} from '../state-filters';
 import {isDeleteCommitted, isWriteDeniedByPermission} from '../state-delete';
 import {useFlowStateCellHandlers} from './use-flow-state-cell-handlers';
@@ -118,6 +118,16 @@ export function FlowStateSection({
                     onReset={handleReset}
                     fixedComputationId={fixedComputationId}
                     staticSpec={staticSpec}
+                    actions={
+                        <FlowStateResultsActions
+                            response={response}
+                            refreshing={refreshing}
+                            hasScope={hasScope}
+                            initialLoading={initialLoading}
+                            readSucceeded={readSucceeded}
+                            error={error}
+                        />
+                    }
                 />
                 <div className={block('content')}>
                     {!hasScope && <Alert theme="info" message={i18n('alert_pick-scope')} />}

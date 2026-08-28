@@ -6,6 +6,7 @@ import {
     getComputationStateNames,
     getStateNameInputMode,
     getStateNameSelectItems,
+    parseRawKeyDraft,
     reconcileStateName,
     reconcileStateTarget,
     resolveKeySchema,
@@ -31,6 +32,7 @@ import {
 import {
     buildCompactYsonSettings,
     buildRowFilterUpdate,
+    buildRowKeyPresentation,
     keyValuesFromRowKey,
     resolveStateStoragePath,
     serializeRawStateValue,
@@ -834,6 +836,58 @@ describe('buildRowFilterUpdate', () => {
                 context,
             ),
         ).toEqual(filters({computationId: 'c1', stateName: '/s'}));
+    });
+});
+
+describe('buildRowKeyPresentation', () => {
+    it('uses the same filterable key values for click and copy while omitting expressions', () => {
+        const filterKeyColumns = [
+            {name: 'user', type: 'uint64'},
+            {name: 'active', type: 'boolean'},
+        ];
+        const allKeyColumns = [
+            {name: 'hash', type: 'uint64', expression: 'farm_hash(user)'},
+            ...filterKeyColumns,
+        ];
+        const presentation = buildRowKeyPresentation(
+            filters({computationId: 'state'}),
+            {
+                section: 'key_state',
+                computationId: 'state',
+                key: [{$type: 'uint64', $value: '999'}, {$type: 'uint64', $value: '7'}, true],
+                stateName: '/counter',
+                value: 1,
+            },
+            {keyColumns: filterKeyColumns, allKeyColumns},
+        );
+
+        expect(presentation).toEqual({
+            rawKey: '[7u; %true]',
+            filterUpdate: filters({
+                computationId: 'state',
+                keyValues: {user: '7', active: 'true'},
+            }),
+        });
+        expect(parseRawKeyDraft(presentation?.rawKey ?? '', filterKeyColumns)).toEqual({
+            values: presentation?.filterUpdate.keyValues,
+        });
+    });
+
+    it('does not present an empty string key as filterable', () => {
+        const filterKeyColumns = [{name: 'user', type: 'string'}];
+        const presentation = buildRowKeyPresentation(
+            filters({computationId: 'state'}),
+            {
+                section: 'key_state',
+                computationId: 'state',
+                key: [''],
+                stateName: '/counter',
+                value: 1,
+            },
+            {keyColumns: filterKeyColumns, allKeyColumns: filterKeyColumns},
+        );
+
+        expect(presentation).toBeUndefined();
     });
 });
 

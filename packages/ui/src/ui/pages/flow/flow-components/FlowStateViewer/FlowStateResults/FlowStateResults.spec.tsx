@@ -26,11 +26,19 @@ jest.mock(
         function MockClickableAttributesButton({
             title,
             tooltipProps,
+            disabled,
         }: {
             title: string;
             tooltipProps: {content: string};
+            disabled?: boolean;
         }) {
-            return <button aria-label={tooltipProps.content} data-modal-title={title} />;
+            return (
+                <button
+                    aria-label={tooltipProps.content}
+                    data-modal-title={title}
+                    disabled={disabled}
+                />
+            );
         },
 );
 jest.mock('../../../../../components/ClickableText/ClickableText', () => ({
@@ -101,10 +109,11 @@ jest.mock('../i18n-api-values', () => ({
     default: (key: string) => key,
 }));
 
-import {FlowStateResults} from './FlowStateResults';
+import {FlowStateResults, FlowStateResultsActions} from './FlowStateResults';
 
 const handlers: FlowStateCellHandlers = {
     getRowFilterUpdate: () => undefined,
+    getRowKeyText: () => undefined,
     onFiltersChange: () => {},
     resolveStoragePath: () => undefined,
     resolveComputationLink: () => '',
@@ -172,12 +181,8 @@ it('keeps the complete stale result region visible but inert while refreshing', 
     expect(content.contains(status)).toBe(false);
     expect(content.contains(screen.getByText(/text_selected-rows/))).toBe(true);
     expect(content.contains(screen.getByTestId('error'))).toBe(true);
-    expect(content.contains(screen.getByRole('button', {name: 'label_bounded-results-info'}))).toBe(
-        true,
-    );
-    expect(content.contains(screen.getByRole('button', {name: 'tooltip_show-raw-response'}))).toBe(
-        true,
-    );
+    expect(screen.queryByRole('button', {name: 'label_bounded-results-info'})).toBeNull();
+    expect(screen.queryByRole('button', {name: 'tooltip_show-raw-response'})).toBeNull();
     expect(content.contains(screen.getByRole('button', {name: 'action_delete'}))).toBe(true);
     expect(content.contains(screen.getByRole('button', {name: 'action_delete-row'}))).toBe(true);
     expect(content.contains(screen.getByRole('button', {name: 'action_copy-value'}))).toBe(true);
@@ -195,7 +200,9 @@ it('renders a transport error instead of empty results', () => {
 
 it('renders NoContent after a successful empty read', () => {
     renderResults({response: {}, readSucceeded: true});
-    expect(screen.getByTestId('no-content')).not.toBeNull();
+    expect(
+        screen.getByTestId('no-content').closest('.yt-flow-state-results__empty'),
+    ).not.toBeNull();
 });
 
 it('does not render NoContent when the response contains section errors', () => {
@@ -204,26 +211,39 @@ it('does not render NoContent when the response contains section errors', () => 
     expect(screen.queryByTestId('no-content')).toBeNull();
 });
 
-it('keeps copy and inspection on Value only and exposes raw response inspection', () => {
+it('copies the filterable Key without its expression hash and keeps Value inspection', () => {
     const response: FlowReadStatesResponse = {
         key_states: [
             {
                 computation_id: 'state',
-                key: ['account'],
+                key: ['hash-not-used-for-filtering', 'account'],
                 states: {'/counter': {count: 42}},
             },
         ],
     };
 
-    renderResults({response});
+    renderResults({
+        response,
+        handlers: {
+            ...handlers,
+            getRowFilterUpdate: (_row, field) =>
+                field === 'key'
+                    ? {computationId: 'state', target: 'all', keyValues: {account: 'account'}}
+                    : undefined,
+            getRowKeyText: () => '["account"]',
+        },
+    });
 
-    expect(document.querySelectorAll('[data-copy-text]')).toHaveLength(1);
-    const copy = screen.getByRole('button', {name: 'action_copy-value'});
-    copy.focus();
-    expect(document.activeElement).toBe(copy);
-    expect(document.querySelector('[data-copy-text]')?.getAttribute('data-copy-text')).toContain(
-        'count',
+    expect(document.querySelectorAll('[data-copy-text]')).toHaveLength(2);
+    const keyCopy = screen.getByRole('button', {name: 'action_copy-key'});
+    expect(keyCopy.getAttribute('data-copy-text')).toBe('["account"]');
+    expect(document.querySelector('[data-column-id="key"]')?.textContent).not.toContain(
+        'hash-not-used-for-filtering',
     );
+    const valueCopy = screen.getByRole('button', {name: 'action_copy-value'});
+    valueCopy.focus();
+    expect(document.activeElement).toBe(valueCopy);
+    expect(valueCopy.getAttribute('data-copy-text')).toContain('count');
     expect(screen.getByRole('button', {name: 'tooltip_show-value'})).not.toBeNull();
     const valueActions = document.querySelector('[data-column-id="value"]');
     expect(
@@ -231,12 +251,25 @@ it('keeps copy and inspection on Value only and exposes raw response inspection'
             button.getAttribute('aria-label'),
         ),
     ).toEqual(['tooltip_show-value', 'action_copy-value']);
-    expect(screen.getByRole('button', {name: 'tooltip_show-raw-response'})).not.toBeNull();
-    expect(
-        screen
-            .getByRole('button', {name: 'tooltip_show-raw-response'})
-            .getAttribute('data-modal-title'),
-    ).toBe('title_raw-response');
+});
+
+it('preserves a schema-unresolvable Key verbatim without offering a misleading copy action', () => {
+    renderResults({
+        response: {
+            key_states: [
+                {
+                    computation_id: 'state',
+                    key: ['hash-not-resolvable', 'account'],
+                    states: {'/counter': 42},
+                },
+            ],
+        },
+    });
+
+    expect(document.querySelector('[data-column-id="key"]')?.textContent).toContain(
+        'hash-not-resolvable',
+    );
+    expect(screen.queryByRole('button', {name: 'action_copy-key'})).toBeNull();
 });
 
 it('keeps computation and backing storage navigation persistently accessible', () => {
@@ -262,10 +295,83 @@ it('keeps computation and backing storage navigation persistently accessible', (
 });
 
 it('describes the bounded response without presenting a row count or raw switch', () => {
-    renderResults({response: {partition_states: []}});
+    render(
+        <FlowStateResultsActions
+            response={{partition_states: []}}
+            refreshing={false}
+            hasScope
+            initialLoading={false}
+            readSucceeded={false}
+        />,
+    );
 
     expect(screen.getByRole('button', {name: 'label_bounded-results-info'})).not.toBeNull();
+    expect(screen.getByRole('button', {name: 'tooltip_show-raw-response'})).not.toBeNull();
     expect(screen.queryByText(/label_rows/)).toBeNull();
+});
+
+it('disables result utilities while a refresh is in flight', () => {
+    render(
+        <FlowStateResultsActions
+            response={{partition_states: []}}
+            refreshing
+            hasScope
+            initialLoading={false}
+            readSucceeded
+        />,
+    );
+
+    expect(
+        (screen.getByRole('button', {name: 'tooltip_show-raw-response'}) as HTMLButtonElement)
+            .disabled,
+    ).toBe(true);
+    expect(
+        (screen.getByRole('button', {name: 'label_bounded-results-info'}) as HTMLButtonElement)
+            .disabled,
+    ).toBe(true);
+});
+
+it.each([
+    {
+        name: 'a stale response after a read error',
+        hasScope: true,
+        error: {message: 'failed'},
+        response: {
+            partition_states: [
+                {computation_id: 'state', partition_id: 'partition', states: {'/state': 1}},
+            ],
+        },
+    },
+    {
+        name: 'a stale response after scope is cleared',
+        hasScope: false,
+        error: undefined,
+        response: {
+            partition_states: [
+                {computation_id: 'state', partition_id: 'partition', states: {'/state': 1}},
+            ],
+        },
+    },
+    {
+        name: 'a successful empty response',
+        hasScope: true,
+        error: undefined,
+        response: {partition_states: []},
+    },
+])('hides result utilities for $name', ({hasScope, error, response}) => {
+    render(
+        <FlowStateResultsActions
+            response={response}
+            refreshing={false}
+            hasScope={hasScope}
+            initialLoading={false}
+            readSucceeded
+            error={error}
+        />,
+    );
+
+    expect(screen.queryByRole('button', {name: 'tooltip_show-raw-response'})).toBeNull();
+    expect(screen.queryByRole('button', {name: 'label_bounded-results-info'})).toBeNull();
 });
 
 it('enables multi-row selection and exposes a rightmost row delete action', () => {

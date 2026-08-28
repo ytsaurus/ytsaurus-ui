@@ -10,7 +10,7 @@ const response: FlowReadStatesResponse = {
     key_states: [
         {
             computation_id: 'state',
-            key: ['4506162232340681623', 'checkout'],
+            key: ['hash-not-filterable', '4506162232340681623', 'checkout'],
             states: {'/counter': 42},
         },
     ],
@@ -25,6 +25,12 @@ const response: FlowReadStatesResponse = {
 
 const handlers: FlowStateCellHandlers = {
     getRowFilterUpdate: () => undefined,
+    getRowKeyText: (row) => {
+        if (!Array.isArray(row.key)) {
+            return row.key ? JSON.stringify(row.key) : undefined;
+        }
+        return JSON.stringify(row.key[0] === 'hash-not-filterable' ? row.key.slice(1) : row.key);
+    },
     onFiltersChange: () => {},
     resolveStoragePath: () => ({path: '//home/flow/pipeline/state', cluster: 'hahn'}),
     resolveComputationLink: (computationId) => `/hahn/flows/computations/${computationId}/state`,

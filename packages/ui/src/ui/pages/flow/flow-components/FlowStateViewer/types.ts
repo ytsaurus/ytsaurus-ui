@@ -106,6 +106,7 @@ export type FlowStateCellHandlers = {
         row: FlowStateResultRow,
         field: FlowStateRowFilterField,
     ) => FlowStateFiltersValue | undefined;
+    getRowKeyText: (row: FlowStateResultRow) => string | undefined;
     onFiltersChange: (next: FlowStateFiltersValue) => void;
     resolveStoragePath: (row: FlowStateResultRow) => FlowStateStorageLocation | undefined;
     resolveComputationLink: (computationId: string) => string;

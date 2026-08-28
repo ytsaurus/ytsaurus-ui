@@ -9,9 +9,20 @@ test('FlowStateResults: Populated', async ({mount, expectScreenshot}) => {
     await expectScreenshot();
 });
 
+test('FlowStateResults: table starts without a utility-action spacer', async ({mount, page}) => {
+    await mount(<FlowStateResultsStories.Populated />);
+    const results = page.locator('.yt-flow-state-results');
+    const table = page.locator('.yt-flow-state-results__table-pane');
+    const [resultsBox, tableBox] = await Promise.all([results.boundingBox(), table.boundingBox()]);
+
+    expect(resultsBox).not.toBeNull();
+    expect(tableBox).not.toBeNull();
+    expect((tableBox?.y ?? 0) - (resultsBox?.y ?? 0)).toBeLessThan(48);
+});
+
 test('FlowStateResults: Populated with a hovered row', async ({mount, expectScreenshot, page}) => {
     await mount(<FlowStateResultsStories.Populated />);
-    await page.locator('.yt-gravity-table__row').nth(1).hover();
+    await page.locator('.yt-gravity-table__row').first().hover();
     await expectScreenshot();
 });
 
@@ -35,8 +46,21 @@ test('FlowStateResults: Refreshing', async ({mount, expectScreenshot}) => {
     await expectScreenshot();
 });
 
-test('FlowStateResults: Successful empty response', async ({mount, expectScreenshot}) => {
+test('FlowStateResults: Successful empty response', async ({mount, expectScreenshot, page}) => {
     await mount(<FlowStateResultsStories.SuccessfulEmpty />);
+    const empty = page.locator('.yt-flow-state-results__empty');
+    const content = empty.locator('.no-content');
+    const [emptyBox, contentBox] = await Promise.all([empty.boundingBox(), content.boundingBox()]);
+
+    expect(emptyBox).not.toBeNull();
+    expect(contentBox).not.toBeNull();
+    expect(
+        Math.abs(
+            (emptyBox?.y ?? 0) +
+                (emptyBox?.height ?? 0) / 2 -
+                ((contentBox?.y ?? 0) + (contentBox?.height ?? 0) / 2),
+        ),
+    ).toBeLessThan(2);
     await expectScreenshot();
 });
 
@@ -55,13 +79,16 @@ test('FlowStateResults: Narrow long content', async ({mount, expectScreenshot}) 
     await expectScreenshot();
 });
 
-test('FlowStateResults: Value copy is keyboard reachable', async ({mount, page}) => {
+test('FlowStateResults: Key and Value copy are keyboard reachable', async ({mount, page}) => {
     await mount(<FlowStateResultsStories.Populated />);
-    const copy = page.getByRole('button', {name: 'Copy value'}).first();
+    const keyCopy = page.getByRole('button', {name: 'Copy key'}).first();
+    const valueCopy = page.getByRole('button', {name: 'Copy value'}).first();
 
-    await copy.focus();
+    await keyCopy.focus();
+    await expect(keyCopy).toBeFocused();
+    await valueCopy.focus();
 
-    await expect(copy).toBeFocused();
+    await expect(valueCopy).toBeFocused();
 });
 
 test('FlowStateResults: row actions reveal on hover and keyboard focus', async ({mount, page}) => {
@@ -90,12 +117,12 @@ test('FlowStateResults: Narrow delete remains keyboard reachable', async ({mount
 });
 
 test('FlowStateResults: Refreshing rows are inert', async ({mount, page}) => {
-    const selectedRowId = 'key_state|state||["4506162232340681623","checkout"]|/counter';
+    const selectedRowId =
+        'key_state|state||["hash-not-filterable","4506162232340681623","checkout"]|/counter';
     await mount(<FlowStateResultsStories.Refreshing rowSelection={{[selectedRowId]: true}} />);
     const content = page.locator('[data-testid="results-content"]');
     const deleteButton = page.getByRole('button', {name: 'Delete state row'}).first();
     const bulkDeleteButton = page.getByRole('button', {name: 'Delete', exact: true});
-    const rawResponseButton = page.getByRole('button', {name: 'Show raw response'});
     const status = page.getByRole('status');
 
     await expect(content).toHaveAttribute('inert', '');
@@ -103,7 +130,7 @@ test('FlowStateResults: Refreshing rows are inert', async ({mount, page}) => {
     expect(
         await content.evaluate((node) => !node.contains(document.querySelector('[role="status"]'))),
     ).toBe(true);
-    for (const action of [bulkDeleteButton, deleteButton, rawResponseButton]) {
+    for (const action of [bulkDeleteButton, deleteButton]) {
         await action.focus();
         await expect(action).not.toBeFocused();
         await expect(action.click({timeout: 500})).rejects.toThrow();

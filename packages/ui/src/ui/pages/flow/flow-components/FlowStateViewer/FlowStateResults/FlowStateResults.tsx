@@ -74,18 +74,47 @@ export type FlowStateResultsProps = {
     onDeleteRows: (rows: Array<FlowStateResultRow>) => void;
 };
 
-function CopyButton({text}: {text: string}) {
+export function isSuccessfulEmptyFlowStateRead(
+    response: FlowReadStatesResponse | undefined,
+    readSucceeded: boolean,
+    refreshing: boolean,
+) {
+    return Boolean(
+        response &&
+        readSucceeded &&
+        !refreshing &&
+        flattenReadStatesResponse(response).length === 0 &&
+        (response.errors ?? []).length === 0,
+    );
+}
+
+export function shouldShowFlowStateResultsUtilities({
+    response,
+    hasScope,
+    initialLoading,
+    readSucceeded,
+    refreshing,
+    error,
+}: Pick<
+    FlowStateResultsProps,
+    'response' | 'hasScope' | 'initialLoading' | 'readSucceeded' | 'refreshing' | 'error'
+>) {
+    return Boolean(
+        response &&
+        hasScope &&
+        !initialLoading &&
+        !error &&
+        !isSuccessfulEmptyFlowStateRead(response, readSucceeded, refreshing),
+    );
+}
+
+function CopyButton({text, label}: {text: string; label: string}) {
     if (!text) {
         return null;
     }
     return (
         <span className={block('hover-action')}>
-            <ClipboardButton
-                text={text}
-                view="flat-secondary"
-                aria-label={i18n('action_copy-value')}
-                title={i18n('action_copy-value')}
-            />
+            <ClipboardButton text={text} view="flat-secondary" aria-label={label} title={label} />
         </span>
     );
 }
@@ -243,16 +272,22 @@ function useResultColumns({
                 header: () => i18n('column_key'),
                 size: 160,
                 accessorFn: (row) => stringifyStateValue(row.key),
-                cell: ({row: {original}}) => (
-                    <TableCell justifyContent="space-between">
-                        <FilterCellValue
-                            row={original}
-                            field="key"
-                            label={stringifyStateValue(original.key)}
-                            handlers={handlers}
-                        />
-                    </TableCell>
-                ),
+                cell: ({row: {original}}) => {
+                    const filterableKey = handlers.getRowKeyText(original);
+                    return (
+                        <TableCell justifyContent="space-between">
+                            <FilterCellValue
+                                row={original}
+                                field="key"
+                                label={filterableKey ?? stringifyStateValue(original.key)}
+                                handlers={handlers}
+                            />
+                            {filterableKey && (
+                                <CopyButton text={filterableKey} label={i18n('action_copy-key')} />
+                            )}
+                        </TableCell>
+                    );
+                },
             },
             {
                 id: 'value',
@@ -289,7 +324,10 @@ function useResultColumns({
                                         />
                                     </span>
                                 )}
-                                <CopyButton text={serializeRawStateValue(original.value)} />
+                                <CopyButton
+                                    text={serializeRawStateValue(original.value)}
+                                    label={i18n('action_copy-value')}
+                                />
                             </Flex>
                         </TableCell>
                     );
@@ -404,6 +442,14 @@ export function FlowStateResults({
         () => selectDeletableRows(rows, rowSelection).length,
         [rows, rowSelection],
     );
+    const showUtilities = shouldShowFlowStateResultsUtilities({
+        response,
+        hasScope,
+        initialLoading,
+        readSucceeded,
+        refreshing,
+        error,
+    });
 
     React.useEffect(() => {
         const content = contentRef.current;
@@ -417,25 +463,29 @@ export function FlowStateResults({
         }
     }, [refreshing]);
 
-    if (error) {
-        return <YTErrorBlock error={error as YTErrorBlockProps['error']} />;
-    }
-
-    if (initialLoading) {
+    if (!showUtilities) {
+        if (error) {
+            return <YTErrorBlock error={error as YTErrorBlockProps['error']} />;
+        }
+        if (initialLoading) {
+            return (
+                <div role="status">
+                    <Loader size="m" />
+                    <span className={block('status-label')}>{i18n('status_loading')}</span>
+                </div>
+            );
+        }
+        if (!hasScope || !response) {
+            return null;
+        }
         return (
-            <div role="status">
-                <Loader size="m" />
-                <span className={block('status-label')}>{i18n('status_loading')}</span>
+            <div className={block('empty')}>
+                <NoContent hint={i18n('text_no-results')} />
             </div>
         );
     }
-
-    if (!hasScope || !response) {
+    if (!response) {
         return null;
-    }
-
-    if (readSucceeded && !refreshing && rows.length === 0 && (response.errors ?? []).length === 0) {
-        return <NoContent hint={i18n('text_no-results')} />;
     }
 
     return (
@@ -467,35 +517,6 @@ export function FlowStateResults({
                         {(response.errors ?? []).map((message, index) => (
                             <YTErrorBlock key={`${index}:${message}`} error={{message}} />
                         ))}
-                        <Flex justifyContent="flex-end">
-                            <Flex direction="column" alignItems="center" gap={1}>
-                                <ClickableAttributesButton
-                                    aria-label={i18n('tooltip_show-raw-response')}
-                                    title={i18n('title_raw-response')}
-                                    attributes={response}
-                                    view="flat-secondary"
-                                    size="s"
-                                    tooltipProps={{
-                                        placement: 'bottom-end',
-                                        content: i18n('tooltip_show-raw-response'),
-                                    }}
-                                />
-                                <Tooltip
-                                    placement="bottom-end"
-                                    content={i18n('text_bounded-results', {
-                                        limit: String(READ_STATES_LIMIT),
-                                    })}
-                                >
-                                    <Button
-                                        view="flat-secondary"
-                                        size="s"
-                                        aria-label={i18n('label_bounded-results-info')}
-                                    >
-                                        <Icon data={CircleInfo} size={16} />
-                                    </Button>
-                                </Tooltip>
-                            </Flex>
-                        </Flex>
                         <FlowStateResultsTable
                             rows={rows}
                             ysonSettings={ysonSettings}
@@ -509,6 +530,64 @@ export function FlowStateResults({
                     </Flex>
                 </div>
             </div>
+        </Flex>
+    );
+}
+
+export function FlowStateResultsActions({
+    response,
+    refreshing,
+    hasScope,
+    initialLoading,
+    readSucceeded,
+    error,
+}: {
+    response?: FlowReadStatesResponse;
+    refreshing: boolean;
+    hasScope: boolean;
+    initialLoading: boolean;
+    readSucceeded: boolean;
+    error?: unknown;
+}) {
+    if (
+        !shouldShowFlowStateResultsUtilities({
+            response,
+            hasScope,
+            initialLoading,
+            readSucceeded,
+            refreshing,
+            error,
+        })
+    ) {
+        return null;
+    }
+    return (
+        <Flex gap={1} alignItems="center">
+            <ClickableAttributesButton
+                aria-label={i18n('tooltip_show-raw-response')}
+                title={i18n('title_raw-response')}
+                attributes={response}
+                view="flat-secondary"
+                size="s"
+                disabled={refreshing}
+                tooltipProps={{
+                    placement: 'bottom-end',
+                    content: i18n('tooltip_show-raw-response'),
+                }}
+            />
+            <Tooltip
+                placement="bottom-end"
+                content={i18n('text_bounded-results', {limit: String(READ_STATES_LIMIT)})}
+            >
+                <Button
+                    view="flat-secondary"
+                    size="s"
+                    disabled={refreshing}
+                    aria-label={i18n('label_bounded-results-info')}
+                >
+                    <Icon data={CircleInfo} size={16} />
+                </Button>
+            </Tooltip>
         </Flex>
     );
 }

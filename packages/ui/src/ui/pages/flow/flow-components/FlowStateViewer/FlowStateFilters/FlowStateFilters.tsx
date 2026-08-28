@@ -32,6 +32,7 @@ export type FlowStateFiltersProps = {
     onReset: () => void;
     fixedComputationId?: string;
     staticSpec?: FlowStaticSpec;
+    actions?: React.ReactNode;
 };
 
 type FlowStateApiValueKey = Parameters<typeof i18nApiValues>[0];
@@ -91,6 +92,7 @@ export function FlowStateFilters({
     onReset,
     fixedComputationId,
     staticSpec,
+    actions,
 }: FlowStateFiltersProps) {
     const {data: pipelineData} = useFlowExecuteQuery<'describe-pipeline'>({
         parameters: {pipeline_path, flow_command: 'describe-pipeline'},
@@ -131,8 +133,8 @@ export function FlowStateFilters({
     };
 
     return (
-        <Flex direction="column" gap={3}>
-            <Flex gap={2} wrap alignItems="flex-end">
+        <Flex direction="column" gap={2}>
+            <Flex className={block('row', {primary: true})} gap={2} wrap alignItems="flex-end">
                 <SelectSingle
                     className={block('control')}
                     width="max"
@@ -225,6 +227,8 @@ export function FlowStateFilters({
                         disabled
                     />
                 )}
+            </Flex>
+            <Flex className={block('row', {secondary: true})} gap={2} wrap alignItems="flex-end">
                 {value.computationId && !value.partitionId && keyColumns.length > 0 && (
                     <FlowStateKeyBuilder
                         columns={keyColumns}
@@ -241,6 +245,7 @@ export function FlowStateFilters({
                 <Button view="outlined" onClick={onReset}>
                     {i18n('action_reset-filters')}
                 </Button>
+                {actions}
             </Flex>
         </Flex>
     );

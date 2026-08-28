@@ -32,6 +32,13 @@
         overflow-x: auto;
     }
 
+    &__empty {
+        display: flex;
+        min-height: clamp(280px, 45vh, 480px);
+        align-items: center;
+        justify-content: center;
+    }
+
     &__content {
         position: relative;
 

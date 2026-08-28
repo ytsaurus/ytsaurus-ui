@@ -10,7 +10,7 @@ import type {FlowKeyColumn, FlowStaticSpec} from '../../../../../shared/yt-types
 import type {YsonSettings} from '../../../../components/Yson/Yson';
 import ypath from '../../../../common/thor/ypath';
 import {isAnnotatedBigInteger} from '../../../../store/api/yt/flow/read-states-normalize';
-import {getOwnProperty, reconcileStateName} from './state-filters';
+import {formatRawKeyDraft, getOwnProperty, reconcileStateName} from './state-filters';
 
 function replaceAnnotatedIntegers(_key: string, value: unknown): unknown {
     return isAnnotatedBigInteger(value) ? value.$value : value;
@@ -117,6 +117,25 @@ function applyRowKeyClick(
     };
 }
 
+export function buildRowKeyPresentation(
+    filters: FlowStateFiltersValue,
+    row: FlowStateResultRow,
+    context: FlowRowKeySchema & {fixedComputationId?: string},
+): {rawKey: string; filterUpdate: FlowStateFiltersValue} | undefined {
+    const filterUpdate = applyRowKeyClick(filters, row, context);
+    if (!filterUpdate) {
+        return undefined;
+    }
+    const rawKey = formatRawKeyDraft(context.keyColumns, filterUpdate.keyValues);
+    if (!rawKey) {
+        return undefined;
+    }
+    return {
+        rawKey,
+        filterUpdate,
+    };
+}
+
 export function buildRowFilterUpdate(
     filters: FlowStateFiltersValue,
     row: FlowStateResultRow,
@@ -158,7 +177,7 @@ export function buildRowFilterUpdate(
             };
         }
         case 'key':
-            return applyRowKeyClick(filters, row, context);
+            return buildRowKeyPresentation(filters, row, context)?.filterUpdate;
         case 'partition':
             return row.partitionId ? {...filters, partitionId: row.partitionId} : undefined;
         case 'stateName': {
