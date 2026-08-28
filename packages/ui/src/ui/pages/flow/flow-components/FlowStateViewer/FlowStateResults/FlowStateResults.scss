@@ -14,6 +14,7 @@
         display: inline-flex;
         align-items: center;
         opacity: 0;
+        pointer-events: none;
     }
 
     &__row-link {
@@ -24,6 +25,7 @@
     .yt-gravity-table__row:hover .yt-flow-state-results__hover-action,
     .yt-gravity-table__row:focus-within .yt-flow-state-results__hover-action {
         opacity: 1;
+        pointer-events: auto;
     }
 
     &__table-pane {

@@ -6,11 +6,7 @@ import {selectCluster} from '../../../../../store/selectors/global';
 import {makeFlowLink} from '../../../../../utils/app-url/makeFlowLink';
 
 import {getComputationStateNames, resolveRowKeySchema} from '../state-filters';
-import {
-    buildRowFilterUpdate,
-    isRowFilterValueActive,
-    resolveStateStoragePath,
-} from '../state-values';
+import {buildRowFilterUpdate, resolveStateStoragePath} from '../state-values';
 import type {
     FlowStateCellHandlers,
     FlowStateFiltersValue,
@@ -48,12 +44,6 @@ export function useFlowStateCellHandlers({
         [filters, staticSpec, fixedComputationId],
     );
 
-    const isRowFilterActive = React.useCallback(
-        (row: FlowStateResultRow, field: FlowStateRowFilterField) =>
-            isRowFilterValueActive(filters, row, field),
-        [filters],
-    );
-
     const resolveStoragePath = React.useCallback(
         (row: FlowStateResultRow) => resolveStateStoragePath(row, pipeline_path, staticSpec),
         [pipeline_path, staticSpec],
@@ -73,17 +63,10 @@ export function useFlowStateCellHandlers({
     return React.useMemo(
         () => ({
             getRowFilterUpdate,
-            isRowFilterActive,
             onFiltersChange,
             resolveStoragePath,
             resolveComputationLink,
         }),
-        [
-            getRowFilterUpdate,
-            isRowFilterActive,
-            onFiltersChange,
-            resolveStoragePath,
-            resolveComputationLink,
-        ],
+        [getRowFilterUpdate, onFiltersChange, resolveStoragePath, resolveComputationLink],
     );
 }

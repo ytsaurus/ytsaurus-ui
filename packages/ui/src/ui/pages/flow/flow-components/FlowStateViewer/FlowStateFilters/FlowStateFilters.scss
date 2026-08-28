@@ -1,20 +1,5 @@
 .yt-flow-state-filters {
     &__control {
         width: 220px;
-
-    }
-
-    &__reset {
-        margin-inline-start: auto;
-    }
-
-    &__key-group {
-        padding: 12px;
-        max-width: fit-content;
-    }
-
-    &__key-group-label {
-        flex-shrink: 0;
-        padding-top: 3px;
     }
 }

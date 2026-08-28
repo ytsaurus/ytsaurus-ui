@@ -15,6 +15,12 @@ class ResizeObserverStub {
 }
 (global as unknown as {ResizeObserver: unknown}).ResizeObserver = ResizeObserverStub;
 
+window.matchMedia = (() => ({
+    matches: false,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+})) as unknown as typeof window.matchMedia;
+
 jest.mock('../../../../../i18n', () => ({
     __esModule: true,
     addI18Keysets: () => (key: string) => key,
@@ -134,6 +140,30 @@ describe('FlowStateFilters kind selector', () => {
 });
 
 describe('FlowStateFilters narrowing controls', () => {
+    it('orders all narrowing controls in one wrapping row', () => {
+        renderFilters(jest.fn(), {
+            staticSpec: {
+                computations: {
+                    comp1: {group_by_schema: [{name: 'user_id', type: 'uint64'}]},
+                },
+            },
+        });
+
+        const controls = [
+            screen.getByRole('button', {name: 'field_computation'}),
+            screen.getByRole('combobox', {name: 'field_state-kind'}),
+            screen.getByRole('button', {name: 'field_state-name'}),
+            screen.getByRole('button', {name: 'field_partition'}),
+            screen.getByRole('textbox', {name: 'field_raw-key'}),
+            screen.getByRole('button', {name: 'action_reset-filters'}),
+        ];
+        for (let index = 1; index < controls.length; index += 1) {
+            expect(controls[index - 1].compareDocumentPosition(controls[index])).toBe(
+                Node.DOCUMENT_POSITION_FOLLOWING,
+            );
+        }
+    });
+
     it('does not render a Limit control', () => {
         renderFilters(jest.fn());
         expect(screen.queryByText('field_limit')).toBeNull();

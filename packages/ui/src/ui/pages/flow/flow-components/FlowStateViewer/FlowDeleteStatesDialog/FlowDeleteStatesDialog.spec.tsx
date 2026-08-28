@@ -4,6 +4,7 @@ import {act, fireEvent, render, renderHook, screen, waitFor, within} from '@test
 import {ThemeProvider} from '@gravity-ui/uikit';
 
 import type {FlowStateResultRow} from '../types';
+import {serializeRawStateValue} from '../state-values';
 import type {GetPipelineStateData} from '../../../../../../shared/yt-types';
 
 const mockUsePipelineState = jest.fn();
@@ -25,6 +26,12 @@ window.matchMedia = (() => ({
 })) as unknown as typeof window.matchMedia;
 
 jest.mock('@ytsaurus/components', () => ({
+    ClipboardButton: ({
+        text,
+        ...props
+    }: {text: string} & React.ButtonHTMLAttributes<HTMLButtonElement>) => (
+        <button data-copy-text={text} {...props} />
+    ),
     YTText: ({children}: {children: React.ReactNode}) => <span>{children}</span>,
     setLang: () => {},
 }));
@@ -70,6 +77,7 @@ function renderDialog(
         isFetching?: boolean;
         pipelineError?: unknown;
         permission?: {data?: {action?: 'allow' | 'deny'}; error?: unknown; isFetching?: boolean};
+        rows?: Array<FlowStateResultRow>;
     } = {},
 ) {
     mockUsePipelineState.mockReturnValue({
@@ -93,7 +101,7 @@ function renderDialog(
                 visible={visible}
                 onClose={onClose}
                 pipeline_path="//pipeline"
-                rows={rows}
+                rows={options.rows ?? rows}
                 permission={permission}
                 onCommitted={onCommitted}
             />
@@ -154,6 +162,12 @@ it('disables Delete while the pipeline is working', () => {
 it('requires Force while paused and sends force after confirmation', async () => {
     mockFlowDeleteStates.mockResolvedValue({committed: true});
     renderDialog('Paused');
+    expect(screen.queryByText('alert_force-paused')).toBeNull();
+    expect(
+        screen.getByRole('checkbox', {
+            name: 'label_force',
+        }),
+    ).not.toBeNull();
     expect(deleteButton().disabled).toBe(true);
 
     fireEvent.click(screen.getByRole('checkbox'));
@@ -164,6 +178,51 @@ it('requires Force while paused and sends force after confirmation', async () =>
         parameters: {pipeline_path: '//pipeline'},
         body: expect.objectContaining({commit: true, force: true}),
     });
+});
+
+it('renders a headed preview with complete copyable values and plain permanence text', () => {
+    renderDialog('Stopped');
+
+    expect(screen.getByText(/text_delete-selected-explanation/).closest('.g-alert')).toBeNull();
+    const headings = [
+        'column_computation',
+        'column_state-kind',
+        'column_state-name',
+        'column_partition',
+        'column_key',
+        'column_value',
+    ];
+    for (const heading of headings) {
+        expect(screen.getByText(heading)).not.toBeNull();
+    }
+    const headerRow = screen.getByText(headings[0]).closest('tr');
+    expect(Array.from(headerRow?.children ?? []).map((cell) => cell.textContent)).toEqual(headings);
+    expect(screen.getAllByRole('button', {name: 'action_copy-value'})).toHaveLength(2);
+    expect(screen.queryByRole('checkbox')).toBeNull();
+});
+
+it('caps the preview at 20 rows and keeps a long value complete and copyable', () => {
+    const longValue = 'complete-value-'.repeat(16);
+    const expectedLongValue = serializeRawStateValue(longValue);
+    const previewRows = Array.from({length: 21}, (_, index): FlowStateResultRow => ({
+        section: 'key_state',
+        computationId: 'state',
+        key: [index],
+        stateName: `/state-${index}`,
+        value: index === 0 ? longValue : index,
+    }));
+
+    renderDialog('Stopped', {rows: previewRows});
+
+    const table = screen.getByText('column_computation').closest('table');
+    expect(table?.querySelectorAll('tbody tr')).toHaveLength(20);
+    expect(screen.getByText('text_and-n-more:{"count":"1"}')).not.toBeNull();
+    expect(screen.getByText(expectedLongValue)).not.toBeNull();
+    expect(
+        screen
+            .getAllByRole('button', {name: 'action_copy-value'})[0]
+            .getAttribute('data-copy-text'),
+    ).toBe(expectedLongValue);
 });
 
 it('Cancel sends no delete requests', () => {

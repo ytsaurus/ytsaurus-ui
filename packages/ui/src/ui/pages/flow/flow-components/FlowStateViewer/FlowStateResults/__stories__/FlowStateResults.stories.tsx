@@ -25,7 +25,6 @@ const response: FlowReadStatesResponse = {
 
 const handlers: FlowStateCellHandlers = {
     getRowFilterUpdate: () => undefined,
-    isRowFilterActive: (_row, field) => field === 'target',
     onFiltersChange: () => {},
     resolveStoragePath: () => ({path: '//home/flow/pipeline/state', cluster: 'hahn'}),
     resolveComputationLink: (computationId) => `/hahn/flows/computations/${computationId}/state`,
@@ -69,6 +68,11 @@ function renderResults(args: React.ComponentProps<typeof FlowStateResults>) {
 
 export const Populated: Story = {
     args: {...baseArgs, response},
+    render: renderResults,
+};
+
+export const ReadOnly: Story = {
+    args: {...baseArgs, response, writeDenied: true},
     render: renderResults,
 };
 

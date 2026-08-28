@@ -20,21 +20,24 @@ test('FlowStateKeyBuilder: narrow raw input and pencil launcher stay adjacent', 
         {width: 480},
     );
 
-    const rawInput = page.getByPlaceholder('[foo; bar; baz]');
+    const rawInput = page.getByPlaceholder('[account]');
+    const rawControl = rawInput.locator('xpath=ancestor::*[contains(@class,"g-text-input")][1]');
     const launcher = page.getByRole('button', {name: 'Edit fields'});
     await expect(rawInput).toBeInViewport();
     await expect(launcher).toBeInViewport();
     expect(await launcher.locator('svg').count()).toBeGreaterThan(0);
     await expect(launcher).toHaveText('');
-    const rawBox = await rawInput.boundingBox();
+    const rawBox = await rawControl.boundingBox();
     const launcherBox = await launcher.boundingBox();
     expect(rawBox).not.toBeNull();
     expect(launcherBox).not.toBeNull();
     if (!rawBox || !launcherBox) {
         throw new Error('Expected the raw input and launcher to have browser geometry');
     }
-    expect(launcherBox.x).toBeGreaterThanOrEqual(rawBox.x + rawBox.width);
-    expect(Math.abs(launcherBox.y - rawBox.y)).toBeLessThanOrEqual(4);
+    expect(launcherBox.x).toBeGreaterThan(rawBox.x);
+    expect(launcherBox.x + launcherBox.width).toBeLessThanOrEqual(rawBox.x + rawBox.width);
+    expect(launcherBox.y).toBeGreaterThanOrEqual(rawBox.y);
+    expect(launcherBox.y + launcherBox.height).toBeLessThanOrEqual(rawBox.y + rawBox.height);
     await launcher.focus();
     await expect(launcher).toBeFocused();
     await launcher.hover();
@@ -96,31 +99,15 @@ test('FlowStateKeyDialog: visible title and vertical fields', async ({mount, pag
     await expect(dialog).toHaveAccessibleName(title.titleText);
 
     const accountName = dialog.getByText('account', {exact: true});
-    const stringType = dialog.getByText('string', {exact: true});
+    const stringType = dialog.getByPlaceholder('string');
     const regionName = dialog.getByText('region', {exact: true});
-    const integerType = dialog.getByText('int64', {exact: true});
+    const integerType = dialog.getByPlaceholder('int64');
     await expect(accountName).toHaveCount(1);
     await expect(stringType).toHaveCount(1);
     await expect(regionName).toHaveCount(1);
     await expect(integerType).toHaveCount(1);
     await expect(dialog.getByText('account (string)', {exact: true})).toHaveCount(0);
     await expect(dialog.getByText('region (int64)', {exact: true})).toHaveCount(0);
-    const textStyles = await accountName.evaluate(
-        (name, type) => {
-            const nameStyle = getComputedStyle(name);
-            const typeStyle = getComputedStyle(type as Element);
-            return {
-                nameColor: nameStyle.color,
-                nameFontSize: Number.parseFloat(nameStyle.fontSize),
-                typeColor: typeStyle.color,
-                typeFontSize: Number.parseFloat(typeStyle.fontSize),
-            };
-        },
-        await stringType.elementHandle(),
-    );
-    expect(textStyles.typeColor).not.toBe(textStyles.nameColor);
-    expect(textStyles.typeFontSize).toBeLessThanOrEqual(textStyles.nameFontSize);
-
     const fields = dialog.getByRole('textbox');
     await expect(fields).toHaveCount(2);
     const first = await fields.nth(0).boundingBox();
@@ -154,21 +141,6 @@ test('FlowStateKeyDialog: visible title and vertical fields', async ({mount, pag
         'color',
         'rgba(255, 255, 255, 0.85)',
     );
-    const darkTextStyles = await accountName.evaluate(
-        (name, type) => {
-            const nameStyle = getComputedStyle(name);
-            const typeStyle = getComputedStyle(type as Element);
-            return {
-                nameColor: nameStyle.color,
-                typeColor: typeStyle.color,
-                nameFontSize: Number.parseFloat(nameStyle.fontSize),
-                typeFontSize: Number.parseFloat(typeStyle.fontSize),
-            };
-        },
-        await stringType.elementHandle(),
-    );
-    expect(darkTextStyles.typeColor).not.toBe(darkTextStyles.nameColor);
-    expect(darkTextStyles.typeFontSize).toBeLessThanOrEqual(darkTextStyles.nameFontSize);
     await expect(close).toBeVisible();
     await page.screenshot({path: testInfo.outputPath('dialog-dark.png')});
 });

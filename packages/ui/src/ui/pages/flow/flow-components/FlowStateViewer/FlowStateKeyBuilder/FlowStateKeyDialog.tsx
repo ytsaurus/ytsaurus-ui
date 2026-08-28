@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {Flex, Text, TextInput} from '@gravity-ui/uikit';
+import {Flex, TextInput} from '@gravity-ui/uikit';
 
 import {DialogWrapper} from '../../../../../components/DialogWrapper/DialogWrapper';
 
@@ -139,6 +139,7 @@ export function FlowStateKeyDialog({
                                 <TextInput
                                     id={fieldId}
                                     label={column.name}
+                                    placeholder={column.type}
                                     value={formValues[fieldId]}
                                     validationState={error ? 'invalid' : undefined}
                                     errorMessage={error}
@@ -154,9 +155,6 @@ export function FlowStateKeyDialog({
                                         });
                                     }}
                                 />
-                                <Text variant="caption-1" color="secondary">
-                                    {column.type}
-                                </Text>
                             </Flex>
                         );
                     })}

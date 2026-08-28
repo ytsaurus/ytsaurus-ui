@@ -1,8 +1,8 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {ArrowUpRightFromSquare, Database, TrashBin} from '@gravity-ui/icons';
-import {Button, Flex, HelpMark, Icon, Loader, Text} from '@gravity-ui/uikit';
+import {ArrowUpRightFromSquare, CircleInfo, Database, TrashBin} from '@gravity-ui/icons';
+import {Button, Flex, HelpMark, Icon, Loader, Text, Tooltip} from '@gravity-ui/uikit';
 import {ClipboardButton} from '@ytsaurus/components';
 
 import ClickableAttributesButton from '../../../../../components/AttributesButton/ClickableAttributesButton';
@@ -111,13 +111,6 @@ function FilterCellValue({
             </Text>
         );
     }
-    if (handlers.isRowFilterActive(row, field)) {
-        return (
-            <Text ellipsis color="secondary" title={i18n('hint_filter-already-applied')}>
-                {label}
-            </Text>
-        );
-    }
     return <Text ellipsis>{label}</Text>;
 }
 
@@ -149,24 +142,8 @@ function useResultColumns({
         () => buildCompactYsonSettings(ysonSettings),
         [ysonSettings],
     );
-    return React.useMemo(
-        () => [
-            {
-                id: 'section',
-                header: () => i18n('column_state-kind'),
-                size: 140,
-                accessorFn: (row) => row.section,
-                cell: ({row: {original}}) => (
-                    <TableCell justifyContent="space-between">
-                        <FilterCellValue
-                            row={original}
-                            field="target"
-                            label={i18nApiValues(KIND_LABEL_KEYS[original.section])}
-                            handlers={handlers}
-                        />
-                    </TableCell>
-                ),
-            },
+    return React.useMemo(() => {
+        const columns: Array<tanstack.ColumnDef<FlowStateResultRow>> = [
             {
                 id: 'computation',
                 header: () => i18n('column_computation'),
@@ -182,7 +159,7 @@ function useResultColumns({
                         />
                         {original.computationId && (
                             <RoutedLink
-                                className={block('row-link')}
+                                className={`${block('row-link')} ${block('hover-action')}`}
                                 href={handlers.resolveComputationLink(original.computationId)}
                                 title={i18n('link_open-computation-page')}
                             >
@@ -193,27 +170,16 @@ function useResultColumns({
                 ),
             },
             {
-                id: 'partition',
-                header: () => i18n('column_partition'),
-                size: 160,
-                accessorFn: (row) => row.partitionId ?? '',
-                cell: ({row: {original}}) => (
-                    <TableCell>
-                        <Text ellipsis>{original.partitionId ?? ''}</Text>
-                    </TableCell>
-                ),
-            },
-            {
-                id: 'key',
-                header: () => i18n('column_key'),
-                size: 160,
-                accessorFn: (row) => stringifyStateValue(row.key),
+                id: 'section',
+                header: () => i18n('column_state-kind'),
+                size: 140,
+                accessorFn: (row) => row.section,
                 cell: ({row: {original}}) => (
                     <TableCell justifyContent="space-between">
                         <FilterCellValue
                             row={original}
-                            field="key"
-                            label={stringifyStateValue(original.key)}
+                            field="target"
+                            label={i18nApiValues(KIND_LABEL_KEYS[original.section])}
                             handlers={handlers}
                         />
                     </TableCell>
@@ -242,7 +208,7 @@ function useResultColumns({
                             {location && (
                                 <RoutedLink
                                     aria-label={i18n('link_open-backing-storage')}
-                                    className={block('row-link')}
+                                    className={`${block('row-link')} ${block('hover-action')}`}
                                     href={genNavigationUrl({
                                         cluster: location.cluster ?? cluster,
                                         path: location.path,
@@ -255,6 +221,38 @@ function useResultColumns({
                         </TableCell>
                     );
                 },
+            },
+            {
+                id: 'partition',
+                header: () => i18n('column_partition'),
+                size: 160,
+                accessorFn: (row) => row.partitionId ?? '',
+                cell: ({row: {original}}) => (
+                    <TableCell>
+                        <FilterCellValue
+                            row={original}
+                            field="partition"
+                            label={original.partitionId ?? ''}
+                            handlers={handlers}
+                        />
+                    </TableCell>
+                ),
+            },
+            {
+                id: 'key',
+                header: () => i18n('column_key'),
+                size: 160,
+                accessorFn: (row) => stringifyStateValue(row.key),
+                cell: ({row: {original}}) => (
+                    <TableCell justifyContent="space-between">
+                        <FilterCellValue
+                            row={original}
+                            field="key"
+                            label={stringifyStateValue(original.key)}
+                            handlers={handlers}
+                        />
+                    </TableCell>
+                ),
             },
             {
                 id: 'value',
@@ -276,45 +274,50 @@ function useResultColumns({
                                 />
                             </div>
                             <Flex gap={1} alignItems="center">
-                                <CopyButton text={serializeRawStateValue(original.value)} />
                                 {expandable && (
-                                    <ClickableAttributesButton
-                                        aria-label={i18n('tooltip_show-value')}
-                                        title={original.stateName}
-                                        attributes={original.value as object}
-                                        view="flat-secondary"
-                                        size="s"
-                                        tooltipProps={{
-                                            placement: 'bottom-end',
-                                            content: i18n('tooltip_show-value'),
-                                        }}
-                                    />
+                                    <span className={block('hover-action')}>
+                                        <ClickableAttributesButton
+                                            aria-label={i18n('tooltip_show-value')}
+                                            title={original.stateName}
+                                            attributes={original.value as object}
+                                            view="flat-secondary"
+                                            size="s"
+                                            tooltipProps={{
+                                                placement: 'bottom-end',
+                                                content: i18n('tooltip_show-value'),
+                                            }}
+                                        />
+                                    </span>
                                 )}
+                                <CopyButton text={serializeRawStateValue(original.value)} />
                             </Flex>
                         </TableCell>
                     );
                 },
             },
-            {
+        ];
+        if (!writeDenied) {
+            columns.push({
                 id: 'delete',
                 header: () => null,
                 size: 48,
                 enableSorting: false,
                 cell: ({row: {original}}) => (
                     <Button
+                        className={block('hover-action')}
                         view="flat-secondary"
                         aria-label={i18n('action_delete-row')}
                         title={i18n('action_delete-row')}
-                        disabled={writeDenied || !isRowDeletable(original)}
+                        disabled={!isRowDeletable(original)}
                         onClick={() => onDeleteRows([original])}
                     >
                         <Icon data={TrashBin} size={16} />
                     </Button>
                 ),
-            },
-        ],
-        [compactYsonSettings, cluster, handlers, onDeleteRows, writeDenied],
-    );
+            });
+        }
+        return columns;
+    }, [compactYsonSettings, cluster, handlers, onDeleteRows, writeDenied]);
 }
 
 function FlowStateResultsTable({
@@ -344,21 +347,31 @@ function FlowStateResultsTable({
         onDeleteRows,
     });
     const allColumns = React.useMemo(
-        () => [selectionColumn as unknown as tanstack.ColumnDef<FlowStateResultRow>, ...columns],
-        [columns],
+        () =>
+            writeDenied
+                ? columns
+                : [
+                      selectionColumn as unknown as tanstack.ColumnDef<FlowStateResultRow>,
+                      ...columns,
+                  ],
+        [columns, writeDenied],
     );
     const [sorting, setSorting] = React.useState<tanstack.SortingState>([]);
 
     const table = useTable({
         columns: allColumns,
         data: rows,
-        state: {sorting, rowSelection, columnPinning: {right: ['delete']}},
+        state: {
+            sorting,
+            rowSelection,
+            columnPinning: writeDenied ? {} : {right: ['delete']},
+        },
         onSortingChange: setSorting,
         onRowSelectionChange,
         enableSorting: true,
         enableColumnPinning: true,
-        enableMultiRowSelection: true,
-        enableRowSelection: (row) => isRowDeletable(row.original),
+        enableMultiRowSelection: !writeDenied,
+        enableRowSelection: writeDenied ? false : (row) => isRowDeletable(row.original),
         getRowId: (row) => getStateRowId(row),
     });
 
@@ -436,45 +449,52 @@ export function FlowStateResults({
                 )}
                 <div ref={contentRef} data-testid="results-content" aria-busy={refreshing}>
                     <Flex direction="column" gap={2}>
-                        {selectedCount > 0 && (
+                        {!writeDenied && selectedCount > 0 && (
                             <Flex gap={3} alignItems="center">
                                 <Text color="secondary">
                                     {i18n('text_selected-rows', {count: String(selectedCount)})}
                                 </Text>
                                 <Button
                                     view="outlined-danger"
-                                    disabled={writeDenied}
                                     onClick={() =>
                                         onDeleteRows(selectDeletableRows(rows, rowSelection))
                                     }
                                 >
                                     {i18n('action_delete')}
                                 </Button>
-                                {writeDenied && (
-                                    <Text color="secondary">
-                                        {i18n('alert_no-write-permission')}
-                                    </Text>
-                                )}
                             </Flex>
                         )}
                         {(response.errors ?? []).map((message, index) => (
                             <YTErrorBlock key={`${index}:${message}`} error={{message}} />
                         ))}
-                        <Flex gap={3} alignItems="center" justifyContent="space-between">
-                            <Text color="secondary">
-                                {i18n('text_bounded-results', {limit: String(READ_STATES_LIMIT)})}
-                            </Text>
-                            <ClickableAttributesButton
-                                aria-label={i18n('tooltip_show-raw-response')}
-                                title={i18n('title_raw-response')}
-                                attributes={response}
-                                view="flat-secondary"
-                                size="s"
-                                tooltipProps={{
-                                    placement: 'bottom-end',
-                                    content: i18n('tooltip_show-raw-response'),
-                                }}
-                            />
+                        <Flex justifyContent="flex-end">
+                            <Flex direction="column" alignItems="center" gap={1}>
+                                <ClickableAttributesButton
+                                    aria-label={i18n('tooltip_show-raw-response')}
+                                    title={i18n('title_raw-response')}
+                                    attributes={response}
+                                    view="flat-secondary"
+                                    size="s"
+                                    tooltipProps={{
+                                        placement: 'bottom-end',
+                                        content: i18n('tooltip_show-raw-response'),
+                                    }}
+                                />
+                                <Tooltip
+                                    placement="bottom-end"
+                                    content={i18n('text_bounded-results', {
+                                        limit: String(READ_STATES_LIMIT),
+                                    })}
+                                >
+                                    <Button
+                                        view="flat-secondary"
+                                        size="s"
+                                        aria-label={i18n('label_bounded-results-info')}
+                                    >
+                                        <Icon data={CircleInfo} size={16} />
+                                    </Button>
+                                </Tooltip>
+                            </Flex>
                         </Flex>
                         <FlowStateResultsTable
                             rows={rows}

@@ -125,10 +125,13 @@ export function buildRowFilterUpdate(
 ): FlowStateFiltersValue | undefined {
     switch (field) {
         case 'target': {
-            if (row.section === 'joined_external_key_state' || row.section === filters.target) {
+            if (row.section === 'joined_external_key_state') {
                 return undefined;
             }
             const target = row.section;
+            if (target === filters.target) {
+                return {...filters};
+            }
             return {
                 ...filters,
                 target,
@@ -137,11 +140,14 @@ export function buildRowFilterUpdate(
             };
         }
         case 'computation': {
-            if (!row.computationId || row.computationId === filters.computationId) {
+            if (!row.computationId) {
                 return undefined;
             }
             if (context.fixedComputationId && row.computationId !== context.fixedComputationId) {
                 return undefined;
+            }
+            if (row.computationId === filters.computationId) {
+                return {...filters};
             }
             return {
                 ...filters,
@@ -153,31 +159,16 @@ export function buildRowFilterUpdate(
         }
         case 'key':
             return applyRowKeyClick(filters, row, context);
+        case 'partition':
+            return row.partitionId ? {...filters, partitionId: row.partitionId} : undefined;
         case 'stateName': {
-            if (!row.stateName || row.stateName === filters.stateName) {
+            if (!row.stateName) {
                 return undefined;
             }
             return {...filters, stateName: row.stateName};
         }
         default:
             return undefined;
-    }
-}
-
-export function isRowFilterValueActive(
-    filters: FlowStateFiltersValue,
-    row: FlowStateResultRow,
-    field: FlowStateRowFilterField,
-): boolean {
-    switch (field) {
-        case 'target':
-            return row.section === filters.target;
-        case 'computation':
-            return Boolean(row.computationId) && row.computationId === filters.computationId;
-        case 'stateName':
-            return Boolean(row.stateName) && row.stateName === filters.stateName;
-        default:
-            return false;
     }
 }
 

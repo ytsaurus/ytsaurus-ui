@@ -34,7 +34,9 @@ jest.mock(
         },
 );
 jest.mock('../../../../../components/ClickableText/ClickableText', () => ({
-    ClickableText: ({children}: {children: React.ReactNode}) => <span>{children}</span>,
+    ClickableText: ({children, onClick}: {children: React.ReactNode; onClick: () => void}) => (
+        <button onClick={onClick}>{children}</button>
+    ),
 }));
 jest.mock('../../../../../components/Yson/Yson', () => ({
     Yson: () => null,
@@ -74,16 +76,19 @@ jest.mock('../../../../../components/DataTableGravity', () => ({
             data-testid="results-table"
             data-multi-row-selection={String(table.enableMultiRowSelection)}
         >
+            <div data-testid="column-order">{table.columns.map(({id}) => id).join(',')}</div>
             {table.data[0] &&
                 table.columns
-                    .slice(1)
+                    .filter((column) => column.cell)
                     .map((column) => (
-                        <div key={column.id}>{column.cell({row: {original: table.data[0]}})}</div>
+                        <div key={column.id} data-column-id={column.id}>
+                            {column.cell({row: {original: table.data[0]}})}
+                        </div>
                     ))}
         </div>
     ),
     TableCell: ({children}: {children: React.ReactNode}) => <div>{children}</div>,
-    selectionColumn: {},
+    selectionColumn: {id: 'select', cell: () => <input type="checkbox" />},
     useTable: (options: unknown) => options,
 }));
 
@@ -100,7 +105,6 @@ import {FlowStateResults} from './FlowStateResults';
 
 const handlers: FlowStateCellHandlers = {
     getRowFilterUpdate: () => undefined,
-    isRowFilterActive: () => false,
     onFiltersChange: () => {},
     resolveStoragePath: () => undefined,
     resolveComputationLink: () => '',
@@ -168,7 +172,9 @@ it('keeps the complete stale result region visible but inert while refreshing', 
     expect(content.contains(status)).toBe(false);
     expect(content.contains(screen.getByText(/text_selected-rows/))).toBe(true);
     expect(content.contains(screen.getByTestId('error'))).toBe(true);
-    expect(content.contains(screen.getByText('text_bounded-results'))).toBe(true);
+    expect(content.contains(screen.getByRole('button', {name: 'label_bounded-results-info'}))).toBe(
+        true,
+    );
     expect(content.contains(screen.getByRole('button', {name: 'tooltip_show-raw-response'}))).toBe(
         true,
     );
@@ -219,6 +225,12 @@ it('keeps copy and inspection on Value only and exposes raw response inspection'
         'count',
     );
     expect(screen.getByRole('button', {name: 'tooltip_show-value'})).not.toBeNull();
+    const valueActions = document.querySelector('[data-column-id="value"]');
+    expect(
+        Array.from(valueActions?.querySelectorAll('button') ?? []).map((button) =>
+            button.getAttribute('aria-label'),
+        ),
+    ).toEqual(['tooltip_show-value', 'action_copy-value']);
     expect(screen.getByRole('button', {name: 'tooltip_show-raw-response'})).not.toBeNull();
     expect(
         screen
@@ -252,9 +264,8 @@ it('keeps computation and backing storage navigation persistently accessible', (
 it('describes the bounded response without presenting a row count or raw switch', () => {
     renderResults({response: {partition_states: []}});
 
-    expect(screen.getByText('text_bounded-results')).not.toBeNull();
+    expect(screen.getByRole('button', {name: 'label_bounded-results-info'})).not.toBeNull();
     expect(screen.queryByText(/label_rows/)).toBeNull();
-    expect(screen.queryByRole('checkbox')).toBeNull();
 });
 
 it('enables multi-row selection and exposes a rightmost row delete action', () => {
@@ -275,4 +286,42 @@ it('enables multi-row selection and exposes a rightmost row delete action', () =
     expect(onDeleteRows).toHaveBeenCalledWith([
         expect.objectContaining({section: 'key_state', stateName: '/counter'}),
     ]);
+});
+
+it('orders columns and omits every write control when permission is unavailable', () => {
+    renderResults({
+        response: {
+            key_states: [{computation_id: 'state', key: [1], states: {'/counter': 42}}],
+        },
+        writeDenied: true,
+        rowSelection: {'key_state|state||[1]|/counter': true},
+    });
+
+    expect(screen.getByTestId('column-order').textContent).toBe(
+        'computation,section,state-name,partition,key,value',
+    );
+    expect(screen.queryByRole('button', {name: 'action_delete'})).toBeNull();
+    expect(screen.queryByRole('button', {name: 'action_delete-row'})).toBeNull();
+});
+
+it('keeps all filterable row coordinates clickable, including an active partition', () => {
+    const onFiltersChange = jest.fn();
+    const update = {target: 'all' as const, keyValues: {}, partitionId: 'p1'};
+    renderResults({
+        response: {
+            partition_states: [
+                {computation_id: 'state', partition_id: 'p1', states: {'/counter': 42}},
+            ],
+        },
+        handlers: {
+            ...handlers,
+            getRowFilterUpdate: () => update,
+            onFiltersChange,
+        },
+    });
+
+    for (const label of ['state', 'value_kind-internal-partition', '/counter', 'p1']) {
+        fireEvent.click(screen.getByRole('button', {name: label}));
+    }
+    expect(onFiltersChange).toHaveBeenCalledTimes(4);
 });

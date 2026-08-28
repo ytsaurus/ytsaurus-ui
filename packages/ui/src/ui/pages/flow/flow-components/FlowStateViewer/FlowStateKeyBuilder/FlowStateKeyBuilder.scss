@@ -1,9 +1,8 @@
 .yt-flow-state-key-builder {
-    width: min(640px, 100%);
+    width: min(420px, 100%);
 
     &__raw-input {
-        flex: 1;
-        min-width: 0;
+        width: 100%;
     }
 
     &__launcher {

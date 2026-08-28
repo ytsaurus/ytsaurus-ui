@@ -200,7 +200,7 @@ describe('FlowStateKeyBuilder', () => {
             </ThemeProvider>,
         );
 
-        const raw = screen.getByPlaceholderText('placeholder_raw-key');
+        const raw = screen.getByPlaceholderText('[first; second; third]');
         fireEvent.change(raw, {target: {value: '[only; two]'}});
 
         expect((raw as HTMLInputElement).value).toBe('[only; two]');
@@ -219,7 +219,7 @@ describe('FlowStateKeyBuilder', () => {
             </ThemeProvider>,
         );
 
-        const raw = screen.getByPlaceholderText('placeholder_raw-key');
+        const raw = screen.getByPlaceholderText('[key]');
         fireEvent.change(raw, {target: {value: '[""]'}});
 
         expect((raw as HTMLInputElement).value).toBe('[""]');
@@ -266,7 +266,7 @@ describe('FlowStateKeyBuilder', () => {
         expect(onChange).toHaveBeenCalledWith({first: '', second: '', third: ''});
     });
 
-    it('keeps field names primary and renders types as separate captions', async () => {
+    it('keeps field names primary and renders types as input placeholders', async () => {
         render(
             <ThemeProvider theme="light">
                 <FlowStateKeyBuilder
@@ -280,7 +280,8 @@ describe('FlowStateKeyBuilder', () => {
 
         const dialog = await screen.findByRole('dialog', {name: 'title_edit-key-fields'});
         expect(within(dialog).getByRole('textbox', {name: 'count'})).not.toBeNull();
-        expect(within(dialog).getByText('int64', {selector: 'span'})).not.toBeNull();
+        expect(within(dialog).getByPlaceholderText('int64')).not.toBeNull();
+        expect(within(dialog).queryByText('int64', {selector: 'span'})).toBeNull();
         expect(within(dialog).queryByText('count (int64)')).toBeNull();
     });
 

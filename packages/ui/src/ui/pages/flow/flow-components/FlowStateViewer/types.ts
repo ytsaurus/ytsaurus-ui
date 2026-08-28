@@ -87,7 +87,7 @@ export type FlowRowKeySchema = {
     keySchemaStateName?: string;
 };
 
-export type FlowStateRowFilterField = 'target' | 'computation' | 'key' | 'stateName';
+export type FlowStateRowFilterField = 'target' | 'computation' | 'stateName' | 'partition' | 'key';
 export type FlowStateStorageLocation = {path: string; cluster?: string};
 
 export type FlowHeavyHitterEntry = {keyText: string; ratio: number; partitionId: string};
@@ -106,7 +106,6 @@ export type FlowStateCellHandlers = {
         row: FlowStateResultRow,
         field: FlowStateRowFilterField,
     ) => FlowStateFiltersValue | undefined;
-    isRowFilterActive: (row: FlowStateResultRow, field: FlowStateRowFilterField) => boolean;
     onFiltersChange: (next: FlowStateFiltersValue) => void;
     resolveStoragePath: (row: FlowStateResultRow) => FlowStateStorageLocation | undefined;
     resolveComputationLink: (computationId: string) => string;

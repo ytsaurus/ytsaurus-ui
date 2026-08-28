@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import {Pencil as PencilIcon} from '@gravity-ui/icons';
-import {Button, Flex, Icon, TextInput, Tooltip} from '@gravity-ui/uikit';
+import {Button, Icon, TextInput, Tooltip} from '@gravity-ui/uikit';
 
 import {formatRawKeyDraft, parseRawKeyDraft} from '../state-filters';
 import {FlowStateKeyDialog} from './FlowStateKeyDialog';
@@ -35,16 +35,30 @@ export function FlowStateKeyBuilder({columns, values, onChange}: FlowStateKeyBui
     const validationError = parsedDraft.error
         ? i18n(parsedDraft.error.errorKey, parsedDraft.error.params)
         : undefined;
+    const rawKeyPlaceholder = `[${columns.map(({name}) => name).join('; ')}]`;
 
     return (
         <React.Fragment>
-            <Flex gap={2} alignItems="flex-start" className={block()}>
+            <div className={block()}>
                 <TextInput
                     className={block('raw-input')}
                     label={i18n('field_raw-key')}
-                    placeholder={i18n('placeholder_raw-key')}
+                    placeholder={rawKeyPlaceholder}
                     value={rawDraft}
                     hasClear
+                    endContent={
+                        <Tooltip content={i18n('action_edit-key-fields')}>
+                            <Button
+                                className={block('launcher')}
+                                view="flat-secondary"
+                                size="s"
+                                aria-label={i18n('action_edit-key-fields')}
+                                onClick={() => setDialogVisible(true)}
+                            >
+                                <Icon data={PencilIcon} size={16} />
+                            </Button>
+                        </Tooltip>
+                    }
                     validationState={validationError ? 'invalid' : undefined}
                     errorMessage={validationError}
                     onUpdate={(next) => {
@@ -55,17 +69,7 @@ export function FlowStateKeyBuilder({columns, values, onChange}: FlowStateKeyBui
                         }
                     }}
                 />
-                <Tooltip content={i18n('action_edit-key-fields')}>
-                    <Button
-                        className={block('launcher')}
-                        view="flat-secondary"
-                        aria-label={i18n('action_edit-key-fields')}
-                        onClick={() => setDialogVisible(true)}
-                    >
-                        <Icon data={PencilIcon} size={16} />
-                    </Button>
-                </Tooltip>
-            </Flex>
+            </div>
             <FlowStateKeyDialog
                 visible={dialogVisible}
                 columns={columns}

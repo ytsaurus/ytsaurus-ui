@@ -55,7 +55,7 @@ export function FlowDeleteStatesDialog({
     onCommitted,
 }: FlowDeleteStatesDialogProps) {
     const titleId = React.useId();
-    const [force, setForce] = React.useState(false);
+    const [irreversibleAcknowledged, setIrreversibleAcknowledged] = React.useState(false);
     const [submitting, setSubmitting] = React.useState(false);
     const [submitError, setSubmitError] = React.useState<string>();
     const [outcomes, setOutcomes] = React.useState<Array<FlowRowDeleteOutcome>>();
@@ -86,7 +86,7 @@ export function FlowDeleteStatesDialog({
 
     React.useEffect(() => {
         if (visible) {
-            setForce(false);
+            setIrreversibleAcknowledged(false);
             setSubmitting(false);
             setSubmitError(undefined);
             setOutcomes(undefined);
@@ -103,7 +103,7 @@ export function FlowDeleteStatesDialog({
     const handleApply = async () => {
         setSubmitting(true);
         setSubmitError(undefined);
-        const result = await runDeleteStates(force);
+        const result = await runDeleteStates(gate.requiresForce && irreversibleAcknowledged);
         if (result.status === 'stale') {
             return;
         }
@@ -132,7 +132,7 @@ export function FlowDeleteStatesDialog({
         !permissionReady ||
         gate.blocked ||
         rows.length === 0 ||
-        (gate.requiresForce && !force);
+        (gate.requiresForce && !irreversibleAcknowledged);
 
     return (
         <DialogWrapper
@@ -168,12 +168,12 @@ export function FlowDeleteStatesDialog({
                         <Alert theme="warning" message={i18n('alert_pipeline-running')} />
                     )}
                     {stateReady && gate.requiresForce && (
-                        <React.Fragment>
-                            <Alert theme="warning" message={i18n('alert_force-paused')} />
-                            <Checkbox checked={force} onUpdate={setForce}>
-                                {i18n('label_force')}
-                            </Checkbox>
-                        </React.Fragment>
+                        <Checkbox
+                            checked={irreversibleAcknowledged}
+                            onUpdate={setIrreversibleAcknowledged}
+                        >
+                            {i18n('label_force')}
+                        </Checkbox>
                     )}
                     {outcomes && !areAllCommitted(outcomes, rows.length) && (
                         <React.Fragment>

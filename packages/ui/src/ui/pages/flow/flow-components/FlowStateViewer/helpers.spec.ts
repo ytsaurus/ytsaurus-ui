@@ -31,7 +31,6 @@ import {
 import {
     buildCompactYsonSettings,
     buildRowFilterUpdate,
-    isRowFilterValueActive,
     keyValuesFromRowKey,
     resolveStateStoragePath,
     serializeRawStateValue,
@@ -709,7 +708,7 @@ describe('buildRowFilterUpdate', () => {
             ),
         ).toBeUndefined();
     });
-    it('refuses a no-op target update', () => {
+    it('keeps an already-active target filter clickable with an idempotent update', () => {
         expect(
             buildRowFilterUpdate(
                 filters({computationId: 'c1', target: 'key_state'}),
@@ -717,7 +716,7 @@ describe('buildRowFilterUpdate', () => {
                 'target',
                 context,
             ),
-        ).toBeUndefined();
+        ).toEqual(filters({computationId: 'c1', target: 'key_state'}));
     });
     it('clears key values when switching the target to partition state', () => {
         const next = buildRowFilterUpdate(
@@ -752,10 +751,28 @@ describe('buildRowFilterUpdate', () => {
             }),
         ).toBeUndefined();
     });
-    it('refuses a no-op computation update', () => {
+    it('keeps an already-active computation filter clickable with an idempotent update', () => {
         expect(
             buildRowFilterUpdate(filters({computationId: 'c2'}), row, 'computation', context),
-        ).toBeUndefined();
+        ).toEqual(filters({computationId: 'c2'}));
+    });
+    it('applies and preserves the row partition filter', () => {
+        expect(
+            buildRowFilterUpdate(
+                filters({computationId: 'c2'}),
+                {...row, partitionId: 'p1'},
+                'partition',
+                context,
+            ),
+        ).toEqual(filters({computationId: 'c2', partitionId: 'p1'}));
+        expect(
+            buildRowFilterUpdate(
+                filters({computationId: 'c2', partitionId: 'p1'}),
+                {...row, partitionId: 'p1'},
+                'partition',
+                context,
+            ),
+        ).toEqual(filters({computationId: 'c2', partitionId: 'p1'}));
     });
     it('applies the row key together with its computation', () => {
         const next = buildRowFilterUpdate(
@@ -808,7 +825,7 @@ describe('buildRowFilterUpdate', () => {
         );
         expect(next).toMatchObject({stateName: '/s'});
     });
-    it('refuses a no-op state name update', () => {
+    it('keeps an already-active state filter clickable with an idempotent update', () => {
         expect(
             buildRowFilterUpdate(
                 filters({computationId: 'c1', stateName: '/s'}),
@@ -816,36 +833,7 @@ describe('buildRowFilterUpdate', () => {
                 'stateName',
                 context,
             ),
-        ).toBeUndefined();
-    });
-});
-
-describe('isRowFilterValueActive', () => {
-    const row: FlowStateResultRow = {
-        section: 'key_state',
-        computationId: 'c1',
-        key: [7],
-        stateName: '/s',
-        value: 1,
-    };
-    it('detects the state kind the filters are narrowed to', () => {
-        expect(isRowFilterValueActive(filters({target: 'key_state'}), row, 'target')).toBe(true);
-        expect(isRowFilterValueActive(filters({target: 'all'}), row, 'target')).toBe(false);
-    });
-    it('detects the computation and the state name the filters are narrowed to', () => {
-        expect(isRowFilterValueActive(filters({computationId: 'c1'}), row, 'computation')).toBe(
-            true,
-        );
-        expect(isRowFilterValueActive(filters({computationId: 'c2'}), row, 'computation')).toBe(
-            false,
-        );
-        expect(isRowFilterValueActive(filters({stateName: '/s'}), row, 'stateName')).toBe(true);
-        expect(isRowFilterValueActive(filters({stateName: '/other'}), row, 'stateName')).toBe(
-            false,
-        );
-    });
-    it('never reports a key cell as narrowed, since clicking it stays available', () => {
-        expect(isRowFilterValueActive(filters({keyValues: {user: '7'}}), row, 'key')).toBe(false);
+        ).toEqual(filters({computationId: 'c1', stateName: '/s'}));
     });
 });
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {Button, Card, Flex, Select, Text, TextInput} from '@gravity-ui/uikit';
+import {Button, Flex, Select, TextInput} from '@gravity-ui/uikit';
 
 import {SelectSingle} from '../../../../../components/Select/Select';
 import {useFlowExecuteQuery} from '../../../../../store/api/yt/flow';
@@ -144,26 +144,11 @@ export function FlowStateFilters({
                     hasClear
                     onChange={handleComputation}
                 />
-                {value.computationId ? (
-                    <PartitionSelect
-                        pipeline_path={pipeline_path}
-                        computationId={value.computationId}
-                        value={value.partitionId}
-                        onChange={(partitionId) => onChange({...value, partitionId})}
-                    />
-                ) : (
-                    <SelectSingle
-                        className={block('control')}
-                        width="max"
-                        label={i18n('field_partition')}
-                        placeholder={i18n('field_partition')}
-                        items={[]}
-                        disabled
-                    />
-                )}
                 <Select
                     className={block('control')}
                     width="max"
+                    label={i18n('field_state-kind')}
+                    aria-label={i18n('field_state-kind')}
                     value={[value.target]}
                     multiple={false}
                     disabled={!hasScope}
@@ -223,31 +208,40 @@ export function FlowStateFilters({
                         }}
                     />
                 )}
-                <Button className={block('reset')} view="outlined" onClick={onReset}>
+                {value.computationId ? (
+                    <PartitionSelect
+                        pipeline_path={pipeline_path}
+                        computationId={value.computationId}
+                        value={value.partitionId}
+                        onChange={(partitionId) => onChange({...value, partitionId})}
+                    />
+                ) : (
+                    <SelectSingle
+                        className={block('control')}
+                        width="max"
+                        label={i18n('field_partition')}
+                        placeholder={i18n('field_partition')}
+                        items={[]}
+                        disabled
+                    />
+                )}
+                {value.computationId && !value.partitionId && keyColumns.length > 0 && (
+                    <FlowStateKeyBuilder
+                        columns={keyColumns}
+                        values={value.keyValues}
+                        onChange={(keyValues) =>
+                            onChange({
+                                ...value,
+                                keyValues,
+                                target: value.target === 'partition_state' ? 'all' : value.target,
+                            })
+                        }
+                    />
+                )}
+                <Button view="outlined" onClick={onReset}>
                     {i18n('action_reset-filters')}
                 </Button>
             </Flex>
-            {value.computationId && !value.partitionId && keyColumns.length > 0 && (
-                <Card view="outlined" className={block('key-group')}>
-                    <Flex gap={2} alignItems="flex-start">
-                        <Text variant="subheader-2" className={block('key-group-label')}>
-                            {i18n('field_key')}
-                        </Text>
-                        <FlowStateKeyBuilder
-                            columns={keyColumns}
-                            values={value.keyValues}
-                            onChange={(keyValues) =>
-                                onChange({
-                                    ...value,
-                                    keyValues,
-                                    target:
-                                        value.target === 'partition_state' ? 'all' : value.target,
-                                })
-                            }
-                        />
-                    </Flex>
-                </Card>
-            )}
         </Flex>
     );
 }

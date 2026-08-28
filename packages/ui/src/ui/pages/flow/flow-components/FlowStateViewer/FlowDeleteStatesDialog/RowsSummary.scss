@@ -1,0 +1,37 @@
+.yt-flow-delete-states-rows-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    &__table-pane {
+        overflow-x: auto;
+    }
+
+    &__table {
+        min-width: 760px;
+    }
+
+    &__complete-value {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        max-width: 360px;
+    }
+
+    &__complete-value-text {
+        overflow-wrap: anywhere;
+    }
+
+    &__hover-action {
+        display: inline-flex;
+        flex: none;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    tr:hover &__hover-action,
+    tr:focus-within &__hover-action {
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
