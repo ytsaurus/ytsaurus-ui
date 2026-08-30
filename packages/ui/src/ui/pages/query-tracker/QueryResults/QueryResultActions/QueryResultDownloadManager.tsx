@@ -2,7 +2,7 @@ import {type QueryResultColumn} from '../../../../types/query-tracker/queryResul
 import qs from 'qs';
 import React, {useMemo, useState} from 'react';
 import {selectCluster} from '../../../../store/selectors/global';
-import {DownloadManager} from '../../../navigation/content/Table/DownloadManager/DownloadManager';
+import {DownloadManager} from '../../../../components/DownloadManager';
 import {getDownloadQueryResultURL} from '../../../../store/actions/query-tracker/api';
 import {selectQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
 import {type RootState} from '../../../../store/reducers';
