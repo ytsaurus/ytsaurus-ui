@@ -1,26 +1,24 @@
 import {type QueryResultColumn} from '../../../../types/query-tracker/queryResult';
 import qs from 'qs';
 import React, {useMemo, useState} from 'react';
-import {
-    selectCluster,
-    selectCurrentClusterConfig,
-    selectMergedUiSettings,
-} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import {DownloadManager} from '../../../navigation/content/Table/DownloadManager/DownloadManager';
 import {getDownloadQueryResultURL} from '../../../../store/actions/query-tracker/api';
 import {selectQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
 import {type RootState} from '../../../../store/reducers';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {type FIX_MY_TYPE} from '../../../../../@types/types';
 import {getExportTableBaseUrl} from '../../../../config';
 import {downloadFile} from '../../../../store/actions/navigation/content/table/download-manager';
 
-/**
- * TODO: get rid of inheritance from DownloadManager
- */
-export class QueryResultTableDownloadManager extends DownloadManager {
+type QueryResultExtraProps = {
+    getDownloadBaseUrl: (cursor: {start: number; end: number} | undefined) => string;
+    queryId: string;
+    resultIndex: number;
+};
+
+class QueryResultTableDownloadManager extends DownloadManager<QueryResultExtraProps> {
     getDefaultFilename(): string {
-        const {queryId, resultIndex} = this.props as FIX_MY_TYPE;
+        const {queryId, resultIndex} = this.props;
 
         return `query_result_${queryId}_${resultIndex + 1}`;
     }
@@ -41,7 +39,7 @@ export class QueryResultTableDownloadManager extends DownloadManager {
     }
 
     getDownloadLink() {
-        const {getDownloadBaseUrl, cluster, queryId, resultIndex} = this.props as FIX_MY_TYPE;
+        const {getDownloadBaseUrl, cluster, queryId, resultIndex} = this.props;
         const {rowsMode, startRow, numRows, format, number_precision_mode} = this.state;
 
         const {query, error} = this.getDownloadParams();
@@ -50,7 +48,7 @@ export class QueryResultTableDownloadManager extends DownloadManager {
             const base = `${getExportTableBaseUrl({cluster})}/${cluster}/api/export-query-result`;
             const params = new URLSearchParams({
                 number_precision_mode,
-                result_index: resultIndex,
+                result_index: String(resultIndex),
                 query_id: queryId,
             });
 
@@ -118,21 +116,15 @@ export const QueryResultDownloadManager = React.memo(function QueryResultDownloa
         await dispatch(downloadFile(url, filename, true));
     };
 
-    const uiSettings = useSelector(selectMergedUiSettings);
-    const clusterConfig = useSelector(selectCurrentClusterConfig);
+    const getDownloadBaseUrl = (cursor: {start: number; end: number} | undefined) =>
+        dispatch(getDownloadQueryResultURL(cluster, queryId, resultIndex, cursor));
 
     return (
         <QueryResultTableDownloadManager
-            {...{
-                getDownloadBaseUrl: (cursor: {start: number; end: number} | undefined) =>
-                    dispatch(getDownloadQueryResultURL(cluster, queryId, resultIndex, cursor)),
-                proxy: '',
-                externalProxy: '',
-                toggleVisible: () => {},
-                transaction_id: undefined,
-                queryId,
-                resultIndex,
-            }}
+            getDownloadBaseUrl={getDownloadBaseUrl}
+            toggleVisible={() => {}}
+            queryId={queryId}
+            resultIndex={resultIndex}
             className={className}
             cluster={cluster}
             rowCount={result?.resultReady ? result?.meta.data_statistics.row_count : 0}
@@ -142,7 +134,6 @@ export const QueryResultDownloadManager = React.memo(function QueryResultDownloa
             pageSize={result?.resultReady ? result?.settings?.pageSize || 50 : 50}
             showDecoded={false}
             loading={false}
-            path={''}
             visible={opened}
             handleShow={() => setOpened(true)}
             handleClose={() => setOpened(false)}
@@ -150,8 +141,6 @@ export const QueryResultDownloadManager = React.memo(function QueryResultDownloa
             isSchematicTable={true}
             downloadFile={handleDownload}
             downloadToClipboard={handleCopy}
-            uiSettings={uiSettings}
-            clusterConfig={clusterConfig}
         />
     );
 });
