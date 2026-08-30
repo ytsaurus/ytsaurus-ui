@@ -2,13 +2,9 @@ import React from 'react';
 import unipika from '../../common/thor/unipika';
 import cn from 'bem-cn-lite';
 
-import filter_ from 'lodash/filter';
-import find_ from 'lodash/find';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 import values_ from 'lodash/values';
-
-import axios from 'axios';
 
 import {Checkbox, SegmentedRadioGroup, TextInput} from '@gravity-ui/uikit';
 
@@ -24,28 +20,18 @@ import Tabs from '../Tabs/Tabs';
 
 import {type WithVisibleProps} from '../../hocs/withVisible';
 
-import './DownloadManager.scss';
-import {docsUrl, getExportTableBaseUrl} from '../../config';
+import {docsUrl} from '../../config';
 import i18n from './i18n';
-import SeparatorInput, {prepareSeparatorValue} from './SeparatorInput';
+import {SeparatorInput} from './SeparatorInput';
 import UIFactory from '../../UIFactory';
 import {type FIX_MY_TYPE} from '../../types';
+import {CSV_SEPARATORS, FILE_EXTENSION_BY_FORMAT} from './constants';
+import {checkExcelExporter, prepareSeparatorValue, prepareValue} from './utils';
+import {type Column, type DownloadFormat} from './types';
+import './DownloadManager.scss';
 
 const block = cn('table-download-manager');
 const messageBlock = cn('elements-message');
-
-function checkExcelExporter(cluster: string) {
-    const EXCEL_BASE_URL = getExportTableBaseUrl({cluster});
-
-    if (!EXCEL_BASE_URL) {
-        return Promise.resolve(false);
-    }
-
-    return axios
-        .get(`${EXCEL_BASE_URL}/${cluster}/api/ready`)
-        .then(() => true)
-        .catch(() => false);
-}
 
 type Props = WithVisibleProps & {
     className?: string;
@@ -54,16 +40,14 @@ type Props = WithVisibleProps & {
     pageSize: number;
     offsetValue: number;
     rowCount: number;
-    allColumns: Array<{name: string; checked: boolean}>;
-    srcColumns: Array<{name: string; checked: boolean}>;
-    columns: Array<{name: string; checked: boolean}>;
+    allColumns: Array<Column>;
+    srcColumns: Array<Column>;
+    columns: Array<Column>;
     showDecoded: boolean;
     isSchematicTable: boolean;
-    downloadFile: (url: string, filename: string) => Promise<void>;
-    downloadToClipboard?: (url: string, filename: string) => Promise<void>;
+    downloadFile: (url: string, filename: string) => void;
+    downloadToClipboard?: (url: string, filename: string) => void;
 };
-
-type DownloadFormat = 'dsv' | 'schemaful_dsv' | 'csv' | 'yson' | 'json' | 'excel';
 
 type State = {
     format: DownloadFormat;
@@ -83,60 +67,22 @@ type State = {
     encodeUtf: boolean;
     withHeaders: boolean;
 
-    withSubkey: boolean;
-    keyColumn?: string;
-    valueColumn?: string;
-    subkeyColumn?: string;
-
-    selectedColumns?: Props['columns'];
+    selectedColumns?: Array<Column>;
 
     number_precision_mode: 'string' | 'error' | 'lose';
-};
-
-const CSV_SEPARATORS: State['separators'] = {
-    record: '\n',
-    field: ',',
-};
-
-const FILE_EXTENSION_BY_FORMAT: Record<DownloadFormat, string> = {
-    dsv: '.tskv',
-    schemaful_dsv: '.dsv',
-    csv: '.csv',
-    yson: '.yson',
-    json: '.json',
-    excel: '.xlsx',
 };
 
 export abstract class DownloadManager<ExtraProps extends object = object> extends React.Component<
     Props & ExtraProps,
     State
 > {
-    static prepareValue(value: string): number | string {
-        const parsedValue = Number(String(value).replace(/\s/g, '') || undefined); // we need `|| undefined` cause Number('') === 0
-        return isNaN(parsedValue) ? value : parsedValue;
-    }
-
-    static prepareColumns(columns: Array<{checked?: boolean}>) {
-        return filter_(columns, ({checked}) => checked);
-    }
-
-    static hasColumn(columns: Array<{name?: string}>, name: string) {
-        return Boolean(find_(columns, (column) => column.name === name));
-    }
-
     static getDerivedStateFromProps(nextProps: Props, prevState: State) {
         if (nextProps.visible !== prevState.visible) {
-            const {columns} = nextProps;
             return {
                 visible: nextProps.visible,
                 numRows: nextProps.pageSize,
                 startRow: nextProps.offsetValue,
                 selectedColumns: nextProps.allColumns,
-
-                withSubkey: nextProps.columns.length >= 3,
-                keyColumn: DownloadManager.hasColumn(columns, 'key') ? 'key' : undefined,
-                valueColumn: DownloadManager.hasColumn(columns, 'value') ? 'value' : undefined,
-                subkeyColumn: DownloadManager.hasColumn(columns, 'subkey') ? 'subkey' : undefined,
             };
         }
 
@@ -146,7 +92,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
     constructor(props: Props & ExtraProps) {
         super(props);
 
-        const {columns, visible, pageSize, offsetValue, allColumns} = props;
+        const {visible, pageSize, offsetValue, allColumns} = props;
 
         this.state = {
             format: 'dsv',
@@ -167,11 +113,6 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
             encodeUtf: false,
             withHeaders: true,
 
-            withSubkey: columns.length >= 3,
-            keyColumn: DownloadManager.hasColumn(columns, 'key') ? 'key' : undefined,
-            valueColumn: DownloadManager.hasColumn(columns, 'value') ? 'value' : undefined,
-            subkeyColumn: DownloadManager.hasColumn(columns, 'subkey') ? 'subkey' : undefined,
-
             numRows: pageSize,
             startRow: offsetValue,
             selectedColumns: allColumns,
@@ -182,12 +123,49 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
     }
 
     componentDidUpdate(prevProps: Props) {
+        /*
+         * The filename depends on getDefaultFilename(), an abstract instance method,
+         * so it can't be reset alongside the rest of the form in the static
+         * getDerivedStateFromProps above.
+         */
         if (this.props.visible && !prevProps.visible) {
             this.setState({filename: this.getDefaultFilename()});
         }
     }
 
-    getOutputFormat() {
+    render() {
+        const {loading, className, visible, handleClose} = this.props;
+
+        return (
+            <div className={block(null, className)}>
+                <Button
+                    size="m"
+                    title={i18n('action_download')}
+                    disabled={loading}
+                    onClick={this.showDialog}
+                    qa={'show-download-static-table'}
+                >
+                    <Icon awesome="download" size={13} />
+                    &nbsp; {i18n('action_download')}
+                </Button>
+
+                {visible && (
+                    <Modal
+                        size="l"
+                        title={i18n('title_download')}
+                        visible={visible}
+                        onCancel={handleClose}
+                        confirmText={i18n('action_download')}
+                        content={this.renderContent()}
+                        footerContent={this.renderModalCopyButton()}
+                        renderCustomConfirm={this.renderModalConfirmButton}
+                    />
+                )}
+            </div>
+        );
+    }
+
+    protected getOutputFormat() {
         const {
             format,
             encodeUtf,
@@ -260,19 +238,44 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         };
     }
 
-    abstract getDefaultFilename(): string;
+    protected abstract getDefaultFilename(): string;
 
-    abstract getDownloadParams(): {
+    protected abstract getDownloadParams(): {
         query: string;
         error?: {inner_errors: string[]; message: string};
     };
 
-    abstract getDownloadLink(): {
+    protected abstract getDownloadLink(): {
         url: string;
         error?: {inner_errors: string[]; message: string};
     };
 
-    getDownloadFilename() {
+    protected prepareColumnsForColumnMode(useQuotes = true) {
+        const {columnsMode, selectedColumns} = this.state;
+
+        if (columnsMode === 'all') {
+            const preparedColumns = map_(selectedColumns, 'name');
+
+            return map_(preparedColumns, (column) => this.parseColumn(column, useQuotes));
+        } else if (columnsMode === 'custom') {
+            const preparedColumns = reduce_(
+                selectedColumns,
+                (columns, item) => {
+                    if (item.checked) {
+                        columns.push(item.name);
+                    }
+
+                    return columns;
+                },
+                [] as Array<string>,
+            );
+
+            return map_(preparedColumns, (column) => this.parseColumn(column, useQuotes));
+        }
+        return undefined;
+    }
+
+    private getDownloadFilename() {
         const {format, filename} = this.state;
 
         const name = filename.trim() || this.getDefaultFilename();
@@ -281,11 +284,11 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         return name.toLowerCase().endsWith(extension) ? name : `${name}${extension}`;
     }
 
-    makeDocsUrl(path = '') {
+    private makeDocsUrl(path = '') {
         return docsUrl(UIFactory.docsUrls['storage:formats'] + path);
     }
 
-    get formats() {
+    private get formats() {
         const {isSchematicTable} = this.props;
         const {excelExporter} = this.state;
 
@@ -343,7 +346,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         };
     }
 
-    get tabItems() {
+    private get tabItems() {
         return map_(values_(this.formats), ({name, caption, show}) => ({
             value: name,
             text: caption,
@@ -351,27 +354,57 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         }));
     }
 
-    changeFormat = (format: DownloadFormat) => this.setState({format});
-    changeFilename = (filename: State['filename']) => this.setState({filename});
-    changeNumRows = (numRows: State['numRows']) => this.setState({numRows});
-    changeStartRow = (startRow: State['startRow']) => this.setState({startRow});
-    changeRowsMode = (rowsMode: State['rowsMode']) => this.setState({rowsMode});
-    changeKeyColumn = (keyColumn: State['keyColumn']) => this.setState({keyColumn});
-    changeYsonFormat = (ysonFormat: State['ysonFormat']) => this.setState({ysonFormat});
-    changeValueColumn = (valueColumn: State['valueColumn']) => this.setState({valueColumn});
-    changeColumnsMode = (columnsMode: State['columnsMode']) => this.setState({columnsMode});
-    changeSubkeyColumn = (subkeyColumn: State['subkeyColumn']) => this.setState({subkeyColumn});
-    changeValueSentinel = (valueSentinel: State['valueSentinel']) => this.setState({valueSentinel});
-    changeSelectedColumns = (selectedColumns: State['selectedColumns']) =>
+    private changeFormat = (format: DownloadFormat) => {
+        this.setState({format});
+    };
+
+    private changeFilename = (filename: State['filename']) => {
+        this.setState({filename});
+    };
+
+    private changeNumRows = (numRows: State['numRows']) => {
+        this.setState({numRows});
+    };
+
+    private changeStartRow = (startRow: State['startRow']) => {
+        this.setState({startRow});
+    };
+
+    private changeRowsMode = (rowsMode: State['rowsMode']) => {
+        this.setState({rowsMode});
+    };
+
+    private changeYsonFormat = (ysonFormat: State['ysonFormat']) => {
+        this.setState({ysonFormat});
+    };
+
+    private changeColumnsMode = (columnsMode: State['columnsMode']) => {
+        this.setState({columnsMode});
+    };
+
+    private changeValueSentinel = (valueSentinel: State['valueSentinel']) => {
+        this.setState({valueSentinel});
+    };
+
+    private changeSelectedColumns = (selectedColumns: State['selectedColumns']) => {
         this.setState({selectedColumns});
-    changeSchemafulDsvMissingMode = (schemafulDsvMissingMode: State['schemafulDsvMissingMode']) =>
+    };
+
+    private changeSchemafulDsvMissingMode = (
+        schemafulDsvMissingMode: State['schemafulDsvMissingMode'],
+    ) => {
         this.setState({schemafulDsvMissingMode});
+    };
 
-    toggleEncodeUtf = () => this.setState((prevState) => ({encodeUtf: !prevState.encodeUtf}));
-    toggleWithSubkey = () => this.setState((prevState) => ({withSubkey: !prevState.withSubkey}));
-    toggleWithHeaders = () => this.setState((prevState) => ({withHeaders: !prevState.withHeaders}));
+    private toggleEncodeUtf = () => {
+        this.setState((prevState) => ({encodeUtf: !prevState.encodeUtf}));
+    };
 
-    parseColumn(column: string, useQuotes: boolean) {
+    private toggleWithHeaders = () => {
+        this.setState((prevState) => ({withHeaders: !prevState.withHeaders}));
+    };
+
+    private parseColumn(column: string, useQuotes: boolean) {
         const {showDecoded} = this.props;
         const parsedColumn = showDecoded ? unipika.decode(column) : column;
 
@@ -391,32 +424,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         return parsedColumn;
     }
 
-    prepareColumnsForColumnMode(useQuotes = true) {
-        const {columnsMode, selectedColumns} = this.state;
-
-        if (columnsMode === 'all') {
-            const preparedColumns = map_(selectedColumns, 'name');
-
-            return map_(preparedColumns, (column) => this.parseColumn(column, useQuotes));
-        } else if (columnsMode === 'custom') {
-            const preparedColumns = reduce_(
-                selectedColumns,
-                (columns, item) => {
-                    if (item.checked) {
-                        columns.push(item.name);
-                    }
-
-                    return columns;
-                },
-                [] as Array<string>,
-            );
-
-            return map_(preparedColumns, (column) => this.parseColumn(column, useQuotes));
-        }
-        return undefined;
-    }
-
-    renderPaginator() {
+    private renderPaginator() {
         const {rowCount} = this.props;
 
         const isStartRowEmpty = this.state.startRow === 0;
@@ -431,7 +439,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
                 showInput
                 inputValue={String(startRow)}
                 onChange={(value: string) => {
-                    const row = DownloadManager.prepareValue(value);
+                    const row = prepareValue(value);
                     this.changeStartRow(row);
                 }}
                 first={{
@@ -470,7 +478,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         );
     }
 
-    renderFilenameForm() {
+    private renderFilenameForm() {
         const {filename} = this.state;
 
         return (
@@ -481,7 +489,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         );
     }
 
-    renderRows() {
+    private renderRows() {
         const {rowsMode, numRows} = this.state;
 
         return (
@@ -526,7 +534,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
                                 value={String(numRows)}
                                 invalid={isNaN(numRows as number) || numRows === ''}
                                 onChange={(value) => {
-                                    const num = DownloadManager.prepareValue(value);
+                                    const num = prepareValue(value);
                                     this.changeNumRows(num);
                                 }}
                             />
@@ -537,7 +545,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         );
     }
 
-    renderColumns() {
+    private renderColumns() {
         const {columnsMode, format, selectedColumns} = this.state;
         const {srcColumns} = this.props;
 
@@ -582,7 +590,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         );
     }
 
-    renderSchemafulDsv({fixedSeparators}: {fixedSeparators?: State['separators']} = {}) {
+    private renderSchemafulDsv({fixedSeparators}: {fixedSeparators?: State['separators']} = {}) {
         const {withHeaders, schemafulDsvMissingMode, valueSentinel} = this.state;
 
         return (
@@ -639,7 +647,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         );
     }
 
-    renderSeparatorEditors({
+    private renderSeparatorEditors({
         showKeyValueSeparator = false,
         fixedSeparators,
     }: {showKeyValueSeparator?: boolean; fixedSeparators?: State['separators']} = {}) {
@@ -679,19 +687,19 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         );
     }
 
-    setKeyValueSeparator = (v?: string) => {
+    private setKeyValueSeparator = (v?: string) => {
         this.onSeparatorChange('keyValue', v);
     };
 
-    setFieldSeparator = (v?: string) => {
+    private setFieldSeparator = (v?: string) => {
         this.onSeparatorChange('field', v);
     };
 
-    setRecordSeparator = (v?: string) => {
+    private setRecordSeparator = (v?: string) => {
         this.onSeparatorChange('record', v);
     };
 
-    onSeparatorChange(separatorType: keyof State['separators'], value?: string) {
+    private onSeparatorChange(separatorType: keyof State['separators'], value?: string) {
         this.setState({
             separators: {
                 ...this.state.separators,
@@ -700,7 +708,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         });
     }
 
-    renderYson() {
+    private renderYson() {
         const {ysonFormat} = this.state;
 
         return (
@@ -736,7 +744,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         );
     }
 
-    renderJson() {
+    private renderJson() {
         const {encodeUtf} = this.state;
 
         return (
@@ -748,7 +756,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         );
     }
 
-    renderExcel() {
+    private renderExcel() {
         const {number_precision_mode: excelNumberPrecisionMode} = this.state;
         return (
             <React.Fragment>
@@ -782,7 +790,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         );
     }
 
-    renderContent() {
+    private renderContent() {
         const {format} = this.state;
         const faqLink = (
             <Link url={UIFactory.docsUrls['faq:web_interface_table_download']}>FAQ</Link>
@@ -847,7 +855,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         );
     }
 
-    renderModalCopyButton() {
+    private renderModalCopyButton() {
         const {downloadToClipboard} = this.props;
 
         if (!downloadToClipboard) {
@@ -874,7 +882,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         );
     }
 
-    renderModalConfirmButton = (classNameConfirm: string) => {
+    private renderModalConfirmButton = (classNameConfirm: string) => {
         const filename = this.getDownloadFilename();
         const {url, error} = this.getDownloadLink();
 
@@ -899,43 +907,11 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         );
     };
 
-    showDialog = () => {
+    private showDialog = () => {
         const {handleShow, cluster} = this.props;
         handleShow();
         checkExcelExporter(cluster).then((excelExporter) => {
             this.setState({excelExporter});
         });
     };
-
-    render() {
-        const {loading, className, visible, handleClose} = this.props;
-
-        return (
-            <div className={block(null, className)}>
-                <Button
-                    size="m"
-                    title={i18n('action_download')}
-                    disabled={loading}
-                    onClick={this.showDialog}
-                    qa={'show-download-static-table'}
-                >
-                    <Icon awesome="download" size={13} />
-                    &nbsp; {i18n('action_download')}
-                </Button>
-
-                {visible && (
-                    <Modal
-                        size="l"
-                        title={i18n('title_download')}
-                        visible={visible}
-                        onCancel={handleClose}
-                        confirmText={i18n('action_download')}
-                        content={this.renderContent()}
-                        footerContent={this.renderModalCopyButton()}
-                        renderCustomConfirm={this.renderModalConfirmButton}
-                    />
-                )}
-            </div>
-        );
-    }
 }
