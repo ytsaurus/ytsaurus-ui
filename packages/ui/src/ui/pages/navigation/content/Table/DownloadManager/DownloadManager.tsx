@@ -1,5 +1,5 @@
 import React from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
+import {connect} from 'react-redux';
 import unipika from '../../../../../common/thor/unipika';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
@@ -66,13 +66,21 @@ function checkExcelExporter(cluster: string) {
         .catch(() => false);
 }
 
-type ReduxProps = Omit<ConnectedProps<typeof connector>, 'downloadFile'>;
-type Props = ReduxProps &
-    WithVisibleProps & {
-        className?: string;
-        downloadFile: (url: string, filename: string) => Promise<void>;
-        downloadToClipboard?: (url: string, filename: string) => Promise<void>;
-    };
+type Props = WithVisibleProps & {
+    className?: string;
+    loading: boolean;
+    cluster: string;
+    pageSize: number;
+    offsetValue: number;
+    rowCount: number;
+    allColumns: Array<{name: string; checked: boolean}>;
+    srcColumns: Array<{name: string; checked: boolean}>;
+    columns: Array<{name: string; checked: boolean}>;
+    showDecoded: boolean;
+    isSchematicTable: boolean;
+    downloadFile: (url: string, filename: string) => Promise<void>;
+    downloadToClipboard?: (url: string, filename: string) => Promise<void>;
+};
 
 type DownloadFormat = 'dsv' | 'schemaful_dsv' | 'csv' | 'yson' | 'json' | 'excel';
 
@@ -118,7 +126,10 @@ const FILE_EXTENSION_BY_FORMAT: Record<DownloadFormat, string> = {
     excel: '.xlsx',
 };
 
-export class DownloadManager extends React.Component<Props, State> {
+export abstract class DownloadManager<ExtraProps extends object = object> extends React.Component<
+    Props & ExtraProps,
+    State
+> {
     static prepareValue(value: string): number | string {
         const parsedValue = Number(String(value).replace(/\s/g, '') || undefined); // we need `|| undefined` cause Number('') === 0
         return isNaN(parsedValue) ? value : parsedValue;
@@ -151,7 +162,7 @@ export class DownloadManager extends React.Component<Props, State> {
         return null;
     }
 
-    constructor(props: Props) {
+    constructor(props: Props & ExtraProps) {
         super(props);
 
         const {columns, visible, pageSize, offsetValue, allColumns} = props;
@@ -268,54 +279,17 @@ export class DownloadManager extends React.Component<Props, State> {
         };
     }
 
-    get downloadRows() {
-        const {rowsMode} = this.state;
+    abstract getDefaultFilename(): string;
 
-        if (rowsMode === 'range') {
-            const {startRow, numRows} = this.state;
-            return '[#' + startRow + ':#' + (Number(startRow) + Number(numRows)) + ']';
-        } else {
-            return '';
-        }
-    }
+    abstract getDownloadParams(): {
+        query: string;
+        error?: {inner_errors: string[]; message: string};
+    };
 
-    get downloadColumns() {
-        const {columnsMode} = this.state;
-
-        if (columnsMode !== 'all') {
-            const columnNames = this.prepareColumnsForColumnMode();
-            return '{' + String(columnNames) + '}';
-        } else {
-            return '';
-        }
-    }
-
-    get downloadPath() {
-        const {path} = this.props;
-
-        return path + this.downloadColumns + this.downloadRows;
-    }
-
-    getDefaultFilename(): string {
-        const {path} = this.props;
-
-        return path.split('/')[path.split('/').length - 1];
-    }
-
-    getDownloadParams() {
-        const {transaction_id} = this.props;
-        const {value: output_format, error} = this.getOutputFormat();
-        const query = qs.stringify(
-            Object.assign(
-                {
-                    path: this.downloadPath,
-                    output_format,
-                },
-                transaction_id ? {transaction_id} : {},
-            ),
-        );
-        return {query, error};
-    }
+    abstract getDownloadLink(): {
+        url: string;
+        error?: {inner_errors: string[]; message: string};
+    };
 
     getDownloadFilename() {
         const {format, filename} = this.state;
@@ -324,25 +298,6 @@ export class DownloadManager extends React.Component<Props, State> {
         const extension = FILE_EXTENSION_BY_FORMAT[format];
 
         return name.toLowerCase().endsWith(extension) ? name : `${name}${extension}`;
-    }
-
-    getDownloadLink() {
-        const {cluster, clusterConfig, uiSettings} = this.props;
-        const {format, number_precision_mode} = this.state;
-        const {query, error} = this.getDownloadParams();
-
-        if (format === 'excel') {
-            const base = `${getExportTableBaseUrl({cluster})}/${cluster}/api/export`;
-            const params = new URLSearchParams({number_precision_mode});
-            return {url: `${base}?${params}&${query}`, error};
-        }
-
-        const base = makeDirectDownloadPath('read_table', {
-            clusterConfig,
-            uiSettings,
-        });
-
-        return {url: `${base}?${query}`, error};
     }
 
     makeDocsUrl(path = '') {
@@ -1004,6 +959,83 @@ export class DownloadManager extends React.Component<Props, State> {
     }
 }
 
+type NavigationTableExtraProps = {
+    path: string;
+    transaction_id?: string;
+    clusterConfig: ReturnType<typeof selectCurrentClusterConfig>;
+    uiSettings: ReturnType<typeof selectMergedUiSettings>;
+};
+
+export class NavigationTableDownloadManager extends DownloadManager<NavigationTableExtraProps> {
+    get downloadRows() {
+        const {rowsMode} = this.state;
+
+        if (rowsMode === 'range') {
+            const {startRow, numRows} = this.state;
+            return '[#' + startRow + ':#' + (Number(startRow) + Number(numRows)) + ']';
+        } else {
+            return '';
+        }
+    }
+
+    get downloadColumns() {
+        const {columnsMode} = this.state;
+
+        if (columnsMode !== 'all') {
+            const columnNames = this.prepareColumnsForColumnMode();
+            return '{' + String(columnNames) + '}';
+        } else {
+            return '';
+        }
+    }
+
+    get downloadPath() {
+        const {path} = this.props;
+
+        return path + this.downloadColumns + this.downloadRows;
+    }
+
+    getDefaultFilename(): string {
+        const {path} = this.props;
+
+        return path.split('/')[path.split('/').length - 1];
+    }
+
+    getDownloadParams() {
+        const {transaction_id} = this.props;
+        const {value: output_format, error} = this.getOutputFormat();
+        const query = qs.stringify(
+            Object.assign(
+                {
+                    path: this.downloadPath,
+                    output_format,
+                },
+                transaction_id ? {transaction_id} : {},
+            ),
+        );
+        return {query, error};
+    }
+
+    getDownloadLink() {
+        const {cluster, clusterConfig, uiSettings} = this.props;
+        const {format, number_precision_mode} = this.state;
+        const {query, error} = this.getDownloadParams();
+
+        if (format === 'excel') {
+            const base = `${getExportTableBaseUrl({cluster})}/${cluster}/api/export`;
+            const params = new URLSearchParams({number_precision_mode});
+            return {url: `${base}?${params}&${query}`, error};
+        }
+
+        const base = makeDirectDownloadPath('read_table', {
+            clusterConfig,
+            uiSettings,
+        });
+
+        return {url: `${base}?${query}`, error};
+    }
+}
+
 const mapStateToProps = (state: RootState) => {
     const {loading}: {loading: boolean} = state.navigation.content.table;
 
@@ -1046,4 +1078,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
-export default compose(connector, withVisible)(DownloadManager);
+export default compose(connector, withVisible)(NavigationTableDownloadManager);
