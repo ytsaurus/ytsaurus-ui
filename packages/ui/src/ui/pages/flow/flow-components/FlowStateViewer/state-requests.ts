@@ -23,6 +23,12 @@ export function buildStateAccessBody(
         body.partition_id = filters.partitionId;
     } else if (filters.computationId) {
         body.computation_id = filters.computationId;
+        if (filters.rawKey !== undefined) {
+            if (filters.target === 'partition_state') {
+                return {error: {errorKey: 'validation_key-target-mismatch'}};
+            }
+            body.key = filters.rawKey;
+        }
         const filledColumns: Array<{column: FlowKeyColumn; value: string}> = [];
         for (const column of keyColumns) {
             const value = getOwnProperty(filters.keyValues, column.name);
@@ -30,7 +36,7 @@ export function buildStateAccessBody(
                 filledColumns.push({column, value});
             }
         }
-        if (filledColumns.length) {
+        if (body.key === undefined && filledColumns.length) {
             if (filledColumns.length !== keyColumns.length) {
                 return {error: {errorKey: 'validation_fill-all-keys'}};
             }

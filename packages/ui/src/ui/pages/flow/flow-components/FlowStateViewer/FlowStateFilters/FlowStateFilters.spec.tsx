@@ -177,6 +177,13 @@ describe('FlowStateFilters narrowing controls', () => {
         expect(primaryRow?.contains(secondaryControls[0])).toBe(false);
     });
 
+    it('renders a raw Key filter for runtime keys without a declared schema', () => {
+        renderFilters(jest.fn(), {rawKeyAvailable: true});
+
+        expect(screen.getByRole('textbox', {name: 'field_raw-key'})).not.toBeNull();
+        expect(screen.queryByRole('button', {name: 'action_edit-key-fields'})).toBeNull();
+    });
+
     it('does not render a Limit control', () => {
         renderFilters(jest.fn());
         expect(screen.queryByText('field_limit')).toBeNull();

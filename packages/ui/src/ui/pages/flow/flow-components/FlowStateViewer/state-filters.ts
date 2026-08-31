@@ -298,6 +298,20 @@ export type RawKeyParseResult =
     | {values: Record<string, string>; error?: never}
     | {values?: never; error: FlowStateValidationError};
 
+export type RuntimeKeyParseResult =
+    {value: unknown; error?: never} | {value?: never; error: FlowStateValidationError};
+
+export function parseRuntimeKeyDraft(raw: string): RuntimeKeyParseResult {
+    if (!raw.trim()) {
+        return {value: undefined};
+    }
+    try {
+        return {value: JSON.parse(raw)};
+    } catch {
+        return {error: {errorKey: 'validation_invalid-key-syntax'}};
+    }
+}
+
 function splitFlatYsonList(raw: string): Array<string> | undefined {
     const trimmed = raw.trim();
     if (!trimmed.startsWith('[') || !trimmed.endsWith(']')) {

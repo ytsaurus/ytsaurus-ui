@@ -184,14 +184,7 @@ it('renders a headed preview with complete copyable values and plain permanence 
     renderDialog('Stopped');
 
     expect(screen.getByText(/text_delete-selected-explanation/).closest('.g-alert')).toBeNull();
-    const headings = [
-        'column_computation',
-        'column_state-kind',
-        'column_state-name',
-        'column_partition',
-        'column_key',
-        'column_value',
-    ];
+    const headings = ['column_computation', 'column_state-name', 'column_key', 'column_value'];
     for (const heading of headings) {
         expect(screen.getByText(heading)).not.toBeNull();
     }
@@ -199,6 +192,7 @@ it('renders a headed preview with complete copyable values and plain permanence 
     expect(Array.from(headerRow?.children ?? []).map((cell) => cell.textContent)).toEqual(headings);
     expect(screen.getAllByRole('button', {name: 'action_copy-value'})).toHaveLength(2);
     expect(screen.queryByRole('checkbox')).toBeNull();
+    expect(screen.getByRole('dialog').querySelector('.g-dialog_size_l')).not.toBeNull();
 });
 
 it('caps the preview at 20 rows and keeps a long value complete and copyable', () => {
@@ -331,9 +325,10 @@ it('disables Delete for a cached Stopped state with a query error', () => {
     expect(deleteButton().disabled).toBe(true);
 });
 
-it('disables Delete for a cached allow while permission is refreshing', () => {
+it('keeps cached permission stable while it refreshes in the background', () => {
     renderDialog('Stopped', {permission: {data: {action: 'allow'}, isFetching: true}});
-    expect(deleteButton().disabled).toBe(true);
+    expect(deleteButton().disabled).toBe(false);
+    expect(screen.queryByText('alert_permission-unavailable')).toBeNull();
 });
 
 it('issues no mutation when fresh permission is revoked at Apply time', async () => {

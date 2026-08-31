@@ -568,7 +568,7 @@ export function FlowStateResultsActions({
                 title={i18n('title_raw-response')}
                 attributes={response}
                 view="flat-secondary"
-                size="s"
+                size="m"
                 disabled={refreshing}
                 tooltipProps={{
                     placement: 'bottom-end',
@@ -581,7 +581,7 @@ export function FlowStateResultsActions({
             >
                 <Button
                     view="flat-secondary"
-                    size="s"
+                    size="m"
                     disabled={refreshing}
                     aria-label={i18n('label_bounded-results-info')}
                 >

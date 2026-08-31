@@ -4,11 +4,9 @@ import cn from 'bem-cn-lite';
 import {Table, type TableColumnConfig, Text} from '@gravity-ui/uikit';
 import {ClipboardButton} from '@ytsaurus/components';
 
-import {KIND_LABEL_KEYS} from '../FlowStateResults/FlowStateResults';
 import {getStateRowId} from '../state-requests';
 import {serializeRawStateValue} from '../state-values';
 import i18n from './i18n';
-import i18nApiValues from '../i18n-api-values';
 import type {FlowStateResultRow} from '../types';
 
 import './RowsSummary.scss';
@@ -35,26 +33,36 @@ function CompleteValue({value}: {value: unknown}) {
     );
 }
 
-const previewColumns: Array<TableColumnConfig<PreviewRow>> = [
+const requiredColumns: Array<TableColumnConfig<PreviewRow>> = [
     {id: 'computationId', name: () => i18n('column_computation')},
-    {
-        id: 'section',
-        name: () => i18n('column_state-kind'),
-        template: (row) => i18nApiValues(KIND_LABEL_KEYS[row.section]),
-    },
     {id: 'stateName', name: () => i18n('column_state-name')},
-    {id: 'partitionId', name: () => i18n('column_partition')},
-    {
-        id: 'key',
-        name: () => i18n('column_key'),
-        template: (row) => serializeRawStateValue(row.key),
-    },
-    {
-        id: 'value',
-        name: () => i18n('column_value'),
-        template: (row) => <CompleteValue value={row.value} />,
-    },
 ];
+
+const partitionColumn: TableColumnConfig<PreviewRow> = {
+    id: 'partitionId',
+    name: () => i18n('column_partition'),
+};
+
+const keyColumn: TableColumnConfig<PreviewRow> = {
+    id: 'key',
+    name: () => i18n('column_key'),
+    template: (row) => serializeRawStateValue(row.key),
+};
+
+const valueColumn: TableColumnConfig<PreviewRow> = {
+    id: 'value',
+    name: () => i18n('column_value'),
+    template: (row) => <CompleteValue value={row.value} />,
+};
+
+function getPreviewColumns(rows: Array<FlowStateResultRow>): Array<TableColumnConfig<PreviewRow>> {
+    return [
+        ...requiredColumns,
+        ...(rows.some((row) => Boolean(row.partitionId)) ? [partitionColumn] : []),
+        ...(rows.some((row) => row.key !== undefined && row.key !== null) ? [keyColumn] : []),
+        valueColumn,
+    ];
+}
 
 export function RowsSummary({rows}: {rows: Array<FlowStateResultRow>}) {
     const listed = rows.slice(0, MAX_LISTED_ROWS).map((row) => ({
@@ -67,7 +75,7 @@ export function RowsSummary({rows}: {rows: Array<FlowStateResultRow>}) {
             <div className={block('table-pane')}>
                 <Table
                     className={block('table')}
-                    columns={previewColumns}
+                    columns={getPreviewColumns(rows)}
                     data={listed}
                     getRowId="id"
                     verticalAlign="middle"

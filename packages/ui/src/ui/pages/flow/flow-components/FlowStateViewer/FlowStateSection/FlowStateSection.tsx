@@ -13,6 +13,7 @@ import {useSelector} from '../../../../../store/redux-hooks';
 import {FlowDeleteStatesDialog} from '../FlowDeleteStatesDialog/FlowDeleteStatesDialog';
 import {FlowStateFilters} from '../FlowStateFilters/FlowStateFilters';
 import {FlowStateResults, FlowStateResultsActions} from '../FlowStateResults/FlowStateResults';
+import {flattenReadStatesResponse} from '../state-requests';
 import {seedStateFilters} from '../state-filters';
 import {isDeleteCommitted, isWriteDeniedByPermission} from '../state-delete';
 import {useFlowStateCellHandlers} from './use-flow-state-cell-handlers';
@@ -59,6 +60,16 @@ export function FlowStateSection({
         parameters: {path: pipeline_path, user: login, permission: 'write'},
     });
     const writeDenied = isWriteDeniedByPermission(permissionResult);
+    const rawKeyAvailable = React.useMemo(
+        () =>
+            flattenReadStatesResponse(response).some(
+                (row) =>
+                    row.computationId === filters.computationId &&
+                    row.key !== undefined &&
+                    row.key !== null,
+            ),
+        [filters.computationId, response],
+    );
 
     const handleFiltersChange = React.useCallback(
         (next: FlowStateFiltersValue) => {
@@ -118,6 +129,7 @@ export function FlowStateSection({
                     onReset={handleReset}
                     fixedComputationId={fixedComputationId}
                     staticSpec={staticSpec}
+                    rawKeyAvailable={rawKeyAvailable}
                     actions={
                         <FlowStateResultsActions
                             response={response}

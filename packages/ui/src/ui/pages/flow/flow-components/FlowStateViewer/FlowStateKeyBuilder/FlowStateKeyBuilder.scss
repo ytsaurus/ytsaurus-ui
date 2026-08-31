@@ -13,5 +13,10 @@
 .yt-flow-state-key-dialog {
     &__field {
         width: 100%;
+
+        .g-text-input__control {
+            padding-top: 4px;
+            padding-bottom: 6px;
+        }
     }
 }

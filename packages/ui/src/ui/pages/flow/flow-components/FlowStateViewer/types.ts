@@ -14,6 +14,7 @@ export type FlowStateFiltersValue = {
     computationId?: string;
     partitionId?: string;
     keyValues: Record<string, string>;
+    rawKey?: unknown;
     stateName?: string;
     target: FlowStateTarget;
 };

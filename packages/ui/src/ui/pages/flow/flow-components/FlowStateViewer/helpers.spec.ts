@@ -378,6 +378,12 @@ describe('buildStateAccessBody', () => {
             },
         });
     });
+    it('maps a runtime key without a declared schema', () => {
+        const rawKey = ['queue', '42fde9d2bebc2af3edd7556f8c113c02', 0];
+        expect(buildStateAccessBody(filters({computationId: 'reader', rawKey}), [])).toEqual({
+            body: {computation_id: 'reader', key: rawKey},
+        });
+    });
     it('preserves a __proto__ key column as an own literal property', () => {
         const built = buildStateAccessBody(
             filters({
@@ -889,6 +895,28 @@ describe('buildRowKeyPresentation', () => {
 
         expect(presentation).toBeUndefined();
     });
+
+    it('uses the complete runtime key when the computation declares no key schema', () => {
+        const presentation = buildRowKeyPresentation(
+            filters({computationId: 'reader'}),
+            {
+                section: 'key_state',
+                computationId: 'reader',
+                key: ['queue', '42fde9d2bebc2af3edd7556f8c113c02', 0],
+                stateName: '/$watermark/v0',
+                value: 1,
+            },
+            {keyColumns: [], allKeyColumns: []},
+        );
+
+        expect(presentation).toEqual({
+            rawKey: '["queue","42fde9d2bebc2af3edd7556f8c113c02",0]',
+            filterUpdate: filters({
+                computationId: 'reader',
+                rawKey: ['queue', '42fde9d2bebc2af3edd7556f8c113c02', 0],
+            }),
+        });
+    });
 });
 
 describe('getStateRowId', () => {
@@ -1323,8 +1351,9 @@ describe('isWriteDeniedByPermission', () => {
     it('fails closed when the permission check resolves with an error envelope', () => {
         expect(isWriteDeniedByPermission({})).toBe(true);
     });
-    it('denies a cached allow while permission is fetching or errored', () => {
-        expect(isWriteDeniedByPermission({data: {action: 'allow'}, isFetching: true})).toBe(true);
+    it('keeps a cached allow during background refresh but denies missing or errored data', () => {
+        expect(isWriteDeniedByPermission({data: {action: 'allow'}, isFetching: true})).toBe(false);
+        expect(isWriteDeniedByPermission({isFetching: true})).toBe(true);
         expect(
             isWriteDeniedByPermission({data: {action: 'allow'}, error: new Error('stale')}),
         ).toBe(true);

@@ -137,7 +137,7 @@ export function FlowDeleteStatesDialog({
     return (
         <DialogWrapper
             open={visible}
-            size="m"
+            size="l"
             aria-labelledby={titleId}
             hasCloseButton={false}
             onClose={handleClose}

@@ -100,6 +100,20 @@ function applyRowKeyClick(
     if (context.fixedComputationId && row.computationId !== context.fixedComputationId) {
         return undefined;
     }
+    if (
+        !context.keyColumns.length &&
+        row.section !== 'joined_external_key_state' &&
+        row.key !== undefined &&
+        row.key !== null
+    ) {
+        return {
+            ...filters,
+            computationId: row.computationId,
+            partitionId: undefined,
+            keyValues: {},
+            rawKey: row.key,
+        };
+    }
     const keyValues = keyValuesFromRowKey(row.key, context.keyColumns, context.allKeyColumns);
     if (!keyValues) {
         return undefined;
@@ -109,6 +123,7 @@ function applyRowKeyClick(
         computationId: row.computationId,
         partitionId: undefined,
         keyValues,
+        rawKey: undefined,
         stateName: context.keySchemaStateName ?? filters.stateName,
         target:
             context.keySchemaStateName !== undefined || filters.target === 'partition_state'
@@ -126,7 +141,9 @@ export function buildRowKeyPresentation(
     if (!filterUpdate) {
         return undefined;
     }
-    const rawKey = formatRawKeyDraft(context.keyColumns, filterUpdate.keyValues);
+    const rawKey = context.keyColumns.length
+        ? formatRawKeyDraft(context.keyColumns, filterUpdate.keyValues)
+        : serializeRawStateValue(filterUpdate.rawKey);
     if (!rawKey) {
         return undefined;
     }
@@ -155,6 +172,7 @@ export function buildRowFilterUpdate(
                 ...filters,
                 target,
                 keyValues: target === 'partition_state' ? {} : filters.keyValues,
+                rawKey: target === 'partition_state' ? undefined : filters.rawKey,
                 stateName: reconcileStateName(filters.stateName, target, context.stateNames),
             };
         }
@@ -173,6 +191,7 @@ export function buildRowFilterUpdate(
                 computationId: row.computationId,
                 partitionId: undefined,
                 keyValues: {},
+                rawKey: undefined,
                 stateName: undefined,
             };
         }

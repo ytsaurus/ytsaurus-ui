@@ -121,6 +121,10 @@ test('FlowStateKeyDialog: visible title and vertical fields', async ({mount, pag
     expect(second.height).toBeGreaterThan(0);
     expect(second.y).toBeGreaterThan(first.y);
     expect(first.y + first.height).toBeLessThanOrEqual(second.y);
+    await expect(stringType).toHaveCSS('padding-top', '4px');
+    await expect(stringType).toHaveCSS('padding-bottom', '6px');
+    await expect(integerType).toHaveCSS('padding-top', '4px');
+    await expect(integerType).toHaveCSS('padding-bottom', '6px');
 
     const close = dialog.getByRole('button', {name: 'Close'});
     await expect(close).toBeVisible();

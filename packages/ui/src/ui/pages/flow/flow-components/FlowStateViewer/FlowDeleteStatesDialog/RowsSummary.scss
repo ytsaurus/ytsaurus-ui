@@ -4,11 +4,7 @@
     gap: 8px;
 
     &__table-pane {
-        overflow-x: auto;
-    }
-
-    &__table {
-        min-width: 760px;
+        overflow-x: visible;
     }
 
     &__complete-value {

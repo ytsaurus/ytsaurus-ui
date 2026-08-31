@@ -26,7 +26,7 @@ export function isWriteDeniedByPermission(result: {
     error?: unknown;
     isFetching?: boolean;
 }): boolean {
-    return result.data?.action !== 'allow' || Boolean(result.error) || Boolean(result.isFetching);
+    return result.data?.action !== 'allow' || Boolean(result.error);
 }
 
 export type FlowDeletePermissionQuery = {

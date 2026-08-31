@@ -30,6 +30,12 @@ test('FlowStateFilters: two-row toolbar', async ({mount, expectScreenshot, page}
     expect(rawBox).not.toBeNull();
     expect(infoBox).not.toBeNull();
     expect(Math.abs((keyBox?.y ?? 0) - (resetBox?.y ?? 0))).toBeLessThan(12);
+    expect((rawBox?.y ?? 0) + (rawBox?.height ?? 0) / 2).toBe(
+        (resetBox?.y ?? 0) + (resetBox?.height ?? 0) / 2,
+    );
+    expect((infoBox?.y ?? 0) + (infoBox?.height ?? 0) / 2).toBe(
+        (resetBox?.y ?? 0) + (resetBox?.height ?? 0) / 2,
+    );
     expect((rawBox?.x ?? 0) - ((resetBox?.x ?? 0) + (resetBox?.width ?? 0))).toBeLessThan(16);
     expect((infoBox?.x ?? 0) - ((rawBox?.x ?? 0) + (rawBox?.width ?? 0))).toBeLessThan(12);
 

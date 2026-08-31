@@ -177,6 +177,34 @@ describe('raw key parsing', () => {
 });
 
 describe('FlowStateKeyBuilder', () => {
+    it('filters by a copied runtime key when no static key schema exists', () => {
+        const onRawKeyChange = jest.fn();
+        render(
+            <ThemeProvider theme="light">
+                <FlowStateKeyBuilder
+                    columns={[]}
+                    values={{}}
+                    rawKey={['queue', '42fde9d2bebc2af3edd7556f8c113c02', 0]}
+                    onChange={() => {}}
+                    onRawKeyChange={onRawKeyChange}
+                />
+            </ThemeProvider>,
+        );
+
+        const raw = screen.getByPlaceholderText('field_raw-key');
+        expect((raw as HTMLInputElement).value).toBe(
+            '["queue","42fde9d2bebc2af3edd7556f8c113c02",0]',
+        );
+        expect(screen.queryByRole('button', {name: 'action_edit-key-fields'})).toBeNull();
+
+        fireEvent.change(raw, {target: {value: '["queue","replacement",1]'}});
+        expect(onRawKeyChange).toHaveBeenLastCalledWith(['queue', 'replacement', 1]);
+
+        fireEvent.change(raw, {target: {value: '[invalid]'}});
+        expect(onRawKeyChange).toHaveBeenCalledTimes(1);
+        expect(screen.getByText('validation_invalid-key-syntax')).not.toBeNull();
+    });
+
     it('opens typed key editing from an icon-only named launcher', async () => {
         render(
             <ThemeProvider theme="light">

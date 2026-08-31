@@ -27,7 +27,6 @@ test('RowsSummary: headed complete-value table', async ({mount, expectScreenshot
     await expect(table).toBeVisible();
     await expect(table.getByRole('row').first().getByRole('cell')).toHaveText([
         'Computation',
-        'State kind',
         'State',
         'Partition',
         'Key',
@@ -52,6 +51,28 @@ test('RowsSummary: headed complete-value table', async ({mount, expectScreenshot
 test('RowsSummary: narrow overflow remains usable', async ({mount, expectScreenshot, page}) => {
     await mount(<RowsSummary rows={rows} />, {width: 480});
     const pane = page.locator('.yt-flow-delete-states-rows-summary__table-pane');
-    await expect(pane).toHaveCSS('overflow-x', 'auto');
+    await expect(pane).toHaveCSS('overflow-x', 'visible');
+    const horizontalScrollContainers = await pane.evaluate(
+        (element) =>
+            [element, ...element.querySelectorAll('*')].filter((candidate) => {
+                const overflow = getComputedStyle(candidate).overflowX;
+                return (
+                    (overflow === 'auto' || overflow === 'scroll') &&
+                    candidate.scrollWidth > candidate.clientWidth
+                );
+            }).length,
+    );
+    expect(horizontalScrollContainers).toBeLessThanOrEqual(1);
     await expectScreenshot();
+});
+
+test('RowsSummary: hides empty optional coordinates', async ({mount, page}) => {
+    await mount(<RowsSummary rows={[rows[0]]} />);
+
+    await expect(page.getByRole('table').getByRole('row').first().getByRole('cell')).toHaveText([
+        'Computation',
+        'State',
+        'Key',
+        'Value',
+    ]);
 });

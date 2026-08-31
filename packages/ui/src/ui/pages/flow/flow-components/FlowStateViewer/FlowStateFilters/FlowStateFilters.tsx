@@ -32,6 +32,7 @@ export type FlowStateFiltersProps = {
     onReset: () => void;
     fixedComputationId?: string;
     staticSpec?: FlowStaticSpec;
+    rawKeyAvailable?: boolean;
     actions?: React.ReactNode;
 };
 
@@ -92,6 +93,7 @@ export function FlowStateFilters({
     onReset,
     fixedComputationId,
     staticSpec,
+    rawKeyAvailable = false,
     actions,
 }: FlowStateFiltersProps) {
     const {data: pipelineData} = useFlowExecuteQuery<'describe-pipeline'>({
@@ -127,6 +129,7 @@ export function FlowStateFilters({
             computationId,
             partitionId: undefined,
             keyValues: {},
+            rawKey: undefined,
             stateName: undefined,
             target: reconcileStateTarget(staticSpec, computationId, value.target),
         });
@@ -171,6 +174,7 @@ export function FlowStateFilters({
                             ...value,
                             target,
                             keyValues: target === 'partition_state' ? {} : value.keyValues,
+                            rawKey: target === 'partition_state' ? undefined : value.rawKey,
                             stateName: reconcileStateName(
                                 value.stateName,
                                 target,
@@ -229,19 +233,33 @@ export function FlowStateFilters({
                 )}
             </Flex>
             <Flex className={block('row', {secondary: true})} gap={2} wrap alignItems="flex-end">
-                {value.computationId && !value.partitionId && keyColumns.length > 0 && (
-                    <FlowStateKeyBuilder
-                        columns={keyColumns}
-                        values={value.keyValues}
-                        onChange={(keyValues) =>
-                            onChange({
-                                ...value,
-                                keyValues,
-                                target: value.target === 'partition_state' ? 'all' : value.target,
-                            })
-                        }
-                    />
-                )}
+                {value.computationId &&
+                    !value.partitionId &&
+                    (keyColumns.length > 0 || rawKeyAvailable || value.rawKey !== undefined) && (
+                        <FlowStateKeyBuilder
+                            columns={keyColumns}
+                            values={value.keyValues}
+                            rawKey={value.rawKey}
+                            onChange={(keyValues) =>
+                                onChange({
+                                    ...value,
+                                    keyValues,
+                                    rawKey: undefined,
+                                    target:
+                                        value.target === 'partition_state' ? 'all' : value.target,
+                                })
+                            }
+                            onRawKeyChange={(rawKey) =>
+                                onChange({
+                                    ...value,
+                                    keyValues: {},
+                                    rawKey,
+                                    target:
+                                        value.target === 'partition_state' ? 'all' : value.target,
+                                })
+                            }
+                        />
+                    )}
                 <Button view="outlined" onClick={onReset}>
                     {i18n('action_reset-filters')}
                 </Button>
