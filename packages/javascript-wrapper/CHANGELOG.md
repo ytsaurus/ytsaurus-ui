@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.18.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.17.0...javascript-wrapper-v0.18.0) (2026-08-31)
+
+
+### Features
+
+* **javascript-wrapper:** add patchOpSpec command [YTFRONT-5272] ([8248ab3](https://github.com/ytsaurus/ytsaurus-ui/commit/8248ab376b83a5ed0394e471abb4dd01b000940c))
+
 ## [0.17.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.16.0...javascript-wrapper-v0.17.0) (2026-03-09)
 
 
