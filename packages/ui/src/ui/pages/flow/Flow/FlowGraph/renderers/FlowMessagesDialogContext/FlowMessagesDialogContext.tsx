@@ -1,29 +1,15 @@
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {DialogWrapper} from '../../../../../../components/DialogWrapper/DialogWrapper';
-import {FlowMessagesContent, type FlowMessagesProps} from '../FlowGraphRenderer';
+import {FlowMessagesContent} from '../FlowGraphRenderer';
 import '../FlowGraphRenderer.scss';
 import i18n from './i18n';
+import {FlowMessagesDialogCtx, type FlowMessagesDialogData} from './FlowMessagesDialogContextState';
 
 const block = cn('yt-flow-graph-renderer');
 
-type FlowMessagesDialogContextValue = {
-    data: FlowMessagesProps['data'];
-    setVisibleMessages: (data?: FlowMessagesProps['data']) => void;
-};
-
-const FlowMessagesDialogCtx = React.createContext<FlowMessagesDialogContextValue>({
-    data: undefined,
-    setVisibleMessages: () => {},
-});
-
-export function useFlowMessagesDialogContext() {
-    const {setVisibleMessages} = React.useContext(FlowMessagesDialogCtx);
-    return {setVisibleMessages};
-}
-
 export function FlowMessagesDialogContext({children}: {children: React.ReactNode}) {
-    const [data = [], setVisibleMessages] = React.useState<FlowMessagesProps['data']>();
+    const [data = [], setVisibleMessages] = React.useState<FlowMessagesDialogData>();
     return (
         <FlowMessagesDialogCtx.Provider value={{data, setVisibleMessages}}>
             {children}
