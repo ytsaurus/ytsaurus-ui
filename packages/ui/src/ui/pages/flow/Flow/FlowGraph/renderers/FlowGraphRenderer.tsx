@@ -16,7 +16,7 @@ import {Yson} from '../../../../../components/Yson/Yson';
 import {YTErrorBlock} from '../../../../../containers/Block/Block';
 import i18n from '../i18n';
 import './FlowGraphRenderer.scss';
-import {useFlowMessagesDialogContext} from './FlowMessagesDialogContext/FlowMessagesDialogContext';
+import {useFlowMessagesDialogContext} from './FlowMessagesDialogContext/FlowMessagesDialogContextState';
 
 const block = cn('yt-flow-graph-renderer');
 
