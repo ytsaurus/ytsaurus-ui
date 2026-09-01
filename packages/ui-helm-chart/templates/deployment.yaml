@@ -35,6 +35,10 @@ spec:
               value: custom
             - name: YT_AUTH_ALLOW_INSECURE
               value: "1"
+              {{- with $.Values.caRootBundle }}
+            - name: NODE_EXTRA_CA_CERTS
+              value: /etc/ssl/certs/ca-certificates.crt
+              {{- end }}
           {{- end }}
           image: "{{ .Values.ui.image.repository }}:{{ .Values.ui.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.ui.image.pullPolicy }}
@@ -70,6 +74,11 @@ spec:
               readOnly: true
             - mountPath: /opt/app/secrets
               name: secrets
+            {{- with .Values.caRootBundle }}
+            - mountPath: /etc/ssl/certs
+              name: ca-root-bundle
+              readOnly: true
+            {{- end }}
       initContainers:
         - command:
           - bash
@@ -123,3 +132,20 @@ spec:
         - emptyDir:
             sizeLimit: 1Mi
           name: secrets
+        {{- with .Values.caRootBundle }}
+        {{- if eq .kind "ConfigMap" }}
+        - name: ca-root-bundle
+          configMap:
+            name: {{ .name }}
+            items:
+            - key: {{ .key }}
+              path: ca-certificates.crt
+        {{- else if eq .kind "Secret" }}
+        - name: ca-root-bundle
+          secret:
+            secretName: {{ .name }}
+            items:
+            - key: {{ .key }}
+              path: ca-certificates.crt
+        {{- end }}
+        {{- end }}
