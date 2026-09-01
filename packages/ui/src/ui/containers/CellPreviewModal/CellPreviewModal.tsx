@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 
 import {useDispatch, useSelector} from '../../store/redux-hooks';
 import {Flex, Text} from '@gravity-ui/uikit';
@@ -23,6 +23,7 @@ import {YTErrorBlock} from '../../containers/Block/Block';
 import {type YsonSettings, selectPreviewCellYsonSettings} from '../../store/selectors/thor/unipika';
 import {closeCellPreviewAndCancelRequest} from '../../store/actions/modals/cell-preview';
 import {isMediaTag} from '../../utils/yql-types';
+import {YSON_AS_TEXT, prettyPrintSafe} from '../../utils/unipika';
 
 import './CellPreviewModal.scss';
 
@@ -45,6 +46,9 @@ export const CellPreviewModal: React.FC = () => {
             ? unipikaSettings
             : {...unipikaSettings, decodeUTF8: shouldDecodeUTF8};
 
+    const rawCopyText = useMemo(() => getCopyText(data), [data]);
+    const copyText = !loading && !error ? rawCopyText : undefined;
+
     return (
         <SimpleModal
             title={i18n('title_preview')}
@@ -60,9 +64,21 @@ export const CellPreviewModal: React.FC = () => {
                 direction="column"
             >
                 <Flex gap={2} direction="column">
-                    <Text variant="subheader-3" color="secondary">
-                        {noticeText}
-                    </Text>
+                    <Flex gap={2} alignItems="center" justifyContent="space-between">
+                        <Text variant="subheader-3" color="secondary">
+                            {noticeText}
+                        </Text>
+                        {copyText !== undefined && (
+                            <ClipboardButton
+                                view="flat-secondary"
+                                text={copyText}
+                                size="s"
+                                title={i18n('action_copy-content')}
+                            >
+                                {i18n('action_copy-content')}
+                            </ClipboardButton>
+                        )}
+                    </Flex>
                     {ytCliDownloadCommand ? (
                         <code className={block('command-wrapper')}>
                             <div className={block('command')}>
@@ -111,6 +127,22 @@ function getUnipikaNodeForYsonPreview(data: PreviewContentProps['data']) {
     }
 
     return data;
+}
+
+function getCopyText(data: PreviewContentProps['data']): string | undefined {
+    if (!data) {
+        return undefined;
+    }
+
+    if (data.$type === 'yql.string' || data.$type === 'yql.json') {
+        return String(data.$value);
+    }
+
+    if (data.$type === 'yql.tagged' && data.$tag && isMediaTag(data.$tag)) {
+        return undefined;
+    }
+
+    return prettyPrintSafe(getUnipikaNodeForYsonPreview(data), YSON_AS_TEXT());
 }
 
 function PreviewContent(props: PreviewContentProps) {
