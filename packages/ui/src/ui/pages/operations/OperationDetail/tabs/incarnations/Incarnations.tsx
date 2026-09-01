@@ -101,7 +101,11 @@ export function IncarnationsTemplate(props: IncarnationProps) {
                                 </Card>
                             ))
                         ) : (
-                            <Alert theme={'info'} message={i18n('alert_no-incarnations')} />
+                            <Alert
+                                theme={'info'}
+                                message={i18n('alert_no-incarnations')}
+                                align="center"
+                            />
                         )}
                     </>
                 )}
