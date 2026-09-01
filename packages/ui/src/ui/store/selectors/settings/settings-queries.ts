@@ -24,12 +24,6 @@ export const selectLastUserChoiceQueryChytClique = createSelector(
     },
 );
 
-export const selectLastUserChoiceYqlVersion = createSelector(
-    [selectSettingsData, selectQueryDraft],
-    (data, {settings}) => {
-        return data[`local::${settings?.cluster}::queryTracker::lastYqlVersion`];
-    },
-);
 export const selectQueryTokens = createSelector([selectSettingsData], (data) => {
     return data['global::queryTracker::tokens'] || [];
 });

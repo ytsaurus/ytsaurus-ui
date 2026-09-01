@@ -192,9 +192,6 @@ export type QueryTrackerLastDiscoveryPath = {
 export type QueryTrackerLastChytClique = {
     [key in `local::${Cluster}::queryTracker::lastChytClique`]: string;
 };
-export type QueryTrackerLastYqlVersion = {
-    [key in `local::${Cluster}::queryTracker::lastYqlVersion`]: string;
-};
 
 type SchedulingSettings = {
     'global::scheduling::expandStaticConfiguration': boolean;
@@ -240,7 +237,6 @@ export type DescribedSettings = GlobalSettings &
     QueryTrackerUserDefaultACOSettings &
     QueryTrackerLastDiscoveryPath &
     QueryTrackerLastChytClique &
-    QueryTrackerLastYqlVersion &
     ComponentsSettings &
     SchedulingSettings &
     DashboardSettings &
