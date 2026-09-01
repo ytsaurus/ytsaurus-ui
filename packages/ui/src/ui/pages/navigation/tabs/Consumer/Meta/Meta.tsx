@@ -5,7 +5,7 @@ import {useSelector} from '../../../../../store/redux-hooks';
 import format from '../../../../../common/hammer/format';
 import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary';
 import Label from '../../../../../components/Label';
-import {MetaTable} from '@ytsaurus/components';
+import {ClipboardButton, MetaTable} from '@ytsaurus/components';
 import Multimeter from '../../../../../components/Multimeter/Multimeter';
 import {SubjectCard} from '../../../../../components/SubjectLink/SubjectLink';
 
@@ -22,11 +22,18 @@ interface Props {
     targetQueue?: string;
     owner?: string;
     partitionCount?: number;
+    queueAgentHost?: string;
     readDataWeightRate?: TPerformanceCounters;
     readRowCountRate?: TPerformanceCounters;
 }
 
-const Meta: React.FC<Props> = ({owner, partitionCount, readDataWeightRate, readRowCountRate}) => {
+const Meta: React.FC<Props> = ({
+    owner,
+    partitionCount,
+    queueAgentHost,
+    readDataWeightRate,
+    readRowCountRate,
+}) => {
     const {vital} = useSelector(selectTargetQueue) ?? {};
 
     return (
@@ -64,6 +71,21 @@ const Meta: React.FC<Props> = ({owner, partitionCount, readDataWeightRate, readR
                             label: i18n('field_partition-count'),
                             value: partitionCount,
                             visible: !isNullable(partitionCount),
+                        },
+                        {
+                            key: 'queue-agent-host',
+                            label: i18n('field_queue-agent-host'),
+                            value: (
+                                <span className={block('queue-agent-host')}>
+                                    {queueAgentHost}
+                                    <ClipboardButton
+                                        text={queueAgentHost}
+                                        view="flat-secondary"
+                                        inlineMargins
+                                    />
+                                </span>
+                            ),
+                            visible: !isNullable(queueAgentHost),
                         },
                     ],
                     [

@@ -20,6 +20,9 @@ export const selectTargetQueue = (state: RootState) =>
 export const selectConsumerRegisteredQueues = (state: RootState) =>
     state.navigation.tabs.consumer.status.consumerData?.registrations;
 
+export const selectQueueAgentHost = (state: RootState) =>
+    state.navigation.tabs.consumer.status.consumerData?.queue_agent_host;
+
 const selectStatusData = (state: RootState) => state.navigation.tabs.consumer.status.consumerData;
 
 const selectTargetQueueStatusData = (state: RootState) => {

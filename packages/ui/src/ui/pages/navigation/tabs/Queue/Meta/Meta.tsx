@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import format from '../../../../../common/hammer/format';
 import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary';
-import {MetaTable} from '@ytsaurus/components';
+import {ClipboardButton, MetaTable} from '@ytsaurus/components';
 import Multimeter from '../../../../../components/Multimeter/Multimeter';
 import {type TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
 import {isNullable} from '../../../../../utils';
@@ -16,6 +16,7 @@ const block = cn('queue-meta');
 interface Props {
     partitionCount?: number;
     family?: string;
+    queueAgentHost?: string;
     writeDataWeightRate?: TPerformanceCounters;
     writeRowCountRate?: TPerformanceCounters;
 }
@@ -23,6 +24,7 @@ interface Props {
 const Meta: React.VFC<Props> = ({
     partitionCount,
     family,
+    queueAgentHost,
     writeDataWeightRate,
     writeRowCountRate,
 }) => {
@@ -44,6 +46,21 @@ const Meta: React.VFC<Props> = ({
                             label: i18n('field_family'),
                             value: family,
                             visible: !isNullable(family),
+                        },
+                        {
+                            key: 'queue-agent-host',
+                            label: i18n('field_queue-agent-host'),
+                            value: (
+                                <span className={block('queue-agent-host')}>
+                                    {queueAgentHost}
+                                    <ClipboardButton
+                                        text={queueAgentHost}
+                                        view="flat-secondary"
+                                        inlineMargins
+                                    />
+                                </span>
+                            ),
+                            visible: !isNullable(queueAgentHost),
                         },
                     ],
                     [

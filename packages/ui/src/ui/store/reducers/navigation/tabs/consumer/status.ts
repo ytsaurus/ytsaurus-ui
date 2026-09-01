@@ -29,6 +29,7 @@ export interface ConsumerStatusState {
     statusLoaded: boolean;
     statusError: YTError | null;
     consumerData: {
+        queue_agent_host?: string;
         queues?: Record<string, YtConsumerStatus>;
         registrations?: Array<ConsumerQueueInfo>;
     } | null;

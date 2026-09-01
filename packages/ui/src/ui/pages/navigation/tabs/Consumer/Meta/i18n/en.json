@@ -5,6 +5,7 @@
   "value_true": "True",
   "value_false": "False",
   "field_partition-count": "Partition count",
+  "field_queue-agent-host": "Queue agent host",
   "field_data-weight-read-rate": "Data weight read rate",
   "field_rows-read-rate": "Rows read rate"
 }

@@ -12,6 +12,7 @@ import {type RootState} from '../../../../store/reducers';
 import {
     selectFamily,
     selectPartitionCount,
+    selectQueueAgentHost,
     selectQueueMode,
     selectQueueStatusDataAlerts,
     selectStatusError,
@@ -44,6 +45,7 @@ const Queue: React.VFC<PropsFromRedux> = ({
     loadQueueStatus,
     family,
     partitionCount,
+    queueAgentHost,
     writeDataWeightRate,
     writeRowCountRate,
     queueMode,
@@ -67,6 +69,7 @@ const Queue: React.VFC<PropsFromRedux> = ({
             <Meta
                 family={family}
                 partitionCount={partitionCount}
+                queueAgentHost={queueAgentHost}
                 writeDataWeightRate={writeDataWeightRate}
                 writeRowCountRate={writeRowCountRate}
             />
@@ -88,6 +91,7 @@ function mapStateToProps(state: RootState) {
     return {
         family: selectFamily(state),
         partitionCount: selectPartitionCount(state),
+        queueAgentHost: selectQueueAgentHost(state),
         writeDataWeightRate: selectWriteDataWeightRate(state),
         writeRowCountRate: selectWriteRowCountRate(state),
         queueMode: selectQueueMode(state),

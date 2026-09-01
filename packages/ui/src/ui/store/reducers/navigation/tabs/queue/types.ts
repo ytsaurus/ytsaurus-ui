@@ -10,6 +10,7 @@ export interface YtQueueStatus {
     error?: YTError;
     partition_count: number;
     family: string;
+    queue_agent_host?: string;
     // alerts: list of TError;  // (unimplemented)
     write_data_weight_rate: TPerformanceCounters; // (unimplemented)
     read_data_weight_rate: TPerformanceCounters; // (unimplemented)

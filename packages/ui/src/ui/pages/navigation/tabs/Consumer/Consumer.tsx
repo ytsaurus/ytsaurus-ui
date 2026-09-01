@@ -11,6 +11,7 @@ import {
     selectConsumerMode,
     selectOwner,
     selectPartitionCount,
+    selectQueueAgentHost,
     selectReadDataWeightRate,
     selectReadRowCountRate,
     selectStatusError,
@@ -40,6 +41,7 @@ const Consumer: React.VFC<PropsFromRedux> = ({
     loadConsumerStatus,
     owner,
     partitionCount,
+    queueAgentHost,
     readDataWeightRate,
     readRowCountRate,
     consumerMode,
@@ -61,6 +63,7 @@ const Consumer: React.VFC<PropsFromRedux> = ({
             <Meta
                 owner={owner}
                 partitionCount={partitionCount}
+                queueAgentHost={queueAgentHost}
                 readDataWeightRate={readDataWeightRate}
                 readRowCountRate={readRowCountRate}
             />
@@ -83,6 +86,7 @@ function mapStateToProps(state: RootState) {
     return {
         owner: selectOwner(state),
         partitionCount: selectPartitionCount(state),
+        queueAgentHost: selectQueueAgentHost(state),
         readDataWeightRate: selectReadDataWeightRate(state),
         readRowCountRate: selectReadRowCountRate(state),
         consumerMode: selectConsumerMode(state),
