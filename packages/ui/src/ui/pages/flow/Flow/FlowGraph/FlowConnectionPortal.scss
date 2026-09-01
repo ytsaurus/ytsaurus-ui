@@ -1,0 +1,44 @@
+.yt-flow-connection-portal {
+    &__icon {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        pointer-events: all;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        border-radius: 6px;
+        background: var(--g-color-base-warning-light);
+        border: 1px solid var(--g-color-base-warning-light-hover);
+
+        color: var(--g-color-text-warning-heavy);
+        appearance: none;
+
+        &:hover {
+            background: var(--g-color-base-warning-light-hover);
+            color: var(--g-color-text-warning-heavy);
+        }
+    }
+
+    &__tooltip-content {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 4px 0;
+    }
+
+    &__tooltip-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        white-space: nowrap;
+    }
+
+    &__tooltip-label {
+        color: var(--g-color-text-secondary);
+    }
+}
