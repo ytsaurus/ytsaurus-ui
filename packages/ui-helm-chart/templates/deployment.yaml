@@ -12,6 +12,8 @@ spec:
       {{- include "ytsaurus-ui-chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config-map.yaml") . | sha256sum | quote }}
       labels:
         {{- include "ytsaurus-ui-chart.labels" . | nindent 8 }}
     spec:
