@@ -11,6 +11,9 @@ export const selectFamily = (state: RootState) =>
 export const selectPartitionCount = (state: RootState) =>
     state.navigation.tabs.queue.status.statusData?.partition_count;
 
+export const selectQueueAgentHost = (state: RootState) =>
+    state.navigation.tabs.queue.status.statusData?.queue_agent_host;
+
 export const selectReadDataWeightRate = (state: RootState) =>
     state.navigation.tabs.queue.status.statusData?.read_data_weight_rate ?? emptyRate;
 
