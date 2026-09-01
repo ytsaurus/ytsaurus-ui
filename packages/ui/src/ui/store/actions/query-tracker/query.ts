@@ -69,7 +69,6 @@ import {
     selectLastUserChoiceQueryChytClique,
     selectLastUserChoiceQueryDiscoveryPath,
     selectLastUserChoiceQueryEngine,
-    selectLastUserChoiceYqlVersion,
 } from '../../selectors/settings/settings-queries';
 
 import {getClusterParams, prepareClusterUiConfig} from '../cluster-params';
@@ -129,7 +128,6 @@ export const setUserLastChoice =
         const engine = selectQueryEngine(state);
         const lastPath = selectLastUserChoiceQueryDiscoveryPath(state);
         const lastClique = selectLastUserChoiceQueryChytClique(state);
-        const lastVersion = selectLastUserChoiceYqlVersion(state);
         const defaultYqlVersion = selectDefaultYqlVersion(state);
         const isSpytConnectAvailable = selectAvailableSpytConnect(state);
 
@@ -160,9 +158,8 @@ export const setUserLastChoice =
         }
 
         if (engine === QueryEngine.YQL && !settings?.yql_version) {
-            const yqlVersion = lastVersion || defaultYqlVersion;
-            if (yqlVersion) {
-                newSettings.yql_version = yqlVersion;
+            if (defaultYqlVersion) {
+                newSettings.yql_version = defaultYqlVersion;
             }
         }
 
@@ -277,9 +274,6 @@ export const setQueryYqlVersion =
         const settings = selectQueryDraftSettings(getState());
 
         dispatch(updateQueryDraft({settings: {...settings, yql_version: version}}));
-        dispatch(
-            setSettingByKey(`local::${settings?.cluster}::queryTracker::lastYqlVersion`, version),
-        );
     };
 
 export const setQueryPath =
