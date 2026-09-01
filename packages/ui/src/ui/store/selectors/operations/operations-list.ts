@@ -79,12 +79,12 @@ export const selectOperationsListFilterPresets = createSelector(
             ...createPreconfiguredPresets(login),
             ...reduce_(
                 collectionKeys,
-                (collection, path) => {
+                (accCollection, path) => {
                     const settingName = path.slice(
                         (NAMESPACES.OPERATION_PRESETS.value + NS_SEPARATOR).length,
                     );
-                    collection[settingName] = {...data[path]};
-                    return collection;
+                    accCollection[settingName] = {...data[path]};
+                    return accCollection;
                 },
                 {} as Record<string, OperationPresetsSettings>,
             ),

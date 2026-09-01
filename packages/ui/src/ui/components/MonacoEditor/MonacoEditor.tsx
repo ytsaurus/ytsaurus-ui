@@ -113,6 +113,7 @@ const MonacoEditor: FC<Props> = ({
 
         key.setScope('monaco-editor');
         if (editorRef) {
+            // eslint-disable-next-line no-param-reassign -- callback initializes the caller-owned React ref
             editorRef.current = editorInstance;
         }
 

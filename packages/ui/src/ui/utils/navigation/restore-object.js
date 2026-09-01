@@ -11,9 +11,10 @@ function checkPathExists(initialPath, path, step = INITIAL_STEP) {
         .exists({path})
         .then((isExists) => {
             if (isExists) {
-                const newPath = getNextObjectName(initialPath, ++step);
+                const nextStep = step + 1;
+                const newPath = getNextObjectName(initialPath, nextStep);
 
-                return checkPathExists(initialPath, newPath, step);
+                return checkPathExists(initialPath, newPath, nextStep);
             }
 
             return path;

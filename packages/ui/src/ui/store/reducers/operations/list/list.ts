@@ -258,26 +258,26 @@ function reducer(state = initialState, action: OperationsListStateAction): Opera
             const counters: any = action.data;
             const filters = reduce_(
                 state.filters,
-                (filters, value, name) => {
+                (accFilters, value, name) => {
                     switch (value.type) {
                         case STATE_FILTER:
-                            filters[name as keyof typeof filters] = {
+                            accFilters[name as keyof typeof accFilters] = {
                                 ...value,
                                 counters,
                             };
                             break;
                         case PARAM_FILTER:
-                            filters[name as keyof typeof filters] = {
+                            accFilters[name as keyof typeof accFilters] = {
                                 ...value,
                                 counter: counters.failed_jobs_count,
                             };
                             break;
                         default:
-                            filters[name as keyof typeof filters] = value;
+                            accFilters[name as keyof typeof accFilters] = value;
                             break;
                     }
 
-                    return filters;
+                    return accFilters;
                 },
                 {} as OperationsListState['filters'],
             );

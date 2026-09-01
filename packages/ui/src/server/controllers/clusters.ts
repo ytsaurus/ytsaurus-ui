@@ -21,20 +21,20 @@ export function clusterAuthStatus(req: Request, res: Response) {
     if (allowPasswordAuth) {
         const clusters = getClustersFromConfig();
 
-        data = Object.keys(clusters).reduce((ret, cluster) => {
-            ret[cluster] = {
+        data = Object.keys(clusters).reduce((accRet, cluster) => {
+            accRet[cluster] = {
                 authorized: Boolean(req.cookies[makeAuthClusterCookieName(cluster)]),
             };
 
-            return ret;
+            return accRet;
         }, {} as ClusterAuthStatus);
     } else {
         const clusters = getClustersFromConfig();
 
-        data = Object.keys(clusters).reduce((ret, clusterName) => {
-            ret[clusterName] = {authorized: true};
+        data = Object.keys(clusters).reduce((accRet, clusterName) => {
+            accRet[clusterName] = {authorized: true};
 
-            return ret;
+            return accRet;
         }, {} as ClusterAuthStatus);
     }
 

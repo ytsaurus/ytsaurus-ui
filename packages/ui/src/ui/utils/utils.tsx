@@ -426,13 +426,13 @@ export function showChangedProps(key: string, props: object, verbose?: boolean) 
 }
 
 export function updateIfChanged<T, K extends keyof T>(
-    obj: T,
+    draftObj: T,
     key: K,
     value: T[K],
     isEqual?: (l: T[K], r: T[K]) => boolean,
 ) {
-    if (isEqual ? !isEqual(obj[key], value) : obj[key] !== value) {
-        obj[key] = value;
+    if (isEqual ? !isEqual(draftObj[key], value) : draftObj[key] !== value) {
+        draftObj[key] = value;
     }
 }
 

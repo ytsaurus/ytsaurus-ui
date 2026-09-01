@@ -14,11 +14,11 @@ import {type NodeEffectiveState, type NodeState} from '../../store/reducers/syst
 export function extractRoleGroups(proxies: Array<RoleGroupItemInfo>): Array<RoleGroupInfo> {
     const roleGroups = reduce_(
         proxies,
-        (roles, proxy) => {
+        (accRoles, proxy) => {
             const roleName = proxy.role || 'default';
-            let role = roles[roleName];
+            let role = accRoles[roleName];
             if (!role) {
-                role = roles[roleName] = {
+                role = accRoles[roleName] = {
                     items: [],
                     name: roleName,
                     counters: {
@@ -34,7 +34,7 @@ export function extractRoleGroups(proxies: Array<RoleGroupItemInfo>): Array<Role
             ++role.counters.total;
             role.items.push(proxy);
             incrementCounters(proxy, role.counters);
-            return roles;
+            return accRoles;
         },
         {} as Record<string, RoleGroupInfo>,
     );
@@ -50,17 +50,17 @@ export function getNodeffectiveState(state: NodeState): NodeEffectiveState {
 }
 
 export function incrementStateCounter<K extends string>(
-    counters: Partial<Record<K, number>>,
+    draftCounters: Partial<Record<K, number>>,
     k?: K,
 ) {
     if (!k) {
         return;
     }
 
-    if (counters[k] === undefined) {
-        counters[k] = 1;
+    if (draftCounters[k] === undefined) {
+        draftCounters[k] = 1;
     } else {
-        ++counters[k]!;
+        ++draftCounters[k]!;
     }
 }
 

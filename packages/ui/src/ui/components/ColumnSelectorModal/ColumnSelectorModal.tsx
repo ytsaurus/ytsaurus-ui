@@ -217,7 +217,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
         const sortableSelectorProps = this._getSortableSelectorProps(selectorProps, items);
         const selectedItemsCount = reduce_(
             sortableSelectorProps.items,
-            (acc, item) => (item.disabled || !item.checked ? acc : ++acc),
+            (acc, item) => (item.disabled || !item.checked ? acc : acc + 1),
             0,
         );
 

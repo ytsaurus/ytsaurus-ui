@@ -130,16 +130,16 @@ export function prepareBundles(tabletCells, bundles) {
 
     aggregation = reduce_(
         aggregation,
-        (res, bundle) => {
+        (accRes, bundle) => {
             const $attributes = bundles[bundle.bundle].$attributes;
             const bundleNodes = ypath.getValue($attributes, '/nodes');
-            res[bundle.bundle] = {
+            accRes[bundle.bundle] = {
                 $attributes,
                 ...collectBundlesAttrs({}, $attributes),
                 ...bundle,
                 nodes: bundleNodes,
             };
-            return res;
+            return accRes;
         },
         {},
     );
@@ -165,12 +165,12 @@ export function prepareBundles(tabletCells, bundles) {
 
     const nodeTags = reduce_(
         bundleList,
-        (res, bundle) => {
+        (accRes, bundle) => {
             const tag = bundle?.node_tag_filter;
             if (tag) {
-                res[tag] = res[tag] ? res[tag] + 1 : 1;
+                accRes[tag] = accRes[tag] ? accRes[tag] + 1 : 1;
             }
-            return res;
+            return accRes;
         },
         {},
     );

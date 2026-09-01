@@ -54,20 +54,20 @@ export function loadTabletErrorsByTablePath(
                 omit_(params, ['fixed_end_timestamp']),
             )
         ) {
-            page = 0;
-            dispatch(tabletErrorsByPathActions.updateFilter({pageFilter: page}));
+            dispatch(tabletErrorsByPathActions.updateFilter({pageFilter: 0}));
             return Promise.resolve();
         }
 
         const prevData = selectTabletErrorsByPathData(state);
-        if (page != 0 && prevData) {
-            params.fixed_end_timestamp = prevData.fixed_end_timestamp;
-        }
+        const requestParams =
+            page != 0 && prevData
+                ? {...params, fixed_end_timestamp: prevData.fixed_end_timestamp}
+                : params;
 
         return fetchFromTabletErrorsApi(
             'tablet_errors_by_table',
             cluster,
-            {...params, offset: page * ROWS_PER_PAGE, count_limit: 100},
+            {...requestParams, offset: page * ROWS_PER_PAGE, count_limit: 100},
             cancelHelper.removeAllAndGenerateNextToken(),
         )
             .then(({data}) => {
@@ -75,7 +75,7 @@ export function loadTabletErrorsByTablePath(
                     page === 0
                         ? {
                               data,
-                              dataParams: params,
+                              dataParams: requestParams,
                               total_row_count: data.total_row_count,
                               error_count_limit_exceeded: data?.error_count_limit_exceeded,
                           }

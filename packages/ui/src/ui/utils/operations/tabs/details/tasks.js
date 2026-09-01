@@ -24,14 +24,14 @@ function prepareCategoryCounters(counters, category) {
     if (typeof counters[category] === 'object') {
         const prepared = reduce_(
             counters[category],
-            (statistics, count, key) => {
-                statistics.counters.push({
+            (accStatistics, count, key) => {
+                accStatistics.counters.push({
                     value: count,
                     key,
                 });
-                statistics.total += count;
+                accStatistics.total += count;
 
-                return statistics;
+                return accStatistics;
             },
             {
                 counters: [],
@@ -74,14 +74,14 @@ function prepareJobTypeOrder(jobTypeOrder) {
     const SINK = 'sink';
 
     // REMOVE source, sink
-    jobTypeOrder = filter_(jobTypeOrder, (jobType) => {
+    const filtered = filter_(jobTypeOrder, (jobType) => {
         const type = String(jobType).toLowerCase();
         return type !== SOURCE && type !== SINK;
     });
     // ADD total
-    jobTypeOrder.push('total');
+    filtered.push('total');
 
-    return jobTypeOrder;
+    return filtered;
 }
 
 export function prepareDataFromGraph(operation) {

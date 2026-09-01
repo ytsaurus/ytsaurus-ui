@@ -83,23 +83,23 @@ export function parseAccountData(data: any) {
     return dst;
 }
 
-function updateMasterMemory(dst: AccountParsedData, attributes: any) {
-    prepareResource(dst, attributes, 'master_memory/total', 'Bytes');
-    prepareResource(dst, attributes, 'master_memory/chunk_host', 'Bytes');
+function updateMasterMemory(draftDst: AccountParsedData, attributes: any) {
+    prepareResource(draftDst, attributes, 'master_memory/total', 'Bytes');
+    prepareResource(draftDst, attributes, 'master_memory/chunk_host', 'Bytes');
 
     const perCell = ypath.getValue(attributes, '/resource_usage/master_memory/per_cell');
     forEach_(perCell, (_value, key) => {
-        prepareResource(dst, attributes, `master_memory/per_cell/${key}`, 'Bytes');
+        prepareResource(draftDst, attributes, `master_memory/per_cell/${key}`, 'Bytes');
     });
 
-    dst.master_memory_detailed = ypath.getValue(
+    draftDst.master_memory_detailed = ypath.getValue(
         attributes,
         '/resource_usage/detailed_master_memory',
     );
 }
 
 function prepareResource(
-    dst: AccountParsedData,
+    draftDst: AccountParsedData,
     resourceAttributes: any,
     path: string,
     format: 'Bytes' | 'Number',
@@ -107,7 +107,7 @@ function prepareResource(
     const name = accountMemoryMediumToFieldName(path);
     const committed = ypath.getValue(resourceAttributes, '/committed_resource_usage/' + path);
     const limit = ypath.getValue(resourceAttributes, '/resource_limits/' + path);
-    (dst as FIX_MY_TYPE)[name] = prepareResourceInfo(
+    (draftDst as FIX_MY_TYPE)[name] = prepareResourceInfo(
         {
             total: ypath.getValue(resourceAttributes, '/resource_usage/' + path),
             committed,
@@ -116,7 +116,7 @@ function prepareResource(
         format,
     );
 
-    if (dst.hasRecursiveResources) {
+    if (draftDst.hasRecursiveResources) {
         const recursiveUsage = ypath.getValue(
             resourceAttributes,
             '/recursive_resource_usage/' + path,
@@ -125,7 +125,7 @@ function prepareResource(
             resourceAttributes,
             '/recursive_committed_resource_usage/' + path,
         );
-        dst.recursiveResources[name] = prepareResourceInfo(
+        draftDst.recursiveResources[name] = prepareResourceInfo(
             {
                 total: recursiveUsage,
                 committed: recursiveCommitted,
@@ -180,7 +180,7 @@ function updateResource(
 }
 
 function updateResourcePerMedium(
-    dst: AccountParsedData,
+    draftDst: AccountParsedData,
     attributes: any,
     name: string,
     format: 'Bytes' | 'Number',
@@ -195,9 +195,9 @@ function updateResourcePerMedium(
     const committedPerMedium = ypath.getValue(attributes, '/committed_resource_usage/' + path);
     const limitPerMedium = ypath.getValue(attributes, '/resource_limits/' + path);
 
-    dst.perMedium = {};
+    draftDst.perMedium = {};
     forEach_(totalPerMedium, (mediumData, mediumName) => {
-        dst.perMedium[mediumName] = updateResourceFields(
+        draftDst.perMedium[mediumName] = updateResourceFields(
             {
                 total: mediumData,
                 committed: committedPerMedium[mediumName],
@@ -210,11 +210,11 @@ function updateResourcePerMedium(
 
     let lastMedium;
     try {
-        if (dst.hasRecursiveResources) {
-            dst.recursiveResources.perMedium = {};
+        if (draftDst.hasRecursiveResources) {
+            draftDst.recursiveResources.perMedium = {};
             forEach_(recursiveTotalPerMedium, (mediumData, mediumName) => {
                 lastMedium = mediumName;
-                (dst.recursiveResources as FIX_MY_TYPE).perMedium[mediumName] =
+                (draftDst.recursiveResources as FIX_MY_TYPE).perMedium[mediumName] =
                     updateResourceFields(
                         {
                             total: mediumData,

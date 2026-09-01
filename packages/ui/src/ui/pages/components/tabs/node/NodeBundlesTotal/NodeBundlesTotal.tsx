@@ -118,13 +118,13 @@ export function TabletDynamicTotal(props: TabletDynamicTotalProps) {
                 <div className={block('progress-tooltip')}>
                     {map_(stack, (item, index) => {
                         const {key} = item;
-                        item.color = COLORS[key] ?? getColor(index);
+                        const color = COLORS[key] ?? getColor(index);
 
                         return (
                             <React.Fragment key={key}>
                                 <div
                                     style={{
-                                        backgroundColor: item.color,
+                                        backgroundColor: color,
                                         borderRadius: '50%',
                                         width: '1em',
                                         height: '1em',

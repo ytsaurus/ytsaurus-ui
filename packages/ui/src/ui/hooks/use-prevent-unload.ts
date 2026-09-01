@@ -5,6 +5,7 @@ export const usePreventUnload = ({shouldListen}: {shouldListen: boolean}) => {
         e.preventDefault();
 
         // Included for legacy support, e.g. Chrome/Edge < 119
+        // eslint-disable-next-line no-param-reassign -- required by the beforeunload API
         e.returnValue = true;
     }, []);
 

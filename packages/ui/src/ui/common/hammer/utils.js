@@ -100,8 +100,8 @@ function wrapCompareFnByAsc(compareFn, asc, undefinedAsk = true) {
     return (l, r) => compareFn(l, r, orderK, undefinedOrderK);
 }
 
-utils.sort = function (data, sortInfo, fields, options) {
-    options = options || {};
+utils.sort = function (data, sortInfo, fields, _options) {
+    const options = _options || {};
 
     const unwrappedSortInfo = sortInfo;
     const unwrappedData = data;

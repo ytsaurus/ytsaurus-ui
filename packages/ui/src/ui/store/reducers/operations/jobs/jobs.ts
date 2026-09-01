@@ -189,8 +189,9 @@ function prepareJobs({
     // Backward compatibility for fail_context
     // TODO: find out, do we still need it?
     return map_(prepared, (job) => {
-        job.fail_context_size = job.fail_context_size || 0;
-        return new Job({clusterConfig, job, operationId});
+        const preparedJob = Object.assign({}, job);
+        preparedJob.fail_context_size = job.fail_context_size || 0;
+        return new Job({clusterConfig, job: preparedJob, operationId});
     });
 }
 

@@ -171,15 +171,15 @@ const initialState: GlobalState = {
 function updatedTitle(
     state: GlobalState,
     {
-        cluster,
-        page,
-        path,
+        cluster: _cluster,
+        page: _page,
+        path: _path,
         clusters,
     }: Pick<GlobalState, 'cluster' | 'page' | 'path'> & {clusters: Record<string, ClusterConfig>},
 ) {
-    cluster = typeof cluster !== 'undefined' ? cluster : state.cluster;
-    page = typeof page !== 'undefined' ? page : state.page;
-    path = typeof path !== 'undefined' ? path : state.path;
+    const cluster = typeof _cluster !== 'undefined' ? _cluster : state.cluster;
+    const page = typeof _page !== 'undefined' ? _page : state.page;
+    const path = typeof _path !== 'undefined' ? _path : state.path;
 
     const clusterConfig = getClusterConfig(clusters, cluster ?? '');
     const clusterName = clusterConfig.name || cluster;

@@ -60,8 +60,7 @@ function findHistogramMedian(histogram) {
         const fullBucketSum = reduce_(
             buckets,
             (memo, bucket) => {
-                memo += bucket;
-                return memo;
+                return memo + bucket;
             },
             0,
         );
@@ -94,8 +93,7 @@ function computeHistogramQuartiles(histogram) {
         const fullBucketSum = reduce_(
             buckets,
             (memo, bucket) => {
-                memo += bucket;
-                return memo;
+                return memo + bucket;
             },
             0,
         );
@@ -133,13 +131,13 @@ function computeHistogramQuartiles(histogram) {
 
 function computeQuartiles(data, method) {
     // Sort and copy data
-    data = data.slice().sort(sortNumbers);
+    const sortedData = data.slice().sort(sortNumbers);
 
     // Calculate min and max
-    const n = data.length;
-    const dataMin = data[0];
-    const dataMax = data[n - 1];
-    const median = findMedian(data);
+    const n = sortedData.length;
+    const dataMin = sortedData[0];
+    const dataMax = sortedData[n - 1];
+    const median = findMedian(sortedData);
     let firstQuartile;
     let thirdQuartile;
     let splittedData;
@@ -155,20 +153,20 @@ function computeQuartiles(data, method) {
     }
 
     if (method === 'standard') {
-        splittedData = splitByMedian(data);
+        splittedData = splitByMedian(sortedData);
         firstQuartile = findMedian(splittedData.firstHalf);
         thirdQuartile = findMedian(splittedData.secondHalf);
     } else if (method === 'tuckey') {
-        splittedData = splitByMedian(data, 'tuckey');
+        splittedData = splitByMedian(sortedData, 'tuckey');
         firstQuartile = findMedian(splittedData.firstHalf);
         thirdQuartile = findMedian(splittedData.secondHalf);
     } else if (method === 'combined') {
         // In combined method quartiles are always the mean of previous two methods;
-        splittedData = splitByMedian(data);
+        splittedData = splitByMedian(sortedData);
         firstQuartile = findMedian(splittedData.firstHalf);
         thirdQuartile = findMedian(splittedData.secondHalf);
 
-        splittedData = splitByMedian(data, 'tuckey');
+        splittedData = splitByMedian(sortedData, 'tuckey');
         firstQuartile = (firstQuartile + findMedian(splittedData.firstHalf)) / 2;
         thirdQuartile = (thirdQuartile + findMedian(splittedData.secondHalf)) / 2;
     }
@@ -187,18 +185,18 @@ function sortNumbers(a, b) {
 }
 
 // PDF - probability density function
-stat.pdf = function (data, settings) {
-    settings = settings || {};
+stat.pdf = function (data, _settings) {
+    const settings = _settings || {};
     // Sort and copy data
-    data = data.slice().sort(sortNumbers);
+    const sortedData = data.slice().sort(sortNumbers);
 
     // Calculate min and max
-    const n = data.length;
-    const dataMin = data[0];
-    const dataMax = data[n - 1];
+    const n = sortedData.length;
+    const dataMin = sortedData[0];
+    const dataMax = sortedData[n - 1];
 
     // Compute bucket size and buckets number
-    const quartiles = computeQuartiles(data, 'combined');
+    const quartiles = computeQuartiles(sortedData, 'combined');
 
     const IQR = quartiles.q75 - quartiles.q25;
     let bucketSize = settings.forcedBucketSize
@@ -224,7 +222,7 @@ stat.pdf = function (data, settings) {
             count: 0,
         };
 
-        while (data[j] < bucket.end && data[j] >= bucket.start) {
+        while (sortedData[j] < bucket.end && sortedData[j] >= bucket.start) {
             bucket.count = bucket.count + 1;
             j++;
         }
@@ -250,11 +248,11 @@ stat.pdf = function (data, settings) {
 // ECDF - empirical cumulative distribution function
 stat.ecdf = function (data) {
     // Sort and copy data
-    data = data.slice();
+    const dataCopy = data.slice();
 
-    const condencedData = uniq_(data).sort(sortNumbers);
-    const dataCounts = countBy_(data);
-    const n = data.length;
+    const condencedData = uniq_(dataCopy).sort(sortNumbers);
+    const dataCounts = countBy_(dataCopy);
+    const n = dataCopy.length;
 
     // Calculate min and max
     const nCondenced = condencedData.length;
@@ -282,8 +280,8 @@ stat.ecdf = function (data) {
     };
 };
 
-stat.quartiles = function (data, method) {
-    method = method || 'combined';
+stat.quartiles = function (data, _method) {
+    const method = _method || 'combined';
     return computeQuartiles(data, method);
 };
 

@@ -227,10 +227,10 @@ export function valueOrDefault<T>(value: T, defaultValue: T): T {
 export function prepareTableColumns<T extends {caption?: string}>(columns: Record<string, T>) {
     return reduce_(
         columns,
-        (preparedColumns, column, name) => {
-            preparedColumns[name] = {...column, name, caption: column.caption};
+        (accPreparedColumns, column, name) => {
+            accPreparedColumns[name] = {...column, name, caption: column.caption};
 
-            return preparedColumns;
+            return accPreparedColumns;
         },
         {} as Record<string, T & {name: string}>,
     );

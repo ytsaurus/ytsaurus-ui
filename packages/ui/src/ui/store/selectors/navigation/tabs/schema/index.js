@@ -51,15 +51,15 @@ export const selectFilteredSchema = createSelector([selectSchema, selectColumn],
 export const selectComputedColumns = createSelector([selectSchema], (schema) => {
     const items = reduce_(
         schema,
-        (res, schemaEntry) => {
+        (accRes, schemaEntry) => {
             forEach_(schemaEntry, (columnValue, columnName) => {
-                res[columnName] = res[columnName] || {
+                accRes[columnName] = accRes[columnName] || {
                     caption: columnName === 'index' ? '#' : getSchemaColumnName(columnName),
                     sort: false,
                     align: 'left',
                 };
             });
-            return res;
+            return accRes;
         },
         {},
     );

@@ -7,19 +7,19 @@ import ypath from '../../../common/thor/ypath';
 import hammer from '../../../common/hammer';
 import {tableItems} from '../../../utils/navigation/tabs/tables';
 
-function prepareFlatColumns(columns, flatColumns = {}, prefix) {
+function prepareFlatColumns(columns, draftFlatColumns = {}, prefix) {
     const correctPrefix = prefix ? prefix + '_' : '';
 
     forEach_(columns, (column, columnName) => {
         if (column.group) {
-            prepareFlatColumns(column.items, flatColumns, columnName);
+            prepareFlatColumns(column.items, draftFlatColumns, columnName);
         } else {
             const flatColumnName = correctPrefix + columnName;
-            flatColumns[flatColumnName] = column;
+            draftFlatColumns[flatColumnName] = column;
         }
     });
 
-    return flatColumns;
+    return draftFlatColumns;
 }
 
 export function prepareDataForColumns(collection) {

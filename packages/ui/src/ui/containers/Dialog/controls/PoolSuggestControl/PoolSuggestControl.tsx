@@ -125,8 +125,8 @@ PoolSuggestControl.isEmpty = (value: Props['value']) => {
     return !value;
 };
 
-function useLoadedPools(cluster?: string, poolTrees?: string[]): Array<string> | null {
-    poolTrees = poolTrees || [];
+function useLoadedPools(cluster?: string, _poolTrees?: string[]): Array<string> | null {
+    const poolTrees = _poolTrees || [];
 
     const [poolNames, setPoolNames] = React.useState<Array<string> | null>(null);
 

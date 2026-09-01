@@ -5,33 +5,33 @@ import {buildOperationUrl} from '../../QueryResults/helpers/buildOperationUrl';
 import {getOperationUrl} from '../../QueryResults/helpers/getOperationUrl';
 
 export const preparePlanNode = (
-    node: ProcessedNode,
+    draftNode: ProcessedNode,
     operationIdToCluster: Map<string, string>,
 ): ProcessedNode => {
-    if (node.type === 'in' || node.type === 'out') {
-        const table = parseTablePath(node.title ?? '');
+    if (draftNode.type === 'in' || draftNode.type === 'out') {
+        const table = parseTablePath(draftNode.title ?? '');
         if (table) {
-            node.url = genNavigationUrl({cluster: table.cluster, path: table.path});
+            draftNode.url = genNavigationUrl({cluster: table.cluster, path: table.path});
         }
-        return node;
+        return draftNode;
     }
 
-    if (node.progress?.remoteId) {
-        const id = node.progress.remoteId.split('/').pop();
+    if (draftNode.progress?.remoteId) {
+        const id = draftNode.progress.remoteId.split('/').pop();
 
         if (!id) {
-            node.url = getOperationUrl(node);
-            return node;
+            draftNode.url = getOperationUrl(draftNode);
+            return draftNode;
         }
 
         const cluster = operationIdToCluster.has(id)
             ? operationIdToCluster.get(id)
-            : node.progress?.remoteData?.cluster_name;
+            : draftNode.progress?.remoteData?.cluster_name;
 
         if (cluster) {
-            node.url = buildOperationUrl(cluster, id);
+            draftNode.url = buildOperationUrl(cluster, id);
         }
     }
 
-    return node;
+    return draftNode;
 };
