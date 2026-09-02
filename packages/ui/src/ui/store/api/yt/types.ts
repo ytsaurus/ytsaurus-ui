@@ -8,18 +8,13 @@ import {
 } from '@reduxjs/toolkit/query';
 
 import {type YTError} from '../../../types';
-import {type ApiMethodParams, type YTApiSetup} from '../../../rum/rum-wrap-api';
+import {type ApiMethodParams} from '../../../rum/rum-wrap-api';
 
 // YT API Utility Types
 
 export type YTEndpointApiArgs<CommandParameters> = ApiMethodParams<CommandParameters> & {
     cluster?: string;
 };
-
-export type ClusterOrSetup =
-    // cluster or setup param should be required for the case of selection
-    | {cluster?: string; setup?: never}
-    | {setup: Omit<YTApiSetup, 'proxy'> & Pick<Required<YTApiSetup>, 'proxy'>; cluster?: never};
 
 export type OverrideDataType<T extends {data?: unknown}, Data> = Omit<T, 'data' | 'error'> & {
     data?: Data;

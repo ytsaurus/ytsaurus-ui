@@ -1,3 +1,5 @@
+import {type Overwrite} from 'utility-types';
+
 import {DEFAULT_UPDATER_TIMEOUT} from '../../../../hooks/use-updater';
 import {useSelector} from '../../../../store/redux-hooks';
 import {selectUseAutoRefresh} from '../../../../store/selectors/settings/settings-ts';
@@ -16,9 +18,10 @@ const readTableApi = ytApi.injectEndpoints({
     }),
 });
 
-type ReadTableResponse<RowT extends Record<string, unknown>> = Omit<ReadTableResult, 'rows'> & {
-    rows: Array<RowT>;
-};
+type ReadTableResponse<RowT extends Record<string, unknown>> = Overwrite<
+    ReadTableResult,
+    {rows: Array<RowT>}
+>;
 
 export function useReadTableQuery<RowT extends Record<string, unknown>>({
     ...args
