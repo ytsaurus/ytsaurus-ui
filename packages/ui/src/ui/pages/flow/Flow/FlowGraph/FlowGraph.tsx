@@ -1,4 +1,4 @@
-import {ECameraScaleLevel, type Graph, type TBlockId, type TConnection} from '@gravity-ui/graph';
+import {ECameraScaleLevel, type Graph, type TBlockId} from '@gravity-ui/graph';
 import {GraphBlock, useGraphEvents} from '@gravity-ui/graph/react';
 import ClockIcon from '@gravity-ui/icons/svgs/clock.svg';
 import FileCodeIcon from '@gravity-ui/icons/svgs/file-code.svg';
@@ -59,7 +59,9 @@ import {
     makeBlock,
     makeFlowComputationRuntimeData,
     makeTimerAnchors,
+    mergeConnectionStreamStatus,
 } from './utils/utils';
+import {type FlowGraphConnection} from './utils/utils';
 
 const block = cn('yt-flow-graph');
 
@@ -313,7 +315,7 @@ function useFlowGraphRuntimeData({pipeline_path}: {pipeline_path: string}) {
 function useFlowGraphData(params: {pipeline_path: string}) {
     const {data: loadedData} = useFlowGraphRuntimeData(params);
 
-    type FlowData = YTGraphData<FlowGraphBlock, TConnection>;
+    type FlowData = YTGraphData<FlowGraphBlock, FlowGraphConnection>;
 
     const data: {data: FlowData; groups: FlowData; groupById: Map<string, FlowGroupBlock>} =
         React.useMemo(() => {
@@ -458,7 +460,7 @@ function useFlowGraphData(params: {pipeline_path: string}) {
             // Transform connections to group connections
             const connectionById = new Map<string, (typeof res.data.connections)[number]>();
             res.data.connections.forEach((item) => {
-                const {sourceBlockId, targetBlockId, styles} = item;
+                const {sourceBlockId, targetBlockId, styles, flowStreamStatus} = item;
                 const src = blockById.get(sourceBlockId!)!;
                 const dst = blockById.get(targetBlockId!)!;
 
@@ -483,10 +485,14 @@ function useFlowGraphData(params: {pipeline_path: string}) {
 
                     let c = connectionById.get(id);
                     if (c === undefined) {
-                        c = addFlowConnection(res.groups.connections, source, target, {styles});
+                        c = addFlowConnection(res.groups.connections, source, target, {
+                            styles,
+                            flowStreamStatus,
+                        });
                         connectionById.set(id, c);
                     } else {
                         c.styles = Object.assign({}, c.styles, styles);
+                        mergeConnectionStreamStatus(c, flowStreamStatus);
                     }
                 }
             });
