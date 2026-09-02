@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 // Stabilize Date/moment formatting across developer machines and CI.
 process.env.TZ = 'UTC';
 
@@ -7,6 +9,7 @@ module.exports = {
     setupFilesAfterEnv: ['jest-extended'],
     testMatch: ['<rootDir>/src/**/?(*.)spec.{js,jsx,ts,tsx}'],
     collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}'],
+    transformIgnorePatterns: [],
     coveragePathIgnorePatterns: [
         '<rootDir>/src/ui/constants/',
         '<rootDir>/src/ui/vendor/',

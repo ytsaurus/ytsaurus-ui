@@ -9,7 +9,6 @@ import React from 'react';
 import {type FlowComputationUIStreamsSummary} from '../../../../../../pages/flow/Flow/types';
 import {type FlowGraphBlock} from '../../FlowGraph';
 import {
-    COMPUTATION_ANCHOR_SIZE,
     COMPUTATION_IN,
     COMPUTATION_OUT,
     COMPUTATION_TIMER_IN,
@@ -54,8 +53,6 @@ export function FlowGraphAnchors({graph, data}: {graph: Graph; data: FlowGraphBl
     });
 }
 
-const ICON_SIZE = 12;
-
 export function FlowComputationStreamsSummary({
     data,
     graph,
@@ -69,12 +66,13 @@ export function FlowComputationStreamsSummary({
 
     let svgIcon = CircleInfoIcon;
     let color: IconProps['color'] = 'secondary';
-    if (drained) {
-        svgIcon = FlagIcon;
-        color = 'info-heavy';
-    } else if (backpressured) {
+
+    if (backpressured) {
         svgIcon = ArrowShapeRightToLineIcon;
         color = 'warning-heavy';
+    } else if (drained) {
+        svgIcon = FlagIcon;
+        color = 'info-heavy';
     }
 
     return (
@@ -90,9 +88,8 @@ export function FlowComputationStreamsSummary({
                         drained,
                         backpressured,
                     })}
-                    style={{padding: (COMPUTATION_ANCHOR_SIZE - 2 - ICON_SIZE) / 2}}
                 >
-                    <Icon data={svgIcon} size={ICON_SIZE} color={color} />
+                    <Icon data={svgIcon} size={12} color={color} />
                 </div>
             </div>
         </GraphBlockAnchor>
