@@ -112,6 +112,21 @@ $elements-table: '.elements-table';
         width: 160px;
     }
 
+    &__metadata-loading {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-left: auto;
+        color: var(--secondary-text);
+        white-space: nowrap;
+    }
+
+    &__editor-loading {
+        display: flex;
+        justify-content: center;
+        padding: 32px;
+    }
+
     &__table {
         min-width: 1200px;
 

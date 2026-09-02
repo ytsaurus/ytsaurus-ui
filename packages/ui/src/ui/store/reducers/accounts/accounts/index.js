@@ -1,5 +1,3 @@
-import indexOf_ from 'lodash/indexOf';
-
 import {getResponsibleUsers} from '../../../../utils/accounts/index';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../../constants/accounts';
 import {initialState as tableSortState} from '../../tables';
@@ -11,10 +9,12 @@ import {
     CHANGE_MEDIUM_TYPE_FILTER,
     CHANGE_NAME_FILTER,
     CLOSE_EDITOR_MODAL,
+    FETCH_ACCOUNTS_METADATA,
     FETCH_ACCOUNTS_NODES,
     FETCH_ACCOUNTS_RESOURCE,
     FETCH_ACCOUNTS_TOTAL_USAGE,
     FETCH_ACCOUNTS_USABLE,
+    FETCH_ACTIVE_ACCOUNT,
     FILTER_USABLE_ACCOUNTS,
     OPEN_EDITOR_MODAL,
     SET_ACCOUNTS_TREE_STATE,
@@ -36,6 +36,12 @@ const persistedState = {
 const ephemeralState = {
     fetching: false,
     wasLoaded: false,
+    metadataFetching: false,
+    metadataError: undefined,
+    activeAccountFetching: false,
+    activeAccountError: undefined,
+    editableAccountFetching: false,
+    editableAccountError: undefined,
     loadTotals: false,
     loadNodes: false,
     error: false,
@@ -67,12 +73,22 @@ export const initialState = {
     ...ephemeralState,
 };
 
+// eslint-disable-next-line complexity
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case UPDATE_EDITABLE_ACCOUNT.REQUEST:
+            return {
+                ...state,
+                editableAccount: {name: action.data.accountName},
+                editableAccountFetching: true,
+                editableAccountError: undefined,
+                showEditor: true,
+            };
+
         case UPDATE_EDITABLE_ACCOUNT.SUCCESS: {
             const {accounts} = state;
             const {account} = action.data;
-            const index = indexOf_(accounts, (x) => x.name === account.name);
+            const index = accounts.findIndex((item) => item.name === account.name);
             const newAccounts = [...accounts];
             if (index === -1) {
                 newAccounts.push(account);
@@ -84,17 +100,29 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 accounts: newAccounts,
                 editableAccount: action.data.account,
+                editableAccountFetching: false,
+                editableAccountError: undefined,
                 showEditor: true,
             };
         }
 
-        case FETCH_ACCOUNTS_RESOURCE.SUCCESS: {
-            const responsibleUsers = getResponsibleUsers(action.data.accounts);
+        case UPDATE_EDITABLE_ACCOUNT.FAILURE:
             return {
                 ...state,
-                accounts: action.data.accounts,
+                editableAccount: {name: action.data.accountName},
+                editableAccountFetching: false,
+                editableAccountError: action.data.error,
+                showEditor: true,
+            };
+
+        case FETCH_ACCOUNTS_RESOURCE.SUCCESS: {
+            const accounts = mergeAccountList(state.accounts, action.data.accounts);
+            const responsibleUsers = getResponsibleUsers(accounts);
+            return {
+                ...state,
+                accounts,
                 responsibleUsers,
-                filteredAccounts: action.data.accounts,
+                filteredAccounts: accounts,
                 fetching: false,
                 error: false,
                 wasLoaded: true,
@@ -111,6 +139,38 @@ const reducer = (state = initialState, action) => {
 
         case FETCH_ACCOUNTS_RESOURCE.REQUEST:
             return {...state, fetching: true};
+
+        case FETCH_ACCOUNTS_METADATA.REQUEST:
+            return {...state, metadataFetching: true, metadataError: undefined};
+
+        case FETCH_ACCOUNTS_METADATA.SUCCESS: {
+            const accounts = mergeMetadataList(state.accounts, action.data.accounts);
+            return {
+                ...state,
+                accounts,
+                responsibleUsers: getResponsibleUsers(accounts),
+                metadataFetching: false,
+            };
+        }
+
+        case FETCH_ACCOUNTS_METADATA.FAILURE:
+            return {...state, metadataFetching: false, metadataError: action.data.error};
+
+        case FETCH_ACTIVE_ACCOUNT.REQUEST:
+            return {...state, activeAccountFetching: true, activeAccountError: undefined};
+
+        case FETCH_ACTIVE_ACCOUNT.SUCCESS: {
+            const accounts = mergeAccount(state.accounts, action.data.account);
+            return {
+                ...state,
+                accounts,
+                responsibleUsers: getResponsibleUsers(accounts),
+                activeAccountFetching: false,
+            };
+        }
+
+        case FETCH_ACTIVE_ACCOUNT.FAILURE:
+            return {...state, activeAccountFetching: false, activeAccountError: action.data.error};
 
         case FETCH_ACCOUNTS_TOTAL_USAGE.SUCCESS:
             return {
@@ -178,7 +238,13 @@ const reducer = (state = initialState, action) => {
         }
 
         case CLOSE_EDITOR_MODAL: {
-            return {...state, showEditor: false, editableAccount: {}};
+            return {
+                ...state,
+                showEditor: false,
+                editableAccount: {},
+                editableAccountFetching: false,
+                editableAccountError: undefined,
+            };
         }
 
         case SET_ACCOUNTS_TREE_STATE: {
@@ -186,7 +252,13 @@ const reducer = (state = initialState, action) => {
         }
 
         case SET_ACTIVE_ACCOUNT: {
-            return {...state, activeAccount: action.data.account};
+            return {
+                ...state,
+                activeAccount: action.data.account,
+                activeAccountFetching: false,
+                activeAccountError: undefined,
+                metadataError: undefined,
+            };
         }
 
         case ACCOUNTS_DATA_FIELDS_ACTION: {
@@ -197,5 +269,35 @@ const reducer = (state = initialState, action) => {
             return state;
     }
 };
+
+function mergeAccountList(currentAccounts, listAccounts) {
+    const currentByName = new Map(currentAccounts.map((account) => [account.name, account]));
+    return listAccounts.map((account) => {
+        const current = currentByName.get(account.name);
+        if (!current?.$attributes?.resource_usage) {
+            return account;
+        }
+
+        const merged = Object.assign(Object.create(Object.getPrototypeOf(current)), current);
+        merged.$attributes = {...current.$attributes, ...account.$attributes};
+        merged.parent = account.parent;
+        return merged;
+    });
+}
+
+function mergeMetadataList(currentAccounts, metadataAccounts) {
+    const metadataByName = new Map(metadataAccounts.map((account) => [account.name, account]));
+    return currentAccounts.map((account) => metadataByName.get(account.name) || account);
+}
+
+function mergeAccount(accounts, updatedAccount) {
+    const index = accounts.findIndex((account) => account.name === updatedAccount.name);
+    if (index === -1) {
+        return [...accounts, updatedAccount];
+    }
+    const result = [...accounts];
+    result[index] = updatedAccount;
+    return result;
+}
 
 export default mergeStateOnClusterChange(ephemeralState, persistedState, reducer);
