@@ -4,7 +4,7 @@ import {type FlowComputationRuntimeType} from '../../types';
 import {getStreamsSummaryByAnchorType, hasVisibleStreamsSummaryDetails} from '../utils/utils';
 
 export class ComputationAnchor extends Anchor {
-    getStreamsSummmaryDetails() {
+    getStreamsSummaryDetails() {
         const meta = this.connectedState.block.$state.value.meta as FlowComputationRuntimeType;
 
         const {type} = this.connectedState.state;
@@ -18,7 +18,7 @@ export class ComputationAnchor extends Anchor {
             return;
         }
 
-        const summary = this.getStreamsSummmaryDetails();
+        const summary = this.getStreamsSummaryDetails();
         if (!hasVisibleStreamsSummaryDetails(summary)) {
             return;
         }
@@ -28,10 +28,10 @@ export class ComputationAnchor extends Anchor {
 
         ctx.fillStyle = GRAPH_COLORS.genericMediumBackground;
 
-        if (drained) {
-            ctx.fillStyle = GRAPH_COLORS.infoLine;
-        } else if (backpressureDetected) {
+        if (backpressureDetected) {
             ctx.fillStyle = GRAPH_COLORS.warningLine;
+        } else if (drained) {
+            ctx.fillStyle = GRAPH_COLORS.infoLine;
         }
 
         const isMinimalistic = cameraLevel === ECameraScaleLevel.Minimalistic;

@@ -65,7 +65,6 @@ const Graph: FC<Props> = ({processedGraph}) => {
             toolbox
             zoomOnScroll
             autoCenter={autoCenter}
-            highlightConnectionsOnHover
             onBlockClick={handleBlockClick}
             data={data}
         />
