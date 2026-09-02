@@ -271,7 +271,7 @@ function useResultColumns({
             {
                 id: 'key',
                 header: () => i18n('column_key'),
-                size: 160,
+                size: 240,
                 accessorFn: (row) => stringifyStateValue(decodeStateKey(row.key)),
                 cell: ({row: {original}}) => {
                     const filterableKey = handlers.getRowKeyText(original);

@@ -37,6 +37,15 @@ test('FlowStateResults: table fills the available width', async ({mount, page}) 
     ).toBeLessThan(2);
 });
 
+test('FlowStateResults: Key column reserves room for multipart keys', async ({mount, page}) => {
+    await mount(<FlowStateResultsStories.Populated />, {width: 1440});
+    const keyCell = page.locator('.gt-table__cell_id_key').first();
+    const keyCellBox = await keyCell.boundingBox();
+
+    expect(keyCellBox).not.toBeNull();
+    expect(keyCellBox?.width ?? 0).toBeGreaterThanOrEqual(240);
+});
+
 test('FlowStateResults: Populated with a hovered row', async ({mount, expectScreenshot, page}) => {
     await mount(<FlowStateResultsStories.Populated />);
     await page.locator('.yt-gravity-table__row').first().hover();
