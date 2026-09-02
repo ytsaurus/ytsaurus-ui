@@ -13,6 +13,7 @@ export type QueriesBlockMeta = {
     level: ECameraScaleLevel;
     operationType: OperationType;
     nodeProgress?: NodeProgress;
+    operationUrl?: string;
     schemas?: OperationSchemas;
     details?: NodeDetails;
 

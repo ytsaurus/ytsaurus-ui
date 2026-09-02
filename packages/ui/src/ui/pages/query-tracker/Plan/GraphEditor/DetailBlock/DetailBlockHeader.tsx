@@ -11,7 +11,7 @@ type Props = {
 
 export const DetailBlockHeader: FC<Props> = ({
     block: {
-        meta: {icon, bottomText, nodeProgress, operationType},
+        meta: {icon, bottomText, nodeProgress, operationType, operationUrl},
         name,
     },
 }) => {
@@ -24,7 +24,7 @@ export const DetailBlockHeader: FC<Props> = ({
 
     return (
         <Flex gap={2} direction="column">
-            <DetailBlockTitle icon={icon} name={name} nodeProgress={nodeProgress} />
+            <DetailBlockTitle icon={icon} name={name} operationUrl={operationUrl} />
             {showContent && (
                 <>
                     {isTable ? (

@@ -436,7 +436,7 @@ export function updateColors(nodes: DataSet<ProcessedNode>, colors: GraphColors)
                 const detail = node.progress;
 
                 node.font = {
-                    color: detail?.remoteId ? colors.text.link : colors.text.label,
+                    color: node.url ? colors.text.link : colors.text.label,
                 };
 
                 if (detail) {

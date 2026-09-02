@@ -1,8 +1,7 @@
 import {type ProcessedNode} from '../utils';
 import {parseTablePath} from './tables';
 import {genNavigationUrl} from '../../../../utils/navigation/navigation';
-import {buildOperationUrl} from '../../QueryResults/helpers/buildOperationUrl';
-import {getOperationUrl} from '../../QueryResults/helpers/getOperationUrl';
+import {getOperationPageUrlFromNodeProgress} from './getOperationPageUrlFromNodeProgress';
 
 export const preparePlanNode = (
     node: ProcessedNode,
@@ -16,22 +15,7 @@ export const preparePlanNode = (
         return node;
     }
 
-    if (node.progress?.remoteId) {
-        const id = node.progress.remoteId.split('/').pop();
-
-        if (!id) {
-            node.url = getOperationUrl(node);
-            return node;
-        }
-
-        const cluster = operationIdToCluster.has(id)
-            ? operationIdToCluster.get(id)
-            : node.progress?.remoteData?.cluster_name;
-
-        if (cluster) {
-            node.url = buildOperationUrl(cluster, id);
-        }
-    }
+    node.url = getOperationPageUrlFromNodeProgress(node.progress, operationIdToCluster);
 
     return node;
 };
