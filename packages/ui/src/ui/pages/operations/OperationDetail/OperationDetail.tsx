@@ -42,7 +42,6 @@ import {Page} from '../../../constants/index';
 import {DEFAULT_TAB, type OperationTabType, Tab} from '../../../constants/operations/detail';
 import {useUpdater} from '../../../hooks/use-updater';
 import {promptAction} from '../../../store/actions/actions';
-import {showEditPoolsWeightsModal} from '../../../store/actions/operations';
 import {getOperation, updateOperation} from '../../../store/actions/operations/detail';
 import {
     selectIsOperationInGpuTree,
@@ -81,6 +80,7 @@ import {type OperationPool, type OperationStates} from '../selectors';
 import './OperationDetail.scss';
 import {JobsTimeline} from './tabs/JobsTimeline';
 import OperationDetailsMonitor from './tabs/monitor/OperationDetailsMonitor';
+import {EditOperationButton} from '../EditOperationButton/EditOperationButton';
 
 const detailBlock = cn('operation-detail');
 
@@ -180,11 +180,6 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
         this.props.listOperationEvents(operationId);
     }
 
-    handlePoolsEditClick = () => {
-        const {operation, showEditPoolsWeightsModal} = this.props;
-        showEditPoolsWeightsModal(operation);
-    };
-
     renderAction = (action: ReduxProps['actions'][0]) => {
         const {promptAction, operation} = this.props;
 
@@ -271,13 +266,11 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                     label: i18n('field_pools'),
                     value: (
                         <TemplatePools
-                            onEdit={this.handlePoolsEditClick}
                             cluster={cluster}
                             pools={pools}
                             operationRefId={$value}
                             state={state}
                             erasedTrees={erasedTrees}
-                            editBtnVisibility="always"
                         />
                     ),
                 },
@@ -417,6 +410,14 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                     routed
                     routedPreserveLocation
                     size={UI_TAB_SIZE}
+                    rightContent={
+                        <EditOperationButton
+                            operationId={operation.$value}
+                            operationState={operation.state}
+                            view="edit-button"
+                            onSuccess={() => this.props.getOperation(operation.$value)}
+                        />
+                    }
                 />
             </div>
         );
@@ -608,7 +609,6 @@ const mapStateToProps = (state: RootState, routerProps: RouteProps) => {
 const mapDispatchToProps = {
     promptAction,
     getOperation,
-    showEditPoolsWeightsModal,
     updateListJobsFilter,
     listOperationEvents: (operationId: string) =>
         listOperationEventsApi.endpoints.listOperationEvents.initiate({

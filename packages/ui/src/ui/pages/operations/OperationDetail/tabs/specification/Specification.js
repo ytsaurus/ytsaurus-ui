@@ -48,6 +48,7 @@ function Specification({operation, operationId}) {
 
     const unrecognizedSpec = operation.typedUnrecognizedSpec || {};
     const fullSpec = operation.typedFullSpec;
+    const cumulativeSpecPatch = operation.typedCumulativeSpecPatch || {};
 
     const hasUnrecognized = keys_(unrecognizedSpec).length > 0;
 
@@ -55,22 +56,27 @@ function Specification({operation, operationId}) {
         provided: hasUnrecognized,
         unrecognized: false,
         resulting: true,
+        patch: true,
     });
-
     const onToggleProvided = React.useCallback((provided) => {
-        setCollapsed({unrecognized: true, resulting: true, provided});
+        setCollapsed({unrecognized: true, resulting: true, patch: true, provided});
         onResize();
-    });
+    }, []);
 
     const onToggleUnrecognized = React.useCallback((unrecognized) => {
-        setCollapsed({unrecognized, provided: true, resulting: true});
+        setCollapsed({unrecognized, provided: true, resulting: true, patch: true});
         onResize();
-    });
+    }, []);
 
     const onToggleResulting = React.useCallback((resulting) => {
-        setCollapsed({unrecognized: true, resulting, provided: true});
+        setCollapsed({unrecognized: true, resulting, provided: true, patch: true});
         onResize();
-    });
+    }, []);
+
+    const onTogglePatch = React.useCallback((patch) => {
+        setCollapsed({unrecognized: true, resulting: true, provided: true, patch});
+        onResize();
+    }, []);
 
     return (
         <ErrorBoundary>
@@ -146,6 +152,26 @@ function Specification({operation, operationId}) {
                         />
                     </CollapsibleSectionStateLess>
                 )}
+
+                <CollapsibleSectionStateLess
+                    name={i18n('title_specification-patch')}
+                    onToggle={onTogglePatch}
+                    collapsed={collapsed.patch}
+                    size={UI_COLLAPSIBLE_SIZE}
+                    marginDirection="bottom"
+                >
+                    <YsonWithScroll
+                        value={cumulativeSpecPatch}
+                        settings={unipika.prepareSettings()}
+                        extraTools={
+                            <YsonDownloadButton
+                                value={cumulativeSpecPatch}
+                                settings={unipika.prepareSettings()}
+                                name={`specification_patch_${operationId}`}
+                            />
+                        }
+                    />
+                </CollapsibleSectionStateLess>
             </div>
         </ErrorBoundary>
     );
@@ -154,6 +180,7 @@ function Specification({operation, operationId}) {
 Specification.propTypes = {
     // from connect
     operation: PropTypes.object.isRequired,
+    operationId: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({

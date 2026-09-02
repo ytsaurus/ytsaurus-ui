@@ -13,7 +13,7 @@ const block = cn('operation-weight');
 
 export default class OperationWeight extends Component {
     static propTypes = {
-        onEdit: PropTypes.func.isRequired,
+        onEdit: PropTypes.func,
         weight: PropTypes.number,
         operation: PropTypes.object.isRequired,
     };
@@ -45,7 +45,7 @@ export default class OperationWeight extends Component {
                 <span className={block('value')}>
                     {weightless ? hammer.format.NO_VALUE : weight}
                 </span>
-                {isCorrectState && !weightless && this.renderButton()}
+                {isCorrectState && !weightless && this.props.onEdit && this.renderButton()}
             </div>
         );
     }

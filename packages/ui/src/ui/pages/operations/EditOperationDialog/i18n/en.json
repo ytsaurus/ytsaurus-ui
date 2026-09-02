@@ -1,0 +1,23 @@
+{
+  "title_edit-operation": "Edit operation",
+  "tab_specification": "Specification",
+  "context_edit-disabled-terminal-state": "The operation cannot be edited because it is already in a terminal state.",
+  "section_general": "General",
+  "section_resource-limits": "Resource Limits",
+  "field_tree": "Tree",
+  "field_pool": "Pool",
+  "field_weight": "Weight",
+  "field_cpu": "CPU",
+  "field_gpu": "GPU",
+  "field_memory": "Memory",
+  "field_user-slots": "User slots",
+  "action_save": "Save",
+  "field_editor-mode": "Editor mode",
+  "value_form": "Form",
+  "value_json": "JSON",
+  "field_maximum-failed-job-count": "Maximum failed job count",
+  "section_tasks": "Tasks",
+  "field_task-job-count": "{{taskName}} job count",
+  "field_specification-patch": "Specification patch",
+  "context_supported-patch-paths": "Supported paths: /max_failed_job_count and /tasks/<task_name>/job_count."
+}

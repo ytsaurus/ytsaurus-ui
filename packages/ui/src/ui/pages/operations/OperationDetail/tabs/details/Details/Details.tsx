@@ -6,13 +6,10 @@ import cn from 'bem-cn-lite';
 import AlertEvents from '../../../../../../components/AlertEvents/AlertEvents';
 import {Description} from '../../../../../../pages/operations/OperationDetail/tabs/details/Description';
 import CollapsibleSection from '../../../../../../components/CollapsibleSection/CollapsibleSection';
-import Button from '../../../../../../components/Button/Button';
 import {YTErrorBlock} from '../../../../../../containers/Block/Block';
-import Icon from '../../../../../../components/Icon/Icon';
 import {Flex, Switch} from '@gravity-ui/uikit';
 
 import {type RootState} from '../../../../../../store/reducers';
-import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operations';
 import {selectCluster} from '../../../../../../store/selectors/global';
 import {
     selectIsOperationInGpuTree,
@@ -48,11 +45,6 @@ class Details extends Component<ReduxProps> {
 
     handleSwitchChange = (checked: boolean) => {
         this.setState({isAbsoluteValue: checked});
-    };
-
-    handleEditClick = () => {
-        const {operation, showEditPoolsWeightsModal} = this.props;
-        showEditPoolsWeightsModal(operation);
     };
 
     renderDescription() {
@@ -114,20 +106,6 @@ class Details extends Component<ReduxProps> {
         );
     }
 
-    renderRuntimeOverview() {
-        return (
-            <Button
-                size="s"
-                onClick={this.handleEditClick}
-                title={i18n('context_edit-pools-and-weights')}
-                className={block('edit-button')}
-            >
-                <Icon awesome="pencil" />
-                &nbsp;{i18n('action_edit')}
-            </Button>
-        );
-    }
-
     renderRuntime() {
         const {runtime, operation, cluster, collapsibleSize, treeConfigs} = this.props;
 
@@ -137,7 +115,6 @@ class Details extends Component<ReduxProps> {
                 <CollapsibleSection
                     name={i18n('title_runtime')}
                     className={block('runtime')}
-                    overview={this.renderRuntimeOverview()}
                     size={collapsibleSize}
                     marginDirection="bottom"
                 >
@@ -262,11 +239,7 @@ const mapStateToProps = (state: RootState) => {
     };
 };
 
-const mapDispatchToProps = {
-    showEditPoolsWeightsModal,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
+const connector = connect(mapStateToProps);
 
 const DetailsConnected = connector(Details);
 
