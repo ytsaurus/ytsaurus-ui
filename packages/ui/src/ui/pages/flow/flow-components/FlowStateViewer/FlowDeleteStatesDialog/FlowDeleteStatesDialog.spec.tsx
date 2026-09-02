@@ -43,6 +43,51 @@ jest.mock('../../../../../i18n', () => ({
 jest.mock('../../../../../containers/Block/Block', () => ({
     YTErrorBlock: ({error}: {error: {message?: string}}) => <div>{error?.message}</div>,
 }));
+jest.mock('../../../../../components/DialogWrapper/DialogWrapper', () => {
+    const ReactModule = jest.requireActual('react') as typeof React;
+    const {Dialog} = jest.requireActual('@gravity-ui/uikit');
+    const DialogWrapper = (props: React.ComponentProps<typeof Dialog>) =>
+        ReactModule.createElement(Dialog, props);
+    DialogWrapper.Header = Dialog.Header;
+    DialogWrapper.Body = Dialog.Body;
+    DialogWrapper.Footer = function MockDialogFooter({
+        textButtonApply,
+        textButtonCancel,
+        propsButtonApply,
+        onClickButtonApply,
+        onClickButtonCancel,
+        loading,
+        errorText,
+        showError,
+    }: {
+        textButtonApply: string;
+        textButtonCancel: string;
+        propsButtonApply?: React.ButtonHTMLAttributes<HTMLButtonElement>;
+        onClickButtonApply?: () => void;
+        onClickButtonCancel?: () => void;
+        loading?: boolean;
+        errorText?: string;
+        showError?: boolean;
+    }) {
+        return (
+            <>
+                <button
+                    {...propsButtonApply}
+                    disabled={loading || propsButtonApply?.disabled}
+                    onClick={onClickButtonApply}
+                >
+                    {textButtonApply}
+                </button>
+                <button disabled={loading} onClick={onClickButtonCancel}>
+                    {textButtonCancel}
+                </button>
+                {showError && errorText ? <div>{errorText}</div> : null}
+            </>
+        );
+    };
+    DialogWrapper.Divider = Dialog.Divider;
+    return {DialogWrapper};
+});
 jest.mock('../FlowStateResults/FlowStateResults', () => ({
     KIND_LABEL_KEYS: {
         key_state: 'key',
