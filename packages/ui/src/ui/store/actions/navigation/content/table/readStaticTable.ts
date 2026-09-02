@@ -28,7 +28,7 @@ export async function readStaticTable({
         parameters: {
             ...parameters,
             ...tableReadParameters,
-            ...{table_reader: {workload_descriptor: {category: 'user_interactive'}}},
+            table_reader: {workload_descriptor: {category: 'user_interactive'}},
         },
         cancellation,
     });
