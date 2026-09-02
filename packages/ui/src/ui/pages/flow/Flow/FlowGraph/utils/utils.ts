@@ -13,19 +13,51 @@ import {
 } from '../../types';
 import {type FlowGraphBlock, type FlowGraphBlockItem} from '../FlowGraph';
 
+export type FlowStreamStatus = {
+    drained: boolean;
+    backpressureDetected: boolean;
+};
+
+export type FlowGraphConnection = TConnection & {
+    flowStreamStatus?: FlowStreamStatus;
+};
+
+export function mergeConnectionStreamStatus(dst: FlowGraphConnection, status?: FlowStreamStatus) {
+    if (!status) {
+        return;
+    }
+
+    const flowStreamStatus = {
+        drained: Boolean(dst.flowStreamStatus?.drained || status.drained),
+        backpressureDetected: Boolean(
+            dst.flowStreamStatus?.backpressureDetected || status.backpressureDetected,
+        ),
+    };
+
+    dst.flowStreamStatus = flowStreamStatus;
+    let background;
+    if (flowStreamStatus.backpressureDetected) {
+        background = GRAPH_COLORS.warningLine;
+    } else if (flowStreamStatus.drained) {
+        background = GRAPH_COLORS.infoLine;
+    }
+
+    if (background) {
+        dst.styles = {...dst.styles, background};
+    }
+}
+
 export function applyConnectionStyle(
-    dst: TConnection,
+    dst: FlowGraphConnection,
     {
         drained,
         backpressure_detected,
     }: Partial<Pick<FlowExtendedStreamType, 'drained' | 'backpressure_detected'>>,
 ) {
-    dst.styles = Object.assign(
-        {},
-        dst.styles,
-        drained ? {background: GRAPH_COLORS.infoLine} : {},
-        backpressure_detected ? {background: GRAPH_COLORS.warningLine} : {},
-    );
+    mergeConnectionStreamStatus(dst, {
+        drained: Boolean(drained),
+        backpressureDetected: Boolean(backpressure_detected),
+    });
 }
 
 const uuid = uuidv4();
@@ -123,12 +155,17 @@ export function makeFlowComputationRuntimeData(
 }
 
 export function addFlowConnection(
-    dstConnections: Array<TConnection>,
+    dstConnections: Array<FlowGraphConnection>,
     sourceBlockId: TBlockId,
     targetBlockId: TBlockId,
-    {...restOptions}: Pick<TConnection, 'styles' | 'sourceAnchorId' | 'targetAnchorId'> = {},
+    {
+        ...restOptions
+    }: Pick<
+        FlowGraphConnection,
+        'flowStreamStatus' | 'styles' | 'sourceAnchorId' | 'targetAnchorId'
+    > = {},
 ) {
-    const c: TConnection = {
+    const c: FlowGraphConnection = {
         ...restOptions,
         sourceBlockId,
         targetBlockId,
