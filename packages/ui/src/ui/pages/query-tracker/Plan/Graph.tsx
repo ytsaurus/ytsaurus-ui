@@ -146,10 +146,10 @@ export default function Graph({isActive, className, graph, showMinimap, prepareN
             if (progressRef.current) {
                 updateProgress(newNodes, progressRef.current);
             }
-            updateColors(newNodes, colorsRef.current);
             if (prepareNodeRef.current) {
                 prepareNodes(newNodes, prepareNodeRef.current);
             }
+            updateColors(newNodes, colorsRef.current);
             setInitialRender(
                 nodes.length !== newNodes.length || edges.length !== graphEdges.length,
             );
@@ -179,6 +179,7 @@ export default function Graph({isActive, className, graph, showMinimap, prepareN
     React.useEffect(() => {
         if (typeof prepareNode === 'function') {
             prepareNodes(nodes, prepareNode);
+            updateColors(nodes, colorsRef.current);
             repaint();
         }
     }, [prepareNode, nodes, repaint]);
