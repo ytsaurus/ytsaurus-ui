@@ -33,6 +33,7 @@ import {
     buildCompactYsonSettings,
     buildRowFilterUpdate,
     buildRowKeyPresentation,
+    decodeStateString,
     keyValuesFromRowKey,
     resolveStateStoragePath,
     serializeRawStateValue,
@@ -846,6 +847,44 @@ describe('buildRowFilterUpdate', () => {
 });
 
 describe('buildRowKeyPresentation', () => {
+    it('uses decoded string key values for display, copy and filtering', () => {
+        const filterKeyColumns = [{name: 'title', type: 'string'}];
+        const presentation = buildRowKeyPresentation(
+            filters({computationId: 'state'}),
+            {
+                section: 'key_state',
+                computationId: 'state',
+                key: ['ÐÐµÐ½Ð¸Ðº'],
+                stateName: '/counter',
+                value: 1,
+            },
+            {keyColumns: filterKeyColumns, allKeyColumns: filterKeyColumns},
+        );
+
+        expect(presentation).toEqual({
+            rawKey: '["Веник"]',
+            filterUpdate: filters({
+                computationId: 'state',
+                keyValues: {title: 'Веник'},
+            }),
+        });
+        const pasted = parseRawKeyDraft(presentation?.rawKey ?? '', filterKeyColumns);
+        expect(pasted).toEqual({values: {title: 'Веник'}});
+        expect(
+            buildStateReadBody(
+                {
+                    ...(presentation?.filterUpdate ?? filters({})),
+                    keyValues: 'values' in pasted ? pasted.values : {},
+                },
+                {
+                    keyColumns: filterKeyColumns,
+                    allKeyColumns: filterKeyColumns,
+                    overrideActive: false,
+                },
+            ),
+        ).toEqual({body: {computation_id: 'state', key: {title: 'Веник'}}});
+    });
+
     it('uses the same filterable key values for click and copy while omitting expressions', () => {
         const filterKeyColumns = [
             {name: 'user', type: 'uint64'},
@@ -1370,6 +1409,19 @@ describe('stringifyStateValue', () => {
     });
     it('returns an empty string for undefined', () => {
         expect(stringifyStateValue(undefined)).toBe('');
+    });
+});
+
+describe('decodeStateString', () => {
+    it('decodes UTF-8 bytes returned through a binary YSON string', () => {
+        expect(
+            decodeStateString('ÐÐµÐ½Ð¸Ðº-Ñ-Ð¿ÑÐ¾Ð²Ð¾Ð»Ð¾ÐºÐ¾Ð¹-Ð¸-Ð¿Ð»ÐµÐ½ÐºÐ¾Ð¹-Ð¡Ð¾ÑÐ³Ð¾'),
+        ).toBe('Веник-с-проволокой-и-пленкой-Сорго');
+    });
+
+    it('preserves already decoded and non-UTF-8 strings', () => {
+        expect(decodeStateString('Веник')).toBe('Веник');
+        expect(decodeStateString('café')).toBe('café');
     });
 });
 

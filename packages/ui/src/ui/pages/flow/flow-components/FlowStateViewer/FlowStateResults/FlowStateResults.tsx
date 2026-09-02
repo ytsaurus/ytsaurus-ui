@@ -34,6 +34,7 @@ import {
 } from '../state-requests';
 import {
     buildCompactYsonSettings,
+    decodeStateKey,
     serializeRawStateValue,
     stringifyStateValue,
 } from '../state-values';
@@ -271,7 +272,7 @@ function useResultColumns({
                 id: 'key',
                 header: () => i18n('column_key'),
                 size: 160,
-                accessorFn: (row) => stringifyStateValue(row.key),
+                accessorFn: (row) => stringifyStateValue(decodeStateKey(row.key)),
                 cell: ({row: {original}}) => {
                     const filterableKey = handlers.getRowKeyText(original);
                     return (
@@ -279,7 +280,10 @@ function useResultColumns({
                             <FilterCellValue
                                 row={original}
                                 field="key"
-                                label={filterableKey ?? stringifyStateValue(original.key)}
+                                label={
+                                    filterableKey ??
+                                    stringifyStateValue(decodeStateKey(original.key))
+                                }
                                 handlers={handlers}
                             />
                             {filterableKey && (

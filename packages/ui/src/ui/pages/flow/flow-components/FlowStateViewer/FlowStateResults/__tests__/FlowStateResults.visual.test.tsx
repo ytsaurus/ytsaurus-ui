@@ -20,6 +20,23 @@ test('FlowStateResults: table starts without a utility-action spacer', async ({m
     expect((tableBox?.y ?? 0) - (resultsBox?.y ?? 0)).toBeLessThan(48);
 });
 
+test('FlowStateResults: table fills the available width', async ({mount, page}) => {
+    await mount(<FlowStateResultsStories.Populated />, {width: 1440});
+    const pane = page.locator('.yt-flow-state-results__table-pane');
+    const lastCell = page.locator('.yt-gravity-table__row').first().locator('td').last();
+    const [paneBox, lastCellBox] = await Promise.all([pane.boundingBox(), lastCell.boundingBox()]);
+
+    expect(paneBox).not.toBeNull();
+    expect(lastCellBox).not.toBeNull();
+    expect(
+        Math.abs(
+            (paneBox?.x ?? 0) +
+                (paneBox?.width ?? 0) -
+                ((lastCellBox?.x ?? 0) + (lastCellBox?.width ?? 0)),
+        ),
+    ).toBeLessThan(2);
+});
+
 test('FlowStateResults: Populated with a hovered row', async ({mount, expectScreenshot, page}) => {
     await mount(<FlowStateResultsStories.Populated />);
     await page.locator('.yt-gravity-table__row').first().hover();
@@ -95,15 +112,34 @@ test('FlowStateResults: row actions reveal on hover and keyboard focus', async (
     await mount(<FlowStateResultsStories.Populated />);
     const row = page.locator('.yt-gravity-table__row').nth(1);
     const actions = row.locator('.yt-flow-state-results__hover-action');
+    const idleBackground = await row.evaluate((node) => getComputedStyle(node).backgroundColor);
 
     await expect(actions.first()).toHaveCSS('opacity', '0');
     await expect(actions.first()).toHaveCSS('pointer-events', 'none');
     await row.hover();
     await expect(actions.first()).toHaveCSS('opacity', '1');
     await expect(actions.first()).toHaveCSS('pointer-events', 'auto');
+    expect(await row.evaluate((node) => getComputedStyle(node).backgroundColor)).not.toBe(
+        idleBackground,
+    );
     await page.mouse.move(0, 0);
     await row.getByRole('button', {name: 'Show value'}).focus();
     await expect(actions.first()).toHaveCSS('opacity', '1');
+});
+
+test('FlowStateResults: selecting a row does not leave row actions visible', async ({
+    mount,
+    page,
+}) => {
+    await mount(<FlowStateResultsStories.Populated />);
+    const row = page.locator('.yt-gravity-table__row').first();
+    const actions = row.locator('.yt-flow-state-results__hover-action');
+
+    await row.getByRole('checkbox').click();
+    await page.mouse.move(0, 0);
+
+    await expect(actions.first()).toHaveCSS('opacity', '0');
+    await expect(actions.first()).toHaveCSS('pointer-events', 'none');
 });
 
 test('FlowStateResults: Narrow delete remains keyboard reachable', async ({mount, page}) => {

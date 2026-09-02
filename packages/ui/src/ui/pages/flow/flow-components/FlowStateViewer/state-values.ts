@@ -8,12 +8,39 @@ import type {
 
 import type {FlowKeyColumn, FlowStaticSpec} from '../../../../../shared/yt-types';
 import type {YsonSettings} from '../../../../components/Yson/Yson';
+import unipika from '../../../../common/thor/unipika';
 import ypath from '../../../../common/thor/ypath';
 import {isAnnotatedBigInteger} from '../../../../store/api/yt/flow/read-states-normalize';
 import {formatRawKeyDraft, getOwnProperty, reconcileStateName} from './state-filters';
 
 function replaceAnnotatedIntegers(_key: string, value: unknown): unknown {
     return isAnnotatedBigInteger(value) ? value.$value : value;
+}
+
+export function decodeStateString(value: string): string {
+    if ([...value].some((character) => character.charCodeAt(0) > 0xff)) {
+        return value;
+    }
+    try {
+        return unipika.utils.utf8.decode(value);
+    } catch {
+        return value;
+    }
+}
+
+export function decodeStateKey(value: unknown): unknown {
+    if (typeof value === 'string') {
+        return decodeStateString(value);
+    }
+    if (Array.isArray(value)) {
+        return value.map(decodeStateKey);
+    }
+    if (value && typeof value === 'object' && !isAnnotatedBigInteger(value)) {
+        return Object.fromEntries(
+            Object.entries(value).map(([field, child]) => [field, decodeStateKey(child)]),
+        );
+    }
+    return value;
 }
 
 export function stringifyStateValue(value: unknown, maxLength = 200): string {
@@ -43,7 +70,7 @@ function stringifyKeyPart(value: unknown): string {
     if (isAnnotatedBigInteger(value)) {
         return value.$value;
     }
-    return typeof value === 'string' ? value : JSON.stringify(value);
+    return typeof value === 'string' ? decodeStateString(value) : JSON.stringify(value);
 }
 
 export function keyValuesFromRowKey(
@@ -111,7 +138,7 @@ function applyRowKeyClick(
             computationId: row.computationId,
             partitionId: undefined,
             keyValues: {},
-            rawKey: row.key,
+            rawKey: decodeStateKey(row.key),
         };
     }
     const keyValues = keyValuesFromRowKey(row.key, context.keyColumns, context.allKeyColumns);
