@@ -874,7 +874,7 @@ describe('buildRowKeyPresentation', () => {
             buildStateReadBody(
                 {
                     ...(presentation?.filterUpdate ?? filters({})),
-                    keyValues: 'values' in pasted ? pasted.values : {},
+                    keyValues: ('values' in pasted ? pasted.values : undefined) ?? {},
                 },
                 {
                     keyColumns: filterKeyColumns,
