@@ -30,9 +30,6 @@ import {docsUrl} from '../../../../../config';
 import UIFactory from '../../../../../UIFactory';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
 import {YsonDownloadButton} from '../../../../../components/DownloadAttributesButton';
-import {Button} from '@gravity-ui/uikit';
-import Icon from '../../../../../components/Icon/Icon';
-import {EditSpecificationPatchDialog} from './EditSpecificationPatchDialog/EditSpecificationPatchDialog';
 
 const block = cn('operation-specification');
 
@@ -61,16 +58,6 @@ function Specification({operation, operationId}) {
         resulting: true,
         patch: true,
     });
-    const [showEditPatch, setShowEditPatch] = React.useState(false);
-
-    const onEditPatch = React.useCallback(() => {
-        setShowEditPatch(true);
-    }, []);
-
-    const onEditPatchClose = React.useCallback(() => {
-        setShowEditPatch(false);
-    }, []);
-
     const onToggleProvided = React.useCallback((provided) => {
         setCollapsed({unrecognized: true, resulting: true, patch: true, provided});
         onResize();
@@ -177,28 +164,14 @@ function Specification({operation, operationId}) {
                         value={cumulativeSpecPatch}
                         settings={unipika.prepareSettings()}
                         extraTools={
-                            <React.Fragment>
-                                <YsonDownloadButton
-                                    value={cumulativeSpecPatch}
-                                    settings={unipika.prepareSettings()}
-                                    name={`specification_patch_${operationId}`}
-                                />
-                                {operation.inIntermediateState() && (
-                                    <Button view="outlined" onClick={onEditPatch}>
-                                        <Icon awesome="pencil" />
-                                        {i18n('action_edit-specification')}
-                                    </Button>
-                                )}
-                            </React.Fragment>
+                            <YsonDownloadButton
+                                value={cumulativeSpecPatch}
+                                settings={unipika.prepareSettings()}
+                                name={`specification_patch_${operationId}`}
+                            />
                         }
                     />
                 </CollapsibleSectionStateLess>
-                <EditSpecificationPatchDialog
-                    operationId={operationId}
-                    resultingSpec={operation.resultingSpec}
-                    visible={showEditPatch && operation.inIntermediateState()}
-                    onClose={onEditPatchClose}
-                />
             </div>
         </ErrorBoundary>
     );

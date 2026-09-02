@@ -2,22 +2,18 @@ import React from 'react';
 
 import {Alert} from '@gravity-ui/uikit';
 
-import {type YTError} from '../../../../../../../@types/types';
-import {type DialogField, YTDFDialog, makeErrorFields} from '../../../../../../containers/Dialog';
-import {useDispatch} from '../../../../../../store/redux-hooks';
-import {patchOperationSpec} from '../../../../../../store/actions/operations/detail';
-import {docsUrl} from '../../../../../../config';
-import UIFactory from '../../../../../../UIFactory';
-import HelpLink from '../../../../../../components/HelpLink/HelpLink';
+import {type DialogField} from '../../../containers/Dialog';
+import {docsUrl} from '../../../config';
+import UIFactory from '../../../UIFactory';
+import HelpLink from '../../../components/HelpLink/HelpLink';
 import {
     type KnownOperationSpecPatchValues,
     type OperationSpecPatchInput,
     extractKnownOperationSpecPatchValues,
     mergeKnownOperationSpecPatchValues,
-    operationSpecPatchToItems,
-} from '../../../../../../utils/operations/specification-patch';
+} from '../../../utils/operations/specification-patch';
 
-import i18n from '../i18n';
+import i18n from './i18n';
 
 type EditorMode = 'form' | 'json';
 
@@ -31,20 +27,15 @@ type JsonFieldValue = {
     error?: string;
 };
 
-type FormValues = Record<string, unknown> & {
+export type SpecificationPatchFormValues = Record<string, unknown> & {
     mode: EditorMode;
-    patch: {value?: string; error?: string};
+    patch: JsonFieldValue;
     maxFailedJobCount: NumberFieldValue;
 };
 
-type Props = {
-    operationId: string;
-    resultingSpec?: {
-        max_failed_job_count?: unknown;
-        tasks?: Record<string, {job_count?: unknown}>;
-    };
-    visible: boolean;
-    onClose: () => void;
+export type ResultingOperationSpec = {
+    max_failed_job_count?: unknown;
+    tasks?: Record<string, {job_count?: unknown}>;
 };
 
 const FORM_VISIBILITY = {
@@ -66,7 +57,7 @@ function parsePatch(value: JsonFieldValue): OperationSpecPatchInput {
 }
 
 function getKnownValuesFromForm(
-    values: FormValues,
+    values: SpecificationPatchFormValues,
     taskNames: string[],
 ): KnownOperationSpecPatchValues {
     return {
@@ -82,8 +73,8 @@ function getKnownValuesFromForm(
 
 function makeModeSubscribers(taskNames: string[]) {
     return (mode: EditorMode, _field: string, allValues?: object, previousValues?: object) => {
-        const values = allValues as FormValues;
-        const previousMode = (previousValues as FormValues | undefined)?.mode;
+        const values = allValues as SpecificationPatchFormValues;
+        const previousMode = (previousValues as SpecificationPatchFormValues | undefined)?.mode;
 
         if (!values || mode === previousMode) {
             return {};
@@ -125,28 +116,32 @@ function getPlaceholder(value: unknown) {
     return typeof value === 'number' ? String(value) : undefined;
 }
 
-export function EditSpecificationPatchDialog({
-    operationId,
-    resultingSpec,
-    visible,
-    onClose,
-}: Props) {
-    const dispatch = useDispatch();
-    const [error, setError] = React.useState<YTError | Error | undefined>();
+export function getSpecificationPatchTaskNames(resultingSpec?: ResultingOperationSpec) {
+    return Object.keys(resultingSpec?.tasks ?? {}).sort();
+}
+
+export function getSpecificationPatchInitialValues(): SpecificationPatchFormValues {
+    return {
+        mode: 'form',
+        patch: {value: '{\n  \n}'},
+        maxFailedJobCount: {value: undefined},
+    };
+}
+
+export function makeSpecificationPatchFields(
+    resultingSpec?: ResultingOperationSpec,
+    disabled = false,
+): Array<DialogField<SpecificationPatchFormValues>> {
     const tasks = resultingSpec?.tasks ?? {};
-    const taskNames = Object.keys(tasks).sort();
+    const taskNames = getSpecificationPatchTaskNames(resultingSpec);
 
-    const handleClose = React.useCallback(() => {
-        setError(undefined);
-        onClose();
-    }, [onClose]);
-
-    const fields: Array<DialogField<FormValues>> = [
+    return [
         {
             name: 'mode',
             caption: i18n('field_editor-mode'),
             type: 'radio',
             extras: {
+                disabled,
                 options: [
                     {value: 'form', label: i18n('value_form')},
                     {value: 'json', label: i18n('value_json')},
@@ -160,6 +155,7 @@ export function EditSpecificationPatchDialog({
             type: 'number',
             visibilityCondition: FORM_VISIBILITY,
             extras: {
+                disabled,
                 hidePrettyValue: true,
                 placeholder: getPlaceholder(resultingSpec?.max_failed_job_count),
             },
@@ -179,6 +175,7 @@ export function EditSpecificationPatchDialog({
                       type: 'number' as const,
                       visibilityCondition: FORM_VISIBILITY,
                       extras: {
+                          disabled,
                           hidePrettyValue: true,
                           placeholder: getPlaceholder(tasks[taskName]?.job_count),
                       },
@@ -191,7 +188,7 @@ export function EditSpecificationPatchDialog({
             type: 'json',
             fullWidth: true,
             visibilityCondition: JSON_VISIBILITY,
-            extras: {initialShowPreview: false, minHeight: 200},
+            extras: {disabled, initialShowPreview: false, minHeight: 200},
         },
         {
             name: 'patchHelp',
@@ -217,48 +214,20 @@ export function EditSpecificationPatchDialog({
                 ),
             },
         },
-        ...makeErrorFields([error]),
     ];
+}
 
-    return (
-        visible && (
-            <YTDFDialog<FormValues>
-                visible
-                size="l"
-                headerProps={{title: i18n('title_edit-specification')}}
-                footerProps={{textApply: i18n('action_apply-patch')}}
-                initialValues={{
-                    mode: 'form',
-                    patch: {value: '{\n  \n}'},
-                    maxFailedJobCount: {value: undefined},
-                }}
-                onClose={handleClose}
-                onAdd={async (form) => {
-                    setError(undefined);
+export function getSpecificationPatchFromFormValues(
+    values: SpecificationPatchFormValues,
+    taskNames: string[],
+): OperationSpecPatchInput {
+    const patch = parsePatch(values.patch);
 
-                    try {
-                        const values = form.getState().values;
-                        const parsedPatch = parsePatch(values.patch);
-                        const patch =
-                            values.mode === 'form'
-                                ? mergeKnownOperationSpecPatchValues(
-                                      parsedPatch,
-                                      getKnownValuesFromForm(values, taskNames),
-                                      taskNames,
-                                  )
-                                : parsedPatch;
-                        await dispatch(
-                            patchOperationSpec(operationId, operationSpecPatchToItems(patch)),
-                        );
-                        return undefined;
-                    } catch (caughtError) {
-                        const apiError = caughtError as YTError | Error;
-                        setError(apiError);
-                        return Promise.reject(apiError);
-                    }
-                }}
-                fields={fields}
-            />
-        )
-    );
+    return values.mode === 'form'
+        ? mergeKnownOperationSpecPatchValues(
+              patch,
+              getKnownValuesFromForm(values, taskNames),
+              taskNames,
+          )
+        : patch;
 }

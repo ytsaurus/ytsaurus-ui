@@ -37,16 +37,14 @@ import {isFinalState} from '../../../pages/operations/OperationDetail/tabs/JobsT
 import i18n from './i18n';
 import {loadOperationAttributes} from './helpers/loadOperationAttributes';
 import {type OperationSpecPatchItem} from '../../../utils/operations/specification-patch';
+import {patchOperationSpec as patchOperationSpecMutation} from './helpers/patchOperationSpec';
 
 export function patchOperationSpec(
     id: string,
     patches: OperationSpecPatchItem[],
 ): ThunkAction<Promise<void>, RootState, unknown, OperationDetailActionType> {
     return async (dispatch) => {
-        await ytApiV3Id.patchOpSpec(YTApiId.operationPatchSpec, {
-            operation_id: id,
-            patches,
-        });
+        await patchOperationSpecMutation(id, patches);
         return dispatch(getOperation(id));
     };
 }
