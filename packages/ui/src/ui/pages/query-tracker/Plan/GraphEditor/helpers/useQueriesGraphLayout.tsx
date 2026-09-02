@@ -13,6 +13,7 @@ import {selectQuerySingleProgress} from '../../../../../store/selectors/query-tr
 export const useQueriesGraphLayout = (
     progressGraph: ProcessedGraph,
     scale: ECameraScaleLevel,
+    operationIdToCluster?: ReadonlyMap<string, string>,
 ): {
     data: {blocks: QueriesNodeBlock[]; connections: MultipointConnection[]};
     isLoading: boolean;
@@ -20,8 +21,8 @@ export const useQueriesGraphLayout = (
     const {yql_progress: progress} = useSelector(selectQuerySingleProgress);
 
     const {blocks, connections: initialConnections} = useMemo(
-        () => createBlocks(progressGraph, progress, scale),
-        [progressGraph, progress, scale],
+        () => createBlocks(progressGraph, progress, scale, operationIdToCluster),
+        [progressGraph, progress, scale, operationIdToCluster],
     );
 
     const [positionedBlocks, setPositionedBlocks] = useState<QueriesNodeBlock[]>(blocks);

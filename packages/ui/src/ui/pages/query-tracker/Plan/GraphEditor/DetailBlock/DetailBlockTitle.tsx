@@ -5,19 +5,17 @@ import './DetailBlockTitle.scss';
 import {Button, Icon} from '@gravity-ui/uikit';
 import {ArrowUpRightFromSquare} from '@gravity-ui/icons';
 import {openInNewTab} from '../../../../../utils/utils';
-import type {NodeProgress} from '../../models/plan';
-import {getOperationPageUrlFromNodeProgress} from '../../services/getOperationPageUrlFromNodeProgress';
 
 const block = cn('yt-detailed-block-title');
 
 type Props = {
     icon: QueriesBlockMeta['icon'];
     name: string;
-    nodeProgress?: NodeProgress;
+    operationUrl?: string;
 };
 
-export const DetailBlockTitle: FC<Props> = ({icon, name, nodeProgress}) => {
-    const url = getOperationPageUrlFromNodeProgress(nodeProgress) ?? '';
+export const DetailBlockTitle: FC<Props> = ({icon, name, operationUrl}) => {
+    const url = operationUrl ?? '';
 
     const handleClick = () => {
         openInNewTab(url);

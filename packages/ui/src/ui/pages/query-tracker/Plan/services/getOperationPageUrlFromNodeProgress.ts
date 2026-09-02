@@ -3,14 +3,19 @@ import {buildOperationUrl} from '../../QueryResults/helpers/buildOperationUrl';
 
 export function getOperationPageUrlFromNodeProgress(
     nodeProgress?: NodeProgress,
+    operationIdToCluster?: ReadonlyMap<string, string>,
 ): string | undefined {
-    const remoteId = nodeProgress?.remoteId;
-    if (!remoteId) return undefined;
+    const operationReference = nodeProgress?.remoteId || nodeProgress?.waitingRemoteId;
+    if (!operationReference) return undefined;
 
-    const operationId = remoteId.split('/').pop();
+    const idParts = operationReference.split('/');
+    const operationId = idParts[idParts.length - 1];
     if (!operationId) return undefined;
 
-    const cluster = nodeProgress?.remoteData?.cluster_name ?? remoteId.split('/')[0];
+    const cluster =
+        operationIdToCluster?.get(operationId) ??
+        nodeProgress?.remoteData?.cluster_name ??
+        (idParts.length > 1 ? idParts[0] : undefined);
     if (!cluster) return undefined;
 
     return buildOperationUrl(cluster, operationId);

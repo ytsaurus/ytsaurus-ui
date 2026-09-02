@@ -101,7 +101,14 @@ export const QueryResults = memo<Props>(function QueryResults({
             );
         }
         if (tabId === 'progress') {
-            return <Plan planView={planView} isActive prepareNode={handlePrepareNode} />;
+            return (
+                <Plan
+                    planView={planView}
+                    isActive
+                    prepareNode={handlePrepareNode}
+                    operationIdToCluster={operationIdToCluster}
+                />
+            );
         }
         return null;
     };
