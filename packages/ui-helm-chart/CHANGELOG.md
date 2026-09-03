@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.6.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ytsaurus-ui-chart-v0.5.0...ytsaurus-ui-chart-v0.6.0) (2026-09-03)
+
+
+### Features
+
+* **server/configs:** add setting [YTFRONT-5702] ([36cab9c](https://github.com/ytsaurus/ytsaurus-ui/commit/36cab9c98d5060a1a26bc573b42fc569118bbccb))
+
+
+### Bug Fixes
+
+* **ui-helm-chart:** restart pods when configuration changes [YTSAURUSSUP-2262] ([d72cf54](https://github.com/ytsaurus/ytsaurus-ui/commit/d72cf547ba34da480f29d69a55703b23efca6bb1))
+
 ## [0.5.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ytsaurus-ui-chart-v0.4.0...ytsaurus-ui-chart-v0.5.0) (2025-08-04)
 
 
