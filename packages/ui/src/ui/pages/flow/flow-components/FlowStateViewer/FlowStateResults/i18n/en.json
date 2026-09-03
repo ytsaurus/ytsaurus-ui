@@ -13,7 +13,7 @@
   "tooltip_show-value": "Show value",
   "tooltip_show-raw-response": "Show raw response",
   "title_raw-response": "Raw read-states response",
-  "text_bounded-results": "Each response section requests at most {{limit}} entries and has no continuation. Open backing storage in Navigation for complete data; filter narrowing is not exhaustive.",
+  "text_bounded-results": "Each response section requests at most {{limit}} entries and has no continuation. Open backing storage in Navigation for complete data.",
   "label_bounded-results-info": "About bounded results",
   "text_no-results": "No states loaded",
   "text_selected-rows": "Selected: {{count}}",

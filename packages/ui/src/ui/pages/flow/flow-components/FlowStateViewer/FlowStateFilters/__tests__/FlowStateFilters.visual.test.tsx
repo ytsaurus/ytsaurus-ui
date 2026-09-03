@@ -3,6 +3,56 @@ import React from 'react';
 import {expect, test} from '../../../../../../playwright-components/core';
 
 import {FlowStateFiltersStories} from '../__stories__';
+import type {FlowStateFiltersValue} from '../../types';
+
+test('FlowStateFilters: Clear aligns with the state search input', async ({mount, page}) => {
+    let changedValue: FlowStateFiltersValue | undefined;
+    await mount(
+        <FlowStateFiltersStories.TwoRowToolbar
+            value={{
+                computationId: 'checkout',
+                target: 'all',
+                keyValues: {},
+                stateName: '/checkout',
+            }}
+            onChange={(value) => {
+                changedValue = value;
+            }}
+        />,
+    );
+
+    await page.getByRole('button', {name: 'State /checkout', exact: true}).click();
+    const filter = page.locator('.yt-select__filter');
+    const search = filter.getByRole('textbox');
+    const clear = filter.getByRole('button', {name: 'Clear', exact: true});
+    await expect(search).toBeVisible();
+    await expect(clear).toBeVisible();
+
+    await expect
+        .poll(() =>
+            filter.evaluate((element) => {
+                const searchBox = element.querySelector('input')?.getBoundingClientRect();
+                const clearBox = element.querySelector('button')?.getBoundingClientRect();
+                if (!searchBox || !clearBox) {
+                    throw new Error('State search and Clear button must have visible bounds.');
+                }
+                return Math.abs(
+                    searchBox.y + searchBox.height / 2 - clearBox.y - clearBox.height / 2,
+                );
+            }),
+        )
+        .toBeLessThan(1);
+
+    await clear.click();
+    await expect
+        .poll(() => changedValue)
+        .toEqual({
+            computationId: 'checkout',
+            target: 'all',
+            keyValues: {},
+            stateName: undefined,
+        });
+});
 
 test('FlowStateFilters: two-row toolbar', async ({mount, expectScreenshot, page}) => {
     await mount(<FlowStateFiltersStories.TwoRowToolbar />);

@@ -51,6 +51,8 @@ body .yt-select {
     }
 
     &__filter-btn {
+        display: flex;
+        align-items: center;
         padding-left: 4px;
     }
 }
