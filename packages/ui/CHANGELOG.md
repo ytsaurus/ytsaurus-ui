@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.24.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.23.0...ui-v3.24.0) (2026-09-03)
+
+
+### Features
+
+* **Navigation:** host metadata [YTFRONT-5757] ([8e8edae](https://github.com/ytsaurus/ytsaurus-ui/commit/8e8edaeeab0ea8f9fa58872336bad998efc81ed3))
+* **server/configs:** add setting [YTFRONT-5702] ([36cab9c](https://github.com/ytsaurus/ytsaurus-ui/commit/36cab9c98d5060a1a26bc573b42fc569118bbccb))
+
+
+### Bug Fixes
+
+* **Navigation/Table:** download file as application/octet-stream [YTFRONT-5970] ([3fd7a9b](https://github.com/ytsaurus/ytsaurus-ui/commit/3fd7a9be4225f4f204ec4ff9b5483e401498b884))
+* **Queries:** change yql version default logic [YTFRONT-5876] ([2956e03](https://github.com/ytsaurus/ytsaurus-ui/commit/2956e03c5f644b7d1eb09bd4e1373d747c7060f1))
+
 ## [3.23.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.22.0...ui-v3.23.0) (2026-08-26)
 
 
