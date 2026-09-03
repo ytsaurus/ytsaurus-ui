@@ -167,7 +167,7 @@ export default function ColumnHeader<T extends string = string>(props: ColumnHea
                         className={block('label', {'sub-column': true})}
                         variant="caption-2"
                         title={subColumn?.titleContent}
-                        color="dark-secondary"
+                        color="secondary"
                     >
                         {subColumn?.nameContent}
                     </Text>
