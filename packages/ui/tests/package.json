@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "playwright test ${PW_OPTIONS}",
+    "start:impl": "playwright test ${PW_OPTIONS}",
+    "start": "../scripts/docker-run.sh npm run start:impl",
     "auth": "rm -rf ./.auth && playwright test -c ./playwright.auth.config.ts ${PW_AUTH_OPTIONS}",
     "screenshots:impl": "E2E_MATCH=${E2E_MATCH:-.screen.} E2E_TEST_DIR=./screenshots playwright test ${PW_OPTIONS}",
     "screenshots": "../scripts/docker-run.sh npm run screenshots:impl"
