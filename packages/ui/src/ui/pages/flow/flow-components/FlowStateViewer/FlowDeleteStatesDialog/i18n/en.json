@@ -1,0 +1,20 @@
+{
+  "action_delete": "Delete",
+  "action_cancel": "Cancel",
+  "label_force": "I understand that deleting pipeline state values is irreversible and might affect its future operation",
+  "alert_pipeline-running": "The pipeline is working — stop or pause it before deleting states",
+  "alert_delete-failed": "Deletion did not complete",
+  "alert_permission-unavailable": "Fresh write permission is required before deleting states",
+  "text_delete-selected-explanation": "These {{count}} state rows will be permanently deleted from the pipeline state storage",
+  "column_computation": "Computation",
+  "column_state-kind": "State kind",
+  "column_state-name": "State",
+  "column_partition": "Partition",
+  "column_key": "Key",
+  "column_value": "Value",
+  "action_copy-value": "Copy value",
+  "text_and-n-more": "and {{count}} more",
+  "text_deleted-count": "Deleted {{done}} of {{total}} selected rows",
+  "text_matched-total": "Matched rows",
+  "title_delete-states": "Delete states"
+}

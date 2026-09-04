@@ -1,0 +1,12 @@
+.yt-flow-state-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-top: 10px;
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+}
