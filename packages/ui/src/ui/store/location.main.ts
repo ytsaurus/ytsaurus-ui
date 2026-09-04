@@ -209,6 +209,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}`, [flowComputationsParams]],
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*`, [flowComputationParams]],
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*/details`, [flowComputationParams]],
+    [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*/distribution`, [flowComputationParams]],
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*/monitor`, [flowComputationMonitorParams]],
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*/partition/*`, [flowPartitionParams]],
     [`/*/${Page.FLOWS}/${FlowTab.WORKERS}`, [flowWorkersParams]],
