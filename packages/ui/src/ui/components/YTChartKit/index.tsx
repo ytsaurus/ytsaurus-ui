@@ -28,3 +28,4 @@ export function getChartSerieColor(serieIndex: number) {
 
 export {YTChartKitPie} from './YTChartKitPie';
 export {YTChartKitHistogram} from './YTChartKitHistogram';
+export {YTChartKitBars} from './YTChartKitBars';
