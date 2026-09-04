@@ -9,6 +9,7 @@
   "context_violated-resources-title": "Limits of the following resources are violated by the account or its children:",
   "context_usable-accounts": "Currently only the accounts for which you have the \"Use\" permission are displayed",
   "context_favourite-accounts": "Currently only the accounts that marked as favourite are displayed.",
+  "context_loading-accounts-data": "Loading account data…",
   "title_media": "Media",
   "field_account-filter": "Account...",
   "field_mode": "Mode:",

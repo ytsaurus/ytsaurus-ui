@@ -49,6 +49,7 @@ class AccountsPage extends BasePage {
             );
             progress.forEach((item) => {
                 item.style.width = '60%';
+                item.classList.remove('g-progress__item_theme_success');
             });
         });
     }
@@ -179,6 +180,10 @@ test('Accounts - Editor', async ({page}) => {
 
     await test.step('Master memory', async () => {
         await accounts(page).selectEditorPage('Master memory');
+        await page
+            .locator('.accounts-editor__edit')
+            .getByText('Per cell/1', {exact: true})
+            .waitFor();
         await expect(page).toHaveScreenshot();
     });
 
