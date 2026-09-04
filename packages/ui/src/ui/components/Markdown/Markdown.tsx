@@ -19,6 +19,7 @@ interface Props {
     text: string;
     ref?: React.Ref<HTMLDivElement>;
     allowHTML?: boolean;
+    errorMode?: 'block' | 'inline';
 }
 
 interface Response {
@@ -81,11 +82,11 @@ const MarkdownImpl = React.forwardRef(function MD({text}: Props, ref: React.Ref<
     );
 });
 
-export const Markdown = React.memo(function Markdown({text}: Props) {
+export const Markdown = React.memo(function Markdown({text, errorMode}: Props) {
     if (!text) {
         return null;
     }
-    const customMarkdown = UIFactory.renderMarkdown({text});
+    const customMarkdown = UIFactory.renderMarkdown({text, errorMode});
     return customMarkdown ?? <MarkdownImpl text={text} />;
 });
 
