@@ -30,9 +30,6 @@ export async function loadStaticTable({
     const parameters = {
         path: path + '[#' + 0 + ':#' + limit + ']',
         output_format,
-        table_reader: {
-            workload_descriptor: {category: 'user_interactive'},
-        },
     };
 
     const {columns, omittedColumns, ...rest} = await wrapApiPromiseByToaster(

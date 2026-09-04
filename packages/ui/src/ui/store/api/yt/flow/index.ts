@@ -1,6 +1,6 @@
 import {type FlowExecuteCommand, type FlowExecuteTypes} from '../../../../../shared/yt-types';
 import {type OverrideDataType} from '../types';
-import {useCurrentClusterArgs} from '../use-current-cluster';
+import {useEffectiveClusterArgs} from '../utils';
 import {ytApi} from '../ytApi';
 import {flowExecute} from './endpoint';
 
@@ -20,6 +20,6 @@ export function useFlowExecuteQuery<T extends FlowExecuteCommand>(
     ...args: Parameters<typeof flowExecute<T>>
 ) {
     const [first, ...rest] = args;
-    const res = flowApi.useFlowExecuteQuery(useCurrentClusterArgs(first), ...rest);
+    const res = flowApi.useFlowExecuteQuery(useEffectiveClusterArgs(first), ...rest);
     return res as OverrideDataType<typeof res, FlowExecuteTypes[T]['ResponseType']>;
 }

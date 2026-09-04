@@ -877,6 +877,11 @@ export type ReadTableParameters = BaseBatchParams & {
     output_format: ReadTableOutputFormat;
     dump_error_into_response?: boolean;
     omit_inaccessible_columns?: boolean;
+    table_reader?: {
+        workload_descriptor?: {
+            category?: string;
+        };
+    };
 };
 
 export type ReadTableOutputFormat =
