@@ -23,9 +23,16 @@ interface PlanProps {
     isActive?: boolean;
     className?: string;
     prepareNode?: (node: ProcessedNode) => ProcessedNode;
+    operationIdToCluster?: ReadonlyMap<string, string>;
 }
 
-export default React.memo(function Plan({planView, isActive, className, prepareNode}: PlanProps) {
+export default React.memo(function Plan({
+    planView,
+    isActive,
+    className,
+    prepareNode,
+    operationIdToCluster,
+}: PlanProps) {
     const graph = useSelector(selectProcessedGraph);
     const newGraphType = useSelector(selectSettingsQueryTrackerNewGraphType);
 
@@ -49,6 +56,7 @@ export default React.memo(function Plan({planView, isActive, className, prepareN
                                 <QueriesGraphLazy
                                     key={planView === 'graph' ? 'visible' : 'hidden'}
                                     processedGraph={graph}
+                                    operationIdToCluster={operationIdToCluster}
                                 />
                             ) : (
                                 <Graph

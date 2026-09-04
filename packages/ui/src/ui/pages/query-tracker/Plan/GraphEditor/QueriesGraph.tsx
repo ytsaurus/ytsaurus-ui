@@ -12,7 +12,6 @@ import {useSelector} from '../../../../store/redux-hooks';
 import {selectSettingsQueryTrackerGraphAutoCenter} from '../../../../store/selectors/settings/settings-ts';
 import {checkControlCommandKey} from '../../../../utils/keyboard';
 import {openInNewTab} from '../../../../utils/utils';
-import {getOperationPageUrlFromNodeProgress} from '../services/getOperationPageUrlFromNodeProgress';
 import cn from 'bem-cn-lite';
 import './QueriesGraph.scss';
 
@@ -20,9 +19,10 @@ const block = cn('yq-queries-graph');
 
 type Props = {
     processedGraph: ProcessedGraph;
+    operationIdToCluster?: ReadonlyMap<string, string>;
 };
 
-const Graph: FC<Props> = ({processedGraph}) => {
+const Graph: FC<Props> = ({processedGraph, operationIdToCluster}) => {
     const {scale, setScale} = useGraphScale();
     const {config, isBlock} = useConfig<QueriesNodeBlock>(
         {
@@ -34,10 +34,10 @@ const Graph: FC<Props> = ({processedGraph}) => {
     const [loading, setLoading] = useState(true);
     const autoCenter = useSelector(selectSettingsQueryTrackerGraphAutoCenter);
 
-    const {data, isLoading} = useQueriesGraphLayout(processedGraph, scale);
+    const {data, isLoading} = useQueriesGraphLayout(processedGraph, scale, operationIdToCluster);
 
     const handleBlockClick = useCallback((node: QueriesNodeBlock, event: Event) => {
-        const url = getOperationPageUrlFromNodeProgress(node.meta.nodeProgress);
+        const {operationUrl: url} = node.meta;
         if (!url) return;
 
         if (checkControlCommandKey(event as MouseEvent)) {
