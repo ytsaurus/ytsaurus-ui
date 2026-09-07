@@ -7,6 +7,7 @@
     "outDir": "build",
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "noImplicitOverride": true,
     "declaration": true,
     "declarationMap": true,
     "resolveJsonModule": true,
@@ -18,3 +19,4 @@
   "include": ["src/**/*"],
   "exclude": ["node_modules", "build"]
 }
+
