@@ -162,7 +162,7 @@ class CustomSelect extends React.Component<
         width: 'max',
     };
 
-    render() {
+    override render() {
         const {className, hideFilter, ...props} = this.props;
         return (
             <Select

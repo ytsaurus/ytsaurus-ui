@@ -49,7 +49,7 @@ class Tabs<ValueT extends string = string> extends React.Component<Props<ValueT>
         layout: 'horizontal',
     };
 
-    render() {
+    override render() {
         const {className} = this.props;
 
         return (

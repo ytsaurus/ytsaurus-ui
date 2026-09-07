@@ -62,7 +62,7 @@ class PoolQuotaEditorControl extends React.Component<Props & ReduxProps> {
         return isEqual_(left, right);
     }
 
-    render() {
+    override render() {
         const {
             pool,
             format,

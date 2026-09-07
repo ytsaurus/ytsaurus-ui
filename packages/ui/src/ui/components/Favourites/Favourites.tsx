@@ -54,7 +54,7 @@ export default class Favourites extends Component<Props, State> {
         return null;
     }
 
-    state = {
+    override state = {
         isActive: this.props.isActive,
     };
 
@@ -115,7 +115,7 @@ export default class Favourites extends Component<Props, State> {
         return <Button {...buttonProps} {...themeProps} />;
     }
 
-    render() {
+    override render() {
         const {toggleDisabled, className, theme} = this.props;
         const {isActive} = this.state;
 

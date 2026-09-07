@@ -153,7 +153,7 @@ export class MetaTable extends Component<MetaTableProps> {
         return <h2 className={block('title')}>{title}</h2>;
     }
 
-    render() {
+    override render() {
         const {items, className, title, subTitles, qa} = this.props;
         const {groups, withInnerGroups, groupTitles} = splitItems(items, subTitles);
 

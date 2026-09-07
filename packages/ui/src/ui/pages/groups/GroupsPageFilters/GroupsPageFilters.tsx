@@ -22,7 +22,7 @@ type GroupsPageFiltersProps = {
 };
 
 class GroupsPageFilters extends React.Component<GroupsPageFiltersProps> {
-    render() {
+    override render() {
         const {className, groupFilter} = this.props;
 
         return (

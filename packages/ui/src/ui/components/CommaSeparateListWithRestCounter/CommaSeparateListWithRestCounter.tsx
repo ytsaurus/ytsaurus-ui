@@ -61,7 +61,7 @@ export default class CommaSeparatedListWithRestCounter extends React.Component<
     ref?: HTMLDivElement | null;
     unmounted = false;
 
-    state: State = {
+    override state: State = {
         restCounter: 0,
         rows: [],
         showDialog: false,
@@ -72,11 +72,11 @@ export default class CommaSeparatedListWithRestCounter extends React.Component<
         this.updateState();
     };
 
-    componentWillUnmount() {
+    override componentWillUnmount() {
         this.unmounted = true;
     }
 
-    componentDidUpdate() {
+    override componentDidUpdate() {
         this.updateState();
     }
 
@@ -266,7 +266,7 @@ export default class CommaSeparatedListWithRestCounter extends React.Component<
         return items.length <= Math.min(MAX_TOOLTIP_COUNT, maxTooltipCount);
     }
 
-    render() {
+    override render() {
         const {className} = this.props;
         return (
             <div ref={this.onRef} className={block(null, className)}>

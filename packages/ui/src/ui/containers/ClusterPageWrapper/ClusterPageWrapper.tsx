@@ -9,7 +9,7 @@ import {odinRootPageInfo} from '../../pages/odin/lazy';
 import {hasOdinPage} from '../../config';
 
 export default class ClusterPageWrapper extends React.PureComponent {
-    render() {
+    override render() {
         return (
             <Switch>
                 {map_(UIFactory.getExtraRootPages(), ({pageId, reactComponent}, index) => {

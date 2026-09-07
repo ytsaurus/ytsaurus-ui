@@ -157,7 +157,7 @@ export class Timeline extends React.Component<TimelineProps> {
             />
         );
     }
-    render() {
+    override render() {
         return this.props.wrapper!({
             picker: this.renderPicker(),
             ruler: this.renderRuler(),

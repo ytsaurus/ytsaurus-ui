@@ -39,7 +39,7 @@ export class Toolbar extends React.Component<Props> {
         itemsToWrap: PropTypes.arrayOf(PropTypes.shape(ToolbarItemPropTypes)),
     };
 
-    render() {
+    override render() {
         const {className, children, marginTopSkip} = this.props;
         return (
             <div className={block({'margin-top-skip': marginTopSkip}, className)}>

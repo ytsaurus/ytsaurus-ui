@@ -144,7 +144,7 @@ export default class AccountsTotal extends Component<Props> {
         );
     }
 
-    render() {
+    override render() {
         return (
             <div className={b('disk-space')}>
                 <div className={b('disk-space-table')}>{this.renderNewTotals()}</div>

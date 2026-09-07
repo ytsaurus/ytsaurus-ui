@@ -23,7 +23,7 @@ class BundlesTableInstruments extends React.Component<Props & ReduxProps> {
         this.props.setTabletsFirstBundleAsActive();
     };
 
-    render() {
+    override render() {
         const {
             accountFilter,
             bundlesTableMode,

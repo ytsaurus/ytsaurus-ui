@@ -97,7 +97,7 @@ function NodesUpdater() {
 }
 
 class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
-    state: State = {
+    override state: State = {
         preset: '',
         activeNodeHost: undefined,
         selectedColumns: this.props.selectedColumns,
@@ -350,7 +350,7 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
         );
     }
 
-    render() {
+    override render() {
         const {visible} = this.props;
         const {preset} = this.state;
 

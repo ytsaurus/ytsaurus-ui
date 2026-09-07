@@ -43,7 +43,7 @@ export default class SortIcon extends React.Component<Props> {
         onChange(nextOrder);
     };
 
-    render() {
+    override render() {
         const {className, label, order, hidden, size = 13} = this.props;
         const icon = ICON_BY_TYPE[order || ''];
 

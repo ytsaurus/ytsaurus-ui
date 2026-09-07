@@ -1,7 +1,7 @@
 import {Component} from '@gravity-ui/graph';
 
 export class NoopComponent extends Component {
-    render() {
+    override render() {
         // noop;
         return;
     }

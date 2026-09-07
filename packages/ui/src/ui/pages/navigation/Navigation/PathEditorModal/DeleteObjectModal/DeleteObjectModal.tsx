@@ -45,7 +45,7 @@ type DispatchProps = ResolveThunks<typeof mapDispatchToProps>;
 type DeleteObjectModalProps = OwnProps & StateProps & DispatchProps;
 
 export class DeleteObjectModal extends Component<DeleteObjectModalProps> {
-    componentDidUpdate(prevProps: DeleteObjectModalProps) {
+    override componentDidUpdate(prevProps: DeleteObjectModalProps) {
         const {visible, item, getRealPath, getRealPaths, multipleMode} = this.props;
 
         if (!prevProps.visible && visible) {
@@ -230,7 +230,7 @@ export class DeleteObjectModal extends Component<DeleteObjectModalProps> {
         );
     }
 
-    render() {
+    override render() {
         const {visible, closeDeleteModal, permanently, loading} = this.props;
         const theme = permanently ? 'outlined-danger' : 'action';
         const helpLinkUrl = UIFactory.docsUrls['common:regular_system_processes'];

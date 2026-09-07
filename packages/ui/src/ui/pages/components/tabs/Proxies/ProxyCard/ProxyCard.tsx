@@ -76,7 +76,7 @@ export class ProxyCard extends Component<ProxyCardProps> {
         isYpCluster: PropTypes.bool.isRequired,
     };
 
-    componentWillUnmount() {
+    override componentWillUnmount() {
         this.props.handleClose();
     }
 
@@ -158,7 +158,7 @@ export class ProxyCard extends Component<ProxyCardProps> {
         );
     }
 
-    render() {
+    override render() {
         const {proxy, handleClose} = this.props;
 
         return (

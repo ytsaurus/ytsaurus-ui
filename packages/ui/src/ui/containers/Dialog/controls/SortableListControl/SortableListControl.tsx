@@ -67,7 +67,7 @@ class SortableListControl extends Component<Props> {
         return Array.isArray(value) ? !value.length : true;
     }
 
-    state: State = {
+    override state: State = {
         items: this.props.value,
     };
 
@@ -84,7 +84,7 @@ class SortableListControl extends Component<Props> {
         });
     };
 
-    render() {
+    override render() {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const {value, onChange, error, ...rest} = this.props;
         const {items} = this.state;

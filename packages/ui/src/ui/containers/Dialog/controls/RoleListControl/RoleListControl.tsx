@@ -83,7 +83,7 @@ export default class RoleListControl extends React.Component<RoleListControlProp
         return type === 'users' ? <SubjectCard name={title} /> : title;
     };
 
-    render() {
+    override render() {
         const {className, value, placeholder, maxVisibleCount, allowedTypes} = this.props;
 
         const manyListsData = RoleListControl.prepareManyListData(value);

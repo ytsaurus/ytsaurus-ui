@@ -4,7 +4,7 @@ import {type FlowGraphBlockItem} from '../FlowGraph';
 const PADDING = 10;
 
 export class SinkCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockItem<'sink'>> {
-    renderBlock(mode: 'minimalistic' | 'schematic'): void {
+    override renderBlock(mode: 'minimalistic' | 'schematic'): void {
         this.drawBorder({backgroundTheme: this.state.backgroundTheme});
 
         if (mode === 'minimalistic') {

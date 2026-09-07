@@ -81,7 +81,7 @@ export class DataTableYT<T> extends React.Component<DataTableYtProps<T>> {
         throw e;
     };
 
-    render() {
+    override render() {
         const {className, disableRightGap, ...rest} = this.props;
 
         const {useThemeYT} = rest as WithThemeYT;

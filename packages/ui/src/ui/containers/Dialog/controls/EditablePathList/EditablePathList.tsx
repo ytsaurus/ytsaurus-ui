@@ -49,7 +49,7 @@ export default class EditablePathList extends React.Component<Props> {
         onChange(newValue);
     };
 
-    render() {
+    override render() {
         const {value, defaultPath, placeholder} = this.props;
         const listItems = map_(sortBy_(value), (path) => {
             return {title: path};

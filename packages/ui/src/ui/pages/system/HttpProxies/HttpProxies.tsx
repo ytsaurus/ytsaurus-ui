@@ -51,7 +51,7 @@ class Proxies extends Component<ReduxProps> {
         );
     }
 
-    render() {
+    override render() {
         return (
             <React.Fragment>
                 <ProxiesUpdater />

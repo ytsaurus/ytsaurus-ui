@@ -66,7 +66,7 @@ class VersionsSummary extends React.Component<Props, State> {
         };
     }
 
-    componentDidUpdate(prevProps: Props, prevState: State) {
+    override componentDidUpdate(prevProps: Props, prevState: State) {
         const {currentVersions, showAll} = this.state;
         const {visibleColumns, checkedHideOffline} = this.props;
 
@@ -246,7 +246,7 @@ class VersionsSummary extends React.Component<Props, State> {
         return data.reverse();
     };
 
-    render() {
+    override render() {
         const {currentVersions, sortOrder} = this.state;
         const {items, loading, loaded, cluster, checkedHideOffline} = this.props;
         const monitoringLink = UIFactory.getVersionMonitoringLink(cluster);

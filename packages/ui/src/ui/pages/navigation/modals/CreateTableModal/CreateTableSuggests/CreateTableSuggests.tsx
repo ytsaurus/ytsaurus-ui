@@ -34,7 +34,7 @@ class LockSuggest extends React.Component<Props> {
         onChange('string' === typeof value ? value : value.value);
     };
 
-    render() {
+    override render() {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const {className, value, onChange, children, suggestions, ...rest} = this.props;
 

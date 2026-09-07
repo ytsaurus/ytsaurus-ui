@@ -76,7 +76,7 @@ class ColumnsWrapper extends React.Component<Props & CWProps, CWState> {
         return isEmpty_(res) ? null : res;
     }
 
-    state: CWState = {
+    override state: CWState = {
         tabItems: [],
         orderedTabItems: [],
         keyColumns: {},
@@ -202,7 +202,7 @@ class ColumnsWrapper extends React.Component<Props & CWProps, CWState> {
         this.onOrderChanged(newTabItems, newIndex, oldIndex);
     };
 
-    render() {
+    override render() {
         const {activeTab, ...rest} = this.props;
         const {orderedTabItems} = this.state;
 
@@ -250,7 +250,7 @@ export default class CreateTableTabField extends React.Component<Props> {
         );
     }
 
-    render() {
+    override render() {
         const {className, activeTab, tabItems, ...rest} = this.props;
         const [tableSettings, ...restItems] = tabItems;
 

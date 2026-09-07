@@ -167,11 +167,11 @@ class ACL extends Component<Props> {
         );
     }
 
-    state = {
+    override state = {
         deleteItem: {} as {key?: string},
     };
 
-    componentDidMount() {
+    override componentDidMount() {
         const {path, idmKind, loadAclData} = this.props;
 
         if (path) {
@@ -179,7 +179,7 @@ class ACL extends Component<Props> {
         }
     }
 
-    componentDidUpdate(prevProps: Props) {
+    override componentDidUpdate(prevProps: Props) {
         const {path, idmKind, loadAclData} = this.props;
         if (prevProps.path !== path) {
             loadAclData({path, idmKind});
@@ -800,7 +800,7 @@ class ACL extends Component<Props> {
         );
     }
 
-    render() {
+    override render() {
         const {loading, loaded, className} = this.props;
         const initialLoading = loading && !loaded;
 

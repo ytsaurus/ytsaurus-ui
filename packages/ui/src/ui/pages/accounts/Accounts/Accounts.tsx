@@ -53,7 +53,7 @@ export class Accounts extends React.Component<
         lastVisitedTab: ACCOUNTS_DEFAULT_TAB,
     };
 
-    render() {
+    override render() {
         const {match, cluster, lastVisitedTab, activeAccount, allowUsageTab} = this.props;
         const showSettings = reduce_(
             AccountsTab,

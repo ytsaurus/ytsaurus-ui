@@ -20,7 +20,7 @@ export class PopupLayer extends Layer<AreaLayerProps, AreaLayerContext> {
         this.getHTML().style.setProperty('--nv-graph-scale', `${state.scale}`);
     };
 
-    protected afterInit() {
+    protected override afterInit() {
         const html = this.getHTML();
 
         html.style.isolation = 'isolate';
@@ -32,7 +32,7 @@ export class PopupLayer extends Layer<AreaLayerProps, AreaLayerContext> {
         super.afterInit();
     }
 
-    protected unmount(): void {
+    protected override unmount(): void {
         super.unmount();
         this.context.camera.off('update', this.updateHTMLCamera);
     }

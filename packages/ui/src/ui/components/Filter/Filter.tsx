@@ -99,7 +99,7 @@ export default class Filter extends Component<FilterProps, State> {
         return props.externallyManaged ? {value: props.value} : null;
     }
 
-    state: State = {value: this.props.value};
+    override state: State = {value: this.props.value};
     prevScope = key.getScope();
 
     input: HTMLInputElement | HTMLTextAreaElement | null = null;
@@ -136,7 +136,7 @@ export default class Filter extends Component<FilterProps, State> {
         }
     };
 
-    render() {
+    override render() {
         const {
             className,
             size,

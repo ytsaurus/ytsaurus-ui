@@ -42,18 +42,18 @@ class CollapsableText extends React.Component<CollapsableTextProps> {
         lineCount: 3,
     };
 
-    state: State = {
+    override state: State = {
         collapsed: this.props.collapsed,
     };
 
     private textRef = React.createRef<HTMLDivElement>();
     private textSize?: number;
 
-    componentDidMount() {
+    override componentDidMount() {
         this.textSize = this.getTextSize();
         this.forceUpdate();
     }
-    render() {
+    override render() {
         const {collapsed} = this.state;
 
         const className = block({collapsed: collapsed ? 'yes' : undefined});

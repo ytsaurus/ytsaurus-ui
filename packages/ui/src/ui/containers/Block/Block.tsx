@@ -194,7 +194,7 @@ class YTErrorBlockImpl extends React.Component<YTErrorBlockInternalProps> {
         );
     }
 
-    render() {
+    override render() {
         const {type, className, topMargin, bottomMargin, disableLogger, error} = this.props;
 
         return (

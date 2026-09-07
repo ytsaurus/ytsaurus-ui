@@ -46,9 +46,9 @@ class PartitionSizes extends React.Component<ReduxProps, State> {
         };
     }
 
-    state: State = {};
+    override state: State = {};
 
-    render() {
+    override render() {
         const {data} = this.state;
         if (!data) {
             return null;

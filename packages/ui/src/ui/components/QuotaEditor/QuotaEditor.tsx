@@ -52,7 +52,7 @@ interface SuggestProps {
 }
 
 export default class QuotaEditor extends React.Component<QuotaEditorProps> {
-    render() {
+    override render() {
         const {
             className,
             format,

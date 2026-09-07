@@ -53,9 +53,9 @@ interface State {
 }
 
 export default class QuotaEditorWithHide extends React.Component<Props, State> {
-    state: State = {};
+    override state: State = {};
 
-    render() {
+    override render() {
         const {showConfirm} = this.state;
         return showConfirm ? this.renderConfirmation() : this.renderEditor();
     }

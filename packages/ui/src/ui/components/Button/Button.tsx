@@ -68,7 +68,7 @@ export default class Button extends Component<ButtonProps> {
         return <Tooltip {...tooltipProps}>{this.renderSimpleButton()}</Tooltip>;
     }
 
-    render() {
+    override render() {
         const {withTooltip} = this.props;
 
         return withTooltip ? this.renderButtonWithTooltip() : this.renderSimpleButton();

@@ -130,11 +130,11 @@ export default class Suggest extends Component<SuggestProps, State> {
         return res;
     }
 
-    componentDidMount() {
+    override componentDidMount() {
         this.isClearClicked = false;
     }
 
-    componentWillUnmount() {
+    override componentWillUnmount() {
         this.isUnmounting = true;
     }
 
@@ -440,7 +440,7 @@ export default class Suggest extends Component<SuggestProps, State> {
         );
     }
 
-    render() {
+    override render() {
         const {className} = this.props;
         return (
             <div className={b(null, className)}>

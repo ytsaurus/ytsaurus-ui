@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default class ChunksContent extends Component<Props> {
-    render() {
+    override render() {
         const {account} = this.props;
 
         return (

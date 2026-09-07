@@ -66,7 +66,7 @@ interface GroupsPageTableProps extends ConnectedProps<typeof connector> {
 }
 
 class GroupsPageTable extends React.Component<GroupsPageTableProps> {
-    componentDidMount() {
+    override componentDidMount() {
         const {fetchGroups} = this.props;
         fetchGroups();
     }
@@ -216,7 +216,7 @@ class GroupsPageTable extends React.Component<GroupsPageTableProps> {
         );
     }
 
-    render() {
+    override render() {
         const {className, error, showEditor} = this.props;
         return (
             <ErrorBoundary>

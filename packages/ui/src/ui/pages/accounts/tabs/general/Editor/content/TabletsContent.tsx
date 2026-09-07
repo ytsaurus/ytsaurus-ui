@@ -52,7 +52,7 @@ class TabletsContent extends Component<Props & ConnectedProps<typeof connector>>
         );
     }
 
-    render() {
+    override render() {
         const {allowTabletAccounting} = this.props;
         return (
             <div className="elements-section">

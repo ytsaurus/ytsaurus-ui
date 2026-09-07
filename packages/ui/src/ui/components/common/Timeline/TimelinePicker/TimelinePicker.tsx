@@ -42,7 +42,7 @@ class TimeHotButton extends React.Component<TimeHotButtonProps> {
     onClick = () => {
         this.props.onClick(this.props.time);
     };
-    render() {
+    override render() {
         const {size, width, title, className, checked} = this.props;
         return (
             <Button
@@ -122,11 +122,11 @@ export class TimelinePicker extends React.Component<TimelinePickerProps, State> 
             };
         }
     }
-    state: State = {} as any;
+    override state: State = {} as any;
     _datepickerRef = React.createRef<HTMLDivElement>();
     _inputRef = React.createRef<EnterInput>();
 
-    componentDidUpdate() {
+    override componentDidUpdate() {
         if (this.state.opened && this._inputRef.current) {
             this._inputRef.current?.focus();
         }
@@ -282,7 +282,7 @@ export class TimelinePicker extends React.Component<TimelinePickerProps, State> 
             );
         }
     };
-    render() {
+    override render() {
         const {className, from, to, topShortcuts, hasDatePicker} = this.props;
         const {opened} = this.state;
         const picker = opened ? this.renderOpenedPicker() : this.renderClosedPicker();

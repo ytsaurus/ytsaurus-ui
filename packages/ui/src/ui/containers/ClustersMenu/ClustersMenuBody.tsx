@@ -34,7 +34,7 @@ const b = block('cluster-menu');
 type Props = ConnectedProps<typeof connector>;
 
 class ClustersMenuBody extends React.Component<Props> {
-    componentDidMount() {
+    override componentDidMount() {
         const {fetchClusterVersions, fetchClusterAvailability, fetchClusterAuthStatus} = this.props;
 
         fetchClusterVersions();
@@ -266,7 +266,7 @@ class ClustersMenuBody extends React.Component<Props> {
         );
     }
 
-    render() {
+    override render() {
         const {viewMode, clusterFilter, clusters} = this.props;
         let regexp: RegExp | undefined;
         try {

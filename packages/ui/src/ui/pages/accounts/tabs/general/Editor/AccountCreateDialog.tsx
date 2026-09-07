@@ -31,7 +31,7 @@ function isRootAccount(account: string) {
 }
 
 class AccountCreateDialog extends React.Component<ConnectedProps<typeof connector>> {
-    render() {
+    override render() {
         const {visible, newAccountInfo, activeAccount, currentUserName, isAdmin} = this.props;
 
         const {parentAccount, responsibles = []} = newAccountInfo;

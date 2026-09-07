@@ -56,7 +56,7 @@ class CellsTableInstruments extends React.Component<Props & ReduxProps> {
         return filter_(hosts, (host = '') => host.indexOf(text) !== -1);
     };
 
-    render() {
+    override render() {
         const {className, idFilter, bundleFilter, activeBundle, activeBundleHosts} = this.props;
 
         return (

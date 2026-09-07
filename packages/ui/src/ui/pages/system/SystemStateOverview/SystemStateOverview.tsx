@@ -19,7 +19,7 @@ export type SystemStateOverviewProps<Flags extends string> = Partial<SystemState
 export default class SystemStateOverview<Flags extends string> extends React.Component<
     SystemStateOverviewProps<Flags>
 > {
-    render() {
+    override render() {
         const {stateOverview: _x, labels, ...rest} = this.props;
         if (!this.props.counters) {
             return null;

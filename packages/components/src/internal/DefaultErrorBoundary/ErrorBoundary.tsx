@@ -19,24 +19,24 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, State> 
         };
     }
 
-    state: State = {
+    override state: State = {
         hasError: false,
         error: undefined,
     };
 
-    componentDidUpdate() {
+    override componentDidUpdate() {
         const {hasError, error} = this.state;
         if (hasError && error) {
             console.error(error);
         }
     }
 
-    componentDidCatch(error: unknown) {
+    override componentDidCatch(error: unknown) {
         console.error({type: 'error-boundary'}, error);
         this.props.onError?.(error);
     }
 
-    render() {
+    override render() {
         const {hasError, error} = this.state;
         const {children} = this.props;
 

@@ -42,7 +42,7 @@ const block = cn('operation-details');
 type ReduxProps = ConnectedProps<typeof connector>;
 
 class Details extends Component<ReduxProps> {
-    state = {
+    override state = {
         isAbsoluteValue: true,
     };
 
@@ -211,7 +211,7 @@ class Details extends Component<ReduxProps> {
         );
     }
 
-    render() {
+    override render() {
         const {isVanillaGpuOperation} = this.props;
         return (
             <div className={block()}>

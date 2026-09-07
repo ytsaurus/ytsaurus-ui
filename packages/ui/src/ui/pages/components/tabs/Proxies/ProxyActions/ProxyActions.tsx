@@ -41,7 +41,7 @@ class ProxyActions extends React.Component<ReduxProps & Props> {
         });
     };
 
-    render() {
+    override render() {
         const {proxy} = this.props;
 
         return (

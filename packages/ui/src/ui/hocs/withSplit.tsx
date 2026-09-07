@@ -8,7 +8,7 @@ export default function withSplit<P>(Component: React.ComponentType<P>): React.C
     return class WithSplit extends React.Component<P> {
         static displayName = `WithSplit(${getDisplayName(Component)})`;
 
-        render() {
+        override render() {
             return ReactDOM.createPortal(
                 <Component {...this.props} />,
                 document.getElementById(SPLIT_PANE_ID)!,

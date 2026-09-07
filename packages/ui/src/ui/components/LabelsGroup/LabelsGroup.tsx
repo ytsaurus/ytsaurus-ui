@@ -98,7 +98,7 @@ class LabelsGroup extends Component<LabelsGroupProps> {
         );
     }
 
-    render() {
+    override render() {
         const {items, renderToggler, onRemoveAll} = this.props;
 
         return (

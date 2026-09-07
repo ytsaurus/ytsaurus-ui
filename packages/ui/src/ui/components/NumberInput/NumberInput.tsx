@@ -176,7 +176,7 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
         return undefined;
     }
 
-    state: State = {parsedValue: NaN};
+    override state: State = {parsedValue: NaN};
 
     // eslint-disable-next-line react/sort-comp
     parseValue(rawValue: string): NumberInputWithErrorProps['value'] {
@@ -286,7 +286,7 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
         );
     }
 
-    render() {
+    override render() {
         const {
             value: propsValue,
             className,
@@ -351,7 +351,7 @@ export default class NumberInput extends React.Component<NumberInputProps> {
         return formatValue(value, format, settings);
     }
 
-    render() {
+    override render() {
         const {
             value,
             error,

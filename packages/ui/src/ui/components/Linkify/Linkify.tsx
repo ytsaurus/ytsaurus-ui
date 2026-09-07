@@ -40,7 +40,7 @@ export class Linkify extends React.PureComponent<Props> {
         return res;
     }
 
-    render() {
+    override render() {
         const {text, className} = this.props;
         return <span className={className}>{Linkify.renderText(text, HREF_RE)}</span>;
     }
