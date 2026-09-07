@@ -29,7 +29,7 @@ interface PreparedHokeyItem {
 export class Hotkey extends Component<HotkeyProps> {
     preparedSettings: Array<PreparedHokeyItem> = [];
 
-    componentDidMount() {
+    override componentDidMount() {
         const {settings} = this.props;
 
         if (!key) {
@@ -50,7 +50,7 @@ export class Hotkey extends Component<HotkeyProps> {
         });
     }
 
-    componentWillUnmount() {
+    override componentWillUnmount() {
         if (!key) {
             return;
         }
@@ -105,7 +105,7 @@ export class Hotkey extends Component<HotkeyProps> {
         key.unbind(combination, scope);
     }
 
-    render() {
+    override render() {
         return null;
     }
 }

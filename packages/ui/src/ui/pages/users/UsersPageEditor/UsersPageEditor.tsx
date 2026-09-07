@@ -131,7 +131,7 @@ class UsersPageEditor extends React.Component<Props, State> {
         return [current].filter(({data}) => data.length);
     }
 
-    state: State = {};
+    override state: State = {};
 
     // eslint-disable-next-line react/sort-comp
     onAdd = async (form: FormApi<FormValues>) => {
@@ -221,7 +221,7 @@ class UsersPageEditor extends React.Component<Props, State> {
         return !this.props.username;
     }
 
-    render() {
+    override render() {
         const {
             className,
             showModal,

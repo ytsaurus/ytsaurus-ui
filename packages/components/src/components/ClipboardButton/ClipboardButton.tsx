@@ -107,7 +107,7 @@ export class ClipboardButton extends Component<ClipboardButtonProps> {
         event.stopPropagation();
     };
 
-    render() {
+    override render() {
         const {
             buttonText,
             hotkey,

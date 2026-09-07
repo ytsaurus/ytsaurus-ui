@@ -189,7 +189,7 @@ class OperationProgress extends Component<OperationProgressProps & ReduxProps> {
             </div>
         );
     }
-    render() {
+    override render() {
         const className = 'operation-progress';
         const {type} = this.props;
         return (

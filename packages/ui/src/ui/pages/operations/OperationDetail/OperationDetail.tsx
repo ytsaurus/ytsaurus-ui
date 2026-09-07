@@ -175,7 +175,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
         return unipika.prepareSettings();
     }
 
-    componentDidMount() {
+    override componentDidMount() {
         const {operationId} = this.props.match.params;
         this.props.listOperationEvents(operationId);
     }
@@ -534,7 +534,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
         return <YTErrorBlock message={errorData.message} error={errorData.details} />;
     }
 
-    render() {
+    override render() {
         const {
             error,
             loading,

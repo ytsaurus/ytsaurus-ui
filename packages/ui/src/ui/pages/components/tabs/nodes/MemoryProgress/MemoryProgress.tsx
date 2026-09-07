@@ -79,7 +79,7 @@ class MemoryProgress extends React.Component<MemoryProgressProps & ReduxProps> {
         );
     }
 
-    render() {
+    override render() {
         return (
             <Tooltip className={block()} content={this.renderPopupContent()} placement={'auto'}>
                 <div>{this.renderProgress()}</div>

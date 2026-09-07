@@ -24,7 +24,7 @@ class NodeActions extends React.Component<NodeActionsProps> {
         });
     };
 
-    render() {
+    override render() {
         const {node, cluster} = this.props;
         const {url, title} = UIFactory.getComponentsNodeDashboardUrl({cluster, host: node.host});
 

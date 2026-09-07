@@ -92,7 +92,7 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
             .then(() => {});
     };
 
-    render() {
+    override render() {
         const {visible, closeGroupEditorModal, groupName, idm, members, otherMembers, responsible} =
             this.props;
         return (

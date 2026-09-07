@@ -81,7 +81,7 @@ class SimpleModal extends Component<SimpleModalProps> {
         return <div className={b('footer')}>{this.props.footerContent}</div>;
     }
 
-    render() {
+    override render() {
         const {visible, onCancel, size, className, wrapperClassName} = this.props;
         return (
             visible && (

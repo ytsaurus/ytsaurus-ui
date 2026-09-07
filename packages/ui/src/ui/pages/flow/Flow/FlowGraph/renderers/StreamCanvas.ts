@@ -8,7 +8,7 @@ import {type FlowGraphBlockItem} from '../FlowGraph';
 const PADDING = 10;
 
 export class StreamCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockItem<'stream'>> {
-    renderBlock(mode: 'minimalistic' | 'schematic'): void {
+    override renderBlock(mode: 'minimalistic' | 'schematic'): void {
         this.drawBorder({backgroundTheme: this.state.backgroundTheme});
 
         if (mode === 'minimalistic') {
@@ -50,7 +50,7 @@ export class StreamCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockItem<'st
         });
     }
 
-    getAnchorPosition({index = 0}: TAnchor) {
+    override getAnchorPosition({index = 0}: TAnchor) {
         const {length = 0} = this.state.anchors ?? {};
 
         const {width} = this.getGeometry();
@@ -59,7 +59,8 @@ export class StreamCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockItem<'st
         return {y: 0, x: step * (index + 1)};
     }
 
-    renderAnchor: YTGraphCanvasBlock<FlowGraphBlockItem<'computation'>>['renderAnchor'] = () => {
-        return NoopComponent.create();
-    };
+    override renderAnchor: YTGraphCanvasBlock<FlowGraphBlockItem<'computation'>>['renderAnchor'] =
+        () => {
+            return NoopComponent.create();
+        };
 }

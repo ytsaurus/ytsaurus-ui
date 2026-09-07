@@ -24,7 +24,7 @@ export default class BytesControl extends Component<Omit<NumberInputProps, 'form
         return value === undefined || value === ('' as any);
     }
 
-    render() {
+    override render() {
         const {value} = this.props;
         return (
             <NumberInput
@@ -56,7 +56,7 @@ export class NumberControl extends Component<NumberInputWithErrorProps> {
         return v?.error ? v?.error : undefined;
     }
 
-    render() {
+    override render() {
         const {value} = this.props;
         return (
             <NumberInputWithError

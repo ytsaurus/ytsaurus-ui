@@ -46,11 +46,11 @@ class Modal extends Component<ModalProps> {
         confirmText: i18n('action_apply'),
     };
 
-    componentDidMount() {
+    override componentDidMount() {
         document.addEventListener('keydown', this.handleKeyDown);
     }
 
-    componentWillUnmount() {
+    override componentWillUnmount() {
         document.removeEventListener('keydown', this.handleKeyDown);
     }
 
@@ -147,7 +147,7 @@ class Modal extends Component<ModalProps> {
         );
     }
 
-    render() {
+    override render() {
         const {visible, onCancel, onTransitionInComplete, size, className} = this.props;
         return (
             <ModalWrapper

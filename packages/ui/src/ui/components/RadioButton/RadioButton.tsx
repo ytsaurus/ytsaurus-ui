@@ -40,7 +40,7 @@ export default class CustomRadioButton<T extends string = string> extends React.
         };
     }
 
-    render() {
+    override render() {
         const {items, className, ...props} = this.props;
 
         const options = items.map((item) => ({

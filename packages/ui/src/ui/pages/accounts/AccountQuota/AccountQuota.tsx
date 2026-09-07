@@ -60,9 +60,9 @@ interface State {
 }
 
 class AccountQuotaEditor extends React.Component<Props & ReduxProps, State> {
-    state: State = {};
+    override state: State = {};
 
-    render() {
+    override render() {
         const {title, type, mediumType, currentAccount, activeAccount, accountsTree} = this.props;
         const {format} = ACCOUNT_RESOURCE_TYPES_DESCRIPTION[type];
         const {showEditor} = this.state;

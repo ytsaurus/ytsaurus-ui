@@ -125,7 +125,7 @@ class ErrorDetailsImpl extends React.Component<
         }
     }
 
-    state: State = {
+    override state: State = {
         showDetails: Boolean(this.props.defaultExpadedCount),
         currentTab: ErrorDetailsImpl.prepareDefaultTab(this.props),
     };
@@ -294,7 +294,7 @@ class ErrorDetailsImpl extends React.Component<
         );
     }
 
-    render() {
+    override render() {
         return (
             <div className={b()}>
                 {this.renderError()}

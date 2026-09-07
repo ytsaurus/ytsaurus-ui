@@ -26,7 +26,7 @@ export class CollapsibleSectionStateLess extends Component<PropsStateLess> {
         onToggle(!this.props.collapsed);
     };
 
-    render() {
+    override render() {
         const {
             name,
             children,

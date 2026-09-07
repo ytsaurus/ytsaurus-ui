@@ -27,7 +27,7 @@ type Props = {
 };
 
 export class MaintenancePage extends React.Component<Props> {
-    render() {
+    override render() {
         const {maintenancePageEvent, onProceed} = this.props;
         if (!maintenancePageEvent) {
             return null;

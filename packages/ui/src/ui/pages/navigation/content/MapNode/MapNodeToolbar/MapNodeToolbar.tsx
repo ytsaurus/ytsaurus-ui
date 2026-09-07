@@ -101,7 +101,7 @@ type State = {
 };
 
 class MapNodeToolbarImpl extends React.PureComponent<MapNodeToolbarProps, State> {
-    state: State = {
+    override state: State = {
         uploadFileVisible: false,
         uploadTableVisible: false,
     };
@@ -135,7 +135,7 @@ class MapNodeToolbarImpl extends React.PureComponent<MapNodeToolbarProps, State>
         this.props.openCreateACOModal({path, namespace: 'queries'});
     };
 
-    render() {
+    override render() {
         const {
             setFilter,
             contentMode,

@@ -34,7 +34,7 @@ class FlexSplitPane extends React.Component<FlexSplitPaneProps, FlexSplitPaneSta
     static VERTICAL = 'vertical' as const;
     static HORIZONTAL = 'horizontal' as const;
 
-    state: FlexSplitPaneState = {
+    override state: FlexSplitPaneState = {
         initialSizes: null,
     };
 
@@ -43,16 +43,16 @@ class FlexSplitPane extends React.Component<FlexSplitPaneProps, FlexSplitPaneSta
     private paneSecond: HTMLDivElement | null = null;
     private splitInstance: ReturnType<typeof split> | null = null;
 
-    componentDidMount() {
+    override componentDidMount() {
         this.checkSplit();
         window.addEventListener('resize', this.handleResize);
     }
 
-    componentDidUpdate() {
+    override componentDidUpdate() {
         this.checkSplit();
     }
 
-    componentWillUnmount() {
+    override componentWillUnmount() {
         this.destroySplit();
         window.removeEventListener('resize', this.handleResize);
     }
@@ -219,7 +219,7 @@ class FlexSplitPane extends React.Component<FlexSplitPaneProps, FlexSplitPaneSta
         }
     }
 
-    render() {
+    override render() {
         const {direction, id, paneClassNames = []} = this.props;
         const [firstChild, ...restChildren] = React.Children.toArray(this.props.children);
 

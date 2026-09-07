@@ -539,7 +539,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
         return this.formValidator;
     }
 
-    render() {
+    override render() {
         const {
             className,
             parentDirectory,

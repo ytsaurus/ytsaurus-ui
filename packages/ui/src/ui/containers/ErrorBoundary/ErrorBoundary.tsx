@@ -32,12 +32,12 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, State> 
         };
     }
 
-    state: State = {
+    override state: State = {
         hasError: false,
         error: undefined,
     };
 
-    componentDidUpdate() {
+    override componentDidUpdate() {
         const {hasError, error} = this.state;
 
         if (hasError && !this.props.disableRum) {
@@ -46,7 +46,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, State> 
         }
     }
 
-    componentDidCatch(error: any) {
+    override componentDidCatch(error: any) {
         if (!this.props.disableRum) {
             rumLogError(
                 {
@@ -58,7 +58,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, State> 
         this.props.onError?.(error);
     }
 
-    render() {
+    override render() {
         const {hasError, error} = this.state;
         const {children, compact, maxCompactMessageLength, inline} = this.props;
 

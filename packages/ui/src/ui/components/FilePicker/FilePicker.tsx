@@ -28,7 +28,7 @@ export default class FilePicker extends React.Component<Props> {
         this.props.onChange(event.target.files);
     };
 
-    render() {
+    override render() {
         const {children, multiple} = this.props;
         return (
             <ClickableText onClick={this.onLinkClick}>

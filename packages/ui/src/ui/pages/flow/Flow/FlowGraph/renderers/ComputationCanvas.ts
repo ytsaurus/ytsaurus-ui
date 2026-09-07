@@ -18,7 +18,7 @@ export class ComputationCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockIte
         return 'header' as const;
     }
 
-    renderBlock(mode: 'minimalistic' | 'schematic'): void {
+    override renderBlock(mode: 'minimalistic' | 'schematic'): void {
         this.drawBorder({backgroundTheme: this.state.backgroundTheme});
 
         if (mode === 'minimalistic') {
@@ -99,7 +99,7 @@ export class ComputationCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockIte
         });
     }
 
-    getAnchorPosition({index = 0}: TAnchor) {
+    override getAnchorPosition({index = 0}: TAnchor) {
         const {length = 0} = this.state.anchors ?? [];
 
         const {width, height} = this.getGeometry();
@@ -108,7 +108,8 @@ export class ComputationCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockIte
         return {y: height, x: step * (index + 1)};
     }
 
-    renderAnchor: YTGraphCanvasBlock<FlowGraphBlockItem<'computation'>>['renderAnchor'] = () => {
-        return NoopComponent.create();
-    };
+    override renderAnchor: YTGraphCanvasBlock<FlowGraphBlockItem<'computation'>>['renderAnchor'] =
+        () => {
+            return NoopComponent.create();
+        };
 }

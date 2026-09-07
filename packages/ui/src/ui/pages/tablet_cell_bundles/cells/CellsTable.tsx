@@ -231,7 +231,7 @@ class CellsTable extends React.Component<Props & ReduxProps> {
         return this.column(name, true);
     }
 
-    render() {
+    override render() {
         const columns = this.props.columns.map((x) => Columns[x].call(this));
 
         const {data, loading, loaded} = this.props;

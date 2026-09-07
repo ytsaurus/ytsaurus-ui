@@ -51,7 +51,7 @@ class ModalErrors extends React.Component<Props> {
         this.props.hideError(errorId);
     };
 
-    render() {
+    override render() {
         const {errors} = this.props;
         return errors.map(({id, error}) => {
             return <ModalError key={id} id={id} data={error} hide={this.hideError} />;

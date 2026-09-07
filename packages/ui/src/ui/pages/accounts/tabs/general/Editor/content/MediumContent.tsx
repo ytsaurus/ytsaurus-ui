@@ -35,7 +35,7 @@ interface Props {
 }
 
 class MediumContent extends Component<Props> {
-    state = {
+    override state = {
         showAllMediums: false,
     };
 
@@ -55,7 +55,7 @@ class MediumContent extends Component<Props> {
         ));
     }
 
-    render() {
+    override render() {
         const {account, mediumList} = this.props;
         const mediumTypesWithoutCache = mediumList.filter((item) => item !== 'cache');
         const [defined, rest] = partition_(

@@ -107,7 +107,7 @@ class Tasks extends React.Component<Props, State> {
         return isEmpty_(res) ? null : res;
     }
 
-    state: State = {
+    override state: State = {
         allowActions: false,
         expandedState: {},
 
@@ -255,7 +255,7 @@ class Tasks extends React.Component<Props, State> {
         return undefined;
     }
 
-    render() {
+    override render() {
         const {className, jobs, collapsibleSize, collapsed} = this.props;
         return !jobs?.items?.length ? null : (
             <CollapsibleSection

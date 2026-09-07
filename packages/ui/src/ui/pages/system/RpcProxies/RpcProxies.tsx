@@ -47,7 +47,7 @@ class RpcProxies extends Component<ReduxProps> {
         );
     }
 
-    render() {
+    override render() {
         return (
             <React.Fragment>
                 <RpcProxiesUpdater />

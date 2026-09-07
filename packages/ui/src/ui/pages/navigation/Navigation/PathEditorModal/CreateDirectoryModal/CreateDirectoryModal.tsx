@@ -23,11 +23,11 @@ type State = {
 type ReduxProps = ConnectedProps<typeof connector>;
 
 class CreateDirectoryModal extends React.Component<ReduxProps> {
-    state: State = {
+    override state: State = {
         recursive: false,
     };
 
-    render() {
+    override render() {
         const {popupVisible, creating, creatingPath, showError, errorMessage, error} = this.props;
 
         const modalTitle = i18n('title_create-directory');

@@ -51,7 +51,7 @@ export class FilterWithRegExp extends React.PureComponent<Props, State> {
     }
 
     input: HTMLInputElement | null = null;
-    state: State = {};
+    override state: State = {};
 
     onChange(filter: string, useRegexp?: boolean) {
         const {onChange} = this.props;
@@ -82,7 +82,7 @@ export class FilterWithRegExp extends React.PureComponent<Props, State> {
         this.onChange(filter, useRegexp);
     };
 
-    render() {
+    override render() {
         const {
             className,
             size,

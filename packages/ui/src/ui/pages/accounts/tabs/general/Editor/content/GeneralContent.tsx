@@ -47,7 +47,7 @@ type ReduxProps = ConnectedProps<typeof connector>;
 type Props = ParentProps & ReduxProps;
 
 class GeneralContent extends React.Component<Props> {
-    state = {
+    override state = {
         abcId: undefined,
         abcTitle: '',
         // We have to use this property as 'key' of StaffSuggestControl to recreate the component,
@@ -126,7 +126,7 @@ class GeneralContent extends React.Component<Props> {
         loadEditedAccount(name);
     };
 
-    render() {
+    override render() {
         const {
             account: {parent},
         } = this.props;

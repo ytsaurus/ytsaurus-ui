@@ -92,7 +92,7 @@ type SchemaState = {
 };
 
 class Schema extends Component<SchemaProps> {
-    state: SchemaState;
+    override state: SchemaState;
 
     constructor(props: SchemaProps) {
         super(props);
@@ -103,7 +103,7 @@ class Schema extends Component<SchemaProps> {
         };
     }
 
-    componentDidMount() {
+    override componentDidMount() {
         this.loadExternalSchemaData();
     }
 
@@ -274,7 +274,7 @@ class Schema extends Component<SchemaProps> {
         );
     }
 
-    render() {
+    override render() {
         const {meta, schema} = this.props;
 
         return (

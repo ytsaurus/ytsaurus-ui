@@ -43,7 +43,7 @@ export default class PermissionsControl extends Component<Props, State> {
         return isEmpty_(value);
     }
 
-    state: State = {};
+    override state: State = {};
 
     handleCheckboxChange = (
         permissionName: string,
@@ -81,7 +81,7 @@ export default class PermissionsControl extends Component<Props, State> {
         );
     }
 
-    render() {
+    override render() {
         const {choices, disabled, disabledChoices, error} = this.props;
 
         const mainChoices: Array<{item: Array<YTPermissionTypeUI>; isDisabled: boolean}> = [];

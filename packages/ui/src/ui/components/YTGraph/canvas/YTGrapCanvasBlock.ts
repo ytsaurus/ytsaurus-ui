@@ -81,7 +81,7 @@ export class YTGraphCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canv
         });
     }
 
-    getGeometry() {
+    override getGeometry() {
         return this.connectedState.$geometry.value;
     }
 

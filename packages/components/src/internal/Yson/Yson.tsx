@@ -71,7 +71,7 @@ export class Yson extends Component<YsonProps, State> {
         return null;
     }
 
-    state: State = {
+    override state: State = {
         convertedValue: undefined as any, // getDerivedStateFromProps should provide correct vgitalue for this field
         value: INITIAL,
         settings: {format: ''},
@@ -94,7 +94,7 @@ export class Yson extends Component<YsonProps, State> {
         return unipika.format(convertedValue, settings);
     }
 
-    render() {
+    override render() {
         const {inline, children, className, ErrorBoundaryComponent} = this.props;
         const ConfigurableErrorBoundary = ErrorBoundaryComponent || DefaultErrorBoundary;
 

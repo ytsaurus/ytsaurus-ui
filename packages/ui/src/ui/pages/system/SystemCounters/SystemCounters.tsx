@@ -160,7 +160,7 @@ class SystemCounters<Flags extends string> extends React.Component<SystemCounter
         );
     }
 
-    render() {
+    override render() {
         const countersFlags = this.renderCountersFlags();
         const countersStates = this.renderCountersStates();
         const counterTotal = this.renderCounterTotal();

@@ -26,13 +26,13 @@ export default function withVisible<P extends WithVisibleProps>(Component: React
 
         static displayName = `WithVisible(${getDisplayName(Component)})`;
 
-        state = {visible: this.props.visible};
+        override state = {visible: this.props.visible};
 
         handleShow = () => this.setState({visible: true});
         handleClose = () => this.setState({visible: false});
         toggleVisible = () => this.setState((prevState) => ({visible: !prevState.visible}));
 
-        render() {
+        override render() {
             const {visible} = this.state;
 
             return (

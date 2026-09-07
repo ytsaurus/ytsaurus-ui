@@ -63,7 +63,7 @@ export default class OperationSelectFilter<NameT extends string = string> extend
         return res;
     }
 
-    render() {
+    override render() {
         const {name, label, value = [], placeholder, multiple, ...props} = this.props;
 
         const placeHolder = 'function' === typeof placeholder ? placeholder(value) : placeholder;

@@ -57,11 +57,11 @@ class JobSizes extends React.Component<Props, State> {
         };
     }
 
-    state: State = {
+    override state: State = {
         showEstimated: false,
     };
 
-    render() {
+    override render() {
         const {className} = this.props;
         return (
             <WithStickyToolbar

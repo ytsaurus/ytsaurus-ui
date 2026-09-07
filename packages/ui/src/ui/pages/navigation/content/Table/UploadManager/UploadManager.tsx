@@ -98,7 +98,7 @@ type ProgressState =
     {inProgress: false} | {inProgress: true; event: {total?: number; loaded: number}};
 
 class UploadManager extends React.Component<Props, State> {
-    state: State = {
+    override state: State = {
         file: null,
         fileType: 'json',
         progress: {inProgress: false},
@@ -537,7 +537,7 @@ class UploadManager extends React.Component<Props, State> {
         );
     }
 
-    render() {
+    override render() {
         const {visible, handleShow} = this.props;
         return (
             <React.Fragment>

@@ -224,7 +224,7 @@ class Runtime extends Component<Props> {
         );
     }
 
-    render() {
+    override render() {
         const {runtime} = this.props;
 
         return (

@@ -73,7 +73,7 @@ const getExcelBaseUrl = (payload: {cluster: string}) => {
 };
 
 class UploadManagerCreateImpl extends React.Component<Props, State> {
-    state: State = {
+    override state: State = {
         name: '',
         file: null,
         fileType: 'xlsx',
@@ -98,7 +98,7 @@ class UploadManagerCreateImpl extends React.Component<Props, State> {
         );
     }
 
-    componentDidUpdate(_: Props, prevState: State) {
+    override componentDidUpdate(_: Props, prevState: State) {
         if (prevState.name !== this.state.name) {
             const alreadyUsed = this.checkNameAlreadyExist(this.state.name);
             this.setState({nameAlreadyUsed: alreadyUsed});
@@ -414,7 +414,7 @@ class UploadManagerCreateImpl extends React.Component<Props, State> {
         this.props.onClose();
     };
 
-    render() {
+    override render() {
         const {visible} = this.props;
         return (
             <React.Fragment>

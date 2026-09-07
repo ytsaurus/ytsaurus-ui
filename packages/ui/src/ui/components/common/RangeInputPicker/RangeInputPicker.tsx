@@ -134,7 +134,7 @@ export class RangeInputPicker extends Component<RangeInputPickerProps, RangeInpu
         this.state = RangeInputPicker.getPreparedState(props);
     }
 
-    componentDidMount() {
+    override componentDidMount() {
         const {onOutsideClick} = this.props;
 
         if (onOutsideClick) {
@@ -143,7 +143,7 @@ export class RangeInputPicker extends Component<RangeInputPickerProps, RangeInpu
         }
     }
 
-    componentWillUnmount() {
+    override componentWillUnmount() {
         this.debouncedCallOnUpdate.cancel();
         this.debouncedHandleOnAfterUpdate.cancel();
 
@@ -151,7 +151,7 @@ export class RangeInputPicker extends Component<RangeInputPickerProps, RangeInpu
         document.removeEventListener('mousedown', this.handleOutsideClick);
     }
 
-    render() {
+    override render() {
         const {
             placeholder,
             autoFocus,

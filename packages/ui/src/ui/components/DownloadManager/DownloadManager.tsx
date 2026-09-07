@@ -122,7 +122,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         };
     }
 
-    componentDidUpdate(prevProps: Props) {
+    override componentDidUpdate(prevProps: Props) {
         /*
          * The filename depends on getDefaultFilename(), an abstract instance method,
          * so it can't be reset alongside the rest of the form in the static
@@ -133,7 +133,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
         }
     }
 
-    render() {
+    override render() {
         const {loading, className, visible, handleClose} = this.props;
 
         return (

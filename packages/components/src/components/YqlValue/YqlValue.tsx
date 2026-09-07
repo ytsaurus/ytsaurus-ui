@@ -25,7 +25,7 @@ export class YqlValue extends React.Component<YqlValueProps> {
             : unipika.formatFromYQL(yqlValue, settings);
     }
 
-    render() {
+    override render() {
         const {value, type, inline, settings, ErrorBoundaryComponent} = this.props;
         const ConfigurableErrorBoundary = ErrorBoundaryComponent || DefaultErrorBoundary;
 

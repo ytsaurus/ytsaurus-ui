@@ -95,7 +95,7 @@ class BeforeDatePicker extends React.Component<IdmDatePickerProps, State> {
         return Object.keys(res).length > 0 ? res : null;
     }
 
-    state = {
+    override state = {
         viewType: null, // see ALLOWED_VIEW_TYPE
 
         period: null,
@@ -190,7 +190,7 @@ class BeforeDatePicker extends React.Component<IdmDatePickerProps, State> {
         onChange(date);
     }
 
-    render() {
+    override render() {
         const {className, onFocus, onBlur} = this.props;
         return (
             <FocusBlurContainer

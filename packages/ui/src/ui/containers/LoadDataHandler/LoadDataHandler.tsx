@@ -17,7 +17,7 @@ interface LoadDataHandlerProps {
 }
 
 export default class LoadDataHandler extends Component<LoadDataHandlerProps> {
-    componentDidUpdate() {
+    override componentDidUpdate() {
         const {error, loaded, errorData} = this.props;
 
         if (error && loaded) {
@@ -37,7 +37,7 @@ export default class LoadDataHandler extends Component<LoadDataHandlerProps> {
         }
     }
 
-    render() {
+    override render() {
         const {alwaysShowError = false, error, errorData, loaded, children} = this.props;
 
         const initialLoading = !loaded;

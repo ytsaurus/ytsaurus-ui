@@ -154,7 +154,7 @@ export class QueriesCanvasBlock extends YTGraphCanvasBlock<QueriesNodeBlock> {
         this.drawIcon(icon, x + width - iconSide, y, iconSide, iconSide);
     }
 
-    protected drawBottomText(bottomText?: string) {
+    protected override drawBottomText(bottomText?: string) {
         if (!bottomText) return;
 
         const maxTextWidth = this.state.width * 3 - this.state.width * BOTTOM_TEXT_OFFSET_RATIO;
@@ -182,7 +182,7 @@ export class QueriesCanvasBlock extends YTGraphCanvasBlock<QueriesNodeBlock> {
         });
     }
 
-    protected drawCounter(total: number, mode?: ZoomMode) {
+    protected override drawCounter(total: number, mode?: ZoomMode) {
         const {x, y, height, width} = this.state;
 
         const counterX = x + width / 2;

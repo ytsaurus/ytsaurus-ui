@@ -124,7 +124,7 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
         return isEmpty_(res) ? null : res;
     }
 
-    state: PathEditorState;
+    override state: PathEditorState;
 
     private suggestionsList = React.createRef<HTMLDivElement>();
     private input = React.createRef<HTMLInputElement>();
@@ -143,7 +143,7 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
         };
     }
 
-    componentDidMount() {
+    override componentDidMount() {
         const {loadSuggestionsList, customFilter, cluster, autoFocus} = this.props;
         const {path} = this.state;
 
@@ -155,13 +155,13 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
         }
     }
 
-    componentDidUpdate(prevProps: PathEditorProps) {
+    override componentDidUpdate(prevProps: PathEditorProps) {
         if (prevProps.disabled && !this.props.disabled && this.input.current) {
             this._setFocus();
         }
     }
 
-    componentWillUnmount() {
+    override componentWillUnmount() {
         this.props.removeActiveRequests();
     }
 
@@ -405,7 +405,7 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
         );
     }
 
-    render() {
+    override render() {
         return (
             <div className={b(null, this.props.className)}>
                 {this.renderInput()}

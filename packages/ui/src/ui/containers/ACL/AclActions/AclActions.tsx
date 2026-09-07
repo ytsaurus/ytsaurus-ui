@@ -63,7 +63,7 @@ export class AclActions extends Component<Props> {
         await loadAclData({path, idmKind});
     };
 
-    render() {
+    override render() {
         const {
             aclMode,
             path,

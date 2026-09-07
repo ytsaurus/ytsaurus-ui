@@ -40,7 +40,7 @@ export class DataType extends React.Component<DataTypeProps, DataTypeState> {
         level: 0,
     };
 
-    state: DataTypeState = {
+    override state: DataTypeState = {
         expanded: (this.props.level ?? 0) < 2,
     };
 
@@ -55,7 +55,7 @@ export class DataType extends React.Component<DataTypeProps, DataTypeState> {
     renderStructTypeEntry = (entry: {key: string | number; type: DataTypeProps}, index: number) => {
         return <DataTypeStructKey key={index} level={(this.props.level ?? 0) + 1} entry={entry} />;
     };
-    render() {
+    override render() {
         const {optional, optionalLevel, complex, name, tagged, tags, type, struct, params} =
             this.props;
         const {expanded} = this.state;

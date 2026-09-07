@@ -40,7 +40,7 @@ type State<T> = Pick<Props<T>, 'items' | 'srcItems'> & {
 };
 
 export default class ColumnSelectorModal<T = never> extends React.Component<Props<T>, State<T>> {
-    state: State<T> = {
+    override state: State<T> = {
         srcItems: this.props.srcItems || this.props.items,
         items: makeItemsCopy(this.props.items),
         itemsOrder: this._getItemsOrder(this.props.items),
@@ -49,7 +49,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
 
     // in React 16.3 there is another way to do it: getDerivedStateFromProps;
     // revise this place once received data is managed by Redux
-    componentDidUpdate(prevProps: Props<T>) {
+    override componentDidUpdate(prevProps: Props<T>) {
         const {items, srcItems, isVisible} = this.props;
         if (prevProps.items !== items || prevProps.srcItems !== srcItems) {
             // don't update itemsOrder
@@ -252,7 +252,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
         );
     }
 
-    render() {
+    override render() {
         const {isVisible} = this.props;
         const title = i18n('title_columns-setup');
 

@@ -238,7 +238,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
         return res;
     }
 
-    render() {
+    override render() {
         const {details, loading, loaded} = this.props;
         const initialLoading = loading && !loaded;
 

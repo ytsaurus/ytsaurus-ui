@@ -30,7 +30,7 @@ export default class SelectWithSubItems extends Component<Props> {
         return !value || value.length === 0;
     }
 
-    render() {
+    override render() {
         const {className, value: input, items, labels, placeholder, subItemsMap = {}} = this.props;
         const [first, second] = input || [];
         const [label, subLabel] = labels || [];

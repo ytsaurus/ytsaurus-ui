@@ -21,7 +21,7 @@ export default class SubjectsControl extends React.Component<SubjectsControlProp
         return !value || !value.length;
     }
 
-    render() {
+    override render() {
         return UIFactory.renderAclSubjectsSuggestControl(this.props);
     }
 }

@@ -343,7 +343,7 @@ export default class ElementsTableHeader extends Component<ElementsTableHeaderPr
         );
     }
 
-    render() {
+    override render() {
         const {columnSet} = this.state;
         const hasGroups = columnSet.hasGroups;
         const headerClassName = b('head', this.props.headerClassName);

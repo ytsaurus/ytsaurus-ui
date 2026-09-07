@@ -13,7 +13,7 @@ class StatusBulb extends Component<Props> {
         theme: PropTypes.string,
     };
 
-    render() {
+    override render() {
         const className = block('status-bulb')({theme: this.props.theme});
         return <div className={className}></div>;
     }

@@ -61,7 +61,7 @@ interface ItemState {
 type Props = {className?: string} & ConnectedProps<typeof connector>;
 
 export class Statistics extends Component<Props> {
-    componentWillUnmount() {
+    override componentWillUnmount() {
         this.expandTable();
     }
 
@@ -238,7 +238,7 @@ export class Statistics extends Component<Props> {
         );
     }
 
-    render() {
+    override render() {
         const {className, treeState, items} = this.props;
 
         return (
