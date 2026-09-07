@@ -1,11 +1,10 @@
 {
-  "extends": "@gravity-ui/tsconfig",
+  "extends": "../../tsconfig",
   "compilerOptions": {
     // not dist/server, because when use server/, common/
     // it results with dist/server/server/, dist/server/common/ and ui-core fails to start server
     "noUnusedParameters": false,
     "outDir": "../../dist",
-    "resolveJsonModule": true,
     "declaration": true,
     "target": "es2021"
   },
