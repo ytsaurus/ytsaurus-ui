@@ -24,66 +24,76 @@ export const textStoryFrameStyle: CSSProperties = {
     borderRadius: 8,
 };
 
-export type TextVisualCase =
-    | {kind: 'yt-text'; id: string; props: TextProps; wrapperStyle?: CSSProperties}
-    | {kind: 'Secondary'; id: string; children: string; disabled?: boolean}
-    | {kind: 'Bold'; id: string; children: string}
-    | {kind: 'SecondaryBold'; id: string; children: string}
-    | {kind: 'Warning'; id: string; children: string}
-    | {kind: 'WarningLight'; id: string; children: string}
-    | {kind: 'NoWrap'; id: string; children: string}
-    | {kind: 'Escaped'; id: string; text: string};
+type TextVisualCaseConfig =
+    | {props: TextProps; wrapperStyle?: CSSProperties}
+    | {children: string; disabled?: boolean}
+    | {text: string};
 
 /** Stable order for visual regression (light + dark each). */
-export const textVisualStoryCases: TextVisualCase[] = [
-    {kind: 'yt-text', id: 'default', props: {children: 'YTsaurus UI text'}},
-    {
-        kind: 'yt-text',
-        id: 'color-secondary',
-        props: {children: 'Secondary tone', color: 'secondary'},
-    },
-    {kind: 'yt-text', id: 'color-success', props: {children: 'Success', color: 'success'}},
-    {kind: 'yt-text', id: 'color-info', props: {children: 'Info', color: 'info'}},
-    {kind: 'yt-text', id: 'color-warning', props: {children: 'Warning', color: 'warning'}},
-    {
-        kind: 'yt-text',
-        id: 'color-warning-light',
-        props: {children: 'Warning light', color: 'warning-light'},
-    },
-    {kind: 'yt-text', id: 'color-danger', props: {children: 'Danger', color: 'danger'}},
-    {kind: 'yt-text', id: 'bold', props: {children: 'Bold text', bold: true}},
-    {kind: 'yt-text', id: 'disabled', props: {children: 'Disabled', disabled: true}},
-    {
-        kind: 'yt-text',
-        id: 'secondary-disabled',
-        props: {children: 'Secondary disabled', color: 'secondary', disabled: true},
-    },
-    {kind: 'yt-text', id: 'capitalize', props: {children: 'capitalized words', capitalize: true}},
-    {
-        kind: 'yt-text',
-        id: 'ellipsis',
-        props: {
-            children: 'Very long text that should be truncated with ellipsis in a narrow box',
-            ellipsis: true,
+export const textVisualStoryCases = {
+    YTText: {
+        default: {props: {children: 'YTsaurus UI text'}},
+        'color-secondary': {
+            props: {children: 'Secondary tone', color: 'secondary'},
         },
-        wrapperStyle: {maxWidth: 140},
+        'color-success': {
+            props: {children: 'Success', color: 'success'},
+        },
+        'color-info': {props: {children: 'Info', color: 'info'}},
+        'color-warning': {
+            props: {children: 'Warning', color: 'warning'},
+        },
+        'color-warning-light': {
+            props: {children: 'Warning light', color: 'warning-light'},
+        },
+        'color-danger': {props: {children: 'Danger', color: 'danger'}},
+        bold: {props: {children: 'Bold text', bold: true}},
+        disabled: {props: {children: 'Disabled', disabled: true}},
+        'secondary-disabled': {
+            props: {children: 'Secondary disabled', color: 'secondary', disabled: true},
+        },
+        capitalize: {
+            props: {children: 'capitalized words', capitalize: true},
+        },
+        ellipsis: {
+            props: {
+                children: 'Very long text that should be truncated with ellipsis in a narrow box',
+                ellipsis: true,
+            },
+            wrapperStyle: {maxWidth: 140},
+        },
+        'no-wrap': {
+            props: {children: 'Single line: noWrap keeps this on one line', noWrap: true},
+            wrapperStyle: {maxWidth: 200},
+        },
     },
-    {
-        kind: 'yt-text',
-        id: 'no-wrap',
-        props: {children: 'Single line: noWrap keeps this on one line', noWrap: true},
-        wrapperStyle: {maxWidth: 200},
+    Secondary: {
+        default: {children: 'Secondary component'},
+        disabled: {children: 'Secondary disabled', disabled: true},
     },
-    {kind: 'Secondary', id: 'Secondary', children: 'Secondary component'},
-    {kind: 'Secondary', id: 'Secondary-disabled', children: 'Secondary disabled', disabled: true},
-    {kind: 'Bold', id: 'Bold', children: 'Bold component'},
-    {kind: 'SecondaryBold', id: 'SecondaryBold', children: 'Secondary bold'},
-    {kind: 'Warning', id: 'Warning', children: 'Warning component'},
-    {kind: 'WarningLight', id: 'WarningLight', children: 'Warning light component'},
-    {kind: 'NoWrap', id: 'NoWrap', children: 'NoWrap component: long line should not wrap'},
-    {
-        kind: 'Escaped',
-        id: 'Escaped',
-        text: '{"message":"hello\\nworld","quotes":"\\"nested\\""}',
+    Bold: {
+        default: {children: 'Bold component'},
     },
-];
+    SecondaryBold: {
+        default: {children: 'Secondary bold'},
+    },
+    Warning: {
+        default: {children: 'Warning component'},
+    },
+    WarningLight: {
+        default: {children: 'Warning light component'},
+    },
+    NoWrap: {
+        default: {children: 'NoWrap component: long line should not wrap'},
+    },
+    Escaped: {
+        default: {text: '{"message":"hello\\nworld","quotes":"\\"nested\\""}'},
+    },
+} satisfies Record<string, Record<string, TextVisualCaseConfig>>;
+
+export type TextVisualComponentName = keyof typeof textVisualStoryCases;
+
+export type TextVisualCase<ComponentName extends TextVisualComponentName> =
+    ComponentName extends TextVisualComponentName
+        ? (typeof textVisualStoryCases)[ComponentName][keyof (typeof textVisualStoryCases)[ComponentName]]
+        : never;
