@@ -83,22 +83,23 @@ export interface BundleDataCenter {
     yp_cluster: string;
 }
 
+interface BundleSizeConfig {
+    resource_guarantee: BundleResourceGuarantee;
+    deprecated?: boolean;
+    deprecation_reason?: string;
+}
+
 export interface BundleDefaultConfigData {
     tablet_node_sizes: {
-        [size: string]: {
-            resource_guarantee: BundleResourceGuarantee;
+        [size: string]: BundleSizeConfig & {
             default_config: {
-                cpu_limits: {
-                    write_thread_pool_size: number;
-                };
+                cpu_limits: CPULimits;
                 memory_limits: Record<string, number>;
             };
         };
     };
     rpc_proxy_sizes: {
-        [size: string]: {
-            resource_guarantee: BundleResourceGuarantee;
-        };
+        [size: string]: BundleSizeConfig;
     };
     data_centers?: {
         [name: string]: BundleDataCenter;
