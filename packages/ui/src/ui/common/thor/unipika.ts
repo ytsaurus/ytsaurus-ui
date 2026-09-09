@@ -24,38 +24,45 @@ const {utf8} = unipika.utils;
  * @deprecated Use corresponding selector from `selectors/thor/unipika`
  */
 unipika.prepareSettings = function (settings: UnipikaSettings) {
-    settings = settings || {};
-    Object.assign(settings, getUnipikaSettingsFromConfig());
+    const resolvedSettings = settings || {};
+    Object.assign(resolvedSettings, getUnipikaSettingsFromConfig());
 
-    settings.format = parseSetting(settings, 'format', getSettingBySelector(selectFormat));
-    settings.showDecoded = parseSetting(
-        settings,
+    resolvedSettings.format = parseSetting(
+        resolvedSettings,
+        'format',
+        getSettingBySelector(selectFormat),
+    );
+    resolvedSettings.showDecoded = parseSetting(
+        resolvedSettings,
         'showDecoded',
         getSettingBySelector(selectShouldShowDecoded),
     );
-    settings.compact = parseSetting(settings, 'compact', getSettingBySelector(selectShouldCompact));
-    settings.escapeWhitespace = parseSetting(
-        settings,
+    resolvedSettings.compact = parseSetting(
+        resolvedSettings,
+        'compact',
+        getSettingBySelector(selectShouldCompact),
+    );
+    resolvedSettings.escapeWhitespace = parseSetting(
+        resolvedSettings,
         'escapeWhitespace',
         getSettingBySelector(selectShouldEscapeWhitespace),
     );
-    settings.binaryAsHex = parseSetting(
-        settings,
+    resolvedSettings.binaryAsHex = parseSetting(
+        resolvedSettings,
         'binaryAsHex',
         getSettingBySelector(selectUseBinaryAsHex),
     );
 
-    settings.asHTML = parseSetting(settings, 'asHTML', true);
+    resolvedSettings.asHTML = parseSetting(resolvedSettings, 'asHTML', true);
 
-    return settings;
+    return resolvedSettings;
 };
 
 /**
  * @deprecated The function uses store implicitly, use `prettyPrint` from `utils/unipika.ts instead of it.
  */
 unipika.prettyprint = function (value: unknown, settings: UnipikaSettings) {
-    settings = unipika.prepareSettings(settings);
-    return prettyPrint(value, settings);
+    return prettyPrint(value, unipika.prepareSettings(settings));
 };
 
 unipika.decode = function (str: string) {

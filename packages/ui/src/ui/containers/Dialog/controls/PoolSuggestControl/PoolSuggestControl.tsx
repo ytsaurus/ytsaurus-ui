@@ -126,15 +126,15 @@ PoolSuggestControl.isEmpty = (value: Props['value']) => {
 };
 
 function useLoadedPools(cluster?: string, poolTrees?: string[]): Array<string> | null {
-    poolTrees = poolTrees || [];
+    const resolvedPoolTrees = poolTrees || [];
 
     const [poolNames, setPoolNames] = React.useState<Array<string> | null>(null);
 
     const defaultPoolTree = useDefaultPoolTree();
 
     React.useMemo(() => {
-        const localPoolTrees: string[] = poolTrees.length
-            ? poolTrees
+        const localPoolTrees: string[] = resolvedPoolTrees.length
+            ? resolvedPoolTrees
             : defaultPoolTree
               ? [defaultPoolTree]
               : [];
@@ -158,7 +158,7 @@ function useLoadedPools(cluster?: string, poolTrees?: string[]): Array<string> |
         }).then((result) => {
             setPoolNames(result);
         });
-    }, [cluster, defaultPoolTree, poolTrees.join()]);
+    }, [cluster, defaultPoolTree, resolvedPoolTrees.join()]);
 
     return poolNames;
 }

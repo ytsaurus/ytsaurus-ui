@@ -101,7 +101,7 @@ function wrapCompareFnByAsc(compareFn, asc, undefinedAsk = true) {
 }
 
 utils.sort = function (data, sortInfo, fields, options) {
-    options = options || {};
+    const resolvedOptions = options || {};
 
     const unwrappedSortInfo = sortInfo;
     const unwrappedData = data;
@@ -114,8 +114,8 @@ utils.sort = function (data, sortInfo, fields, options) {
     const {field, asc, undefinedAsc} = unwrappedSortInfo;
     const fieldData = (fields || {})[field];
     const fieldSelector = fieldSelectors[field];
-    const groupBy = options.groupBy,
-        addGetParams = options.addGetParams || [];
+    const groupBy = resolvedOptions.groupBy,
+        addGetParams = resolvedOptions.addGetParams || [];
 
     const compareFn =
         fieldData?.compareFn ||
