@@ -18,7 +18,7 @@ import {selectCurrentUserName} from '../selectors/global';
 export function togglePinnedPage(id: string): ThunkAction<any, RootState, any, any> {
     return (dispatch, getState) => {
         const state = getState();
-        const pinned = {...selectSettingsPagesPinned(state)};
+        const pinnedPages = {...selectSettingsPagesPinned(state)};
         const orderedPages = selectPagesOrderedByUser(state);
 
         const prevOrder = selectSettingsPagesOrder(state);
@@ -37,13 +37,13 @@ export function togglePinnedPage(id: string): ThunkAction<any, RootState, any, a
             return;
         }
 
-        toggleBooleanInPlace(id, pinned);
-        dispatch(setSettingsPagesPinned(pinned));
+        toggleBooleanInPlace(id, pinnedPages);
+        dispatch(setSettingsPagesPinned(pinnedPages));
 
         const afterPinned = findIndex_(orderedPages, ({pinned}) => !pinned);
 
         if (itemIndex !== -1) {
-            const newState = pinned[id];
+            const newState = pinnedPages[id];
             const tmp = afterPinned === -1 ? orderedPages.length : afterPinned;
             const newIndex = !newState ? Math.max(0, tmp - 1) : tmp;
 

@@ -14,7 +14,7 @@ const {
     jobId,
     monitoringDescriptor,
     type,
-    state,
+    state: jobStateFilter,
     withStderr,
     withFailContext,
     withSpec,
@@ -26,7 +26,7 @@ const initialAddressFilter = address.value;
 const initialJobIdFilter = jobId.value;
 const initialMonitoringDescriptorFilter = monitoringDescriptor.value;
 const initialTypeFilter = type.value;
-const initialStateFilter = state.value;
+const initialStateFilter = jobStateFilter.value;
 const initialWithStderrFilter = withStderr.value;
 const initialWithFailContextFilter = withFailContext.value;
 const initialWithSpecFilter = withSpec.value;

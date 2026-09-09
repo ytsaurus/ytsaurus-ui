@@ -13,11 +13,11 @@ import {type ActionD, type ValueOf} from '../../../../types';
 
 const settings = getSettingsInitialData();
 
-const activeAggregation = settings['global::operations::statisticsAggregationType'];
+const initialAggregation = settings['global::operations::statisticsAggregationType'];
 
 export interface OperationStatistics {
     filterText: string;
-    activeAggregation: typeof activeAggregation;
+    activeAggregation: typeof initialAggregation;
     jobTypeFilter: string;
     poolTreeFilter: string;
     treeState: ValueOf<typeof TREE_STATE>;
@@ -25,7 +25,7 @@ export interface OperationStatistics {
 
 export const initialState: OperationStatistics = {
     filterText: '',
-    activeAggregation,
+    activeAggregation: initialAggregation,
     jobTypeFilter: STATISTICS_FILTER_ALL_VALUE,
     poolTreeFilter: STATISTICS_FILTER_ALL_VALUE,
     treeState: TREE_STATE.EXPANDED,

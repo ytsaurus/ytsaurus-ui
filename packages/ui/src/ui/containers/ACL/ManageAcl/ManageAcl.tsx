@@ -110,8 +110,13 @@ function ManageAcl(props: Props) {
 
     const onAdd = useCallback(
         (form: FormApi<FormValues, Partial<FormValues>>) => {
-            const {auditors, readApprovers, responsible, inheritanceResponsible, ...rest} =
-                form.getState().values;
+            const {
+                auditors: formAuditors,
+                readApprovers: formReadApprovers,
+                responsible: formResponsible,
+                inheritanceResponsible,
+                ...rest
+            } = form.getState().values;
 
             return updateAcl({
                 path,
@@ -119,9 +124,9 @@ function ManageAcl(props: Props) {
                 values: {
                     ...rest,
                     disableInheritance: !inheritanceResponsible,
-                    responsible: roleListValueToSubjectList(responsible),
-                    auditors: roleListValueToSubjectList(auditors),
-                    readApprovers: roleListValueToSubjectList(readApprovers),
+                    responsible: roleListValueToSubjectList(formResponsible),
+                    auditors: roleListValueToSubjectList(formAuditors),
+                    readApprovers: roleListValueToSubjectList(formReadApprovers),
                 },
                 version,
             });

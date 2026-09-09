@@ -25,9 +25,9 @@ const initialState: DownloadManagerState = {
 
 const reducers = {
     onRequest(state: DownloadManagerState, action: PayloadAction<Pick<DownloadItem, 'id'>>) {
-        return produce(state, (state: DownloadManagerState) => {
-            state.downloads[action.payload.id] = {
-                ...state.downloads[action.payload.id],
+        return produce(state, (draft: DownloadManagerState) => {
+            draft.downloads[action.payload.id] = {
+                ...draft.downloads[action.payload.id],
                 id: action.payload.id,
                 startTime: moment(),
                 loading: true,
@@ -39,9 +39,9 @@ const reducers = {
         state: DownloadManagerState,
         action: PayloadAction<Pick<DownloadItem, 'id' | 'error'>>,
     ) {
-        return produce(state, (state: DownloadManagerState) => {
-            state.downloads[action.payload.id] = {
-                ...state.downloads[action.payload.id],
+        return produce(state, (draft: DownloadManagerState) => {
+            draft.downloads[action.payload.id] = {
+                ...draft.downloads[action.payload.id],
                 id: action.payload.id,
                 error: action.payload.error,
                 loaded: false,
@@ -50,9 +50,9 @@ const reducers = {
         });
     },
     onSuccess(state: DownloadManagerState, action: PayloadAction<Pick<DownloadItem, 'id'>>) {
-        return produce(state, (state: DownloadManagerState) => {
-            state.downloads[action.payload.id] = {
-                ...state.downloads[action.payload.id],
+        return produce(state, (draft: DownloadManagerState) => {
+            draft.downloads[action.payload.id] = {
+                ...draft.downloads[action.payload.id],
                 id: action.payload.id,
                 loading: false,
                 loaded: true,
@@ -60,8 +60,8 @@ const reducers = {
         });
     },
     onCleanup(state: DownloadManagerState, action: PayloadAction<Pick<DownloadItem, 'id'>>) {
-        return produce(state, (state: DownloadManagerState) => {
-            delete state.downloads[action.payload.id];
+        return produce(state, (draft: DownloadManagerState) => {
+            delete draft.downloads[action.payload.id];
         });
     },
 };

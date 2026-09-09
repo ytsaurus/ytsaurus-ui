@@ -168,11 +168,11 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
                     }
 
                     const {
-                        data,
+                        data: barValues,
                         series: {color},
                     } = barData as TooltipDataChunkBarX;
 
-                    const {y, index} = data as typeof data & {index: number};
+                    const {y, index} = barValues as typeof barValues & {index: number};
                     const l = from + step * index;
                     const count = format.Number(y, {digits: 0});
 

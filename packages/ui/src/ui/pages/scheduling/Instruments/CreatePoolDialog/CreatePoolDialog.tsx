@@ -121,9 +121,9 @@ function CreatePoolDialog(props: {onClose: () => void}) {
 
     const validateForm = React.useCallback(
         (values: FormValues): null | {name?: string} => {
-            const {name} = values;
+            const poolName = values.name;
             const res: Partial<Record<keyof FormValues, string>> = {};
-            if (-1 !== sortedIndexOf_(sortedFlatTree, name)) {
+            if (-1 !== sortedIndexOf_(sortedFlatTree, poolName)) {
                 res.name = i18n('alert_name-not-unique');
             }
             return isEmpty_(res) ? null : res;

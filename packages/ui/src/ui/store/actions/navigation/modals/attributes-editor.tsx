@@ -211,8 +211,8 @@ export function navigationSetNodeAttributes(
                     const promises = map_(staticTables, (path) => {
                         return wrapApiPromiseByToaster(yt.v3.merge(prepareMergeParams(path)), {
                             toasterName: 'storage_attrs_' + path,
-                            successContent(res: string) {
-                                const opId = JSON.parse(res);
+                            successContent(response: string) {
+                                const opId = JSON.parse(response);
                                 return (
                                     <AppStoreProvider>
                                         <OperationShortInfo
@@ -229,21 +229,21 @@ export function navigationSetNodeAttributes(
                     });
                     return Promise.all(promises);
                 } else {
-                    const requests = map_(staticTables, (path) => {
+                    const mergeRequests = map_(staticTables, (path) => {
                         return {
                             command: 'merge' as const,
                             parameters: prepareMergeParams(path),
                         };
                     });
-                    return executeBatchWithRetries(YTApiId.attributesEditorMerge, requests, {
+                    return executeBatchWithRetries(YTApiId.attributesEditorMerge, mergeRequests, {
                         errorTitle: i18n('alert_failed-to-start-operations'),
                     }).then((results: any) => {
-                        const error = getBatchError(
+                        const operationError = getBatchError(
                             results,
                             i18n('alert_failed-to-start-operations'),
                         );
-                        if (error) {
-                            throw error;
+                        if (operationError) {
+                            throw operationError;
                         }
 
                         toaster.add({

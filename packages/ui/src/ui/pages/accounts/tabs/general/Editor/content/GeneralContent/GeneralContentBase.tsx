@@ -1,21 +1,11 @@
 import React from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
 import block from 'bem-cn-lite';
 
-import {setAccountAbc} from '../../../../../../utils/accounts/editor';
-import {
-    loadEditedAccount,
-    setParentAccountAction,
-} from '../../../../../../store/actions/accounts/accounts';
-import {selectCluster} from '../../../../../../store/selectors/global';
-import {selectIsAdmin} from '../../../../../../store/selectors/global/is-developer';
-import {SuggestParentsForEditableAccount} from '../../../../AccountsSuggest';
-
-import './../Editor.scss';
-import UIFactory from '../../../../../../UIFactory';
-import i18n from './i18n';
-import {type RootState} from '../../../../../../store/reducers';
-import {type AccountParsedData} from '../../../../../../utils/accounts/accounts-selector';
+import {setAccountAbc} from '../../../../../../../utils/accounts/editor';
+import {SuggestParentsForEditableAccount} from '../../../../../AccountsSuggest';
+import UIFactory from '../../../../../../../UIFactory';
+import i18n from '../i18n';
+import {type AccountParsedData} from '../../../../../../../utils/accounts/accounts-selector';
 
 const b = block('accounts-editor');
 
@@ -37,16 +27,14 @@ export function WithHeader({
 interface ParentProps {
     account: AccountParsedData;
     loadEditedAccount: (name: string) => void;
-    setAccountParent: (name: string, parentName: string) => void;
+    setAccountParent: (name: string, parentName: string) => Promise<void>;
     cluster: string;
     isAdmin: boolean;
 }
 
-type ReduxProps = ConnectedProps<typeof connector>;
+type Props = ParentProps;
 
-type Props = ParentProps & ReduxProps;
-
-class GeneralContent extends React.Component<Props> {
+export class GeneralContentBase extends React.Component<Props> {
     override state = {
         abcId: undefined,
         abcTitle: '',
@@ -139,19 +127,3 @@ class GeneralContent extends React.Component<Props> {
         );
     }
 }
-
-const mapStateToProps = (state: RootState) => {
-    return {
-        cluster: selectCluster(state),
-        isAdmin: selectIsAdmin(state),
-    };
-};
-
-const mapDispatchToProps = {
-    loadEditedAccount,
-    setAccountParent: setParentAccountAction,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(GeneralContent);

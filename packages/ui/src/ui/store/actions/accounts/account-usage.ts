@@ -167,9 +167,9 @@ export function fetchAccountUsageList(): UsageListThunkAction {
 
         const timestamp = selectAccountUsageCurrentSnapshot(state);
 
-        const params = getFilterParameters(state);
+        const filterParams = getFilterParameters(state);
         const requestParams: AccountUsageListDataParams = {
-            ...params,
+            ...filterParams,
             timestamp: normalizeTimestamp(timestamp),
         };
 
@@ -182,7 +182,7 @@ export function fetchAccountUsageList(): UsageListThunkAction {
             .request<AccountsUsageDataResponse>({
                 method: 'POST',
                 url: calcAccountsUsageBaseUrl(
-                    `/api/accounts-usage/${params.cluster}/get-resource-usage`,
+                    `/api/accounts-usage/${filterParams.cluster}/get-resource-usage`,
                     state,
                 ),
                 data: requestParams,
@@ -221,12 +221,12 @@ export function fetchAccountUsageTree(): UsageTreeThunkAction {
 
         const timestamp = selectAccountUsageCurrentSnapshot(state);
 
-        const params = getFilterParameters(state);
+        const filterParams = getFilterParameters(state);
         const requestParams: AccountUsageTreeData['requestParams'] = {
-            ...params,
+            ...filterParams,
             timestamp: normalizeTimestamp(timestamp),
             row_filter: {
-                ...params.row_filter,
+                ...filterParams.row_filter,
                 base_path: selectAccountUsageTreePath(state),
             },
         };
@@ -240,7 +240,7 @@ export function fetchAccountUsageTree(): UsageTreeThunkAction {
             .request<AccountsUsageDataResponse>({
                 method: 'POST',
                 url: calcAccountsUsageBaseUrl(
-                    `/api/accounts-usage/${params.cluster}/get-children-and-resource-usage`,
+                    `/api/accounts-usage/${filterParams.cluster}/get-children-and-resource-usage`,
                     state,
                 ),
                 data: requestParams,

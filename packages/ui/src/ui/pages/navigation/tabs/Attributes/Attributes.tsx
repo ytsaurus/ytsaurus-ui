@@ -71,12 +71,12 @@ function Attributes() {
 }
 
 export default function AttributesWithRum() {
-    const loadState = useSelector(selectLoadState);
+    const navigationLoadState = useSelector(selectLoadState);
     const attributes = useSelector(selectAttributesWithTypes);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_TAB_ATTRIBUTES,
-        startDeps: [loadState],
+        startDeps: [navigationLoadState],
         allowStart: ([loadState]) => {
             return !isFinalLoadingStatus(loadState);
         },
@@ -84,7 +84,7 @@ export default function AttributesWithRum() {
 
     useRumMeasureStop({
         type: RumMeasureTypes.NAVIGATION_TAB_ATTRIBUTES,
-        stopDeps: [loadState, attributes],
+        stopDeps: [navigationLoadState, attributes],
         allowStop: ([loadState]) => {
             return isFinalLoadingStatus(loadState);
         },

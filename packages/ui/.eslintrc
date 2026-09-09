@@ -52,6 +52,12 @@
             "rules": {
                 "no-shadow": "error"
             }
+        },
+        {
+            "files": ["*.ts", "*.tsx"],
+            "rules": {
+                "@typescript-eslint/no-shadow": "error"
+            }
         }
     ],
     "env": {

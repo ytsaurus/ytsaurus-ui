@@ -74,8 +74,8 @@ export function EditTextWithPreview({
     const actions = showPreview ? editorActions : [...(editorActions ?? []), showHideAction];
 
     const onChange = React.useCallback(
-        (value: string) => {
-            onChangeProp({value});
+        (text: string) => {
+            onChangeProp({value: text});
         },
         [onChangeProp],
     );

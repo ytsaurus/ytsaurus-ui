@@ -65,9 +65,9 @@ export default function LinkToModal() {
                     type: 'path',
                     caption: i18n('field_link-path'),
                     required: true,
-                    validator: async (path: string) => {
+                    validator: async (linkPath: string) => {
                         try {
-                            const res = await ytApiV3.exists({path});
+                            const res = await ytApiV3.exists({path: linkPath});
                             if (res) {
                                 return i18n('alert_link-path-exists');
                             }
@@ -86,9 +86,9 @@ export default function LinkToModal() {
                     type: 'path',
                     caption: i18n('field_target-path'),
                     required: true,
-                    validator: async (path: string) => {
+                    validator: async (targetPath: string) => {
                         try {
-                            const res = await ytApiV3.exists({path});
+                            const res = await ytApiV3.exists({path: targetPath});
                             if (!res) {
                                 return i18n('alert_target-path-not-exists');
                             }

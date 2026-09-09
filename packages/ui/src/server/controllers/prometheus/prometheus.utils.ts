@@ -182,14 +182,14 @@ export async function checkDashboardPermissions(
 
         for (let i = 0; i < data.length; ++i) {
             const clusterResults = data[i];
-            const [cluster, permissions] = permissionEntries[i];
+            const [cluster, clusterPermissions] = permissionEntries[i];
             for (const item of clusterResults) {
                 if (item.error) {
                     error.inner_errors?.push(item.error);
                 } else if (item.output?.action !== 'allow') {
                     error.inner_errors?.push({
                         message: `Missing permission`,
-                        attributes: {cluster, permissions} as any,
+                        attributes: {cluster, permissions: clusterPermissions} as any,
                     });
                 }
             }

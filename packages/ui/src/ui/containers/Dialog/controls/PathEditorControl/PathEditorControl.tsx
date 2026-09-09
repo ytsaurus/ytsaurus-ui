@@ -17,8 +17,8 @@ export function PathEditorControl(props: Props) {
     const {value, placeholder, onChange, ...rest} = props;
 
     const handleApply = React.useCallback(
-        (value: Props['value']) => {
-            onChange(value);
+        (path: Props['value']) => {
+            onChange(path);
         },
         [onChange],
     );

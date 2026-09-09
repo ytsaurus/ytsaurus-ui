@@ -1,12 +1,9 @@
 import React from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
+import {type ButtonProps} from '../../Button/Button';
 
-import {openAttributesModal} from '../../store/actions/modals/attributes-modal';
-import {type ButtonProps} from '../../components/Button/Button';
+import AttributesButton, {type AttributesButtonProps} from '../AttributesButton';
 
-import AttributesButton, {type AttributesButtonProps} from './AttributesButton';
-
-import i18n from './i18n';
+import i18n from '../i18n';
 
 interface Props extends Omit<AttributesButtonProps, 'onClick' | 'title'> {
     title: React.ReactNode;
@@ -23,7 +20,7 @@ interface Props extends Omit<AttributesButtonProps, 'onClick' | 'title'> {
     view?: ButtonProps['view'];
 }
 
-function ClickableAttributesButton({
+export function ClickableAttributesButtonBase({
     title,
     getPathProps = () => {
         return {};
@@ -37,7 +34,15 @@ function ClickableAttributesButton({
     tooltipProps = {placement: 'bottom-end', content: i18n('tooltip-content')},
     // Extract potentially problematic props
     ...rest
-}: Props & ConnectedProps<typeof connector>) {
+}: Props & {
+    openAttributesModal: (args_0: {
+        title: React.ReactNode;
+        path?: string;
+        exactPath?: string;
+        attribute?: string;
+        attributes?: object;
+    }) => void;
+}) {
     return (
         <AttributesButton
             {...rest}
@@ -60,7 +65,3 @@ function ClickableAttributesButton({
         />
     );
 }
-
-const connector = connect(null, {openAttributesModal});
-
-export default connector(ClickableAttributesButton);

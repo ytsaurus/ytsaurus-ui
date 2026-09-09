@@ -43,8 +43,8 @@ export function CopyConfigDialog() {
     return (
         <YTDFDialog<FormValues>
             onAdd={async (form: FormApi<FormValues>) => {
-                const {cluster} = form.getState().values;
-                await dispatch(copyConfig(cluster[0]));
+                const formClusters = form.getState().values.cluster;
+                await dispatch(copyConfig(formClusters[0]));
             }}
             headerProps={{title: i18n('title_copy-config')}}
             visible={copyConfigDialogVisibility}

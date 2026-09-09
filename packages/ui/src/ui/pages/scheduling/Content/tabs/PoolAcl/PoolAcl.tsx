@@ -51,14 +51,14 @@ function PoolAclWithRum({loadState}: {loadState: LoadingStatus}) {
         type: RumMeasureTypes.SCHEDULING_ACL,
         additionalStartType: RumMeasureTypes.SCHEDULING,
         startDeps: [loadState],
-        allowStart: ([loadState]) => !isFinalLoadingStatus(loadState),
+        allowStart: ([status]) => !isFinalLoadingStatus(status),
     });
 
     useRumMeasureStop({
         type: RumMeasureTypes.SCHEDULING_ACL,
         stopDeps: [loadState],
-        allowStop: ([loadState]) => {
-            return isFinalLoadingStatus(loadState);
+        allowStop: ([status]) => {
+            return isFinalLoadingStatus(status);
         },
     });
 

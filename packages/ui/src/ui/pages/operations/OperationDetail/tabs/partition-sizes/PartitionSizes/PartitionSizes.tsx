@@ -94,12 +94,12 @@ const connector = connect(mapStateToProps);
 const PartitionSizesConnected = connector(PartitionSizes);
 
 export default function PartitionSizesWithRum() {
-    const loadState = useSelector(selectOperationDetailsLoadingStatus);
+    const operationLoadState = useSelector(selectOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.OPERATION_TAB_PARTITION_SIZES,
         additionalStartType: RumMeasureTypes.OPERATION,
-        startDeps: [loadState],
+        startDeps: [operationLoadState],
         allowStart: ([loadState]) => {
             return !isFinalLoadingStatus(loadState);
         },
@@ -107,7 +107,7 @@ export default function PartitionSizesWithRum() {
 
     useRumMeasureStop({
         type: RumMeasureTypes.OPERATION_TAB_PARTITION_SIZES,
-        stopDeps: [loadState],
+        stopDeps: [operationLoadState],
         allowStop: ([loadState]) => {
             return isFinalLoadingStatus(loadState);
         },

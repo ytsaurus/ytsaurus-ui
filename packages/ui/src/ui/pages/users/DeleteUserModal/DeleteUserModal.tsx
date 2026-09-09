@@ -31,8 +31,8 @@ export const DeleteUserModal: React.FC = () => {
             disableUsersCache();
             // we don't need to wait for the end of the action
             dispatch(fetchUsers());
-        } catch (error) {
-            setError(error as YTError);
+        } catch (cause) {
+            setError(cause as YTError);
         }
     }, [dispatch, usernameToDelete, onClose]);
 

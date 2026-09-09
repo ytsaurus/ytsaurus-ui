@@ -314,10 +314,10 @@ const mapDispatchToProps = {
 const SchemaConnected = connect(mapStateToProps, mapDispatchToProps)(Schema);
 
 export default function SchemaWithRum() {
-    const loadState = useSelector(selectLoadState);
+    const navigationLoadState = useSelector(selectLoadState);
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_TAB_SCHEMA,
-        startDeps: [loadState],
+        startDeps: [navigationLoadState],
         allowStart: ([loadState]) => {
             return !isFinalLoadingStatus(loadState);
         },
@@ -325,7 +325,7 @@ export default function SchemaWithRum() {
 
     useRumMeasureStop({
         type: RumMeasureTypes.NAVIGATION_TAB_SCHEMA,
-        stopDeps: [loadState],
+        stopDeps: [navigationLoadState],
         allowStop: ([loadState]) => {
             return isFinalLoadingStatus(loadState);
         },

@@ -1,14 +1,8 @@
-import React, {useEffect} from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
-import {useSelector} from '../../../../../../store/redux-hooks';
-import cn from 'bem-cn-lite';
+import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-import {type Column, type Settings} from '@gravity-ui/react-data-table';
+import {type Column} from '@gravity-ui/react-data-table';
 
 import format from '../../../../../../common/hammer/format';
-import {DataTableYT} from '../../../../../../components/DataTableYT';
-import {YTErrorBlock} from '../../../../../../containers/Block/Block';
-import {NoContent} from '../../../../../../components/NoContent';
 import {CONSUMER_RATE_MODE} from '../../../../../../constants/navigation/tabs/consumer';
 import {
     datetime,
@@ -28,14 +22,13 @@ import {
     selectPartitionsError,
     selectPartitionsLoaded,
     selectPartitionsLoading,
-    selectTargetQueue,
 } from '../../../../../../store/selectors/navigation/tabs/consumer';
 
 import i18n from './i18n';
 
 import './Partitions.scss';
 
-const block = cn('consumer-partitions');
+import {PartitionsBase, block} from './PartitionsBase';
 
 const readRateName: Record<CONSUMER_RATE_MODE, string> = {
     get [CONSUMER_RATE_MODE.ROWS]() {
@@ -77,50 +70,6 @@ const getColumns = createSelector(
     },
 );
 
-const settings: Settings = {displayIndices: false};
-
-const Partitions: React.VFC<PropsFromRedux> = ({
-    loadConsumerPartitions,
-    columns,
-    partitions,
-    partitionsError,
-    partitionsLoading,
-    partitionsLoaded,
-}) => {
-    const {queue} = useSelector(selectTargetQueue) ?? {};
-
-    useEffect(() => {
-        if (queue) {
-            loadConsumerPartitions(queue);
-        }
-    }, [queue]);
-
-    if (!queue) {
-        return (
-            <NoContent
-                hint={i18n('alert_select-queue')}
-                warning={i18n('alert_no-selected-queues')}
-            />
-        );
-    }
-
-    if (partitionsError) {
-        return <YTErrorBlock error={partitionsError} topMargin="half" />;
-    }
-
-    return (
-        <DataTableYT
-            className={block('table-row')}
-            columns={columns}
-            data={partitions}
-            loading={partitionsLoading}
-            loaded={partitionsLoaded}
-            useThemeYT
-            settings={settings}
-        />
-    );
-};
-
 function mapStateToProps(state: RootState) {
     return {
         columns: getColumns(state),
@@ -135,7 +84,6 @@ const mapDispatchToProps = {
     loadConsumerPartitions,
 };
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
+const Partitions = connect(mapStateToProps, mapDispatchToProps)(PartitionsBase);
 
-export default connector(Partitions);
+export default Partitions;

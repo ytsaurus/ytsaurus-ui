@@ -1,23 +1,30 @@
 import React from 'react';
 import block from 'bem-cn-lite';
-import {type ConnectedProps, connect} from 'react-redux';
 import {LayoutCellsLarge, ListUl} from '@gravity-ui/icons';
 import {Icon, SegmentedRadioGroup} from '@gravity-ui/uikit';
 
-import Filter from '../../components/Filter/Filter';
-import {updateFilter, updateViewMode} from '../../store/actions/clusters-menu';
-import {HeaderLinks} from '../../containers/ClustersMenu/HeaderLinks';
-import {LINKS_ITEM_CLUSTERS} from '../../containers/ClustersMenu/header-links-items';
-import {type RootState} from '../../store/reducers';
-import i18n from './i18n';
-
-import './ClusterMenuHeader.scss';
+import Filter from '../../../components/Filter/Filter';
+import {HeaderLinks} from '../HeaderLinks';
+import {LINKS_ITEM_CLUSTERS} from '../header-links-items';
+import {type ClustersMenuState} from '../../../store/reducers/clusters-menu/clusters-menu';
+import i18n from '../i18n';
 
 const b = block('cluster-menu');
 
-type Props = ConnectedProps<typeof connector>;
+type Props = {
+    viewMode: 'dashboard' | 'table';
+    clusterFilter: string;
+    login: string;
+    updateViewMode: (viewMode: ClustersMenuState['viewMode']) => void;
+    updateFilter: (clusterFilter: ClustersMenuState['clusterFilter']) => void;
+};
 
-function ClustersMenuHeader({viewMode, updateViewMode, clusterFilter, updateFilter}: Props) {
+export function ClustersMenuHeaderBase({
+    viewMode,
+    updateViewMode,
+    clusterFilter,
+    updateFilter,
+}: Props) {
     return (
         <header className={b('header', 'elements-page__header')}>
             <div className={b('header-inner')}>
@@ -54,22 +61,3 @@ function ClustersMenuHeader({viewMode, updateViewMode, clusterFilter, updateFilt
         </header>
     );
 }
-
-function mapStateToProps(state: RootState) {
-    const {viewMode, clusterFilter} = state.clustersMenu;
-    const {login} = state.global;
-    return {
-        viewMode,
-        clusterFilter,
-        login,
-    };
-}
-
-const mapDispatchToProps = {
-    updateViewMode,
-    updateFilter,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(ClustersMenuHeader);

@@ -1,34 +1,17 @@
 import React from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import {
     CompactColumnSelector,
     timeItems,
-} from '../../../Consumer/views/Partitions/PartitionsExtraControls';
-import Filter from '../../../../../../components/Filter/Filter';
-import RadioButton from '../../../../../../components/RadioButton/RadioButton';
-import {QUEUE_RATE_MODE} from '../../../../../../constants/navigation/tabs/queue';
-import {
-    changeQueuePartitionIndex,
-    changeQueuePartitionsColumns,
-    changeQueueRateMode,
-    changeQueueTabletCellHost,
-    changeQueueTabletCellId,
-    changeQueueTimeWindow,
-} from '../../../../../../store/actions/navigation/tabs/queue/filters';
-import {type RootState} from '../../../../../../store/reducers';
-import {
-    selectQueuePartitionIndex,
-    selectQueuePartitionsColumns,
-    selectQueueRateMode,
-    selectQueueTabletCellHost,
-    selectQueueTabletCellId,
-    selectQueueTimeWindow,
-} from '../../../../../../store/selectors/navigation/tabs/queue';
-
-import './PartitionsExtraControls.scss';
-import i18n from './i18n';
+} from '../../../../Consumer/views/Partitions/PartitionsExtraControls';
+import Filter from '../../../../../../../components/Filter/Filter';
+import RadioButton from '../../../../../../../components/RadioButton/RadioButton';
+import {QUEUE_RATE_MODE} from '../../../../../../../constants/navigation/tabs/queue';
+import {type PartitionColumn} from '../../../../../../../store/reducers/navigation/tabs/consumer/filters';
+import {type QueuePartitionsColumns} from '../../../../../../../store/reducers/navigation/tabs/queue/filters';
+import {type TPerformanceCounters} from '../../../../../../../store/reducers/navigation/tabs/queue/types';
+import i18n from '../i18n';
 
 const block = cn('queue-partitions');
 
@@ -49,7 +32,7 @@ const rateItems: React.ComponentProps<typeof RadioButton>['items'] = [
     },
 ];
 
-const PartitionsExtraControls: React.VFC<Props> = ({
+export const PartitionsExtraControlsBase: React.VFC<Props> = ({
     queuePartitionIndex,
     queueTabletCellHost,
     queueTabletCellId,
@@ -98,28 +81,19 @@ const PartitionsExtraControls: React.VFC<Props> = ({
         </>
     );
 };
-
-function mapStateToProps(state: RootState) {
-    return {
-        queuePartitionIndex: selectQueuePartitionIndex(state),
-        queueTabletCellHost: selectQueueTabletCellHost(state),
-        queueTabletCellId: selectQueueTabletCellId(state),
-        queueRateMode: selectQueueRateMode(state),
-        queueTimeWindow: selectQueueTimeWindow(state),
-        queuePartitionsColumns: selectQueuePartitionsColumns(state),
-    };
-}
-
-const mapDispatchToProps = {
-    changeQueuePartitionIndex,
-    changeQueueTabletCellHost,
-    changeQueueTabletCellId,
-    changeQueueRateMode,
-    changeQueueTimeWindow,
-    changeQueuePartitionsColumns,
+type PropsFromRedux = {
+    queuePartitionIndex: string;
+    queueTabletCellHost: string;
+    queueTabletCellId: string;
+    queueRateMode: QUEUE_RATE_MODE;
+    queueTimeWindow: keyof TPerformanceCounters;
+    queuePartitionsColumns: PartitionColumn<QueuePartitionsColumns>[];
+    changeQueuePartitionIndex: (value: string) => void;
+    changeQueueTabletCellHost: (value: string) => void;
+    changeQueueTabletCellId: (value: string) => void;
+    changeQueueRateMode: (evt: React.ChangeEvent<HTMLInputElement>) => void;
+    changeQueueTimeWindow: (evt: React.ChangeEvent<HTMLInputElement>) => void;
+    changeQueuePartitionsColumns(data: {
+        items: Array<PartitionColumn<QueuePartitionsColumns>>;
+    }): void;
 };
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-export default connector(PartitionsExtraControls);

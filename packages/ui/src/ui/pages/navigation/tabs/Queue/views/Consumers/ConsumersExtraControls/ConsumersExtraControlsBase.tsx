@@ -1,33 +1,18 @@
 import React from 'react';
 import {Button} from '@gravity-ui/uikit';
-import {type ConnectedProps, connect} from 'react-redux';
-import {useDispatch} from '../../../../../../store/redux-hooks';
+import {useDispatch} from '../../../../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
-import Filter from '../../../../../../components/Filter/Filter';
-import RadioButton from '../../../../../../components/RadioButton/RadioButton';
-import {QUEUE_RATE_MODE} from '../../../../../../constants/navigation/tabs/queue';
-import i18n from './i18n';
+import Filter from '../../../../../../../components/Filter/Filter';
+import RadioButton from '../../../../../../../components/RadioButton/RadioButton';
+import {QUEUE_RATE_MODE} from '../../../../../../../constants/navigation/tabs/queue';
+import {type TPerformanceCounters} from '../../../../../../../store/reducers/navigation/tabs/queue/types';
+import i18n from '../i18n';
 
 import {
     toggleCreateDialog,
     toggleRegisterDialog,
-} from '../../../../../../store/reducers/navigation/tabs/queue/consumers';
-import {
-    changeQueueConsumerName,
-    changeQueueOwner,
-    changeQueueRateMode,
-    changeQueueTimeWindow,
-} from '../../../../../../store/actions/navigation/tabs/queue/filters';
-import {type RootState} from '../../../../../../store/reducers';
-import {
-    selectQueueConsumerName,
-    selectQueueOwner,
-    selectQueueRateMode,
-    selectQueueTimeWindow,
-} from '../../../../../../store/selectors/navigation/tabs/queue';
-
-import './ConsumersExtraControls.scss';
+} from '../../../../../../../store/reducers/navigation/tabs/queue/consumers';
 
 const block = cn('queue-consumers');
 
@@ -48,7 +33,7 @@ const rateItems: React.ComponentProps<typeof RadioButton>['items'] = [
     },
 ];
 
-const ConsumersExtraControls: React.VFC<Props> = ({
+export const ConsumersExtraControlsBase: React.VFC<Props> = ({
     queueConsumerName,
     queueRateMode,
     changeQueueConsumerName,
@@ -76,24 +61,13 @@ const ConsumersExtraControls: React.VFC<Props> = ({
         </>
     );
 };
-
-function mapStateToProps(state: RootState) {
-    return {
-        queueConsumerName: selectQueueConsumerName(state),
-        queueOwner: selectQueueOwner(state),
-        queueRateMode: selectQueueRateMode(state),
-        queueTimeWindow: selectQueueTimeWindow(state),
-    };
-}
-
-const mapDispatchToProps = {
-    changeQueueConsumerName,
-    changeQueueOwner,
-    changeQueueRateMode,
-    changeQueueTimeWindow,
+type PropsFromRedux = {
+    queueConsumerName: string;
+    queueOwner: string;
+    queueRateMode: QUEUE_RATE_MODE;
+    queueTimeWindow: keyof TPerformanceCounters;
+    changeQueueConsumerName: (value: string) => void;
+    changeQueueOwner: (value: string) => void;
+    changeQueueRateMode: (evt: React.ChangeEvent<HTMLInputElement>) => void;
+    changeQueueTimeWindow: (evt: React.ChangeEvent<HTMLInputElement>) => void;
 };
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-export default connector(ConsumersExtraControls);

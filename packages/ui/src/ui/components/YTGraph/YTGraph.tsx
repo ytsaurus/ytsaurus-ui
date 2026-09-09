@@ -79,8 +79,8 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
         }
 
         const handleMouseEnter = ({detail}: GraphMouseEvent) => {
-            const block = isBlock(detail.target) ? detail.target : undefined;
-            setHoveredBlockId(block ? (block.state as {id: TBlockId}).id : null);
+            const hoveredBlock = isBlock(detail.target) ? detail.target : undefined;
+            setHoveredBlockId(hoveredBlock ? (hoveredBlock.state as {id: TBlockId}).id : null);
         };
         const handleMouseLeave = () => {
             setHoveredBlockId(null);
@@ -119,8 +119,8 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
         return () => clearInterval(id);
     }, [zoomToNode, onZoomToFinished, graph]);
 
-    useGraphEvent(graph, 'camera-change', (data) => {
-        const cameraScale = graph.cameraService.getCameraBlockScaleLevel(data.scale);
+    useGraphEvent(graph, 'camera-change', (event) => {
+        const cameraScale = graph.cameraService.getCameraBlockScaleLevel(event.scale);
         setScale(
             cameraScale === ECameraScaleLevel.Detailed ? ECameraScaleLevel.Schematic : cameraScale,
         );
@@ -213,22 +213,22 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     }, [element, graph, zoomOnScroll]);
 
     const renderBlockCallback = React.useCallback(
-        (graph: Graph, data: B) => {
+        (instance: Graph, blockData: B) => {
             return !renderBlock ? (
                 <></>
             ) : (
                 renderBlock({
-                    graph,
-                    data,
+                    graph: instance,
+                    data: blockData,
                     className: block('render-block', {
-                        selected: data.selected,
-                        background: data.backgroundTheme,
+                        selected: blockData.selected,
+                        background: blockData.backgroundTheme,
                     }),
                     style: {
-                        left: data.x,
-                        top: data.y,
-                        width: data.width,
-                        height: data.height,
+                        left: blockData.x,
+                        top: blockData.y,
+                        width: blockData.width,
+                        height: blockData.height,
                         overflow: 'hidden',
                         position: 'absolute',
                     },

@@ -14,7 +14,7 @@ export function useOperationsWidget(props: OperationsWidgetProps) {
     const {id, data} = props;
     const cluster = useSelector(selectCluster);
 
-    const state = useSelector((state: RootState) => selectOperationsStateFilter(state, id));
+    const stateFilter = useSelector((state: RootState) => selectOperationsStateFilter(state, id));
     const authorType = useSelector((state: RootState) =>
         selectOperationsAuthorTypeFilter(state, id),
     );
@@ -32,14 +32,14 @@ export function useOperationsWidget(props: OperationsWidgetProps) {
         id,
         cluster,
         authorType,
-        state,
+        state: stateFilter,
         authors,
         pool,
         limit,
     });
 
     return {
-        filters: {state},
+        filters: {state: stateFilter},
         data: {
             operations: queryData?.operations,
             isLoading: isLoading || isFetching,

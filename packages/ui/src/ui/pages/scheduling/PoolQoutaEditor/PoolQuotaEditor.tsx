@@ -139,10 +139,10 @@ function PoolSourceSuggest(props: {
 
     const items = React.useMemo(() => {
         const res = skipParent ? sourcesNoParent : sources;
-        return map_(res, (value) => {
+        return map_(res, (source) => {
             return {
-                value,
-                text: value,
+                value: source,
+                text: source,
             };
         });
     }, [skipParent, sources, sourcesNoParent]);
