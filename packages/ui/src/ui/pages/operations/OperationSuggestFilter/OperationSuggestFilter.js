@@ -20,15 +20,13 @@ export default class OperationSuggestFilter extends Component {
     };
 
     static simpleSuggestLoader(items, text) {
-        text = text.toLowerCase();
+        const query = text.toLowerCase();
 
-        items = filter_(items, (item) => {
+        return filter_(items, (item) => {
             const itemText = typeof item === 'string' ? item : item.value;
 
-            return text ? itemText.toLowerCase().indexOf(text) !== -1 : true;
+            return query ? itemText.toLowerCase().indexOf(query) !== -1 : true;
         });
-
-        return items;
     }
 
     render() {

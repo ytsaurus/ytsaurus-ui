@@ -15,7 +15,7 @@ export function autoCorrectPath(path: string) {
     const secondToLastToken = path[length - 2];
 
     if (length > 1 && lastToken === '/' && secondToLastToken !== '\\') {
-        path = path.slice(0, length - 1);
+        return path.slice(0, length - 1);
     }
 
     return path;
@@ -43,16 +43,19 @@ export function prepareRequest(
     relativePath: string | RelativePath,
     parameters: Partial<RelativePath> = {},
 ) {
-    if (typeof relativePath !== 'string') {
-        parameters = relativePath;
-        relativePath = parameters.relativePath!;
+    let resolvedPath = relativePath;
+    let resolvedParams = parameters;
+
+    if (typeof resolvedPath !== 'string') {
+        resolvedParams = resolvedPath;
+        resolvedPath = resolvedParams.relativePath!;
     }
 
-    const {path, relativePath: _x, transaction, ...rest} = parameters;
+    const {path, relativePath: _x, transaction, ...rest} = resolvedParams;
 
     const restParameters: {transaction_id?: string} = rest;
 
-    const resultPath = path + (relativePath ? relativePath : '');
+    const resultPath = path + (resolvedPath ? resolvedPath : '');
 
     if (transaction?.length) {
         restParameters.transaction_id = transaction;

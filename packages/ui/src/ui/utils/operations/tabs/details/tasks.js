@@ -74,14 +74,14 @@ function prepareJobTypeOrder(jobTypeOrder) {
     const SINK = 'sink';
 
     // REMOVE source, sink
-    jobTypeOrder = filter_(jobTypeOrder, (jobType) => {
+    const result = filter_(jobTypeOrder, (jobType) => {
         const type = String(jobType).toLowerCase();
         return type !== SOURCE && type !== SINK;
     });
     // ADD total
-    jobTypeOrder.push('total');
+    result.push('total');
 
-    return jobTypeOrder;
+    return result;
 }
 
 export function prepareDataFromGraph(operation) {

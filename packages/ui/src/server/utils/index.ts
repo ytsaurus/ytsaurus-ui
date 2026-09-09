@@ -170,7 +170,6 @@ export async function pipeReadableToWriteable(
             pipedDataSize += chunk?.length;
         });
         src.on('error', (e: any) => {
-            resolve = () => {};
             reject(e);
         });
         src.on('close', () => {

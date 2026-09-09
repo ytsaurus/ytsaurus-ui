@@ -43,21 +43,19 @@ export function getNotFoundError<T extends YTErrorRaw>(error: T): T | undefined 
 }
 
 export function appendInnerErrors(targetErr: any, innerErr: YTError) {
-    if (!targetErr) {
-        targetErr = new Error('Unexpected behavior: targetErr is undefined.');
+    const resolvedError = targetErr || new Error('Unexpected behavior: targetErr is undefined.');
+
+    if (!resolvedError.inner_errors) {
+        resolvedError.inner_errors = [innerErr];
+        return resolvedError;
     }
 
-    if (!targetErr.inner_errors) {
-        targetErr.inner_errors = [innerErr];
-        return targetErr;
-    }
-
-    if (Array.isArray(targetErr.inner_errors)) {
-        targetErr.inner_errors.push(innerErr);
+    if (Array.isArray(resolvedError.inner_errors)) {
+        resolvedError.inner_errors.push(innerErr);
     } else {
-        targetErr.inner_errors = [targetErr.inner_errors, innerErr];
+        resolvedError.inner_errors = [resolvedError.inner_errors, innerErr];
     }
-    return targetErr;
+    return resolvedError;
 }
 
 export function getYtErrorCode(error: YTErrorRaw | unknown): number {

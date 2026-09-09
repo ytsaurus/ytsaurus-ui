@@ -336,8 +336,8 @@ class UploadManagerCreateImpl extends React.Component<Props, State> {
             this.props.updateView();
             this.props.onClose();
         } else if (!axios.isCancel(error) && (!error || error.code !== 'cancelled')) {
-            error = error.response?.data || error;
-            this.setState({error});
+            const resolvedError = error.response?.data || error;
+            this.setState({error: resolvedError});
         }
     }
 

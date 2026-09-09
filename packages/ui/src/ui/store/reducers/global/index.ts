@@ -177,15 +177,15 @@ function updatedTitle(
         clusters,
     }: Pick<GlobalState, 'cluster' | 'page' | 'path'> & {clusters: Record<string, ClusterConfig>},
 ) {
-    cluster = typeof cluster !== 'undefined' ? cluster : state.cluster;
-    page = typeof page !== 'undefined' ? page : state.page;
-    path = typeof path !== 'undefined' ? path : state.path;
+    const resolvedCluster = typeof cluster !== 'undefined' ? cluster : state.cluster;
+    const resolvedPage = typeof page !== 'undefined' ? page : state.page;
+    const resolvedPath = typeof path !== 'undefined' ? path : state.path;
 
-    const clusterConfig = getClusterConfig(clusters, cluster ?? '');
-    const clusterName = clusterConfig.name || cluster;
-    const title = filter_([path, page, clusterName], Boolean).join(' - ');
+    const clusterConfig = getClusterConfig(clusters, resolvedCluster ?? '');
+    const clusterName = clusterConfig.name || resolvedCluster;
+    const title = filter_([resolvedPath, resolvedPage, clusterName], Boolean).join(' - ');
 
-    return {cluster, page, path, title};
+    return {cluster: resolvedCluster, page: resolvedPage, path: resolvedPath, title};
 }
 
 export default (state = initialState, action: GloablStateAction): GlobalState => {

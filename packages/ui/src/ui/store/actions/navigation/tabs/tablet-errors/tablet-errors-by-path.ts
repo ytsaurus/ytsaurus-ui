@@ -35,6 +35,8 @@ export function loadTabletErrorsByTablePath(
         | 'fixed_end_timestamp'
     >,
 ): AsyncAction {
+    let currentPage = page;
+
     return (dispatch, getState) => {
         dispatch(
             tabletErrorsByPathActions.onRequest({
@@ -48,31 +50,31 @@ export function loadTabletErrorsByTablePath(
 
         const prevDataParams = selectTabletErrorsByPathDataParams(state);
         if (
-            page != 0 &&
+            currentPage != 0 &&
             !isEqual_(
                 omit_(prevDataParams, ['fixed_end_timestamp']),
                 omit_(params, ['fixed_end_timestamp']),
             )
         ) {
-            page = 0;
-            dispatch(tabletErrorsByPathActions.updateFilter({pageFilter: page}));
+            currentPage = 0;
+            dispatch(tabletErrorsByPathActions.updateFilter({pageFilter: currentPage}));
             return Promise.resolve();
         }
 
         const prevData = selectTabletErrorsByPathData(state);
-        if (page != 0 && prevData) {
+        if (currentPage != 0 && prevData) {
             params.fixed_end_timestamp = prevData.fixed_end_timestamp;
         }
 
         return fetchFromTabletErrorsApi(
             'tablet_errors_by_table',
             cluster,
-            {...params, offset: page * ROWS_PER_PAGE, count_limit: 100},
+            {...params, offset: currentPage * ROWS_PER_PAGE, count_limit: 100},
             cancelHelper.removeAllAndGenerateNextToken(),
         )
             .then(({data}) => {
                 const payload =
-                    page === 0
+                    currentPage === 0
                         ? {
                               data,
                               dataParams: params,

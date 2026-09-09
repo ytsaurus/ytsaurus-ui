@@ -7,12 +7,12 @@ const yson = unipika.utils.yson;
 
 /** @deprecated */
 function convertToNumberOld(value: number | string, defaultValue?: number): number | undefined {
-    value = yson.value(value);
+    const currentValue: unknown = yson.value(value);
 
-    const type = unipika.utils.type(value);
+    const type = unipika.utils.type(currentValue);
 
     if (type === 'string') {
-        const converted = Number(value);
+        const converted = Number(currentValue);
 
         if (isFinite(converted)) {
             return converted;
@@ -20,17 +20,19 @@ function convertToNumberOld(value: number | string, defaultValue?: number): numb
             if (defaultValue !== undefined) {
                 return isNaN(defaultValue) ? undefined : defaultValue;
             }
-            throw new Error('thorYPath: value "' + value + '" cannot be converted to number.');
+            throw new Error(
+                'thorYPath: value "' + currentValue + '" cannot be converted to number.',
+            );
         }
     } else if (type === 'number' || type === 'undefined') {
-        return isNaN(value as number) && defaultValue !== undefined
+        return isNaN(currentValue as number) && defaultValue !== undefined
             ? defaultValue
-            : (value as number | undefined);
+            : (currentValue as number | undefined);
     } else {
         if (defaultValue !== undefined) {
             return isNaN(defaultValue) ? undefined : defaultValue;
         }
-        throw new Error('thorYPath: value "' + value + '" cannot be converted to number.');
+        throw new Error('thorYPath: value "' + currentValue + '" cannot be converted to number.');
     }
 }
 
