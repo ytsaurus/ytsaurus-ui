@@ -32,8 +32,13 @@ const makeNormalizeUrl = createSelector(
         if (!hideReferrerUrl) {
             return undefined;
         }
+
         return function normalizeUrl(url?: string) {
-            return `${hideReferrerUrl}?${encodeURIComponent(url!)}`;
+            const targetUrl = url?.startsWith('/')
+                ? new URL(url, window.location.origin).href
+                : url;
+
+            return `${hideReferrerUrl}?${encodeURIComponent(String(targetUrl))}`;
         };
     },
 );
