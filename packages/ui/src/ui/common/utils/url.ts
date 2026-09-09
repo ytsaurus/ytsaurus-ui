@@ -3,11 +3,9 @@ export function absolute(relative: string, base?: string) {
         return relative;
     }
 
-    if (base === undefined) {
-        base = window?.location.pathname || '';
-    }
+    const basePath = base === undefined ? window?.location.pathname || '' : base;
 
-    const stack = base.split('/');
+    const stack = basePath.split('/');
     const parts = relative.split('/');
     stack.pop();
     for (let i = 0; i < parts.length; i++) {

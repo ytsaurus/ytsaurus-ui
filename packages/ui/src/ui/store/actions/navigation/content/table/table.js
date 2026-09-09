@@ -405,6 +405,7 @@ export function updateTableData() {
 
         return loadTableRows(LOAD_TYPE.UPDATE, state)
             .then(({columns, omittedColumns, rows, yqlTypes}) => {
+                let updatedRows = rows;
                 // Scheme is always strict in dynamic tables. No new columns are expected.
                 if (!isDynamic) {
                     // Get current columns for save visible status
@@ -412,7 +413,7 @@ export function updateTableData() {
                     const defaultTableColumnLimit = selectDefaultTableColumnLimit(state);
                     const preparedColumns = Columns.prepareColumns(
                         attributes,
-                        rows,
+                        updatedRows,
                         columns,
                         storedColumns,
                         defaultTableColumnLimit,
@@ -426,20 +427,22 @@ export function updateTableData() {
 
                 if (moveBackward) {
                     let newOffsetValue;
-                    if (!isEmpty_(offsetValue) && rows.length < requestedPageSize) {
+                    if (!isEmpty_(offsetValue) && updatedRows.length < requestedPageSize) {
                         // If there are not enough rows on the new page on the left:
                         //  - add rows from the current page
                         //  - reset offset value
                         newOffsetValue = '';
                         const previousRows = selectRows(state);
                         const addRowCount = Math.min(
-                            requestedPageSize - rows.length + 1,
+                            requestedPageSize - updatedRows.length + 1,
                             previousRows.length,
                         );
-                        rows = rows.concat(previousRows.slice(1, addRowCount));
+                        updatedRows = updatedRows.concat(previousRows.slice(1, addRowCount));
                     } else {
                         const keyColumns = selectKeyColumns(state);
-                        newOffsetValue = Query.prepareKey(getColumnsValues(rows[0], keyColumns));
+                        newOffsetValue = Query.prepareKey(
+                            getColumnsValues(updatedRows[0], keyColumns),
+                        );
                     }
 
                     if (newOffsetValue !== undefined) {
@@ -452,7 +455,7 @@ export function updateTableData() {
 
                 dispatch({
                     type: GET_TABLE_DATA.SUCCESS,
-                    data: {rows, yqlTypes},
+                    data: {rows: updatedRows, yqlTypes},
                 });
             })
             .catch((error) => {

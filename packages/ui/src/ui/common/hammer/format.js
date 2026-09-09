@@ -11,6 +11,7 @@ function parseSetting(...args) {
 }
 
 function preformat(value) {
+    let result = value;
     const replacements = [
         ['dynamic_row_read_rate', 'dynamic_read'],
         ['dynamic_row_lookup_rate', 'dynamic_lookup'],
@@ -25,13 +26,14 @@ function preformat(value) {
     ];
 
     forEach_(replacements, (replacementSettings) => {
-        value = value.replace.apply(value, replacementSettings);
+        result = result.replace.apply(result, replacementSettings);
     });
 
-    return value;
+    return result;
 }
 
 function postformat(value) {
+    let result = value;
     const replacements = [
         ['acl', 'ACL'],
         ['id', 'Id'],
@@ -57,10 +59,10 @@ function postformat(value) {
     forEach_(replacements, (replacementSettings) => {
         const regex = new RegExp('(^|\\s)(' + replacementSettings[0] + ')($|\\s)', 'i');
         const replacement = '$1' + replacementSettings[1] + '$3';
-        value = value.replace(regex, replacement);
+        result = result.replace(regex, replacement);
     });
 
-    return value;
+    return result;
 }
 
 /**
@@ -70,7 +72,7 @@ function postformat(value) {
  * @returns {String}
  */
 format['ReadableField'] = function (value, settings) {
-    settings = settings || {};
+    const resolvedSettings = settings || {};
 
     let formatted = value;
 
@@ -78,7 +80,7 @@ format['ReadableField'] = function (value, settings) {
         formatted = preformat(formatted);
         formatted = format['Readable'](formatted, {
             delimiter: '_',
-            caps: parseSetting(settings, 'caps', 'first'),
+            caps: parseSetting(resolvedSettings, 'caps', 'first'),
         });
         formatted = postformat(formatted);
     }
@@ -191,13 +193,14 @@ format['UnderscoreToHyphen'] = format['CssTemplateField'] = function (value) {
  * @constructor
  */
 format['RackToVector'] = function (value) {
+    let currentValue = value;
     const rackPartRegex = /([a-z]+)|(\d+)|([-.])/i;
     const vector = [];
     let currentMatch;
 
-    if (typeof value !== 'undefined') {
+    if (typeof currentValue !== 'undefined') {
         do {
-            currentMatch = rackPartRegex.exec(value);
+            currentMatch = rackPartRegex.exec(currentValue);
 
             if (currentMatch !== null) {
                 if (currentMatch[2]) {
@@ -208,11 +211,11 @@ format['RackToVector'] = function (value) {
                     vector.push(currentMatch[3]);
                 }
 
-                value = value.substring(currentMatch.index + currentMatch[0].length);
+                currentValue = currentValue.substring(currentMatch.index + currentMatch[0].length);
             }
         } while (currentMatch !== null);
     } else {
-        vector.push(value);
+        vector.push(currentValue);
     }
 
     return vector;

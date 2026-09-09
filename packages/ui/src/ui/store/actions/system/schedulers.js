@@ -120,8 +120,8 @@ export function getAgents() {
             ...USE_SUPRESS_SYNC,
         })
         .then((hosts) => {
-            hosts = hosts || [];
-            const res = sortBy_(hosts, (host) => {
+            const resolvedHosts = hosts || [];
+            const res = sortBy_(resolvedHosts, (host) => {
                 return ypath.getValue(host, '');
             });
             return getAgentsState(res);

@@ -119,14 +119,14 @@ function prepareChunkCells(chunks) {
     });
 
     forEach_(chunkTypes, (type) => {
-        type = type.name;
+        const typeName = type.name;
 
-        if (chunks[type]) {
+        if (chunks[typeName]) {
             // Some chunks types may not exist on cluster, e.g. foreign chunks
-            cells['total'][type] = chunks[type].count;
+            cells['total'][typeName] = chunks[typeName].count;
 
-            forEach_(chunks[type].multicell_count, (count, cellTag) => {
-                cells[cellTag][type] = count;
+            forEach_(chunks[typeName].multicell_count, (count, cellTag) => {
+                cells[cellTag][typeName] = count;
             });
         }
     });

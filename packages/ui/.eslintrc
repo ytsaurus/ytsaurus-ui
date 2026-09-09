@@ -4,6 +4,7 @@
     "root": true,
     "rules": {
         "no-console": "error",
+        "no-param-reassign": ["error", {"props": false}],
         "new-cap": 0,
         "import/order": 0,
         "import/dynamic-import-chunkname": [2, {

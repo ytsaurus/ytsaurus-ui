@@ -7,13 +7,15 @@ function getNextObjectName(initialPath, step = INITIAL_STEP) {
 }
 
 function checkPathExists(initialPath, path, step = INITIAL_STEP) {
+    let currentStep = step;
+
     return yt.v3
         .exists({path})
         .then((isExists) => {
             if (isExists) {
-                const newPath = getNextObjectName(initialPath, ++step);
+                const newPath = getNextObjectName(initialPath, ++currentStep);
 
-                return checkPathExists(initialPath, newPath, step);
+                return checkPathExists(initialPath, newPath, currentStep);
             }
 
             return path;
