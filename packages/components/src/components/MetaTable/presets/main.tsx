@@ -57,7 +57,7 @@ export const metaTablePresetMain: Props = (attributes, cluster, config = {}) => 
               {
                   key: 'nirvana_block_url',
                   value: renderMarkdown ? (
-                      renderMarkdown({text: nirvanaBlockUrl})
+                      renderMarkdown({text: nirvanaBlockUrl, errorMode: 'inline'})
                   ) : (
                       <TemplateLink
                           url={nirvanaBlockUrl}

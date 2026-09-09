@@ -43,6 +43,7 @@ export type MetaTableOperationLinkParams = {
 export type MetaTableRenderMarkdownParams = {
     text: string;
     allowHTML?: boolean;
+    errorMode?: 'block' | 'inline';
 };
 
 export type MetaTableAutomaticModeSwitchParams = {

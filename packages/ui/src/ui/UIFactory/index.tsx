@@ -214,6 +214,11 @@ export type AiChatIntegration = {
     AskAiButton?: React.ComponentType<AskAiButtonProps>;
 };
 
+type RenderMarkdownParams = {
+    text: string;
+    errorMode?: 'block' | 'inline';
+};
+
 export interface UIFactory {
     isAccountCreateDisabled(params: {
         currentAccount: string;
@@ -542,7 +547,7 @@ export interface UIFactory {
         error: Error | YTError;
     }) => React.ReactNode;
 
-    renderMarkdown(props: {text: string}): React.ReactNode;
+    renderMarkdown(props: RenderMarkdownParams): React.ReactNode;
 
     getAnalyticsService(): AnalyticsService[];
 
