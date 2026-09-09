@@ -164,12 +164,12 @@ const mapStateToProps = (state) => ({
 const SpecificationConnected = connect(mapStateToProps)(Specification);
 
 export default function SpecificationWithRum() {
-    const loadState = useSelector(selectOperationDetailsLoadingStatus);
+    const operationLoadState = useSelector(selectOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.OPERATION_TAB_SPECIFICATION,
         additionalStartType: RumMeasureTypes.OPERATION,
-        startDeps: [loadState],
+        startDeps: [operationLoadState],
         allowStart: ([loadState]) => {
             return !isFinalLoadingStatus(loadState);
         },
@@ -177,7 +177,7 @@ export default function SpecificationWithRum() {
 
     useRumMeasureStop({
         type: RumMeasureTypes.OPERATION_TAB_SPECIFICATION,
-        stopDeps: [loadState],
+        stopDeps: [operationLoadState],
         allowStop: ([loadState]) => {
             return isFinalLoadingStatus(loadState);
         },

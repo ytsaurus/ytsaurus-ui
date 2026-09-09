@@ -412,9 +412,9 @@ export class Calendar extends React.Component {
             default: {
                 return (e) => {
                     const {from, to, pick} = this.props;
-                    const range = e.target.getAttribute('range');
+                    const hoveredRange = e.target.getAttribute('range');
 
-                    if (!range || !from || !to || !pick) {
+                    if (!hoveredRange || !from || !to || !pick) {
                         if (this.state.hovered && !pick) {
                             this.setState({hovered: undefined});
                         }
@@ -423,7 +423,7 @@ export class Calendar extends React.Component {
                     }
 
                     const hovered = Interval.fromDateTimes(from, to).union(
-                        Interval.fromISO(range, {zone}),
+                        Interval.fromISO(hoveredRange, {zone}),
                     );
 
                     if (!this.state.hovered || !hovered.equals(this.state.hovered)) {

@@ -24,7 +24,7 @@ export function loadTransactions() {
         const state = getState();
         const path = selectPath(state);
         const parsedPath = selectParsedPath(state);
-        const transaction = selectTransaction(state);
+        const currentTransaction = selectTransaction(state);
 
         dispatch({type: LOAD_TRANSACTIONS.REQUEST});
         requests.removeAllRequests();
@@ -33,7 +33,7 @@ export function loadTransactions() {
             .list(YTApiId.navigationListTransactions, {
                 parameters: prepareRequest('/', {
                     path,
-                    transaction,
+                    transaction: currentTransaction,
                     attributes: ['type', 'title', 'start_time', 'owner'],
                 }),
                 cancellation: requests.saveCancelToken,

@@ -46,6 +46,14 @@
             "fixStyle": "inline-type-imports"
         }]
     },
+    "overrides": [
+        {
+            "files": ["*.js", "*.jsx"],
+            "rules": {
+                "no-shadow": "error"
+            }
+        }
+    ],
     "env": {
         "jest": true
     }

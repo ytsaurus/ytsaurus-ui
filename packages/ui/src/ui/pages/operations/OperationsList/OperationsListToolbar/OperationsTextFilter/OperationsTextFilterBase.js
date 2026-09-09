@@ -1,20 +1,18 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import {connect} from 'react-redux';
-import {Redirect, withRouter} from 'react-router';
+import {Redirect} from 'react-router';
 
-import Filter from '../../../../components/Filter/Filter';
+import Filter from '../../../../../components/Filter/Filter';
 
-import {isGotoEnabled} from '../../../../utils/operations/list';
-import {updateFilter} from '../../../../store/actions/operations';
-import Button from '../../../../components/Button/Button';
-import i18n from './i18n';
+import {isGotoEnabled} from '../../../../../utils/operations/list';
+import Button from '../../../../../components/Button/Button';
+import i18n from '../i18n';
 
 const block = cn('operations-list');
 const tbBlock = cn('elements-toolbar');
 
-class OperationsTextFilter extends Component {
+export class OperationsTextFilterBase extends Component {
     static propTypes = {
         // from connect
         updateFilter: PropTypes.func.isRequired,
@@ -91,14 +89,3 @@ class OperationsTextFilter extends Component {
         );
     }
 }
-
-function mapStateToProps({operations}) {
-    return {
-        filter: operations.list.filters.text,
-        activePreset: operations.list.activePreset,
-    };
-}
-
-const mapDispatchToProps = {updateFilter};
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(OperationsTextFilter));
