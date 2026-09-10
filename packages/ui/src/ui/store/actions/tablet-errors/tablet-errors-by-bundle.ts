@@ -25,7 +25,7 @@ export function loadTabletErrorsByBundle(
 
         const state = getState();
         const cluster = selectCluster(state);
-        const data = selectTabletErrorsByBundleData(state);
+        const tabletErrorsData = selectTabletErrorsByBundleData(state);
 
         return fetchFromTabletErrorsApi(
             'tablet_errors_by_bundle',
@@ -34,8 +34,8 @@ export function loadTabletErrorsByBundle(
                 ...params,
                 offset: page * 100,
                 count_limit: 100,
-                ...(page !== 0 && data?.fixed_end_timestamp
-                    ? {fixed_end_timestamp: data?.fixed_end_timestamp}
+                ...(page !== 0 && tabletErrorsData?.fixed_end_timestamp
+                    ? {fixed_end_timestamp: tabletErrorsData?.fixed_end_timestamp}
                     : {}),
             },
             cancelHelper.removeAllAndGenerateNextToken(),

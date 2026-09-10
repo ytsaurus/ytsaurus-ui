@@ -50,11 +50,11 @@ const TabletErrorsConnected = connect(
 )(TabletErrorsBackgroundBase);
 
 export default function TabletErrorsWithRum() {
-    const loadState = useSelector(selectTabletErrorsLoadingStatus);
+    const tabletErrorsLoadState = useSelector(selectTabletErrorsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_TAB_TABLET_ERRORS,
-        startDeps: [loadState],
+        startDeps: [tabletErrorsLoadState],
         allowStart: ([loadState]) => {
             return !isFinalLoadingStatus(loadState);
         },
@@ -62,7 +62,7 @@ export default function TabletErrorsWithRum() {
 
     useRumMeasureStop({
         type: RumMeasureTypes.NAVIGATION_TAB_TABLET_ERRORS,
-        stopDeps: [loadState],
+        stopDeps: [tabletErrorsLoadState],
         allowStop: ([loadState]) => {
             return isFinalLoadingStatus(loadState);
         },

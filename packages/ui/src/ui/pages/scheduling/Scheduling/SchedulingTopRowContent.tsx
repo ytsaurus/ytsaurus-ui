@@ -85,9 +85,9 @@ function SchedulingFavourites() {
 
     const onFavouriteClick = React.useCallback(
         ({path}: {path: string}) => {
-            const [, pool, tree] = path.match(/(.+)\[(.+)]/)!;
-            dispatch(changeTree(tree));
-            dispatch(changePool(pool));
+            const [, selectedPool, selectedTree] = path.match(/(.+)\[(.+)]/)!;
+            dispatch(changeTree(selectedTree));
+            dispatch(changePool(selectedPool));
         },
         [dispatch],
     );
@@ -194,7 +194,7 @@ function calcPathname(pathname: string, cluster: string, pool?: string) {
 }
 
 function SchedulingPhysicalTree() {
-    const tree = useSelector(selectTree);
+    const currentTree = useSelector(selectTree);
     const treeItems = useSelector(selectTreesSelectItems);
     const dispatch = useDispatch();
 
@@ -203,7 +203,7 @@ function SchedulingPhysicalTree() {
     return (
         <div className={block('tree')}>
             <Select
-                value={[tree]}
+                value={[currentTree]}
                 filterable={treeItems?.length >= 5}
                 options={treeItems}
                 onUpdate={(vals) => onChange(vals[0])}

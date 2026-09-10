@@ -9,11 +9,11 @@ import {useSelector} from '../../../../store/redux-hooks';
 import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
 
 const DocumentWithRum: FC = () => {
-    const loadState = useSelector(selectNavigationDocumentLoadingStatus);
+    const documentLoadState = useSelector(selectNavigationDocumentLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_CONTENT_DOCUMENT,
-        startDeps: [loadState],
+        startDeps: [documentLoadState],
         allowStart: ([loadState]) => {
             return !isFinalLoadingStatus(loadState);
         },
@@ -21,7 +21,7 @@ const DocumentWithRum: FC = () => {
 
     useRumMeasureStop({
         type: RumMeasureTypes.NAVIGATION_CONTENT_DOCUMENT,
-        stopDeps: [loadState],
+        stopDeps: [documentLoadState],
         allowStop: ([loadState]) => {
             return isFinalLoadingStatus(loadState);
         },

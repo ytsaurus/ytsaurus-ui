@@ -61,8 +61,8 @@ export class ClustersMenuBodyBase extends React.Component<Props> {
             {} as Record<string, Array<ClusterConfigWithStatus>>,
         );
 
-        forEach_(groups, (clusters) => {
-            clusters.sort(sortByClusterName);
+        forEach_(groups, (groupClusters) => {
+            groupClusters.sort(sortByClusterName);
         });
 
         return groups;
@@ -148,12 +148,12 @@ export class ClustersMenuBodyBase extends React.Component<Props> {
         return (
             <main key="body" className={b(null, 'elements-page__content')}>
                 {map_(CLUSTER_GROUPS_ORDER.concat(unknown), (groupName) => {
-                    const clusters = clusterGroups[groupName];
+                    const groupClusters = clusterGroups[groupName];
                     const {caption, size} = CLUSTER_GROUPS[groupName] ?? {caption: groupName};
 
                     return (
-                        clusters &&
-                        clusters.length && (
+                        groupClusters &&
+                        groupClusters.length && (
                             <div key={groupName} className={b('group')}>
                                 <div
                                     className={b(
@@ -165,7 +165,7 @@ export class ClustersMenuBodyBase extends React.Component<Props> {
                                     {caption}
                                 </div>
                                 <div className={b('list')}>
-                                    {map_(clusters, (cluster) =>
+                                    {map_(groupClusters, (cluster) =>
                                         this.renderCluster(cluster, size),
                                     )}
                                 </div>

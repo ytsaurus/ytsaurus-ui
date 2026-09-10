@@ -20,8 +20,8 @@ export function PoolTreeSuggestControl(props: Props) {
     usePoolTreesLoaded();
 
     const items = React.useMemo(() => {
-        return map_(treeNames, (value) => {
-            return {value, content: value};
+        return map_(treeNames, (treeName) => {
+            return {value: treeName, content: treeName};
         });
     }, [treeNames]);
 

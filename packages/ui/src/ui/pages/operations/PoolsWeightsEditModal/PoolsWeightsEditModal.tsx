@@ -25,8 +25,8 @@ export function PoolsWeightsEditModal() {
     const operationValue = operation.$value;
 
     const {pools, initialValues} = useMemo(() => {
-        const pools = operation.pools ?? [];
-        return {pools, initialValues: buildInitialValues(pools)};
+        const operationPools = operation.pools ?? [];
+        return {pools: operationPools, initialValues: buildInitialValues(operationPools)};
     }, [operation.pools]);
 
     const [activeTab, setActiveTab] = useState<string>('');

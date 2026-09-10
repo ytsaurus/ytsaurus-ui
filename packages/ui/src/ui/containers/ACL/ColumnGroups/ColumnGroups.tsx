@@ -143,8 +143,11 @@ export default function ColumnGroups({
                                             placeholder={i18n('context_filter-by-name')}
                                             className={block('filter')}
                                             value={columnGroupNameFilter}
-                                            onUpdate={(columnGroupNameFilter) =>
-                                                updateAclFilters({columnGroupNameFilter})
+                                            onUpdate={(nextColumnGroupNameFilter) =>
+                                                updateAclFilters({
+                                                    columnGroupNameFilter:
+                                                        nextColumnGroupNameFilter,
+                                                })
                                             }
                                         />
                                     ),
@@ -196,8 +199,8 @@ export function ColumnGroupsFilter({
     updateAclFilters,
 }: ColumnGropsToolbarProps) {
     const options = React.useMemo(() => {
-        return userPermissionsAccessColumns?.map((value) => {
-            return {value, title: value};
+        return userPermissionsAccessColumns?.map((column) => {
+            return {value: column, title: column};
         });
     }, [userPermissionsAccessColumns]);
     return (

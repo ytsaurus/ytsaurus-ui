@@ -239,13 +239,17 @@ export default function Graph({isActive, className, graph, showMinimap, prepareN
                     let position = rightPosition;
                     let placement: PopupProps['placement'] = 'right';
                     if (graphContainer) {
-                        const {x, y, width} = graphContainer.getBoundingClientRect();
+                        const {
+                            x: containerX,
+                            y: containerY,
+                            width,
+                        } = graphContainer.getBoundingClientRect();
                         if (position.x + 330 > width) {
                             position = leftPosition;
                             placement = 'left';
                         }
-                        position.x += x;
-                        position.y += y;
+                        position.x += containerX;
+                        position.y += containerY;
                     }
                     setNodeInfo({
                         progress: hoveredNode.progress,

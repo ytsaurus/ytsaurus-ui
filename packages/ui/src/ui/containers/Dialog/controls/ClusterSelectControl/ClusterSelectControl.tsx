@@ -42,7 +42,7 @@ function ClusterSelectControl({
     filterPredicate = () => true,
     width,
 }: Props) {
-    const clusters = React.useMemo(() => {
+    const options = React.useMemo(() => {
         const res = map_(filter_(YT.clusters, filterPredicate), ({name, id}) => ({
             value: id,
             text: name,
@@ -53,18 +53,18 @@ function ClusterSelectControl({
 
     const items = React.useMemo(() => {
         if (!excludeClusters?.length) {
-            return clusters;
+            return options;
         }
 
         const toSkip = new Set(excludeClusters);
-        return filter_(clusters, ({value}) => {
-            return !toSkip.has(value);
+        return filter_(options, (option) => {
+            return !toSkip.has(option.value);
         });
-    }, [clusters, excludeClusters]);
+    }, [options, excludeClusters]);
 
     const handleChange = React.useCallback(
-        (value: Array<string>) => {
-            onChange(value[0]);
+        (selectedValues: Array<string>) => {
+            onChange(selectedValues[0]);
         },
         [onChange],
     );

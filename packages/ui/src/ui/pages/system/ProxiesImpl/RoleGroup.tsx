@@ -161,18 +161,27 @@ export function RoleGroup({data, makeUrl, forceExpand}: Props) {
             </Flex>
             {expanded && (
                 <div className={block('rack-nodes')}>
-                    {items.map(({effectiveState, alerts, decommissioned, name, banned, full}) => {
-                        return (
-                            <NodeQuad
-                                key={name}
-                                theme={effectiveState}
-                                alerts={alerts}
-                                banned={banned}
-                                decommissioned={decommissioned}
-                                full={full}
-                            />
-                        );
-                    })}
+                    {items.map(
+                        ({
+                            effectiveState,
+                            alerts,
+                            decommissioned,
+                            name: nodeName,
+                            banned: isBanned,
+                            full: isFull,
+                        }) => {
+                            return (
+                                <NodeQuad
+                                    key={nodeName}
+                                    theme={effectiveState}
+                                    alerts={alerts}
+                                    banned={isBanned}
+                                    decommissioned={decommissioned}
+                                    full={isFull}
+                                />
+                            );
+                        },
+                    )}
                 </div>
             )}
         </div>

@@ -116,7 +116,13 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
         {useDefaultConnection: !useGroups},
     );
 
-    const {isEmpty, isLoading, data, groups, groupBlocks} = useFlowGraphData({
+    const {
+        isEmpty,
+        isLoading,
+        data: graphData,
+        groups,
+        groupBlocks,
+    } = useFlowGraphData({
         pipeline_path,
     });
 
@@ -132,23 +138,23 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
 
     return (
         <div className={block()}>
-            <FlowGraphToolbar blocks={data.blocks} zoomToNode={zoomTo} />
+            <FlowGraphToolbar blocks={graphData.blocks} zoomToNode={zoomTo} />
             <YTGraph
                 className={block('graph')}
                 setScale={setScale}
                 {...config}
-                data={useGroups && !zoomToState ? groups : data}
-                renderBlock={({className, data, graph}) => {
+                data={useGroups && !zoomToState ? groups : graphData}
+                renderBlock={({className, data, graph: graphInstance}) => {
                     return (
                         <GraphBlock
-                            graph={graph}
+                            graph={graphInstance}
                             block={data}
                             className={block('graph-block', className)}
                         >
                             <Flex className={block('item-container')}>
                                 {renderContent({item: data})}
                             </Flex>
-                            <FlowGraphAnchors graph={graph} data={data} />
+                            <FlowGraphAnchors graph={graphInstance} data={data} />
                         </GraphBlock>
                     );
                 }}
@@ -173,17 +179,17 @@ function useFlowGraphEvents(graph?: Graph) {
 
     useGraphEvents(graph ?? null, {
         onBlockAnchorSelectionChange({anchor: {id, blockId, type}, selected}) {
-            const block = graph?.api.getBlockById(blockId) as FlowGraphBlock;
+            const graphBlock = graph?.api.getBlockById(blockId) as FlowGraphBlock;
             if (
                 !graph ||
                 !selected ||
                 !isComputationAnchorType(type) ||
-                !isFlowComputationOrGroup(block)
+                !isFlowComputationOrGroup(graphBlock)
             ) {
                 return;
             }
 
-            const summary = getStreamsSummaryByAnchorType(block.meta, type);
+            const summary = getStreamsSummaryByAnchorType(graphBlock.meta, type);
             if (summary) {
                 setVisibleMessages(summary.messages);
                 requestAnimationFrame(() => {
@@ -224,8 +230,10 @@ function FlowGraphToolbar({
                             value={zoomToNode ? [zoomToNode] : []}
                             label={i18n('field_zoom-to')}
                             placeholder={i18n('context_select-node')}
-                            onUpdate={([zoomToNode = '']) => {
-                                dispatch(filtersSlice.actions.updateFlowFilters({zoomToNode}));
+                            onUpdate={([nodeId = '']) => {
+                                dispatch(
+                                    filtersSlice.actions.updateFlowFilters({zoomToNode: nodeId}),
+                                );
                             }}
                             items={items}
                             hasClear
@@ -378,9 +386,9 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                     key: K,
                     options?: {groupId: string},
                 ) {
-                    const streams = computation[key] ?? [];
+                    const streamIds = computation[key] ?? [];
 
-                    streams.forEach((id) => {
+                    streamIds.forEach((id) => {
                         if (key === 'input_streams' || key === 'source_streams') {
                             const c = addFlowConnection(res.data.connections, id, computation.id, {
                                 targetAnchorId,
@@ -398,7 +406,7 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                                 runtimeData.output.extendedStreams.get(id) ?? {},
                             );
                         } else if (key === 'timer_streams') {
-                            const computationBlock = blockById.get(computation.id)!;
+                            const timerComputationBlock = blockById.get(computation.id)!;
                             const timerBlock = blockById.get(id)!;
 
                             const cOut = addFlowConnection(
@@ -407,7 +415,7 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                                 id,
                                 {sourceAnchorId},
                             );
-                            makeTimerAnchors(computationBlock, timerBlock, cOut);
+                            makeTimerAnchors(timerComputationBlock, timerBlock, cOut);
                             const timerInfo = runtimeData.timer.extendedStreams.get(id) ?? {};
                             applyConnectionStyle(cOut, timerInfo);
 
@@ -417,7 +425,7 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                                 computation.id,
                                 {targetAnchorId},
                             );
-                            makeTimerAnchors(timerBlock, computationBlock, cIn);
+                            makeTimerAnchors(timerBlock, timerComputationBlock, cIn);
                             applyConnectionStyle(cIn, timerInfo);
                         }
 

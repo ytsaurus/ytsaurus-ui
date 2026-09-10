@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import format from '../../../common/hammer/format';
+import hammerFormat from '../../../common/hammer/format';
 import Label, {type LabelTheme} from '../../../components/Label';
 import StatusBlock from '../../../components/StatusBlock/StatusBlock';
 import {ClipboardButton, Tooltip} from '@ytsaurus/components';
@@ -25,19 +25,23 @@ const STATE_THEME: Record<string, LabelTheme> = {
 } as const;
 
 export function NodeColumnState({state}: {state: 'online' | 'offline' | string}) {
-    const text = format.FirstUppercase(state);
+    const text = hammerFormat.FirstUppercase(state);
     const theme = STATE_THEME[state] ?? 'default';
 
     return <Label theme={theme} className={block('state')} type="text" text={text} />;
 }
 
 export function NodeColumnBanned({banned}: {banned: boolean}) {
-    return banned ? <StatusBlock text={i18n('value_banned')} theme="banned" /> : format.NO_VALUE;
+    return banned ? (
+        <StatusBlock text={i18n('value_banned')} theme="banned" />
+    ) : (
+        hammerFormat.NO_VALUE
+    );
 }
 
 export function NodeColumnRole({role}: {role: 'default' | 'control' | 'data'}) {
     const theme = ROLE_THEME[role] || 'info';
-    const text = format.Address(role);
+    const text = hammerFormat.Address(role);
 
     return <Label theme={theme} className={block('role')} type="text" text={text} />;
 }

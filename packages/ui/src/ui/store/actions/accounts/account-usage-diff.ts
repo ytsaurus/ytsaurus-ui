@@ -56,9 +56,9 @@ export function fetchAccountUsageListDiff(): UsageListThunkAction {
             return;
         }
 
-        const params = getFilterParameters(state);
+        const filterParams = getFilterParameters(state);
         const requestParams: AccountUsageListDiffDataParams = {
-            ...params,
+            ...filterParams,
             timestamps,
         };
 
@@ -71,7 +71,7 @@ export function fetchAccountUsageListDiff(): UsageListThunkAction {
             .request<AccountsUsageDiffDataResponse>({
                 method: 'POST',
                 url: calcAccountsUsageBaseUrl(
-                    `/api/accounts-usage/${params.cluster}/get-resource-usage-diff`,
+                    `/api/accounts-usage/${filterParams.cluster}/get-resource-usage-diff`,
                     state,
                 ),
                 data: requestParams,
@@ -114,12 +114,12 @@ export function fetchAccountUsageTreeDiff(): UsageTreeThunkAction {
             return;
         }
 
-        const params = getFilterParameters(state);
+        const filterParams = getFilterParameters(state);
         const requestParams: AccountUsageTreeDiffData['requestParams'] = {
-            ...params,
+            ...filterParams,
             timestamps,
             row_filter: {
-                ...params.row_filter,
+                ...filterParams.row_filter,
                 base_path: selectAccountUsageTreePath(state),
             },
         };
@@ -133,7 +133,7 @@ export function fetchAccountUsageTreeDiff(): UsageTreeThunkAction {
             .request<AccountUsageData>({
                 method: 'POST',
                 url: calcAccountsUsageBaseUrl(
-                    `/api/accounts-usage/${params.cluster}/get-children-and-resource-usage-diff`,
+                    `/api/accounts-usage/${filterParams.cluster}/get-children-and-resource-usage-diff`,
                     state,
                 ),
                 data: requestParams,

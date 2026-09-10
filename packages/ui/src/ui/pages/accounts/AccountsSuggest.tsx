@@ -111,7 +111,7 @@ export const SuggestParentsForEditableAccount =
 export function AccountsSuggestWithLoading(
     props: Omit<React.ComponentProps<typeof AccountSuggestImpl>, 'items'>,
 ) {
-    const [{items, error}, setState] = React.useState<{
+    const [{items: stateItems, error: stateError}, setState] = React.useState<{
         items?: Array<string>;
         error?: YTError;
     }>({items: []});
@@ -127,8 +127,8 @@ export function AccountsSuggestWithLoading(
 
     return (
         <React.Fragment>
-            <AccountSuggestImpl {...props} items={items || []} />
-            {error && <YTErrorBlock error={error} />}
+            <AccountSuggestImpl {...props} items={stateItems || []} />
+            {stateError && <YTErrorBlock error={stateError} />}
         </React.Fragment>
     );
 }

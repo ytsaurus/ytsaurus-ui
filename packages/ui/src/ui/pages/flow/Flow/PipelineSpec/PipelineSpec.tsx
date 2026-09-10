@@ -132,10 +132,10 @@ function EditSpecDialog({
                 }}
                 onAdd={async (f) => {
                     setError(undefined);
-                    const {text, force} = f.getState().values;
-                    if (text.value) {
+                    const {text: textData, force} = f.getState().values;
+                    if (textData.value) {
                         try {
-                            return await onSpecApply(JSON.parse(text.value), {force});
+                            return await onSpecApply(JSON.parse(textData.value), {force});
                         } catch (e: any) {
                             setError(e);
                             return Promise.reject(e);

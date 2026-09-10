@@ -23,7 +23,7 @@ export function VisibleValues({
     value,
     maxVisibleValues,
     maxTextLength,
-    renderItem = (value) => value,
+    renderItem = (item) => item,
     counter,
 }: VisbileValuesProps) {
     const visibleItems = React.useMemo(() => {

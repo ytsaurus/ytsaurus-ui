@@ -31,7 +31,7 @@ import i18n from './i18n';
 export default function TableMergeModal() {
     const login = useSelector(selectCurrentUserName);
     const visible = useSelector(selectNavigationTableMergeVisible);
-    const paths = useSelector(selectNavigationTableSortPaths);
+    const inputPaths = useSelector(selectNavigationTableSortPaths);
     const suggestError = useSelector(selectNavigationTableSortError);
     const suggestColumns = useSelector(selectNavigationTableSortSuggestColumns);
     const attributeValues = useSelector(selectNavigationTableAttributesValues);
@@ -104,7 +104,7 @@ export default function TableMergeModal() {
         [dispatch],
     );
 
-    const outputPath = paths?.length === 1 ? paths[0] : undefined;
+    const outputPath = inputPaths?.length === 1 ? inputPaths[0] : undefined;
 
     return (
         <WaitForDefaultPoolTree>
@@ -118,7 +118,7 @@ export default function TableMergeModal() {
                     onAdd={handleAdd}
                     onClose={handleClose}
                     initialValues={{
-                        paths,
+                        paths: inputPaths,
                         mode: 'unordered',
                         outputPath,
                         columns: [],

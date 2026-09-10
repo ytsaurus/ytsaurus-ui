@@ -35,9 +35,13 @@ export const QuerySelector = <T,>({
             popupClassName={popupBlock(null, popupClassName)}
             value={value ? [value] : []}
             onUpdate={handleChange}
-            renderFilter={({onChange, ...props}) => (
+            renderFilter={({onChange: onFilterChange, ...restProps}) => (
                 <div className={popupBlock('filter')}>
-                    <TextInput {...props} size={size} onChange={(e) => onChange(e.target.value)} />
+                    <TextInput
+                        {...restProps}
+                        size={size}
+                        onChange={(e) => onFilterChange(e.target.value)}
+                    />
                 </div>
             )}
             {...props}

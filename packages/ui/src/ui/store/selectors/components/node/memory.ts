@@ -346,7 +346,7 @@ export const selectNodeMemoryUsageTablesFiltered = createSelector(
                     if (!collapsed.has(item.name)) {
                         return item;
                     }
-                    const res: typeof item = {
+                    const result: typeof item = {
                         ...item,
                         attributes: {
                             ...item.attributes,
@@ -354,7 +354,7 @@ export const selectNodeMemoryUsageTablesFiltered = createSelector(
                         },
                         children: [],
                     };
-                    return res;
+                    return result;
                 }),
             };
         }

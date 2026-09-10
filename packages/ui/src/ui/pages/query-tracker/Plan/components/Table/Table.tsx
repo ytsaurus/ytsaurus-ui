@@ -287,13 +287,13 @@ export default function Table<T>({
     );
 
     React.useEffect(() => {
-        const minWidth =
+        const tableMinWidth =
             columns.reduce(
                 (minTableWidth, {width, minWidth = DEFAULT_MIN_WIDTH}) =>
                     minTableWidth + (width ?? minWidth),
                 0,
             ) + 30;
-        _containerRef.current?.style.setProperty('--table-min-width', `${minWidth}px`);
+        _containerRef.current?.style.setProperty('--table-min-width', `${tableMinWidth}px`);
     }, [columns]);
 
     // const {getListProps} = useActiveItem({items: data, onItemClick: onRowClick, itemWrapper: rowWrapper});
