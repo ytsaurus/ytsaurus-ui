@@ -1,6 +1,5 @@
 import {DropdownMenu} from '@gravity-ui/uikit';
 import React from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
 import {NoWrap} from '@ytsaurus/components';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
@@ -15,32 +14,13 @@ import Filter from '../../../../../components/Filter/Filter';
 import {SelectSingle} from '../../../../../components/Select/Select';
 import Icon from '../../../../../components/Icon/Icon';
 import TTLInfo from '../../../../../components/TTLInfo/TTLInfo';
-import {selectIsCreateTableModalVisible} from '../../../../../store/selectors/navigation/modals/create-table';
-
-import {openCreateTableModal} from '../../../../../store/actions/navigation/modals/create-table';
-import {selectPath, selectTransaction} from '../../../../../store/selectors/navigation';
-import {selectNavigationPathAttributes} from '../../../../../store/selectors/navigation/navigation';
-import {selectMediumList} from '../../../../../store/selectors/thor';
 import {
-    selectContentMode,
-    selectError,
-    selectFilterState,
     selectIsRootNode,
-    selectLoadState,
     selectMapNodeResourcesLoading,
-    selectMediumType,
 } from '../../../../../store/selectors/navigation/content/map-node';
 
 import {OPEN_CREATE_DIRECTORY_POPUP} from '../../../../../constants/navigation/modals/create-directory';
-
-import {openEditingPopup} from '../../../../../store/actions/navigation/modals/path-editing-popup';
-import {
-    fetchNodes,
-    setContentMode,
-    setFilter,
-    setMediumType,
-    updateResourceUsage,
-} from '../../../../../store/actions/navigation/content/map-node';
+import {updateResourceUsage} from '../../../../../store/actions/navigation/content/map-node';
 
 import hammer from '../../../../../common/hammer';
 import {UploadManagerCreate} from '../../Table/UploadManager/UploadManagerCreate';
@@ -48,60 +28,46 @@ import NodesTypes from '../NodesTypes/NodesTypes';
 
 import {ContentMode} from '../../../../../constants/navigation';
 import {MediumType} from '../../../../../constants';
-import {showLinkToModal} from '../../../../../store/actions/navigation/modals/link-to-modal';
-import {openCreateACOModal} from '../../../../../store/actions/navigation/modals/create-aco';
 import NavigationExtraActions from '../../../../../containers/NavigationExtraActions/NavigationExtraActions';
 import UIFactory from '../../../../../UIFactory';
-import {selectCluster} from '../../../../../store/selectors/global';
-import {type RootState} from '../../../../../store/reducers';
 import {UploadFileManager} from '../../../UploadFileManager';
 import {CurrentPathActions} from '../../../components/CurrentPathActions/CurrentPathActions';
 import {MapNodeUserSettings} from './MapNodeUserSettings/MapNodeUserSettings';
-
-import './MapNodeToolbar.scss';
 import i18n from './i18n';
 
 const block = cn('map-node-toolbar');
 const tbBlock = cn('elements-toolbar');
 
-function mapStateToProps(state: RootState) {
-    const path = selectPath(state);
-
-    return {
-        path,
-        showACOCreateButton: path === '//sys/access_control_object_namespaces/queries',
-        loadState: selectLoadState(state),
-        error: selectError(state),
-        contentMode: selectContentMode(state),
-        filterState: selectFilterState(state),
-        transaction: selectTransaction(state),
-        mediumList: selectMediumList(state),
-        mediumType: selectMediumType(state),
-        showCreateTableModal: selectIsCreateTableModalVisible(state),
-        attributes: selectNavigationPathAttributes(state),
-        cluster: selectCluster(state),
-    };
-}
-
-const mapDispatchToProps = {
-    setFilter,
-    setContentMode,
-    fetchNodes,
-    setMediumType,
-    openEditingPopup,
-    openCreateTableModal,
-    showLinkToModal,
-    openCreateACOModal,
+type MapNodeToolbarProps = {
+    path: string;
+    showACOCreateButton: boolean;
+    contentMode: (typeof ContentMode)[keyof typeof ContentMode];
+    filterState: string;
+    mediumList: string[];
+    mediumType: string;
+    attributes: React.ComponentProps<typeof TTLInfo>['attributes'];
+    cluster: string;
+    setFilter(filter?: string): void;
+    setContentMode(contentMode: string): void;
+    setMediumType(mediumType?: string): void;
+    openEditingPopup: (
+        objectPath: string | null,
+        path: string,
+        type: string,
+        multipleMode?: boolean,
+        items?: unknown[],
+    ) => void;
+    openCreateTableModal(parentDirectory?: string): void;
+    showLinkToModal: (params?: {path?: string; target?: string} | undefined) => void;
+    openCreateACOModal: (params?: {path?: string; namespace?: string} | undefined) => void;
 };
-
-type MapNodeToolbarProps = ConnectedProps<typeof connector>;
 
 type State = {
     uploadFileVisible: boolean;
     uploadTableVisible: boolean;
 };
 
-class MapNodeToolbarImpl extends React.PureComponent<MapNodeToolbarProps, State> {
+export class MapNodeToolbarBase extends React.PureComponent<MapNodeToolbarProps, State> {
     override state: State = {
         uploadFileVisible: false,
         uploadTableVisible: false,
@@ -314,6 +280,3 @@ function ShowResourcesButton() {
         </Button>
     );
 }
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-export const MapNodeToolbar = connector(MapNodeToolbarImpl);
