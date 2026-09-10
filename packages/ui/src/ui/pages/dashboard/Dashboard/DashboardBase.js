@@ -1,0 +1,74 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import cn from 'bem-cn-lite';
+import {useSelector} from '../../../store/redux-hooks';
+
+import Operations from '../../../pages/operations/Operations/Operations';
+import Links from '../Links/Links';
+import AccountsGeneralTab from '../../../pages/accounts/tabs/general/AccountsGeneralTab';
+import {DASHBOARD_VIEW_CONTEXT} from '../../../constants/index';
+import AccountsUpdater from '../../accounts/Accounts/AccountsUpdater';
+import {selectCluster, selectCurrentUserName} from '../../../store/selectors/global';
+import UIFactory from '../../../UIFactory';
+
+import i18n from './i18n';
+
+const block = cn('dashboard');
+const headingBlock = cn('elements-heading');
+
+DashboardBase.propTypes = {
+    currentAccount: PropTypes.string.isRequired,
+    setActiveAccount: PropTypes.func.isRequired,
+};
+
+function MyRolesLink() {
+    const login = useSelector(selectCurrentUserName);
+    const cluster = useSelector(selectCluster);
+
+    return (
+        UIFactory.renderRolesLink({
+            login,
+            cluster,
+            className: block('idm-roles-link'),
+        }) ?? null
+    );
+}
+
+export function DashboardBase({currentAccount, setActiveAccount}) {
+    React.useEffect(() => {
+        if (currentAccount) {
+            setActiveAccount('');
+        }
+    }, [currentAccount, setActiveAccount]);
+
+    const size = 'm';
+
+    return (
+        <div className={block()}>
+            <div className="elements-main-section">
+                <div className={'elements-section'}>
+                    <div className={headingBlock({size}, block('links-header'))}>
+                        <span>{i18n('title_links')}</span>
+                        <div className={block('idm-roles')}>
+                            <MyRolesLink />
+                        </div>
+                    </div>
+                    <Links />
+                </div>
+
+                <div className={'elements-section'}>
+                    <div className={headingBlock({size}, block('operations-header'))}>
+                        {i18n('title_operations')}
+                    </div>
+                    <Operations viewContext={DASHBOARD_VIEW_CONTEXT} />
+                </div>
+
+                <div className={'elements-section'}>
+                    <div className={headingBlock({size})}>{i18n('title_accounts')}</div>
+                    <AccountsUpdater />
+                    <AccountsGeneralTab viewContext={DASHBOARD_VIEW_CONTEXT} />
+                </div>
+            </div>
+        </div>
+    );
+}
