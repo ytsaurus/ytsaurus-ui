@@ -5,7 +5,6 @@ import React, {
     type KeyboardEvent,
     type MouseEvent,
 } from 'react';
-import {connect} from 'react-redux';
 import ReactList from 'react-list';
 import block from 'bem-cn-lite';
 
@@ -27,16 +26,9 @@ import {
     getNextSelectedIndex,
     getPrevSelectedIndex,
 } from '../../utils/navigation/path-editor';
-import {
-    loadSuggestionsList,
-    removeActiveRequests,
-} from '../../store/actions/navigation/path-editor/path-editor';
-import {type RootState} from '../../store/reducers';
 import {KeyCode} from '../../constants/index';
 import {UseHotkeysScope} from '../../hooks/use-hotkeysjs-scope';
 import i18n from './i18n';
-
-import './PathEditor.scss';
 
 interface Suggestion {
     parentPath: string;
@@ -93,7 +85,7 @@ interface PathEditorState {
 const debounceTime = 300;
 const b = block('path-editor');
 
-export class PathEditor extends Component<PathEditorProps, PathEditorState> {
+export class PathEditorBase extends Component<PathEditorProps, PathEditorState> {
     static defaultProps: Partial<PathEditorProps> = {
         errorMessage: i18n('message_error-default'),
         placeholder: i18n('field_placeholder'),
@@ -415,14 +407,3 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
         );
     }
 }
-
-const mapStateToProps = ({navigation}: RootState) => ({
-    suggestions: navigation.pathEditor.suggestions,
-    suggestionsError: navigation.pathEditor.suggestionsError,
-    errorMessage: navigation.pathEditor.errorMessage,
-});
-
-export default connect(mapStateToProps, {
-    loadSuggestionsList,
-    removeActiveRequests,
-})(PathEditor);
