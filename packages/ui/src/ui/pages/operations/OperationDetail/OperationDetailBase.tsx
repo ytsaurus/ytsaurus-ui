@@ -1,0 +1,578 @@
+import cn from 'bem-cn-lite';
+import React, {Fragment} from 'react';
+import i18n from './i18n';
+import {type match as MatchType, Redirect, Route, Switch} from 'react-router';
+import hammer from '../../../common/hammer';
+import unipika from '../../../common/thor/unipika';
+import {useDispatch} from '../../../store/redux-hooks';
+
+import ypath from '../../../common/thor/ypath';
+
+import {Loader} from '@gravity-ui/uikit';
+import Button from '../../../components/Button/Button';
+import {YTErrorBlock} from '../../../containers/Block/Block';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
+import Icon from '../../../components/Icon/Icon';
+import {
+    TemplateId,
+    TemplateReadable,
+    TemplateTime,
+} from '../../../components/MetaTable/templates/Template';
+import {TemplatePools} from '../../../components/MetaTable/templates/OperationTemplate';
+import StatusLabel from '../../../components/StatusLabel/StatusLabel';
+import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
+import Tabs from '../../../components/Tabs/Tabs';
+import {MetaTable, Tooltip} from '@ytsaurus/components';
+import {Yson} from '../../../components/Yson/Yson';
+import OperationProgress from '../OperationProgress/OperationProgress';
+
+import Jobs from './tabs/Jobs/Jobs';
+import JobsMonitor from './tabs/JobsMonitor/JobsMonitor';
+import OperationAttributes from './tabs/attributes/OperationAttributes';
+import Details from './tabs/details/Details/Details';
+import JobSizes from './tabs/job-sizes/JobSizes/JobSizes';
+import PartitionSizes from './tabs/partition-sizes/PartitionSizes/PartitionSizes';
+import Specification from './tabs/specification/Specification';
+import Statistics from './tabs/statistics/Statistics';
+
+import Placeholder from '../../../pages/components/Placeholder';
+
+import {Page} from '../../../constants/index';
+import {DEFAULT_TAB, type OperationTabType, Tab} from '../../../constants/operations/detail';
+import {useUpdater} from '../../../hooks/use-updater';
+import {updateOperation} from '../../../store/actions/operations/detail';
+import {type TabSettings, makeTabProps} from '../../../utils';
+import {
+    getDetailsTabsShowSettings,
+    operationMonitoringUrl,
+    performAction,
+} from '../../../utils/operations/detail';
+import {isOperationId} from '../../../utils/operations/list';
+
+import UIFactory from '../../../UIFactory';
+import {UI_TAB_SIZE} from '../../../constants/global';
+import {type RuntimeItem} from '../../../store/reducers/operations/detail';
+import {type JobState} from '../../../store/selectors/operations/statistics-v2';
+import {
+    type DetailedOperationSelector,
+    type OperationPool,
+    type OperationStates,
+} from '../selectors';
+import {type OperationAction} from '../../../utils/operations/detail';
+import {type OperationMonitoringTabProps} from '../../../UIFactory';
+import {type ListOperationEventsResponse} from '../../../../shared/yt-types';
+import {type UpdateFilterData} from '../../../store/reducers/operations/jobs/jobs';
+import {type YTError} from '../../../types';
+import {JobsTimeline} from './tabs/JobsTimeline';
+import OperationDetailsMonitor from './tabs/monitor/OperationDetailsMonitor';
+
+const detailBlock = cn('operation-detail');
+
+const headingBlock = cn('elements-heading');
+
+export type RouteProps = {match: MatchType<{operationId: string; tab: OperationTabType}>};
+
+type ReduxProps = {
+    cluster: string;
+    operation: DetailedOperationSelector;
+    errorData: {message: string; details?: YTError};
+    loading: boolean;
+    loaded: boolean;
+    error: boolean;
+    actions: OperationAction[];
+    runtime: RuntimeItem[] | undefined;
+    totalJobWallTime: number;
+    cpuTimeSpent: number;
+    erasedTrees: {[poolTree: string]: boolean};
+    monitorTabVisible: boolean;
+    monitorTabTitle: string | undefined;
+    monitorTabUrlTemplate: string | undefined;
+    monitoringComponent: React.ComponentType<OperationMonitoringTabProps> | undefined;
+    timelineTabVisible: boolean;
+    jobsMonitorIsSupported: boolean;
+    jobsMonitorVisible: boolean;
+    hasStatististicsTab: boolean;
+    isGpuOperation: boolean | undefined;
+    operationPerformanceUrlTemplate: {url: string; title: string} | undefined;
+    operationEvents: ListOperationEventsResponse | undefined;
+    ysonSettings: {
+        decodeUTF8: boolean;
+        format: string;
+        showDecoded: boolean;
+        compact: boolean;
+        escapeWhitespace: boolean;
+        binaryAsHex: boolean;
+        asHTML: boolean;
+    };
+    promptAction(data: unknown): void;
+    getOperation: (id: string) => void;
+    showEditPoolsWeightsModal(operation: DetailedOperationSelector, editable?: boolean): void;
+    updateListJobsFilter: (data: UpdateFilterData) => void;
+    listOperationEvents: (operationId: string) => void;
+};
+
+function OperationDetailUpdater({operationId}: {operationId: string}) {
+    const dispatch = useDispatch();
+
+    const updateFn = React.useCallback(() => {
+        dispatch(updateOperation(operationId));
+    }, [dispatch, operationId]);
+
+    useUpdater(updateFn, {timeout: 15 * 1000});
+
+    return null;
+}
+
+function getSpecialWaitingStatuses(
+    pools: OperationPool[],
+    state: OperationStates,
+    suspended: boolean | undefined,
+    runtime: RuntimeItem[] | undefined,
+    type: string | undefined,
+    isGpuOperation: boolean | undefined,
+): {isWaitingForJobs?: boolean; isWaitingForResources?: boolean} {
+    if (state !== 'running' || suspended) {
+        return {};
+    }
+
+    const isSingleTree = new Set(pools?.map((pool) => pool?.tree)).size === 1;
+    if (!isSingleTree) {
+        return {};
+    }
+
+    const fairShareRatio = runtime?.[0]?.progress?.fair_share_ratio as number | undefined;
+    const usageRatio = runtime?.[0]?.progress?.usage_ratio as number | undefined;
+    const demandRatio = runtime?.[0]?.progress?.demand_ratio as number | undefined;
+
+    if (type === 'vanilla' && isGpuOperation) {
+        const isWaitingForResources = fairShareRatio === usageRatio && fairShareRatio === 0;
+
+        const isWaitingForJobs =
+            fairShareRatio === demandRatio &&
+            usageRatio !== undefined &&
+            fairShareRatio !== undefined &&
+            usageRatio < fairShareRatio;
+
+        return {isWaitingForResources, isWaitingForJobs};
+    }
+
+    // Runtime stats may not have loaded yet; only treat usage/fair share as
+    // "zero" once we've actually observed zero, not when data is missing.
+    if (usageRatio !== 0 || fairShareRatio === undefined) {
+        return {};
+    }
+
+    return fairShareRatio === 0 ? {isWaitingForResources: true} : {isWaitingForJobs: true};
+}
+
+const TOOLTIPS = {
+    get waitingForJobs() {
+        return i18n('context_waiting-for-jobs');
+    },
+    get waitingForResources() {
+        return i18n('context_waiting-for-resources');
+    },
+};
+
+function SpecialWaitingStatus({type}: {type: 'jobs' | 'resources'}) {
+    return (
+        <Tooltip content={type === 'jobs' ? TOOLTIPS.waitingForJobs : TOOLTIPS.waitingForResources}>
+            <StatusLabel
+                state={'running'}
+                iconState={'running'}
+                text={
+                    type === 'jobs'
+                        ? i18n('value_waiting-for-jobs')
+                        : i18n('value_waiting-for-resources')
+                }
+                renderPlaque
+            />
+        </Tooltip>
+    );
+}
+
+export class OperationDetailBase extends React.Component<ReduxProps & RouteProps> {
+    get settings() {
+        return unipika.prepareSettings();
+    }
+
+    override componentDidMount() {
+        const {operationId} = this.props.match.params;
+        this.props.listOperationEvents(operationId);
+    }
+
+    handlePoolsEditClick = () => {
+        const {operation, showEditPoolsWeightsModal} = this.props;
+        showEditPoolsWeightsModal(operation);
+    };
+
+    renderAction = (action: ReduxProps['actions'][0]) => {
+        const {promptAction, operation} = this.props;
+
+        const message = action.message || i18n('confirm_perform-action', {name: action.name});
+        const handler = ({currentOption}: {currentOption?: string}) =>
+            performAction({
+                ...action,
+                operation,
+                currentOption,
+            }).then(() => {
+                return this.props.getOperation(operation.$value);
+            });
+
+        return (
+            <Button
+                key={action.name}
+                view={action.theme}
+                className={detailBlock('action')}
+                title={hammer.format['ReadableField'](action.name)}
+                onClick={() => promptAction({...action, message, handler})}
+            >
+                <Icon awesome={action.icon} />
+                &nbsp;
+                {hammer.format['ReadableField'](action.name)}
+            </Button>
+        );
+    };
+
+    renderHeader() {
+        const {actions = [], runtime, operation, isGpuOperation} = this.props;
+        const {type, user = '', state, suspended, pools, title, $value} = operation;
+
+        const {isWaitingForJobs, isWaitingForResources} = getSpecialWaitingStatuses(
+            pools,
+            state,
+            suspended,
+            runtime,
+            type,
+            isGpuOperation,
+        );
+
+        const label = suspended ? 'suspended' : state;
+
+        const isWaiting = isWaitingForJobs || isWaitingForResources;
+        const mainStatusProps:
+            {label: typeof label} | {state: 'unknown'; iconState: 'running'; text: string} =
+            isWaiting
+                ? {state: 'unknown', iconState: 'running', text: i18n('value_running')}
+                : {label};
+
+        return (
+            <div className={detailBlock('header', 'elements-section')}>
+                <div className={detailBlock('header-heading', headingBlock({size: 'l'}))}>
+                    {hammer.format['ReadableField'](type)} {i18n('title_operation-by')}{' '}
+                    <SubjectCard name={user} />
+                    &ensp;
+                    <StatusLabel {...mainStatusProps} renderPlaque />
+                    &ensp;
+                    {isWaitingForJobs && <SpecialWaitingStatus type={'jobs'} />}
+                    {isWaitingForResources && <SpecialWaitingStatus type={'resources'} />}
+                </div>
+                <div className={detailBlock('header-title')}>
+                    <Yson value={title || $value} settings={this.props.ysonSettings} inline />
+                </div>
+
+                <div className={detailBlock('actions')}>{actions.map(this.renderAction)}</div>
+            </div>
+        );
+    }
+
+    renderOverview() {
+        const {operation, cluster, totalJobWallTime, cpuTimeSpent, erasedTrees, isGpuOperation} =
+            this.props;
+        const {$value, user = '', type, startTime, finishTime, duration, pools, state} = operation;
+
+        const isGpuVanillaOperation = isGpuOperation && type === 'vanilla';
+
+        const items = [
+            [
+                {key: 'id', label: i18n('field_id'), value: <TemplateId id={$value} />},
+                {key: 'user', label: i18n('field_user'), value: <SubjectCard name={user} />},
+                {
+                    key: 'pools',
+                    label: i18n('field_pools'),
+                    value: (
+                        <TemplatePools
+                            onEdit={this.handlePoolsEditClick}
+                            cluster={cluster}
+                            pools={pools}
+                            operationRefId={$value}
+                            state={state}
+                            erasedTrees={erasedTrees}
+                            editBtnVisibility="always"
+                        />
+                    ),
+                },
+                {key: 'type', label: i18n('field_type'), value: <TemplateReadable value={type} />},
+            ],
+            [
+                {
+                    key: 'started',
+                    label: i18n('field_started'),
+                    value: <TemplateTime time={startTime} valueFormat="DateTime" />,
+                },
+                {
+                    key: 'finished',
+                    label: i18n('field_finished'),
+                    value: <TemplateTime time={finishTime} valueFormat="DateTime" />,
+                },
+                {
+                    key: 'duration',
+                    label: i18n('field_duration'),
+                    value: <TemplateTime time={duration} valueFormat="TimeDuration" />,
+                },
+                {
+                    key: 'total job wall time',
+                    label: i18n('field_total-job-wall-time'),
+                    value: <TemplateTime time={totalJobWallTime} valueFormat="TimeDuration" />,
+                    visible: !isGpuVanillaOperation,
+                },
+                {
+                    key: 'total cpu time spent',
+                    label: i18n('field_total-cpu-time-spent'),
+                    value: <TemplateTime time={cpuTimeSpent} valueFormat="TimeDuration" />,
+                    visible: !isGpuVanillaOperation,
+                },
+            ],
+        ];
+
+        return (
+            <div className={detailBlock('overview')}>
+                <div className={detailBlock('general')}>
+                    <MetaTable items={items} />
+                </div>
+
+                <div className={detailBlock('progress-wrapper')}>
+                    <OperationProgress
+                        operation={operation}
+                        onLinkClick={this.onProgressLinkClick}
+                    />
+                    {operation.state !== 'failed' && (
+                        <OperationProgress
+                            operation={operation}
+                            type="failed"
+                            onLinkClick={this.onProgressLinkClick}
+                        />
+                    )}
+                </div>
+            </div>
+        );
+    }
+
+    onProgressLinkClick = (jobState: JobState) => {
+        const {updateListJobsFilter} = this.props;
+        updateListJobsFilter({name: 'state', value: jobState});
+    };
+
+    renderTabs() {
+        const {
+            match: {
+                params: {operationId, tab: activeTab},
+            },
+            cluster,
+            operation,
+            hasStatististicsTab,
+            jobsMonitorVisible,
+            monitorTabVisible,
+            monitorTabTitle,
+            monitorTabUrlTemplate,
+            timelineTabVisible,
+            operationPerformanceUrlTemplate,
+            operationEvents,
+        } = this.props;
+        const path = `/${cluster}/${Page.OPERATIONS}/${operationId}`;
+
+        const showSettings: Record<string, TabSettings> = {
+            [Tab.DETAILS]: {show: true, title: i18n('title_details')},
+            [Tab.ATTRIBUTES]: {show: true, title: i18n('title_attributes')},
+            [Tab.SPECIFICATION]: {show: true, title: i18n('title_specification')},
+            [Tab.JOBS]: {show: true, title: i18n('title_jobs')},
+            ...getDetailsTabsShowSettings(operation),
+            [Tab.STATISTICS]: {show: hasStatististicsTab, title: i18n('title_statistics')},
+            [Tab.JOBS_MONITOR]: {
+                show: jobsMonitorVisible || activeTab === Tab.JOBS_MONITOR,
+                title: i18n('title_jobs-monitor'),
+            },
+            [Tab.MONITOR]: {
+                show: monitorTabVisible,
+                title: monitorTabTitle ?? i18n('title_monitoring'),
+            },
+            [Tab.JOBS_TIMELINE]: {show: timelineTabVisible, title: i18n('title_jobs-timeline')},
+            [Tab.INCARNATIONS]: {
+                show: Boolean(operationEvents?.length),
+                title: i18n('title_incarnations'),
+            },
+            [Tab.LOGS]: {
+                show: Boolean(UIFactory.renderOperationLogsTab()),
+                title: i18n('title_logs'),
+            },
+            [Tab.PERFORMANCE]: {
+                show: Boolean(operationPerformanceUrlTemplate),
+                external: true,
+                url: operationPerformanceUrlTemplate?.url,
+                title: operationPerformanceUrlTemplate?.title,
+                routed: false,
+            },
+        };
+
+        if (monitorTabUrlTemplate) {
+            const monTab = showSettings[Tab.MONITOR];
+            monTab.routed = false;
+            monTab.external = true;
+
+            const firstPoolInfo = operation.pools?.[0] || {};
+            monTab.url = operationMonitoringUrl({
+                cluster,
+                operation,
+                ...firstPoolInfo,
+                urlTemplate: monitorTabUrlTemplate,
+            });
+        }
+
+        const props = makeTabProps(path, Tab, showSettings, undefined);
+
+        return (
+            <div className={detailBlock('tabs')}>
+                <Tabs
+                    {...props}
+                    active={activeTab}
+                    routed
+                    routedPreserveLocation
+                    size={UI_TAB_SIZE}
+                />
+            </div>
+        );
+    }
+
+    renderMain() {
+        const {
+            match,
+            cluster,
+            monitorTabVisible,
+            jobsMonitorIsSupported,
+            monitoringComponent,
+            timelineTabVisible,
+        } = this.props;
+        const {url, params} = match;
+        const {operationId} = params;
+
+        const path = `/${cluster}/${Page.OPERATIONS}/${operationId}`;
+
+        // NOTE: <Redirect> has issues with urls which contain '*', and since every operation alias starts with it,
+        // we have to redirect to real operation id in those cases
+        return !isOperationId(operationId) ? (
+            this.renderAlias()
+        ) : (
+            <div className={detailBlock('main')}>
+                <Switch>
+                    <Route
+                        path={`${path}/${Tab.ATTRIBUTES}`}
+                        render={() => <OperationAttributes className={detailBlock('attributes')} />}
+                    />
+                    <Route path={`${path}/${Tab.DETAILS}`} component={Details} />
+                    <Route path={`${path}/${Tab.SPECIFICATION}`} component={Specification} />
+                    <Route
+                        path={`${path}/${Tab.STATISTICS}`}
+                        render={() => <Statistics className={detailBlock('statistics')} />}
+                    />
+                    <Route
+                        path={`${path}/${Tab.JOBS}`}
+                        render={() => <Jobs className={detailBlock('jobs')} />}
+                    />
+                    {timelineTabVisible && (
+                        <Route
+                            path={`${path}/${Tab.JOBS_TIMELINE}`}
+                            render={() => <JobsTimeline />}
+                        />
+                    )}
+                    <Route
+                        path={`${path}/${Tab.JOB_SIZES}`}
+                        render={() => <JobSizes className={detailBlock('job-sizes')} />}
+                    />
+                    <Route path={`${path}/${Tab.PARTITION_SIZES}`} component={PartitionSizes} />
+                    {monitorTabVisible && monitoringComponent && (
+                        <Route
+                            path={`${path}/${Tab.MONITOR}`}
+                            render={() => (
+                                <OperationDetailsMonitor component={monitoringComponent} />
+                            )}
+                        />
+                    )}
+                    {jobsMonitorIsSupported && (
+                        <Route path={`${path}/${Tab.JOBS_MONITOR}`} component={JobsMonitor} />
+                    )}
+                    <Route
+                        path={`${path}/${Tab.INCARNATIONS}`}
+                        render={() =>
+                            UIFactory.renderIncarnationsTab({
+                                cluster,
+                                operationId,
+                            })
+                        }
+                    />
+                    <Route path={`${path}/${Tab.LOGS}`} render={UIFactory.renderOperationLogsTab} />
+                    <Route path={`${path}/:tab`} component={Placeholder} />
+                    <Redirect from={url} to={`${path}/${DEFAULT_TAB}`} />
+                </Switch>
+            </div>
+        );
+    }
+
+    renderAlias() {
+        const {match, cluster, operation} = this.props;
+        const {
+            url,
+            params: {operationId, tab},
+        } = match;
+
+        const alias = ypath.getValue(operation, '/@spec/alias');
+        if (operationId !== alias) {
+            // Just wait until operation data is loaded
+            return null;
+        }
+
+        const redirectPath = `/${cluster}/${Page.OPERATIONS}/${operation.$value}${
+            tab ? '/' + tab : ''
+        }`;
+        return <Redirect from={url} to={redirectPath} />;
+    }
+
+    renderContent(isFirstLoading: boolean) {
+        return isFirstLoading ? (
+            <Loader />
+        ) : (
+            <Fragment>
+                {this.renderHeader()}
+                {this.renderOverview()}
+                {this.renderTabs()}
+                {this.renderMain()}
+            </Fragment>
+        );
+    }
+
+    renderError() {
+        const {errorData} = this.props;
+
+        return <YTErrorBlock message={errorData.message} error={errorData.details} />;
+    }
+
+    override render() {
+        const {
+            error,
+            loading,
+            loaded,
+            match: {
+                params: {operationId},
+            },
+        } = this.props;
+        const isFirstLoading = loading && !loaded;
+
+        return (
+            <ErrorBoundary>
+                <OperationDetailUpdater operationId={operationId} />
+                <div className={detailBlock({loading: isFirstLoading})}>
+                    {error && !loaded ? this.renderError() : this.renderContent(isFirstLoading)}
+                </div>
+            </ErrorBoundary>
+        );
+    }
+}
