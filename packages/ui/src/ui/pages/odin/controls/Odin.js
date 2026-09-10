@@ -76,8 +76,8 @@ function useCheckOdinStatus(cluster) {
     useEffect(() => {
         if (cluster) {
             Utils.checkStatus(cluster)
-                .then((status) => {
-                    setStatus(status ? 'available' : 'unavailable');
+                .then((isAvailable) => {
+                    setStatus(isAvailable ? 'available' : 'unavailable');
                 })
                 .catch(() => {
                     setStatus('error');

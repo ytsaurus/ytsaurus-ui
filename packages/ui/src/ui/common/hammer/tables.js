@@ -173,9 +173,9 @@ class InverseIndex extends BoundedArray {
         let maxValue = 0;
         let relevantIndex = -1;
 
-        function getMeasure(factors) {
+        function getMeasure(values) {
             let result = 0;
-            forEach_(factors, (val) => {
+            forEach_(values, (val) => {
                 if (factorsToFrequences[val]) {
                     result += 1 / factorsToFrequences[val];
                 }
@@ -185,9 +185,9 @@ class InverseIndex extends BoundedArray {
 
         const factorsToFrequencesLocal = {};
 
-        function getMeasureLocal(factors) {
+        function getMeasureLocal(values) {
             let result = 0;
-            forEach_(factors, (val) => {
+            forEach_(values, (val) => {
                 if (factorsToFrequencesLocal[val]) {
                     result += 1 / factorsToFrequencesLocal[val];
                 }
@@ -265,9 +265,9 @@ function saveData(storageKey) {
                 similarColumnSets.repackData();
                 window.localStorage.setItem(STORAGE_KEY_SIMILAR, similarColumnSets.serialize());
 
-                const columnSets = tables[STORAGE_KEY];
-                columnSets.repackData();
-                window.localStorage.setItem(STORAGE_KEY, columnSets.serialize());
+                const storedColumnSets = tables[STORAGE_KEY];
+                storedColumnSets.repackData();
+                window.localStorage.setItem(STORAGE_KEY, storedColumnSets.serialize());
 
                 // eslint-disable-next-line no-console
                 console.warn('Repacking due to global localStorage limit exceeded');

@@ -7,21 +7,21 @@ import {getParamSetup, mapLocationToState} from './store/location';
 
 setParamEncoder(customEncodeURIComponent);
 
-function makeReducersWithLocation(setupObject, mapLocationToState, rootReducer) {
-    function makeLocationReducer(setupObject, mapLocationToState) {
+function makeReducersWithLocation(setupObject, locationMapper, rootReducer) {
+    function makeLocationReducer(config, mapLocation) {
         return (state, action) => {
             const {type, payload} = action;
             if (!payload) {
                 return state;
             }
             if (LOCATION_POP === type || LOCATION_PUSH === type) {
-                payload.query = parseQuery(setupObject, payload);
-                return mapLocationToState(state, payload);
+                payload.query = parseQuery(config, payload);
+                return mapLocation(state, payload);
             }
             return state;
         };
     }
-    const locationReducer = makeLocationReducer(setupObject, mapLocationToState);
+    const locationReducer = makeLocationReducer(setupObject, locationMapper);
 
     return (state, action) => {
         const postReducerState = rootReducer(state, action);

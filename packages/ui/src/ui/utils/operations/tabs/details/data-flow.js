@@ -60,11 +60,11 @@ function prepareGraphDataByTasks(operation) {
                 from,
                 to,
                 info: item,
-                value: keys_(job_data_statistics).reduce((acc, key) => {
+                value: keys_(job_data_statistics).reduce((result, key) => {
                     const jobStat = ypath.getValue(job_data_statistics[key]);
                     const teleportStat = ypath.getValue(teleport_data_statistics[key]);
-                    acc[key] = jobStat + teleportStat;
-                    return acc;
+                    result[key] = jobStat + teleportStat;
+                    return result;
                 }, {}),
                 job_data_statistics: isEmptyStatistics(job_data_statistics)
                     ? null

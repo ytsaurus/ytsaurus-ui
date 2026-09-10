@@ -120,24 +120,22 @@ describe('hammer.tree-list', () => {
 
         describe('filterTree()', () => {
             describe('behavior', () => {
-                let treeNodes, filteredNodes;
+                let nodes, filteredNodes;
 
                 beforeEach(() => {
-                    treeNodes = treeList.prepareTree(entries, parentGetter);
+                    nodes = treeList.prepareTree(entries, parentGetter);
                 });
 
                 it('Does not change tree structure', () => {
-                    filteredNodes = treeList.filterTree(treeNodes[ROOT_NODE], () => true);
-                    expect(filteredNodes.name).toBe(treeNodes[ROOT_NODE].name);
-                    expect(filteredNodes.children.length).toBe(
-                        treeNodes[ROOT_NODE].children.length,
-                    );
-                    expect(filteredNodes.leaves.length).toBe(treeNodes[ROOT_NODE].leaves.length);
+                    filteredNodes = treeList.filterTree(nodes[ROOT_NODE], () => true);
+                    expect(filteredNodes.name).toBe(nodes[ROOT_NODE].name);
+                    expect(filteredNodes.children.length).toBe(nodes[ROOT_NODE].children.length);
+                    expect(filteredNodes.leaves.length).toBe(nodes[ROOT_NODE].leaves.length);
                 });
 
                 it('Removes non matching children and leaves', () => {
                     filteredNodes = treeList.filterTree(
-                        treeNodes[ROOT_NODE],
+                        nodes[ROOT_NODE],
                         (entry) => entry.name.indexOf('entry1') !== -1,
                     );
                     expect(filteredNodes.children).toHaveLength(1);
@@ -476,10 +474,10 @@ describe('hammer.tree-list', () => {
             };
         };
 
-        let entries;
+        let treeEntries;
 
         beforeEach(() => {
-            entries = {
+            treeEntries = {
                 sibling1: {
                     payload: 10,
                     memberOf: [],
@@ -570,7 +568,7 @@ describe('hammer.tree-list', () => {
                 },
             ];
 
-            expect(takeEssentials(produceFlatData(entries, []))).toEqual(expectedData);
+            expect(takeEssentials(produceFlatData(treeEntries, []))).toEqual(expectedData);
         });
 
         it('original content is put into `attributes` property', () => {
@@ -601,7 +599,7 @@ describe('hammer.tree-list', () => {
                 },
             ];
 
-            const nodeAttributes = produceFlatData(entries, []).map((node) => node.attributes);
+            const nodeAttributes = produceFlatData(treeEntries, []).map((node) => node.attributes);
 
             expect(nodeAttributes).toEqual(expectedData);
         });
@@ -629,7 +627,9 @@ describe('hammer.tree-list', () => {
                     name: 'child3',
                 },
             ];
-            expect(takeEssentials(produceFlatData(entries, [], 'child1'))).toEqual(expectedData);
+            expect(takeEssentials(produceFlatData(treeEntries, [], 'child1'))).toEqual(
+                expectedData,
+            );
         });
 
         it('a given filter and a given sort ordering should produce expected dataset', () => {
@@ -667,7 +667,7 @@ describe('hammer.tree-list', () => {
             ];
             const sortInfo = {field: 'name', asc: false};
 
-            expect(takeEssentials(produceFlatData(entries, [], '', sortInfo))).toEqual(
+            expect(takeEssentials(produceFlatData(treeEntries, [], '', sortInfo))).toEqual(
                 expectedData,
             );
         });

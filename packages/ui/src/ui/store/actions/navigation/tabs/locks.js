@@ -17,7 +17,7 @@ import {
 } from '../../../../constants/navigation/tabs/locks';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 
-const requests = new CancelHelper();
+const cancelHelper = new CancelHelper();
 
 function prepareData(locks, transactions = []) {
     return map_(locks, (lock, index) => {
@@ -82,12 +82,12 @@ export function getLocks() {
         const transaction = selectTransaction(state);
 
         dispatch({type: GET_LOCKS.REQUEST});
-        requests.removeAllRequests();
+        cancelHelper.removeAllRequests();
 
         ytApiV3Id
             .get(YTApiId.navigationLocks, {
                 parameters: prepareRequest('/@locks', {path, transaction}),
-                cancellation: requests.saveCancelToken,
+                cancellation: cancelHelper.saveCancelToken,
             })
             .then((locks) => dispatch(getTransactions(locks)))
             .catch((error) => {
@@ -105,7 +105,7 @@ export function getLocks() {
 
 export function abortAndReset() {
     return (dispatch) => {
-        requests.removeAllRequests();
+        cancelHelper.removeAllRequests();
         dispatch({type: GET_LOCKS.CANCELLED});
     };
 }

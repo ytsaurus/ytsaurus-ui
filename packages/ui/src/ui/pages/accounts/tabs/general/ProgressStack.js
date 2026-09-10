@@ -31,7 +31,7 @@ function prepareProgressStack(treeItem, useChildren, getTreeItemInfoFn) {
         return {};
     }
     const {
-        limit = 0,
+        limit: recursiveLimit = 0,
         progressText,
         committed: recursiveCommitted = 0,
         uncommitted: recursiveUncommitted = 0,
@@ -40,7 +40,7 @@ function prepareProgressStack(treeItem, useChildren, getTreeItemInfoFn) {
     const children = treeItem.children;
     const items = useChildren && children.length > 0 ? [treeItem, ...children] : [treeItem];
 
-    const allLimit = Math.max(recursiveCommitted + recursiveUncommitted, limit);
+    const allLimit = Math.max(recursiveCommitted + recursiveUncommitted, recursiveLimit);
 
     // start colorPallet from green color
     let colorIndex = 4;
@@ -77,7 +77,7 @@ function prepareProgressStack(treeItem, useChildren, getTreeItemInfoFn) {
             ++colorIndex;
         }
     });
-    return {progressText, progressStack, tooltipInfo, limit};
+    return {progressText, progressStack, tooltipInfo, limit: recursiveLimit};
 }
 
 function ProgressStackImpl({treeItem, infoGetter, useChildren, className, formatNumber}) {
@@ -86,17 +86,19 @@ function ProgressStackImpl({treeItem, infoGetter, useChildren, className, format
     }
 
     try {
-        const {value, progressText, progressStack, tooltipInfo, limit} = prepareProgressStack(
-            treeItem,
-            useChildren,
-            infoGetter,
-        );
-        if (isNullable(value) && isNullable(progressStack)) {
+        const {
+            value: totalValue,
+            progressText,
+            progressStack,
+            tooltipInfo,
+            limit,
+        } = prepareProgressStack(treeItem, useChildren, infoGetter);
+        if (isNullable(totalValue) && isNullable(progressStack)) {
             return hammer.format.NO_VALUE;
         }
         const progressValue =
             !progressStack || !progressStack.length
-                ? value
+                ? totalValue
                 : progressStack.reduce((acc, {value}) => (isNaN(value) ? acc : acc + value), 0);
         const progress = (
             <Progress value={progressValue} stack={progressStack} text={progressText} />
