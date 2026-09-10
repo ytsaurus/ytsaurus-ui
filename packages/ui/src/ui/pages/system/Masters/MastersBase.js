@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import {useDispatch} from '../../../store/redux-hooks';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
@@ -13,14 +12,9 @@ import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 import MasterGroup from './MasterGroup';
 
 import {loadMasters} from '../../../store/actions/system/masters';
-import {selectSettingsSystemMastersCollapsed} from '../../../store/selectors/settings/settings-ts';
-import {setSettingsSystemMastersCollapsed} from '../../../store/actions/settings/settings';
 import {useUpdater} from '../../../hooks/use-updater';
-
-import './Masters.scss';
 import {SystemAlert} from './SystemAlert';
 import i18n from './i18n/index-masters';
-import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 import {StickyContainer} from '../../../components/StickyContainer/StickyContainer';
 
 const b = block('system-master');
@@ -45,7 +39,7 @@ function computeStateProgress(counters) {
     );
 }
 
-class Masters extends Component {
+export class MastersBase extends Component {
     static propTypes = {
         // from connect
         alerts: PropTypes.arrayOf(PropTypes.object),
@@ -288,27 +282,6 @@ class Masters extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    const {secondary, primary, providers, discovery, queueAgents, counters, initialized, alerts} =
-        state.system.masters;
-    return {
-        initialized,
-        secondary,
-        primary,
-        providers,
-        discovery,
-        queueAgents,
-        counters,
-        alerts,
-        collapsibleSize: UI_COLLAPSIBLE_SIZE,
-        collapsed: selectSettingsSystemMastersCollapsed(state),
-    };
-}
-
-const mapDispatchToProps = {
-    setSettingsSystemMastersCollapsed,
-};
-
 function MastersUpdater() {
     const dispatch = useDispatch();
 
@@ -329,5 +302,3 @@ function MastersUpdater() {
 
     return null;
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(Masters);
