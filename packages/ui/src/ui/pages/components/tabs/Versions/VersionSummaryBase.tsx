@@ -1,42 +1,42 @@
 import React, {type CSSProperties} from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import {Button, Checkbox, Flex, Select} from '@gravity-ui/uikit';
-
-import {type RootState} from '../../../../store/reducers';
 import {DataTableYT} from '../../../../components/DataTableYT';
 import type * as DT100 from '@gravity-ui/react-data-table';
 import DataTable from '@gravity-ui/react-data-table';
-import {
-    selectHideOfflineValue,
-    selectSummarySortState,
-    selectVersions,
-    selectVersionsSummaryData,
-} from '../../../../store/selectors/components/versions/versions_v2-ts';
 
 import hammer from '../../../../common/hammer';
 
 import Icon from '../../../../components/Icon/Icon';
 import Link from '../../../../containers/Link/Link';
 import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
-import {
-    changeCheckedHideOffline,
-    changeVersionStateTypeFilters,
-    setVersionsSummarySortState,
-} from '../../../../store/actions/components/versions/versions_v2';
 import {type VersionSummaryRow} from '../../../../store/reducers/components/versions/versions_v2';
-import {selectCluster} from '../../../../store/selectors/global';
+import {type SortState} from '../../../../types';
 import {formatByParams} from '../../../../../shared/utils/format';
 import UIFactory from '../../../../UIFactory';
 
 import i18n from './i18n';
 
-import './VersionSummary.scss';
-
 const block = cn('versions-summary');
 
-type Props = ConnectedProps<typeof connector>;
+type Props = {
+    loading: boolean;
+    loaded: boolean;
+    cluster: string;
+    items: VersionSummaryRow[];
+    sortState: SortState<string> | undefined;
+    checkedHideOffline: boolean;
+    visibleColumns: {type: string; name: string}[];
+    changeVersionStateTypeFilters: (data: {
+        version?: string;
+        state?: string;
+        type?: string;
+        banned?: boolean;
+    }) => void;
+    setVersionsSummarySortState: (summarySortState: SortState) => void;
+    changeCheckedHideOffline: (checkedHideOffline: boolean) => void;
+};
 
 type State = Readonly<{
     showAll: boolean;
@@ -57,7 +57,7 @@ function isSpecialRow(version: string) {
     return DEFAULT_VERSIONS.includes(version);
 }
 
-class VersionsSummary extends React.Component<Props, State> {
+export class VersionSummaryBase extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -335,33 +335,3 @@ class VersionsSummary extends React.Component<Props, State> {
         }
     };
 }
-
-const mapStateToProps = (state: RootState) => {
-    const {loading, loaded} = state.components.versionsV2;
-    const cluster = selectCluster(state);
-
-    const sortState = selectSummarySortState(state);
-
-    const visibleColumns = selectVersions(state);
-    const items = selectVersionsSummaryData(state);
-
-    return {
-        loading: loading as boolean,
-        loaded: loaded as boolean,
-        cluster,
-        items,
-        sortState,
-        checkedHideOffline: selectHideOfflineValue(state),
-        visibleColumns,
-    };
-};
-
-const mapDispatchToProps = {
-    changeVersionStateTypeFilters,
-    setVersionsSummarySortState,
-    changeCheckedHideOffline,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(VersionsSummary);
