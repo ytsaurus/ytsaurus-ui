@@ -1,0 +1,281 @@
+import React, {Component} from 'react';
+import {compose} from 'redux';
+import {useDispatch} from '../../../store/redux-hooks';
+import hammer from '../../../common/hammer';
+import PropTypes from 'prop-types';
+import block from 'bem-cn-lite';
+
+import filter_ from 'lodash/filter';
+import forEach_ from 'lodash/forEach';
+import map_ from 'lodash/map';
+import partition_ from 'lodash/partition';
+
+import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
+import withStickyFooter from '../../../components/ElementsTable/hocs/withStickyFooter';
+import {sortStateType} from '../../../components/ElementsTable/ElementsTableHeader';
+import withStickyHead from '../../../components/ElementsTable/hocs/withStickyHead';
+import ElementsTableBase from '../../../components/ElementsTable/ElementsTable';
+import SystemCounters from '../SystemCounters/SystemCounters';
+import Label from '../../../components/Label';
+import {StickyContainer} from '../../../components/StickyContainer/StickyContainer';
+
+import {SYSTEM_CHUNKS_TABLE_ID} from '../../../constants/tables';
+import {loadChunks} from '../../../store/actions/system/chunks';
+import {useUpdater} from '../../../hooks/use-updater';
+import {HEADER_HEIGHT} from '../../../constants';
+import i18n from './i18n';
+
+const b = block('system');
+
+const ElementsTable = compose(withStickyHead, withStickyFooter)(ElementsTableBase);
+
+export class ChunksBase extends Component {
+    static _formatChunkCount(count) {
+        return count === 0 ? '' : hammer.format['Number'](count);
+    }
+
+    static _prepareColumnSet(types) {
+        let columnSet = map_(types, 'name');
+
+        columnSet = filter_(columnSet, (item) => item !== 'chunks');
+        columnSet.push('chunks');
+        columnSet.unshift('cell_tag');
+
+        return columnSet;
+    }
+
+    static propTypes = {
+        // from connect
+        replication: PropTypes.bool,
+        sealer: PropTypes.bool,
+        refresh: PropTypes.bool,
+        requisitionUpdate: PropTypes.bool,
+        cells: PropTypes.arrayOf(PropTypes.object),
+        types: PropTypes.arrayOf(PropTypes.object),
+
+        sortState: sortStateType,
+    };
+
+    onToggle = () => {
+        const {collapsed, setSettingsSystemChunksCollapsed} = this.props;
+        setSettingsSystemChunksCollapsed(!collapsed);
+    };
+
+    _prepareColumns(types) {
+        const columns = {};
+
+        forEach_(types, (type) => {
+            columns[type.name] = {
+                ...type,
+                get(cellData) {
+                    return cellData[type.name];
+                },
+                align: 'right',
+                sort: true,
+            };
+        });
+
+        columns.cell_tag = {
+            get(cellData) {
+                const cellTag = cellData.cell_tag;
+                return cellTag === 'total' ? cellTag : Number(cellTag);
+            },
+            name: 'cell_tag',
+            caption: i18n('field_cell-tag'),
+            align: 'left',
+            sort: true,
+        };
+
+        return columns;
+    }
+
+    renderLabels() {
+        const {replication, sealer, refresh, requisitionUpdate} = this.props;
+
+        const labels = [
+            {
+                key: 'replication',
+                get name() {
+                    return i18n('title_replication');
+                },
+                value: replication,
+            },
+            {
+                key: 'sealer',
+                get name() {
+                    return i18n('title_sealer');
+                },
+                value: sealer,
+            },
+            {
+                key: 'refresh',
+                get name() {
+                    return i18n('title_refresh');
+                },
+                value: refresh,
+            },
+            {
+                key: 'requisition-update',
+                get name() {
+                    return i18n('title_requisition-update');
+                },
+                value: requisitionUpdate,
+            },
+        ];
+
+        return map_(labels, (label) => {
+            let theme, text;
+
+            if (typeof label.value === 'boolean') {
+                theme = label.value ? 'success' : 'danger';
+                text = label.value
+                    ? i18n('value_enabled', {name: label.name})
+                    : i18n('value_disabled', {name: label.name});
+            } else {
+                theme = 'default';
+                text = i18n('value_unknown', {name: label.name});
+            }
+
+            return <Label key={label.key} theme={theme} text={text} />;
+        });
+    }
+
+    renderImpl() {
+        const {cells, types, sortState, collapsibleSize, collapsed} = this.props;
+        const [rest, total] = partition_(cells, ({cell_tag}) => 'total' !== cell_tag);
+
+        if (!cells || 0 === cells.length) {
+            return null;
+        }
+
+        const columns = this._prepareColumns(types);
+        const sortedCells = hammer.utils.sort(rest, sortState, columns);
+
+        // TABLE
+        const tableSettings = {
+            size: 's',
+            theme: 'embedded',
+            striped: false,
+            css: 'chunk-cells',
+            computeKey(item) {
+                return item.cell_tag;
+            },
+            tableId: SYSTEM_CHUNKS_TABLE_ID,
+            columns: {
+                items: columns,
+                sets: {
+                    default: {
+                        items: ChunksBase._prepareColumnSet(types),
+                    },
+                },
+            },
+            templates: {
+                key: 'system/chunk-cells',
+                data: {columns},
+            },
+            header: false,
+        };
+
+        const table = Object.assign({}, tableSettings, {
+            items: sortedCells,
+            columns: Object.assign({}, tableSettings.columns, {
+                items: columns,
+                mode: 'default',
+            }),
+        });
+
+        const totalRow = total[0];
+
+        let countersBlock = null;
+        if (totalRow) {
+            /* eslint-disable camelcase */
+            const {
+                lost_vital_chunks,
+                data_missing_chunks,
+                parity_missing_chunks,
+                chunks,
+                quorum_missing_chunks,
+            } = totalRow;
+
+            const counters = {
+                flags: {
+                    lvc: ChunksBase._formatChunkCount(lost_vital_chunks),
+                    dmc: ChunksBase._formatChunkCount(data_missing_chunks),
+                    pmc: ChunksBase._formatChunkCount(parity_missing_chunks),
+                    qmc: ChunksBase._formatChunkCount(quorum_missing_chunks),
+                },
+                total: hammer.format['Number'](chunks),
+            };
+            /* eslint-enable camelcase */
+            const stateThemeMappings = {
+                lvc: 'danger',
+                dmc: 'warning',
+                pmc: 'warning',
+                qmc: 'danger',
+            };
+            countersBlock = (
+                <SystemCounters
+                    counters={counters}
+                    renderLinks={false}
+                    stateThemeMappings={stateThemeMappings}
+                />
+            );
+        }
+
+        const overview = (
+            <div className={b('heading-overview')}>
+                {countersBlock}
+                {this.renderLabels()}
+            </div>
+        );
+
+        return (
+            <StickyContainer>
+                {({stickyTopClassName}) => (
+                    <CollapsibleSectionStateLess
+                        name={i18n('title_chunks')}
+                        headingClassName={stickyTopClassName}
+                        overview={overview}
+                        onToggle={this.onToggle}
+                        collapsed={collapsed}
+                        size={collapsibleSize}
+                    >
+                        <div className={b('chunks')}>
+                            <ElementsTable {...table} top={HEADER_HEIGHT + 64} footer={totalRow} />
+                        </div>
+                    </CollapsibleSectionStateLess>
+                )}
+            </StickyContainer>
+        );
+    }
+
+    render() {
+        return (
+            <React.Fragment>
+                <ChunksUpdater />
+                {this.renderImpl()}
+            </React.Fragment>
+        );
+    }
+}
+
+function ChunksUpdater() {
+    const dispatch = useDispatch();
+
+    const updateFn = React.useMemo(() => {
+        let allowRetry = true;
+        return () => {
+            if (allowRetry) {
+                dispatch(loadChunks()).then(({isRetryFutile} = {}) => {
+                    if (isRetryFutile) {
+                        allowRetry = false;
+                    }
+                });
+            }
+        };
+    }, [dispatch]);
+
+    useUpdater(updateFn);
+
+    return null;
+}
