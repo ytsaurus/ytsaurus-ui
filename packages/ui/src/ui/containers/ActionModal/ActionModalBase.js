@@ -1,5 +1,4 @@
 import React from 'react';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
@@ -11,15 +10,13 @@ import Radiobox from '../../components/Radiobox/Radiobox';
 import SimpleModal from '../../components/Modal/SimpleModal';
 import TimeInput from '../../components/TimeInput/TimeInput';
 import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
-
-import {confirmAction, dismissAction} from '../../store/actions/actions';
 import {MODAL_STATES} from '../../constants/actions';
 import {Checkbox} from '@gravity-ui/uikit';
 import i18n from './i18n';
 
 const block = cn('elements-confirmation');
 
-class ActionModal extends React.Component {
+export class ActionModalBase extends React.Component {
     static propTypes = {
         dismissAction: PropTypes.func,
         confirmAction: PropTypes.func,
@@ -193,12 +190,3 @@ class ActionModal extends React.Component {
         );
     }
 }
-
-const mapStateToProps = ({actions}) => actions;
-
-const mapDispatchToProps = {
-    dismissAction,
-    confirmAction,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ActionModal);
