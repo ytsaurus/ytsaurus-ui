@@ -7,7 +7,16 @@ import {updateIfChanged} from '../../../../utils/utils';
 import {type LocationParameters} from '../../../../store/location';
 import {type FIX_MY_TYPE} from '../../../../types';
 
-const {text, user, subject, permissions, pool, state, type, failedJobs} = listInitialState.filters;
+const {
+    text,
+    user,
+    subject,
+    permissions,
+    pool,
+    state: operationStateFilter,
+    type,
+    failedJobs,
+} = listInitialState.filters;
 const {
     dataMode: initialDataMode,
     timeRange: {from: initialTimeRangeFrom, to: initialTimeRangeTo},
@@ -19,7 +28,7 @@ const initialUserFilter = user.defaultValue;
 const initialSubjectFilter = subject.defaultValue;
 const initialPermissionsFilter = permissions.defaultValue;
 const initialPoolFilter = pool.defaultValue;
-const initialStateFilter = state.defaultValue;
+const initialStateFilter = operationStateFilter.defaultValue;
 const initialTypeFilter = type.defaultValue;
 const initialFailedJobsFilter = failedJobs.defaultValue;
 

@@ -27,8 +27,8 @@ export const DeleteGroupModal: React.FC<DeleteGroupModalProps> = ({group, onClos
             disableGroupsCache();
             // we don't need to wait for the end of the action
             dispatch(fetchGroups());
-        } catch (error) {
-            setError(error as YTError);
+        } catch (cause) {
+            setError(cause as YTError);
         }
     }, [dispatch, group, onClose]);
 

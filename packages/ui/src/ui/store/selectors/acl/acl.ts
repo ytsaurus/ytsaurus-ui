@@ -150,7 +150,7 @@ export const selectAllObjectPermissionsFiltered = createSelector(
         selectAclFilterColumns,
         selectAclRowAccessPredicateFilter,
     ],
-    (items, subjectFilter, permissionsFilter, columns, rowAccessPredicateFilter) => {
+    (items, subjectFilter, permissionsFilter, filterColumns, rowAccessPredicateFilter) => {
         const {mainPermissions, columnPermissions, rowPermissions} = items.reduce(
             (acc, item) => {
                 if (!item.columns?.length && !item.row_access_predicate) {
@@ -188,7 +188,7 @@ export const selectAllObjectPermissionsFiltered = createSelector(
                   permissionsFilterPredicate(item, permissionsFilterSet) ?? false
             : undefined;
 
-        const visibleColumns = new Set(columns);
+        const visibleColumns = new Set(filterColumns);
         const filterByColumns = visibleColumns.size
             ? ({columns}: ObjectPermissionsRow) => {
                   return columns?.some((colName) => visibleColumns.has(colName)) ?? false;

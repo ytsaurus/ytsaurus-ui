@@ -56,10 +56,10 @@ export function useQueriesWidget(props: QueriesWidgetProps) {
     // TODO: move requests comptations to api
     const requests = useMemo(() => {
         if (requestedStates?.length) {
-            const requests: ListQueriesParams[] = [];
+            const result: ListQueriesParams[] = [];
 
             users.forEach((user) => {
-                requests.push(
+                result.push(
                     ...map_(requestedStates, (state) => ({
                         engine: queryEngine,
                         state,
@@ -70,7 +70,7 @@ export function useQueriesWidget(props: QueriesWidgetProps) {
                 );
             });
 
-            return requests;
+            return result;
         }
         return map_(users, (user) => ({
             engine: queryEngine?.length ? queryEngine : undefined,

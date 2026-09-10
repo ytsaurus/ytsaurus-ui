@@ -51,12 +51,12 @@ const mapDispatchToProps = {
 const StatisticsConnected = connect(mapStateToProps, mapDispatchToProps)(StatisticsBase);
 
 export default function SpecificationWithRum(props: {className: string}) {
-    const loadState = useSelector(selectOperationDetailsLoadingStatus);
+    const operationLoadState = useSelector(selectOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.OPERATION_TAB_STATISTICS,
         additionalStartType: RumMeasureTypes.OPERATION,
-        startDeps: [loadState],
+        startDeps: [operationLoadState],
         allowStart: ([loadState]) => {
             return !isFinalLoadingStatus(loadState);
         },
@@ -64,7 +64,7 @@ export default function SpecificationWithRum(props: {className: string}) {
 
     useRumMeasureStop({
         type: RumMeasureTypes.OPERATION_TAB_STATISTICS,
-        stopDeps: [loadState],
+        stopDeps: [operationLoadState],
         allowStop: ([loadState]) => {
             return isFinalLoadingStatus(loadState);
         },

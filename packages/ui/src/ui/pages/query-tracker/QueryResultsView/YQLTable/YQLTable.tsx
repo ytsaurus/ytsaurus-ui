@@ -117,7 +117,7 @@ export default function Table({
 }: Props) {
     const sortable = typeof onSort === 'function';
     const columns = React.useMemo(() => {
-        const columns = header.map((column): Column<WithIndex<any>> => {
+        const result = header.map((column): Column<WithIndex<any>> => {
             const {name, displayName, type = {}} = column;
             return {
                 name,
@@ -222,7 +222,7 @@ export default function Table({
                 align: type.numeric ? defaultNumberAlign : undefined,
             };
         });
-        return columns;
+        return result;
     }, [
         header,
         sortable,

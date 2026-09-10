@@ -74,17 +74,17 @@ function TagsFilter(props: Props) {
 
     const handleChange = React.useCallback(
         (v: Props['value']) => {
-            const value = reduce_(
+            const result = reduce_(
                 v,
-                (acc, value, key) => {
-                    if (value !== undefined) {
-                        acc[key] = value;
+                (acc, item, key) => {
+                    if (item !== undefined) {
+                        acc[key] = item;
                     }
                     return acc;
                 },
                 {} as any,
             );
-            onChange(value);
+            onChange(result);
         },
         [onChange],
     );
@@ -97,8 +97,8 @@ function TagsFilter(props: Props) {
     );
 
     const handleSelectChange = React.useCallback(
-        (selected?: Array<string>) => {
-            handleChange({...value, selected});
+        (tags?: Array<string>) => {
+            handleChange({...value, selected: tags});
         },
         [handleChange, value],
     );
@@ -141,8 +141,8 @@ function TagsFilter(props: Props) {
             {control}
             <DropdownMenu
                 items={modes}
-                renderSwitcher={(props) => (
-                    <Button {...props} size={size} width={'auto'} pin={'clear-round'}>
+                renderSwitcher={(buttonProps) => (
+                    <Button {...buttonProps} size={size} width={'auto'} pin={'clear-round'}>
                         <Icon awesome={ICONS[mode]} />
                     </Button>
                 )}

@@ -196,8 +196,8 @@ export class VersionSummaryBase extends React.Component<Props, State> {
 
     handleSelectUpdate = (value: string[]) => {
         // move default versions to the end
-        const prepareValue = (value: string[]) => {
-            return value
+        const prepareValue = (versions: string[]) => {
+            return versions
                 .filter((item) => !DEFAULT_VERSIONS.includes(item))
                 .concat(DEFAULT_VERSIONS);
         };
@@ -235,8 +235,8 @@ export class VersionSummaryBase extends React.Component<Props, State> {
                     .sort((item1, item2) => item1.type.localeCompare(item2.type));
 
                 BASE_COMPONENTS.forEach((type) => {
-                    const item = data.find((item) => item.type === type);
-                    if (item) newData.push(item);
+                    const component = data.find((item) => item.type === type);
+                    if (component) newData.push(component);
                 });
             }
             return newData;

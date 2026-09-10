@@ -88,13 +88,13 @@ export function loadSchedulingData(): SchedulingThunkAction {
                     return Promise.reject(error);
                 }
 
-                const state = getState();
+                const rootState = getState();
 
                 const trees = prepareTrees(rawTrees);
                 const tree = prepareCurrentTree(
                     defaultTree,
                     trees,
-                    state.scheduling.scheduling.tree,
+                    rootState.scheduling.scheduling.tree,
                 );
 
                 if (isInitialLoading) {
@@ -135,12 +135,12 @@ export function loadSchedulingData(): SchedulingThunkAction {
                     )
                     .then((treeData) => {
                         const extracted = extractBatchV4Values(treeData, treeRequests);
-                        const {error, results} = splitBatchResults(
+                        const {error: treeError, results} = splitBatchResults(
                             extracted.results,
                             'Failed to fetch tree details',
                         );
-                        if (error) {
-                            throw error;
+                        if (treeError) {
+                            throw treeError;
                         }
                         return results;
                     });

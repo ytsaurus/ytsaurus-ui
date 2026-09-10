@@ -57,14 +57,14 @@ function ClusterSelectControl({
         }
 
         const toSkip = new Set(excludeClusters);
-        return filter_(clusters, ({value}) => {
-            return !toSkip.has(value);
+        return filter_(clusters, (option) => {
+            return !toSkip.has(option.value);
         });
     }, [clusters, excludeClusters]);
 
     const handleChange = React.useCallback(
-        (value: Array<string>) => {
-            onChange(value[0]);
+        (selectedValues: Array<string>) => {
+            onChange(selectedValues[0]);
         },
         [onChange],
     );

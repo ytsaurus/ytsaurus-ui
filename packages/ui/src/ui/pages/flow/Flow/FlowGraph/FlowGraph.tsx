@@ -104,7 +104,13 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
         {useDefaultConnection: !useGroups},
     );
 
-    const {isEmpty, isLoading, data, groups, groupBlocks} = useFlowGraphData({
+    const {
+        isEmpty,
+        isLoading,
+        data: graphData,
+        groups,
+        groupBlocks,
+    } = useFlowGraphData({
         pipeline_path,
     });
 
@@ -118,12 +124,12 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
 
     return (
         <div className={block()}>
-            <FlowGraphToolbar blocks={data.blocks} zoomToNode={zoomTo} />
+            <FlowGraphToolbar blocks={graphData.blocks} zoomToNode={zoomTo} />
             <YTGraph
                 className={block('graph')}
                 setScale={setScale}
                 {...config}
-                data={useGroups && !zoomToState ? groups : data}
+                data={useGroups && !zoomToState ? groups : graphData}
                 renderBlock={({className, style, data}) => {
                     return (
                         <Flex className={block('item-container', className)} style={style}>
@@ -175,8 +181,10 @@ function FlowGraphToolbar({
                             value={zoomToNode ? [zoomToNode] : []}
                             label={i18n('field_zoom-to')}
                             placeholder={i18n('context_select-node')}
-                            onUpdate={([zoomToNode = '']) => {
-                                dispatch(filtersSlice.actions.updateFlowFilters({zoomToNode}));
+                            onUpdate={([nodeId = '']) => {
+                                dispatch(
+                                    filtersSlice.actions.updateFlowFilters({zoomToNode: nodeId}),
+                                );
                             }}
                             items={items}
                             hasClear
@@ -306,9 +314,9 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                     key: K,
                     options?: {groupId: string},
                 ) {
-                    const streams = computation[key] ?? [];
+                    const streamIds = computation[key] ?? [];
 
-                    streams.forEach((id) => {
+                    streamIds.forEach((id) => {
                         if (key === 'input_streams' || key === 'source_streams') {
                             addConnection(res.data.connections, id, computation.id);
                         } else if (key === 'output_streams') {

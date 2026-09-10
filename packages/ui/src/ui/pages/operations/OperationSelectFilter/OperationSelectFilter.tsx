@@ -76,8 +76,8 @@ export default class OperationSelectFilter<NameT extends string = string> extend
                 placeholder={placeHolder}
                 value={Array.isArray(value) ? value : [value]}
                 items={this.items}
-                onUpdate={(value) => {
-                    const v = multiple ? value : value[0];
+                onUpdate={(values) => {
+                    const v = multiple ? values : values[0];
                     this.props.updateFilter(this.props.name, v);
                 }}
             />

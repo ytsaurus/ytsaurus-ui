@@ -103,7 +103,7 @@ function useShowPrevewHandler() {
     const {dataHandler, onShowPreview} = React.useMemo(() => {
         const cancelHelper = new CancelHelper();
 
-        const dataHandler = {
+        const handler = {
             cancelHelper,
             saveCancellation: (token) => {
                 cancelHelper.saveCancelToken(token);
@@ -115,19 +115,19 @@ function useShowPrevewHandler() {
             },
         } as CellDataHandlerNavigation & {cancelHelper: CancelHelper};
 
-        const onShowPreview = (columnName: string, rowIndex: number, tag?: string) => {
+        const showPreview = (columnName: string, rowIndex: number, tag?: string) => {
             const allowInjectData = isInlinePreviewAllowed(tag);
             return dispatch(
                 onCellPreview({
                     columnName,
                     rowIndex,
                     tag,
-                    dataHandler: allowInjectData ? dataHandler : undefined,
+                    dataHandler: allowInjectData ? handler : undefined,
                 }),
             );
         };
 
-        return {onShowPreview, dataHandler};
+        return {onShowPreview: showPreview, dataHandler: handler};
     }, [dispatch, offsetValue]);
 
     React.useEffect(() => {

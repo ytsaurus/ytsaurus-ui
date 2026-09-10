@@ -32,9 +32,9 @@ interface Props {
 export function OperationShortInfo(props: Props) {
     const {id, type, output_attribute_name} = props;
 
-    const [operation, setOperation] = React.useState();
+    const [operationInfo, setOperationInfo] = React.useState();
 
-    const finishTimeRaw = ypath.getValue(operation, '/finish_time');
+    const finishTimeRaw = ypath.getValue(operationInfo, '/finish_time');
     React.useEffect(() => {
         if (finishTimeRaw) {
             return;
@@ -46,22 +46,22 @@ export function OperationShortInfo(props: Props) {
                     operation_id: id,
                 })
                 .then((operation: any) => {
-                    setOperation(operation);
+                    setOperationInfo(operation);
                 });
         }, 3000);
         return () => {
             clearInterval(timerId);
         };
-    }, [finishTimeRaw, setOperation]);
+    }, [finishTimeRaw, setOperationInfo]);
 
     const cluster = useSelector(selectCluster);
     const output = output_attribute_name
-        ? ypath.getValue(operation, output_attribute_name) || '...'
+        ? ypath.getValue(operationInfo, output_attribute_name) || '...'
         : '...';
-    const error = ypath.getValue(operation, '/result/error');
+    const error = ypath.getValue(operationInfo, '/result/error');
     const code = ypath.getValue(error, '/code');
 
-    const startTime = moment(ypath.getValue(operation, '/start_time'));
+    const startTime = moment(ypath.getValue(operationInfo, '/start_time'));
     const finishTime = moment(finishTimeRaw);
     const diff = finishTime.diff(startTime);
 
@@ -79,7 +79,7 @@ export function OperationShortInfo(props: Props) {
                         label: i18n('field_type'),
                         value: (
                             <span className={block('value')}>
-                                {ypath.getValue(operation, '/type') || type || '...'}
+                                {ypath.getValue(operationInfo, '/type') || type || '...'}
                             </span>
                         ),
                     },
@@ -101,7 +101,9 @@ export function OperationShortInfo(props: Props) {
                         key: 'status',
                         label: i18n('field_status'),
                         value: (
-                            <OperationState state={ypath.getValue(operation, '/state') || '...'} />
+                            <OperationState
+                                state={ypath.getValue(operationInfo, '/state') || '...'}
+                            />
                         ),
                     },
                     ...(!code || code === '0'

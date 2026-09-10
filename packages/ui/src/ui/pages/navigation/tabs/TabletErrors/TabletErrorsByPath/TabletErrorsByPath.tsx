@@ -49,7 +49,7 @@ export function TabletErrorsRequest() {
 export function TabletErrorsRequestToolbar({className}: {className: string}) {
     const dispatch = useDispatch();
     const {
-        timeRange: {from, to, shortcutValue},
+        timeRange: {from: rangeFrom, to: rangeTo, shortcutValue: rangeShortcut},
         tabletIdFilter,
         pageFilter,
         methodsFilter,
@@ -61,9 +61,9 @@ export function TabletErrorsRequestToolbar({className}: {className: string}) {
     return (
         <div className={className}>
             <YTTimeline
-                from={from!}
-                to={to!}
-                shortcut={shortcutValue}
+                from={rangeFrom!}
+                to={rangeTo!}
+                shortcut={rangeShortcut}
                 onUpdate={({from, to, shortcutValue}) => {
                     dispatch(
                         tabletErrorsByPathActions.updateFilter({
@@ -81,8 +81,10 @@ export function TabletErrorsRequestToolbar({className}: {className: string}) {
                                 value={pageFilter}
                                 min={0}
                                 max={Math.max(0, pageCount - 1)}
-                                onChange={(pageFilter) => {
-                                    dispatch(tabletErrorsByPathActions.updateFilter({pageFilter}));
+                                onChange={(page) => {
+                                    dispatch(
+                                        tabletErrorsByPathActions.updateFilter({pageFilter: page}),
+                                    );
                                 }}
                             />
                         ),

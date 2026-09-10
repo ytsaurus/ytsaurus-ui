@@ -87,9 +87,9 @@ function ChytSimpleConfirmation({
                         onConfirm();
                         setError(undefined);
                     })
-                    .catch((error: any) => {
-                        setError(error);
-                        throw error;
+                    .catch((cause: any) => {
+                        setError(cause);
+                        throw cause;
                     });
             }}
             fields={[
@@ -145,16 +145,15 @@ function ChytStartConfirmation({
                         onConfirm();
                         setError(undefined);
                     })
-                    .catch((error: any) => {
-                        setError(error);
-                        throw error;
+                    .catch((cause: any) => {
+                        setError(cause);
+                        throw cause;
                     });
             }}
             isApplyDisabled={(state) => {
-                const {
-                    values: {pool, untracked},
-                } = state;
-                return Boolean(!pool && !untracked);
+                const {pool: selectedPool, untracked} = state.values;
+
+                return Boolean(!selectedPool && !untracked);
             }}
             fields={[
                 {

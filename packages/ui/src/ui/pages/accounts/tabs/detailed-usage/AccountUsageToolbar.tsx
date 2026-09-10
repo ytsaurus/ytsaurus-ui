@@ -170,7 +170,7 @@ function useSnapshotItems() {
 function FromSnapshot() {
     const dispatch = useDispatch();
     const items = useSnapshotItems();
-    const value = useSelector(selectAccountsUsageDiffFromSnapshot);
+    const snapshot = useSelector(selectAccountsUsageDiffFromSnapshot);
 
     const handleChange = React.useCallback(
         (value: string) => {
@@ -187,7 +187,7 @@ function FromSnapshot() {
         <Select
             placeholder={i18n('field_snapshot') + '...'}
             items={items}
-            value={[snapshot2string(value)]}
+            value={[snapshot2string(snapshot)]}
             onUpdate={(vals) => handleChange(vals[0])}
             width={150}
         />
@@ -197,7 +197,7 @@ function FromSnapshot() {
 function ToSnapshot() {
     const dispatch = useDispatch();
     const items = useSnapshotItems();
-    const value = useSelector(selectAccountsUsageDiffToSnapshot);
+    const snapshot = useSelector(selectAccountsUsageDiffToSnapshot);
 
     const handleChange = React.useCallback(
         (value: string) => {
@@ -214,7 +214,7 @@ function ToSnapshot() {
         <Select
             placeholder={i18n('field_snapshot') + '...'}
             items={items}
-            value={[snapshot2string(value)]}
+            value={[snapshot2string(snapshot)]}
             onUpdate={(vals) => handleChange(vals[0])}
             width={150}
         />
@@ -293,7 +293,7 @@ function PathFilter() {
 function OwnerFilter() {
     const dispatch = useDispatch();
 
-    const filter = useSelector(selectAccountUsageOwnerFilter);
+    const selectedOwnerFilter = useSelector(selectAccountUsageOwnerFilter);
 
     const handleChange = React.useCallback(
         (item: SuggestItem) => {
@@ -307,7 +307,7 @@ function OwnerFilter() {
 
     return (
         <Suggest
-            text={filter}
+            text={selectedOwnerFilter}
             items={allNames}
             filter={(_items, filter = '') => getFiltered(filter)}
             apply={handleChange}
@@ -478,7 +478,7 @@ function DiffTitle({title}: {title: string}) {
 function ViewType() {
     const dispatch = useDispatch();
 
-    const value = useSelector(selectAccountUsageViewType);
+    const viewType = useSelector(selectAccountUsageViewType);
     const handleChange = React.useCallback(
         (value: string) => {
             dispatch(setAccountUsageViewType(value as any));
@@ -488,7 +488,7 @@ function ViewType() {
 
     return (
         <Select
-            value={value ? [value] : []}
+            value={viewType ? [viewType] : []}
             items={VIEW_TYPE_ITEMS}
             onUpdate={(vals) => handleChange(vals[0])}
             width="max"

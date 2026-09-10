@@ -95,11 +95,11 @@ const mapDispatchToProps = {
 const OperationDetailConnected = connect(mapStateToProps, mapDispatchToProps)(OperationDetailBase);
 
 export default function OperationDetailsWithRum(props: RouteProps) {
-    const loadState = useSelector(selectOperationDetailsLoadingStatus);
+    const operationLoadState = useSelector(selectOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.OPERATION,
-        startDeps: [loadState],
+        startDeps: [operationLoadState],
         allowStart: ([loadState]) => {
             return !isFinalLoadingStatus(loadState);
         },

@@ -56,7 +56,7 @@ export function useConfig<T extends TBlock>(
             ? undefined
             : (connection ?? MultipointConnection);
 
-        const config: HookGraphParams = {
+        const graphConfig: HookGraphParams = {
             settings: {
                 connection: resolvedConnection,
                 canDuplicateBlocks: false,
@@ -75,7 +75,7 @@ export function useConfig<T extends TBlock>(
         };
         const knownTypes = new Set(Object.keys(blockComponentsCached));
         return {
-            config,
+            config: graphConfig,
             isBlock: (v: unknown): v is CanvasBlock<T> => {
                 return knownTypes.has((v as Partial<CanvasBlock<T>>).state?.is!);
             },

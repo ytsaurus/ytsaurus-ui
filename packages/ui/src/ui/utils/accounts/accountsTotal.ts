@@ -82,13 +82,13 @@ function prepareMediumStats<T extends Record<string, MediumStat>>(
 function initMediumStats<T extends readonly string[]>(list: T) {
     return reduce_(
         list,
-        (list, type: T[number]) => {
-            list[type] = {
+        (acc, type: T[number]) => {
+            acc[type] = {
                 usage: 0,
                 limit: 0,
             };
 
-            return list;
+            return acc;
         },
         {} as Record<T[number], MediumStat>,
     );

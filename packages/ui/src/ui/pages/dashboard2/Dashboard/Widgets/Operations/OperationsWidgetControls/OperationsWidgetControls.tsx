@@ -26,7 +26,7 @@ export function OperationsWidgetControls(props: OperationsWidgetProps) {
 
     const dispatch = useDispatch();
 
-    const state = useSelector((state: RootState) => selectOperationsStateFilter(state, id));
+    const stateFilter = useSelector((state: RootState) => selectOperationsStateFilter(state, id));
     const authorType = useSelector((state: RootState) =>
         selectOperationsAuthorTypeFilter(state, id),
     );
@@ -50,7 +50,7 @@ export function OperationsWidgetControls(props: OperationsWidgetProps) {
                     {value: 'aborted', content: i18n('value_aborted')},
                 ]}
                 label={i18n('label_state')}
-                value={[state]}
+                value={[stateFilter]}
                 onUpdate={onStateFilterUpdate}
                 className={block('state')}
                 qa={'operations-state-filter'}

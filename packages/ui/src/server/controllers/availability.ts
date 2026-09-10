@@ -28,7 +28,7 @@ function getClusterAvailability(clusterConfig: {id: string}, odinPath: string) {
 function getAvailability(req: Request, clusters: Record<string, {id: string}>) {
     const odinBaseUrl = req.ctx.config.odinBaseUrl;
     const isMultiOdinBaseUrl = 'string' !== typeof odinBaseUrl;
-    const makeOdinIsAliveUrl = (odinBaseUrl: string) => `${odinBaseUrl}/is_alive`;
+    const makeOdinIsAliveUrl = (baseUrl: string) => `${baseUrl}/is_alive`;
 
     const commonIsAlive = isMultiOdinBaseUrl
         ? Promise.resolve({data: true})

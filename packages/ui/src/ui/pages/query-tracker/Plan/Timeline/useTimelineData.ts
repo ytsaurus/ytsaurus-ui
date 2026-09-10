@@ -50,8 +50,8 @@ export function useTimelineData(): UseTimelineDataResult {
     const {filteredAxes, isSomeAxesCollapsed} = React.useMemo(() => {
         const cleanedSearch = search.toLowerCase().trim();
 
-        const filteredAxes: FilteredAxis[] = [];
-        let isSomeAxesCollapsed = false;
+        const result: FilteredAxis[] = [];
+        let hasCollapsedAxes = false;
 
         for (const axis of axes) {
             if (cleanedSearch && !axis.label.toLowerCase().includes(cleanedSearch)) {
@@ -62,26 +62,26 @@ export function useTimelineData(): UseTimelineDataResult {
             }
             const isExpanded = axis.isExpandable ? expandedAxesSet.has(axis.id) : false;
 
-            if (!isSomeAxesCollapsed && axis.isExpandable && !isExpanded) {
-                isSomeAxesCollapsed = true;
+            if (!hasCollapsedAxes && axis.isExpandable && !isExpanded) {
+                hasCollapsedAxes = true;
             }
             const tracksCount = isExpanded ? axis.events.length : 1;
-            filteredAxes.push({...axis, tracksCount, isExpanded});
+            result.push({...axis, tracksCount, isExpanded});
         }
 
-        return {filteredAxes, isSomeAxesCollapsed};
+        return {filteredAxes: result, isSomeAxesCollapsed: hasCollapsedAxes};
     }, [axes, search, stateFilter, expandedAxesSet]);
 
     const timelineAxes = React.useMemo(() => {
-        const timelineAxes: TimelineAxis[] = [];
+        const result: TimelineAxis[] = [];
         let top = 0;
 
         filteredAxes.forEach((axis, index) => {
             if (index) {
-                top += (timelineAxes.at(-1)?.tracksCount || 0) * ROW_HEIGHT;
+                top += (result.at(-1)?.tracksCount || 0) * ROW_HEIGHT;
             }
 
-            timelineAxes.push({
+            result.push({
                 id: axis.id,
                 tracksCount: axis.isExpanded ? axis.events.length : 1,
                 top,
@@ -89,7 +89,7 @@ export function useTimelineData(): UseTimelineDataResult {
             });
         });
 
-        return timelineAxes;
+        return result;
     }, [filteredAxes]);
 
     const timelineEvents = React.useMemo(() => {

@@ -285,7 +285,7 @@ export function StatisticTable({
                             minWidth={minWidth}
                             toggleItemState={toggleItemState}
                             itemState={itemState}
-                            renderValue={(item) => item?.attributes?.name}
+                            renderValue={(row) => row?.attributes?.name}
                             info={info}
                         />
                     );

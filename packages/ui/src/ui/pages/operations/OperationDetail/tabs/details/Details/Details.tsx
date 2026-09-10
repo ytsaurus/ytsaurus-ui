@@ -45,12 +45,12 @@ const mapDispatchToProps = {
 const DetailsConnected = connect(mapStateToProps, mapDispatchToProps)(DetailsBase);
 
 export default function DetailsWithRum() {
-    const loadState = useSelector(selectOperationDetailsLoadingStatus);
+    const operationLoadState = useSelector(selectOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.OPERATION_TAB_DETAILS,
         additionalStartType: RumMeasureTypes.OPERATION,
-        startDeps: [loadState],
+        startDeps: [operationLoadState],
         allowStart: ([loadState]) => {
             return !isFinalLoadingStatus(loadState);
         },
@@ -58,7 +58,7 @@ export default function DetailsWithRum() {
 
     useRumMeasureStop({
         type: RumMeasureTypes.OPERATION_TAB_DETAILS,
-        stopDeps: [loadState],
+        stopDeps: [operationLoadState],
         allowStop: ([loadState]) => {
             return isFinalLoadingStatus(loadState);
         },
