@@ -1,23 +1,13 @@
 import React, {Component} from 'react';
 import {Checkbox, Flex} from '@gravity-ui/uikit';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import PathEditorModal from '../PathEditorModal';
 import i18n from './i18n';
 
 import {CLOSE_COPY_OBJECT_POPUP} from '../../../../../constants/navigation/modals/copy-object';
-import {
-    abortRequests,
-    copyObject,
-} from '../../../../../store/actions/navigation/modals/copy-object';
-import {
-    closeEditingPopup,
-    hideError,
-} from '../../../../../store/actions/navigation/modals/path-editing-popup';
-import {updateView} from '../../../../../store/actions/navigation';
 
-class CopyObjectModal extends Component {
+export class CopyObjectModalBase extends Component {
     static propTypes = {
         // from connect
         error: PropTypes.shape({
@@ -135,39 +125,3 @@ class CopyObjectModal extends Component {
         this.setState((state) => ({...state, preserve_account}));
     };
 }
-
-const mapStateToProps = ({navigation}) => {
-    const {
-        copyPath,
-        objectPath,
-        popupVisible,
-        showError,
-        copying,
-        errorMessage,
-        error,
-        multipleMode,
-        items,
-    } = navigation.modals.copyObject;
-
-    return {
-        items,
-        multipleMode,
-        copyPath,
-        copying,
-        popupVisible,
-        errorMessage,
-        error,
-        showError,
-        objectPath,
-    };
-};
-
-const mapDispatchToProps = {
-    updateView,
-    copyObject,
-    abortRequests,
-    closeEditingPopup,
-    hideError,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CopyObjectModal);
