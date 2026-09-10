@@ -1,9 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {type ConnectedProps, connect} from 'react-redux';
 import DataTable from '@gravity-ui/react-data-table';
-
-import {openAttributesModal} from '../../../store/actions/modals/attributes-modal';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import CommaSeparatedListWithRestCounter from '../../../components/CommaSeparateListWithRestCounter/CommaSeparateListWithRestCounter';
 import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
@@ -14,21 +11,11 @@ import {Tooltip} from '@ytsaurus/components';
 import {DataTableYT} from '../../../components/DataTableYT';
 
 import LoadDataHandler from '../../../containers/LoadDataHandler/LoadDataHandler';
-
-import {fetchGroups, setGroupsPageSorting, toggleGroupExpand} from '../../../store/actions/groups';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import GroupEditorDialog from '../../../pages/groups/GroupEditorDialog/GroupEditorDialog';
-import {
-    type GroupsTreeNode,
-    selectGroupEditorVisible,
-    selectGroupsFlattenTree,
-    selectGroupsSort,
-    selectGroupsTableDataState,
-} from '../../../store/selectors/groups';
-
-import './GroupsPageTable.scss';
-import {type RootState} from '../../../store/reducers';
+import {type GroupsTreeNode} from '../../../store/selectors/groups';
 import {type OrderType} from '../../../utils/sort-helpers';
+import {type YTError} from '../../../types';
 import {GroupActions} from '../GroupActions/GroupActions';
 import i18n from './i18n';
 
@@ -61,11 +48,20 @@ const COLUMN_NAMES: Record<string, string> = {
     actions: '',
 };
 
-interface GroupsPageTableProps extends ConnectedProps<typeof connector> {
+interface GroupsPageTableProps {
     className?: string;
+    loaded: boolean;
+    loading: boolean;
+    error: YTError | null;
+    groups: GroupsTreeNode[];
+    sort: {column: string; order: OrderType};
+    showEditor: boolean;
+    fetchGroups(): void;
+    setGroupsPageSorting(column: string, order: OrderType): void;
+    toggleGroupExpand(groupName: string, isExpanded: boolean): void;
 }
 
-class GroupsPageTable extends React.Component<GroupsPageTableProps> {
+export class GroupsPageTableBase extends React.Component<GroupsPageTableProps> {
     override componentDidMount() {
         const {fetchGroups} = this.props;
         fetchGroups();
@@ -234,31 +230,3 @@ class GroupsPageTable extends React.Component<GroupsPageTableProps> {
         );
     }
 }
-
-const mapStateToProps = (state: RootState) => {
-    const {loaded, loading, error} = selectGroupsTableDataState(state);
-    const groups = selectGroupsFlattenTree(state);
-    const sort = selectGroupsSort(state);
-    const showEditor = selectGroupEditorVisible(state);
-
-    return {
-        loaded,
-        loading,
-        error,
-
-        groups,
-        sort,
-        showEditor,
-    };
-};
-
-const mapDispatchToProps = {
-    fetchGroups,
-    setGroupsPageSorting,
-    toggleGroupExpand,
-    openAttributesModal,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(GroupsPageTable);
