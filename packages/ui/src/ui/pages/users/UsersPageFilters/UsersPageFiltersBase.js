@@ -1,32 +1,18 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 import {Checkbox} from '@gravity-ui/uikit';
 import i18n from './i18n';
 
 import Filter from '../../../components/Filter/Filter';
-
-import {
-    setUsersBannedFilter,
-    setUsersGroupFilter,
-    setUsersNameFilter,
-} from '../../../store/actions/users/index';
 import GroupSuggest from '../../../pages/components/GroupSuggest/GroupSuggest';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
-import {
-    selectUsersBannedFilter,
-    selectUsersGroupFilter,
-    selectUsersNameFilter,
-} from '../../../store/selectors/users';
 import {GroupsLoader} from '../../../hooks/global';
 import {ShowCreateUserModalButton} from '../CreateUserModal/CreateUserModal';
 
-import './UsersPageFilters.scss';
-
 const block = cn('users-page-filters');
 
-class UsersPageFilters extends React.Component {
+export class UsersPageFiltersBase extends React.Component {
     static propTypes = {
         className: PropTypes.string,
 
@@ -104,19 +90,3 @@ class UsersPageFilters extends React.Component {
         );
     }
 }
-
-const mapStateToProps = (state) => {
-    return {
-        bannedFilter: selectUsersBannedFilter(state),
-        nameFilter: selectUsersNameFilter(state),
-        groupFilter: selectUsersGroupFilter(state),
-    };
-};
-
-const mapDispatchToProps = {
-    setUsersBannedFilter,
-    setUsersNameFilter,
-    setUsersGroupFilter,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(UsersPageFilters);
