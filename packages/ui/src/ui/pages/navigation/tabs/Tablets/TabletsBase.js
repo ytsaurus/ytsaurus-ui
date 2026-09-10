@@ -1,6 +1,4 @@
 import React, {Component, Fragment} from 'react';
-import {connect} from 'react-redux';
-import {useSelector} from '../../../../store/redux-hooks';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
@@ -21,29 +19,8 @@ import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 
-import {selectPath, selectType} from '../../../../store/selectors/navigation';
-
-import {
-    selectActiveHistogram,
-    selectHistogram,
-    selectIsReplicationDataExist,
-    selectIsSearchByPivot,
-    selectNavigationTabletsLoadingStatus,
-    selectTablets,
-} from '../../../../store/selectors/navigation/tabs/tablets';
-
 import {NAVIGATION_TABLETS_TABLE_ID} from '../../../../constants/navigation/tabs/tablets';
 import {Page} from '../../../../constants/index';
-
-import {
-    abortAndReset,
-    changeActiveHistogram,
-    changeTabletsFilter,
-    changeTabletsMode,
-    loadTablets,
-    toggleExpandedHost,
-    toggleHistogram,
-} from '../../../../store/actions/navigation/tabs/tablets';
 
 import {histogramItems, tableItems} from '../../../../utils/navigation/tabs/tables';
 import {asNumber} from '../../../../components/templates/utils';
@@ -52,24 +29,13 @@ import ypath from '../../../../common/thor/ypath';
 import unipika from '../../../../common/thor/unipika';
 
 import {genTabletCellBundlesCellUrl} from '../../../../utils/tablet_cell_bundles';
-import {useRumMeasureStop} from '../../../../rum/RumUiContext';
-import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
-import {isFinalLoadingStatus} from '../../../../utils/utils';
-import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
 import {Host} from '../../../../containers/Host/Host';
-import {
-    selectTabletsByName,
-    selectTabletsMax,
-} from '../../../../store/selectors/navigation/tabs/tablets-ts';
 import {useSerieColor} from '../../../../hooks/use-serie-color';
-
-import './Tablets.scss';
-import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';
 import i18n from './i18n';
 
 const block = cn('navigation-tablets');
 
-class Tablets extends Component {
+export class TabletsBase extends Component {
     static typedValueProps = PropTypes.shape({
         $type: PropTypes.string.isRequired,
         $value: PropTypes.string.isRequired,
@@ -88,7 +54,7 @@ class Tablets extends Component {
         performance_counters: PropTypes.object,
         statistics: PropTypes.object,
 
-        pivot_key: PropTypes.arrayOf(Tablets.typedValueProps),
+        pivot_key: PropTypes.arrayOf(TabletsBase.typedValueProps),
         replication_lag_time: PropTypes.number,
         replication_mode: PropTypes.string,
     });
@@ -106,7 +72,7 @@ class Tablets extends Component {
         tabletsFilter: PropTypes.string.isRequired,
         activeHistogram: PropTypes.string.isRequired,
         histogramCollapsed: PropTypes.bool.isRequired,
-        tablets: PropTypes.arrayOf(Tablets.tabletProps).isRequired,
+        tablets: PropTypes.arrayOf(TabletsBase.tabletProps).isRequired,
         histogram: PropTypes.shape({
             data: PropTypes.array.isRequired,
             format: PropTypes.string.isRequired,
@@ -161,11 +127,11 @@ class Tablets extends Component {
                         <Icon awesome={isCollapsed ? 'angle-down' : 'angle-up'} />
                     </Button>{' '}
                     {name === cell_leader_address
-                        ? Tablets.renderHost(item)
-                        : Tablets.renderCellId(item)}
+                        ? TabletsBase.renderHost(item)
+                        : TabletsBase.renderCellId(item)}
                 </React.Fragment>
             ) : (
-                Tablets.renderTabletId(item)
+                TabletsBase.renderTabletId(item)
             );
 
         return <div className={block('name', {level})}>{content}</div>;
@@ -177,10 +143,10 @@ class Tablets extends Component {
     }
 
     static renderIndex(item, columnName) {
-        if (Tablets.isTopLevel(item) && item.childrenCount) {
+        if (TabletsBase.isTopLevel(item) && item.childrenCount) {
             return i18n('context_total-count', {count: item.childrenCount});
         }
-        if (Tablets)
+        if (TabletsBase)
             if (item.index === 'aggregation') {
                 return hammer.format['ReadableField'](item.index);
             } else {
@@ -192,14 +158,14 @@ class Tablets extends Component {
         const id = item.tablet_id;
         const url = `${Page.TABLET}/${id}`;
 
-        return Tablets.renderIdWithLink(id, url);
+        return TabletsBase.renderIdWithLink(id, url);
     }
 
     static renderCellId(item) {
         const id = item.cell_id;
         const url = genTabletCellBundlesCellUrl(id);
 
-        return Tablets.renderIdWithLink(id, url);
+        return TabletsBase.renderIdWithLink(id, url);
     }
 
     static renderHost(item) {
@@ -290,7 +256,7 @@ class Tablets extends Component {
     }
 
     static renderActions(item) {
-        if (item.index === 'aggregation' || Tablets.isTopLevel(item)) {
+        if (item.index === 'aggregation' || TabletsBase.isTopLevel(item)) {
             return null;
         } else {
             const tablet = ypath.getValue(item, '/tablet_id');
@@ -307,7 +273,7 @@ class Tablets extends Component {
 
     static renderStorePreload(item, columnName) {
         const storePreload = item[columnName];
-        const storePreloadProgress = Tablets.prepareStorePreloadProgress(storePreload);
+        const storePreloadProgress = TabletsBase.prepareStorePreloadProgress(storePreload);
 
         return <Progress {...storePreloadProgress} />;
     }
@@ -450,16 +416,16 @@ class Tablets extends Component {
                 mode: tabletsMode,
             },
             templates: {
-                name_tablet_id: Tablets.renderName.bind(this),
-                name_cell_id: Tablets.renderName,
-                index: Tablets.renderIndex,
-                tablet_id: Tablets.renderTabletId,
-                cell_id: Tablets.renderCellId,
-                cell_leader_address: Tablets.renderHost,
-                state: Tablets.renderState,
-                pivot_key: Tablets.renderPivotKey,
-                actions: Tablets.renderActions,
-                store_preload: Tablets.renderStorePreload,
+                name_tablet_id: TabletsBase.renderName.bind(this),
+                name_cell_id: TabletsBase.renderName,
+                index: TabletsBase.renderIndex,
+                tablet_id: TabletsBase.renderTabletId,
+                cell_id: TabletsBase.renderCellId,
+                cell_leader_address: TabletsBase.renderHost,
+                state: TabletsBase.renderState,
+                pivot_key: TabletsBase.renderPivotKey,
+                actions: TabletsBase.renderActions,
+                store_preload: TabletsBase.renderStorePreload,
                 error_count: asNumber,
                 replication_error_count: asNumber,
                 chunk_count: asNumber,
@@ -478,8 +444,8 @@ class Tablets extends Component {
                 dynamic_delete: asNumber,
                 unmerged_row_read_rate: asNumber,
                 merged_row_read_rate: asNumber,
-                replication_lag_time: Tablets.renderReplicationLag,
-                replication_mode: Tablets.renderReplicationMode,
+                replication_lag_time: TabletsBase.renderReplicationLag,
+                replication_mode: TabletsBase.renderReplicationMode,
             },
             computeKey(item) {
                 return item.name || item.tablet_id;
@@ -638,7 +604,7 @@ class Tablets extends Component {
                             <ElementsTable
                                 {...this.tableSettings}
                                 items={tablets}
-                                rowClassName={Tablets.rowClassName}
+                                rowClassName={TabletsBase.rowClassName}
                                 onItemClick={this.onRowClick}
                             />
                         }
@@ -671,57 +637,6 @@ class Tablets extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    const {loading, loaded, error, errorData, tabletsMode, tabletsFilter, histogramCollapsed} =
-        state.navigation.tabs.tablets;
-    const path = selectPath(state);
-    let tablets;
-    let maxByLevel = [];
-    if (tabletsMode === 'by_host' || tabletsMode === 'by_cell') {
-        const data = selectTabletsByName(state);
-        tablets = data.items;
-        maxByLevel = data.maxByLevel;
-    } else {
-        tablets = selectTablets(state);
-        maxByLevel = [selectTabletsMax(state)];
-    }
-
-    const histogram = selectHistogram(state);
-    const activeHistogram = selectActiveHistogram(state);
-    const type = selectType(state);
-    const hasReplication = selectIsReplicationDataExist(state);
-    const isSearchByPivot = selectIsSearchByPivot(state);
-
-    return {
-        loading,
-        loaded,
-        error,
-        errorData,
-        path,
-        tablets,
-        maxByLevel,
-        tabletsMode,
-        tabletsFilter,
-        histogramCollapsed,
-        activeHistogram,
-        histogram,
-        type,
-        hasReplication,
-        collapsibleSize: UI_COLLAPSIBLE_SIZE,
-        isSearchByPivot,
-    };
-};
-
-const mapDispatchToProps = {
-    loadTablets,
-    abortAndReset,
-    toggleHistogram,
-    changeTabletsMode,
-    changeTabletsFilter,
-    changeActiveHistogram,
-    toggleExpandedHost,
-};
-
 function ThemedProgress({progress, text, colorIndex}) {
     const getColor = useSerieColor();
     const color = getColor(colorIndex);
@@ -736,28 +651,4 @@ function ThemedProgress({progress, text, colorIndex}) {
             text={text}
         />
     );
-}
-
-const TabletsConnected = connect(mapStateToProps, mapDispatchToProps)(Tablets);
-
-export default function TabletsWithRum() {
-    const loadState = useSelector(selectNavigationTabletsLoadingStatus);
-
-    useAppRumMeasureStart({
-        type: RumMeasureTypes.NAVIGATION_TAB_TABLETS,
-        startDeps: [loadState],
-        allowStart: ([loadState]) => {
-            return !isFinalLoadingStatus(loadState);
-        },
-    });
-
-    useRumMeasureStop({
-        type: RumMeasureTypes.NAVIGATION_TAB_TABLETS,
-        stopDeps: [loadState],
-        allowStop: ([loadState]) => {
-            return isFinalLoadingStatus(loadState);
-        },
-    });
-
-    return <TabletsConnected />;
 }
