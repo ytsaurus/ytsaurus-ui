@@ -7,28 +7,34 @@ import {
 } from '../../../containers/Dialog';
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {type ConnectedProps, connect} from 'react-redux';
 
 import i18n from './i18n';
-
-import {closeGroupEditorModal, fetchGroups, saveGroupData} from '../../../store/actions/groups';
-import {
-    selectGroupEditorGroupIdm,
-    selectGroupEditorGroupName,
-    selectGroupEditorIdmDataOtherMembers,
-    selectGroupEditorRoles,
-    selectGroupEditorVisible,
-} from '../../../store/selectors/groups';
-import {type RootState} from '../../../store/reducers';
-import {type ResponsibleType, type RoleConverted} from '../../../utils/acl/acl-types';
+import {type ResponsibleType, type RoleConverted, type Subject} from '../../../utils/acl/acl-types';
+import {type PreparedRole} from '../../../utils/acl';
 import UIFactory from '../../../UIFactory';
 import {disableGroupsCache} from '../../../utils/users-groups';
 
-import './GroupEditorDialog.scss';
-
 const block = cn('group-editor-dialog');
 
-interface GroupsPageTableProps extends ConnectedProps<typeof connector> {}
+interface GroupEditorDialogProps {
+    visible: boolean;
+    groupName: string;
+    idm: boolean | undefined;
+    members: PreparedRole[];
+    responsible: PreparedRole[];
+    otherMembers: string[];
+    closeGroupEditorModal(): void;
+    saveGroupData(data: {
+        initialGroupName: string;
+        groupName: string;
+        membersToAdd: Subject[];
+        membersToRemove: Subject[];
+        responsiblesToAdd: Subject[];
+        responsiblesToRemove: Subject[];
+        comment: string;
+    }): Promise<unknown>;
+    fetchGroups(): void;
+}
 
 type FormValues = {
     general: {
@@ -52,7 +58,7 @@ type FormValues = {
     };
 };
 
-class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
+export class GroupEditorDialogBase extends React.Component<GroupEditorDialogProps> {
     onSubmit = async (form: FormApi<FormValues, Partial<FormValues>>) => {
         const {groupName: initialGroupName} = this.props;
         const {values} = form.getState();
@@ -212,26 +218,3 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
         return !this.props.groupName;
     }
 }
-
-const mapStateToProps = (state: RootState) => {
-    const otherMembers = selectGroupEditorIdmDataOtherMembers(state);
-    const {responsible, members} = selectGroupEditorRoles(state);
-    return {
-        visible: selectGroupEditorVisible(state),
-        groupName: selectGroupEditorGroupName(state),
-        idm: selectGroupEditorGroupIdm(state),
-        members,
-        responsible,
-        otherMembers,
-    };
-};
-
-const mapDispatchToProps = {
-    closeGroupEditorModal,
-    saveGroupData,
-    fetchGroups,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(GroupEditorDialog);
