@@ -1,40 +1,20 @@
 import React, {Component} from 'react';
-import {withRouter} from 'react-router';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
 import {Button, Checkbox, TextInput} from '@gravity-ui/uikit';
+import Modal from '../../../../../components/Modal/Modal';
+import Icon from '../../../../../components/Icon/Icon';
 
-import {NAMESPACES} from '../../../../../shared/constants/settings';
-import {
-    applyFilterPreset,
-    removeFilterPreset,
-    saveFilterPreset,
-    toggleSaveFilterPresetDialog,
-} from '../../../../store/actions/operations';
-import {DEFAULT_PRESET_SETTING} from '../../../../constants/operations';
-import {OPERATIONS_LIST_RUNNING_PRESET} from '../../../../constants/operations/list';
-
-import {selectGetSetting} from '../../../../store/selectors/settings';
-import {
-    selectOperationsListActivePresets,
-    selectOperationsListFilterPresets,
-} from '../../../../store/selectors/operations/operations-list';
-import Modal from '../../../../components/Modal/Modal';
-import Icon from '../../../../components/Icon/Icon';
-
-import i18n from './i18n';
-
-import './OperationsFilterPresets.scss';
+import i18n from '../i18n';
 
 const ELEMENT = 'toolbar-presets';
 const block = cn('operations-list');
 const tbBlock = cn('elements-toolbar');
 
-class OperationsFilterPresets extends Component {
+export class OperationsFilterPresetsBase extends Component {
     static propTypes = {
         // from connect
         applyFilterPreset: PropTypes.func.isRequired,
@@ -101,7 +81,7 @@ class OperationsFilterPresets extends Component {
         const {dialog, toggleSaveFilterPresetDialog} = this.props;
         const {presetName, isPresetDefault} = this.state;
 
-        const block = cn('elements-form');
+        const formBlock = cn('elements-form');
         const INPUT_ID = 'save-preset-filter';
 
         return (
@@ -114,10 +94,10 @@ class OperationsFilterPresets extends Component {
                 isConfirmDisabled={this.isPresetNameEmpty}
                 content={
                     <React.Fragment>
-                        <div className={block('field')}>
+                        <div className={formBlock('field')}>
                             <label
                                 htmlFor={INPUT_ID}
-                                className={block('label')}
+                                className={formBlock('label')}
                                 title={i18n('field_filter-name')}
                             >
                                 {i18n('field_filter-name')}
@@ -125,14 +105,14 @@ class OperationsFilterPresets extends Component {
                             <TextInput
                                 id={INPUT_ID}
                                 value={presetName}
-                                onUpdate={(presetName) => this.setState({presetName})}
+                                onUpdate={(name) => this.setState({presetName: name})}
                                 autoFocus
                             />
                         </div>
-                        <div className={block('field')}>
+                        <div className={formBlock('field')}>
                             <Checkbox
                                 checked={isPresetDefault}
-                                onChange={(isPresetDefault) => this.setState({isPresetDefault})}
+                                onChange={(checked) => this.setState({isPresetDefault: checked})}
                             >
                                 {i18n('field_default-filter')}
                             </Checkbox>
@@ -182,31 +162,3 @@ class OperationsFilterPresets extends Component {
         );
     }
 }
-
-function mapStateToProps(state) {
-    const {operations} = state;
-
-    const getSetting = selectGetSetting(state);
-    let defaultPreset = getSetting(DEFAULT_PRESET_SETTING, NAMESPACES.OPERATION);
-    const presets = selectOperationsListFilterPresets(state);
-
-    if (!presets[defaultPreset]) {
-        defaultPreset = OPERATIONS_LIST_RUNNING_PRESET;
-    }
-
-    return {
-        presets,
-        activePresets: selectOperationsListActivePresets(state),
-        defaultPreset,
-        dialog: operations.list.savePresetDialog,
-    };
-}
-
-const mapDispatchToProps = {
-    applyFilterPreset,
-    removeFilterPreset,
-    saveFilterPreset,
-    toggleSaveFilterPresetDialog,
-};
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(OperationsFilterPresets));
