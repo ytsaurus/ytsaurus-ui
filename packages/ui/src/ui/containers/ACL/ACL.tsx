@@ -283,10 +283,10 @@ class ACL extends Component<Props> {
             inheritance_mode: {
                 name: i18n('field_inheritance-mode'),
                 render({row}) {
-                    const {inheritance_mode: mode} = row;
-                    return mode === undefined
+                    const inheritanceMode = row.inheritance_mode;
+                    return inheritanceMode === undefined
                         ? hammer.format.NO_VALUE
-                        : i18nPermissionValues(`inheritance_mode_${mode}`);
+                        : i18nPermissionValues(`inheritance_mode_${inheritanceMode}`);
                 },
                 align: 'left',
                 className: block('table-item', {type: 'inheritance-mode'}),

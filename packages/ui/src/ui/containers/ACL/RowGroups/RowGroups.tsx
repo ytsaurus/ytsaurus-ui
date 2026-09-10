@@ -135,8 +135,10 @@ export function RowGroups({
                                             placeholder={i18n('context_filter-by-name')}
                                             className={block('filter')}
                                             value={rowGroupNameFilter}
-                                            onUpdate={(rowGroupNameFilter) =>
-                                                updateAclFilters({rowGroupNameFilter})
+                                            onUpdate={(nextRowGroupNameFilter) =>
+                                                updateAclFilters({
+                                                    rowGroupNameFilter: nextRowGroupNameFilter,
+                                                })
                                             }
                                         />
                                     ),

@@ -143,7 +143,7 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
 };
 
 const makeAclMapDispatchToProps = () => ({
-    loadAclData,
+    loadAclDataFn: loadAclData,
     userPermissionsRequestFn: requestPermissions,
     userPermissionsCancelRequestFn: cancelRequestPermissions,
     userPermissionsUpdateAcl: updateAcl,
@@ -159,7 +159,7 @@ type DispatchProps = ReturnType<typeof makeAclMapDispatchToProps>;
 function mergeProps(stateProps: StateProps, dispatchProps: DispatchProps, ownProps: ACLOwnProps) {
     const {normalizedPoolTree, aclRequestOptions} = stateProps;
     const {
-        loadAclData,
+        loadAclDataFn,
         deletePermissionsFn,
         userPermissionsRequestFn,
         userPermissionsUpdateAcl,
@@ -169,8 +169,8 @@ function mergeProps(stateProps: StateProps, dispatchProps: DispatchProps, ownPro
         ...ownProps,
         ...stateProps,
         ...restDispatchProps,
-        loadAclData: (params: Parameters<typeof loadAclData>[0]) => {
-            return loadAclData({...params}, {normalizedPoolTree}, aclRequestOptions);
+        loadAclData: (params: Parameters<typeof loadAclDataFn>[0]) => {
+            return loadAclDataFn({...params}, {normalizedPoolTree}, aclRequestOptions);
         },
         deletePermissionsFn: (params: Parameters<typeof deletePermissionsFn>[0]) => {
             return deletePermissionsFn(params, {normalizedPoolTree});

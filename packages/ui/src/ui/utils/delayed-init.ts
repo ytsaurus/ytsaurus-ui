@@ -10,17 +10,17 @@ export function makeObjectWithDelayedInit<D, T extends Record<string, () => unkn
         {},
         {
             get(_target, p) {
-                let res = __cache[p as string];
+                let cachedValue = __cache[p as string];
                 if (p in __cache) {
-                    return res;
+                    return cachedValue;
                 } else {
                     const v = obj[p as keyof typeof obj]();
                     if (v === undefined && skipUndefined) {
                         return v ?? defaultValue;
                     }
-                    res = __cache[p as string] = v;
+                    cachedValue = __cache[p as string] = v;
                 }
-                return res ?? defaultValue;
+                return cachedValue ?? defaultValue;
             },
         },
     ) as unknown as Record<keyof typeof obj, Exclude<R, undefined> | D>;

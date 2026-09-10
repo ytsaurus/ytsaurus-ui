@@ -71,18 +71,22 @@ function UserAttributes() {
 }
 
 export default function UserAttributesWithRum() {
-    const {loaded, loading, error} = useSelector(selectUserAttributesLoadInfo);
-    const loadState = calculateLoadingStatus(Boolean(loading), Boolean(loaded), error);
+    const {loaded, loading: attributesLoading, error} = useSelector(selectUserAttributesLoadInfo);
+    const attributesLoadState = calculateLoadingStatus(
+        Boolean(attributesLoading),
+        Boolean(loaded),
+        error,
+    );
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_TAB_USER_ATTRIBUTES,
-        startDeps: [loading],
+        startDeps: [attributesLoading],
         allowStart: ([loading]) => Boolean(loading),
     });
 
     useRumMeasureStop({
         type: RumMeasureTypes.NAVIGATION_TAB_USER_ATTRIBUTES,
-        stopDeps: [loadState],
+        stopDeps: [attributesLoadState],
         allowStop: ([loadState]) => {
             return isFinalLoadingStatus(loadState);
         },

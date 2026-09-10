@@ -31,7 +31,7 @@ type SettingsMenuSelectProps = {
 } & SettingsMenuSelectOption;
 
 export const SettingsMenuSelect = (props: SettingsMenuSelectProps) => {
-    const value = props.getSetting();
+    const settingValue = props.getSetting();
     const [items, setItems] = useState('options' in props ? props.options : []);
 
     useEffect(() => {
@@ -45,7 +45,7 @@ export const SettingsMenuSelect = (props: SettingsMenuSelectProps) => {
     return (
         <div className={b('settings-item', {select: true})} title={props.label}>
             <SelectSingle
-                value={value}
+                value={settingValue}
                 items={items}
                 onChange={(value) => props.setSetting(value)}
                 placeholder={props.placeholder}

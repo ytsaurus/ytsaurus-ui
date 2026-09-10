@@ -46,10 +46,10 @@ export type ConversationGroup = {
 
 export const selectConversationsGroupedByDate = createSelector(
     [selectConversationsItems],
-    (items): ConversationGroup[] => {
+    (conversations): ConversationGroup[] => {
         const groupMap = new Map<string, Conversation[]>();
 
-        items.forEach((conversation) => {
+        conversations.forEach((conversation) => {
             const dateKey = moment(conversation.created_at * 1000)
                 .startOf('day')
                 .format('YYYY-MM-DD');

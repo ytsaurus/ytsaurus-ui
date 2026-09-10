@@ -123,8 +123,8 @@ export function getType(typeArray: yqlModel.value.TypeArray): DataType {
         };
     }
 
-    function getVariantType(typeArray: yqlModel.value.TypeArray) {
-        const variantType = getType(typeArray);
+    function getVariantType(variant: yqlModel.value.TypeArray) {
+        const variantType = getType(variant);
         switch (variantType.name) {
             case 'Tuple':
                 return (variantType as DataTypeTuple).type.map((type, index) => ({

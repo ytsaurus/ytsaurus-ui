@@ -20,7 +20,7 @@ function NodeTables() {
     const loading = useSelector(selectNodeMemoryLoading);
     const loaded = useSelector(selectNodeMemoryLoaded);
     const items = useSelector(selectNodeMemoryUsageTablesItemsSorted);
-    const sortOrder = useSelector(selectNodeMemoryUsageTablesSortOrder);
+    const tableSortOrder = useSelector(selectNodeMemoryUsageTablesSortOrder);
 
     const handleSort = React.useCallback((sortOrder: Array<SortState>) => {
         dispatch(setNodeMemoryTablesSort(sortOrder));
@@ -38,7 +38,7 @@ function NodeTables() {
             toggleExpand={toggleExpandState}
             onSort={handleSort}
             nameColumnTitle={i18n('field_bundles-table')}
-            sortState={sortOrder}
+            sortState={tableSortOrder}
         />
     );
 }

@@ -108,10 +108,10 @@ export class AccountQuotaEditor extends React.Component<Props & ReduxProps, Stat
             <SelectSingle
                 value={value}
                 onChange={onChange}
-                items={map_(sources, (value) => {
+                items={map_(sources, (source) => {
                     return {
-                        value,
-                        text: value,
+                        value: source,
+                        text: source,
                     };
                 })}
                 placeholder={i18n('field_select-account')}

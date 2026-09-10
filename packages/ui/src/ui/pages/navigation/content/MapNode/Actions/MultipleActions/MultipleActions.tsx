@@ -47,7 +47,7 @@ export default function MultipleActions(props: {className?: string}) {
     const {className} = props;
 
     const dispatch = useDispatch();
-    const path = useSelector(selectPath);
+    const currentPath = useSelector(selectPath);
     const isOneSelected = useSelector(selectIsSelected);
     const selectedNodes = useSelector(selectSelectedNodes);
     const isTooLarge = selectedNodes.length > MAX_ITEMS_PER_REQUEST;
@@ -77,8 +77,8 @@ export default function MultipleActions(props: {className?: string}) {
                 action: () => {
                     dispatch(
                         openEditingPopup(
-                            path,
-                            path + '/',
+                            currentPath,
+                            currentPath + '/',
                             OPEN_COPY_OBJECT_POPUP,
                             true,
                             selectedNodes,
@@ -92,8 +92,8 @@ export default function MultipleActions(props: {className?: string}) {
                 action: () => {
                     dispatch(
                         openEditingPopup(
-                            path,
-                            path + '/',
+                            currentPath,
+                            currentPath + '/',
                             OPEN_MOVE_OBJECT_POPUP,
                             true,
                             selectedNodes,
@@ -112,7 +112,7 @@ export default function MultipleActions(props: {className?: string}) {
             });
         }
         return res;
-    }, [dispatch, hasRestoreButton, path, selectedNodes]);
+    }, [currentPath, dispatch, hasRestoreButton, selectedNodes]);
 
     const transferItem = useMemo(() => {
         if (selectedNodes.length !== 1) {

@@ -40,7 +40,7 @@ import {openModal} from '../modals/attributes-modal';
 import {showToasterError} from '../../../utils/utils';
 import i18n from './i18n';
 
-const requests = new CancelHelper();
+const cancelHelper = new CancelHelper();
 
 const getOperation = (state: RootState) => state.operations.detail.operation;
 
@@ -56,11 +56,11 @@ export function getJob(): JobsListThunkAction {
         const state = getState();
         const clusterConfig = selectCurrentClusterConfig(state);
 
-        requests.removeAllRequests();
+        cancelHelper.removeAllRequests();
         return ytApiV3
             .getJob({
                 parameters: getJobRequestParameters(state),
-                cancellation: requests.saveCancelToken,
+                cancellation: cancelHelper.saveCancelToken,
             })
             .then((job) => {
                 dispatch({
@@ -123,7 +123,7 @@ export function getCompetitiveJobs(): JobsListThunkAction {
         return ytApiV3
             .listJobs({
                 parameters: getCompetitiveJobsRequestParameters(state),
-                cancellation: requests.removeAllAndSave,
+                cancellation: cancelHelper.removeAllAndSave,
             })
             .then(({jobs}) => {
                 dispatch({

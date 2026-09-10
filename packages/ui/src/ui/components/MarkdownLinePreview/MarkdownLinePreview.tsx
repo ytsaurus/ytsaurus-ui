@@ -33,11 +33,9 @@ export function MarkdownLinePreview({text, title, className, allowHTML = false}:
     const result = data?.result;
 
     const {plainText, html} = React.useMemo(() => {
-        const {html} = result ?? {};
         const div = document.createElement('div');
-        div.innerHTML = html ?? '';
-        const plainText = div.innerText;
-        return {html, plainText};
+        div.innerHTML = result?.html ?? '';
+        return {html: result?.html, plainText: div.innerText};
     }, [result]);
 
     return (
