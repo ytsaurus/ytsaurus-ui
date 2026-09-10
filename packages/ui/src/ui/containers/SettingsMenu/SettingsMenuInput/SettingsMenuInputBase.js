@@ -1,16 +1,12 @@
 import React, {useCallback, useState} from 'react';
 import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 
 import {TextInput} from '@gravity-ui/uikit';
 
-import {setSetting} from '../../store/actions/settings';
-import {selectGetSetting} from '../../store/selectors/settings';
-
 const block = cn('elements-page');
 
-SettingsMenuInput.propTypes = {
+SettingsMenuInputBase.propTypes = {
     // from connect
     getSetting: PropTypes.func.isRequired,
     setSetting: PropTypes.func.isRequired,
@@ -25,7 +21,7 @@ SettingsMenuInput.propTypes = {
     validator: PropTypes.func,
 };
 
-function SettingsMenuInput({
+export function SettingsMenuInputBase({
     getSetting,
     setSetting,
     settingName,
@@ -66,19 +62,3 @@ function SettingsMenuInput({
         </div>
     );
 }
-
-const mapStateToProps = (state) => {
-    const getSetting = selectGetSetting(state);
-
-    return {
-        getSetting,
-    };
-};
-
-/**
- * @deprecated
- * Uses the legacy `settingName`/`settingNS` pattern.
- * There is no by-key replacement yet — a new component needs to be implemented following the
- * `settingKey` pattern, see `BooleanSettingItem` for reference.
- */
-export default connect(mapStateToProps, {setSetting})(SettingsMenuInput);
