@@ -1,52 +1,21 @@
 import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {useSelector} from '../../../../store/redux-hooks';
 
 import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
 import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
-import {selectIsCreateTableModalVisible} from '../../../../store/selectors/navigation/modals/create-table';
 import CreateTableModal from '../../modals/CreateTableModal/CreateTableModal';
 
 import MapNodesTable from './MapNodesTable/MapNodesTable';
 
-import {openCreateTableModal} from '../../../../store/actions/navigation/modals/create-table';
-import {selectPath, selectTransaction} from '../../../../store/selectors/navigation';
-import {selectNavigationPathAttributes} from '../../../../store/selectors/navigation/navigation';
-import {selectMediumList} from '../../../../store/selectors/thor';
-import {
-    selectContentMode,
-    selectError,
-    selectFilterState,
-    selectLoadState,
-    selectMediumType,
-} from '../../../../store/selectors/navigation/content/map-node';
-
 import {LOADING_STATUS} from '../../../../constants/index';
-
-import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
-import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
-import {
-    fetchNodes,
-    setContentMode,
-    setFilter,
-    setMediumType,
-} from '../../../../store/actions/navigation/content/map-node';
-import {openEditingPopup} from '../../../../store/actions/navigation/modals/path-editing-popup';
-
-import {openCreateACOModal} from '../../../../store/actions/navigation/modals/create-aco';
-import {showLinkToModal} from '../../../../store/actions/navigation/modals/link-to-modal';
-import {selectCluster} from '../../../../store/selectors/global';
-
-import './MapNode.scss';
 import {MapNodeToolbar} from './MapNodeToolbar/MapNodeToolbar';
 
 const block = cn('map-node');
 const tbBlock = cn('elements-toolbar');
 
-class MapNode extends Component {
+export class MapNodeBase extends Component {
     static TYPE = 'map_node';
 
     static propTypes = {
@@ -121,49 +90,4 @@ class MapNode extends Component {
             </ErrorBoundary>
         );
     }
-}
-
-function mapStateToProps(state) {
-    const path = selectPath(state);
-
-    return {
-        path,
-        showACOCreateButton: path === '//sys/access_control_object_namespaces/queries',
-        loadState: selectLoadState(state),
-        error: selectError(state),
-        contentMode: selectContentMode(state),
-        filterState: selectFilterState(state),
-        transaction: selectTransaction(state),
-        mediumList: selectMediumList(state),
-        mediumType: selectMediumType(state),
-        showCreateTableModal: selectIsCreateTableModalVisible(state),
-        attributes: selectNavigationPathAttributes(state),
-        cluster: selectCluster(state),
-    };
-}
-
-const mapDispatchToProps = {
-    setFilter,
-    setContentMode,
-    fetchNodes,
-    setMediumType,
-    openEditingPopup,
-    openCreateTableModal,
-    showLinkToModal,
-    openCreateACOModal,
-};
-
-const MapNodeConnected = connect(mapStateToProps, mapDispatchToProps)(MapNode);
-
-export default function MapNodeWithRum() {
-    const loadState = useSelector(selectLoadState);
-
-    useAppRumMeasureStart({
-        type: RumMeasureTypes.NAVIGATION_CONTENT_MAP_NODE,
-        startDeps: [loadState],
-        allowStart: ([loadState]) => {
-            return loadState === LOADING_STATUS.LOADING;
-        },
-    });
-    return <MapNodeConnected />;
 }
