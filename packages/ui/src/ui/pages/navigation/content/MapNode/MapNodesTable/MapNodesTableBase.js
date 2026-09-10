@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import findIndex_ from 'lodash/findIndex';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
-import {batch, connect} from 'react-redux';
+import {batch} from 'react-redux';
 import hammer from '../../../../../common/hammer';
 import ElementsTableBase from '../../../../../components/ElementsTable/ElementsTable';
 import withKeyboardNavigation from '../../../../../components/ElementsTable/hocs/withKeyboardNavigation';
@@ -23,46 +23,21 @@ import {LOADING_STATUS, Page} from '../../../../../constants/index';
 import {NAVIGATION_MAP_NODE_TABLE_ID} from '../../../../../constants/navigation';
 import {ROOT_POOL_NAME, SchedulingTab} from '../../../../../constants/scheduling';
 import {itemNavigationAllowed} from '../../../../../pages/navigation/Navigation/ContentViewer/helpers/itemNavigationAllowed';
-import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
-import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
-import {
-    navigateParent,
-    setMode,
-    updatePath,
-    updateView,
-} from '../../../../../store/actions/navigation';
-import {setSelectedItem} from '../../../../../store/actions/navigation/content/map-node';
-import {showTableEraseModal} from '../../../../../store/actions/navigation/modals/table-erase-modal';
-import {
-    showTableMergeModal,
-    showTableSortModal,
-} from '../../../../../store/actions/navigation/modals/table-merge-sort-modal';
-import {useSelector} from '../../../../../store/redux-hooks';
-import {selectTransaction} from '../../../../../store/selectors/navigation';
-import {
-    selectContentMode,
-    selectLoadState,
-    selectPreparedTableColumns,
-    selectSelected,
-    selectSelectedIndex,
-    selectSortedNodes,
-} from '../../../../../store/selectors/navigation/content/map-node';
 import {makeFlowLink} from '../../../../../utils/app-url';
 import {isLinkToTrashNode} from '../../../../../utils/navigation/isLinkToTrashNode';
 import {isPipelineNode} from '../../../../../utils/navigation/isPipelineNode';
 import {isTrashNode} from '../../../../../utils/navigation/isTrashNode';
-import {isFinalLoadingStatus, showErrorPopup} from '../../../../../utils/utils';
+import {showErrorPopup} from '../../../../../utils/utils';
 import AccountLink from '../../../../accounts/AccountLink';
 import PathActions from '../Actions/PathActions/PathActions';
 import MultipleActions from '../Actions/MultipleActions/MultipleActions';
 import Chooser from '../Chooser';
-import './MapNodesTable.scss';
 import i18n from './i18n';
 
 const block = cn('map-nodes-table');
 const ElementsTable = withKeyboardNavigation(ElementsTableBase);
 
-class MapNodesTable extends Component {
+export class MapNodesTableBase extends Component {
     static propTypes = {
         columns: PropTypes.objectOf(
             PropTypes.shape({
@@ -92,8 +67,10 @@ class MapNodesTable extends Component {
     static renderName(item) {
         return (
             <div className={block('name-cell')}>
-                <div className={block('name-cell-text')}>{MapNodesTable.renderNameImpl(item)}</div>
-                <div className={block('name-cell-tags')}>{MapNodesTable.renderTags(item)}</div>
+                <div className={block('name-cell-text')}>
+                    {MapNodesTableBase.renderNameImpl(item)}
+                </div>
+                <div className={block('name-cell-tags')}>{MapNodesTableBase.renderTags(item)}</div>
             </div>
         );
     }
@@ -113,9 +90,9 @@ class MapNodesTable extends Component {
 
     static renderNameImpl(item) {
         if (isTrashNode(item)) {
-            return MapNodesTable.renderTrash(item.pathState);
+            return MapNodesTableBase.renderTrash(item.pathState);
         } else if (isLinkToTrashNode(item)) {
-            return MapNodesTable.renderTrash(item.targetPathState);
+            return MapNodesTableBase.renderTrash(item.targetPathState);
         }
 
         const type = item.type;
@@ -289,10 +266,10 @@ class MapNodesTable extends Component {
             templates: {
                 chooser: this.renderChooser,
                 icon: (node) => <MapNodeIcon node={node} />,
-                name: MapNodesTable.renderName,
-                locks: MapNodesTable.renderLocks,
-                modification_time: MapNodesTable.renderModificationTime,
-                creation_time: MapNodesTable.renderCreationTime,
+                name: MapNodesTableBase.renderName,
+                locks: MapNodesTableBase.renderLocks,
+                modification_time: MapNodesTableBase.renderModificationTime,
+                creation_time: MapNodesTableBase.renderCreationTime,
                 row_count: this.renderRowCount,
                 chunk_count: this.printColumnAsNumber,
                 node_count: this.printColumnAsNumber,
@@ -301,7 +278,7 @@ class MapNodesTable extends Component {
                 tablet_static_memory: this.printColumnAsBytes,
                 master_memory: this.printColumnAsBytes,
                 tablet_count: this.printColumnAsNumber,
-                account: MapNodesTable.renderAccount,
+                account: MapNodesTableBase.renderAccount,
                 actions: this.renderActions,
             },
         };
@@ -405,44 +382,4 @@ class MapNodesTable extends Component {
             )
         );
     }
-}
-
-function mapStateToProps(state) {
-    return {
-        loadState: selectLoadState(state),
-        columns: selectPreparedTableColumns(state),
-        transaction: selectTransaction(state),
-        contentMode: selectContentMode(state),
-        nodes: selectSortedNodes(state),
-        selected: selectSelected(state),
-        selectedIndex: selectSelectedIndex(state),
-    };
-}
-
-const mapDispatchToProps = {
-    setSelectedItem,
-    navigateParent,
-    updateView,
-    updatePath,
-    setMode,
-    showTableEraseModal,
-    showTableSortModal,
-    showTableMergeModal,
-};
-
-const MapNodesTableConnected = connect(mapStateToProps, mapDispatchToProps)(MapNodesTable);
-
-export default function MapNodesTableWithRum() {
-    const loadState = useSelector(selectLoadState);
-    const nodes = useSelector(selectSortedNodes);
-
-    useRumMeasureStop({
-        type: RumMeasureTypes.NAVIGATION_CONTENT_MAP_NODE,
-        stopDeps: [nodes, loadState],
-        allowStop: ([nodes, loadState]) => {
-            return Boolean(nodes) && isFinalLoadingStatus(loadState);
-        },
-    });
-
-    return <MapNodesTableConnected />;
 }
