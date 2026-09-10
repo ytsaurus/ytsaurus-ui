@@ -1,8 +1,6 @@
 import React from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import hammer from '../../../../../common/hammer';
-import {compose} from 'redux';
 import cn from 'bem-cn-lite';
 import memoize_ from 'lodash/memoize';
 import filter_ from 'lodash/filter';
@@ -32,44 +30,54 @@ import NodeCard from '../NodeCard/NodeCard';
 import {ComponentsNodeTypeSelector} from '../../../../../pages/system/Nodes/NodeTypeSelector';
 
 import {
-    selectComponentNodesFiltersCount,
-    selectComponentNodesTableProps,
     selectComponentsNodesNodeTypes,
     selectRequiredAttributes,
-    selectVisibleNodes,
 } from '../../../../../store/selectors/components/nodes/nodes';
-import {selectSelectedColumns} from '../../../../../store/selectors/settings';
-import {selectSettingsEnableSideBar} from '../../../../../store/selectors/settings/settings-ts';
-import {defaultColumns} from '../../../../../pages/components/tabs/nodes/tables';
-import withVisible, {type WithVisibleProps} from '../../../../../hocs/withVisible';
+import {type WithVisibleProps} from '../../../../../hocs/withVisible';
 import {useUpdaterWithMemoizedParams} from '../../../../../hooks/use-updater';
 import {isPaneSplit} from '../../../../../utils';
-import {
-    changeContentMode,
-    changeHostFilter,
-    getNodes,
-    handleColumnsChange,
-} from '../../../../../store/actions/components/nodes/nodes';
+import {getNodes} from '../../../../../store/actions/components/nodes/nodes';
 import {type NodesState} from '../../../../../store/reducers/components/nodes/nodes/nodes';
-
-import {mergeScreen, splitScreen as splitScreenAction} from '../../../../../store/actions/global';
+import {type Node} from '../../../../../store/reducers/components/nodes/nodes/node';
+import {type NodeType} from '../../../../../../shared/constants/system';
+import {type YTError} from '../../../../../types';
+import {type getNodeTablesProps} from '../tables';
 import {KeyCode} from '../../../../../constants/index';
 import {
     CONTENT_MODE,
     CONTENT_MODE_ITEMS,
     SPLIT_TYPE,
 } from '../../../../../constants/components/nodes/nodes';
-import {type RootState} from '../../../../../store/reducers';
 
 import {NodeMaintenanceModal} from '../../../NodeMaintenanceModal/NodeMaintenanceModal';
 
 import i18n from './i18n';
 
-import './Nodes.scss';
-
 const block = cn('components-nodes');
 
-type ReduxProps = ConnectedProps<typeof connector>;
+type ReduxProps = {
+    loading: boolean;
+    loaded: boolean;
+    error: boolean;
+    errorData: YTError | undefined;
+    nodes: Node[];
+    totalItems: number;
+    showingItems: number;
+    selectedColumns: string[];
+    hostFilter: string;
+    contentMode: NodesState['contentMode'];
+    splitScreen: {isSplit: boolean; paneClassNames: Array<string>; type: string};
+    initialLoading: boolean;
+    nodesTableProps: ReturnType<typeof getNodeTablesProps>;
+    sideBarEnabled: boolean;
+    nodeTypes: NodeType[];
+    filterCount: number;
+    changeContentMode: (contentMode: NodesState['contentMode']) => void;
+    splitScreenAction: (type: string, paneClassNames?: Array<string>) => void;
+    changeHostFilter: (hostFilter: string) => void;
+    mergeScreen: () => void;
+    handleColumnsChange: (selectedColumns: string[]) => void;
+};
 
 type State = {
     preset: string;
@@ -96,7 +104,7 @@ function NodesUpdater() {
     return null;
 }
 
-class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
+export class NodesBase extends React.Component<ReduxProps & WithVisibleProps, State> {
     override state: State = {
         preset: '',
         activeNodeHost: undefined,
@@ -155,7 +163,7 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
         }
     };
 
-    handleColumnsChange = ({items}: {items: Nodes['allColumns']}) => {
+    handleColumnsChange = ({items}: {items: NodesBase['allColumns']}) => {
         const {handleColumnsChange} = this.props;
 
         const selectedItems = filter_(items, (column) => column.checked);
@@ -379,49 +387,3 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
         );
     }
 }
-
-const mapStateToProps = (state: RootState) => {
-    const {splitScreen} = state.global;
-    const {contentMode, nodes, loading, loaded, error, errorData, hostFilter} =
-        state.components.nodes.nodes;
-
-    const visibleNodes = selectVisibleNodes(state);
-    const selectedColumns = selectSelectedColumns(state) || defaultColumns;
-    const initialLoading = loading && !loaded;
-
-    const nodesTableProps = selectComponentNodesTableProps(state);
-
-    const sideBarEnabled = selectSettingsEnableSideBar(state);
-
-    return {
-        loading,
-        loaded,
-        error,
-        errorData,
-
-        nodes: visibleNodes,
-        totalItems: nodes.length,
-        showingItems: visibleNodes.length,
-        selectedColumns,
-        hostFilter,
-        contentMode,
-        splitScreen,
-        initialLoading,
-        nodesTableProps,
-        sideBarEnabled,
-        nodeTypes: selectComponentsNodesNodeTypes(state),
-        filterCount: selectComponentNodesFiltersCount(state),
-    };
-};
-
-const mapDispatchToProps = {
-    changeContentMode,
-    splitScreenAction,
-    changeHostFilter,
-    mergeScreen,
-    handleColumnsChange,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default compose(connector, withVisible)(Nodes);
