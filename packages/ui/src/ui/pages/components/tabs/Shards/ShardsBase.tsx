@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import {type ResolveThunks, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
@@ -11,15 +10,10 @@ import {Loader} from '@gravity-ui/uikit';
 
 import Name from './Name';
 import NodeCount from './NodeCount';
-
-import {abortAllRequests, getShards} from '../../../../store/actions/components/shards';
 import {type Shard} from '../../../../store/reducers/components/shards';
+import {type YTError} from '../../../../types';
 
 import i18n from './i18n';
-
-import './Shards.scss';
-import {selectCluster} from '../../../../store/selectors/global';
-import {type RootState} from '../../../../store/reducers';
 
 const block = cn('components-shards');
 
@@ -64,13 +58,23 @@ type OwnProps = {
     className: string;
 };
 
-type StateProps = ReturnType<typeof mapStateToProps>;
+type StateProps = {
+    loading: boolean;
+    loaded: boolean;
+    error: boolean;
+    errorData: YTError;
+    shards: Shard[];
+    cluster: string;
+};
 
-type DispatchProps = ResolveThunks<typeof mapDispatchToProps>;
+type DispatchProps = {
+    getShards: () => void;
+    abortAllRequests: () => void;
+};
 
 type ShardsProps = OwnProps & StateProps & DispatchProps;
 
-function Shards(props: ShardsProps) {
+export function ShardsBase(props: ShardsProps) {
     const {cluster, getShards, abortAllRequests} = props;
     useEffect(() => {
         getShards();
@@ -118,23 +122,3 @@ function Shards(props: ShardsProps) {
         </ErrorBoundary>
     );
 }
-
-const mapStateToProps = (state: RootState) => {
-    const {loading, loaded, error, errorData, shards} = state.components.shards;
-
-    return {
-        loading,
-        loaded,
-        error,
-        errorData,
-        shards,
-        cluster: selectCluster(state),
-    };
-};
-
-const mapDispatchToProps = {
-    getShards,
-    abortAllRequests,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Shards);
