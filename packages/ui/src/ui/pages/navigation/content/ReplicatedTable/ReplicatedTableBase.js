@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {useSelector} from '../../../../store/redux-hooks';
 import PropTypes from 'prop-types';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import hammer from '../../../../common/hammer';
@@ -8,8 +6,6 @@ import sortBy_ from 'lodash/sortBy';
 import cn from 'bem-cn-lite';
 
 import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
-
-import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
 import TableActions from '../../../../pages/navigation/content/Table/TableOverview/TableActions';
 import TableMeta from '../../../../pages/navigation/content/Table/TableMeta/TableMeta';
@@ -22,31 +18,9 @@ import Icon from '../../../../components/Icon/Icon';
 import Link from '../../../../containers/Link/Link';
 import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
-
-import {
-    abortAndReset,
-    loadReplicas,
-    performReplicaAction,
-    toggleReplicatedTableSortOrder,
-    updateEnableReplicatedTableTracker,
-} from '../../../../store/actions/navigation/content/replicated-table';
-import {selectAttributes, selectPath} from '../../../../store/selectors/navigation';
 import {Page} from '../../../../constants/index';
 import {ReplicatedTableSettingsButton} from './ReplicatedTableSettings';
-import {useRumMeasureStop} from '../../../../rum/RumUiContext';
-import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
-import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
-import {isFinalLoadingStatus} from '../../../../utils/utils';
 import {NAVIGATION_REPLICATED_TABLE_ID} from '../../../../constants/navigation/content/replicated-table';
-
-import {
-    selectAllowEnableReplicatedTracker,
-    selectNavigationReplicatedTableLoadingStatus,
-    selectReplicatedTableData,
-    selectReplicatedTableSortSettings,
-} from '../../../../store/selectors/navigation/content/replicated-table';
-
-import './ReplicatedTable.scss';
 import {CypressNodeTypes} from '../../../../utils/cypress-attributes';
 import i18n from './i18n';
 
@@ -80,7 +54,7 @@ const tableSets = {
     },
 };
 
-class ReplicatedTable extends Component {
+export class ReplicatedTableBase extends Component {
     static propTypes = {
         // from connect
         loading: PropTypes.bool.isRequired,
@@ -207,19 +181,19 @@ class ReplicatedTable extends Component {
     };
 
     static renderField(item, columnName) {
-        const value = ReplicatedTable.tableItems[columnName].get(item);
+        const value = ReplicatedTableBase.tableItems[columnName].get(item);
 
         return !value ? hammer.format.NO_VALUE : value;
     }
 
     static renderAsReadableField(item, columnName) {
-        const value = ReplicatedTable.tableItems[columnName].get(item);
+        const value = ReplicatedTableBase.tableItems[columnName].get(item);
 
         return hammer.format['ReadableField'](value);
     }
 
     static renderAsTimeDuration(item, columnName) {
-        const value = ReplicatedTable.tableItems[columnName].get(item);
+        const value = ReplicatedTableBase.tableItems[columnName].get(item);
 
         return hammer.format['TimeDuration'](Number(value));
     }
@@ -269,13 +243,13 @@ class ReplicatedTable extends Component {
     }
 
     static renderState(item, columnName) {
-        const state = ReplicatedTable.tableItems[columnName].get(item);
+        const state = ReplicatedTableBase.tableItems[columnName].get(item);
 
         return <StatusBulb theme={state} />;
     }
 
     static renderAutomaticModeSwitch(enableTableTracker, item, columnName) {
-        const value = ReplicatedTable.tableItems[columnName].get(item);
+        const value = ReplicatedTableBase.tableItems[columnName].get(item);
         const theme = !enableTableTracker ? 'unknown' : value ? 'enabled' : 'disabled';
         const title = value ? i18n('value_enabled') : i18n('value_disabled');
         return (
@@ -317,7 +291,7 @@ class ReplicatedTable extends Component {
         const getValueByField =
             field === 'cluster_name' || field === 'replica_path'
                 ? (replica) => ypath.getValue(replica, `/@${field}`)
-                : ReplicatedTable.tableItems[field]?.get;
+                : ReplicatedTableBase.tableItems[field]?.get;
 
         if (!getValueByField) {
             return replicas;
@@ -363,9 +337,9 @@ class ReplicatedTable extends Component {
         const {loading, loaded, tableMode, enable_replicated_table_tracker} = this.props;
 
         const items = {
-            ...ReplicatedTable.tableItems,
+            ...ReplicatedTableBase.tableItems,
             name: {
-                ...ReplicatedTable.tableItems.name,
+                ...ReplicatedTableBase.tableItems.name,
                 renderHeader: this.renderNameHeader,
             },
         };
@@ -384,25 +358,25 @@ class ReplicatedTable extends Component {
                 mode: tableMode,
             },
             templates: {
-                name: ReplicatedTable.renderName,
-                cluster: ReplicatedTable.renderField,
-                content_type: ReplicatedTable.renderField,
-                mode: ReplicatedTable.renderField,
-                errors: ReplicatedTable.renderErrors,
-                error_count: ReplicatedTable.renderAsReadableField,
-                state: ReplicatedTable.renderState,
-                automatic_mode_switch: ReplicatedTable.renderAutomaticModeSwitch.bind(
+                name: ReplicatedTableBase.renderName,
+                cluster: ReplicatedTableBase.renderField,
+                content_type: ReplicatedTableBase.renderField,
+                mode: ReplicatedTableBase.renderField,
+                errors: ReplicatedTableBase.renderErrors,
+                error_count: ReplicatedTableBase.renderAsReadableField,
+                state: ReplicatedTableBase.renderState,
+                automatic_mode_switch: ReplicatedTableBase.renderAutomaticModeSwitch.bind(
                     null,
                     enable_replicated_table_tracker,
                 ),
-                replication_lag_time: ReplicatedTable.renderAsTimeDuration,
+                replication_lag_time: ReplicatedTableBase.renderAsTimeDuration,
                 actions: this.renderActions,
             },
             computeKey(item) {
                 return item.$value;
             },
             onSort: (columnName) => {
-                const column = ReplicatedTable.tableItems[columnName];
+                const column = ReplicatedTableBase.tableItems[columnName];
 
                 this.props.toggleReplicatedTableSortOrder(
                     columnName,
@@ -497,64 +471,4 @@ class ReplicatedTable extends Component {
             </LoadDataHandler>
         );
     }
-}
-const mapStateToProps = (state) => {
-    const {loading, loaded, error, errorData, replicas} = selectReplicatedTableData(state);
-    const allowEnableReplicatedTracker = selectAllowEnableReplicatedTracker(state);
-    const path = selectPath(state);
-    const attributes = selectAttributes(state);
-    const sortState = selectReplicatedTableSortSettings(state);
-
-    const [enable_replicated_table_tracker, type] = ypath.getValues(attributes, [
-        '/replicated_table_options/enable_replicated_table_tracker',
-        '/type',
-    ]);
-
-    return {
-        loading,
-        loaded,
-        error,
-        errorData,
-        path,
-        replicas,
-        attributes,
-        tableMode: allowEnableReplicatedTracker ? 'with-auto-switch' : 'default',
-        enable_replicated_table_tracker,
-        type,
-        sortState,
-    };
-};
-
-const mapDispatchToProps = {
-    loadReplicas,
-    abortAndReset,
-    performReplicaAction,
-    updateEnableReplicatedTableTracker,
-    toggleReplicatedTableSortOrder,
-};
-
-const ReplicatedTableConnected = connect(mapStateToProps, mapDispatchToProps)(ReplicatedTable);
-
-export default function ReplicatedTableWithRum() {
-    useDisableMaxContentWidth();
-
-    const loadState = useSelector(selectNavigationReplicatedTableLoadingStatus);
-
-    useAppRumMeasureStart({
-        type: RumMeasureTypes.NAVIGATION_CONTENT_REPLICATED_TABLE,
-        startDeps: [loadState],
-        allowStart: ([loadState]) => {
-            return !isFinalLoadingStatus(loadState);
-        },
-    });
-
-    useRumMeasureStop({
-        type: RumMeasureTypes.NAVIGATION_CONTENT_REPLICATED_TABLE,
-        stopDeps: [loadState],
-        allowStop: ([loadState]) => {
-            return isFinalLoadingStatus(loadState);
-        },
-    });
-
-    return <ReplicatedTableConnected />;
 }
