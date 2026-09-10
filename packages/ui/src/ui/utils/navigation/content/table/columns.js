@@ -109,7 +109,7 @@ export default class Columns {
             columns = uniq_(columns.concat(allColumns));
         }
 
-        const storedColumnsMap = reduce_(
+        const storedColumnsByName = reduce_(
             storedColumns,
             (storedColumnsMap, column) => {
                 storedColumnsMap[column.name] = column;
@@ -139,8 +139,8 @@ export default class Columns {
                 isDeletable: !(keyColumn && isDynamic),
                 sortOrder: schemaColumnsByName[column]?.sort_order,
                 disabled: false,
-                checked: Object.hasOwnProperty.call(storedColumnsMap, column)
-                    ? storedColumnsMap[column].checked
+                checked: Object.hasOwnProperty.call(storedColumnsByName, column)
+                    ? storedColumnsByName[column].checked
                     : false,
             };
 

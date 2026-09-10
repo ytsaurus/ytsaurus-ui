@@ -20,7 +20,7 @@ import i18n from './i18n';
 
 import './ColumnSelector.scss';
 
-const b = cn('column-selector');
+const block = cn('column-selector');
 
 export function makeItemsCopy(items) {
     return map_(items, (item) => {
@@ -29,7 +29,7 @@ export function makeItemsCopy(items) {
 }
 
 const DragHandle = sortableHandle(() => (
-    <div className={b('drag-handle')}>
+    <div className={block('drag-handle')}>
         <Icon face="solid" awesome="list" />
     </div>
 ));
@@ -37,7 +37,7 @@ const DragHandle = sortableHandle(() => (
 const SortableItem = sortableElement(
     ({item, isSortable, isSelectable, isDisabled, itemRenderer, onCheckBoxChange}) => {
         const active = !isDisabled && !item.disabled;
-        const className = b('list-item', {
+        const className = block('list-item', {
             selected: item.checked && active && 'yes',
             selectable: isSelectable && active && 'yes',
             disabled: !active && 'yes',
@@ -51,20 +51,20 @@ const SortableItem = sortableElement(
         return (
             <div className={className}>
                 {isSortable && item.checked && <DragHandle />}
-                <div className={b('list-item-name')}>
+                <div className={block('list-item-name')}>
                     {item.keyColumn && <Icon awesome="key" />}
                     {itemRenderer(item)}
                 </div>
                 {active && showAction && (
                     <span
-                        className={b('list-item-check')}
+                        className={block('list-item-check')}
                         onClick={onCheckBoxChange}
                         data-item={item.name}
                     >
                         <Icon awesome="check" />
                     </span>
                 )}
-                {!active && <Icon className={b('list-item-lock')} awesome="lock" />}
+                {!active && <Icon className={block('list-item-lock')} awesome="lock" />}
             </div>
         );
     },
@@ -98,7 +98,7 @@ const SortableList = sortableContainer(
         const mods = {'static-size': useStaticSize};
 
         return (
-            <div className={b('list', mods)}>
+            <div className={block('list', mods)}>
                 <List
                     items={items}
                     renderItem={renderItem}
@@ -313,11 +313,11 @@ export default class ColumnSelector extends Component {
         const {isFilterable, isSelectable, isSortable, isHeadless} = this.props;
         const btnProps = {
             size: 'm',
-            className: b('controls-item'),
+            className: block('controls-item'),
         };
 
         return (
-            <div className={b('controls')}>
+            <div className={block('controls')}>
                 {isFilterable && this.renderSearchBox()}
                 {isHeadless && (
                     <Button {...btnProps} onClick={this._toggleShownItems}>
@@ -396,7 +396,7 @@ export default class ColumnSelector extends Component {
 
         const {items, keyItems} = this.getVisibleItems();
 
-        const className = b(
+        const className = block(
             'content',
             {
                 headless: isHeadless ? undefined : 'no',
@@ -416,10 +416,10 @@ export default class ColumnSelector extends Component {
                             isSelectable={isSelectable}
                             items={keyItems}
                             itemRenderer={itemRenderer}
-                            helperClass={b('list-item', {helper: 'yes'})}
+                            helperClass={block('list-item', {helper: 'yes'})}
                             onCheckBoxChange={this._handleCheckBoxChange}
                         />
-                        {items.length > 0 && <div className={b('separator')} />}
+                        {items.length > 0 && <div className={block('separator')} />}
                     </React.Fragment>
                 )}
                 {items.length > 0 && (
@@ -429,7 +429,7 @@ export default class ColumnSelector extends Component {
                         isSortable={isSortable}
                         itemRenderer={itemRenderer}
                         lockAxis="y"
-                        helperClass={b('list-item', {helper: 'yes'})}
+                        helperClass={block('list-item', {helper: 'yes'})}
                         onSortEnd={this._handleSortEnd}
                         onCheckBoxChange={this._handleCheckBoxChange}
                         useDragHandle
@@ -442,7 +442,7 @@ export default class ColumnSelector extends Component {
 
     render() {
         const {isHeadless, isSortable, className} = this.props;
-        const classNames = b(
+        const classNames = block(
             {
                 headless: isHeadless ? 'yes' : undefined,
                 sortable: isSortable ? undefined : 'no',
