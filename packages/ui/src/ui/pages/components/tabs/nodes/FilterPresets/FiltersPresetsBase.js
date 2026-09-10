@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
@@ -7,14 +6,9 @@ import map_ from 'lodash/map';
 
 import Icon from '../../../../../components/Icon/Icon';
 
-import {selectPresets} from '../../../../../store/selectors/components/nodes/filters-presets';
-import {applyPreset, removePreset} from '../../../../../store/actions/components/nodes/nodes';
-
-import './FiltersPresets.scss';
-
 const block = cn('nodes-filters-preset');
 
-class FiltersPresets extends Component {
+export class FiltersPresetsBase extends Component {
     static propTypes = {
         // from connect
         presets: PropTypes.arrayOf(
@@ -79,7 +73,3 @@ class FiltersPresets extends Component {
         );
     }
 }
-
-const mapStateToProps = (state) => ({presets: selectPresets(state)});
-
-export default connect(mapStateToProps, {applyPreset, removePreset})(FiltersPresets);
