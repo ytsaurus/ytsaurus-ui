@@ -1,24 +1,16 @@
 import cn from 'bem-cn-lite';
 import React from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
-import {type DialogField, type FormApi, YTDFDialog} from '../../../../../containers/Dialog';
-import {isIdmAclAvailable} from '../../../../../config';
-import {ROOT_ACCOUNT_NAME} from '../../../../../constants/accounts/accounts';
-import {loadEditedAccount} from '../../../../../store/actions/accounts/accounts';
-import {closeCreateModal} from '../../../../../store/actions/accounts/editor';
-import {createAccountFromInfo} from '../../../../../store/actions/accounts/editor-ts';
-import {type RootState} from '../../../../../store/reducers';
-import {selectActiveAccount} from '../../../../../store/selectors/accounts/accounts';
-import {selectCurrentUserName} from '../../../../../store/selectors/global';
-import {selectIsAdmin} from '../../../../../store/selectors/global/is-developer';
-import {isAbcAllowed} from '../../../../../UIFactory';
-import {type ResponsibleType} from '../../../../../utils/acl/acl-types';
-import './AccountCreateDialog.scss';
-import i18n from './i18n';
+import {type DialogField, type FormApi, YTDFDialog} from '../../../../../../containers/Dialog';
+import {isIdmAclAvailable} from '../../../../../../config';
+import {ROOT_ACCOUNT_NAME} from '../../../../../../constants/accounts/accounts';
+import {isAbcAllowed} from '../../../../../../UIFactory';
+import {type ResponsibleType} from '../../../../../../utils/acl/acl-types';
+import {type NewAccountInfo} from '../../../../../../store/actions/accounts/editor-ts';
+import i18n from '../i18n';
 
 const block = cn('account-create-dialog');
 
-interface FormValues {
+export interface FormValues {
     abcService?: {slug: string; id: number};
     account: string;
     parentAccount: string;
@@ -30,7 +22,16 @@ function isRootAccount(account: string) {
     return account === 'root';
 }
 
-class AccountCreateDialog extends React.Component<ConnectedProps<typeof connector>> {
+export class AccountCreateDialogBase extends React.Component<{
+    currentUserName: string;
+    activeAccount: string | undefined;
+    visible: boolean;
+    newAccountInfo: FormValues;
+    isAdmin: boolean;
+    closeCreateModal: (newAccountInfo?: FormValues) => void;
+    loadEditedAccount: (accountName?: string) => void;
+    createAccountFromInfo: (newAccountInfo: NewAccountInfo) => Promise<unknown>;
+}> {
     override render() {
         const {visible, newAccountInfo, activeAccount, currentUserName, isAdmin} = this.props;
 
@@ -136,26 +137,3 @@ class AccountCreateDialog extends React.Component<ConnectedProps<typeof connecto
         this.props.closeCreateModal(form.getState().values);
     };
 }
-
-const mapStateToProps = (state: RootState) => {
-    const {
-        accounts: {editor},
-    } = state;
-    return {
-        currentUserName: selectCurrentUserName(state),
-        activeAccount: selectActiveAccount(state),
-        visible: editor.createModalVisible,
-        newAccountInfo: editor.newAccountInfo as FormValues,
-        isAdmin: selectIsAdmin(state),
-    };
-};
-
-const mapDispatchToProps = {
-    closeCreateModal,
-    loadEditedAccount,
-    createAccountFromInfo,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(AccountCreateDialog);
