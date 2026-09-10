@@ -1,14 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import hammer from '../../../../common/hammer';
-import {type ResolveThunks, connect} from 'react-redux';
+import hammer from '../../../../../common/hammer';
 
-import Button from '../../../../components/Button/Button';
+import Button from '../../../../../components/Button/Button';
+import i18n from '../i18n';
 
-import {openAttributesModal} from '../../../../store/actions/modals/attributes-modal';
-import i18n from './i18n';
-
-NodeCount.propTypes = {
+NodeCountBase.propTypes = {
     // from parent
     count: PropTypes.number.isRequired,
     className: PropTypes.string.isRequired,
@@ -26,11 +23,19 @@ type OwnProps = {
     name: string;
 };
 
-type DispatchProps = ResolveThunks<typeof mapDispatchToProps>;
+type DispatchProps = {
+    openAttributesModal: (args_0: {
+        title: React.ReactNode;
+        path?: string;
+        exactPath?: string;
+        attribute?: string;
+        attributes?: object;
+    }) => void;
+};
 
 type NodeCountProps = OwnProps & DispatchProps;
 
-function NodeCount({id, name, count, className, openAttributesModal}: NodeCountProps) {
+export function NodeCountBase({id, name, count, className, openAttributesModal}: NodeCountProps) {
     const handleClick = () =>
         openAttributesModal({
             title: name,
@@ -52,7 +57,3 @@ function NodeCount({id, name, count, className, openAttributesModal}: NodeCountP
         </div>
     );
 }
-
-const mapDispatchToProps = {openAttributesModal};
-
-export default connect(null, mapDispatchToProps)(NodeCount);
