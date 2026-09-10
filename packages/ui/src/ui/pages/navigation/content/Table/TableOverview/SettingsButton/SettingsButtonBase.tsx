@@ -1,36 +1,30 @@
 import React, {type ComponentProps, type VFC} from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
 import type cn from 'bem-cn-lite';
 import {Checkbox} from '@gravity-ui/uikit';
 
-import RadioButton from '../../../../../components/RadioButton/RadioButton';
-import Dropdown from '../../../../../components/Dropdown/Dropdown';
-import Button from '../../../../../components/Button/Button';
-import Icon from '../../../../../components/Icon/Icon';
+import RadioButton from '../../../../../../components/RadioButton/RadioButton';
+import Dropdown from '../../../../../../components/Dropdown/Dropdown';
+import Button from '../../../../../../components/Button/Button';
+import Icon from '../../../../../../components/Icon/Icon';
 
-import i18n from './i18n';
+import i18n from '../i18n';
 
 import {
     cellSizeRadioButtonItems,
     pageSizeRadioButtonItems,
-} from '../../../../../constants/navigation/content/table';
-import {
-    changeCellSize,
-    changePageSize,
-} from '../../../../../store/actions/navigation/content/table/table';
-import {
-    selectCellSize,
-    selectPageSize,
-} from '../../../../../store/selectors/navigation/content/table-ts';
-import {selectSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
-import {setTableDisplayRawStrings} from '../../../../../store/actions/settings/settings';
-import {type RootState} from '../../../../../store/reducers';
+} from '../../../../../../constants/navigation/content/table';
 
-interface Props extends ConnectedProps<typeof connector> {
+interface Props {
     block: ReturnType<typeof cn>;
+    pageSize: 10 | 50 | 100 | 200;
+    cellSize: 1024 | 16384 | 32768 | 65536;
+    allowRawStrings: boolean;
+    changePageSize(pageSize: number): void;
+    changeCellSize(cellSize: number): void;
+    setTableDisplayRawStrings(value: boolean): void;
 }
 
-const SettingsButton: VFC<Props> = ({
+export const SettingsButtonBase: VFC<Props> = ({
     block,
     pageSize,
     changePageSize,
@@ -95,23 +89,3 @@ const SettingsButton: VFC<Props> = ({
         />
     );
 };
-
-const mapStateToProps = (state: RootState) => {
-    const {isFullScreen} = state.navigation.content.table;
-    const pageSize = selectPageSize(state);
-    const cellSize = selectCellSize(state);
-
-    const allowRawStrings = selectSettingTableDisplayRawStrings(state);
-
-    return {pageSize, cellSize, isFullScreen, allowRawStrings};
-};
-
-const mapDispatchToProps = {
-    changePageSize,
-    changeCellSize,
-    setTableDisplayRawStrings,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(SettingsButton);
