@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.25.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.24.0...ui-v3.25.0) (2026-09-10)
+
+
+### Features
+
+* **Flow:** add partitions distribution for computations [[#1753](https://github.com/ytsaurus/ytsaurus-ui/issues/1753)] ([1e2e649](https://github.com/ytsaurus/ytsaurus-ui/commit/1e2e64959af0d034a1d661fd593582dbf7db9760))
+* **Scheduling:** allow custom pool metadata rendering [YTFRONT-5882] ([c815953](https://github.com/ytsaurus/ytsaurus-ui/commit/c81595344ca4be9f1d6247e80237abd8ea4a1b45))
+
+
+### Bug Fixes
+
+* **Scheduling:** wrong filter color [YTFRONT-6016] ([ceb7aab](https://github.com/ytsaurus/ytsaurus-ui/commit/ceb7aabd8e0d6a13f015327b231154a599f0c239))
+
 ## [3.24.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.23.0...ui-v3.24.0) (2026-09-03)
 
 
