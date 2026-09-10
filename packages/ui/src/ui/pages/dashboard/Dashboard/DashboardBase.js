@@ -1,12 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import {connect} from 'react-redux';
 import {useSelector} from '../../../store/redux-hooks';
-import {setActiveAccount} from '../../../store/actions/accounts/accounts';
 
 import Operations from '../../../pages/operations/Operations/Operations';
-import {selectActiveAccount} from '../../../store/selectors/accounts/accounts';
 import Links from '../Links/Links';
 import AccountsGeneralTab from '../../../pages/accounts/tabs/general/AccountsGeneralTab';
 import {DASHBOARD_VIEW_CONTEXT} from '../../../constants/index';
@@ -16,12 +13,10 @@ import UIFactory from '../../../UIFactory';
 
 import i18n from './i18n';
 
-import './Dashboard.scss';
-
 const block = cn('dashboard');
 const headingBlock = cn('elements-heading');
 
-Dashboard.propTypes = {
+DashboardBase.propTypes = {
     currentAccount: PropTypes.string.isRequired,
     setActiveAccount: PropTypes.func.isRequired,
 };
@@ -39,7 +34,7 @@ function MyRolesLink() {
     );
 }
 
-function Dashboard({currentAccount, setActiveAccount}) {
+export function DashboardBase({currentAccount, setActiveAccount}) {
     React.useEffect(() => {
         if (currentAccount) {
             setActiveAccount('');
@@ -77,11 +72,3 @@ function Dashboard({currentAccount, setActiveAccount}) {
         </div>
     );
 }
-
-const mapStateToProps = (state) => {
-    return {
-        currentAccount: selectActiveAccount(state),
-    };
-};
-
-export default connect(mapStateToProps, {setActiveAccount})(Dashboard);
