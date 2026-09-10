@@ -3,7 +3,6 @@ import {MetaTable} from '@ytsaurus/components';
 import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 import React, {Fragment, useEffect} from 'react';
-import {connect} from 'react-redux';
 import i18n from './i18n';
 import {
     compression,
@@ -13,24 +12,8 @@ import {
 } from '../../../../components/MetaTable/presets';
 import Link from '../../../../containers/Link/Link';
 import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
-import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
 import NavigationExtraActions from '../../../../containers/NavigationExtraActions/NavigationExtraActions';
-import {useRumMeasureStop} from '../../../../rum/RumUiContext';
-import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
-import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
-import {abortAndReset, loadFile} from '../../../../store/actions/navigation/content/file';
-import {useSelector} from '../../../../store/redux-hooks';
-import {selectAttributes, selectPath} from '../../../../store/selectors/navigation';
-import {
-    selectDownloadPath,
-    selectIsEmpty,
-    selectIsTooBig,
-    selectNavigationFileLoadingStatus,
-} from '../../../../store/selectors/navigation/content/file';
-import {selectEffectiveMode} from '../../../../store/selectors/navigation/navigation';
-import {isFinalLoadingStatus} from '../../../../utils/utils';
 import {CurrentPathActions} from '../../components/CurrentPathActions/CurrentPathActions';
-import './File.scss';
 
 const block = cn('navigation-file');
 const messageBlock = cn('elements-message');
@@ -92,7 +75,7 @@ const renderContent = (file, isTooBig, downloadPath) => {
     );
 };
 
-function File(props) {
+export function FileBase(props) {
     const {path, mode, loadFile, abortAndReset} = props;
     useEffect(() => {
         loadFile();
@@ -120,7 +103,7 @@ function File(props) {
     );
 }
 
-File.propTypes = {
+FileBase.propTypes = {
     // from connect
     loading: PropTypes.bool.isRequired,
     loaded: PropTypes.bool.isRequired,
@@ -139,60 +122,3 @@ File.propTypes = {
     loadFile: PropTypes.func.isRequired,
     abortAndReset: PropTypes.func.isRequired,
 };
-
-const mapStateToProps = (state) => {
-    const {loading, loaded, error, errorData, file} = state.navigation.content.file;
-    const {mediumList} = state.global;
-
-    const downloadPath = selectDownloadPath(state);
-    const attributes = selectAttributes(state);
-    const isTooBig = selectIsTooBig(state);
-    const isEmpty = selectIsEmpty(state);
-    const path = selectPath(state);
-    const mode = selectEffectiveMode(state);
-
-    return {
-        loading,
-        loaded,
-        error,
-        errorData,
-        mediumList,
-        attributes,
-        path,
-        mode,
-        isEmpty,
-        isTooBig,
-        downloadPath,
-        file,
-    };
-};
-const mapDispatchToProps = {
-    loadFile,
-    abortAndReset,
-};
-
-const FileConnected = connect(mapStateToProps, mapDispatchToProps)(File);
-
-export default function FileWithRum() {
-    useDisableMaxContentWidth();
-
-    const loadState = useSelector(selectNavigationFileLoadingStatus);
-
-    useAppRumMeasureStart({
-        type: RumMeasureTypes.NAVIGATION_CONTENT_FILE,
-        startDeps: [loadState],
-        allowStart: ([loadState]) => {
-            return !isFinalLoadingStatus(loadState);
-        },
-    });
-
-    useRumMeasureStop({
-        type: RumMeasureTypes.NAVIGATION_CONTENT_FILE,
-        stopDeps: [loadState],
-        allowStop: ([loadState]) => {
-            return isFinalLoadingStatus(loadState);
-        },
-    });
-
-    return <FileConnected />;
-}
