@@ -1,26 +1,15 @@
 /* eslint-disable react/prop-types */
 import React, {useState} from 'react';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
-import {RangeInputPicker} from '../../../../../components/common/RangeInputPicker';
-import Button from '../../../../../components/Button/Button';
-import Filter from '../../../../../components/Filter/Filter';
-import Icon from '../../../../../components/Icon/Icon';
-import OffsetSelectorButton from '../../../../../pages/navigation/content/Table/TableOverview/OffsetSelectorButton';
+import {RangeInputPicker} from '../../../../../../components/common/RangeInputPicker';
+import Button from '../../../../../../components/Button/Button';
+import Filter from '../../../../../../components/Filter/Filter';
+import Icon from '../../../../../../components/Icon/Icon';
+import OffsetSelectorButton from '../OffsetSelectorButton';
+import i18n from '../i18n';
 
-import {
-    selectOffsetValue,
-    selectProgressWidth,
-    selectRowCount,
-} from '../../../../../store/selectors/navigation/content/table';
-import {selectIsDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
-import {moveOffset} from '../../../../../store/actions/navigation/content/table/pagination';
-
-import './TableOverview.scss';
-import i18n from './i18n';
-
-TableOverview.propTypes = {
+OffsetInputBase.propTypes = {
     // from parent
     block: PropTypes.func.isRequired,
 
@@ -76,7 +65,7 @@ const renderPlaceholder = (props, handleStartEditing) => {
     );
 };
 
-function TableOverview(props) {
+export function OffsetInputBase(props) {
     const {block, moveOffset, isDynamic} = props;
     const [editing, changeEditing] = useState(false);
 
@@ -110,18 +99,3 @@ function TableOverview(props) {
         </div>
     );
 }
-
-const mapStateToProps = (state) => {
-    const progressWidth = selectProgressWidth(state);
-    const offsetValue = selectOffsetValue(state);
-    const isDynamic = selectIsDynamic(state);
-    const rowCount = selectRowCount(state);
-
-    return {progressWidth, offsetValue, rowCount, isDynamic};
-};
-
-const mapDispatchToProps = {
-    moveOffset,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(TableOverview);
