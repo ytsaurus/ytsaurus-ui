@@ -1,11 +1,10 @@
 import cn from 'bem-cn-lite';
 import React, {Fragment} from 'react';
 import i18n from './i18n';
-import {type ConnectedProps, connect} from 'react-redux';
 import {type match as MatchType, Redirect, Route, Switch} from 'react-router';
 import hammer from '../../../common/hammer';
 import unipika from '../../../common/thor/unipika';
-import {useDispatch, useSelector} from '../../../store/redux-hooks';
+import {useDispatch} from '../../../store/redux-hooks';
 
 import ypath from '../../../common/thor/ypath';
 
@@ -41,15 +40,7 @@ import Placeholder from '../../../pages/components/Placeholder';
 import {Page} from '../../../constants/index';
 import {DEFAULT_TAB, type OperationTabType, Tab} from '../../../constants/operations/detail';
 import {useUpdater} from '../../../hooks/use-updater';
-import {promptAction} from '../../../store/actions/actions';
-import {showEditPoolsWeightsModal} from '../../../store/actions/operations';
-import {getOperation, updateOperation} from '../../../store/actions/operations/detail';
-import {
-    selectIsOperationInGpuTree,
-    selectOperationDetailsLoadingStatus,
-    selectOperationErasedTrees,
-    selectOperationPerformanceUrlTemplate,
-} from '../../../store/selectors/operations/operation';
+import {updateOperation} from '../../../store/actions/operations/detail';
 import {type TabSettings, makeTabProps} from '../../../utils';
 import {
     getDetailsTabsShowSettings,
@@ -58,27 +49,20 @@ import {
 } from '../../../utils/operations/detail';
 import {isOperationId} from '../../../utils/operations/list';
 
-import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
-import {RumMeasureTypes} from '../../../rum/rum-measure-types';
-import {isFinalLoadingStatus} from '../../../utils/utils';
-
 import UIFactory from '../../../UIFactory';
 import {UI_TAB_SIZE} from '../../../constants/global';
-import {updateListJobsFilter} from '../../../store/actions/operations/jobs';
-import {getOperationEvents, listOperationEventsApi} from '../../../store/api/yt';
-import {type RootState} from '../../../store/reducers';
 import {type RuntimeItem} from '../../../store/reducers/operations/detail';
-import {selectJobsMonitorTabVisible} from '../../../store/selectors/operations/jobs-monitor';
+import {type JobState} from '../../../store/selectors/operations/statistics-v2';
 import {
-    type JobState,
-    selectOperationStatisticsHasData,
-    selectTotalCpuTimeSpent,
-    selectTotalJobWallTime,
-} from '../../../store/selectors/operations/statistics-v2';
-import {selectCurrentCluster} from '../../../store/selectors/thor';
-import {selectYsonSettingsDisableDecode} from '../../../store/selectors/thor/unipika';
-import {type OperationPool, type OperationStates} from '../selectors';
-import './OperationDetail.scss';
+    type DetailedOperationSelector,
+    type OperationPool,
+    type OperationStates,
+} from '../selectors';
+import {type OperationAction} from '../../../utils/operations/detail';
+import {type OperationMonitoringTabProps} from '../../../UIFactory';
+import {type ListOperationEventsResponse} from '../../../../shared/yt-types';
+import {type UpdateFilterData} from '../../../store/reducers/operations/jobs/jobs';
+import {type YTError} from '../../../types';
 import {JobsTimeline} from './tabs/JobsTimeline';
 import OperationDetailsMonitor from './tabs/monitor/OperationDetailsMonitor';
 
@@ -86,9 +70,46 @@ const detailBlock = cn('operation-detail');
 
 const headingBlock = cn('elements-heading');
 
-type RouteProps = {match: MatchType<{operationId: string; tab: OperationTabType}>};
+export type RouteProps = {match: MatchType<{operationId: string; tab: OperationTabType}>};
 
-type ReduxProps = ConnectedProps<typeof connector>;
+type ReduxProps = {
+    cluster: string;
+    operation: DetailedOperationSelector;
+    errorData: {message: string; details?: YTError};
+    loading: boolean;
+    loaded: boolean;
+    error: boolean;
+    actions: OperationAction[];
+    runtime: RuntimeItem[] | undefined;
+    totalJobWallTime: number;
+    cpuTimeSpent: number;
+    erasedTrees: {[poolTree: string]: boolean};
+    monitorTabVisible: boolean;
+    monitorTabTitle: string | undefined;
+    monitorTabUrlTemplate: string | undefined;
+    monitoringComponent: React.ComponentType<OperationMonitoringTabProps> | undefined;
+    timelineTabVisible: boolean;
+    jobsMonitorIsSupported: boolean;
+    jobsMonitorVisible: boolean;
+    hasStatististicsTab: boolean;
+    isGpuOperation: boolean | undefined;
+    operationPerformanceUrlTemplate: {url: string; title: string} | undefined;
+    operationEvents: ListOperationEventsResponse | undefined;
+    ysonSettings: {
+        decodeUTF8: boolean;
+        format: string;
+        showDecoded: boolean;
+        compact: boolean;
+        escapeWhitespace: boolean;
+        binaryAsHex: boolean;
+        asHTML: boolean;
+    };
+    promptAction(data: unknown): void;
+    getOperation: (id: string) => void;
+    showEditPoolsWeightsModal(operation: DetailedOperationSelector, editable?: boolean): void;
+    updateListJobsFilter: (data: UpdateFilterData) => void;
+    listOperationEvents: (operationId: string) => void;
+};
 
 function OperationDetailUpdater({operationId}: {operationId: string}) {
     const dispatch = useDispatch();
@@ -170,7 +191,7 @@ function SpecialWaitingStatus({type}: {type: 'jobs' | 'resources'}) {
     );
 }
 
-class OperationDetail extends React.Component<ReduxProps & RouteProps> {
+export class OperationDetailBase extends React.Component<ReduxProps & RouteProps> {
     get settings() {
         return unipika.prepareSettings();
     }
@@ -554,83 +575,4 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             </ErrorBoundary>
         );
     }
-}
-
-const mapStateToProps = (state: RootState, routerProps: RouteProps) => {
-    const {operation, errorData, loading, loaded, error, actions, details} =
-        state.operations.detail;
-    const totalJobWallTime = selectTotalJobWallTime(state);
-    const cpuTimeSpent = selectTotalCpuTimeSpent(state);
-    const erasedTrees = selectOperationErasedTrees(state);
-    const {runtime} = details;
-
-    const {operationId} = routerProps.match.params;
-    const {data: operationEvents} = getOperationEvents(state, {
-        operation_id: operationId,
-        event_type: 'incarnation_started',
-    });
-
-    const {
-        component: monitoringComponent,
-        urlTemplate: monitorTabUrlTemplate,
-        title: monitorTabTitle,
-    } = UIFactory.getMonitoringForOperation(operation) || {};
-
-    const monitorTabVisible = Boolean(monitoringComponent) || Boolean(monitorTabUrlTemplate);
-
-    return {
-        cluster: selectCurrentCluster(state),
-        operation,
-        errorData,
-        loading,
-        loaded,
-        error,
-        actions,
-        runtime,
-        totalJobWallTime,
-        cpuTimeSpent,
-        erasedTrees,
-        monitorTabVisible,
-        monitorTabTitle,
-        monitorTabUrlTemplate,
-        monitoringComponent,
-        timelineTabVisible: operation?.type === 'vanilla',
-        jobsMonitorIsSupported: Boolean(UIFactory.getMonitorComponentForJob()),
-        jobsMonitorVisible: selectJobsMonitorTabVisible(state),
-        hasStatististicsTab: selectOperationStatisticsHasData(state),
-        isGpuOperation: selectIsOperationInGpuTree(state),
-        operationPerformanceUrlTemplate: selectOperationPerformanceUrlTemplate(state),
-        operationEvents,
-        ysonSettings: selectYsonSettingsDisableDecode(state),
-    };
-};
-
-const mapDispatchToProps = {
-    promptAction,
-    getOperation,
-    showEditPoolsWeightsModal,
-    updateListJobsFilter,
-    listOperationEvents: (operationId: string) =>
-        listOperationEventsApi.endpoints.listOperationEvents.initiate({
-            operation_id: operationId,
-            event_type: 'incarnation_started',
-        }),
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-const OperationDetailConnected = connector(OperationDetail);
-
-export default function OperationDetailsWithRum(props: RouteProps) {
-    const loadState = useSelector(selectOperationDetailsLoadingStatus);
-
-    useAppRumMeasureStart({
-        type: RumMeasureTypes.OPERATION,
-        startDeps: [loadState],
-        allowStart: ([loadState]) => {
-            return !isFinalLoadingStatus(loadState);
-        },
-    });
-
-    return <OperationDetailConnected {...props} />;
 }
