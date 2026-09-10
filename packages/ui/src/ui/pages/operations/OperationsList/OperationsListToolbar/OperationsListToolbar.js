@@ -1,267 +1,16 @@
 import React from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import PropTypes from 'prop-types';
-import cn from 'bem-cn-lite';
-import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
-
-import i18n from './i18n';
-
-import map_ from 'lodash/map';
 
 import {selectAllUserNames} from '../../../../store/selectors/global';
-import OperationsTextFilter from './OperationsTextFilter';
-import OperationsArchiveFilter from './OperationsArchiveFilter';
-import OperationsSelectFilter from './OperationsSelectFilter';
-
-import OperationsListPaginator from './OperationsListPaginator';
-import OperationsFilterPresets from './OperationsFilterPresets';
 import {
     toggleSaveFilterPresetDialog,
     updateFilter,
 } from '../../../../store/actions/operations/list';
-
-import {
-    OperationsAccessibleForFilter,
-    OperationsListPoolSuggestFilter,
-    OperationsListPoolTreeSuggestFilter,
-    OperationsListUserSuggestFilter,
-} from '../../../../pages/operations/OperationsList/OperationsListToolbar/OperationsListSuggestFilters';
 import {selectOperationsListFixedStartedByFilter_FOR_YTFRONT_2838} from '../../../../store/selectors/operations';
-import Button, {SelectButton} from '../../../../components/Button/Button';
-import Icon from '../../../../components/Icon/Icon';
-import {PoolTreesLoader} from '../../../../hooks/global-pool-trees';
 
 import './OperationsListToolbar.scss';
 
-const block = cn('operations-list');
-const tbBlock = cn('elements-toolbar');
-const tbComp = tbBlock('component');
-
-class OperationsListToolbar extends React.PureComponent {
-    static propTypes = {
-        // from connect
-        updateFilter: PropTypes.func.isRequired,
-        toggleSaveFilterPresetDialog: PropTypes.func.isRequired,
-        failedJobsFilter: PropTypes.shape({
-            type: PropTypes.string.isRequired,
-            defaultValue: PropTypes.bool.isRequired,
-            value: PropTypes.bool,
-        }).isRequired,
-        subjects: PropTypes.arrayOf(PropTypes.string).isRequired,
-        // from props
-        inDashboard: PropTypes.bool,
-    };
-
-    preparePermissionsPlaceholder(permissions) {
-        if (permissions.length === 0) {
-            return i18n('action_select');
-        }
-
-        const labels = map_(permissions, (permission) => permission[0].toUpperCase());
-
-        return labels.join(', ');
-    }
-
-    renderTopSection() {
-        return (
-            <div className={tbBlock('container')}>
-                <OperationsTextFilter />
-
-                <div className={block('toolbar-pool-filter', tbComp)}>
-                    <PoolTreesLoader />
-                    <OperationsListPoolTreeSuggestFilter pin="round-clear" />
-                    <OperationsListPoolSuggestFilter pin="brick-round" />
-                </div>
-
-                <OperationsArchiveFilter />
-
-                <div className={block('toolbar-pagination', tbComp)}>
-                    <OperationsListPaginator />
-                </div>
-            </div>
-        );
-    }
-
-    renderBottomSection() {
-        const {failedJobsFilter, updateFilter, toggleSaveFilterPresetDialog} = this.props;
-
-        return (
-            <div className={tbBlock('container')}>
-                <div className={block('toolbar-user-filter', tbComp)}>
-                    <OperationsListUserSuggestFilter />
-                </div>
-
-                <div className={block('toolbar-access-filters', tbComp)}>
-                    <OperationsAccessibleForFilter pin="round-clear" />
-                    <OperationsSelectFilter
-                        type="check"
-                        name="permissions"
-                        label={i18n('field_permissions') + ':'}
-                        withCounters={false}
-                        placeholder={this.preparePermissionsPlaceholder}
-                        states={[
-                            {
-                                name: 'read',
-                                caption: i18n('value_read'),
-                                show: true,
-                            },
-                            {
-                                name: 'manage',
-                                caption: i18n('value_manage'),
-                                show: true,
-                            },
-                        ]}
-                        width={170}
-                        multiple
-                        pin="brick-round"
-                    />
-                </div>
-
-                <div className={block('toolbar-state-filter', tbComp)}>
-                    <OperationsSelectFilter
-                        name="state"
-                        label={i18n('field_state') + ':'}
-                        states={[
-                            {
-                                name: 'all',
-                                caption: i18n('value_all-states'),
-                                show: true,
-                            },
-                            {
-                                name: 'pending',
-                                caption: i18n('value_pending'),
-                                show: true,
-                            },
-                            {
-                                name: 'running',
-                                caption: i18n('value_running'),
-                                show: true,
-                            },
-                            {
-                                name: 'completed',
-                                caption: i18n('value_completed'),
-                                show: true,
-                            },
-                            {
-                                name: 'failed',
-                                caption: i18n('value_failed'),
-                                show: true,
-                            },
-                            {
-                                name: 'aborted',
-                                caption: i18n('value_aborted'),
-                                show: true,
-                            },
-                        ]}
-                        width={200}
-                    />
-                </div>
-
-                <div className={block('toolbar-type-filter', tbComp)}>
-                    <OperationsSelectFilter
-                        name="type"
-                        label={i18n('field_type') + ':'}
-                        states={[
-                            {
-                                name: 'all',
-                                get caption() {
-                                    return i18n('value_all-types');
-                                },
-                                show: true,
-                            },
-                            {
-                                name: 'map',
-                                show: true,
-                            },
-                            {
-                                name: 'reduce',
-                                show: true,
-                            },
-                            {
-                                name: 'map_reduce',
-                                show: true,
-                            },
-                            {
-                                name: 'join_reduce',
-                                show: true,
-                            },
-                            {
-                                name: 'merge',
-                                show: true,
-                            },
-                            {
-                                name: 'sort',
-                                show: true,
-                            },
-                            {
-                                name: 'erase',
-                                show: true,
-                            },
-                            {
-                                name: 'remote_copy',
-                                show: true,
-                            },
-                            {
-                                name: 'vanilla',
-                                show: true,
-                            },
-                        ]}
-                        width={200}
-                    />
-                </div>
-
-                <div className={block('failed-jobs', tbComp)}>
-                    <SelectButton
-                        selected={failedJobsFilter.value}
-                        onClick={() => updateFilter('failedJobs', !failedJobsFilter.value)}
-                    >
-                        {i18n('action_only-ops-with-failed-jobs')}{' '}
-                        <span className={block('only-jobs-with-failed-counter')}>
-                            {failedJobsFilter.counter}
-                        </span>
-                    </SelectButton>
-                </div>
-
-                <div className={block('toolbar-save-preset', tbComp)}>
-                    <Button
-                        title={i18n('title_save-filter')}
-                        onClick={toggleSaveFilterPresetDialog}
-                        className={block('save-preset')}
-                    >
-                        <Icon awesome={'save'} face={'regular'} />
-                        &nbsp; {i18n('title_save-filter')}
-                    </Button>
-                </div>
-            </div>
-        );
-    }
-
-    renderWarning_uiissue_2838() {
-        return <div className={block('ytfront-2838')}>{i18n('alert_ytfront-2838-warning')}</div>;
-    }
-
-    render() {
-        const {fixedStartedByFilter, children} = this.props;
-
-        return (
-            <StickyContainer hideShadow keepWidth>
-                {({stickyTop: sticky, stickyTopClassName}) => (
-                    <React.Fragment>
-                        <div
-                            className={block('toolbar', {sticky}, [tbBlock(), stickyTopClassName])}
-                        >
-                            {this.renderTopSection()}
-                            {this.renderBottomSection()}
-                            {fixedStartedByFilter && this.renderWarning_uiissue_2838()}
-                            <OperationsFilterPresets />
-                        </div>
-                        {children}
-                    </React.Fragment>
-                )}
-            </StickyContainer>
-        );
-    }
-}
+import {OperationsListToolbarBase} from './OperationsListToolbarBase';
 
 function OperationsListToolbarHooked({children}) {
     const subjects = useSelector(selectAllUserNames);
@@ -286,7 +35,7 @@ function OperationsListToolbarHooked({children}) {
     );
 
     return (
-        <OperationsListToolbar
+        <OperationsListToolbarBase
             {...{
                 subjects,
                 failedJobsFilter: failedJobs,
@@ -296,8 +45,10 @@ function OperationsListToolbarHooked({children}) {
             toggleSaveFilterPresetDialog={handleToggleSaveFilterPresetDialog}
         >
             {children}
-        </OperationsListToolbar>
+        </OperationsListToolbarBase>
     );
 }
 
-export default React.memo(OperationsListToolbarHooked);
+const OperationsListToolbar = React.memo(OperationsListToolbarHooked);
+
+export default OperationsListToolbar;
