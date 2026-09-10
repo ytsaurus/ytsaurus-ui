@@ -1,123 +1,12 @@
-import React, {useEffect} from 'react';
-import {type ResolveThunks, connect} from 'react-redux';
-import cn from 'bem-cn-lite';
-
-import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
-import {FormattedId} from '../../../../components/formatters';
-
-import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
-import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
-import {Loader} from '@gravity-ui/uikit';
-
-import Name from './Name';
-import NodeCount from './NodeCount';
+import {connect} from 'react-redux';
 
 import {abortAllRequests, getShards} from '../../../../store/actions/components/shards';
-import {type Shard} from '../../../../store/reducers/components/shards';
-
-import i18n from './i18n';
 
 import './Shards.scss';
 import {selectCluster} from '../../../../store/selectors/global';
 import {type RootState} from '../../../../store/reducers';
 
-const block = cn('components-shards');
-
-const tableSettings = {
-    columns: {
-        items: {
-            id: {
-                align: 'left',
-            },
-            name: {
-                align: 'left',
-            },
-            account_statistics: {
-                align: 'left',
-            },
-            node_count: {
-                align: 'left',
-                get caption() {
-                    return i18n('field_node-count');
-                },
-            },
-        },
-        sets: {
-            default: {
-                items: ['id', 'name', 'node_count'],
-            },
-        },
-        mode: 'default',
-    },
-    theme: 'light',
-    striped: false,
-    cssHover: true,
-    css: block('table'),
-    computeKey(item: Shard) {
-        return item.id;
-    },
-};
-
-type OwnProps = {
-    id: string;
-    name: string;
-    className: string;
-};
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-
-type DispatchProps = ResolveThunks<typeof mapDispatchToProps>;
-
-type ShardsProps = OwnProps & StateProps & DispatchProps;
-
-function Shards(props: ShardsProps) {
-    const {cluster, getShards, abortAllRequests} = props;
-    useEffect(() => {
-        getShards();
-        return abortAllRequests;
-    }, [cluster]);
-
-    const idTemplate = (item: Shard) => <FormattedId id={item.id} />;
-    const nameTemplate = (item: Shard) => (
-        <Name className={block('name')} name={item.name} id={item.id} />
-    );
-    const nodeCountTemplate = (item: Shard) => (
-        <NodeCount
-            count={item['total_account_statistics']['node_count']}
-            className={block('node-count')}
-            name={item.name}
-            id={item.id}
-        />
-    );
-
-    const templates = {
-        id: idTemplate,
-        name: nameTemplate,
-        node_count: nodeCountTemplate,
-    };
-
-    const {loading, loaded, error, errorData, shards} = props;
-    const initialLoading = loading && !loaded;
-
-    return (
-        <ErrorBoundary>
-            <LoadDataHandler loaded={loading} error={error} errorData={errorData}>
-                <div className={block({loading: initialLoading})}>
-                    {initialLoading ? (
-                        <Loader />
-                    ) : (
-                        <ElementsTable
-                            {...tableSettings}
-                            templates={templates}
-                            items={shards}
-                            css={block()}
-                        />
-                    )}
-                </div>
-            </LoadDataHandler>
-        </ErrorBoundary>
-    );
-}
+import {ShardsBase} from './ShardsBase';
 
 const mapStateToProps = (state: RootState) => {
     const {loading, loaded, error, errorData, shards} = state.components.shards;
@@ -137,4 +26,6 @@ const mapDispatchToProps = {
     abortAllRequests,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Shards);
+const Shards = connect(mapStateToProps, mapDispatchToProps)(ShardsBase);
+
+export default Shards;
