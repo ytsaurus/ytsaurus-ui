@@ -1,25 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 
-import i18n from './i18n';
+import i18n from '../i18n';
 
-import Pagination from '../../../../../components/Pagination/Pagination';
+import Pagination from '../../../../../../components/Pagination/Pagination';
 
-import {selectIsDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
-import {
-    selectIsPaginationDisabled,
-    selectIsTableEndReached,
-    selectOffsetValue,
-} from '../../../../../store/selectors/navigation/content/table';
-import {
-    moveOffsetToEnd,
-    moveOffsetToLeft,
-    moveOffsetToRight,
-    moveOffsetToStart,
-} from '../../../../../store/actions/navigation/content/table/pagination';
-
-Paginator.propTypes = {
+PaginatorBase.propTypes = {
     // from parent
     block: PropTypes.func.isRequired,
 
@@ -39,7 +25,7 @@ Paginator.propTypes = {
     moveOffsetToEnd: PropTypes.func.isRequired,
 };
 
-function Paginator(props) {
+export function PaginatorBase(props) {
     const {block, error, isPaginationDisabled, isTableEndReached, offsetValue, isDynamic} = props;
     const {moveOffsetToStart, moveOffsetToLeft, moveOffsetToRight, moveOffsetToEnd} = props;
     const tooltip = isPaginationDisabled ? i18n('context_pagination-disabled') : undefined;
@@ -83,29 +69,3 @@ function Paginator(props) {
         />
     );
 }
-
-const mapStateToProps = (state) => {
-    const {error} = state.navigation.content.table;
-
-    const isPaginationDisabled = selectIsPaginationDisabled(state);
-    const isTableEndReached = selectIsTableEndReached(state);
-    const offsetValue = selectOffsetValue(state);
-    const isDynamic = selectIsDynamic(state);
-
-    return {
-        error,
-        isDynamic,
-        offsetValue,
-        isPaginationDisabled,
-        isTableEndReached,
-    };
-};
-
-const mapDispatchToProps = {
-    moveOffsetToStart,
-    moveOffsetToLeft,
-    moveOffsetToRight,
-    moveOffsetToEnd,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Paginator);
