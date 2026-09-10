@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import PathEditorModal from '../PathEditorModal';
@@ -7,11 +6,8 @@ import PathEditorModal from '../PathEditorModal';
 import i18n from './i18n';
 
 import {CLOSE_RESTORE_POPUP} from '../../../../../constants/navigation/modals/restore-object';
-import {closeEditingPopup} from '../../../../../store/actions/navigation/modals/path-editing-popup';
-import {restoreObject} from '../../../../../store/actions/navigation/modals/restore-object';
-import {updateView} from '../../../../../store/actions/navigation';
 
-class RestoreObjectModal extends Component {
+export class RestoreObjectModalBase extends Component {
     static propTypes = {
         // from connect
         error: PropTypes.shape({
@@ -74,26 +70,3 @@ class RestoreObjectModal extends Component {
         );
     }
 }
-
-const mapStateToProps = ({navigation}) => {
-    const {restoredPath, objectPath, popupVisible, showError, restoring, errorMessage, error} =
-        navigation.modals.restoreObject;
-
-    return {
-        restoredPath,
-        restoring,
-        popupVisible,
-        errorMessage,
-        error,
-        showError,
-        objectPath,
-    };
-};
-
-const mapDispatchToProps = {
-    updateView,
-    restoreObject,
-    closeEditingPopup,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(RestoreObjectModal);
