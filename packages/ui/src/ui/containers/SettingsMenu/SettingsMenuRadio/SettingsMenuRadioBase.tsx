@@ -1,17 +1,11 @@
-import React, {type VFC} from 'react';
+import React from 'react';
 import cn from 'bem-cn-lite';
-import {type ConnectedProps, connect} from 'react-redux';
 
-import RadioButton, {type ItemType} from '../../components/RadioButton/RadioButton';
-
-import {setSetting} from '../../store/actions/settings';
-import {selectGetSetting} from '../../store/selectors/settings';
-import {type RootState} from '../../store/reducers';
-import {type FIX_MY_TYPE} from '../../types';
+import RadioButton, {type ItemType} from '../../../components/RadioButton/RadioButton';
 
 const block = cn('elements-page');
 
-interface BaseProps {
+export interface BaseProps {
     items: ItemType[];
     name: string;
     heading?: string;
@@ -79,58 +73,3 @@ export const SettingsMenuRadioBase = (props: BaseProps) => {
         </div>
     );
 };
-
-type SettingNS = FIX_MY_TYPE;
-
-interface Props
-    extends
-        ConnectedProps<typeof connector>,
-        Pick<BaseProps, 'items' | 'heading' | 'description' | 'onAfterChange' | 'convertValue'> {
-    settingName: string;
-    settingNS: SettingNS;
-    onChange?(settingName: string, settingNS: SettingNS, value: unknown): void;
-}
-
-const SettingsMenuRadio: VFC<Props> = (props) => {
-    const {settingName, settingNS, getSetting, setSetting, onChange, ...rest} = props;
-    const onChangeHandler = React.useCallback(
-        (value: unknown) => {
-            if (onChange) onChange(settingName, settingNS, value);
-        },
-        [onChange, settingNS, settingName],
-    );
-    const set = React.useCallback(
-        (value: unknown) => setSetting(settingName, settingNS, value),
-        [setSetting, settingNS, settingName],
-    );
-    const get = React.useCallback(
-        () => getSetting(settingName, settingNS),
-        [getSetting, settingNS, settingName],
-    );
-    return (
-        <SettingsMenuRadioBase
-            {...rest}
-            name={settingName}
-            onChange={onChange ? onChangeHandler : undefined}
-            set={set}
-            get={get}
-        />
-    );
-};
-
-const mapStateToProps = (state: RootState) => {
-    const getSetting = selectGetSetting(state);
-
-    return {
-        getSetting,
-    };
-};
-
-const connector = connect(mapStateToProps, {setSetting});
-
-/**
- * @deprecated
- * Uses the legacy `settingName`/`settingNS` pattern.
- * Use `SettingsMenuRadioByKey` instead.
- */
-export default connector(SettingsMenuRadio);
