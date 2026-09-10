@@ -11,7 +11,7 @@ import {LOAD_STORES} from '../../../constants/tablet';
 import {preparePath, prepareStores} from '../../../utils/tablet/stores';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 
-const requests = new CancelHelper();
+const cancelHelper = new CancelHelper();
 
 export function loadStoresData(storesId, index, unorderedDynamicTable) {
     return (dispatch, getState) => {
@@ -63,7 +63,7 @@ export function loadStoresData(storesId, index, unorderedDynamicTable) {
 
 export function abortAndReset() {
     return (dispatch) => {
-        requests.removeAllRequests();
+        cancelHelper.removeAllRequests();
         dispatch({type: LOAD_STORES.CANCELLED});
     };
 }
