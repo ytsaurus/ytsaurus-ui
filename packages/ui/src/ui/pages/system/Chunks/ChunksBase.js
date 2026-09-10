@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {compose} from 'redux';
-import {connect} from 'react-redux';
 import {useDispatch} from '../../../store/redux-hooks';
 import hammer from '../../../common/hammer';
 import PropTypes from 'prop-types';
@@ -22,12 +21,7 @@ import {StickyContainer} from '../../../components/StickyContainer/StickyContain
 
 import {SYSTEM_CHUNKS_TABLE_ID} from '../../../constants/tables';
 import {loadChunks} from '../../../store/actions/system/chunks';
-import {selectSettingsSystemChunksCollapsed} from '../../../store/selectors/settings/settings-ts';
-import {setSettingsSystemChunksCollapsed} from '../../../store/actions/settings/settings';
 import {useUpdater} from '../../../hooks/use-updater';
-
-import './Chunks.scss';
-import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 import {HEADER_HEIGHT} from '../../../constants';
 import i18n from './i18n';
 
@@ -35,7 +29,7 @@ const b = block('system');
 
 const ElementsTable = compose(withStickyHead, withStickyFooter)(ElementsTableBase);
 
-class Chunks extends Component {
+export class ChunksBase extends Component {
     static _formatChunkCount(count) {
         return count === 0 ? '' : hammer.format['Number'](count);
     }
@@ -171,7 +165,7 @@ class Chunks extends Component {
                 items: columns,
                 sets: {
                     default: {
-                        items: Chunks._prepareColumnSet(types),
+                        items: ChunksBase._prepareColumnSet(types),
                     },
                 },
             },
@@ -205,10 +199,10 @@ class Chunks extends Component {
 
             const counters = {
                 flags: {
-                    lvc: Chunks._formatChunkCount(lost_vital_chunks),
-                    dmc: Chunks._formatChunkCount(data_missing_chunks),
-                    pmc: Chunks._formatChunkCount(parity_missing_chunks),
-                    qmc: Chunks._formatChunkCount(quorum_missing_chunks),
+                    lvc: ChunksBase._formatChunkCount(lost_vital_chunks),
+                    dmc: ChunksBase._formatChunkCount(data_missing_chunks),
+                    pmc: ChunksBase._formatChunkCount(parity_missing_chunks),
+                    qmc: ChunksBase._formatChunkCount(quorum_missing_chunks),
                 },
                 total: hammer.format['Number'](chunks),
             };
@@ -265,26 +259,6 @@ class Chunks extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    const {replication, sealer, refresh, requisitionUpdate, cells, types} = state.system.chunks;
-
-    return {
-        replication,
-        sealer,
-        refresh,
-        requisitionUpdate,
-        cells,
-        types,
-        sortState: state.tables[SYSTEM_CHUNKS_TABLE_ID],
-        collapsibleSize: UI_COLLAPSIBLE_SIZE,
-        collapsed: selectSettingsSystemChunksCollapsed(state),
-    };
-}
-
-const mapDispatchToProps = {
-    setSettingsSystemChunksCollapsed,
-};
-
 function ChunksUpdater() {
     const dispatch = useDispatch();
 
@@ -305,5 +279,3 @@ function ChunksUpdater() {
 
     return null;
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(Chunks);
