@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react';
 import {Checkbox} from '@gravity-ui/uikit';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import hammer from '../../../../../common/hammer';
 import cn from 'bem-cn-lite';
@@ -17,30 +16,12 @@ import Modal from '../../../../../components/Modal/Modal';
 import Select from '../../../../../components/Select/Select';
 
 import {initialState} from '../../../../../store/reducers/components/nodes/setup/setup';
-import {
-    applyPreset,
-    getComponentsNodesFilterOptions,
-    savePreset,
-} from '../../../../../store/actions/components/nodes/nodes';
 import {FLAG_STATE, MEDIUM_COLS_PREFIX} from '../../../../../constants/components/nodes/nodes';
 import {updateListWithAll} from '../../../../../utils';
 import {parseBytes} from '../../../../../utils/parse/parse-bytes';
-
-import {selectMediumListNoCache} from '../../../../../store/selectors/thor';
 import TagsFilter from './TagsFilter/TagsFilter';
-import {
-    selectComponentNodesFiltersSetup,
-    selectComponentNodesRacks,
-    selectComponentNodesTags,
-} from '../../../../../store/selectors/components/nodes/nodes';
-import {
-    COMPONENTS_AVAILABLE_STATES,
-    selectComponentNodesFilterSetupStateValue,
-} from '../../../../../store/selectors/components/nodes/nodes/data';
 
 import i18n from './i18n';
-
-import './SetupModal.scss';
 
 const block = cn('nodes-setup-modal');
 
@@ -55,7 +36,7 @@ const groupFilterProps = PropTypes.shape({
     }).isRequired,
 });
 
-export class SetupModal extends Component {
+export class SetupModalBase extends Component {
     static radioProps = PropTypes.oneOf([FLAG_STATE.ENABLED, FLAG_STATE.DISABLED, FLAG_STATE.ALL]);
 
     static propTypes = {
@@ -69,22 +50,22 @@ export class SetupModal extends Component {
                 physicalHost: PropTypes.string.isRequired,
                 tag: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
                 state: PropTypes.arrayOf(PropTypes.string),
-                schedulerJobs: SetupModal.radioProps.isRequired,
-                writeSessions: SetupModal.radioProps.isRequired,
-                tabletCells: SetupModal.radioProps.isRequired,
+                schedulerJobs: SetupModalBase.radioProps.isRequired,
+                writeSessions: SetupModalBase.radioProps.isRequired,
+                tabletCells: SetupModalBase.radioProps.isRequired,
                 rack: PropTypes.oneOfType([
                     PropTypes.string.isRequired,
                     PropTypes.object.isRequired,
                 ]).isRequired,
-                banned: SetupModal.radioProps.isRequired,
-                decommissioned: SetupModal.radioProps.isRequired,
-                full: SetupModal.radioProps.isRequired,
-                alerts: SetupModal.radioProps.isRequired,
+                banned: SetupModalBase.radioProps.isRequired,
+                decommissioned: SetupModalBase.radioProps.isRequired,
+                full: SetupModalBase.radioProps.isRequired,
+                alerts: SetupModalBase.radioProps.isRequired,
             }).isRequired,
-            storage: SetupModal.createPropTypes('storage'),
-            cpu: SetupModal.createPropTypes('cpu'),
-            resources: SetupModal.createPropTypes('resources'),
-            tablets: SetupModal.createPropTypes('tablets'),
+            storage: SetupModalBase.createPropTypes('storage'),
+            cpu: SetupModalBase.createPropTypes('cpu'),
+            resources: SetupModalBase.createPropTypes('resources'),
+            tablets: SetupModalBase.createPropTypes('tablets'),
         }),
 
         applyPreset: PropTypes.func.isRequired,
@@ -232,7 +213,7 @@ export class SetupModal extends Component {
 
     renderValueFilter({placeholder, onChange, value, invalid, format = 'Bytes'}) {
         const formatter =
-            format === 'Number' ? (value) => Number(value).toString() : hammer.format[format];
+            format === 'Number' ? (number) => Number(number).toString() : hammer.format[format];
         const preparedValue = value === '' || value === null ? '' : formatter(value);
 
         return (
@@ -868,20 +849,3 @@ export class SetupModal extends Component {
         }
     }
 }
-
-const mapStateToProps = (state) => {
-    return {
-        setup: selectComponentNodesFiltersSetup(state),
-        mediumList: selectMediumListNoCache(state),
-        nodeTags: selectComponentNodesTags(state),
-        nodeRacks: selectComponentNodesRacks(state),
-        nodeStates: COMPONENTS_AVAILABLE_STATES,
-        stateValue: selectComponentNodesFilterSetupStateValue(state),
-    };
-};
-
-export default connect(mapStateToProps, {
-    applyPreset,
-    savePreset,
-    loadOptions: getComponentsNodesFilterOptions,
-})(SetupModal);
