@@ -1,21 +1,11 @@
 import React, {type ComponentType, useEffect} from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
 
 import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {CONSUMER_MODE} from '../../../../constants/navigation/tabs/consumer';
-import {loadConsumerStatus} from '../../../../store/actions/navigation/tabs/consumer/status';
-import {type RootState} from '../../../../store/reducers';
-import {
-    selectConsumerMode,
-    selectOwner,
-    selectPartitionCount,
-    selectQueueAgentHost,
-    selectReadDataWeightRate,
-    selectReadRowCountRate,
-    selectStatusError,
-} from '../../../../store/selectors/navigation/tabs/consumer';
+import {type TPerformanceCounters} from '../../../../store/reducers/navigation/tabs/queue/types';
+import {type YTError} from '../../../../types';
 
 import {QueueError} from '../Queue/QueueError';
 
@@ -37,7 +27,7 @@ const emptyView: {ExtraControls: ComponentType; View: ComponentType} = {
     View: () => null,
 };
 
-const Consumer: React.VFC<PropsFromRedux> = ({
+export const ConsumerBase: React.VFC<PropsFromRedux> = ({
     loadConsumerStatus,
     owner,
     partitionCount,
@@ -81,24 +71,13 @@ const Consumer: React.VFC<PropsFromRedux> = ({
         </ErrorBoundary>
     );
 };
-
-function mapStateToProps(state: RootState) {
-    return {
-        owner: selectOwner(state),
-        partitionCount: selectPartitionCount(state),
-        queueAgentHost: selectQueueAgentHost(state),
-        readDataWeightRate: selectReadDataWeightRate(state),
-        readRowCountRate: selectReadRowCountRate(state),
-        consumerMode: selectConsumerMode(state),
-        statusError: selectStatusError(state),
-    };
-}
-
-const mapDispatchToProps = {
-    loadConsumerStatus,
+type PropsFromRedux = {
+    owner: string | undefined;
+    partitionCount: number | undefined;
+    queueAgentHost: string | undefined;
+    readDataWeightRate: TPerformanceCounters;
+    readRowCountRate: TPerformanceCounters;
+    consumerMode: CONSUMER_MODE;
+    statusError: YTError | null;
+    loadConsumerStatus: () => void;
 };
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-export default connector(Consumer);
