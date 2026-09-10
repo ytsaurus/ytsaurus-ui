@@ -1,5 +1,4 @@
 import React, {Fragment} from 'react';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {Button, DropdownMenu, Icon} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
@@ -19,31 +18,13 @@ import ChartLink from '../../../../../../components/ChartLink/ChartLink';
 import {Yson} from '../../../../../../components/Yson/Yson';
 import Link from '../../../../../../containers/Link/Link';
 import CollapsibleSection from '../../../../../../components/CollapsibleSection/CollapsibleSection';
-
-import {
-    getCompetitiveJobs,
-    getJobs,
-    hideInputPaths,
-    showInputPaths,
-    showJobAttributesModal,
-} from '../../../../../../store/actions/operations/jobs';
-import {promptAction, showErrorModal} from '../../../../../../store/actions/actions';
 import {performJobAction} from '../utils';
 import {LOADING_STATUS} from '../../../../../../constants/index';
 import {TEXT} from '../../../../../../utils/actions';
-import {getShowCompetitiveJobs} from '../../../../../../pages/operations/selectors';
-import {selectJobsOperationId} from '../../../../../../store/selectors/operations/jobs';
-import {
-    selectOperationId,
-    selectOperationTasksNames,
-} from '../../../../../../store/selectors/operations/operation';
-import {selectMergedUiSettings} from '../../../../../../store/selectors/global/cluster';
 import UIFactory from '../../../../../../UIFactory';
 import {StaleJobIcon} from '../StaleJobIcon';
 
 import JobTemplate from './JobTemplate';
-import './OperationJobsTable.scss';
-import {UI_COLLAPSIBLE_SIZE} from '../../../../../../constants/global';
 import {JobDetails} from './JobDetails';
 import EllipsisIcon from '@gravity-ui/icons/svgs/ellipsis.svg';
 import {StatusInfo} from './StatusInfo';
@@ -51,7 +32,7 @@ import i18n from './i18n';
 
 const block = cn('operation-detail-jobs');
 
-class OperationJobsTable extends React.Component {
+export class OperationJobsTableBase extends React.Component {
     static propTypes = {
         isLoading: PropTypes.bool.isRequired,
         // from connect
@@ -560,40 +541,3 @@ class OperationJobsTable extends React.Component {
         );
     }
 }
-
-function mapStateToProps(state, props) {
-    const {operations, global} = state;
-    const {cluster, login} = global;
-    const showCompetitiveJobs = getShowCompetitiveJobs(state);
-    const taskNamesNumber = selectOperationTasksNames(state)?.length;
-    const jobsOperationId = selectJobsOperationId(state);
-    const operationId = selectOperationId(state);
-    const {jobs, job, competitiveJobs, inputPaths} = operations.jobs;
-    const uiSettings = selectMergedUiSettings(state);
-    return {
-        jobs: operationId !== jobsOperationId ? [] : jobs,
-        job,
-        competitiveJobs,
-        showCompetitiveJobs,
-        inputPaths,
-        cluster,
-        login,
-        operationId,
-        collapsibleSize: UI_COLLAPSIBLE_SIZE,
-        isLoading: props.isLoading || operationId !== jobsOperationId,
-        taskNamesNumber,
-        uiSettings,
-    };
-}
-
-const mapDispatchToProps = {
-    showJobAttributesModal,
-    showInputPaths,
-    hideInputPaths,
-    showErrorModal,
-    promptAction,
-    getJobs,
-    getCompetitiveJobs,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(OperationJobsTable);
