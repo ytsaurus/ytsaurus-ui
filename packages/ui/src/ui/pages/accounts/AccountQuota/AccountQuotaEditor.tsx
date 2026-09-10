@@ -10,9 +10,6 @@ import {SelectSingle} from '../../../components/Select/Select';
 
 import ypath from '../../../common/thor/ypath';
 
-import {selectActiveAccount} from '../../../store/selectors/accounts/accounts';
-import {useDispatch, useSelector} from '../../../store/redux-hooks';
-
 import {
     ALLOW_CHILDREN_LIMIT_OVERCOMMIT,
     RECURSIVE_RESOURCES_USAGE_PREFIX,
@@ -20,26 +17,20 @@ import {
     RESOURCES_USAGE_PREFIX,
     TOTAL_CHILDREN_RESOURCE_LIMIT,
 } from '../../../constants/accounts';
-import {type AccountQuotaParams, setAccountQuota} from '../../../store/actions/accounts/editor-ts';
+import {type AccountQuotaParams} from '../../../store/actions/accounts/editor-ts';
 import {
     ACCOUNT_RESOURCE_TYPES_DESCRIPTION,
     type AccountResourceNameType,
     ROOT_ACCOUNT_NAME,
 } from '../../../constants/accounts/accounts';
 import {ProgressStackByTreeItem} from '../tabs/general/ProgressStack';
-import {
-    type AccountsTree,
-    selectAccountsTree,
-    selectEditableAccountQuotaSources,
-} from '../../../store/selectors/accounts/accounts-ts';
+import {type AccountsTree} from '../../../store/selectors/accounts/accounts-ts';
 
 import i18n from './i18n';
 
-import './AccountQuota.scss';
-
 const block = cn('account-quota');
 
-interface Props {
+export interface Props {
     title: string;
     currentAccount: string;
     hardLimit?: number;
@@ -59,7 +50,7 @@ interface State {
     showEditor?: boolean;
 }
 
-class AccountQuotaEditor extends React.Component<Props & ReduxProps, State> {
+export class AccountQuotaEditor extends React.Component<Props & ReduxProps, State> {
     override state: State = {};
 
     override render() {
@@ -200,30 +191,3 @@ class AccountQuotaEditor extends React.Component<Props & ReduxProps, State> {
         return allowChildrenOverCommit ? total : usage + totalChildrenLimit;
     }
 }
-
-function AccountQuota(props: Props) {
-    const dispatch = useDispatch();
-    const activeAccount = useSelector(selectActiveAccount);
-    const accountsTree = useSelector(selectAccountsTree);
-
-    const handleSetQuota = React.useCallback(
-        (params: AccountQuotaParams) => {
-            dispatch(setAccountQuota(params));
-        },
-        [dispatch],
-    );
-
-    const sources = useSelector(selectEditableAccountQuotaSources);
-
-    return (
-        <AccountQuotaEditor
-            {...props}
-            activeAccount={activeAccount}
-            accountsTree={accountsTree}
-            setAccountQuota={handleSetQuota}
-            sources={sources}
-        />
-    );
-}
-
-export default React.memo(AccountQuota);
