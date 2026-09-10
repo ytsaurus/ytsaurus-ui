@@ -191,8 +191,8 @@ type Predicates = {
 const selectRackPredicate = createSelector(
     [selectSetupFiltersRaw, selectComponentNodesIndexByRack],
     (setupFilters, nodesByRack) => {
-        const {rack} = setupFilters.default;
-        if ('string' !== typeof rack && rack.selected?.[0] === UNAWARE) {
+        const rackFilter = setupFilters.default.rack;
+        if ('string' !== typeof rackFilter && rackFilter.selected?.[0] === UNAWARE) {
             return ({rack}: {rack?: string}) => rack === undefined;
         }
         return createNodeTagPredicate<'rack'>(setupFilters.default.rack, nodesByRack, (node) => [

@@ -34,7 +34,7 @@ const block = cn('table-sort-modal');
 export default function TableSortModal() {
     const login = useSelector(selectCurrentUserName);
     const visible = useSelector(selectNavigationTableSortVisible);
-    const paths = useSelector(selectNavigationTableSortPaths);
+    const inputPaths = useSelector(selectNavigationTableSortPaths);
     const suggestError = useSelector(selectNavigationTableSortError);
     const suggestColumns = useSelector(selectNavigationTableSortSuggestColumns);
     const attributeValues = useSelector(selectNavigationTableAttributesValues);
@@ -96,8 +96,8 @@ export default function TableSortModal() {
         [dispatch],
     );
 
-    const title = paths?.length > 1 ? i18n('title_sort-tables') : i18n('title_sort-table');
-    const outputPath = paths?.length === 1 ? paths[0] : undefined;
+    const title = inputPaths?.length > 1 ? i18n('title_sort-tables') : i18n('title_sort-table');
+    const outputPath = inputPaths?.length === 1 ? inputPaths[0] : undefined;
 
     const errorFields: Array<DialogField<FormValues>> = [];
     if (error) {
@@ -131,7 +131,7 @@ export default function TableSortModal() {
                     onAdd={handleAdd}
                     onClose={handleClose}
                     initialValues={{
-                        paths,
+                        paths: inputPaths,
                         outputPath,
                         columns: [],
                         poolTree: [defaultPoolTree],

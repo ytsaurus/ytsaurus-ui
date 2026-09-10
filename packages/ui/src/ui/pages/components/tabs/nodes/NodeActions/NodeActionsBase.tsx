@@ -37,7 +37,7 @@ export class NodeActionsBase extends React.Component<NodeActionsProps> {
 
                 <ChartLink
                     url={url}
-                    wrapContent={(node) => (
+                    wrapContent={(content) => (
                         <Button
                             tooltipProps={{
                                 placement: 'bottom',
@@ -48,7 +48,7 @@ export class NodeActionsBase extends React.Component<NodeActionsProps> {
                             size="m"
                             withTooltip
                         >
-                            {node}
+                            {content}
                         </Button>
                     )}
                 />

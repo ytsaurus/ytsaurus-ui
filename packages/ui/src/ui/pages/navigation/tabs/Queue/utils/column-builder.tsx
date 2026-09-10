@@ -56,14 +56,14 @@ export function error<T>(
     return {
         name,
         render({row}) {
-            const error = getter(row);
-            if (!error) return null;
+            const rowError = getter(row);
+            if (!rowError) return null;
 
             return (
                 <WarningIcon
                     className={className}
                     color="danger"
-                    hoverContent={<HoverContent error={error} />}
+                    hoverContent={<HoverContent error={rowError} />}
                 >
                     {i18n('alert_error')}
                 </WarningIcon>
@@ -73,11 +73,11 @@ export function error<T>(
     };
 }
 
-function HoverContent({error}: {error: YTError}) {
+function HoverContent(props: {error: YTError}) {
     return (
         <span>
-            {error.message ?? i18n('alert_error')}{' '}
-            <ClickableText onClick={() => showErrorPopup(error)}>
+            {props.error.message ?? i18n('alert_error')}{' '}
+            <ClickableText onClick={() => showErrorPopup(props.error)}>
                 {i18n('action_details')}
             </ClickableText>
         </span>
@@ -88,8 +88,8 @@ export function host<T>(name: string, getter: (row: T) => string, classNames: st
     return {
         name,
         render({row}) {
-            const host = getter(row);
-            return <Host asTabletNode address={host} copyBtnClassName={classNames} />;
+            const address = getter(row);
+            return <Host asTabletNode address={address} copyBtnClassName={classNames} />;
         },
         sortAccessor: getter,
     };

@@ -6,12 +6,12 @@ import './MetaData.scss';
 import {ClipboardButton} from '@ytsaurus/components';
 import hammer from '../../../../../../common/hammer';
 import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
+import durationPlugin from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import i18n from './i18n';
 
 dayjs.extend(relativeTime);
-dayjs.extend(duration);
+dayjs.extend(durationPlugin);
 
 const block = cn('yt-event-timeline-meta');
 

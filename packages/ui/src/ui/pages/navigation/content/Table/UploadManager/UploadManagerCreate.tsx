@@ -152,8 +152,8 @@ class UploadManagerCreateImpl extends React.Component<Props, State> {
                                 errorMessage: i18n('alert_name-already-exists'),
                             }),
                         },
-                        onChange: (name: string | Array<string> | undefined) => {
-                            this.setState({name: name as string});
+                        onChange: (nextName: string | Array<string> | undefined) => {
+                            this.setState({name: nextName as string});
                         },
                     },
                     {

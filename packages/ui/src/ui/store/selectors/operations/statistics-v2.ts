@@ -152,11 +152,11 @@ export const selectOperationStatisticsFilteredTree = createSelector(
         return filterFieldTree(
             tree ?? {},
             isStatisticItem,
-            (path, tree) => {
+            (path, node) => {
                 if (checkByName(path)) {
                     return true;
                 }
-                return tree && fieldTreeSome(tree, isStatisticItem, checkByName, path.slice());
+                return node && fieldTreeSome(node, isStatisticItem, checkByName, path.slice());
             },
             (items) => {
                 return filter_(items, ({tags: {job_type, pool_tree}}) => {

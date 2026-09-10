@@ -202,12 +202,12 @@ const connector = connect(mapStateToProps);
 const JobSizesConnected = connector(JobSizes);
 
 export default function JobSizesWithRum(props: {className?: string}) {
-    const loadState = useSelector(selectOperationDetailsLoadingStatus);
+    const detailsLoadState = useSelector(selectOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.OPERATION_TAB_JOB_SIZES,
         additionalStartType: RumMeasureTypes.OPERATION,
-        startDeps: [loadState],
+        startDeps: [detailsLoadState],
         allowStart: ([loadState]) => {
             return !isFinalLoadingStatus(loadState);
         },
@@ -215,7 +215,7 @@ export default function JobSizesWithRum(props: {className?: string}) {
 
     useRumMeasureStop({
         type: RumMeasureTypes.OPERATION_TAB_JOB_SIZES,
-        stopDeps: [loadState],
+        stopDeps: [detailsLoadState],
         allowStop: ([loadState]) => {
             return isFinalLoadingStatus(loadState);
         },

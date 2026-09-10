@@ -32,12 +32,12 @@ export function editConfig(
 
         const configItems = [...(config?.items || [])];
 
-        const generateConfig = (configType: ItemsTypes, data: any) =>
+        const generateConfig = (configType: ItemsTypes, itemData: any) =>
             DashKit.setItem({
                 item: {
                     namespace: 'dashboard',
                     type: configType,
-                    data: {...defaultDashboardItems[configType].data, ...data},
+                    data: {...defaultDashboardItems[configType].data, ...itemData},
                 },
                 config,
             });

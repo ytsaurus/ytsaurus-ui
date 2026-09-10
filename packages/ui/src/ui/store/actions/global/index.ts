@@ -57,8 +57,8 @@ export function loadUsersIfNotLoaded(): ThunkAction<any, RootState, any, any> {
             return Promise.resolve();
         }
 
-        const users = selectGlobalUsers(getState());
-        if (users?.length) {
+        const globalUsers = selectGlobalUsers(getState());
+        if (globalUsers?.length) {
             return Promise.resolve();
         }
 

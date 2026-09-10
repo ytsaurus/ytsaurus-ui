@@ -21,8 +21,8 @@ export function IncarnationsToolbarTemplate(props: IncarnationsToolbarTemplatePr
 
     const idFilter = useSelector(getIdFilter);
 
-    const handleIdFilterChange = (idFilter: string) => {
-        dispatch(setIdFilter({idFilter}));
+    const handleIdFilterChange = (nextIdFilter: string) => {
+        dispatch(setIdFilter({idFilter: nextIdFilter}));
     };
 
     return (

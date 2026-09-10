@@ -5,9 +5,9 @@ export function makeClusterSelectOptionsSameEnv(cluster: string) {
         .filter(([_, value]) => value.environment === YT.clusters[cluster].environment)
         .map(([key]) => key);
     return clusters
-        .map((cluster) => ({
-            value: cluster,
-            content: cluster,
+        .map((clusterId) => ({
+            value: clusterId,
+            content: clusterId,
         }))
         ?.sort((a, b) => a.value.localeCompare(b.value));
 }

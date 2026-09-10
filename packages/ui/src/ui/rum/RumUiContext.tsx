@@ -183,24 +183,28 @@ function createRumContext(page?: string): RumUiContextValue {
             const time = rumGetTime();
             const event = _events[type];
             if (event) {
-                // eslint-disable-next-line no-shadow
-                const {start, type, page, additionalStartType} = event;
-                delete _events[type];
+                delete _events[event.type];
 
                 if (subType) {
-                    const withSubType = `${type}.${subType}`;
-                    rumDebugLog('CTX_STOP__MEASURE--', withSubType, time - start, _events);
-                    rumSendDelta('ui.' + withSubType, time - start, page);
+                    const withSubType = `${event.type}.${subType}`;
+                    rumDebugLog('CTX_STOP__MEASURE--', withSubType, time - event.start, _events);
+                    rumSendDelta('ui.' + withSubType, time - event.start, event.page);
                 }
-                rumDebugLog('CTX_STOP__MEASURE--', type, time - start, _events);
-                rumSendDelta('ui.' + type, time - start, page);
+                rumDebugLog('CTX_STOP__MEASURE--', event.type, time - event.start, _events);
+                rumSendDelta('ui.' + event.type, time - event.start, event.page);
 
-                const addEvent = additionalStartType ? _events[additionalStartType] : undefined;
+                const addEvent = event.additionalStartType
+                    ? _events[event.additionalStartType]
+                    : undefined;
                 if (addEvent) {
-                    const {start, type, page} = addEvent;
-                    delete _events[type];
-                    rumDebugLog('CTX_STOP__MEASURE--', type, time - start, _events);
-                    rumSendDelta('ui.' + type, time - start, page);
+                    delete _events[addEvent.type];
+                    rumDebugLog(
+                        'CTX_STOP__MEASURE--',
+                        addEvent.type,
+                        time - addEvent.start,
+                        _events,
+                    );
+                    rumSendDelta('ui.' + addEvent.type, time - addEvent.start, addEvent.page);
                 }
 
                 rumFinalizeSpa();
