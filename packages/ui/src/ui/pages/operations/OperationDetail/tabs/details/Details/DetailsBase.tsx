@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
-import {useSelector} from '../../../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import AlertEvents from '../../../../../../components/AlertEvents/AlertEvents';
@@ -10,22 +8,13 @@ import Button from '../../../../../../components/Button/Button';
 import {YTErrorBlock} from '../../../../../../containers/Block/Block';
 import Icon from '../../../../../../components/Icon/Icon';
 import {Flex, Switch} from '@gravity-ui/uikit';
-
-import {type RootState} from '../../../../../../store/reducers';
-import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operations';
-import {selectCluster} from '../../../../../../store/selectors/global';
+import {type AlertInfo} from '../../../../../../components/AlertEvents/AlertEvents';
 import {
-    selectIsOperationInGpuTree,
-    selectOperationAlertEvents,
-    selectOperationDetailsLoadingStatus,
-} from '../../../../../../store/selectors/operations/operation';
-
-import {useRumMeasureStop} from '../../../../../../rum/RumUiContext';
-import {RumMeasureTypes} from '../../../../../../rum/rum-measure-types';
-import {isFinalLoadingStatus} from '../../../../../../utils/utils';
-import {useAppRumMeasureStart} from '../../../../../../rum/rum-app-measures';
-
-import {UI_COLLAPSIBLE_SIZE} from '../../../../../../constants/global';
+    type AlertEvent,
+    type RuntimeItem,
+} from '../../../../../../store/reducers/operations/detail';
+import {type DetailedOperationSelector} from '../../../../selectors';
+import {type YTError} from '../../../../../../types';
 
 import DataFlow from '../DataFlow/DataFlow';
 import Specification from '../Specification/Specification';
@@ -35,13 +24,32 @@ import Tasks from '../Tasks/Tasks';
 
 import i18n from './i18n';
 
-import './Details.scss';
-
 const block = cn('operation-details');
 
-type ReduxProps = ConnectedProps<typeof connector>;
+type ReduxProps = {
+    collapsibleSize: 'ss';
+    alertEvents: AlertInfo[];
+    isVanillaGpuOperation: boolean | undefined;
+    isOperationInGpuTree: boolean | undefined;
+    alert_events: AlertEvent[];
+    runtime?: RuntimeItem[] | undefined;
+    specification?: unknown;
+    resources?: unknown[] | undefined;
+    error?: YTError | undefined;
+    events?: unknown[] | undefined;
+    intermediateResources?: unknown;
+    cluster: string;
+    operation: DetailedOperationSelector;
+    treeConfigs:
+        | {
+              tree: string;
+              config: {main_resource?: 'gpu'; resource_limits?: Record<string, number>};
+          }[]
+        | undefined;
+    showEditPoolsWeightsModal(operation: DetailedOperationSelector, editable?: boolean): void;
+};
 
-class Details extends Component<ReduxProps> {
+export class DetailsBase extends Component<ReduxProps> {
     override state = {
         isAbsoluteValue: true,
     };
@@ -244,51 +252,4 @@ class Details extends Component<ReduxProps> {
             </div>
         );
     }
-}
-
-const mapStateToProps = (state: RootState) => {
-    const operation = state.operations.detail.operation;
-    const isOperationInGpuTree = selectIsOperationInGpuTree(state);
-
-    return {
-        cluster: selectCluster(state),
-        operation,
-        treeConfigs: state.operations.detail.treeConfigs,
-        ...state.operations.detail.details,
-        collapsibleSize: UI_COLLAPSIBLE_SIZE,
-        alertEvents: selectOperationAlertEvents(state),
-        isVanillaGpuOperation: operation.type === 'vanilla' && isOperationInGpuTree,
-        isOperationInGpuTree,
-    };
-};
-
-const mapDispatchToProps = {
-    showEditPoolsWeightsModal,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-const DetailsConnected = connector(Details);
-
-export default function DetailsWithRum() {
-    const loadState = useSelector(selectOperationDetailsLoadingStatus);
-
-    useAppRumMeasureStart({
-        type: RumMeasureTypes.OPERATION_TAB_DETAILS,
-        additionalStartType: RumMeasureTypes.OPERATION,
-        startDeps: [loadState],
-        allowStart: ([loadState]) => {
-            return !isFinalLoadingStatus(loadState);
-        },
-    });
-
-    useRumMeasureStop({
-        type: RumMeasureTypes.OPERATION_TAB_DETAILS,
-        stopDeps: [loadState],
-        allowStop: ([loadState]) => {
-            return isFinalLoadingStatus(loadState);
-        },
-    });
-
-    return <DetailsConnected />;
 }
