@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import {type ResolveThunks, connect} from 'react-redux';
 // @ts-expect-error
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
-import {compose} from 'redux';
 import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
@@ -15,36 +13,49 @@ import {Checkbox, Loader} from '@gravity-ui/uikit';
 import {YTErrorBlock} from '../../../../../containers/Block/Block';
 import Modal from '../../../../../components/Modal/Modal';
 import Label from '../../../../../components/Label';
-
-import {
-    closeDeleteModal,
-    deleteObject,
-    deleteObjects,
-    getRealPath,
-    getRealPaths,
-    togglePermanentlyDelete,
-} from '../../../../../store/actions/navigation/modals/delete-object';
-import withScope from '../../../../../hocs/components/Modal/withScope';
-import {selectIsTrashPath} from '../../../../../store/selectors/navigation';
 import hammer from '../../../../../common/hammer';
-
-import './DeleteObjectModal.scss';
 import i18n from './i18n';
 import UIFactory from '../../../../../UIFactory';
-import {type RootState} from '../../../../../store/reducers';
-import {type DeleteObjectItem} from '../../../../../store/reducers/navigation/modals/delete-object';
+import {
+    type DeleteObjectItem,
+    type MulipleInfoItem,
+    type ResourceUsage,
+} from '../../../../../store/reducers/navigation/modals/delete-object';
+import {type YTError} from '../../../../../types';
 
 const block = cn('navigation-delete-object-modal');
 
 type OwnProps = {};
 
-type StateProps = ReturnType<typeof mapStateToProps>;
+type StateProps = {
+    error: boolean;
+    errorData: YTError;
+    visible: boolean;
+    permanently: boolean;
+    item: DeleteObjectItem | DeleteObjectItem[];
+    loading: boolean;
+    loadingRealPath: boolean;
+    errorRealPath: boolean;
+    errorDataRealPath: YTError;
+    realPath: string;
+    multipleInfo: MulipleInfoItem[];
+    resourceUsage: ResourceUsage;
+    multipleMode: boolean;
+    inTrash: boolean;
+};
 
-type DispatchProps = ResolveThunks<typeof mapDispatchToProps>;
+type DispatchProps = {
+    getRealPath: (args_0: {path: string; type: string}) => void;
+    deleteObject: () => void;
+    deleteObjects: () => void;
+    getRealPaths: (items: {path: string}[]) => void;
+    closeDeleteModal: () => void;
+    togglePermanentlyDelete: () => void;
+};
 
 type DeleteObjectModalProps = OwnProps & StateProps & DispatchProps;
 
-export class DeleteObjectModal extends Component<DeleteObjectModalProps> {
+export class DeleteObjectModalBase extends Component<DeleteObjectModalProps> {
     override componentDidUpdate(prevProps: DeleteObjectModalProps) {
         const {visible, item, getRealPath, getRealPaths, multipleMode} = this.props;
 
@@ -257,53 +268,3 @@ export class DeleteObjectModal extends Component<DeleteObjectModalProps> {
         );
     }
 }
-
-const mapStateToProps = (state: RootState) => {
-    const {
-        error,
-        errorData,
-        loading,
-        visible,
-        permanently,
-        item,
-        loadingRealPath,
-        errorRealPath,
-        errorDataRealPath,
-        realPath,
-        resourceUsage,
-        multipleInfo,
-        multipleMode,
-    } = state.navigation.modals.deleteObject;
-    const inTrash = selectIsTrashPath(state);
-
-    return {
-        error,
-        errorData,
-        visible,
-        permanently,
-        item,
-        loading,
-        loadingRealPath,
-        errorRealPath,
-        errorDataRealPath,
-        realPath,
-        multipleInfo,
-        resourceUsage,
-        multipleMode,
-        inTrash,
-    };
-};
-
-const mapDispatchToProps = {
-    getRealPath,
-    deleteObject,
-    deleteObjects,
-    getRealPaths,
-    closeDeleteModal,
-    togglePermanentlyDelete,
-};
-
-export default compose(
-    connect(mapStateToProps, mapDispatchToProps),
-    withScope('delete-object-modal'),
-)(DeleteObjectModal);
