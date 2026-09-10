@@ -1,0 +1,171 @@
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import cn from 'bem-cn-lite';
+
+import map_ from 'lodash/map';
+
+import Tabs from '../../../components/Tabs/Tabs';
+import Link from '../../../containers/Link/Link';
+import {LinksTab} from '../../../constants/dashboard';
+import {Page} from '../../../constants/index';
+import hammer from '../../../common/hammer';
+
+import i18n from './i18n';
+import {genAccountsUrl} from '../../accounts/AccountLink';
+
+const linksBlock = cn('dashboard-links');
+const listBlock = cn('elements-list');
+
+const TEXT = {
+    get titlePaths() {
+        return i18n('title_paths');
+    },
+    get titleAccounts() {
+        return i18n('title_accounts');
+    },
+    get titleLastVisited() {
+        return i18n('title_last-visited');
+    },
+    get titlePopular() {
+        return i18n('title_popular');
+    },
+    get titleFavourite() {
+        return i18n('title_favourite');
+    },
+};
+
+const FavouriteItemType = PropTypes.shape({
+    path: PropTypes.string.isRequired,
+});
+const PopularItemType = PropTypes.shape({
+    path: PropTypes.string.isRequired,
+    count: PropTypes.number.isRequired,
+});
+
+export class LinksBase extends Component {
+    static propTypes = {
+        // from connect
+        activeTab: PropTypes.string.isRequired,
+
+        lastVisited: PropTypes.arrayOf(PopularItemType).isRequired,
+        popular: PropTypes.arrayOf(PopularItemType).isRequired,
+        favourites: PropTypes.arrayOf(FavouriteItemType).isRequired,
+
+        lastVisitedAccounts: PropTypes.arrayOf(PopularItemType).isRequired,
+        popularAccounts: PropTypes.arrayOf(PopularItemType).isRequired,
+        favouriteAccounts: PropTypes.arrayOf(FavouriteItemType).isRequired,
+
+        changeActiveTab: PropTypes.func.isRequired,
+
+        // from hoc
+        cluster: PropTypes.string.isRequired,
+    };
+
+    renderLink(defaultUrl, path) {
+        return (
+            <li key={path} className={linksBlock('item')}>
+                <Link
+                    className="elements-ellipsis"
+                    url={defaultUrl + encodeURIComponent(path)}
+                    theme="primary"
+                    routed
+                >
+                    {path}
+                </Link>
+            </li>
+        );
+    }
+
+    renderLinks(listName, links, defaultUrl) {
+        const {activeTab} = this.props;
+        const content =
+            links.length > 0 ? (
+                <ul className={listBlock({type: 'unstyled'}, linksBlock('list'))}>
+                    {map_(links, ({path}) => this.renderLink(defaultUrl, path))}
+                </ul>
+            ) : (
+                <span className={linksBlock('list', {empty: 'yes'})}>
+                    {i18n('alert_no-items', {
+                        activeTab: hammer.format['ReadableField'](activeTab),
+                        listName,
+                    })}
+                </span>
+            );
+
+        return (
+            <div className={linksBlock('tab-content-item')}>
+                <div className={linksBlock('tab-content-item-header')}>{listName}</div>
+                {content}
+            </div>
+        );
+    }
+
+    renderLists(paths, accounts) {
+        const {cluster} = this.props;
+        const navigationUrl = `/${cluster}/${Page.NAVIGATION}?path=`;
+        const accountsUrl = genAccountsUrl(cluster, '');
+
+        return (
+            <React.Fragment>
+                {paths && this.renderLinks(TEXT.titlePaths, paths, navigationUrl)}
+                {accounts && this.renderLinks(TEXT.titleAccounts, accounts, accountsUrl)}
+            </React.Fragment>
+        );
+    }
+
+    renderTabContent() {
+        const {
+            activeTab,
+            lastVisited,
+            popular,
+            favourites,
+            lastVisitedAccounts,
+            popularAccounts,
+            favouriteAccounts,
+        } = this.props;
+
+        switch (activeTab) {
+            case LinksTab.LAST_VISITED:
+                return this.renderLists(lastVisited, lastVisitedAccounts);
+            case LinksTab.POPULAR:
+                return this.renderLists(popular, popularAccounts);
+            case LinksTab.FAVOURITES:
+                return this.renderLists(favourites, favouriteAccounts);
+        }
+    }
+
+    renderTabs() {
+        const {changeActiveTab, activeTab} = this.props;
+
+        return (
+            <Tabs
+                size="m"
+                active={activeTab}
+                onTabChange={changeActiveTab}
+                className={linksBlock('tabs')}
+                items={[
+                    {
+                        value: LinksTab.LAST_VISITED,
+                        text: TEXT.titleLastVisited,
+                        show: true,
+                    },
+                    {value: LinksTab.POPULAR, text: TEXT.titlePopular, show: true},
+                    {
+                        value: LinksTab.FAVOURITES,
+                        text: TEXT.titleFavourite,
+                        show: true,
+                    },
+                ]}
+            />
+        );
+    }
+
+    render() {
+        return (
+            <div className={linksBlock()}>
+                {this.renderTabs()}
+                <div className={linksBlock('tab-content')}>{this.renderTabContent()}</div>
+            </div>
+        );
+    }
+}
