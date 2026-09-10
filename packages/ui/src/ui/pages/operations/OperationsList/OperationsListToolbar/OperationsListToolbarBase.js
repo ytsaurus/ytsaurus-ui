@@ -1,5 +1,4 @@
 import React from 'react';
-import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
@@ -7,18 +6,12 @@ import {StickyContainer} from '../../../../components/StickyContainer/StickyCont
 import i18n from './i18n';
 
 import map_ from 'lodash/map';
-
-import {selectAllUserNames} from '../../../../store/selectors/global';
 import OperationsTextFilter from './OperationsTextFilter';
 import OperationsArchiveFilter from './OperationsArchiveFilter';
 import OperationsSelectFilter from './OperationsSelectFilter';
 
 import OperationsListPaginator from './OperationsListPaginator';
 import OperationsFilterPresets from './OperationsFilterPresets';
-import {
-    toggleSaveFilterPresetDialog,
-    updateFilter,
-} from '../../../../store/actions/operations/list';
 
 import {
     OperationsAccessibleForFilter,
@@ -26,18 +19,15 @@ import {
     OperationsListPoolTreeSuggestFilter,
     OperationsListUserSuggestFilter,
 } from '../../../../pages/operations/OperationsList/OperationsListToolbar/OperationsListSuggestFilters';
-import {selectOperationsListFixedStartedByFilter_FOR_YTFRONT_2838} from '../../../../store/selectors/operations';
 import Button, {SelectButton} from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 import {PoolTreesLoader} from '../../../../hooks/global-pool-trees';
-
-import './OperationsListToolbar.scss';
 
 const block = cn('operations-list');
 const tbBlock = cn('elements-toolbar');
 const tbComp = tbBlock('component');
 
-class OperationsListToolbar extends React.PureComponent {
+export class OperationsListToolbarBase extends React.PureComponent {
     static propTypes = {
         // from connect
         updateFilter: PropTypes.func.isRequired,
@@ -262,42 +252,3 @@ class OperationsListToolbar extends React.PureComponent {
         );
     }
 }
-
-function OperationsListToolbarHooked({children}) {
-    const subjects = useSelector(selectAllUserNames);
-    const {failedJobs} = useSelector((state) => state.operations.list.filters) || {};
-    const fixedStartedByFilter = useSelector(
-        selectOperationsListFixedStartedByFilter_FOR_YTFRONT_2838,
-    );
-
-    const dispatch = useDispatch();
-    const handleUpdateFilter = React.useCallback(
-        (...args) => {
-            dispatch(updateFilter(...args));
-        },
-        [dispatch],
-    );
-
-    const handleToggleSaveFilterPresetDialog = React.useCallback(
-        (...args) => {
-            dispatch(toggleSaveFilterPresetDialog(...args));
-        },
-        [dispatch],
-    );
-
-    return (
-        <OperationsListToolbar
-            {...{
-                subjects,
-                failedJobsFilter: failedJobs,
-                fixedStartedByFilter,
-            }}
-            updateFilter={handleUpdateFilter}
-            toggleSaveFilterPresetDialog={handleToggleSaveFilterPresetDialog}
-        >
-            {children}
-        </OperationsListToolbar>
-    );
-}
-
-export default React.memo(OperationsListToolbarHooked);
