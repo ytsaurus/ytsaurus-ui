@@ -1,5 +1,4 @@
 import React, {type ComponentType, useEffect} from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../../store/redux-hooks';
 
 import {Alerts} from '../../../../containers/Alerts/Alerts';
@@ -7,18 +6,9 @@ import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {QUEUE_MODE} from '../../../../constants/navigation/tabs/queue';
-import {loadQueueStatus} from '../../../../store/actions/navigation/tabs/queue/status';
-import {type RootState} from '../../../../store/reducers';
-import {
-    selectFamily,
-    selectPartitionCount,
-    selectQueueAgentHost,
-    selectQueueMode,
-    selectQueueStatusDataAlerts,
-    selectStatusError,
-    selectWriteDataWeightRate,
-    selectWriteRowCountRate,
-} from '../../../../store/selectors/navigation/tabs/queue';
+import {type TPerformanceCounters} from '../../../../store/reducers/navigation/tabs/queue/types';
+import {type YTError} from '../../../../types';
+import {selectQueueStatusDataAlerts} from '../../../../store/selectors/navigation/tabs/queue';
 
 import Meta from './Meta/Meta';
 import QueueToolbar from './Toolbar/Toolbar';
@@ -41,7 +31,7 @@ const VIEWS: Record<QUEUE_MODE, {ExtraControls: ComponentType; View: ComponentTy
     [QUEUE_MODE.EXPORTS]: {ExtraControls: ExportsExtraControls, View: Exports},
 };
 
-const Queue: React.VFC<PropsFromRedux> = ({
+export const QueueBase: React.VFC<PropsFromRedux> = ({
     loadQueueStatus,
     family,
     partitionCount,
@@ -86,24 +76,13 @@ const Queue: React.VFC<PropsFromRedux> = ({
         </ErrorBoundary>
     );
 };
-
-function mapStateToProps(state: RootState) {
-    return {
-        family: selectFamily(state),
-        partitionCount: selectPartitionCount(state),
-        queueAgentHost: selectQueueAgentHost(state),
-        writeDataWeightRate: selectWriteDataWeightRate(state),
-        writeRowCountRate: selectWriteRowCountRate(state),
-        queueMode: selectQueueMode(state),
-        statusError: selectStatusError(state),
-    };
-}
-
-const mapDispatchToProps = {
-    loadQueueStatus,
+type PropsFromRedux = {
+    family: string | undefined;
+    partitionCount: number | undefined;
+    queueAgentHost: string | undefined;
+    writeDataWeightRate: TPerformanceCounters;
+    writeRowCountRate: TPerformanceCounters;
+    queueMode: QUEUE_MODE;
+    statusError: YTError | null;
+    loadQueueStatus: () => void;
 };
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-export default connector(Queue);
