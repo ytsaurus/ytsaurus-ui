@@ -1,11 +1,7 @@
 import React, {useEffect} from 'react';
-import {connect} from 'react-redux';
 import {useSelector} from '../../../../store/redux-hooks';
 import PropTypes from 'prop-types';
-import {compose} from 'redux';
 import cn from 'bem-cn-lite';
-
-import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
 import DataTableWrapper from '../../../../pages/navigation/content/Table/DataTableWrapper/DataTableWrapper';
 import TableOverview from '../../../../pages/navigation/content/Table/TableOverview/TableOverview';
 import ColumnSelectorModal from '../../../../components/ColumnSelectorModal/ColumnSelectorModal';
@@ -17,44 +13,14 @@ import {YsonSettingsPropTypes} from '../../../../components/Yson/Yson';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 
 import {OVERVIEW_HEIGHT} from '../../../../constants/navigation/content/table';
-import {selectPath} from '../../../../store/selectors/navigation';
 import {HEADER_HEIGHT} from '../../../../constants/index';
-import {
-    abortAndReset,
-    closeColumnSelectorModal,
-    getTableData,
-    handleScreenChanged,
-    updateColumns,
-} from '../../../../store/actions/navigation/content/table/table';
-import {
-    selectAllColumns,
-    selectIsYqlTypesEnabled,
-    selectOffsetValue,
-    selectSrcColumns,
-    selectVisibleColumns,
-    selectVisibleRows,
-} from '../../../../store/selectors/navigation/content/table';
-import {
-    selectColumns,
-    selectIsDynamic,
-    selectKeyColumns,
-    selectNavigationTableLoadingState,
-    selectYqlTypes,
-} from '../../../../store/selectors/navigation/content/table-ts';
-import {selectCluster} from '../../../../store/selectors/global';
-import {selectTableYsonSettings} from '../../../../store/selectors/thor/unipika';
-import {useRumMeasureStop} from '../../../../rum/RumUiContext';
-import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
-import {isFinalLoadingStatus} from '../../../../utils/utils';
-
-import './Table.scss';
+import {selectIsYqlTypesEnabled} from '../../../../store/selectors/navigation/content/table';
 import TableColumnsPresetNotice from './TableOverview/TableColumnsPresetNotice';
-import {makeTableRumId} from '../../../../store/actions/navigation/content/table/table-rum-id';
 import i18n from './i18n';
 
 const block = cn('navigation-table');
 
-Table.columnsProps = PropTypes.arrayOf(
+TableBase.columnsProps = PropTypes.arrayOf(
     PropTypes.shape({
         name: PropTypes.string.isRequired,
         data: PropTypes.shape({
@@ -70,7 +36,7 @@ Table.columnsProps = PropTypes.arrayOf(
     }),
 );
 
-Table.propTypes = {
+TableBase.propTypes = {
     // from connect
     loading: PropTypes.bool.isRequired,
     loaded: PropTypes.bool.isRequired,
@@ -85,9 +51,9 @@ Table.propTypes = {
     isColumnSelectorOpen: PropTypes.bool.isRequired,
     visibleRows: PropTypes.arrayOf(PropTypes.object).isRequired,
 
-    columns: Table.columnsProps.isRequired,
-    allColumns: Table.columnsProps.isRequired,
-    srcColumns: Table.columnsProps.isRequired,
+    columns: TableBase.columnsProps.isRequired,
+    allColumns: TableBase.columnsProps.isRequired,
+    srcColumns: TableBase.columnsProps.isRequired,
     keyColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
 
     offsetValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -167,7 +133,7 @@ const renderTable = (props) => {
     );
 };
 
-function Table(props) {
+export function TableBase(props) {
     const {path, getTableData, abortAndReset, isSplit} = props;
     const isYqlV3Types = useSelector(selectIsYqlTypesEnabled);
 
@@ -206,81 +172,4 @@ function Table(props) {
             {isDynamic && <OffsetSelectorModal />}
         </div>
     );
-}
-
-const mapStateToProps = (state) => {
-    const {loading, loaded, error, errorData, isColumnSelectorOpen, isFullScreen} =
-        state.navigation.content.table;
-    const settings = selectTableYsonSettings(state);
-    const {isSplit} = state.global.splitScreen;
-
-    const path = selectPath(state);
-    const columns = selectColumns(state);
-    const yqlTypes = selectYqlTypes(state);
-    const isDynamic = selectIsDynamic(state);
-    const keyColumns = selectKeyColumns(state);
-    const allColumns = selectAllColumns(state);
-    const srcColumns = selectSrcColumns(state);
-    const visibleRows = selectVisibleRows(state);
-    const offsetValue = selectOffsetValue(state);
-    const visibleColumns = selectVisibleColumns(state);
-
-    return {
-        loading,
-        loaded,
-        error,
-        errorData,
-        columns,
-        keyColumns,
-        allColumns,
-        srcColumns,
-        visibleColumns,
-        isSplit,
-        path,
-        isDynamic,
-        visibleRows,
-        yqlTypes,
-        settings,
-        offsetValue,
-        isColumnSelectorOpen,
-        isFullScreen,
-    };
-};
-
-const mapDispatchToProps = {
-    updateColumns,
-    getTableData,
-    abortAndReset,
-    handleScreenChanged,
-    closeColumnSelectorModal,
-};
-
-const TableConnected = compose(connect(mapStateToProps, mapDispatchToProps))(Table);
-
-export default function TableWithRum() {
-    const loadState = useSelector(selectNavigationTableLoadingState);
-    const isDynamic = useSelector(selectIsDynamic);
-    const cluster = useSelector(selectCluster);
-
-    const measureId = makeTableRumId({cluster, isDynamic}).getMeasureId();
-
-    useAppRumMeasureStart({
-        type: measureId,
-        startDeps: [loadState, measureId],
-        allowStart: ([loadState]) => {
-            return !isFinalLoadingStatus(loadState);
-        },
-    });
-
-    useRumMeasureStop({
-        type: measureId,
-        stopDeps: [loadState, measureId],
-        sybType: isDynamic ? 'dynamic' : 'static',
-        allowStop: ([loadState]) => {
-            return isFinalLoadingStatus(loadState);
-        },
-    });
-
-    useDisableMaxContentWidth();
-    return <TableConnected />;
 }
