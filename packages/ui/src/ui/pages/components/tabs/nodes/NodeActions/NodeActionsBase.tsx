@@ -1,20 +1,19 @@
 import React from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
 
 import ClickableAttributesButton from '../../../../../components/AttributesButton/ClickableAttributesButton';
 import Button from '../../../../../components/Button/Button';
 import Icon from '../../../../../components/Icon/Icon';
 import ChartLink from '../../../../../components/ChartLink/ChartLink';
 
-import {selectCluster} from '../../../../../store/selectors/global';
-import {showNodeMaintenance} from '../../../../../store/actions/components/node-maintenance-modal';
-
 import UIFactory from '../../../../../UIFactory';
-import {type RootState} from '../../../../../store/reducers';
+import {type NodeMaintenanceState} from '../../../../../store/reducers/components/node-maintenance-modal';
 
-export type NodeActionsProps = {node: {host: string}} & ConnectedProps<typeof connector>;
+type NodeActionsProps = {node: {host: string}} & {
+    cluster: string;
+    showNodeMaintenance(params: Pick<NodeMaintenanceState, 'address' | 'component'>): void;
+};
 
-class NodeActions extends React.Component<NodeActionsProps> {
+export class NodeActionsBase extends React.Component<NodeActionsProps> {
     handleEditClick = () => {
         const {node, showNodeMaintenance} = this.props;
 
@@ -60,17 +59,3 @@ class NodeActions extends React.Component<NodeActionsProps> {
         );
     }
 }
-
-const mapStateToProps = (state: RootState) => {
-    return {
-        cluster: selectCluster(state),
-    };
-};
-
-const mapDispatchToProps = {
-    showNodeMaintenance,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(NodeActions);
