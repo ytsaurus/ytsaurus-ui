@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
@@ -7,26 +6,12 @@ import map_ from 'lodash/map';
 
 import Tabs from '../../../components/Tabs/Tabs';
 import Link from '../../../containers/Link/Link';
-
-import {changeActiveTab} from '../../../store/actions/dashboard/dashboad';
 import {LinksTab} from '../../../constants/dashboard';
 import {Page} from '../../../constants/index';
 import hammer from '../../../common/hammer';
-import {
-    selectFavouriteAccounts,
-    selectFavouritePaths,
-    selectLastVisitedAccounts,
-    selectLastVisitedPaths,
-    selectPopularAccounts,
-    selectPopularPaths,
-} from '../../../store/selectors/favourites';
 
 import i18n from './i18n';
-
-import './Links.scss';
 import {genAccountsUrl} from '../../accounts/AccountLink';
-import {selectCluster} from '../../../store/selectors/global';
-import {UI_TAB_SIZE} from '../../../constants/global';
 
 const linksBlock = cn('dashboard-links');
 const listBlock = cn('elements-list');
@@ -57,7 +42,7 @@ const PopularItemType = PropTypes.shape({
     count: PropTypes.number.isRequired,
 });
 
-class Links extends Component {
+export class LinksBase extends Component {
     static propTypes = {
         // from connect
         activeTab: PropTypes.string.isRequired,
@@ -184,21 +169,3 @@ class Links extends Component {
         );
     }
 }
-
-const mapStateToProps = (state) => {
-    const {activeTab} = state.dashboard;
-
-    return {
-        activeTab,
-        lastVisited: selectLastVisitedPaths(state),
-        popular: selectPopularPaths(state),
-        favourites: selectFavouritePaths(state),
-        lastVisitedAccounts: selectLastVisitedAccounts(state),
-        popularAccounts: selectPopularAccounts(state),
-        favouriteAccounts: selectFavouriteAccounts(state),
-        tabSize: UI_TAB_SIZE,
-        cluster: selectCluster(state),
-    };
-};
-
-export default connect(mapStateToProps, {changeActiveTab})(Links);
