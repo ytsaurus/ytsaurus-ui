@@ -1,32 +1,19 @@
 import React from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import Filter from '../../../../../../components/Filter/Filter';
-import ColumnSelector from '../../../../../../components/ColumnSelector/ColumnSelector';
-import RadioButton from '../../../../../../components/RadioButton/RadioButton';
-import {CONSUMER_RATE_MODE} from '../../../../../../constants/navigation/tabs/consumer';
+import Filter from '../../../../../../../components/Filter/Filter';
+import ColumnSelector from '../../../../../../../components/ColumnSelector/ColumnSelector';
+import RadioButton from '../../../../../../../components/RadioButton/RadioButton';
+import {CONSUMER_RATE_MODE} from '../../../../../../../constants/navigation/tabs/consumer';
 import {
-    changeConsumerPartitionIndex,
-    changeConsumerPartitionsColumns,
-    changeConsumerRateMode,
-    changeConsumerTimeWindow,
-} from '../../../../../../store/actions/navigation/tabs/consumer/filters';
-import {type RootState} from '../../../../../../store/reducers';
-import {type TPerformanceCounters} from '../../../../../../store/reducers/navigation/tabs/queue/types';
-import {
-    selectConsumerPartitionIndex,
-    selectConsumerPartitionsColumns,
-    selectConsumerRateMode,
-    selectConsumerTimeWindow,
-} from '../../../../../../store/selectors/navigation/tabs/consumer';
-import Button from '../../../../../../components/Button/Button';
-import Icon from '../../../../../../components/Icon/Icon';
-import Dropdown from '../../../../../../components/Dropdown/Dropdown';
-
-import './PartitionsExtraControls.scss';
-import {type PartitionColumn} from '../../../../../../store/reducers/navigation/tabs/consumer/filters';
-import i18n from './i18n';
+    type ConsumerPartitionsColumns,
+    type PartitionColumn,
+} from '../../../../../../../store/reducers/navigation/tabs/consumer/filters';
+import {type TPerformanceCounters} from '../../../../../../../store/reducers/navigation/tabs/queue/types';
+import Button from '../../../../../../../components/Button/Button';
+import Icon from '../../../../../../../components/Icon/Icon';
+import Dropdown from '../../../../../../../components/Dropdown/Dropdown';
+import i18n from '../i18n';
 
 const block = cn('consumer-partitions');
 
@@ -89,7 +76,7 @@ export function CompactColumnSelector<Names>({items, onChange}: CompactColumnSel
     );
 }
 
-const PartitionsExtraControls: React.VFC<Props> = ({
+export const PartitionsExtraControlsBase: React.VFC<Props> = ({
     consumerPartitionIndex,
     consumerRateMode,
     consumerTimeWindow,
@@ -126,24 +113,15 @@ const PartitionsExtraControls: React.VFC<Props> = ({
         </>
     );
 };
-
-function mapStateToProps(state: RootState) {
-    return {
-        consumerPartitionIndex: selectConsumerPartitionIndex(state),
-        consumerRateMode: selectConsumerRateMode(state),
-        consumerTimeWindow: selectConsumerTimeWindow(state),
-        partitionsColumns: selectConsumerPartitionsColumns(state),
-    };
-}
-
-const mapDispatchToProps = {
-    changeConsumerPartitionIndex,
-    changeConsumerRateMode,
-    changeConsumerTimeWindow,
-    changeConsumerPartitionsColumns,
+type PropsFromRedux = {
+    consumerPartitionIndex: string;
+    consumerRateMode: CONSUMER_RATE_MODE;
+    consumerTimeWindow: keyof TPerformanceCounters;
+    partitionsColumns: PartitionColumn<ConsumerPartitionsColumns>[];
+    changeConsumerPartitionIndex: (value: string) => void;
+    changeConsumerRateMode: (evt: React.ChangeEvent<HTMLInputElement>) => void;
+    changeConsumerTimeWindow: (evt: React.ChangeEvent<HTMLInputElement>) => void;
+    changeConsumerPartitionsColumns(data: {
+        items: Array<PartitionColumn<ConsumerPartitionsColumns>>;
+    }): void;
 };
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-export default connector(PartitionsExtraControls);
