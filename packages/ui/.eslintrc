@@ -52,6 +52,12 @@
             "env": {
                 "jest": true
             }
+        },
+        {
+            "files": ["*.js", "*.jsx"],
+            "rules": {
+                "no-shadow": "error"
+            }
         }
     ]
 }
