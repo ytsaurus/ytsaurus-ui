@@ -1,14 +1,9 @@
 import React, {Component, Fragment} from 'react';
-import {connect} from 'react-redux';
-import {useSelector} from '../../../store/redux-hooks';
 import PropTypes from 'prop-types';
 import hammer from '../../../common/hammer';
 import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
-
-import {selectCluster} from '../../../store/selectors/global';
-import {updateTitle} from '../../../store/actions/global';
 
 import {
     CopyObjectModal,
@@ -24,25 +19,7 @@ import Tabs from '../../../components/Tabs/Tabs';
 import {NavigationError} from './NavigationError';
 
 import {Tab} from '../../../constants/navigation';
-import {LOADING_STATUS} from '../../../constants/index';
-
-import {onTransactionChange, setMode, updateView} from '../../../store/actions/navigation';
-
-import {
-    selectError,
-    selectIdmSupport,
-    selectIsNavigationFinalLoadState,
-    selectLoadState,
-    selectParsedPath,
-    selectPath,
-    selectTransaction,
-    selectType,
-} from '../../../store/selectors/navigation';
-import {selectEffectiveMode, selectTabs} from '../../../store/selectors/navigation/navigation';
 import {NavigationPermissionsNotice} from './NavigationPermissionsNotice';
-import {useRumMeasureStop} from '../../../rum/RumUiContext';
-import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
-import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import AttributesEditor from '../modals/AttributesEditor';
 import RemoteCopyModal from '../modals/RemoteCopyModal';
 import TableEraseModal from '../modals/TableEraseModal';
@@ -53,15 +30,11 @@ import LinkToModal from '../modals/LinkToModal';
 import CreateACOModal from '../modals/CreateACOModal';
 import Button from '../../../components/Button/Button';
 import Icon from '../../../components/Icon/Icon';
-import {showNavigationAttributesEditor} from '../../../store/actions/navigation/modals/attributes-editor';
-import {UI_TAB_SIZE} from '../../../constants/global';
 import {CellPreviewModal} from '../../../containers/CellPreviewModal/CellPreviewModal';
 import {OpenQueryButtonsContent} from '../../../containers/OpenQueryButtons/OpenQueryButtons';
 import {UpdateAccessLogAvailability} from '../../../pages/navigation/tabs/AccessLog/UpdateAccessLogAvailability/UpdateAccessLogAvailability';
 
 import i18n from './i18n';
-
-import './Navigation.scss';
 
 const block = cn('navigation');
 
@@ -87,7 +60,7 @@ function renderModals() {
     );
 }
 
-class Navigation extends Component {
+export class NavigationBase extends Component {
     static propTypes = {
         // from connect
         cluster: PropTypes.string.isRequired,
@@ -151,11 +124,11 @@ class Navigation extends Component {
     get items() {
         const {tabs, setMode} = this.props;
 
-        return tabs.map((tab) => {
-            if (tab.hotkey) {
+        return tabs.map((item) => {
+            if (item.hotkey) {
                 return {
-                    ...tab,
-                    hotkey: tab.hotkey.map(({keys, tab, scope}) => {
+                    ...item,
+                    hotkey: item.hotkey.map(({keys, tab, scope}) => {
                         return {
                             keys,
                             scope,
@@ -165,7 +138,7 @@ class Navigation extends Component {
                 };
             }
 
-            return tab;
+            return item;
         });
     }
 
@@ -283,66 +256,4 @@ class Navigation extends Component {
             </ErrorBoundary>
         );
     }
-}
-
-function mapStateToProps(state) {
-    const isFinalState = selectIsNavigationFinalLoadState(state);
-    const loadState = selectLoadState(state);
-    const hasError = loadState === LOADING_STATUS.ERROR;
-    const loaded = loadState === LOADING_STATUS.LOADED;
-    return {
-        path: selectPath(state),
-        mode: selectEffectiveMode(state),
-        type: selectType(state),
-        isIdmSupported: selectIdmSupport(state),
-        error: selectError(state),
-        hasError,
-        loaded,
-        loading: !isFinalState,
-        parsedPath: selectParsedPath(state),
-        transaction: selectTransaction(state),
-        cluster: selectCluster(state),
-        tabSize: UI_TAB_SIZE,
-        tabs: selectTabs(state),
-    };
-}
-
-const mapDispatchToProps = {
-    setMode,
-    updateView,
-    updateTitle,
-    onTransactionChange,
-    showNavigationAttributesEditor,
-};
-
-const NavigationConnected = connect(mapStateToProps, mapDispatchToProps)(Navigation);
-
-const NavigationWithRumMemo = React.memo(NavigationWithMesure);
-
-function NavigationWithMesure() {
-    const path = useSelector(selectPath);
-    const transaction = useSelector(selectTransaction);
-    const isFinalState = useSelector(selectIsNavigationFinalLoadState);
-
-    useAppRumMeasureStart({
-        type: RumMeasureTypes.NAVIGATION_PRELOAD,
-        startDeps: [isFinalState, path, transaction],
-        allowStart: ([isFinal]) => {
-            return !isFinal;
-        },
-    });
-
-    useRumMeasureStop({
-        type: RumMeasureTypes.NAVIGATION_PRELOAD,
-        stopDeps: [isFinalState],
-        allowStop: ([isFinal]) => {
-            return isFinal;
-        },
-    });
-
-    return <NavigationConnected />;
-}
-
-export default function NavigationWithRum() {
-    return <NavigationWithRumMemo />;
 }
