@@ -1,11 +1,8 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 import i18n from './i18n';
 import DataTable from '@gravity-ui/react-data-table';
-
-import {fetchUsers, setUsersPageSorting} from '../../../store/actions/users/index';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import CommaSeparatedListWithRestCounter from '../../../components/CommaSeparateListWithRestCounter/CommaSeparateListWithRestCounter';
 import {Tooltip} from '@ytsaurus/components';
@@ -15,15 +12,7 @@ import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import UsersPageEditor from '../../../pages/users/UsersPageEditor/UsersPageEditor';
 import {DeleteUserModal} from '../../../pages/users/DeleteUserModal/DeleteUserModal';
-import {selectCluster} from '../../../store/selectors/global';
-import {
-    selectUsersFilteredAndSorted,
-    selectUsersPageEditableUser,
-    selectUsersTableDataState,
-} from '../../../store/selectors/users';
 import {UserActions} from '../UserActions/UserActions';
-
-import './UsersPageTable.scss';
 
 const block = cn('users-page-table');
 
@@ -72,7 +61,7 @@ const SHOR_COLUMN_NAMES = {
     write_request_rate_limit: 'WRR',
 };
 
-class UsersPageTable extends React.Component {
+export class UsersPageTableBase extends React.Component {
     static propTypes = {
         className: PropTypes.string,
 
@@ -268,24 +257,3 @@ class UsersPageTable extends React.Component {
         );
     }
 }
-
-const mapStateToProps = (state) => {
-    const {loaded, loading, error, sort} = selectUsersTableDataState(state);
-    const {showModal} = selectUsersPageEditableUser(state);
-    return {
-        loaded,
-        loading,
-        error,
-        users: selectUsersFilteredAndSorted(state),
-        sort,
-        cluster: selectCluster(state),
-        showModal,
-    };
-};
-
-const mapDispatchToProps = {
-    fetchUsers,
-    setUsersPageSorting,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(UsersPageTable);
