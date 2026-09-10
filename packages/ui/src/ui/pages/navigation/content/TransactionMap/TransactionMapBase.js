@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {useSelector} from '../../../../store/redux-hooks';
 import PropTypes from 'prop-types';
 import hammer from '../../../../common/hammer';
 import cn from 'bem-cn-lite';
@@ -15,31 +13,15 @@ import {StickyContainer} from '../../../../components/StickyContainer/StickyCont
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 
 import {NAVIGATION_TRANSACTION_MAP_TABLE_ID} from '../../../../constants/navigation/content/transaction-map';
-import {
-    changeFilter,
-    loadTransactions,
-} from '../../../../store/actions/navigation/content/transaction-map';
-import {
-    selectNavigationTransactionMapLoadingStatus,
-    selectTransactions,
-} from '../../../../store/selectors/navigation/content/transaction-map';
 import {tableItems} from '../../../../utils/navigation/content/transaction-map/table';
 import {getIconNameForType} from '../../../../utils/navigation/path-editor';
-import {selectPath, selectTransaction} from '../../../../store/selectors/navigation';
 import {itemNavigationAllowed} from '../../../../pages/navigation/Navigation/ContentViewer/helpers/itemNavigationAllowed';
-
-import {useRumMeasureStop} from '../../../../rum/RumUiContext';
-import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
-import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
-import {isFinalLoadingStatus} from '../../../../utils/utils';
 
 import i18n from './i18n';
 
-import './TransactionMap.scss';
-
 const block = cn('navigation-transaction-map');
 
-class TransactionMap extends Component {
+export class TransactionMapBase extends Component {
     static propTypes = {
         // from connect
         loading: PropTypes.bool.isRequired,
@@ -119,12 +101,12 @@ class TransactionMap extends Component {
                 mode: 'default',
             },
             templates: {
-                icon: TransactionMap.renderIcon,
-                id: TransactionMap.renderId,
-                owner: TransactionMap.renderOwner,
-                start_time: TransactionMap.renderStartTime,
-                title: TransactionMap.renderTitle,
-                actions: TransactionMap.renderActions,
+                icon: TransactionMapBase.renderIcon,
+                id: TransactionMapBase.renderId,
+                owner: TransactionMapBase.renderOwner,
+                start_time: TransactionMapBase.renderStartTime,
+                title: TransactionMapBase.renderTitle,
+                actions: TransactionMapBase.renderActions,
             },
             computeKey(item) {
                 return item.id;
@@ -175,51 +157,4 @@ class TransactionMap extends Component {
             </div>
         );
     }
-}
-
-const mapStateToProps = (state) => {
-    const {filter, loading, loaded, error, errorData} = state.navigation.content.transactionMap;
-    const path = selectPath(state);
-    const transaction = selectTransaction(state);
-    const transactions = selectTransactions(state);
-
-    return {
-        loading,
-        loaded,
-        error,
-        errorData,
-        path,
-        transaction,
-        filter,
-        transactions,
-    };
-};
-
-const mapDispatchToProps = {
-    loadTransactions,
-    changeFilter,
-};
-
-const TransactionMapConnected = connect(mapStateToProps, mapDispatchToProps)(TransactionMap);
-
-export default function TranscationMapWithRum() {
-    const loadState = useSelector(selectNavigationTransactionMapLoadingStatus);
-
-    useAppRumMeasureStart({
-        type: RumMeasureTypes.NAVIGATION_CONTENT_TRANSACTION_MAP,
-        startDeps: [loadState],
-        allowStart: ([loadState]) => {
-            return !isFinalLoadingStatus(loadState);
-        },
-    });
-
-    useRumMeasureStop({
-        type: RumMeasureTypes.NAVIGATION_CONTENT_TRANSACTION_MAP,
-        stopDeps: [loadState],
-        allowStop: ([loadState]) => {
-            return isFinalLoadingStatus(loadState);
-        },
-    });
-
-    return <TransactionMapConnected />;
 }
