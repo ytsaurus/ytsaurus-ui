@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 
 import cn from 'bem-cn-lite';
 
@@ -14,22 +13,11 @@ import Modal from '../../../../../components/Modal/Modal';
 
 import {Query} from '../../../../../utils/navigation/content/table/query';
 
-import {
-    selectCurrentOffsetValues,
-    selectIsTableSorted,
-} from '../../../../../store/selectors/navigation/content/table';
-import {
-    closeOffsetSelectorModal,
-    moveOffset,
-} from '../../../../../store/actions/navigation/content/table/pagination';
-
 import i18n from './i18n';
-
-import './OffsetSelectorModal.scss';
 
 const block = cn('offset-selector');
 
-class OffsetSelectorModal extends Component {
+export class OffsetSelectorModalBase extends Component {
     static itemProps = PropTypes.shape({
         name: PropTypes.string.isRequired,
         value: PropTypes.string,
@@ -41,7 +29,7 @@ class OffsetSelectorModal extends Component {
         isOffsetSelectorOpen: PropTypes.bool.isRequired,
         closeOffsetSelectorModal: PropTypes.func.isRequired,
         moveOffset: PropTypes.func.isRequired,
-        initialItems: PropTypes.arrayOf(OffsetSelectorModal.itemProps).isRequired,
+        initialItems: PropTypes.arrayOf(OffsetSelectorModalBase.itemProps).isRequired,
         isTableSorted: PropTypes.bool.isRequired,
     };
 
@@ -172,18 +160,3 @@ class OffsetSelectorModal extends Component {
         );
     }
 }
-
-const mapStateToProps = (state) => {
-    const {isOffsetSelectorOpen} = state.navigation.content.table;
-    const initialItems = selectCurrentOffsetValues(state);
-    const isTableSorted = selectIsTableSorted(state);
-
-    return {isOffsetSelectorOpen, initialItems, isTableSorted};
-};
-
-const mapDispatchToProps = {
-    closeOffsetSelectorModal,
-    moveOffset,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(OffsetSelectorModal);
