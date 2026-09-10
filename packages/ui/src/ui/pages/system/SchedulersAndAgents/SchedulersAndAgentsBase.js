@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 import {useDispatch} from '../../../store/redux-hooks';
 
 import map_ from 'lodash/map';
@@ -10,12 +9,6 @@ import block from 'bem-cn-lite';
 import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
 import {StickyContainer} from '../../../components/StickyContainer/StickyContainer';
 import VisibleHostTypeRadioButton from '../../../pages/system/VisibleHostTypeRadioButton';
-import {
-    selectSystemAgentsWithState,
-    selectSystemSchedulerAndAgentAlerts,
-    selectSystemSchedulerAndAgentCounters,
-    selectSystemSchedulersWithState,
-} from '../../../store/selectors/system/schedulers';
 import Scheduler from './Scheduler/Scheduler';
 import {YTErrorBlock} from '../../../containers/Block/Block';
 
@@ -23,12 +16,7 @@ import {loadSchedulersAndAgents} from '../../../store/actions/system';
 
 import prepareTags from './prepareTags';
 import i18n from './i18n';
-
-import './Schedulers.scss';
-import {selectSettingsSystemSchedulersCollapsed} from '../../../store/selectors/settings/settings-ts';
-import {setSettingsSystemSchedulersCollapsed} from '../../../store/actions/settings/settings';
 import {useUpdater} from '../../../hooks/use-updater';
-import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 
 const b = block('system');
 const headingCN = block('elements-heading')({size: 's'});
@@ -38,7 +26,7 @@ const connectedHost = PropTypes.shape({
     connected: PropTypes.bool,
 });
 
-class SchedulersAndAgents extends Component {
+export class SchedulersAndAgentsBase extends Component {
     static propTypes = {
         // from connect
         schedulers: PropTypes.arrayOf(connectedHost),
@@ -174,21 +162,6 @@ class SchedulersAndAgents extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        schedulers: selectSystemSchedulersWithState(state),
-        agents: selectSystemAgentsWithState(state),
-        counters: selectSystemSchedulerAndAgentCounters(state),
-        alerts: selectSystemSchedulerAndAgentAlerts(state),
-        collapsibleSize: UI_COLLAPSIBLE_SIZE,
-        collapsed: selectSettingsSystemSchedulersCollapsed(state),
-    };
-}
-
-const mapDispatchToProps = {
-    setSettingsSystemSchedulersCollapsed,
-};
-
 function SchedulersAndAgentsUpdater() {
     const dispatch = useDispatch();
 
@@ -209,5 +182,3 @@ function SchedulersAndAgentsUpdater() {
 
     return null;
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(SchedulersAndAgents);
