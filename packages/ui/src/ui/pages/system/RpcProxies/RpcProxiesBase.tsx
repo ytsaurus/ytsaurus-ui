@@ -1,23 +1,25 @@
 import React, {Component} from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
 
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
 import i18n from './i18n';
 
 import {useUpdater} from '../../../hooks/use-updater';
-import {setSettingsSystemRpcProxiesCollapsed} from '../../../store/actions/settings/settings';
 import {loadSystemRPCProxies} from '../../../store/actions/system/rpc-proxies';
-import {selectCluster} from '../../../store/selectors/global';
-import {type RootState} from '../../../store/reducers';
-import {selectSettingsSystemRpcProxiesCollapsed} from '../../../store/selectors/settings/settings-ts';
 import {useDispatch} from '../../../store/redux-hooks';
 import {type MakeUrlParams} from '../ProxiesImpl/RoleGroup';
 import {ProxiesImpl} from '../ProxiesImpl/ProxiesImpl';
+import {type RoleGroupInfo, type SystemNodeCounters} from '../../../store/reducers/system/proxies';
 
-type ReduxProps = ConnectedProps<typeof connector>;
+type ReduxProps = {
+    counters: SystemNodeCounters;
+    roleGroups: RoleGroupInfo[];
+    collapsed: boolean;
+    cluster: string;
+    setSettingsSystemRpcProxiesCollapsed: (value: boolean) => void;
+};
 
-class RpcProxies extends Component<ReduxProps> {
+export class RpcProxiesBase extends Component<ReduxProps> {
     onToggle = () => {
         const {collapsed, setSettingsSystemRpcProxiesCollapsed} = this.props;
         setSettingsSystemRpcProxiesCollapsed(!collapsed);
@@ -68,20 +70,6 @@ class RpcProxies extends Component<ReduxProps> {
     };
 }
 
-function mapStateToProps(state: RootState) {
-    const {roleGroups, counters} = state.system.rpcProxies;
-    return {
-        counters,
-        roleGroups,
-        collapsed: selectSettingsSystemRpcProxiesCollapsed(state),
-        cluster: selectCluster(state),
-    };
-}
-
-const mapDispatchToProps = {
-    setSettingsSystemRpcProxiesCollapsed,
-};
-
 function RpcProxiesUpdater() {
     const dispatch = useDispatch();
 
@@ -102,6 +90,3 @@ function RpcProxiesUpdater() {
 
     return null;
 }
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-export default connector(RpcProxies);
