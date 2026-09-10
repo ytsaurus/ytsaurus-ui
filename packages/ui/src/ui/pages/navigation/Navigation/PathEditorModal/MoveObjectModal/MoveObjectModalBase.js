@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import PathEditorModal from '../PathEditorModal';
@@ -7,16 +6,9 @@ import PathEditorModal from '../PathEditorModal';
 import i18n from './i18n';
 
 import {CLOSE_MOVE_OBJECT_POPUP} from '../../../../../constants/navigation/modals/move-object';
-import {
-    abortRequests,
-    moveObject,
-} from '../../../../../store/actions/navigation/modals/move-object';
-import {closeEditingPopup} from '../../../../../store/actions/navigation/modals/path-editing-popup';
-import {updatePath, updateView} from '../../../../../store/actions/navigation';
 import {Checkbox} from '@gravity-ui/uikit';
-import {selectPath} from '../../../../../store/selectors/navigation';
 
-class MoveObjectModal extends Component {
+export class MoveObjectModalBase extends Component {
     static propTypes = {
         // from connect
         error: PropTypes.shape({
@@ -144,44 +136,3 @@ class MoveObjectModal extends Component {
 
     onUpdatePreserveAccount = (preserve_account) => this.setState({preserve_account});
 }
-
-const mapStateToProps = (state) => {
-    const {navigation} = state;
-    const path = selectPath(state);
-    const {
-        error,
-        errorMessage,
-        popupVisible,
-        showError,
-        renaming,
-        movedPath,
-        objectPath,
-        multipleMode,
-        items,
-    } = navigation.modals.moveObject;
-
-    const entityPath = !multipleMode ? objectPath : items.length !== 1 ? undefined : items[0]?.path;
-
-    return {
-        error,
-        errorMessage,
-        popupVisible,
-        showError,
-        renaming,
-        movedPath,
-        objectPath,
-        multipleMode,
-        items,
-        afterMoveStrategy: entityPath === path ? 'redirect' : 'refresh',
-    };
-};
-
-const mapDispatchToProps = {
-    closeEditingPopup,
-    abortRequests,
-    moveObject,
-    updateView,
-    updatePath,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(MoveObjectModal);
