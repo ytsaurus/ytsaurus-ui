@@ -1,24 +1,19 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import hammer from '../../../common/hammer';
+import hammer from '../../../../common/hammer';
 
-import Label from '../../../components/Label';
+import Label from '../../../../components/Label';
 import {Loader} from '@gravity-ui/uikit';
-import {FormattedId} from '../../../components/formatters';
+import {FormattedId} from '../../../../components/formatters';
 import {MetaTable} from '@ytsaurus/components';
-import ElementsTable from '../../../components/ElementsTable/ElementsTable';
-import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
-import LoadDataHandler from '../../../containers/LoadDataHandler/LoadDataHandler';
+import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
+import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
+import {TABLET_PARTITION_STORES_TABLE_ID} from '../../../../constants/tablet';
+import {storesTableItems} from '../../../../utils/tablet/table';
 
-import {abortAndReset, loadStoresData} from '../../../store/actions/tablet/stores';
-import {TABLET_PARTITION_STORES_TABLE_ID} from '../../../constants/tablet';
-import {storesTableItems} from '../../../utils/tablet/table';
-import {selectStores} from '../../../store/selectors/tablet/stores';
-
-import i18n from './i18n';
-import './Stores.scss';
+import i18n from '../i18n';
 
 const block = cn('tablet-stores');
 
@@ -39,7 +34,7 @@ function stateToTheme(state, theme) {
     return theme[state] || 'default';
 }
 
-class Stores extends Component {
+export class StoresBase extends Component {
     static propTypes = {
         // from parent
         index: PropTypes.number.isRequired,
@@ -91,7 +86,7 @@ class Stores extends Component {
 
     static renderAsState(store, columnName) {
         const state = storesTableItems[columnName].get(store);
-        return Stores.renderStoreState(state);
+        return StoresBase.renderStoreState(state);
     }
 
     static renderAsNumber(store, columnName) {
@@ -133,7 +128,7 @@ class Stores extends Component {
                     {
                         key: 'flush_state',
                         label: i18n('meta_flush-state'),
-                        value: Stores.renderFlushState(store.flushState),
+                        value: StoresBase.renderFlushState(store.flushState),
                         visible: dynamicStore,
                     },
 
@@ -152,13 +147,13 @@ class Stores extends Component {
                     {
                         key: 'compaction_state',
                         label: i18n('meta_compaction-state'),
-                        value: Stores.renderFlushState(store.compactionState),
+                        value: StoresBase.renderFlushState(store.compactionState),
                         visible: persistentStore,
                     },
                     {
                         key: 'preload_state',
                         label: i18n('meta_preload-state'),
-                        value: Stores.renderPreloadState(store.preloadState),
+                        value: StoresBase.renderPreloadState(store.preloadState),
                         visible: persistentStore,
                     },
                 ]}
@@ -206,10 +201,10 @@ class Stores extends Component {
                 mode: 'default',
             },
             templates: {
-                id: Stores.renderAsId,
-                store_state: Stores.renderAsState,
-                row_count: Stores.renderAsNumber,
-                attributes: Stores.renderAsAttributes,
+                id: StoresBase.renderAsId,
+                store_state: StoresBase.renderAsState,
+                row_count: StoresBase.renderAsNumber,
+                attributes: StoresBase.renderAsAttributes,
             },
             computeKey(store) {
                 return store.$value;
@@ -235,17 +230,3 @@ class Stores extends Component {
         );
     }
 }
-
-const mapStateToProps = (state) => {
-    const {loading, loaded, error, errorData} = state.tablet.stores;
-    const stores = selectStores(state);
-
-    return {loading, loaded, error, errorData, stores};
-};
-
-const mapDispatchToProps = {
-    loadStoresData,
-    abortAndReset,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Stores);
