@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import {useDispatch} from '../../../../store/redux-hooks';
 
 import hammer from '../../../../common/hammer';
@@ -18,22 +17,8 @@ import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStic
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import ProxyCard from './ProxyCard/ProxyCard';
 
-import {
-    changeBannedFilter,
-    changeHostFilter,
-    changeRoleFilter,
-    changeStateFilter,
-    getProxies,
-    resetProxyState,
-} from '../../../../store/actions/components/proxies/proxies';
-import {
-    selectRoles,
-    selectStates,
-    selectVisibleProxies,
-} from '../../../../store/selectors/components/proxies/proxies';
-import {mergeScreen, splitScreen as splitScreenAction} from '../../../../store/actions/global';
+import {getProxies, resetProxyState} from '../../../../store/actions/components/proxies/proxies';
 import {proxiesTableColumnItems} from '../../../../utils/components/proxies/table';
-import {showNodeMaintenance} from '../../../../store/actions/components/node-maintenance-modal';
 import {useUpdater} from '../../../../hooks/use-updater';
 import {isPaneSplit} from '../../../../utils';
 import {
@@ -45,8 +30,6 @@ import {NodeColumnBanned, NodeColumnRole, NodeColumnState, NodeColumnText} from 
 import {NodeMaintenanceModal} from '../../NodeMaintenanceModal/NodeMaintenanceModal';
 
 import i18n from './i18n';
-
-import './Proxies.scss';
 
 const block = cn('components-proxies');
 
@@ -65,7 +48,7 @@ function ProxiesUpdater({type}) {
     return null;
 }
 
-export class Proxies extends Component {
+export class ProxiesBase extends Component {
     static selectProps = PropTypes.arrayOf(
         PropTypes.shape({
             text: PropTypes.string.isRequired,
@@ -88,8 +71,8 @@ export class Proxies extends Component {
         hostFilter: PropTypes.string.isRequired,
         stateFilter: PropTypes.string.isRequired,
         roleFilter: PropTypes.string.isRequired,
-        states: Proxies.selectProps.isRequired,
-        roles: Proxies.selectProps.isRequired,
+        states: ProxiesBase.selectProps.isRequired,
+        roles: ProxiesBase.selectProps.isRequired,
         proxies: PropTypes.arrayOf(PropTypes.object).isRequired,
         splitScreen: PropTypes.shape({
             isSplit: PropTypes.bool.isRequired,
@@ -199,15 +182,15 @@ export class Proxies extends Component {
                 mode: type,
             },
             templates: {
-                host: Proxies.renderHost,
-                state: Proxies.renderState,
-                banned: Proxies.renderBanned,
-                role: Proxies.renderRole,
-                load_average: Proxies.renderLoadAverage,
-                network_load: Proxies.renderNetworkLoad,
-                updated_at: Proxies.renderUpdatedAt,
+                host: ProxiesBase.renderHost,
+                state: ProxiesBase.renderState,
+                banned: ProxiesBase.renderBanned,
+                role: ProxiesBase.renderRole,
+                load_average: ProxiesBase.renderLoadAverage,
+                network_load: ProxiesBase.renderNetworkLoad,
+                updated_at: ProxiesBase.renderUpdatedAt,
                 actions: this.renderActions,
-                version: Proxies.renderVersion,
+                version: ProxiesBase.renderVersion,
             },
             computeKey(proxy) {
                 return proxy.host;
@@ -359,56 +342,3 @@ export class Proxies extends Component {
         );
     }
 }
-
-const mapStateToProps = (state) => {
-    const {components, global} = state;
-    const {
-        loading,
-        loaded,
-        error,
-        errorData,
-        proxies,
-        hostFilter,
-        stateFilter,
-        bannedFilter,
-        roleFilter,
-    } = components.proxies.proxies;
-    const {splitScreen} = global;
-
-    const visibleProxies = selectVisibleProxies(state);
-    const states = selectStates(state);
-    const roles = selectRoles(state);
-    const initialLoading = loading && !loaded;
-
-    return {
-        loading,
-        loaded,
-        error,
-        errorData,
-
-        showingItems: visibleProxies.length,
-        totalItems: proxies.length,
-        proxies: visibleProxies,
-        splitScreen,
-        states,
-        roles,
-        stateFilter,
-        hostFilter,
-        roleFilter,
-        bannedFilter,
-        initialLoading,
-    };
-};
-
-const mapDispatchToProps = {
-    changeBannedFilter,
-    changeHostFilter,
-    changeStateFilter,
-    changeRoleFilter,
-    splitScreenAction,
-    mergeScreen,
-
-    showNodeMaintenance,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Proxies);
