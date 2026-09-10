@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
@@ -15,30 +14,29 @@ import {YTErrorBlock} from '../../../../containers/Block/Block';
 import Link from '../../../../containers/Link/Link';
 import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
 import {Secondary} from '@ytsaurus/components';
-
-import {getTabletErrors} from '../../../../store/actions/navigation/tabs/tablet-errors/tablet-errors-background';
-import {selectPath} from '../../../../store/selectors/navigation';
-import {selectEffectiveMode} from '../../../../store/selectors/navigation/navigation';
-import {selectCluster} from '../../../../store/selectors/global';
 import {
     selectTabletErrorsBackgroundCountNoticeVisbile,
-    selectTabletErrorsLoadingStatus,
-    selectTabletErrorsReplicationErrors,
+    type selectTabletErrorsReplicationErrors,
 } from '../../../../store/selectors/navigation/tabs/tablet-errors-background';
 import {selectReplicatedTableReplicasMap} from '../../../../store/selectors/navigation/content/replicated-table';
-import {type RootState} from '../../../../store/reducers';
-
-import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
-import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
-import {useRumMeasureStop} from '../../../../rum/RumUiContext';
-import {isFinalLoadingStatus} from '../../../../utils/utils';
 import {type YTError} from '../../../../types';
-
-import './TabletErrorsBackground.scss';
 
 const block = cn('navigation-tablet-errors-background');
 
-function TabletErrors(props: ConnectedProps<typeof connector>) {
+export function TabletErrorsBackgroundBase(props: {
+    loading: boolean;
+    loaded: boolean;
+    error: YTError | undefined;
+    path: string;
+    mode: string;
+    tabletErrors: {
+        tablet_errors?: Record<string, Array<YTError>>;
+        replication_errors?: Record<string, Array<YTError>>;
+    };
+    cluster: string;
+    replicationErrors: Record<string, Record<string, YTError[]>>;
+    getTabletErrors: () => void;
+}) {
     const {path, mode, cluster, getTabletErrors} = props;
     useEffect(() => {
         getTabletErrors();
@@ -74,55 +72,6 @@ function TabletErrors(props: ConnectedProps<typeof connector>) {
             )}
         </LoadDataHandler>
     );
-}
-
-const mapStateToProps = (state: RootState) => {
-    const {loading, loaded, error, tabletErrors} = state.navigation.tabs.tabletErrorsBackground;
-    const path = selectPath(state);
-    const mode = selectEffectiveMode(state);
-    const cluster = selectCluster(state);
-
-    return {
-        loading,
-        loaded,
-        error,
-
-        path,
-        mode,
-        tabletErrors,
-        cluster,
-        replicationErrors: selectTabletErrorsReplicationErrors(state),
-    };
-};
-
-const mapDispatchToProps = {
-    getTabletErrors,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-const TabletErrorsConnected = connector(TabletErrors);
-
-export default function TabletErrorsWithRum() {
-    const loadState = useSelector(selectTabletErrorsLoadingStatus);
-
-    useAppRumMeasureStart({
-        type: RumMeasureTypes.NAVIGATION_TAB_TABLET_ERRORS,
-        startDeps: [loadState],
-        allowStart: ([loadState]) => {
-            return !isFinalLoadingStatus(loadState);
-        },
-    });
-
-    useRumMeasureStop({
-        type: RumMeasureTypes.NAVIGATION_TAB_TABLET_ERRORS,
-        stopDeps: [loadState],
-        allowStop: ([loadState]) => {
-            return isFinalLoadingStatus(loadState);
-        },
-    });
-
-    return <TabletErrorsConnected />;
 }
 
 interface ReplicationErrorsBlockProps {
