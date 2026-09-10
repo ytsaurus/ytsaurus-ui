@@ -1,5 +1,4 @@
 import React from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
 import {useDispatch} from '../../../../store/redux-hooks';
 
 import cn from 'bem-cn-lite';
@@ -20,26 +19,10 @@ import Icon from '../../../../components/Icon/Icon';
 import format from '../../../../common/hammer/format';
 
 import {VersionCellWithAction} from '../../../../pages/components/tabs/Versions/VersionCell';
-
-import {
-    selectBannedSelectItems,
-    selectStatesSelectItems,
-    selectTypeSelectItems,
-    selectVersionSelectItems,
-    selectVisibleDetails,
-} from '../../../../store/selectors/components/versions/versions_v2';
-import {
-    changeBannedFilter,
-    changeHostFilter,
-    changeStateFilter,
-    changeTypeFilter,
-    changeVersionFilter,
-    getVersions,
-} from '../../../../store/actions/components/versions/versions_v2';
+import {getVersions} from '../../../../store/actions/components/versions/versions_v2';
 import {DEBOUNCE_TIME} from '../../../../constants/components/versions/versions_v2';
 import {useUpdater} from '../../../../hooks/use-updater';
 import VersionsSummary from './VersionSummary';
-import {type RootState} from '../../../../store/reducers';
 
 import templates, {ColumnAsTime, printColumnAsError} from '../../../../components/templates/utils';
 import {type VersionHostInfo} from '../../../../store/reducers/components/versions/versions_v2';
@@ -48,11 +31,12 @@ import {Host} from '../../../../containers/Host/Host';
 
 import {detailsTableProps} from './tables_v2';
 import i18n from './i18n';
-
-import './Versions.scss';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';
+import {type YTError} from '../../../../types';
 
 const b = cn('components-versions');
+
+type SelectItems = React.ComponentProps<typeof Select>['items'];
 
 function VersionsV2Updater() {
     const dispatch = useDispatch();
@@ -66,9 +50,30 @@ function VersionsV2Updater() {
     return null;
 }
 
-type ReduxProps = ConnectedProps<typeof connector>;
+type ReduxProps = {
+    loading: boolean;
+    loaded: boolean;
+    error: YTError | undefined;
+    details: VersionHostInfo[];
+    showingItems: number;
+    totalItems: number;
+    hostFilter: string;
+    versionFilter: string;
+    typeFilter: string;
+    stateFilter: string;
+    bannedFilter: boolean | 'all';
+    versionSelectItems: SelectItems;
+    typeSelectItems: SelectItems;
+    stateSelectItems: SelectItems;
+    bannedSelectItems: SelectItems;
+    changeHostFilter: (hostFilter: string) => void;
+    changeVersionFilter: (versionFilter: string) => void;
+    changeTypeFilter: (typeFilter: string) => void;
+    changeStateFilter: (stateFilter: string) => void;
+    changeBannedFilter: (bannedFilter: 'all' | boolean) => void;
+};
 
-class VersionsV2 extends React.Component<ReduxProps> {
+export class VersionsV2Base extends React.Component<ReduxProps> {
     renderFilters() {
         const {
             hostFilter,
@@ -286,56 +291,3 @@ class VersionsV2 extends React.Component<ReduxProps> {
         );
     }
 }
-
-const mapStateToProps = (state: RootState) => {
-    const {
-        loading,
-        loaded,
-        error,
-        hostFilter,
-        versionFilter,
-        typeFilter,
-        stateFilter,
-        bannedFilter,
-        details: allDetails,
-    } = state.components.versionsV2;
-
-    const details = selectVisibleDetails(state);
-    const versionSelectItems = selectVersionSelectItems(state);
-    const typeSelectItems = selectTypeSelectItems(state);
-    const stateSelectItems = selectStatesSelectItems(state);
-    const bannedSelectItems = selectBannedSelectItems(state);
-
-    const showingItems = details.length;
-    const totalItems = allDetails.length;
-
-    return {
-        loading,
-        loaded,
-        error,
-        details,
-        showingItems,
-        totalItems,
-        hostFilter,
-        versionFilter,
-        typeFilter,
-        stateFilter,
-        bannedFilter,
-        versionSelectItems,
-        typeSelectItems,
-        stateSelectItems,
-        bannedSelectItems,
-    };
-};
-
-const mapDispatchToProps = {
-    changeHostFilter,
-    changeVersionFilter,
-    changeTypeFilter,
-    changeStateFilter,
-    changeBannedFilter,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(VersionsV2);
