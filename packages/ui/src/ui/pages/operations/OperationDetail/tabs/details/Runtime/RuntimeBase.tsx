@@ -1,5 +1,4 @@
 import React, {Component, type FC} from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
@@ -10,7 +9,6 @@ import {TemplateWeight} from '../../../../../../components/MetaTable/templates/O
 
 import {formatShare} from '../../../../../../utils/operations/tabs/details/runtime';
 import i18n from './i18n';
-import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operations';
 import hammer from '../../../../../../common/hammer';
 import {OperationPool} from '../../../../../../components/OperationPool/OperationPool';
 import ypath from '../../../../../../common/thor/ypath';
@@ -24,12 +22,12 @@ import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 const headingBlock = cn('elements-heading');
 const runtimeBlock = cn('runtime');
 
-export type PoolItem = {
+type PoolItem = {
     tree: string;
     pool: string;
 };
 
-export type Operation = {
+type Operation = {
     $value?: string;
     $attributes?: Record<string, any>;
     type?: string;
@@ -54,21 +52,17 @@ const StarvingStatus: FC<StarvingStatusProps> = ({progress}) => {
     return res || null; // returns null to prevent react warning
 };
 
-const mapDispatchToProps = {
-    showEditPoolsWeightsModal,
-};
-
-const connector = connect(null, mapDispatchToProps);
-
-export type Props = {
+type Props = {
     isAbsoluteValue: boolean;
     runtime: RuntimeItem[];
     operation: Operation;
     cluster: string;
     treeConfigs?: {tree: string; config: Record<string, any>}[];
-} & ConnectedProps<typeof connector>;
+} & {
+    showEditPoolsWeightsModal(operation: Operation, editable?: boolean): void;
+};
 
-class Runtime extends Component<Props> {
+export class RuntimeBase extends Component<Props> {
     handlePoolEditClick = () => {
         const {showEditPoolsWeightsModal, operation} = this.props;
         showEditPoolsWeightsModal(operation);
@@ -232,5 +226,3 @@ class Runtime extends Component<Props> {
         );
     }
 }
-
-export default connector(Runtime);
