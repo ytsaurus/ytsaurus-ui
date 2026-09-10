@@ -32,7 +32,7 @@ function prepareEvents(events, params) {
 
     if (events) {
         let lastState;
-        let prepared = reduce_(
+        let preparedEventsData = reduce_(
             events,
             (prepared, event, index) => {
                 const nextEvent = events[index + 1];
@@ -73,9 +73,9 @@ function prepareEvents(events, params) {
             {events: [], totalDuration: 0, precedingDuration: 0},
         );
 
-        const eventsDurations = map_(prepared.events, 'duration');
+        const eventsDurations = map_(preparedEventsData.events, 'duration');
 
-        prepared = reduce_(
+        preparedEventsData = reduce_(
             eventsDurations,
             (prepared, duration, index) => {
                 const currentEvent = prepared.events[index];
@@ -91,10 +91,10 @@ function prepareEvents(events, params) {
 
                 return prepared;
             },
-            prepared,
+            preparedEventsData,
         );
 
-        prepared.events.push(
+        preparedEventsData.events.push(
             new Event({
                 duration: params.duration,
                 finishTime: params.finishTime,
@@ -104,7 +104,7 @@ function prepareEvents(events, params) {
             }),
         );
 
-        return prepared.events;
+        return preparedEventsData.events;
     }
 }
 

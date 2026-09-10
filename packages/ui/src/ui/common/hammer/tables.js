@@ -157,14 +157,14 @@ class InverseIndex extends BoundedArray {
         this._updateMappings(factors, this.data.length - 1);
     }
 
-    find(factors) {
+    find(searchFactors) {
         const factorsToFrequences = this.factorsToFrequences;
         const data = this.data;
         const factorsToDataIndex = this.factorsToDataIndex;
         // const searchKeywords = map_(searchName.replace(/"/g, '').split(/[ \.]/g),function (val) {return val.toLowerCase().trim();});
         let objectCandidates = [];
 
-        forEach_(factors, function (val) {
+        forEach_(searchFactors, function (val) {
             if (Object.hasOwnProperty.call(factorsToDataIndex, val)) {
                 objectCandidates = union_(objectCandidates, factorsToDataIndex[val]);
             }
@@ -202,7 +202,7 @@ class InverseIndex extends BoundedArray {
             });
         });
 
-        forEach_(factors, (val) => {
+        forEach_(searchFactors, (val) => {
             InverseIndex.addToFrequences(factorsToFrequencesLocal, val);
         });
 
@@ -210,16 +210,16 @@ class InverseIndex extends BoundedArray {
             const object = data[objectIndex];
             const intersectionOfFactors = filter_(
                 object.factors,
-                (val) => factors.indexOf(val) !== -1,
+                (val) => searchFactors.indexOf(val) !== -1,
             );
 
             const val = Math.max(
                 getMeasure(intersectionOfFactors) /
-                    (getMeasure(factors) +
+                    (getMeasure(searchFactors) +
                         getMeasure(object.factors) -
                         getMeasure(intersectionOfFactors)),
                 getMeasureLocal(intersectionOfFactors) /
-                    (getMeasureLocal(factors) +
+                    (getMeasureLocal(searchFactors) +
                         getMeasureLocal(object.factors) -
                         getMeasureLocal(intersectionOfFactors)),
             );
@@ -265,9 +265,9 @@ function saveData(storageKey) {
                 similarColumnSets.repackData();
                 window.localStorage.setItem(STORAGE_KEY_SIMILAR, similarColumnSets.serialize());
 
-                const columnSets = tables[STORAGE_KEY];
-                columnSets.repackData();
-                window.localStorage.setItem(STORAGE_KEY, columnSets.serialize());
+                const storedColumnSets = tables[STORAGE_KEY];
+                storedColumnSets.repackData();
+                window.localStorage.setItem(STORAGE_KEY, storedColumnSets.serialize());
 
                 // eslint-disable-next-line no-console
                 console.warn('Repacking due to global localStorage limit exceeded');

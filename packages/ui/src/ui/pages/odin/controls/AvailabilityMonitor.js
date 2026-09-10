@@ -153,14 +153,14 @@ function update(domData, data, showInfo) {
 }
 
 function useInitMonitor(ref) {
-    const [domData, setDomData] = useState(null);
+    const [stateDomData, setStateDomData] = useState(null);
 
     useEffect(() => {
         const domData = init(ref.current);
-        setDomData(domData);
+        setStateDomData(domData);
     }, []);
 
-    return domData;
+    return stateDomData;
 }
 
 function useUpdateMonitor(domData, data, showInfo) {

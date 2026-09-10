@@ -193,8 +193,8 @@ class ElementsTable extends Component {
                 toAdd = newKeys;
             }
 
-            forEach_(ElementsTable.getEmptinessStates(newKeys), (state, key) => {
-                items[key] = Object.assign({}, items[key], state);
+            forEach_(ElementsTable.getEmptinessStates(newKeys), (itemState, key) => {
+                items[key] = Object.assign({}, items[key], itemState);
             });
 
             items = omit_(items, toRemove);
@@ -288,10 +288,10 @@ class ElementsTable extends Component {
             reactList
         ) {
             const highlightedIndex = items?.findIndex(
-                (items) =>
+                (item) =>
                     highlightedItem?.[compareHighlitedBy] &&
-                    items?.[compareHighlitedBy] &&
-                    highlightedItem?.[compareHighlitedBy] === items?.[compareHighlitedBy],
+                    item?.[compareHighlitedBy] &&
+                    highlightedItem?.[compareHighlitedBy] === item?.[compareHighlitedBy],
             );
             reactList.scrollAround(highlightedIndex);
             this.waitForHighlightedElementAndScroll();
@@ -564,10 +564,10 @@ class ElementsTable extends Component {
             this.props;
 
         const highlightedIndex = items?.findIndex(
-            (items) =>
+            (item) =>
                 highlightedItem?.[compareHighlitedBy] &&
-                items?.[compareHighlitedBy] &&
-                highlightedItem?.[compareHighlitedBy] === items?.[compareHighlitedBy],
+                item?.[compareHighlitedBy] &&
+                highlightedItem?.[compareHighlitedBy] === item?.[compareHighlitedBy],
         );
 
         const itemRenderer = (index, key) =>

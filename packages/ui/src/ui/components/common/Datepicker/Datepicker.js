@@ -250,41 +250,41 @@ export class Datepicker extends React.PureComponent {
     onRangeDateClick = ({start, end, isAllRangePicked, scrollCalendar}) => {
         const {range} = this.props;
 
-        let pick = this.state.pick + 1;
-        let from, to;
+        let nextPick = this.state.pick + 1;
+        let nextFrom, nextTo;
 
         switch (true) {
-            case pick === 1 || isAllRangePicked || !range: {
-                from = start;
-                to = end;
+            case nextPick === 1 || isAllRangePicked || !range: {
+                nextFrom = start;
+                nextTo = end;
 
                 if (isAllRangePicked || !range) {
-                    pick = 0;
+                    nextPick = 0;
                 }
 
                 break;
             }
-            case pick === 2: {
+            case nextPick === 2: {
                 const dates = getListWithoutNullableValues(
                     start,
                     end,
                     this.state.from,
                     this.state.to,
                 );
-                from = DateTime.min(...dates);
-                to = DateTime.max(...dates);
-                pick = 0;
+                nextFrom = DateTime.min(...dates);
+                nextTo = DateTime.max(...dates);
+                nextPick = 0;
                 break;
             }
         }
 
-        if (to) {
-            to = to.endOf('day');
+        if (nextTo) {
+            nextTo = nextTo.endOf('day');
         }
 
         const searchText = getSearchText({
-            from,
-            to,
+            from: nextFrom,
+            to: nextTo,
             format: this.props.format,
             emptyValueText: this.props.emptyValueText,
             range: this.props.range,
@@ -293,9 +293,9 @@ export class Datepicker extends React.PureComponent {
         this.setState(
             {
                 searchText,
-                pick,
-                from,
-                to,
+                pick: nextPick,
+                from: nextFrom,
+                to: nextTo,
                 scrollCalendar,
                 error: '',
                 invalidInput: false,

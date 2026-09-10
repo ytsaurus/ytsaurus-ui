@@ -380,7 +380,7 @@ function ClusterPageStopRumMeasure() {
     const loadState = useSelector((state) => state.global.loadState);
     const paramsLoading = useSelector((state) => state.global.paramsLoading);
 
-    const isLoaded =
+    const isLoadingFinished =
         loadState === LOADING_STATUS.ERROR ||
         (!paramsLoading && loadState === LOADING_STATUS.LOADED);
 
@@ -390,13 +390,13 @@ function ClusterPageStopRumMeasure() {
         type: RumMeasureTypes.CLUSTER_PARAMS,
         subPage: `ui.${cluster}`,
         allowStop: ([isLoaded]) => !isLoaded,
-        startDeps: [isLoaded],
+        startDeps: [isLoadingFinished],
     });
 
     useRumMeasureStop({
         type: RumMeasureTypes.CLUSTER_PARAMS,
         allowStop: ([isLoaded]) => isLoaded,
-        stopDeps: [isLoaded],
+        stopDeps: [isLoadingFinished],
     });
     return null;
 }
