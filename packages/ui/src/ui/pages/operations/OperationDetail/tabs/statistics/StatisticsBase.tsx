@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
-import {useSelector} from '../../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import format from '../../../../../common/hammer/format';
@@ -19,34 +17,15 @@ import {
     DEBOUNCE_DELAY,
     TREE_STATE,
 } from '../../../../../constants/operations/statistics';
-import {
-    changeAggregation,
-    changeFilterText,
-    changeJobType,
-    changePoolTreeFilter,
-    setTreeState,
-} from '../../../../../store/actions/operations/statistics';
 import {statisticsTableProps} from '../../../../../utils/operations/tabs/statistics/statisticsTableProps';
 import {makeRadioButtonProps} from '../../../../../utils';
-
-import {type RootState} from '../../../../../store/reducers';
-import {selectOperationDetailsLoadingStatus} from '../../../../../store/selectors/operations/operation';
-import {
-    selectOperationStatisticsActiveFilterValues,
-    selectOperationStatisticsAvailableValues,
-    selectOperationStatisticsFiltered,
-} from '../../../../../store/selectors/operations/statistics-v2';
-import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
-import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
-import {isFinalLoadingStatus} from '../../../../../utils/utils';
-import {useAppRumMeasureStart} from '../../../../../rum/rum-app-measures';
+import {type selectOperationStatisticsFiltered} from '../../../../../store/selectors/operations/statistics-v2';
 import {docsUrl} from '../../../../../config';
 import UIFactory from '../../../../../UIFactory';
 import {WaitForFont} from '../../../../../containers/WaitForFont/WaitForFont';
 
 import {OperationStatisticName, OperationStatisticValue} from './OperationStatisticName';
 import i18n from './i18n';
-import './Statistics.scss';
 
 const statisticsBlock = cn('operation-statistics');
 const toolbarBlock = cn('elements-toolbar');
@@ -58,9 +37,23 @@ interface ItemState {
     empty?: boolean;
 }
 
-type Props = {className?: string} & ConnectedProps<typeof connector>;
+type Props = {className?: string} & {
+    activeJobType: string;
+    activePoolTree: string;
+    filterText: string;
+    items: ItemType[];
+    treeState: (typeof TREE_STATE)[keyof typeof TREE_STATE];
+    activeAggregation: 'max' | 'min' | 'count' | 'avg' | 'sum' | undefined;
+    jobTypes: string[];
+    poolTrees: string[];
+    setTreeState(treeState: (typeof TREE_STATE)[keyof typeof TREE_STATE]): void;
+    changeFilterText(filterText: string): void;
+    changeAggregation(event: React.ChangeEvent<HTMLInputElement>): void;
+    changeJobType(jobType?: string): void;
+    changePoolTreeFilter(poolTreeFilter?: string): void;
+};
 
-export class Statistics extends Component<Props> {
+export class StatisticsBase extends Component<Props> {
     override componentWillUnmount() {
         this.expandTable();
     }
@@ -259,55 +252,4 @@ export class Statistics extends Component<Props> {
             </ErrorBoundary>
         );
     }
-}
-
-const mapStateToProps = (state: RootState) => {
-    const {treeState, activeAggregation} = state.operations.statistics;
-
-    const {job_type: jobTypes, pool_tree: poolTrees} =
-        selectOperationStatisticsAvailableValues(state);
-
-    return {
-        items: selectOperationStatisticsFiltered(state),
-        treeState,
-        activeAggregation,
-        jobTypes,
-        poolTrees,
-        ...selectOperationStatisticsActiveFilterValues(state),
-    };
-};
-
-const mapDispatchToProps = {
-    setTreeState,
-    changeFilterText,
-    changeAggregation,
-    changeJobType,
-    changePoolTreeFilter,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-const StatisticsConnected = connector(Statistics);
-
-export default function SpecificationWithRum(props: {className: string}) {
-    const loadState = useSelector(selectOperationDetailsLoadingStatus);
-
-    useAppRumMeasureStart({
-        type: RumMeasureTypes.OPERATION_TAB_STATISTICS,
-        additionalStartType: RumMeasureTypes.OPERATION,
-        startDeps: [loadState],
-        allowStart: ([loadState]) => {
-            return !isFinalLoadingStatus(loadState);
-        },
-    });
-
-    useRumMeasureStop({
-        type: RumMeasureTypes.OPERATION_TAB_STATISTICS,
-        stopDeps: [loadState],
-        allowStop: ([loadState]) => {
-            return isFinalLoadingStatus(loadState);
-        },
-    });
-
-    return <StatisticsConnected {...props} />;
 }
