@@ -1,19 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 
-import Icon from '../../../../../components/Icon/Icon';
-import Button from '../../../../../components/Button/Button';
+import Icon from '../../../../../../components/Icon/Icon';
+import Button from '../../../../../../components/Button/Button';
 
-import {openOffsetSelectorModal} from '../../../../../store/actions/navigation/content/table/pagination';
-import {
-    selectAllColumns,
-    selectVisibleColumns,
-} from '../../../../../store/selectors/navigation/content/table';
+import i18n from '../i18n';
 
-import i18n from './i18n';
-
-OffsetSelectorButton.propTypes = {
+OffsetSelectorButtonBase.propTypes = {
     // from parent
     disabled: PropTypes.bool,
 
@@ -25,7 +18,7 @@ OffsetSelectorButton.propTypes = {
     openOffsetSelectorModal: PropTypes.func.isRequired,
 };
 
-function OffsetSelectorButton({
+export function OffsetSelectorButtonBase({
     loading,
     disabled,
     allColumns,
@@ -48,18 +41,3 @@ function OffsetSelectorButton({
         </Button>
     );
 }
-
-const mapStateToProps = (state) => {
-    const {loading} = state.navigation.content.table;
-
-    const visibleColumns = selectVisibleColumns(state).filter((column) => column.keyColumn);
-    const allColumns = selectAllColumns(state).filter((column) => column.keyColumn);
-
-    return {visibleColumns, loading, allColumns};
-};
-
-const mapDispatchToProps = {
-    openOffsetSelectorModal,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(OffsetSelectorButton);
