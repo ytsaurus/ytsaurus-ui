@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import {withRouter} from 'react-router';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import hammer from '../../../../common/hammer';
 import cn from 'bem-cn-lite';
@@ -20,17 +18,9 @@ import Button from '../../../../components/Button/Button';
 import Link from '../../../../containers/Link/Link';
 import Icon from '../../../../components/Icon/Icon';
 import {OperationType} from '../../../../components/OperationType/OperationType';
-
-import {
-    showEditPoolsWeightsModal,
-    updateOperationsList,
-} from '../../../../store/actions/operations';
 import {performAction, prepareActions} from '../../../../utils/operations/detail';
-import {promptAction} from '../../../../store/actions/actions';
 import {PathItem} from './PathItem';
 import i18n from './i18n';
-
-import './OperationsListTable.scss';
 
 const BLOCK_NAME = 'operations-list';
 const block = cn(BLOCK_NAME);
@@ -78,7 +68,7 @@ function UserPoolItem({awesomeIcon, children, title}) {
     );
 }
 
-class OperationsListTable extends Component {
+export class OperationsListTableBase extends Component {
     static propTypes = {
         // from connect
         operations: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -355,9 +345,9 @@ class OperationsListTable extends Component {
         templates: {
             title: this.renderTitle,
             user_pool: this.renderUserPool,
-            type: OperationsListTable.renderType,
-            start_time: OperationsListTable.renderStartTime,
-            progress: OperationsListTable.renderProgress,
+            type: OperationsListTableBase.renderType,
+            start_time: OperationsListTableBase.renderStartTime,
+            progress: OperationsListTableBase.renderProgress,
             actions: this.renderActions,
         },
     };
@@ -375,22 +365,3 @@ class OperationsListTable extends Component {
         );
     }
 }
-
-function mapStateToProps({operations, global}) {
-    const {isLoading, hasLoaded} = operations.list;
-    const initialLoading = isLoading && !hasLoaded;
-
-    return {
-        initialLoading,
-        cluster: global.cluster,
-        operations: operations.list.operations,
-    };
-}
-
-const mapDispatchToProps = {
-    showEditPoolsWeightsModal,
-    promptAction,
-    updateOperationsList,
-};
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(OperationsListTable));
