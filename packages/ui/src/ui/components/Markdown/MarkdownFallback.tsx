@@ -9,17 +9,8 @@ type Props = {
     text: string;
 };
 
-export const MarkdownFallback = React.forwardRef(function MarkdownFallback(
-    {text}: Props,
-    ref: React.Ref<HTMLDivElement>,
-) {
+export const MarkdownFallback = ({text}: Props) => {
     const {html} = useMarkdown({text, allowHTML: true}).result ?? {};
 
-    return (
-        <div
-            className={block(null, 'yfm')}
-            dangerouslySetInnerHTML={{__html: html ?? ''}}
-            ref={ref}
-        />
-    );
-});
+    return <div className={block(null, 'yfm')} dangerouslySetInnerHTML={{__html: html ?? ''}} />;
+};
