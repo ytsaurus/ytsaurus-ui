@@ -9,12 +9,12 @@ import {useSubmitHandler} from './useSubmitHandler';
 import {YTDFDialog} from '../../../containers/Dialog';
 
 import i18n from './i18n';
-import './PoolsWeightsEditModal.scss';
+import './EditOperationDialog.scss';
 import {validateNumber} from '../../../common/hammer/validate-number';
 
-const block = cn('operation-pools-weights');
+const block = cn('yt-edit-operation-dialog');
 
-export function PoolsWeightsEditModal() {
+export function EditOperationDialog() {
     const dispatch = useDispatch();
 
     const {visible, editable, loading, operation} = useSelector(
