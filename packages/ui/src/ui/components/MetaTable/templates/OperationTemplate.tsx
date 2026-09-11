@@ -254,7 +254,7 @@ TemplateLivePreivew.propTypes = {
 
 interface TemplateWeightProps {
     operation: Record<string, unknown>;
-    onEdit: () => void;
+    onEdit?: () => void;
     pool: Pool;
 }
 
@@ -271,7 +271,7 @@ export function TemplateWeight({operation, pool, onEdit}: TemplateWeightProps) {
 
 TemplateWeight.propTypes = {
     operation: PropTypes.object.isRequired,
-    onEdit: PropTypes.func.isRequired,
+    onEdit: PropTypes.func,
 };
 
 interface TemplateLayerPathProps {
