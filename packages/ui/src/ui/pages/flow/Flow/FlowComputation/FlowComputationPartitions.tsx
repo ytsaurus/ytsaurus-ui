@@ -4,6 +4,7 @@ import {type FlowComputationPartitionType} from '../../../../../shared/yt-types'
 import format from '../../../../common/hammer/format';
 import {concatByAnd} from '../../../../common/hammer/predicate';
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
+import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
 import {
     DataTableGravity,
     TableCell,
@@ -42,33 +43,35 @@ export function FlowComputationPartitions({
 }) {
     const {partitionIdFilter, setPartitionIdFilter} = useFlowPartitionIdFilter();
     return (
-        <WithStickyToolbar
-            className={block()}
-            toolbar={
-                <Toolbar
-                    itemsToWrap={[
-                        {
-                            node: (
-                                <TextInputWithDebounce
-                                    className={block('id-filter')}
-                                    placeholder={i18n('search-partition-by-id')}
-                                    value={partitionIdFilter}
-                                    onUpdate={setPartitionIdFilter}
-                                    hasClear
-                                />
-                            ),
-                        },
-                        {
-                            node: <JobStateFilter partitions={partitions} />,
-                        },
-                        {
-                            node: <StateFilter partitions={partitions} />,
-                        },
-                    ]}
-                />
-            }
-            content={<FlowComputationPartitionsTable partitions={partitions} />}
-        />
+        <CollapsibleSection name={i18n('title_partitions')}>
+            <WithStickyToolbar
+                className={block()}
+                toolbar={
+                    <Toolbar
+                        itemsToWrap={[
+                            {
+                                node: (
+                                    <TextInputWithDebounce
+                                        className={block('id-filter')}
+                                        placeholder={i18n('search-partition-by-id')}
+                                        value={partitionIdFilter}
+                                        onUpdate={setPartitionIdFilter}
+                                        hasClear
+                                    />
+                                ),
+                            },
+                            {
+                                node: <JobStateFilter partitions={partitions} />,
+                            },
+                            {
+                                node: <StateFilter partitions={partitions} />,
+                            },
+                        ]}
+                    />
+                }
+                content={<FlowComputationPartitionsTable partitions={partitions} />}
+            />
+        </CollapsibleSection>
     );
 }
 
