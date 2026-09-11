@@ -1,9 +1,5 @@
 .yt-edit-operation-dialog {
-    &__error {
-        margin-top: 16px;
-    }
-
-    &__title {
-        width: 100%;
+    .df-dialog_with_vertical_tabs {
+        min-height: 488px;
     }
 }
