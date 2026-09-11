@@ -28,6 +28,7 @@ import {
     type ListOperationEventsResponse,
     type OperationIdParams,
     type OutputFormat,
+    type PatchOperationSpecParams,
     type PathParams,
     type PipelineParams,
     type ReadTableParameters,
@@ -82,6 +83,7 @@ interface YTApiV3 {
     completeOperation(...args: ApiMethodParameters<OperationIdParams>): Promise<void>;
     resumeOperation(...args: ApiMethodParameters<OperationIdParams>): Promise<void>;
     suspendOperation(...args: ApiMethodParameters<OperationIdParams>): Promise<void>;
+    patchOpSpec(...args: ApiMethodParameters<PatchOperationSpecParams>): Promise<void>;
     updateOperationParameters(
         ...args: ApiMethodParameters<UpdateOperationParametersParams>
     ): Promise<void>;

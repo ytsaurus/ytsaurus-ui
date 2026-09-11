@@ -166,6 +166,13 @@ export interface OperationIdParams {
     operation_id: string;
 }
 
+export interface PatchOperationSpecParams extends OperationIdParams {
+    patches: Array<{
+        path: string;
+        value: unknown;
+    }>;
+}
+
 export interface UpdateOperationParametersParams extends OperationIdParams {
     _parameters: {
         scheduling_options_per_pool_tree: Record<string, unknown>;
