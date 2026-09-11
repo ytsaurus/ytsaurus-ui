@@ -4,9 +4,7 @@ import cn from 'bem-cn-lite';
 import AlertEvents from '../../../../../../components/AlertEvents/AlertEvents';
 import {Description} from '../../../../../../pages/operations/OperationDetail/tabs/details/Description';
 import CollapsibleSection from '../../../../../../components/CollapsibleSection/CollapsibleSection';
-import Button from '../../../../../../components/Button/Button';
 import {YTErrorBlock} from '../../../../../../containers/Block/Block';
-import Icon from '../../../../../../components/Icon/Icon';
 import {Flex, Switch} from '@gravity-ui/uikit';
 import {type AlertInfo} from '../../../../../../components/AlertEvents/AlertEvents';
 import {
@@ -46,7 +44,6 @@ type ReduxProps = {
               config: {main_resource?: 'gpu'; resource_limits?: Record<string, number>};
           }[]
         | undefined;
-    showEditPoolsWeightsModal(operation: DetailedOperationSelector, editable?: boolean): void;
 };
 
 export class DetailsBase extends Component<ReduxProps> {
@@ -56,11 +53,6 @@ export class DetailsBase extends Component<ReduxProps> {
 
     handleSwitchChange = (checked: boolean) => {
         this.setState({isAbsoluteValue: checked});
-    };
-
-    handleEditClick = () => {
-        const {operation, showEditPoolsWeightsModal} = this.props;
-        showEditPoolsWeightsModal(operation);
     };
 
     renderDescription() {
@@ -122,20 +114,6 @@ export class DetailsBase extends Component<ReduxProps> {
         );
     }
 
-    renderRuntimeOverview() {
-        return (
-            <Button
-                size="s"
-                onClick={this.handleEditClick}
-                title={i18n('context_edit-pools-and-weights')}
-                className={block('edit-button')}
-            >
-                <Icon awesome="pencil" />
-                &nbsp;{i18n('action_edit')}
-            </Button>
-        );
-    }
-
     renderRuntime() {
         const {runtime, operation, cluster, collapsibleSize, treeConfigs} = this.props;
 
@@ -145,7 +123,6 @@ export class DetailsBase extends Component<ReduxProps> {
                 <CollapsibleSection
                     name={i18n('title_runtime')}
                     className={block('runtime')}
-                    overview={this.renderRuntimeOverview()}
                     size={collapsibleSize}
                     marginDirection="bottom"
                 >

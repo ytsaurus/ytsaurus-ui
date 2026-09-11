@@ -1,0 +1,11 @@
+.edit-operation-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    &__info {
+        display: inline-flex;
+        color: var(--secondary-text);
+        cursor: help;
+    }
+}

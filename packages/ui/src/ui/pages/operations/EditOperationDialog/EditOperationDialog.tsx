@@ -207,7 +207,7 @@ export function EditOperationDialog({operationId, visible, onClose, onSuccess}: 
             onClose={onClose}
             onAdd={handleAdd}
             initialValues={initialValues}
-            headerProps={{title: i18n('title_edit-operation-pools')}}
+            headerProps={{title: i18n('title_edit-operation')}}
             footerProps={{textApply: i18n('action_save')}}
             isApplyDisabled={(state) =>
                 !operation ||

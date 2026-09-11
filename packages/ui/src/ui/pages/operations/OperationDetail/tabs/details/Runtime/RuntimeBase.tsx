@@ -58,18 +58,11 @@ type Props = {
     operation: Operation;
     cluster: string;
     treeConfigs?: {tree: string; config: Record<string, any>}[];
-} & {
-    showEditPoolsWeightsModal(operation: Operation, editable?: boolean): void;
 };
 
 export class RuntimeBase extends Component<Props> {
-    handlePoolEditClick = () => {
-        const {showEditPoolsWeightsModal, operation} = this.props;
-        showEditPoolsWeightsModal(operation);
-    };
-
     renderTree({progress, name}: RuntimeItem) {
-        const {cluster, operation, showEditPoolsWeightsModal, treeConfigs} = this.props;
+        const {cluster, operation, treeConfigs} = this.props;
         const {state} = operation;
 
         const {config} = treeConfigs?.find((item) => item.tree === name) || {};
@@ -104,7 +97,6 @@ export class RuntimeBase extends Component<Props> {
                                 key: 'pool',
                                 value: (
                                     <OperationPool
-                                        onEdit={this.handlePoolEditClick}
                                         cluster={cluster}
                                         state={state}
                                         pool={pool}
@@ -115,13 +107,7 @@ export class RuntimeBase extends Component<Props> {
                             },
                             {
                                 key: 'weight',
-                                value: (
-                                    <TemplateWeight
-                                        operation={operation}
-                                        pool={pool}
-                                        onEdit={() => showEditPoolsWeightsModal(operation)}
-                                    />
-                                ),
+                                value: <TemplateWeight operation={operation} pool={pool} />,
                             },
                             {
                                 key: 'fifo_index',

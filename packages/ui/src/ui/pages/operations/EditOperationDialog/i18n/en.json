@@ -1,5 +1,6 @@
 {
-  "title_edit-operation-pools": "Edit operation attributes",
+  "title_edit-operation": "Edit operation",
+  "context_edit-disabled-terminal-state": "The operation cannot be edited because it is already in a terminal state.",
   "section_general": "General",
   "section_resource-limits": "Resource Limits",
   "field_tree": "Tree",
@@ -9,8 +10,5 @@
   "field_gpu": "GPU",
   "field_memory": "Memory",
   "field_user-slots": "User slots",
-  "action_save": "Save",
-  "action_close": "Close",
-  "alert_save-success": "Operation attributes \"{{operation}}\" updated successfully",
-  "alert_save-failure": "Failed to update operation attributes \"{{operation}}\""
+  "action_save": "Save"
 }

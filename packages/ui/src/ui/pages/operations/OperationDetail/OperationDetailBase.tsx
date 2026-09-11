@@ -65,6 +65,7 @@ import {type UpdateFilterData} from '../../../store/reducers/operations/jobs/job
 import {type YTError} from '../../../types';
 import {JobsTimeline} from './tabs/JobsTimeline';
 import OperationDetailsMonitor from './tabs/monitor/OperationDetailsMonitor';
+import {EditOperationButton} from '../EditOperationButton/EditOperationButton';
 
 const detailBlock = cn('operation-detail');
 
@@ -106,7 +107,6 @@ type ReduxProps = {
     };
     promptAction(data: unknown): void;
     getOperation: (id: string) => void;
-    showEditPoolsWeightsModal(operation: DetailedOperationSelector, editable?: boolean): void;
     updateListJobsFilter: (data: UpdateFilterData) => void;
     listOperationEvents: (operationId: string) => void;
 };
@@ -201,11 +201,6 @@ export class OperationDetailBase extends React.Component<ReduxProps & RouteProps
         this.props.listOperationEvents(operationId);
     }
 
-    handlePoolsEditClick = () => {
-        const {operation, showEditPoolsWeightsModal} = this.props;
-        showEditPoolsWeightsModal(operation);
-    };
-
     renderAction = (action: ReduxProps['actions'][0]) => {
         const {promptAction, operation} = this.props;
 
@@ -292,13 +287,11 @@ export class OperationDetailBase extends React.Component<ReduxProps & RouteProps
                     label: i18n('field_pools'),
                     value: (
                         <TemplatePools
-                            onEdit={this.handlePoolsEditClick}
                             cluster={cluster}
                             pools={pools}
                             operationRefId={$value}
                             state={state}
                             erasedTrees={erasedTrees}
-                            editBtnVisibility="always"
                         />
                     ),
                 },
@@ -438,6 +431,14 @@ export class OperationDetailBase extends React.Component<ReduxProps & RouteProps
                     routed
                     routedPreserveLocation
                     size={UI_TAB_SIZE}
+                    rightContent={
+                        <EditOperationButton
+                            operationId={operation.$value}
+                            operationState={operation.state}
+                            view="edit-button"
+                            onSuccess={() => this.props.getOperation(operation.$value)}
+                        />
+                    }
                 />
             </div>
         );
