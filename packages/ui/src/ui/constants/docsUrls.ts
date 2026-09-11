@@ -6,6 +6,7 @@ export const docsUrls = {
     'acl:permissions': `${baseUrl}/user-guide/storage/access-control#authorization`,
     'acl:row-level-security': `${baseUrl}/user-guide/storage/row-level-security`,
     'api:cli': `${baseUrl}/api/cli/cli`,
+    'api:commands#patch_operation_spec': `${baseUrl}/api/commands#patch_operation_spec`,
     'bundle-controller:reserved-memory': ``,
     'bundles:tablet-errors': `${baseUrl}/faq#dynamic_tables`,
     'chyt:yt_tables#dynamic': `${baseUrl}/user-guide/data-processing/chyt/yt-tables#dynamic`,
