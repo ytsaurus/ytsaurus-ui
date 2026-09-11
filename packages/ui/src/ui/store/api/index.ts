@@ -1,7 +1,7 @@
 import {type BaseQueryFn, createApi} from '@reduxjs/toolkit/query/react';
-import {type YTApiIdType} from '../../../shared/constants/yt-api-id';
+import {YTApiId, type YTApiIdType} from '../../../shared/constants/yt-api-id';
 
-const tagTypes = [] as Array<YTApiIdType | `${YTApiIdType}_${string}`>;
+const tagTypes = [YTApiId.flowExecute] as Array<YTApiIdType | `${YTApiIdType}_${string}`>;
 
 const baseQuery: BaseQueryFn = () => {
     return {data: undefined};
