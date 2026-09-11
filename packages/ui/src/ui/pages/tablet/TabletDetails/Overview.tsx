@@ -213,7 +213,7 @@ function Overview({id, block}: Props) {
     const histogram = useSelector(selectHistogram);
 
     const handleHistogramChange = useCallback(
-        (histogram: string) => dispatch(changeActiveHistogram(histogram)),
+        (nextActiveHistogram: string) => dispatch(changeActiveHistogram(nextActiveHistogram)),
         [dispatch, activeHistogram],
     );
     const handleErrorsClick = useCallback(() => setErrorsVisibility(tabletErrors), [tabletErrors]);

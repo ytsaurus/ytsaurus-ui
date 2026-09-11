@@ -38,8 +38,8 @@ export function loadColumnPresetIfDefined(): ColumnPresetThunkAction {
             return Promise.resolve();
         }
 
-        const {hash} = selectColumnsPreset(state);
-        if (hashToLoad === hash) {
+        const columnsPresetHash = selectColumnsPreset(state).hash;
+        if (hashToLoad === columnsPresetHash) {
             return Promise.resolve();
         }
 

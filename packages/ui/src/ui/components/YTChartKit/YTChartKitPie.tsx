@@ -42,11 +42,11 @@ export function YTChartKitPie({format: fmt = 'Number', ...rest}: YTChartKitPiePr
             },
             tooltip: {
                 renderer({hovered}) {
-                    const {data} = hovered[0] ?? {};
-                    if (!data) {
+                    const hoveredData = hovered[0]?.data;
+                    if (!hoveredData) {
                         return null;
                     }
-                    const {value} = data as PieSeriesData;
+                    const {value} = hoveredData as PieSeriesData;
                     return (
                         <>
                             <b>{format.Percent((100 * value!) / sum)}</b>&nbsp;&nbsp;&nbsp;

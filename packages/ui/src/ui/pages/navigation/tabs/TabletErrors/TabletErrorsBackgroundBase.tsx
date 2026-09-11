@@ -1,0 +1,178 @@
+import React, {useEffect} from 'react';
+import {useSelector} from '../../../../store/redux-hooks';
+import cn from 'bem-cn-lite';
+
+import i18n from './i18n';
+
+import capitalize_ from 'lodash/capitalize';
+import isEmpty_ from 'lodash/isEmpty';
+import map_ from 'lodash/map';
+
+import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
+import {Loader} from '@gravity-ui/uikit';
+import {YTErrorBlock} from '../../../../containers/Block/Block';
+import Link from '../../../../containers/Link/Link';
+import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
+import {Secondary} from '@ytsaurus/components';
+import {
+    selectTabletErrorsBackgroundCountNoticeVisbile,
+    type selectTabletErrorsReplicationErrors,
+} from '../../../../store/selectors/navigation/tabs/tablet-errors-background';
+import {selectReplicatedTableReplicasMap} from '../../../../store/selectors/navigation/content/replicated-table';
+import {type YTError} from '../../../../types';
+
+const block = cn('navigation-tablet-errors-background');
+
+export function TabletErrorsBackgroundBase(props: {
+    loading: boolean;
+    loaded: boolean;
+    error: YTError | undefined;
+    path: string;
+    mode: string;
+    tabletErrors: {
+        tablet_errors?: Record<string, Array<YTError>>;
+        replication_errors?: Record<string, Array<YTError>>;
+    };
+    cluster: string;
+    replicationErrors: Record<string, Record<string, YTError[]>>;
+    getTabletErrors: () => void;
+}) {
+    const {path, mode, cluster, getTabletErrors} = props;
+    useEffect(() => {
+        getTabletErrors();
+    }, [path, mode]);
+
+    const {
+        loading,
+        loaded,
+        tabletErrors: {tablet_errors},
+        replicationErrors,
+        error,
+    } = props;
+    const initialLoading = loading && !loaded;
+
+    return (
+        <LoadDataHandler loaded={loaded} error={Boolean(error)} errorData={error}>
+            {initialLoading ? (
+                <Loader />
+            ) : (
+                <div className={block({loading: initialLoading})}>
+                    <TabletErrorsCountNotice />
+                    <CollapsibleSection name={i18n('title_tablet-errors')}>
+                        <TabletErrorsBlock
+                            cluster={cluster}
+                            items={tablet_errors}
+                            sectionClassName={block('section')}
+                        />
+                    </CollapsibleSection>
+                    <CollapsibleSection name={i18n('title_replication-errors')}>
+                        <ReplicationErrorsBlock cluster={cluster} data={replicationErrors} />
+                    </CollapsibleSection>
+                </div>
+            )}
+        </LoadDataHandler>
+    );
+}
+
+interface ReplicationErrorsBlockProps {
+    cluster: string;
+    data: ReturnType<typeof selectTabletErrorsReplicationErrors>;
+}
+
+function ReplicationErrorsBlock({data, cluster}: ReplicationErrorsBlockProps) {
+    let counter = 0;
+    return (
+        <React.Fragment>
+            {map_(data, (items, replicaId) => {
+                return (
+                    <CollapsibleSection
+                        key={replicaId}
+                        name={<ReplicaErrorHeader id={replicaId} />}
+                        className={block('group', block('section'))}
+                        collapsed={0 < counter++}
+                    >
+                        <TabletErrorsBlock cluster={cluster} items={items} />
+                    </CollapsibleSection>
+                );
+            })}
+        </React.Fragment>
+    );
+}
+
+function TabletErrorsCountNotice() {
+    const visible = useSelector(selectTabletErrorsBackgroundCountNoticeVisbile);
+    if (!visible) {
+        return null;
+    }
+    return <div className={block('count-notice')}>{i18n('alert_limited-errors-displayed')}</div>;
+}
+
+function TabletErrorsHeader({id, cluster}: {id: string; cluster: string}) {
+    return (
+        <React.Fragment>
+            {i18n('title_errors-of-tablet')} <Link url={`/${cluster}/tablet/${id}`}>{id}</Link>
+        </React.Fragment>
+    );
+}
+
+function ReplicaErrorHeader({id}: {id: string}) {
+    const data = useSelector(selectReplicatedTableReplicasMap);
+    const {[id]: attrs} = data;
+
+    if (!attrs) return null;
+    const {cluster_name: cluster, mode, replica_path: path} = attrs;
+
+    const link =
+        cluster && path ? <Link url={`/${cluster}/navigation?path=${path}`}>{path}</Link> : id;
+
+    return (
+        <React.Fragment>
+            {id}{' '}
+            <Secondary>
+                ({mode ? i18n('title_mode-replica-to', {mode}) : i18n('title_replica-to')}{' '}
+                {capitalize_(cluster)}, {i18n('title_table-path')} {link})
+            </Secondary>
+        </React.Fragment>
+    );
+}
+
+interface Props {
+    cluster: string;
+    items?: Record<string, Array<YTError>>;
+    sectionClassName?: string;
+}
+
+function TabletErrorsBlock({items, cluster, sectionClassName}: Props) {
+    if (isEmpty_(items)) {
+        return null;
+    }
+
+    let counter = 0;
+    return (
+        <div className={block('items')}>
+            {map_(items, (errors, id) => {
+                return (
+                    <CollapsibleSection
+                        key={id}
+                        className={block('group', sectionClassName)}
+                        size="s"
+                        name={<TabletErrorsHeader {...{id, cluster}} />}
+                        collapsed={0 < counter++}
+                    >
+                        {map_(errors, (error, index) => {
+                            return (
+                                <YTErrorBlock
+                                    key={index}
+                                    className={block('error')}
+                                    topMargin="none"
+                                    error={error}
+                                    disableLogger={true}
+                                />
+                            );
+                        })}
+                    </CollapsibleSection>
+                );
+            })}
+        </div>
+    );
+}

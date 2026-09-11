@@ -18,7 +18,7 @@ const block = cn('node-memory-usage-toolbar');
 function NodeMemoryUsageToolbar() {
     const dispatch = useDispatch();
     const viewMode = useSelector(selectNodeMemoryViewMode);
-    const filter = useSelector(selectNodeMemoryFilter);
+    const nodeMemoryFilter = useSelector(selectNodeMemoryFilter);
 
     const handleViewMode = React.useCallback((value: string) => {
         dispatch(
@@ -36,7 +36,7 @@ function NodeMemoryUsageToolbar() {
         <div className={block(null, 'elements-section')}>
             <div className={block('filter')}>
                 <Filter
-                    value={filter}
+                    value={nodeMemoryFilter}
                     onChange={handleFilter}
                     placeholder={
                         viewMode === 'cells'

@@ -34,8 +34,8 @@ const {
 
 const createStateKey = (group: string, key: string, direction: string) =>
     `components.nodes.setup.${group}.${key}.${direction}.value`;
-const createParam = (group: string, value: string, direction: string) => ({
-    stateKey: createStateKey(group, value, direction),
+const createParam = (group: string, key: string, direction: string) => ({
+    stateKey: createStateKey(group, key, direction),
     options: {serialize: (value: any) => value},
     initialState: direction === 'from' ? fromInitialValue : toInitialValue,
     type: 'number',

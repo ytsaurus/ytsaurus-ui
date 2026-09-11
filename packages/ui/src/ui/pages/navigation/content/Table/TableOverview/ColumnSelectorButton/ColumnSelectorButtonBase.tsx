@@ -1,24 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 
-import i18n from './i18n';
+import i18n from '../i18n';
 
-import Icon from '../../../../../components/Icon/Icon';
-import Button from '../../../../../components/Button/Button';
-
-import {openColumnSelectorModal} from '../../../../../store/actions/navigation/content/table/table';
-import {
-    selectAllColumns,
-    selectVisibleColumns,
-} from '../../../../../store/selectors/navigation/content/table';
-import {selectSchemaStrict} from '../../../../../store/selectors/navigation/tabs/schema';
+import Icon from '../../../../../../components/Icon/Icon';
+import Button from '../../../../../../components/Button/Button';
 import {Secondary} from '@ytsaurus/components';
-import ColumnsPresetButton from './ColumnsPresetButton';
-import {type RootState} from '../../../../../store/reducers';
-import {getConfigData} from '../../../../../config/ui-settings';
+import ColumnsPresetButton from '../ColumnsPresetButton';
+import {getConfigData} from '../../../../../../config/ui-settings';
 
-ColumnSelectorButton.propTypes = {
+ColumnSelectorButtonBase.propTypes = {
     // from parent
     block: PropTypes.func.isRequired,
 
@@ -40,7 +31,7 @@ interface Props {
     openColumnSelectorModal: () => void;
 }
 
-function ColumnSelectorButton({
+export function ColumnSelectorButtonBase({
     loading,
     isStrict,
     allColumns,
@@ -77,19 +68,3 @@ function ColumnSelectorButton({
         </React.Fragment>
     );
 }
-
-const mapStateToProps = (state: RootState) => {
-    const {loading} = state.navigation.content.table;
-
-    const visibleColumns = selectVisibleColumns(state);
-    const allColumns = selectAllColumns(state);
-    const isStrict = selectSchemaStrict(state);
-
-    return {visibleColumns, loading, allColumns, isStrict};
-};
-
-const mapDispatchToProps = {
-    openColumnSelectorModal,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ColumnSelectorButton);

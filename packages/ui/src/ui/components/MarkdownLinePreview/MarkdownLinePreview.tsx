@@ -32,11 +32,11 @@ export function MarkdownLinePreview({text, title, className, allowHTML = false}:
     const {result} = useMarkdown({text, allowHTML});
 
     const {plainText, html} = React.useMemo(() => {
-        const {html} = result ?? {};
+        const sourceHtml = result?.html;
         const div = document.createElement('div');
-        div.innerHTML = html ?? '';
-        const plainText = div.innerText;
-        return {html, plainText};
+        div.innerHTML = sourceHtml ?? '';
+        const previewText = div.innerText;
+        return {html: sourceHtml, plainText: previewText};
     }, [result]);
 
     return (

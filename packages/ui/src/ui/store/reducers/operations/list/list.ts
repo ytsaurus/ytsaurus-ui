@@ -180,7 +180,7 @@ function applyFilterPreset(
 ) {
     return reduce_(
         presets,
-        (state, value, name) => getUpdatedFilter(state, name as any, {value}),
+        (result, value, name) => getUpdatedFilter(result, name as any, {value}),
         state,
     );
 }
@@ -258,26 +258,26 @@ function reducer(state = initialState, action: OperationsListStateAction): Opera
             const counters: any = action.data;
             const filters = reduce_(
                 state.filters,
-                (filters, value, name) => {
+                (acc, value, name) => {
                     switch (value.type) {
                         case STATE_FILTER:
-                            filters[name as keyof typeof filters] = {
+                            acc[name as keyof typeof acc] = {
                                 ...value,
                                 counters,
                             };
                             break;
                         case PARAM_FILTER:
-                            filters[name as keyof typeof filters] = {
+                            acc[name as keyof typeof acc] = {
                                 ...value,
                                 counter: counters.failed_jobs_count,
                             };
                             break;
                         default:
-                            filters[name as keyof typeof filters] = value;
+                            acc[name as keyof typeof acc] = value;
                             break;
                     }
 
-                    return filters;
+                    return acc;
                 },
                 {} as OperationsListState['filters'],
             );

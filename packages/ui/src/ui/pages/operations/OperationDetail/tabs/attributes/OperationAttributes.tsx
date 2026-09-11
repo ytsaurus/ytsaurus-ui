@@ -15,12 +15,12 @@ import {useAppRumMeasureStart} from '../../../../../rum/rum-app-measures';
 import {YsonDownloadButton} from '../../../../../components/DownloadAttributesButton';
 
 function useOperationAttributesRumMesures() {
-    const loadState = useSelector(selectOperationDetailsLoadingStatus);
+    const operationLoadState = useSelector(selectOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.OPERATION_TAB_ATTRIBUTES,
         additionalStartType: RumMeasureTypes.OPERATION,
-        startDeps: [loadState],
+        startDeps: [operationLoadState],
         allowStart: ([loadState]) => {
             return !isFinalLoadingStatus(loadState);
         },
@@ -28,7 +28,7 @@ function useOperationAttributesRumMesures() {
 
     useRumMeasureStop({
         type: RumMeasureTypes.OPERATION_TAB_ATTRIBUTES,
-        stopDeps: [loadState],
+        stopDeps: [operationLoadState],
         allowStop: ([loadState]) => {
             return isFinalLoadingStatus(loadState);
         },

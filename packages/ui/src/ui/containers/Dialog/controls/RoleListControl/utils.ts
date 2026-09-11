@@ -85,9 +85,9 @@ export function roleListValueToSubjectList(
 function manyListDataItemToSubjectList(
     manyListDataItem: EditableManyListsItemType<RoleConverted>,
 ): Array<ResponsibleType> {
-    const {data} = manyListDataItem || {};
+    const items = (manyListDataItem || {}).data;
     return map_(
-        filter_(data, ({removed}) => !removed),
+        filter_(items, ({removed}) => !removed),
         ({data}) => {
             const {type, value} = data || {};
             return {type: type!, value: value!};
@@ -95,16 +95,17 @@ function manyListDataItemToSubjectList(
     );
 }
 
-export function extractChangedSubjects(value: {
+export function extractChangedSubjects(input: {
     current: EditableManyListsItemType<RoleConverted>;
     newItems: Array<ResponsibleType>;
 }): {
     added: Subject[];
     removed: Subject[];
 } {
-    const {current, newItems} = value;
+    const {current, newItems} = input;
     const added = newItems || [];
-    const removed = ((current && current.data) || []).filter(({removed}) => removed);
+    const removed = ((current && current.data) || []).filter(({removed: isRemoved}) => isRemoved);
+
     return {
         added: added.map(({type, value}) => {
             return type === 'users' ? {user: value} : {group: value};

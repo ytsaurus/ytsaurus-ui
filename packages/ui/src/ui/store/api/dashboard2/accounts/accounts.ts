@@ -131,8 +131,8 @@ export async function fetchAccounts(args: AccountsWidgetArgs) {
             };
 
             if (Array.isArray(medium)) {
-                medium.forEach((item) => {
-                    res[item] = account.getDiskSpaceProgressInfo(item, true);
+                medium.forEach((mediumName) => {
+                    res[mediumName] = account.getDiskSpaceProgressInfo(mediumName, true);
                 });
             }
 

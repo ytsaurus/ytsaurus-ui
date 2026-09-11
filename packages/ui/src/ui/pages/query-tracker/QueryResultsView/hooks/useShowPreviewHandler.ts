@@ -20,7 +20,7 @@ export function useShowPreviewHandler({queryId, resultIndex}: Props) {
     const {dataHandler, onShowPreview} = React.useMemo(() => {
         const cancelHelper = new CancelHelper();
 
-        const dataHandler = {
+        const handler = {
             onStartLoading: () => {},
             onSuccess: ({columnName, rowIndex, data}) => {
                 dispatch(
@@ -41,7 +41,7 @@ export function useShowPreviewHandler({queryId, resultIndex}: Props) {
             },
         } as CellDataHandlerQueries & {cancelHelper: CancelHelper};
 
-        const onShowPreview = async (
+        const showPreview = async (
             columnName: string,
             rowIndex: number,
             tag: string | undefined,
@@ -52,12 +52,12 @@ export function useShowPreviewHandler({queryId, resultIndex}: Props) {
                     queryId,
                     resultIndex,
                     {columnName, rowIndex},
-                    allowInlinePreview ? dataHandler : undefined,
+                    allowInlinePreview ? handler : undefined,
                 ),
             );
         };
 
-        return {dataHandler, onShowPreview};
+        return {dataHandler: handler, onShowPreview: showPreview};
     }, [queryId, resultIndex, dispatch]);
 
     React.useEffect(() => {

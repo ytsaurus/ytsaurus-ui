@@ -398,7 +398,7 @@ function processMastersData(
     };
 }
 
-function masters(state = initialState, action: MastersStateAction): MastersState {
+function mastersReducer(state = initialState, action: MastersStateAction): MastersState {
     switch (action.type) {
         case FETCH_MASTER_CONFIG.REQUEST:
             return {...state, fetchingConfig: true};
@@ -435,4 +435,4 @@ export type MastersStateAction =
     | ActionD<typeof FETCH_MASTER_DATA.FAILURE, YTError>
     | ActionD<typeof SET_MASTER_ALERTS, MasterAlert[]>;
 
-export default mergeStateOnClusterChange(initialState, {}, masters);
+export default mergeStateOnClusterChange(initialState, {}, mastersReducer);

@@ -57,9 +57,7 @@ const selectFilteredByHost = createSelector(
     (nodes, hostFilter) => {
         const hostFilters = hostFilter.split(/\s+/);
         return filter_(nodes, (node) => {
-            return some_(hostFilters, (hostFilter) =>
-                node?.host?.toLowerCase().includes(hostFilter),
-            );
+            return some_(hostFilters, (term) => node?.host?.toLowerCase().includes(term));
         });
     },
 );

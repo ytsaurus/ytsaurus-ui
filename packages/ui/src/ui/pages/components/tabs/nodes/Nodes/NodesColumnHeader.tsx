@@ -18,13 +18,13 @@ export function NodesColumnHeader(
     const sortState = useSelector(selectTables)[COMPONENTS_NODES_TABLE_ID];
     const order = oldSortStateToOrderType(sortState);
 
-    const column = props.options?.find(({column}) => sortState.field === column);
+    const sortColumn = props.options?.find(({column}) => sortState.field === column);
 
     return (
         <ColumnHeader
             {...props}
-            column={props.options ? (column?.column ?? props.column) : props.column}
-            order={column ? order : undefined}
+            column={props.options ? (sortColumn?.column ?? props.column) : props.column}
+            order={sortColumn ? order : undefined}
             onSort={(columnName) => {
                 const colInfo = props.options?.find(({column}) => columnName === column);
                 dispatch(

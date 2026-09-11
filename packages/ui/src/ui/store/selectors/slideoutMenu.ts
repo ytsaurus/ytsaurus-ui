@@ -52,8 +52,8 @@ const selectRecentPagesInfoRaw = createSelector(
     (pageInfoRaw, isAdmin, allowExpPages, uiConfig) => {
         const expPages = UIFactory.getExperimentalPages();
         const hiddenPages = new Set(
-            expPages.filter((expPages) => {
-                return !allowExpPages?.includes(expPages);
+            expPages.filter((page) => {
+                return !allowExpPages?.includes(page);
             }),
         );
 
@@ -132,7 +132,7 @@ export const selectPagesOrderedByName = createSelector([selectRecentPagesInfo], 
 
 export const selectPagesOrderedByUser = createSelector(
     [selectPagesOrderedByName, selectSettingsPagesOrder, selectSettingsPagesPinned],
-    (pages, order, pinned) => {
+    (pages, order, pinnedPages) => {
         const pagesById = reduce_(
             pages,
             (acc, item) => {
@@ -149,7 +149,7 @@ export const selectPagesOrderedByUser = createSelector(
                 return res
                     ? {
                           ...res,
-                          pinned: pinned[res.id],
+                          pinned: pinnedPages[res.id],
                       }
                     : false;
             }),
@@ -158,7 +158,7 @@ export const selectPagesOrderedByUser = createSelector(
         forEach_(pagesById, (item) => {
             ordered.push({
                 ...item,
-                pinned: pinned[item.id],
+                pinned: pinnedPages[item.id],
             });
         });
 

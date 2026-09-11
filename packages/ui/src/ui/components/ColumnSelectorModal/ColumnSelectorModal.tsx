@@ -1,5 +1,5 @@
 import React from 'react';
-import block from 'bem-cn-lite';
+import cn from 'bem-cn-lite';
 
 import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
@@ -12,7 +12,7 @@ import i18n from './i18n';
 
 import './ColumnSelectorModal.scss';
 
-const b = block('column-selector-modal');
+const block = cn('column-selector-modal');
 
 export type ColumnSelectorModalProps<DataT> = {
     items: Array<ColumnSelectorItem<DataT>>;
@@ -192,7 +192,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
     }) {
         return (
             <ColumnSelector {...props} className={className}>
-                <div className={b('no-content')}>
+                <div className={block('no-content')}>
                     <p>
                         <strong>{title}</strong>
                     </p>
@@ -211,7 +211,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
             return null;
         }
 
-        const headingCN = block('elements-heading')({size: 's'}, b('header'));
+        const headingCN = cn('elements-heading')({size: 's'}, block('header'));
 
         const selectorProps = this._getSelectorProps(rest, srcItems);
         const sortableSelectorProps = this._getSortableSelectorProps(selectorProps, items);
@@ -222,8 +222,8 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
         );
 
         return (
-            <div className={b()}>
-                <div className={b('panel', {left: 'yes'})}>
+            <div className={block()}>
+                <div className={block('panel', {left: 'yes'})}>
                     <div className={headingCN}>
                         {i18n('title_all')} &nbsp;
                         <span className="elements-secondary-text">{srcItems?.length}</span>
@@ -236,7 +236,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
                     })}
                 </div>
 
-                <div className={b('panel')}>
+                <div className={block('panel')}>
                     <div className={headingCN}>
                         {i18n('title_selected')} &nbsp;
                         <span className="elements-secondary-text">{selectedItemsCount}</span>

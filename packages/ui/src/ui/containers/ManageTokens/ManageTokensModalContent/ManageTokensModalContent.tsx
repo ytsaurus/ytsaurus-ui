@@ -36,13 +36,13 @@ const AuthenticationGenerateTokenFormSection: FC<{onClose: () => void}> = ({onCl
     const {getPassword} = useManageTokensPasswordModalContext();
     const user = useSelector(selectCurrentUserName);
     const dispatch = useDispatch();
-    const [error, setError] = useState<YTError>();
-    const [token, setToken] = useState<string>();
+    const [stateError, setStateError] = useState<YTError>();
+    const [stateToken, setStateToken] = useState<string>();
 
     const handleSubmit = (form: FormApi<FormData>) => {
         const {description} = form.getState().values;
 
-        setError(undefined);
+        setStateError(undefined);
 
         return getPassword()
             .then((password_sha256 = '') => {
@@ -56,7 +56,7 @@ const AuthenticationGenerateTokenFormSection: FC<{onClose: () => void}> = ({onCl
                     }),
                 )
                     .then((token) => {
-                        setToken(token);
+                        setStateToken(token);
 
                         return dispatch(
                             manageTokensGetList({
@@ -68,7 +68,7 @@ const AuthenticationGenerateTokenFormSection: FC<{onClose: () => void}> = ({onCl
                             .catch(() => undefined);
                     })
                     .catch((error) => {
-                        setError(error);
+                        setStateError(error);
 
                         return Promise.reject(error);
                     });
@@ -78,7 +78,7 @@ const AuthenticationGenerateTokenFormSection: FC<{onClose: () => void}> = ({onCl
             });
     };
 
-    if (token) {
+    if (stateToken) {
         return (
             <div className={block('new-token')}>
                 <h2>Copy token value</h2>
@@ -88,9 +88,9 @@ const AuthenticationGenerateTokenFormSection: FC<{onClose: () => void}> = ({onCl
                 />
                 <br />
                 <Alert
-                    message={token}
+                    message={stateToken}
                     layout="horizontal"
-                    actions={<ClipboardButton text={token} />}
+                    actions={<ClipboardButton text={stateToken} />}
                 />
                 <div className={block('tokens-action')}>
                     <Button
@@ -123,7 +123,7 @@ const AuthenticationGenerateTokenFormSection: FC<{onClose: () => void}> = ({onCl
                     type: 'textarea',
                     caption: 'Description',
                 },
-                ...makeErrorFields([error]),
+                ...makeErrorFields([stateError]),
             ]}
             footerProps={{
                 propsButtonCancel: {
@@ -358,13 +358,13 @@ export const ManageTokensModalSections: React.FC<{passwordSha256?: string}> = ({
 const ManageTokenPasswordGuard = () => {
     const {getPassword} = useManageTokensPasswordModalContext();
     const dispatch = useDispatch();
-    const [passwordSha256, setPassword] = React.useState<string | undefined>();
+    const [passwordHash, setPasswordHash] = React.useState<string | undefined>();
     const [open, setOpen] = React.useState(false);
 
     React.useEffect(() => {
         getPassword()
             .then((passwordSha256) => {
-                setPassword(passwordSha256);
+                setPasswordHash(passwordSha256);
                 setOpen(true);
             })
             .catch(() => {
@@ -376,7 +376,7 @@ const ManageTokenPasswordGuard = () => {
         return null;
     }
 
-    return <ManageTokensModalSections passwordSha256={passwordSha256} />;
+    return <ManageTokensModalSections passwordSha256={passwordHash} />;
 };
 
 export const ManageTokensModalContent = () => {

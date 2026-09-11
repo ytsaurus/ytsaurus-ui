@@ -1,12 +1,8 @@
-import React, {useEffect} from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
-import cn from 'bem-cn-lite';
+import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-import {type Column, type Settings} from '@gravity-ui/react-data-table';
+import {type Column} from '@gravity-ui/react-data-table';
 
 import format from '../../../../../../common/hammer/format';
-import {DataTableYT} from '../../../../../../components/DataTableYT';
-import {YTErrorBlock} from '../../../../../../containers/Block/Block';
 import {QUEUE_RATE_MODE} from '../../../../../../constants/navigation/tabs/queue';
 import {
     datetime,
@@ -34,7 +30,7 @@ import i18n from './i18n';
 
 import './Partitions.scss';
 
-const block = cn('queue-partitions');
+import {PartitionsBase, block} from './PartitionsBase';
 
 const writeRateName: Record<QUEUE_RATE_MODE, string> = {
     get [QUEUE_RATE_MODE.ROWS]() {
@@ -87,37 +83,6 @@ const getColumns = createSelector(
     },
 );
 
-const settings: Settings = {displayIndices: false};
-
-const Partitions: React.VFC<PropsFromRedux> = ({
-    loadQueuePartitions,
-    columns,
-    partitions,
-    partitionsError,
-    partitionsLoading,
-    partitionsLoaded,
-}) => {
-    useEffect(() => {
-        loadQueuePartitions();
-    }, []);
-
-    if (partitionsError) {
-        return <YTErrorBlock error={partitionsError} topMargin="half" />;
-    }
-
-    return (
-        <DataTableYT
-            className={block()}
-            columns={columns}
-            data={partitions}
-            loading={partitionsLoading}
-            loaded={partitionsLoaded}
-            useThemeYT
-            settings={settings}
-        />
-    );
-};
-
 function mapStateToProps(state: RootState) {
     return {
         columns: getColumns(state),
@@ -132,7 +97,6 @@ const mapDispatchToProps = {
     loadQueuePartitions,
 };
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
+const Partitions = connect(mapStateToProps, mapDispatchToProps)(PartitionsBase);
 
-export default connector(Partitions);
+export default Partitions;

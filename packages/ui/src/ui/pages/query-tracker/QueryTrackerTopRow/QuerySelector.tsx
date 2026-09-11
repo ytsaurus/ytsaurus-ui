@@ -35,11 +35,19 @@ export const QuerySelector = <T,>({
             popupClassName={popupBlock(null, popupClassName)}
             value={value ? [value] : []}
             onUpdate={handleChange}
-            renderFilter={({onChange, ...props}) => (
-                <div className={popupBlock('filter')}>
-                    <TextInput {...props} size={size} onChange={(e) => onChange(e.target.value)} />
-                </div>
-            )}
+            renderFilter={(filterProps) => {
+                const {onChange: onFilterChange, ...inputProps} = filterProps;
+
+                return (
+                    <div className={popupBlock('filter')}>
+                        <TextInput
+                            {...inputProps}
+                            size={size}
+                            onChange={(e) => onFilterChange(e.target.value)}
+                        />
+                    </div>
+                );
+            }}
             {...props}
         >
             {children(items)}

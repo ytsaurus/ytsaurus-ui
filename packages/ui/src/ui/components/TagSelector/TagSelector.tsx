@@ -29,7 +29,7 @@ function TagSelector(props: TagSelectorProps) {
     const {className, onChange, items, placeholder, value, ...rest} = props;
 
     const options = React.useMemo(() => {
-        return map_(items, (value) => ({value, text: value}));
+        return map_(items, (tag) => ({value: tag, text: tag}));
     }, [items]);
 
     return (

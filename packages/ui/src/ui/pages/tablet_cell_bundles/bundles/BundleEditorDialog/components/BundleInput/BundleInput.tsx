@@ -93,19 +93,19 @@ export function BundleInput(props: BundleInputProps) {
         }
     }, [value]);
 
-    const handleChange = (rawValue: string) => {
-        const value = parseValue(rawValue, format);
-        const error = errorFromValue(value);
-        setParsedValue(value);
-        setRawValue(rawValue);
-        setFormattedValue(formatValue(value, format, {digits: decimalPlaces}));
-        setParsedError(error);
+    const handleChange = (nextRawValue: string) => {
+        const nextParsedValue = parseValue(nextRawValue, format);
+        const validationError = errorFromValue(nextParsedValue);
+        setParsedValue(nextParsedValue);
+        setRawValue(nextRawValue);
+        setFormattedValue(formatValue(nextParsedValue, format, {digits: decimalPlaces}));
+        setParsedError(validationError);
 
-        if (error) {
+        if (validationError) {
             return;
         }
 
-        onChange(value);
+        onChange(nextParsedValue);
     };
 
     const text = focused ? rawValue : formattedValue;

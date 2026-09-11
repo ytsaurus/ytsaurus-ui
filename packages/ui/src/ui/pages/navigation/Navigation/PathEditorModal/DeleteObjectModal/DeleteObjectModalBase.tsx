@@ -1,0 +1,270 @@
+import React, {Component} from 'react';
+// @ts-expect-error
+import ypath from '@ytsaurus/interface-helpers/lib/ypath';
+import cn from 'bem-cn-lite';
+
+import map_ from 'lodash/map';
+
+import {MapNodeIcon} from '../../../../../components/MapNodeIcon/MapNodeIcon';
+import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary';
+import {MetaTable} from '@ytsaurus/components';
+import HelpLink from '../../../../../components/HelpLink/HelpLink';
+import {Checkbox, Loader} from '@gravity-ui/uikit';
+import {YTErrorBlock} from '../../../../../containers/Block/Block';
+import Modal from '../../../../../components/Modal/Modal';
+import Label from '../../../../../components/Label';
+import hammer from '../../../../../common/hammer';
+import i18n from './i18n';
+import UIFactory from '../../../../../UIFactory';
+import {
+    type DeleteObjectItem,
+    type MulipleInfoItem,
+    type ResourceUsage,
+} from '../../../../../store/reducers/navigation/modals/delete-object';
+import {type YTError} from '../../../../../types';
+
+const block = cn('navigation-delete-object-modal');
+
+type OwnProps = {};
+
+type StateProps = {
+    error: boolean;
+    errorData: YTError;
+    visible: boolean;
+    permanently: boolean;
+    item: DeleteObjectItem | DeleteObjectItem[];
+    loading: boolean;
+    loadingRealPath: boolean;
+    errorRealPath: boolean;
+    errorDataRealPath: YTError;
+    realPath: string;
+    multipleInfo: MulipleInfoItem[];
+    resourceUsage: ResourceUsage;
+    multipleMode: boolean;
+    inTrash: boolean;
+};
+
+type DispatchProps = {
+    getRealPath: (args_0: {path: string; type: string}) => void;
+    deleteObject: () => void;
+    deleteObjects: () => void;
+    getRealPaths: (items: {path: string}[]) => void;
+    closeDeleteModal: () => void;
+    togglePermanentlyDelete: () => void;
+};
+
+type DeleteObjectModalProps = OwnProps & StateProps & DispatchProps;
+
+export class DeleteObjectModalBase extends Component<DeleteObjectModalProps> {
+    override componentDidUpdate(prevProps: DeleteObjectModalProps) {
+        const {visible, item, getRealPath, getRealPaths, multipleMode} = this.props;
+
+        if (!prevProps.visible && visible) {
+            if (multipleMode) {
+                getRealPaths(item as DeleteObjectItem[]);
+            } else {
+                getRealPath(item as DeleteObjectItem);
+            }
+        }
+    }
+
+    get content() {
+        const {loadingRealPath, errorRealPath, error, multipleMode} = this.props;
+
+        if (loadingRealPath) {
+            return this.renderLoader();
+        } else if (errorRealPath || error) {
+            return this.renderError();
+        }
+
+        return multipleMode ? this.renderMultipleModeContent() : this.renderContent();
+    }
+
+    handleDeleteClick = () => {
+        const {multipleMode, deleteObject, deleteObjects} = this.props;
+
+        if (multipleMode) {
+            deleteObjects();
+        } else {
+            deleteObject();
+        }
+    };
+
+    renderLoader() {
+        return (
+            <div className={block({loading: true})}>
+                <Loader />
+            </div>
+        );
+    }
+
+    renderError() {
+        const {error, errorData, errorDataRealPath} = this.props;
+        const errorContent = error ? errorData : errorDataRealPath;
+
+        return (
+            <div className={block({error: true})}>
+                <YTErrorBlock error={errorContent} />
+            </div>
+        );
+    }
+
+    renderPermanentlyCheckbox() {
+        const {permanently, togglePermanentlyDelete, inTrash} = this.props;
+
+        return (
+            <p className={block('delete', {permanently})}>
+                <Checkbox
+                    size="l"
+                    disabled={inTrash}
+                    checked={permanently}
+                    content={i18n('confirm_delete-permanently')}
+                    onChange={togglePermanentlyDelete}
+                />
+
+                <Label theme="danger" text={i18n('alert_cannot-be-undone')} />
+            </p>
+        );
+    }
+
+    renderMultipleModeContent() {
+        const {item, multipleInfo} = this.props;
+
+        return (
+            <ErrorBoundary>
+                <div className={block({multiple: true})}>
+                    <div className={block('table')}>
+                        <div className={block('table-header')}>
+                            <div className={block('preview-icon')} />
+                            <div className={block('preview-name')}>{i18n('field_name')}</div>
+                            <div className={block('preview-disk-space')}>
+                                {i18n('field_disk-space')}
+                            </div>
+                            <div className={block('preview-node-count')}>
+                                {i18n('field_node-count')}
+                            </div>
+                            <div className={block('preview-node-count')}>
+                                {i18n('field_row-count')}
+                            </div>
+                        </div>
+
+                        {map_(multipleInfo, ({path, resourceUsage}, index) => {
+                            const {type, titleUnquoted, rows, unmergedRows} = (
+                                item as DeleteObjectItem[]
+                            )[index];
+                            const diskSpace = ypath.get(resourceUsage, '/disk_space');
+                            const nodeCount = ypath.get(resourceUsage, '/node_count');
+
+                            return (
+                                <React.Fragment key={path}>
+                                    <MapNodeIcon node={(item as DeleteObjectItem[])[index]} />
+                                    <span title={path} className="elements-ellipsis">
+                                        {titleUnquoted}
+                                    </span>
+                                    <span>{hammer.format['Bytes'](diskSpace)}</span>
+                                    <span>
+                                        {type === 'table'
+                                            ? hammer.format.NO_VALUE
+                                            : hammer.format['Number'](nodeCount)}
+                                    </span>
+                                    <span>
+                                        {unmergedRows
+                                            ? `≈ ${hammer.format['Number'](unmergedRows)}`
+                                            : hammer.format['Number'](rows)}
+                                    </span>
+                                </React.Fragment>
+                            );
+                        })}
+                    </div>
+                    {this.renderPermanentlyCheckbox()}
+                </div>
+            </ErrorBoundary>
+        );
+    }
+
+    renderContent() {
+        const {item, resourceUsage} = this.props;
+        const {type, rows, unmergedRows} = item as DeleteObjectItem;
+        const diskSpace = ypath.get(resourceUsage, '/disk_space');
+        const nodeCount = ypath.get(resourceUsage, '/node_count');
+
+        const buildItems = () => {
+            const items = [
+                {
+                    key: 'disk-space',
+                    label: i18n('field_disk-space'),
+                    value: hammer.format['Bytes'](diskSpace),
+                },
+            ];
+
+            switch (type) {
+                case 'table':
+                    items.push({
+                        key: 'rows',
+                        label: i18n('field_rows'),
+                        value: unmergedRows
+                            ? `≈ ${hammer.format['Number'](unmergedRows)}`
+                            : hammer.format['Number'](rows),
+                    });
+
+                    return items;
+
+                case 'access_control_object':
+                    return [];
+
+                default:
+                    items.push({
+                        key: 'node-count',
+                        label: i18n('field_node-count'),
+                        value: hammer.format['Number'](nodeCount),
+                    });
+
+                    return items;
+            }
+        };
+
+        return (
+            <ErrorBoundary>
+                <div className={block()}>
+                    <div className={block()}>
+                        <p className={block('object')}>
+                            <MapNodeIcon node={item as DeleteObjectItem} />
+                            <span className={block('path')}>{(item as DeleteObjectItem).path}</span>
+                        </p>
+
+                        <MetaTable className={block('meta')} items={buildItems()} />
+
+                        {this.renderPermanentlyCheckbox()}
+                    </div>
+                </div>
+            </ErrorBoundary>
+        );
+    }
+
+    override render() {
+        const {visible, closeDeleteModal, permanently, loading} = this.props;
+        const theme = permanently ? 'outlined-danger' : 'action';
+        const helpLinkUrl = UIFactory.docsUrls['common:regular_system_processes'];
+        const helpLink =
+            helpLinkUrl !== '' ? (
+                <HelpLink text={i18n('action_documentation')} url={helpLinkUrl} />
+            ) : null;
+        const title = permanently ? i18n('action_delete') : i18n('action_move-to-trash');
+        const confirmText = permanently ? i18n('action_delete') : i18n('action_move-to-trash');
+
+        return (
+            <Modal
+                title={title}
+                visible={visible}
+                loading={loading}
+                confirmTheme={theme}
+                confirmText={confirmText}
+                content={this.content}
+                footerContent={helpLink}
+                contentClassName={block('content')}
+                onCancel={closeDeleteModal}
+                onConfirm={this.handleDeleteClick}
+            />
+        );
+    }
+}
