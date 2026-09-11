@@ -1,4 +1,8 @@
 import {type OperationPool, type OperationPoolResourceLimits} from '../selectors';
+import {
+    type SchedulingOptionsPerPoolTreeUpdate,
+    buildSchedulingOptionsUpdate,
+} from '../../../store/actions/operations/helpers/updateOperationAttributes';
 import i18n from './i18n';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 
@@ -36,16 +40,6 @@ export function buildInitialValues(pools: OperationPool[]): FormValues {
     return formValues;
 }
 
-type SetPoolsAndWeightsOptions = {closeOnSuccess?: boolean};
-
-type SetPoolsAndWeightsFn = (
-    operation: {pools?: OperationPool[]},
-    poolsMap: Record<string, string>,
-    weightsMap: Record<string, number | undefined>,
-    resourceLimitsMap: Record<string, OperationPoolResourceLimits>,
-    options?: SetPoolsAndWeightsOptions,
-) => (dispatch: unknown) => Promise<unknown>;
-
 function collectMapsForTrees(values: FormValues, treesFilter?: Set<string>) {
     const poolsMap: Record<string, string> = {};
     const weightsMap: Record<string, number | undefined> = {};
@@ -80,20 +74,23 @@ function collectMapsForTrees(values: FormValues, treesFilter?: Set<string>) {
     return {poolsMap, weightsMap, resourceLimitsMap};
 }
 
-export async function submitTrees(
+export function getSchedulingOptionsUpdate(
     values: FormValues,
-    operation: {pools?: OperationPool[]},
-    dispatch: (action: unknown) => Promise<unknown>,
-    setPoolsAndWeights: SetPoolsAndWeightsFn,
-) {
+    operation: {id: string; pools: OperationPool[]},
+): SchedulingOptionsPerPoolTreeUpdate {
     const {poolsMap, weightsMap, resourceLimitsMap} = collectMapsForTrees(values);
-
-    await dispatch(
-        setPoolsAndWeights(operation, poolsMap, weightsMap, resourceLimitsMap, {
-            closeOnSuccess: true,
-        }),
-    );
+    return buildSchedulingOptionsUpdate(operation.pools, poolsMap, weightsMap, resourceLimitsMap);
 }
+
+type SetPoolsAndWeightsOptions = {closeOnSuccess?: boolean};
+
+type SetPoolsAndWeightsFn = (
+    operation: {pools?: OperationPool[]},
+    poolsMap: Record<string, string>,
+    weightsMap: Record<string, number | undefined>,
+    resourceLimitsMap: Record<string, OperationPoolResourceLimits>,
+    options?: SetPoolsAndWeightsOptions,
+) => (dispatch: unknown) => Promise<unknown>;
 
 export async function submitTreesWithToaster(
     values: FormValues,
@@ -101,8 +98,14 @@ export async function submitTreesWithToaster(
     dispatch: (action: unknown) => Promise<unknown>,
     setPoolsAndWeights: SetPoolsAndWeightsFn,
 ) {
+    const {poolsMap, weightsMap, resourceLimitsMap} = collectMapsForTrees(values);
+
     await wrapApiPromiseByToaster(
-        submitTrees(values, operation, dispatch, setPoolsAndWeights) as Promise<unknown>,
+        dispatch(
+            setPoolsAndWeights(operation, poolsMap, weightsMap, resourceLimitsMap, {
+                closeOnSuccess: true,
+            }),
+        ),
         {
             toasterName: 'pools-weights-edit-all',
             successTitle: i18n('alert_save-success', {operation: operation.$value}),
