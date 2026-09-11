@@ -166,6 +166,12 @@ export interface OperationIdParams {
     operation_id: string;
 }
 
+export interface UpdateOperationParametersParams extends OperationIdParams {
+    _parameters: {
+        scheduling_options_per_pool_tree: Record<string, unknown>;
+    };
+}
+
 export interface BaseBatchParams {
     transaction_id?: string;
     ui_marker?: string;
