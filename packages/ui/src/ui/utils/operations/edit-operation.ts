@@ -4,6 +4,12 @@ import {
     type OperationPoolResourceLimits,
     type OperationStates,
 } from '../../pages/operations/selectors';
+import {type CumulativeOperationSpecPatch, applyOperationSpecPatch} from './specification-patch';
+
+type OperationSpecForEditing = {
+    max_failed_job_count?: unknown;
+    tasks?: Record<string, {job_count?: unknown}>;
+};
 
 type SchedulingOptions = {
     pool?: string;
@@ -14,6 +20,8 @@ type SchedulingOptions = {
 export type OperationEditAttributes = {
     id: string;
     state: OperationStates;
+    full_spec?: OperationSpecForEditing;
+    cumulative_spec_patch?: CumulativeOperationSpecPatch;
     runtime_parameters?: {
         scheduling_options_per_pool_tree?: Record<string, SchedulingOptions>;
     };
@@ -23,6 +31,7 @@ export type EditOperationData = {
     id: string;
     state: OperationStates;
     pools: OperationPool[];
+    resultingSpec?: OperationSpecForEditing;
 };
 
 function prepareResourceLimits(
@@ -60,9 +69,15 @@ function preparePools(attributes: OperationEditAttributes): OperationPool[] {
 }
 
 export function prepareEditOperationData(attributes: OperationEditAttributes): EditOperationData {
+    const fullSpec = ypath.getValue(attributes, '/full_spec') as
+        OperationSpecForEditing | undefined;
+    const cumulativeSpecPatch = ypath.getValue(attributes, '/cumulative_spec_patch') as
+        CumulativeOperationSpecPatch | undefined;
+
     return {
         id: ypath.getValue(attributes, '/id'),
         state: ypath.getValue(attributes, '/state'),
         pools: preparePools(attributes),
+        resultingSpec: applyOperationSpecPatch(fullSpec, cumulativeSpecPatch),
     };
 }
