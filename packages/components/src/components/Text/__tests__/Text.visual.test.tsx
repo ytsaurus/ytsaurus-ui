@@ -12,39 +12,85 @@ import {
     WarningLight,
     YTText,
 } from '../Text';
-import {type TextVisualCase, textStoryFrameStyle, textVisualStoryCases} from '../textStorySetup';
+import {
+    type TextVisualCase,
+    type TextVisualComponentName,
+    textStoryFrameStyle,
+    textVisualStoryCases,
+} from '../textStorySetup';
 
-const renderTextCase = (c: TextVisualCase): ReactElement => {
-    switch (c.kind) {
-        case 'yt-text':
-            return <YTText {...c.props} />;
-        case 'Secondary':
-            return <Secondary disabled={c.disabled}>{c.children}</Secondary>;
-        case 'Bold':
-            return <Bold>{c.children}</Bold>;
-        case 'SecondaryBold':
-            return <SecondaryBold>{c.children}</SecondaryBold>;
-        case 'Warning':
-            return <Warning>{c.children}</Warning>;
-        case 'WarningLight':
-            return <WarningLight>{c.children}</WarningLight>;
-        case 'NoWrap':
-            return <NoWrap>{c.children}</NoWrap>;
-        case 'Escaped':
-            return <Escaped text={c.text} />;
-        default: {
-            const _exhaustive: never = c;
-            return _exhaustive;
+const renderTextCase = <ComponentName extends TextVisualComponentName>(
+    componentName: ComponentName,
+    visualCase: TextVisualCase<ComponentName>,
+): ReactElement => {
+    switch (componentName) {
+        case 'YTText': {
+            const {props} = visualCase as TextVisualCase<'YTText'>;
+
+            return <YTText {...props} />;
         }
+
+        case 'Secondary': {
+            const props = visualCase as TextVisualCase<'Secondary'>;
+
+            return <Secondary {...props} />;
+        }
+
+        case 'Bold': {
+            const {children} = visualCase as TextVisualCase<'Bold'>;
+
+            return <Bold>{children}</Bold>;
+        }
+
+        case 'SecondaryBold': {
+            const {children} = visualCase as TextVisualCase<'SecondaryBold'>;
+
+            return <SecondaryBold>{children}</SecondaryBold>;
+        }
+
+        case 'Warning': {
+            const {children} = visualCase as TextVisualCase<'Warning'>;
+
+            return <Warning>{children}</Warning>;
+        }
+
+        case 'WarningLight': {
+            const {children} = visualCase as TextVisualCase<'WarningLight'>;
+
+            return <WarningLight>{children}</WarningLight>;
+        }
+
+        case 'NoWrap': {
+            const {children} = visualCase as TextVisualCase<'NoWrap'>;
+
+            return <NoWrap>{children}</NoWrap>;
+        }
+
+        case 'Escaped': {
+            const {text} = visualCase as TextVisualCase<'Escaped'>;
+
+            return <Escaped text={text} />;
+        }
+
+        default:
+            throw new Error(`Unknown text component: ${componentName}`);
     }
 };
 
-for (const storyCase of textVisualStoryCases) {
-    test(`Text: ${storyCase.id}`, async ({mount, expectScreenshot}) => {
-        const innerStyle = storyCase.kind === 'yt-text' ? storyCase.wrapperStyle : undefined;
-        await mount(
-            <div style={{...textStoryFrameStyle, ...innerStyle}}>{renderTextCase(storyCase)}</div>,
-        );
-        await expectScreenshot();
-    });
+for (const [componentName, componentCases] of Object.entries(textVisualStoryCases) as Array<
+    [TextVisualComponentName, Record<string, TextVisualCase<TextVisualComponentName>>]
+>) {
+    for (const [caseId, caseData] of Object.entries(componentCases)) {
+        test(`${componentName}: ${caseId}`, async ({mount, expectScreenshot}) => {
+            const innerStyle = 'wrapperStyle' in caseData ? caseData.wrapperStyle : undefined;
+
+            await mount(
+                <div style={{...textStoryFrameStyle, ...innerStyle}}>
+                    {renderTextCase(componentName, caseData)}
+                </div>,
+            );
+
+            await expectScreenshot();
+        });
+    }
 }
