@@ -1,0 +1,8 @@
+{
+  "field_computation": "Computation",
+  "field_state-kind": "State kind",
+  "field_partition": "Partition",
+  "field_state-name": "State",
+  "action_reset-filters": "Reset filters",
+  "hint_target-unavailable": "The selected computation has no state of this kind"
+}

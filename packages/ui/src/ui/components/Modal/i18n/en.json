@@ -1,4 +1,5 @@
 {
   "action_apply": "Apply",
-  "action_cancel": "Cancel"
+  "action_cancel": "Cancel",
+  "action_close": "Close"
 }
