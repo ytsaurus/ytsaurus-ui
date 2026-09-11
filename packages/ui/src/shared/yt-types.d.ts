@@ -970,6 +970,7 @@ export type OperationEvent = {
 export type ListOperationEventsResponse = Array<OperationEvent>;
 
 export type SupportedFeatures = {
+    cumulative_spec_patch?: boolean;
     compression_codecs?: Array<string>;
     erasure_codecs?: Array<string>;
     primitive_types?: Array<string>;

@@ -325,8 +325,8 @@ export class DetailedOperationSelector extends OperationSelector {
 
             this.failedJobs = jobs.failed;
 
-            if (fullSpec) {
-                this.totalFailedJobs = ypath.getValue(fullSpec, '/max_failed_job_count');
+            if (this.resultingSpec) {
+                this.totalFailedJobs = ypath.getValue(this.resultingSpec, '/max_failed_job_count');
             }
             this.failedJobsProgress = this.totalFailedJobs
                 ? (this.failedJobs! / this.totalFailedJobs) * 100

@@ -105,9 +105,10 @@ export const enum YTApiId {
 
     listOperations = 'listOperations',
 
+    operationEditData = 'operationEditData',
     operationGetJobs = 'operationGetJobs',
     operationIntermediateResourceUsage = 'operationIntermediateResourceUsage',
-    operationEditData = 'operationEditData',
+    operationPatchSpec = 'operationPatchSpec',
     operationUpdateParameters = 'operationUpdateParameters',
     operationIsEphemeral = 'operationIsEphemeral',
     operationsSchedulerInstances = 'operationsSchedulerInstances',
