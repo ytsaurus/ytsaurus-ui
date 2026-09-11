@@ -199,10 +199,10 @@ function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPrelo
                     return Promise.reject({deniedKeyColumns});
                 }
 
-                const columns = map_(availableColumns, unipika.decode);
+                const decodedAvailableColumns = map_(availableColumns, unipika.decode);
                 const parameters = {
                     query: Query.prepareQuery({
-                        columns,
+                        columns: decodedAvailableColumns,
                         path,
                         keyColumns,
                         offsetColumns,
@@ -232,12 +232,12 @@ function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPrelo
             });
     } else {
         // Get only visible columns for updating data. Get omittedColumns from store.
-        const columns = selectVisibleColumns(state);
+        const visibleColumns = selectVisibleColumns(state);
         const omittedColumns = selectOmittedColumns(state);
         const deniedKeyColumns = selectDeniedKeyColumns(state);
-        const decodedColumns = decodeNameField(columns);
-        const outputFormat = getRequestOutputFormat(
-            decodedColumns,
+        const decodedVisibleColumns = decodeNameField(visibleColumns);
+        const updateOutputFormat = getRequestOutputFormat(
+            decodedVisibleColumns,
             stringLimit,
             login,
             defaultTableColumnLimit,
@@ -252,7 +252,7 @@ function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPrelo
 
         const parameters = {
             query: Query.prepareQuery({
-                columns: decodedColumns,
+                columns: decodedVisibleColumns,
                 path,
                 keyColumns,
                 offsetColumns,
@@ -261,7 +261,7 @@ function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPrelo
                 descending,
                 orderBySupported,
             }),
-            output_format: outputFormat,
+            output_format: updateOutputFormat,
             dump_error_into_response: true,
         };
 
@@ -469,15 +469,15 @@ export function getTableData() {
         const attributes = selectAttributes(state);
 
         return dispatch(loadColumnPresetIfDefined()).then(() => {
-            const updateColumns = ({
+            const applyColumns = ({
                 rows,
                 columns,
                 omittedColumns,
                 storedColumns,
                 deniedKeyColumns = [],
             }) => {
-                const state = getState();
-                const defaultTableColumnLimit = selectDefaultTableColumnLimit(state);
+                const currentState = getState();
+                const defaultTableColumnLimit = selectDefaultTableColumnLimit(currentState);
                 const preparedColumns = Columns.prepareColumns(
                     attributes,
                     rows,
@@ -491,7 +491,7 @@ export function getTableData() {
                 );
 
                 // if we have columns preset -> update checked according to preset
-                const preset = selectColumnsPreset(state);
+                const preset = selectColumnsPreset(currentState);
                 if (preset?.columns) {
                     preparedColumns.forEach((column) => {
                         column.checked = preset?.columns?.includes(column.name);
@@ -513,7 +513,7 @@ export function getTableData() {
             return dispatch(waitForFontFamilies(restoreColumns(getState())))
                 .then(({columns, omittedColumns, storedColumns, ...rest}) => {
                     if (columns) {
-                        updateColumns({
+                        applyColumns({
                             rows: [],
                             columns,
                             omittedColumns,
@@ -524,7 +524,7 @@ export function getTableData() {
                     return dispatch(updateTableData());
                 })
                 .catch((error) => {
-                    updateColumns({
+                    applyColumns({
                         rows: [],
                         columns: Columns.getSchemaColumns(attributes),
                         omittedColumns: [],

@@ -207,8 +207,8 @@ function calcAggregationRow(treeItem, masterMemoryMedia) {
         perMedium: {},
     };
 
-    forEach_(children, (treeItem) => {
-        const {attributes: acc} = treeItem;
+    forEach_(children, (child) => {
+        const {attributes: acc} = child;
         const account = acc.getResourceInfoSource(true);
 
         forEach_(AGGREGATION_FIELDS, (key) => {

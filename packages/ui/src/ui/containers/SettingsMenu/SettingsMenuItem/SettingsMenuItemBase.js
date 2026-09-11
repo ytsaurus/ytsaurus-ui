@@ -1,18 +1,12 @@
 import React, {Component, Fragment} from 'react';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 
 import {Checkbox, Switch} from '@gravity-ui/uikit';
 
-import {setSetting} from '../../store/actions/settings';
-import {selectGetSetting} from '../../store/selectors/settings';
-
-import './SettingsMenu.scss';
-
 const b = block('elements-page');
 
-class SettingsMenuItem extends Component {
+export class SettingsMenuItemBase extends Component {
     static propTypes = {
         // from connect
         getSetting: PropTypes.func.isRequired,
@@ -87,17 +81,3 @@ class SettingsMenuItem extends Component {
         );
     }
 }
-
-function mapStateToProps(state) {
-    return {
-        getSetting: selectGetSetting(state),
-    };
-}
-
-/**
- * @deprecated
- * Uses the legacy `settingName`/`settingNS` pattern.
- * Use `BooleanSettingItem` instead. Note: it does not yet support the
- * `useSwitch`/`annotationHighlight` variants of this component — extend it if you need those.
- */
-export default connect(mapStateToProps, {setSetting})(SettingsMenuItem);

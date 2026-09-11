@@ -50,11 +50,11 @@ const mapStateToProps = (state) => {
 const LinkConnected = connect(mapStateToProps)(Link);
 
 export default function LinkWithRum() {
-    const loadState = useSelector(selectLoadState);
+    const navigationLoadState = useSelector(selectLoadState);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_CONTENT_LINK,
-        startDeps: [loadState],
+        startDeps: [navigationLoadState],
         allowStart: ([loadState]) => {
             return !isFinalLoadingStatus(loadState);
         },
@@ -62,7 +62,7 @@ export default function LinkWithRum() {
 
     useRumMeasureStop({
         type: RumMeasureTypes.NAVIGATION_CONTENT_LINK,
-        stopDeps: [loadState],
+        stopDeps: [navigationLoadState],
         allowStop: ([loadState]) => {
             return isFinalLoadingStatus(loadState);
         },

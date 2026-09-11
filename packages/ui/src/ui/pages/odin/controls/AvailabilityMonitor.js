@@ -156,8 +156,8 @@ function useInitMonitor(ref) {
     const [domData, setDomData] = useState(null);
 
     useEffect(() => {
-        const domData = init(ref.current);
-        setDomData(domData);
+        const data = init(ref.current);
+        setDomData(data);
     }, []);
 
     return domData;

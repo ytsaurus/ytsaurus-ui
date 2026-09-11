@@ -41,20 +41,20 @@ function Overview({className}) {
     );
 
     const handlePathChange = useCallback(
-        (path) => dispatch(changeParameters('path', path)),
+        (value) => dispatch(changeParameters('path', value)),
         [dispatch],
     );
     const handleAttributesChange = useCallback(
-        (attributes) => dispatch(changeParameters('attributes', attributes)),
+        (value) => dispatch(changeParameters('attributes', value)),
         [dispatch],
     );
 
     const handleCommandChange = useCallback(
-        (command) => dispatch(changeParameters('command', command, true)),
+        (value) => dispatch(changeParameters('command', value, true)),
         [dispatch],
     );
     const handleMaxSizeChange = useCallback(
-        (maxSize) => dispatch(changeParameters('maxSize', maxSize)),
+        (value) => dispatch(changeParameters('maxSize', value)),
         [dispatch],
     );
 

@@ -28,20 +28,20 @@ export function prepareTabletCells(tabletCells) {
 
         let peer;
         let peerAddress;
-        let state;
+        let peerState;
         let lastHydraRestartReason;
 
         if (peerCount) {
-            peer = find_(peers, (peer) => peer.state === 'leading') || peers[0];
+            peer = find_(peers, ({state}) => state === 'leading') || peers[0];
             peerAddress = peer.address;
-            state = peer.state;
+            peerState = peer.state;
             lastHydraRestartReason = peer.last_hydra_restart_reason;
         }
 
         return {
             id,
             health,
-            state,
+            state: peerState,
             bundle,
             tablets,
             memory,

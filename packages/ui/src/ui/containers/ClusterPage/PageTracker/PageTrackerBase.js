@@ -1,10 +1,7 @@
 import {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 
-import {trackPageVisit, trackTabVisit} from '../../store/actions/menu';
-
-class PageTracker extends Component {
+export class PageTrackerBase extends Component {
     static propTypes = {
         match: PropTypes.shape({
             params: PropTypes.object,
@@ -46,10 +43,3 @@ class PageTracker extends Component {
     getTab = (match) => match.params.tab;
     render = () => null;
 }
-
-const mapDispatchToProps = {
-    trackPageVisit,
-    trackTabVisit,
-};
-
-export default connect(null, mapDispatchToProps)(PageTracker);

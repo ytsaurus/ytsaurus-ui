@@ -1,95 +1,48 @@
 import React, {Component} from 'react';
 import block from 'bem-cn-lite';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 import {compose} from 'redux';
 
 import {Select} from '@gravity-ui/uikit';
 
 import WithStickyToolbar, {
     STICKY_TOOLBAR_BOTTOM,
-} from '../../../../components/WithStickyToolbar/WithStickyToolbar';
+} from '../../../../../components/WithStickyToolbar/WithStickyToolbar';
 
-import hammer from '../../../../common/hammer';
-import {
-    selectFavouriteAccountsSet,
-    selectFilteredAccounts,
-    selectFilteredAccountsOfDashboard,
-} from '../../../../store/selectors/accounts/dashboard';
+import hammer from '../../../../../common/hammer';
+import AccountsTotal from '../AccountsTotal';
 
-import {
-    selectAccountsVisibilityMode,
-    selectAccountsVisibilityModeOfDashboard,
-} from '../../../../store/selectors/settings';
-import AccountsTotal from './AccountsTotal';
-
-import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
-import withStickyHead from '../../../../components/ElementsTable/hocs/withStickyHead';
-import withStickyFooter from '../../../../components/ElementsTable/hocs/withStickyFooter';
-import {YTErrorBlock} from '../../../../containers/Block/Block';
-import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
-import Filter from '../../../../components/Filter/Filter';
-import AccountLink from '../../AccountLink';
-import Icon from '../../../../components/Icon/Icon';
-import CustomRadioButton from '../../../../components/RadioButton/RadioButton';
-import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
-import Modal from '../../../../components/Modal/Modal';
-import Editor from './Editor/Editor';
-import AccountAlerts from './AccountAlerts';
+import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
+import withStickyHead from '../../../../../components/ElementsTable/hocs/withStickyHead';
+import withStickyFooter from '../../../../../components/ElementsTable/hocs/withStickyFooter';
+import {YTErrorBlock} from '../../../../../containers/Block/Block';
+import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary';
+import Filter from '../../../../../components/Filter/Filter';
+import AccountLink from '../../../AccountLink';
+import Icon from '../../../../../components/Icon/Icon';
+import CustomRadioButton from '../../../../../components/RadioButton/RadioButton';
+import ElementsTable from '../../../../../components/ElementsTable/ElementsTable';
+import Modal from '../../../../../components/Modal/Modal';
+import Editor from '../Editor/Editor';
+import AccountAlerts from '../AccountAlerts';
 import {Tooltip, Warning} from '@ytsaurus/components';
-
-import {loadUsers} from '../../../../store/actions/accounts/editor';
-import {accountsToggleFavourite} from '../../../../store/actions/favourites';
-import getTableProps from '../../../../utils/accounts/tables';
+import getTableProps from '../../../../../utils/accounts/tables';
 import {
     genRadioButtonVisibleAccounts,
     getContentModeOptions,
     makeReadableItems,
-} from '../../../../utils/accounts';
-import {selectMediumList} from '../../../../store/selectors/thor';
-import {
-    changeContentFilter,
-    changeMediumFilter,
-    changeNameFilter,
-    closeEditorModal,
-    filterUsableAccounts,
-    loadEditedAccount,
-    setAccountsAbcServiceFilter,
-    setAccountsTreeState,
-    setAccountsVisibilityMode,
-    setAccountsVisibilityModeOfDashboard,
-    setActiveAccount,
-    showEditorModal,
-} from '../../../../store/actions/accounts/accounts';
-import {
-    selectAccountsAbcServiceIdSlugFilter,
-    selectActiveAccountAggregationRow,
-} from '../../../../store/selectors/accounts/accounts';
-import {isNullable} from '../../../../utils';
-import {DASHBOARD_VIEW_CONTEXT} from '../../../../constants/index';
-import {AccountResourceName} from '../../../../constants/accounts/accounts';
+} from '../../../../../utils/accounts';
+import {isNullable} from '../../../../../utils';
+import {DASHBOARD_VIEW_CONTEXT} from '../../../../../constants/index';
+import {AccountResourceName} from '../../../../../constants/accounts/accounts';
 
-import {ProgressStackByTreeItem} from './ProgressStack';
-
-import './AccountsGeneralTab.scss';
-import i18n from './i18n';
-import {
-    selectAccountsColumnFields,
-    selectAccountsContentMode,
-    selectAccountsMapByName,
-    selectAccountsMasterMemoryContentMode,
-} from '../../../../store/selectors/accounts/accounts-ts';
-import {
-    selectCluster,
-    selectClusterUiConfig,
-    selectClusterUiConfigEnablePerAccountTabletAccounting,
-} from '../../../../store/selectors/global';
-import {TabletAccountingNotice} from './Editor/content/TabletsContent';
-import AccountStaticConfiguration from './AccountStaticConfiguration/AccountStaticConfiguration';
-import Button from '../../../../components/Button/Button';
-import MasterMemoryTableMode from './MasterMemoryTableMode';
-import UIFactory from '../../../../UIFactory';
-import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';
+import {ProgressStackByTreeItem} from '../ProgressStack';
+import i18n from '../i18n';
+import {TabletAccountingNotice} from '../Editor/content/TabletsContent';
+import AccountStaticConfiguration from '../AccountStaticConfiguration/AccountStaticConfiguration';
+import Button from '../../../../../components/Button/Button';
+import MasterMemoryTableMode from '../MasterMemoryTableMode';
+import UIFactory from '../../../../../UIFactory';
 
 const b = block('accounts');
 const progressTooltipClassname = b('progress-tooltip');
@@ -154,7 +107,7 @@ function VisibilityNotice({mode}) {
     return !message ? null : <Warning>{message}</Warning>;
 }
 
-class AccountsGeneralTab extends Component {
+export class AccountsGeneralTabBase extends Component {
     static propTypes = {
         accounts: PropTypes.array.isRequired,
         nameToAccountMap: PropTypes.object.isRequired,
@@ -787,69 +740,3 @@ class AccountsGeneralTab extends Component {
         );
     }
 }
-
-const makeMapStateToProps = () => {
-    return (state, ownProps) => {
-        const nameToAccountMap = selectAccountsMapByName(state);
-        const favouriteAccountsSet = selectFavouriteAccountsSet(state);
-
-        const {
-            accounts: {accounts},
-        } = state;
-
-        const {viewContext} = ownProps;
-        const isDashboard = viewContext === DASHBOARD_VIEW_CONTEXT;
-
-        const contextViewTree = isDashboard
-            ? selectFilteredAccountsOfDashboard(state)
-            : selectFilteredAccounts(state);
-
-        return {
-            ...accounts,
-            activeContentModeFilter: selectAccountsContentMode(state),
-
-            clusterUiConfig: selectClusterUiConfig(state),
-
-            mediumList: selectMediumList(state),
-            accounts: accounts.accounts,
-            contextViewTree,
-            nameToAccountMap,
-
-            cluster: selectCluster(state),
-
-            activeAccountAggregation: selectActiveAccountAggregationRow(state),
-            favouriteAccountsSet,
-            dashboardVisibilityMode: isDashboard
-                ? selectAccountsVisibilityModeOfDashboard(state)
-                : selectAccountsVisibilityMode(state),
-            abcServiceFilter: selectAccountsAbcServiceIdSlugFilter(state),
-            columnFields: selectAccountsColumnFields(state),
-
-            enable_per_account_tablet_accounting:
-                selectClusterUiConfigEnablePerAccountTabletAccounting(state),
-
-            collapsibleSize: UI_COLLAPSIBLE_SIZE,
-
-            masterMemoryContentMode: selectAccountsMasterMemoryContentMode(state),
-        };
-    };
-};
-
-const mapDispatchToProps = {
-    changeNameFilter,
-    changeContentFilter,
-    changeMediumFilter,
-    filterUsableAccounts,
-    closeEditorModal,
-    loadUsers,
-    setAccountsTreeState,
-    loadEditedAccount,
-    setActiveAccount,
-    showEditorModal,
-    accountsToggleFavourite,
-    setAccountsVisibilityModeOfDashboard,
-    setAccountsVisibilityMode,
-    setAccountsAbcServiceFilter,
-};
-
-export default connect(makeMapStateToProps, mapDispatchToProps)(AccountsGeneralTab);
