@@ -26,6 +26,7 @@ interface Props<ValueT extends string = string> {
     routed?: boolean;
     routedPreserveLocation?: boolean;
     exactNavLink?: boolean;
+    rightContent?: React.ReactNode;
 }
 
 export interface TabItem<ValueT extends string = string> {
@@ -149,6 +150,9 @@ class Tabs<ValueT extends string = string> extends React.Component<Props<ValueT>
                 {externalItems.map((item) => {
                     return this.renderTab(item);
                 })}
+                {this.props.rightContent && (
+                    <li className={b('right-content')}>{this.props.rightContent}</li>
+                )}
             </ul>
         );
     }
