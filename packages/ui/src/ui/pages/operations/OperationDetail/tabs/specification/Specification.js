@@ -30,6 +30,7 @@ import {docsUrl} from '../../../../../config';
 import UIFactory from '../../../../../UIFactory';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
 import {YsonDownloadButton} from '../../../../../components/DownloadAttributesButton';
+import {selectIsCumulativeSpecPatchSupported} from '../../../../../store/selectors/global/supported-features';
 
 const block = cn('operation-specification');
 
@@ -41,13 +42,14 @@ const onResize = throttle_(
     {leading: false},
 );
 
-function Specification({operation, operationId}) {
+function Specification({operation, operationId, isCumulativeSpecPatchSupported}) {
     const helpUrl = UIFactory.docsUrls['operations:operations_options'];
 
     const providedSpec = operation.typedProvidedSpec || operation.typedSpec;
 
     const unrecognizedSpec = operation.typedUnrecognizedSpec || {};
     const fullSpec = operation.typedFullSpec;
+    const cumulativeSpecPatch = operation.typedCumulativeSpecPatch || {};
 
     const hasUnrecognized = keys_(unrecognizedSpec).length > 0;
 
@@ -55,22 +57,27 @@ function Specification({operation, operationId}) {
         provided: hasUnrecognized,
         unrecognized: false,
         resulting: true,
+        patch: true,
     });
-
     const onToggleProvided = React.useCallback((provided) => {
-        setCollapsed({unrecognized: true, resulting: true, provided});
+        setCollapsed({unrecognized: true, resulting: true, patch: true, provided});
         onResize();
-    });
+    }, []);
 
     const onToggleUnrecognized = React.useCallback((unrecognized) => {
-        setCollapsed({unrecognized, provided: true, resulting: true});
+        setCollapsed({unrecognized, provided: true, resulting: true, patch: true});
         onResize();
-    });
+    }, []);
 
     const onToggleResulting = React.useCallback((resulting) => {
-        setCollapsed({unrecognized: true, resulting, provided: true});
+        setCollapsed({unrecognized: true, resulting, provided: true, patch: true});
         onResize();
-    });
+    }, []);
+
+    const onTogglePatch = React.useCallback((patch) => {
+        setCollapsed({unrecognized: true, resulting: true, provided: true, patch});
+        onResize();
+    }, []);
 
     return (
         <ErrorBoundary>
@@ -146,6 +153,28 @@ function Specification({operation, operationId}) {
                         />
                     </CollapsibleSectionStateLess>
                 )}
+
+                {isCumulativeSpecPatchSupported && (
+                    <CollapsibleSectionStateLess
+                        name={i18n('title_specification-patch')}
+                        onToggle={onTogglePatch}
+                        collapsed={collapsed.patch}
+                        size={UI_COLLAPSIBLE_SIZE}
+                        marginDirection="bottom"
+                    >
+                        <YsonWithScroll
+                            value={cumulativeSpecPatch}
+                            settings={unipika.prepareSettings()}
+                            extraTools={
+                                <YsonDownloadButton
+                                    value={cumulativeSpecPatch}
+                                    settings={unipika.prepareSettings()}
+                                    name={`specification_patch_${operationId}`}
+                                />
+                            }
+                        />
+                    </CollapsibleSectionStateLess>
+                )}
             </div>
         </ErrorBoundary>
     );
@@ -154,11 +183,14 @@ function Specification({operation, operationId}) {
 Specification.propTypes = {
     // from connect
     operation: PropTypes.object.isRequired,
+    operationId: PropTypes.string.isRequired,
+    isCumulativeSpecPatchSupported: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
     operation: state.operations.detail.operation,
     operationId: selectOperationId(state),
+    isCumulativeSpecPatchSupported: selectIsCumulativeSpecPatchSupported(state),
 });
 
 const SpecificationConnected = connect(mapStateToProps)(Specification);

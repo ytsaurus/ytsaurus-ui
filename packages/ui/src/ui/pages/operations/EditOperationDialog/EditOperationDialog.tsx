@@ -4,21 +4,42 @@ import cn from 'bem-cn-lite';
 import {Loader} from '@gravity-ui/uikit';
 
 import {type YTError} from '../../../../@types/types';
-import {validateNumber} from '../../../common/hammer/validate-number';
-import {type FormApi, YTDFDialog, makeErrorFields} from '../../../containers/Dialog';
-import {YTApiId} from '../../../rum/rum-wrap-api';
+import {OPERATION_TERMINAL_STATES, type OperationPool, type OperationStates} from '../selectors';
+import {
+    type FormValues as PoolFormValues,
+    buildInitialValues,
+    getSchedulingOptionsUpdate,
+} from './utils';
+import {
+    type DialogField,
+    type DialogTabField,
+    type FormApi,
+    YTDFDialog,
+    makeErrorFields,
+} from '../../../containers/Dialog';
+import {patchOperationSpec} from '../../../store/actions/operations/helpers/patchOperationSpec';
 import {updateOperationAttributes} from '../../../store/actions/operations/helpers/updateOperationAttributes';
 import {useGetOperationQuery} from '../../../store/api/yt';
+import {useSelector} from '../../../store/redux-hooks';
+import {selectIsCumulativeSpecPatchSupported} from '../../../store/selectors/global/supported-features';
 import {showErrorPopup} from '../../../utils/utils';
+import {operationSpecPatchToItems} from '../../../utils/operations/specification-patch';
 import {
     type EditOperationData,
     type OperationEditAttributes,
     prepareEditOperationData,
 } from '../../../utils/operations/edit-operation';
-import {OPERATION_TERMINAL_STATES, type OperationPool, type OperationStates} from '../selectors';
-import {type FormValues, buildInitialValues, getSchedulingOptionsUpdate} from './utils';
+import {
+    type SpecificationPatchFormValues,
+    getSpecificationPatchFromFormValues,
+    getSpecificationPatchInitialValues,
+    getSpecificationPatchTaskNames,
+    makeSpecificationPatchFields,
+} from './SpecificationForm';
 
 import i18n from './i18n';
+import {validateNumber} from '../../../common/hammer/validate-number';
+import {YTApiId} from '../../../rum/rum-wrap-api';
 
 import './EditOperationDialog.scss';
 
@@ -31,7 +52,12 @@ type Props = {
     onSuccess?: () => void | Promise<void>;
 };
 
-const OPERATION_EDIT_ATTRIBUTES = ['id', 'state', 'runtime_parameters'] as const;
+type FormValues = Record<string, PoolFormValues[string] | SpecificationPatchFormValues> & {
+    specification: SpecificationPatchFormValues;
+};
+
+const SPECIFICATION_TAB = 'specification';
+const OPERATION_EDIT_ATTRIBUTES = ['id', 'state', 'full_spec', 'runtime_parameters'] as const;
 
 function makePoolTreeTabs(
     pools: OperationPool[],
@@ -42,7 +68,7 @@ function makePoolTreeTabs(
         const tree = item.tree;
 
         return {
-            type: 'tab-vertical' as const,
+            type: 'yt-edit-operation-tab' as const,
             name: tree,
             title: tree,
             fields: [
@@ -130,12 +156,61 @@ function makePoolTreeTabs(
     });
 }
 
-function hasChanges(values: FormValues, operation: EditOperationData) {
-    return Object.keys(getSchedulingOptionsUpdate(values, operation)).length > 0;
+function getPoolValues(values: FormValues, pools: OperationPool[]): PoolFormValues {
+    const result: PoolFormValues = {};
+
+    for (const pool of pools) {
+        const valuesForTree = values[pool.tree] as PoolFormValues[string] | undefined;
+
+        if (valuesForTree) {
+            result[pool.tree] = valuesForTree;
+        }
+    }
+
+    return result;
+}
+
+function prepareChanges(
+    values: FormValues,
+    operation: EditOperationData,
+    taskNames: string[],
+    isCumulativeSpecPatchSupported: boolean,
+) {
+    const specificationPatch = isCumulativeSpecPatchSupported
+        ? operationSpecPatchToItems(
+              getSpecificationPatchFromFormValues(values.specification, taskNames),
+          )
+        : [];
+    const schedulingOptions = getSchedulingOptionsUpdate(
+        getPoolValues(values, operation.pools),
+        operation,
+    );
+
+    return {specificationPatch, schedulingOptions};
+}
+
+function hasChanges(
+    values: FormValues,
+    operation: EditOperationData,
+    taskNames: string[],
+    isCumulativeSpecPatchSupported: boolean,
+) {
+    try {
+        const {specificationPatch, schedulingOptions} = prepareChanges(
+            values,
+            operation,
+            taskNames,
+            isCumulativeSpecPatchSupported,
+        );
+        return specificationPatch.length > 0 || Object.keys(schedulingOptions).length > 0;
+    } catch {
+        return false;
+    }
 }
 
 export function EditOperationDialog({operationId, visible, onClose, onSuccess}: Props) {
     const [submitErrors, setSubmitErrors] = useState<Array<YTError | Error>>([]);
+    const isCumulativeSpecPatchSupported = useSelector(selectIsCumulativeSpecPatchSupported);
     const {
         data: operationAttributes,
         error: loadError,
@@ -146,7 +221,10 @@ export function EditOperationDialog({operationId, visible, onClose, onSuccess}: 
             id: YTApiId.operationEditData,
             parameters: {
                 operation_id: operationId,
-                attributes: [...OPERATION_EDIT_ATTRIBUTES],
+                attributes: [
+                    ...OPERATION_EDIT_ATTRIBUTES,
+                    ...(isCumulativeSpecPatchSupported ? ['cumulative_spec_patch'] : []),
+                ],
             },
         },
         {refetchOnMountOrArgChange: true},
@@ -159,16 +237,22 @@ export function EditOperationDialog({operationId, visible, onClose, onSuccess}: 
                 : undefined,
         [loadError, loading, operationAttributes],
     );
-    const {pools, initialValues} = useMemo(() => {
-        const operationPools = operation?.pools ?? [];
-        return {
-            pools: operationPools,
-            initialValues: buildInitialValues(operationPools),
-        };
-    }, [operation]);
+
     const isTerminal = operation
         ? OPERATION_TERMINAL_STATES.has(operation.state as OperationStates)
         : false;
+
+    const {pools, initialValues, taskNames} = useMemo(() => {
+        const operationPools = operation?.pools ?? [];
+        return {
+            pools: operationPools,
+            initialValues: {
+                specification: getSpecificationPatchInitialValues(),
+                ...buildInitialValues(operationPools),
+            },
+            taskNames: getSpecificationPatchTaskNames(operation?.resultingSpec),
+        };
+    }, [operation]);
 
     const handleAdd = async (form: FormApi<FormValues>) => {
         if (!operation) {
@@ -176,13 +260,32 @@ export function EditOperationDialog({operationId, visible, onClose, onSuccess}: 
         }
 
         setSubmitErrors([]);
-        const schedulingOptions = getSchedulingOptionsUpdate(form.getState().values, operation);
 
-        try {
-            await updateOperationAttributes(operation.id, schedulingOptions);
-        } catch (error) {
-            setSubmitErrors([error as YTError | Error]);
-            throw error;
+        const {values} = form.getState();
+        const {specificationPatch, schedulingOptions} = prepareChanges(
+            values,
+            operation,
+            taskNames,
+            isCumulativeSpecPatchSupported,
+        );
+        const mutations: Array<Promise<void>> = [];
+
+        if (specificationPatch.length > 0) {
+            mutations.push(patchOperationSpec(operation.id, specificationPatch));
+        }
+
+        if (Object.keys(schedulingOptions).length > 0) {
+            mutations.push(updateOperationAttributes(operation.id, schedulingOptions));
+        }
+
+        const results = await Promise.allSettled(mutations);
+        const errors = results.flatMap((result) =>
+            result.status === 'rejected' ? [result.reason as YTError | Error] : [],
+        );
+
+        if (errors.length) {
+            setSubmitErrors(errors);
+            throw errors[0];
         }
 
         try {
@@ -197,6 +300,24 @@ export function EditOperationDialog({operationId, visible, onClose, onSuccess}: 
     }
 
     const errors = [loadError, ...submitErrors];
+    const fields = [
+        ...(isCumulativeSpecPatchSupported
+            ? [
+                  {
+                      type: 'yt-edit-operation-tab' as const,
+                      name: SPECIFICATION_TAB,
+                      title: i18n('tab_specification'),
+                      fields: [
+                          ...(operation
+                              ? makeSpecificationPatchFields(operation.resultingSpec, isTerminal)
+                              : []),
+                          ...makeErrorFields(errors),
+                      ],
+                  },
+              ]
+            : []),
+        ...makePoolTreeTabs(pools, isTerminal, errors),
+    ] as unknown as Array<DialogTabField<DialogField<FormValues>>>;
 
     return (
         <YTDFDialog<FormValues>
@@ -208,16 +329,18 @@ export function EditOperationDialog({operationId, visible, onClose, onSuccess}: 
             onAdd={handleAdd}
             initialValues={initialValues}
             headerProps={{title: i18n('title_edit-operation')}}
-            footerProps={{textApply: i18n('action_save')}}
+            footerProps={{
+                textApply: i18n('action_save'),
+            }}
             isApplyDisabled={(state) =>
                 !operation ||
                 loading ||
                 isTerminal ||
                 state.hasValidationErrors ||
-                !hasChanges(state.values, operation)
+                !hasChanges(state.values, operation, taskNames, isCumulativeSpecPatchSupported)
             }
             waitingMessage={loading ? <Loader size="s" /> : undefined}
-            fields={makePoolTreeTabs(pools, isTerminal, errors)}
+            fields={fields}
             modal
         />
     );

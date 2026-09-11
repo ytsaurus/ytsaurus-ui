@@ -362,13 +362,14 @@ function prepareScriptCaption(type: string) {
 function prepareScript(operation: DetailedOperationSelector, type: string) {
     try {
         const script = ypath.getValue(operation, '/@spec/' + type);
+        const resultingScript = ypath.getValue(operation.resultingSpec, '/' + type);
 
         let environment = ypath.getValue(script, '/environment');
         environment = prepareMeta(environment);
 
         const command = ypath.getValue(script, '/command');
         const className = ypath.getValue(script, '/class_name');
-        const jobCount = ypath.getValue(script, '/job_count');
+        const jobCount = ypath.getValue(resultingScript ?? script, '/job_count');
         const files = map_(ypath.getValue(script, '/file_paths'), prepareFile);
         const layerPaths = ypath.getValue(script, '/layer_paths');
 
