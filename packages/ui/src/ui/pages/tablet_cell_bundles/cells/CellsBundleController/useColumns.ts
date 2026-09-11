@@ -71,6 +71,7 @@ const getColumns = ({sortState, onSortChange}: ColumnsParams) => {
         },
         {
             name: 'actions',
+            header: '',
             render: renderActions,
             width: 80,
             align: 'center',
