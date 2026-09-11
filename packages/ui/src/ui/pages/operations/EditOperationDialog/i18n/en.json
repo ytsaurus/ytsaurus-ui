@@ -10,8 +10,13 @@
   "field_gpu": "GPU",
   "field_memory": "Memory",
   "field_user-slots": "User slots",
+  "field_editor-mode": "Editor mode",
+  "value_form": "Form",
+  "value_json": "JSON",
   "field_maximum-failed-job-count": "Maximum failed job count",
   "section_tasks": "Tasks",
   "field_task-job-count": "{{taskName}} job count",
+  "field_specification-patch": "Specification patch",
+  "context_supported-patch-paths": "Supported paths: /max_failed_job_count and /tasks/<task_name>/job_count.",
   "action_save": "Save"
 }
