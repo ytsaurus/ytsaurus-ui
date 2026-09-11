@@ -7,6 +7,7 @@ import {
     listOperationEventsApi,
     useListOperationEventsQuery,
 } from './listOperationEvents';
+import {getOperationApi, useGetOperationQuery} from './getOperation';
 
 export {
     // queries
@@ -14,6 +15,7 @@ export {
     useListQueriesQuery,
     useFlowExecuteQuery,
     useListOperationEventsQuery,
+    useGetOperationQuery,
     // mutations
     useUpdateBatchMutation,
     // selectors
@@ -24,4 +26,5 @@ export {
     listQueriesApi,
     flowApi,
     listOperationEventsApi,
+    getOperationApi,
 };
