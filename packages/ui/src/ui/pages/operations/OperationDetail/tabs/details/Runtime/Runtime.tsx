@@ -1,5 +1,4 @@
 import React, {Component, type FC} from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
@@ -10,7 +9,6 @@ import {TemplateWeight} from '../../../../../../components/MetaTable/templates/O
 
 import {formatShare} from '../../../../../../utils/operations/tabs/details/runtime';
 import i18n from './i18n';
-import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operations';
 import hammer from '../../../../../../common/hammer';
 import {OperationPool} from '../../../../../../components/OperationPool/OperationPool';
 import ypath from '../../../../../../common/thor/ypath';
@@ -54,28 +52,17 @@ const StarvingStatus: FC<StarvingStatusProps> = ({progress}) => {
     return res || null; // returns null to prevent react warning
 };
 
-const mapDispatchToProps = {
-    showEditPoolsWeightsModal,
-};
-
-const connector = connect(null, mapDispatchToProps);
-
 export type Props = {
     isAbsoluteValue: boolean;
     runtime: RuntimeItem[];
     operation: Operation;
     cluster: string;
     treeConfigs?: {tree: string; config: Record<string, any>}[];
-} & ConnectedProps<typeof connector>;
+};
 
 class Runtime extends Component<Props> {
-    handlePoolEditClick = () => {
-        const {showEditPoolsWeightsModal, operation} = this.props;
-        showEditPoolsWeightsModal(operation);
-    };
-
     renderTree({progress, name}: RuntimeItem) {
-        const {cluster, operation, showEditPoolsWeightsModal, treeConfigs} = this.props;
+        const {cluster, operation, treeConfigs} = this.props;
         const {state} = operation;
 
         const {config} = treeConfigs?.find((item) => item.tree === name) || {};
@@ -110,7 +97,6 @@ class Runtime extends Component<Props> {
                                 key: 'pool',
                                 value: (
                                     <OperationPool
-                                        onEdit={this.handlePoolEditClick}
                                         cluster={cluster}
                                         state={state}
                                         pool={pool}
@@ -121,13 +107,7 @@ class Runtime extends Component<Props> {
                             },
                             {
                                 key: 'weight',
-                                value: (
-                                    <TemplateWeight
-                                        operation={operation}
-                                        pool={pool}
-                                        onEdit={() => showEditPoolsWeightsModal(operation)}
-                                    />
-                                ),
+                                value: <TemplateWeight operation={operation} pool={pool} />,
                             },
                             {
                                 key: 'fifo_index',
@@ -233,4 +213,4 @@ class Runtime extends Component<Props> {
     }
 }
 
-export default connector(Runtime);
+export default Runtime;
