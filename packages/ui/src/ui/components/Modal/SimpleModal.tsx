@@ -7,6 +7,7 @@ import {Button, Loader} from '@gravity-ui/uikit';
 import {ModalWrapper} from '../ModalWrapper/ModalWrapper';
 
 import withHandledScrollBar from '../../hocs/components/Modal/withHandledScrollBar';
+import i18n from './i18n';
 
 import './Modal.scss';
 
@@ -15,7 +16,7 @@ const b = block('elements-modal');
 interface SimpleModalProps {
     visible?: boolean;
     loading?: boolean;
-    title?: string;
+    title?: React.ReactNode;
     size?: 's' | 'm' | 'l';
     borderless?: boolean;
     onCancel: () => void;
@@ -37,14 +38,17 @@ class SimpleModal extends Component<SimpleModalProps> {
 
     renderHeader() {
         const {title, onCancel, className} = this.props;
+        const htmlTitle = typeof title === 'string' ? title : undefined;
         return (
-            <div className={b('header', {mix: className})} title={title}>
+            <div className={b('header', {mix: className})} title={htmlTitle}>
                 {title}
                 <div className={b('close')}>
                     <Button
                         qa="simple-modal-close"
                         view="flat-secondary"
                         size="l"
+                        aria-label={i18n('action_close')}
+                        title={i18n('action_close')}
                         onClick={onCancel}
                     >
                         <Icon awesome="times" face="light" />
