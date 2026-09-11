@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.25.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.25.0...ui-v3.25.1) (2026-09-11)
+
+
+### Bug Fixes
+
+* **unipika:** resolve root-relative URLs before wrapping in referrer redirect [YTFRONT-5896] ([d987c8a](https://github.com/ytsaurus/ytsaurus-ui/commit/d987c8af6305daa1c59f07608b5e0c27c97a78ae))
+
 ## [3.25.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.24.0...ui-v3.25.0) (2026-09-10)
 
 
