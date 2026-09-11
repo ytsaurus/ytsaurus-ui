@@ -20,22 +20,27 @@ function makeOperation(maxFailedJobCount: number, patchedMaxFailedJobCount?: num
 }
 
 describe('DetailedOperationSelector specification patch', () => {
-    it('applies max_failed_job_count to the resulting spec', () => {
+    it('uses max_failed_job_count from the resulting spec', () => {
         const operation = makeOperation(1, 10);
 
         expect(operation.resultingSpec).toEqual({max_failed_job_count: 10});
+        expect(operation.totalFailedJobs).toBe(10);
+        expect(operation.failedJobsProgress).toBe(50);
     });
 
     it('falls back to max_failed_job_count from full_spec', () => {
         const operation = makeOperation(10);
 
         expect(operation.resultingSpec).toEqual({max_failed_job_count: 10});
+        expect(operation.totalFailedJobs).toBe(10);
     });
 
     it('preserves zero max_failed_job_count', () => {
         const operation = makeOperation(10, 0);
 
         expect(operation.resultingSpec).toEqual({max_failed_job_count: 0});
+        expect(operation.totalFailedJobs).toBe(0);
+        expect(operation.failedJobsProgress).toBe(0);
     });
 
     it('builds a typed resulting spec from typed YSON attributes', () => {
