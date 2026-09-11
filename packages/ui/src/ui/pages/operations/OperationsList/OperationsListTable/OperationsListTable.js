@@ -1,10 +1,7 @@
 import {withRouter} from 'react-router';
 import {connect} from 'react-redux';
 
-import {
-    showEditPoolsWeightsModal,
-    updateOperationsList,
-} from '../../../../store/actions/operations';
+import {updateOperationsList} from '../../../../store/actions/operations';
 import {promptAction} from '../../../../store/actions/actions';
 
 import './OperationsListTable.scss';
@@ -23,7 +20,6 @@ function mapStateToProps({operations, global}) {
 }
 
 const mapDispatchToProps = {
-    showEditPoolsWeightsModal,
     promptAction,
     updateOperationsList,
 };
