@@ -1,0 +1,40 @@
+.yt-edit-operation-tab-field {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: max-content;
+    min-width: 180px;
+    max-width: 240px;
+    min-height: 450px;
+
+    &__specification,
+    &__pool-trees {
+        width: 100%;
+    }
+
+    &__specification {
+        flex: 0 0 auto;
+    }
+
+    &__pool-trees-title {
+        flex: 0 0 auto;
+        padding: 20px 16px 10px 24px;
+        font-size: var(--g-text-subheader-3-font-size);
+    }
+
+    &__pool-trees {
+        flex: 1 1 auto;
+        min-height: 0;
+
+        &_with-separator {
+            border-bottom: 1px solid var(--g-color-line-generic);
+        }
+    }
+
+    &__pool-tree {
+        display: flex;
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+    }
+}

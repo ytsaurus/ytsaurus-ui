@@ -58,6 +58,7 @@ import {AclColumnsControl} from '../../containers/ACL/RequestPermissions/AclColu
 import {useHotkeysScope} from '../../hooks/use-hotkeysjs-scope';
 import {PoolsMultiple} from './controls/PoolsMultiple/PoolsMultiple';
 import {ServicesSelect} from './controls/ServicesSelect/ServicesSelect';
+import EditOperationTabField from '../../pages/operations/EditOperationDialog/EditOperationTabField/EditOperationTabField';
 
 const block = cn('yt-dialog');
 
@@ -215,9 +216,16 @@ export type DialogField<FormValues = unknown> =
     | RegisteredDialogField<'services-select', ComponentProps<typeof ServicesSelect>, FormValues>;
 
 registerDialogTabControl('yt-create-table-tab', CreateTableTabField);
+registerDialogTabControl('yt-edit-operation-tab', EditOperationTabField);
 
 export type DialogTabField<FieldT> =
-    DFDialogTabField<FieldT> | RegisteredDialogTabField<'yt-create-table-tab', any, FieldT>;
+    | DFDialogTabField<FieldT>
+    | RegisteredDialogTabField<'yt-create-table-tab', any, FieldT>
+    | RegisteredDialogTabField<
+          'yt-edit-operation-tab',
+          ComponentProps<typeof EditOperationTabField>,
+          FieldT
+      >;
 
 export type YTDialogType = typeof YTDialog;
 export function YTDialog<Values, InitialValues = Partial<Values>>(
