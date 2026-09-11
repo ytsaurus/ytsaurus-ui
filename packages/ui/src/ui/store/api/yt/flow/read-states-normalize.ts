@@ -2,7 +2,6 @@ import type {FlowAnnotatedInteger, FlowReadStatesResponse} from '../../../../../
 import unipika from '../../../../common/thor/unipika';
 import ypath from '../../../../common/thor/ypath';
 import {isBigIntegerType} from './state-scalar-types';
-export {BIG_INTEGER_RANGES, isBigIntegerType} from './state-scalar-types';
 
 function isPlainObject(node: unknown): node is Record<string, unknown> {
     return typeof node === 'object' && node !== null && !Array.isArray(node);
