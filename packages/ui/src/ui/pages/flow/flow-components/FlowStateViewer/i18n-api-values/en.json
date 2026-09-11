@@ -1,0 +1,7 @@
+{
+  "value_kind-all": "All",
+  "value_kind-internal-key": "Internal State (key)",
+  "value_kind-internal-partition": "Internal State (partition)",
+  "value_kind-external": "External State",
+  "value_kind-external-joiner": "External State Joiner"
+}
