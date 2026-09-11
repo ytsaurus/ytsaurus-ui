@@ -5,7 +5,7 @@ import Icon from '../Icon/Icon';
 import Modal from '../Modal/Modal';
 import cn from 'bem-cn-lite';
 
-import {useMarkdown} from '../Markdown/Markdown';
+import {useMarkdown} from '../../hooks/useMarkdown';
 import './MarkdownLinePreview.scss';
 
 const block = cn('one-line-text-preview');
