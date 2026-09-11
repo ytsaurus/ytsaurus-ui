@@ -1,5 +1,6 @@
 import {ypath} from '../../../utils';
-import {TemplateId, TemplateLink, TemplateTime} from '../templates';
+import {TemplateId, TemplateTime} from '../templates';
+import {NirvanaBlockUrl} from './NirvanaBlockUrl';
 import {makeTTLItems} from './ttl';
 import type {TYComponentsNavigationMetaConfig} from '../../../types';
 import {MetaTableItem} from '../MetaTable';
@@ -21,7 +22,7 @@ type Props = (
 ) => MetaTableItem[];
 
 export const metaTablePresetMain: Props = (attributes, cluster, config = {}) => {
-    const {SubjectCard, AccountLink, renderMetaOperationLink, renderMarkdown} = config;
+    const {SubjectCard, AccountLink, renderMetaOperationLink, renderNirvanaBlockUrl} = config;
     const [
         id,
         owner,
@@ -56,14 +57,11 @@ export const metaTablePresetMain: Props = (attributes, cluster, config = {}) => 
         ? [
               {
                   key: 'nirvana_block_url',
-                  value: renderMarkdown ? (
-                      renderMarkdown({text: nirvanaBlockUrl})
-                  ) : (
-                      <TemplateLink
+                  value: (
+                      <NirvanaBlockUrl
                           url={nirvanaBlockUrl}
-                          text={nirvanaBlockUrl}
                           maxWidth={LINK_MAX_WIDTH}
-                          withClipboard
+                          renderNirvanaBlockUrl={renderNirvanaBlockUrl}
                       />
                   ),
               },
