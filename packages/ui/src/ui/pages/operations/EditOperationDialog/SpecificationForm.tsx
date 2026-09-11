@@ -1,20 +1,39 @@
 import React from 'react';
 
+import {Alert} from '@gravity-ui/uikit';
+
 import {type DialogField} from '../../../containers/Dialog';
+import {docsUrl} from '../../../config';
+import UIFactory from '../../../UIFactory';
+import HelpLink from '../../../components/HelpLink/HelpLink';
 import {
-    MAX_FAILED_JOB_COUNT_PATH,
+    type KnownOperationSpecPatchValues,
     type OperationSpecPatchInput,
-    getTaskJobCountPath,
+    extractKnownOperationSpecPatchValues,
+    mergeKnownOperationSpecPatchValues,
 } from '../../../utils/operations/specification-patch';
 
 import i18n from './i18n';
+
+type EditorMode = 'form' | 'json';
+
+type DialogFormValues = {
+    specification?: SpecificationPatchFormValues;
+};
 
 type NumberFieldValue = {
     value?: number;
     error?: string;
 };
 
+type JsonFieldValue = {
+    value?: string;
+    error?: string;
+};
+
 export type SpecificationPatchFormValues = Record<string, unknown> & {
+    mode: EditorMode;
+    patch: JsonFieldValue;
     maxFailedJobCount: NumberFieldValue;
 };
 
@@ -23,8 +42,87 @@ export type ResultingOperationSpec = {
     tasks?: Record<string, {job_count?: unknown}>;
 };
 
+const FORM_VISIBILITY = {
+    when: 'specification.mode',
+    isActive: (mode: unknown) => mode === 'form',
+};
+
+const JSON_VISIBILITY = {
+    when: 'specification.mode',
+    isActive: (mode: unknown) => mode === 'json',
+};
+
+function getSpecificationFieldName(name: string) {
+    return `specification.${name}`;
+}
+
 function getTaskFieldName(index: number) {
     return `taskJobCount_${index}`;
+}
+
+function parsePatch(value: JsonFieldValue): OperationSpecPatchInput {
+    return JSON.parse(value.value || '{}') as OperationSpecPatchInput;
+}
+
+function getKnownValuesFromForm(
+    values: SpecificationPatchFormValues,
+    taskNames: string[],
+): KnownOperationSpecPatchValues {
+    return {
+        maxFailedJobCount: values.maxFailedJobCount?.value,
+        taskJobCounts: Object.fromEntries(
+            taskNames.map((taskName, index) => [
+                taskName,
+                (values[getTaskFieldName(index)] as NumberFieldValue | undefined)?.value,
+            ]),
+        ),
+    };
+}
+
+function makeModeSubscribers(taskNames: string[]) {
+    return (mode: EditorMode, _field: string, allValues?: object, previousValues?: object) => {
+        const values = (allValues as DialogFormValues | undefined)?.specification;
+        const previousMode = (previousValues as DialogFormValues | undefined)?.specification?.mode;
+
+        if (!values || previousMode === undefined || mode === previousMode) {
+            return {};
+        }
+
+        if (mode === 'form') {
+            try {
+                const knownValues = extractKnownOperationSpecPatchValues(
+                    parsePatch(values.patch),
+                    taskNames,
+                );
+
+                return Object.fromEntries([
+                    [
+                        getSpecificationFieldName('maxFailedJobCount'),
+                        {value: knownValues.maxFailedJobCount},
+                    ],
+                    ...taskNames.map((taskName, index) => [
+                        getSpecificationFieldName(getTaskFieldName(index)),
+                        {value: knownValues.taskJobCounts[taskName]},
+                    ]),
+                ]);
+            } catch {
+                return {[getSpecificationFieldName('mode')]: 'json'};
+            }
+        }
+
+        try {
+            const patch = mergeKnownOperationSpecPatchValues(
+                parsePatch(values.patch),
+                getKnownValuesFromForm(values, taskNames),
+                taskNames,
+            );
+            return {
+                [getSpecificationFieldName('patch')]: {value: JSON.stringify(patch, null, 2)},
+            };
+        } catch {
+            return {};
+        }
+    };
 }
 
 function getPlaceholder(value: unknown) {
@@ -37,6 +135,8 @@ export function getSpecificationPatchTaskNames(resultingSpec?: ResultingOperatio
 
 export function getSpecificationPatchInitialValues(): SpecificationPatchFormValues {
     return {
+        mode: 'form',
+        patch: {value: '{\n  \n}'},
         maxFailedJobCount: {value: undefined},
     };
 }
@@ -50,9 +150,23 @@ export function makeSpecificationPatchFields(
 
     return [
         {
+            name: 'mode',
+            caption: i18n('field_editor-mode'),
+            type: 'radio',
+            extras: {
+                disabled,
+                options: [
+                    {value: 'form', label: i18n('value_form')},
+                    {value: 'json', label: i18n('value_json')},
+                ],
+            },
+            subscribers: makeModeSubscribers(taskNames),
+        },
+        {
             name: 'maxFailedJobCount',
             caption: i18n('field_maximum-failed-job-count'),
             type: 'number',
+            visibilityCondition: FORM_VISIBILITY,
             extras: {
                 disabled,
                 hidePrettyValue: true,
@@ -65,12 +179,14 @@ export function makeSpecificationPatchFields(
                       name: 'tasksTitle',
                       type: 'block' as const,
                       fullWidth: true,
+                      visibilityCondition: FORM_VISIBILITY,
                       extras: {children: <strong>{i18n('section_tasks')}</strong>},
                   },
                   ...taskNames.map((taskName, index) => ({
                       name: getTaskFieldName(index),
                       caption: i18n('field_task-job-count', {taskName}),
                       type: 'number' as const,
+                      visibilityCondition: FORM_VISIBILITY,
                       extras: {
                           disabled,
                           hidePrettyValue: true,
@@ -79,6 +195,38 @@ export function makeSpecificationPatchFields(
                   })),
               ]
             : []),
+        {
+            name: 'patch',
+            caption: i18n('field_specification-patch'),
+            type: 'json',
+            fullWidth: true,
+            visibilityCondition: JSON_VISIBILITY,
+            extras: {disabled, initialShowPreview: false, minHeight: 200},
+        },
+        {
+            name: 'patchHelp',
+            type: 'block',
+            visibilityCondition: JSON_VISIBILITY,
+            extras: {
+                children: (
+                    <Alert
+                        theme="info"
+                        message={
+                            <div>
+                                {i18n('context_supported-patch-paths')}{' '}
+                                {docsUrl(
+                                    <HelpLink
+                                        url={
+                                            UIFactory.docsUrls['api:commands#patch_operation_spec']
+                                        }
+                                    />,
+                                )}
+                            </div>
+                        }
+                    />
+                ),
+            },
+        },
     ];
 }
 
@@ -86,19 +234,13 @@ export function getSpecificationPatchFromFormValues(
     values: SpecificationPatchFormValues,
     taskNames: string[],
 ): OperationSpecPatchInput {
-    const result: OperationSpecPatchInput = {};
-    const maxFailedJobCount = values.maxFailedJobCount?.value;
+    const patch = parsePatch(values.patch);
 
-    if (maxFailedJobCount !== undefined) {
-        result[MAX_FAILED_JOB_COUNT_PATH] = maxFailedJobCount;
-    }
-
-    taskNames.forEach((taskName, index) => {
-        const value = (values[getTaskFieldName(index)] as NumberFieldValue | undefined)?.value;
-        if (value !== undefined) {
-            result[getTaskJobCountPath(taskName)] = value;
-        }
-    });
-
-    return result;
+    return values.mode === 'form'
+        ? mergeKnownOperationSpecPatchValues(
+              patch,
+              getKnownValuesFromForm(values, taskNames),
+              taskNames,
+          )
+        : patch;
 }

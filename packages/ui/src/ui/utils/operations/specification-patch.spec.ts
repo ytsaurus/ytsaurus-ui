@@ -1,6 +1,8 @@
 import {
     applyOperationSpecPatch,
+    extractKnownOperationSpecPatchValues,
     getTaskJobCountPath,
+    mergeKnownOperationSpecPatchValues,
     operationSpecPatchToItems,
 } from './specification-patch';
 
@@ -126,7 +128,70 @@ describe('operationSpecPatchToItems', () => {
     });
 });
 
-describe('getTaskJobCountPath', () => {
+describe('known operation specification patch values', () => {
+    const taskNames = ['main', 'task/with special@characters'];
+
+    it('extracts known numeric values and preserves zero', () => {
+        expect(
+            extractKnownOperationSpecPatchValues(
+                {
+                    '/max_failed_job_count': 0,
+                    '/tasks/main/job_count': 5,
+                    '/tasks/task\\/with special\\@characters/job_count': 'invalid',
+                },
+                taskNames,
+            ),
+        ).toEqual({
+            maxFailedJobCount: 0,
+            taskJobCounts: {
+                main: 5,
+                'task/with special@characters': undefined,
+            },
+        });
+    });
+
+    it('merges form values without mutating the patch or dropping unknown paths', () => {
+        const patch = {
+            '/max_failed_job_count': 10,
+            '/tasks/main/job_count': 3,
+            '/some/future/path': {value: true},
+        };
+
+        expect(
+            mergeKnownOperationSpecPatchValues(
+                patch,
+                {
+                    maxFailedJobCount: 20,
+                    taskJobCounts: {
+                        main: undefined,
+                        'task/with special@characters': 0,
+                    },
+                },
+                taskNames,
+            ),
+        ).toEqual({
+            '/max_failed_job_count': 20,
+            '/tasks/task\\/with special\\@characters/job_count': 0,
+            '/some/future/path': {value: true},
+        });
+        expect(patch).toEqual({
+            '/max_failed_job_count': 10,
+            '/tasks/main/job_count': 3,
+            '/some/future/path': {value: true},
+        });
+    });
+
+    it('keeps known values that cannot be represented by number fields', () => {
+        const patch = {
+            '/max_failed_job_count': 'invalid',
+            '/tasks/main/job_count': null,
+        };
+
+        expect(
+            mergeKnownOperationSpecPatchValues(patch, {taskJobCounts: {main: undefined}}, ['main']),
+        ).toEqual(patch);
+    });
+
     it('escapes task names for YPath', () => {
         expect(getTaskJobCountPath('task/with special@characters')).toBe(
             '/tasks/task\\/with special\\@characters/job_count',
