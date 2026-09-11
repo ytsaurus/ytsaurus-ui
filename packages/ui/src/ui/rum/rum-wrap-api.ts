@@ -37,6 +37,7 @@ import {
     type SupportedFeatures,
     type TableParams,
     type TransactionIdParams,
+    type UpdateOperationParametersParams,
     type WriteFileParams,
 } from '../../shared/yt-types';
 import {YTApiId, type YTApiIdType} from '../../shared/constants/yt-api-id';
@@ -81,6 +82,9 @@ interface YTApiV3 {
     completeOperation(...args: ApiMethodParameters<OperationIdParams>): Promise<void>;
     resumeOperation(...args: ApiMethodParameters<OperationIdParams>): Promise<void>;
     suspendOperation(...args: ApiMethodParameters<OperationIdParams>): Promise<void>;
+    updateOperationParameters(
+        ...args: ApiMethodParameters<UpdateOperationParametersParams>
+    ): Promise<void>;
     checkPermission(
         ...args: ApiMethodParameters<CheckPermissionParams>
     ): Promise<CheckPermissionResponse>;
