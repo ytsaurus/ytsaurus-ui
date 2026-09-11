@@ -40,10 +40,7 @@ export type MetaTableOperationLinkParams = {
     cluster: string;
 };
 
-export type MetaTableRenderMarkdownParams = {
-    text: string;
-    allowHTML?: boolean;
-};
+export type MetaTableNirvanaBlockUrlRenderer = (params: {text: string}) => ReactNode;
 
 export type MetaTableAutomaticModeSwitchParams = {
     value?: boolean;
@@ -66,7 +63,7 @@ export type TYComponentsNavigationMetaConfig = Partial<{
     renderMetaOperationLink: (
         params: MetaTableOperationLinkParams,
     ) => MetaTableItem | MetaTableItem[] | null | undefined;
-    renderMarkdown: (params: MetaTableRenderMarkdownParams) => ReactNode;
+    renderNirvanaBlockUrl: MetaTableNirvanaBlockUrlRenderer;
     renderMetaTableAutomaticModeSwitch: (params: MetaTableAutomaticModeSwitchParams) => ReactNode;
     navigationLinkTemplate: NavigationLinkTemplate;
     docsUrls: Record<YtComponentsDocsUrlKey, string>;
