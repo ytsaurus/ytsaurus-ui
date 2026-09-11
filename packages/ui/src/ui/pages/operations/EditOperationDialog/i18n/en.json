@@ -2,6 +2,7 @@
   "title_edit-operation": "Edit operation",
   "context_edit-disabled-terminal-state": "The operation cannot be edited because it is already in a terminal state.",
   "section_general": "General",
+  "section_pool-trees": "Pool trees",
   "section_resource-limits": "Resource Limits",
   "field_tree": "Tree",
   "field_pool": "Pool",
