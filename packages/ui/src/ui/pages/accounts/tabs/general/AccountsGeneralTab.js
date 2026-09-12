@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {compose} from 'redux';
 
-import {Select} from '@gravity-ui/uikit';
+import {Loader, Select} from '@gravity-ui/uikit';
 
 import WithStickyToolbar, {
     STICKY_TOOLBAR_BOTTOM,
@@ -171,6 +171,12 @@ class AccountsGeneralTab extends Component {
         showEditor: PropTypes.bool.isRequired,
         usableError: PropTypes.object,
         usableErrorMessage: PropTypes.string,
+        metadataFetching: PropTypes.bool,
+        metadataError: PropTypes.object,
+        activeAccountFetching: PropTypes.bool,
+        activeAccountError: PropTypes.object,
+        editableAccountFetching: PropTypes.bool,
+        editableAccountError: PropTypes.object,
         errorData: PropTypes.object,
         viewContext: PropTypes.string,
         loadTotals: PropTypes.bool,
@@ -254,6 +260,8 @@ class AccountsGeneralTab extends Component {
             activeMediumFilter,
             activeContentModeFilter,
             dashboardVisibilityMode,
+            metadataFetching,
+            activeAccountFetching,
             abcServiceFilter: {slug, id} = {},
             contextView,
         } = this.props;
@@ -262,10 +270,9 @@ class AccountsGeneralTab extends Component {
             mediumList &&
             (activeContentModeFilter === 'default' || activeContentModeFilter === 'disk_space');
 
-        const radioProps =
-            contextView === DASHBOARD_VIEW_CONTEXT
-                ? DB_VISIBILITY_MODE_PROPS
-                : ACCOUNTS_VISIBILITY_MODE_PROPS;
+        const isDashboard = contextView === DASHBOARD_VIEW_CONTEXT;
+        const radioProps = isDashboard ? DB_VISIBILITY_MODE_PROPS : ACCOUNTS_VISIBILITY_MODE_PROPS;
+        const detailsFetching = this.props.activeAccount ? activeAccountFetching : metadataFetching;
 
         return (
             <div className={b('toolbar', 'elements-section')}>
@@ -314,6 +321,12 @@ class AccountsGeneralTab extends Component {
                         />
                     )}
                 </div>
+                {detailsFetching && !isDashboard && (
+                    <div className={b('metadata-loading')}>
+                        <Loader size="s" />
+                        <span>{i18n('context_loading-accounts-data')}</span>
+                    </div>
+                )}
             </div>
         );
     }
@@ -747,14 +760,31 @@ class AccountsGeneralTab extends Component {
     };
 
     renderEditorModal() {
-        const {closeEditorModal, editableAccount, showEditor} = this.props;
+        const {
+            closeEditorModal,
+            editableAccount,
+            editableAccountFetching,
+            editableAccountError,
+            showEditor,
+        } = this.props;
+
+        let content = <Editor account={editableAccount} />;
+        if (editableAccountFetching) {
+            content = (
+                <div className={b('editor-loading')}>
+                    <Loader size="m" />
+                </div>
+            );
+        } else if (editableAccountError) {
+            content = <YTErrorBlock error={editableAccountError} />;
+        }
 
         return (
             editableAccount.name && (
                 <Modal
                     onCancel={closeEditorModal}
                     visible={showEditor}
-                    content={<Editor account={editableAccount} />}
+                    content={content}
                     title={editableAccount.name}
                     footer={false}
                     size={'l'}
@@ -764,7 +794,17 @@ class AccountsGeneralTab extends Component {
     }
 
     render() {
-        const {error, usableError, wasLoaded, viewContext, fetching} = this.props;
+        const {
+            error,
+            usableError,
+            wasLoaded,
+            viewContext,
+            fetching,
+            activeAccount,
+            activeAccountError,
+            metadataError,
+        } = this.props;
+        const detailsError = activeAccount ? activeAccountError : metadataError;
 
         return (
             <div>
@@ -776,6 +816,9 @@ class AccountsGeneralTab extends Component {
                         content={
                             <div>
                                 {error && <YTErrorBlock error={this.props.errorData} />}
+                                {viewContext !== DASHBOARD_VIEW_CONTEXT && detailsError && (
+                                    <YTErrorBlock error={detailsError} />
+                                )}
                                 {usableError && this.renderUsableError()}
                                 {(wasLoaded || fetching) && this.renderAccountsTable()}
                             </div>
@@ -800,9 +843,16 @@ const makeMapStateToProps = () => {
         const {viewContext} = ownProps;
         const isDashboard = viewContext === DASHBOARD_VIEW_CONTEXT;
 
-        const contextViewTree = isDashboard
+        const contextTree = isDashboard
             ? selectFilteredAccountsOfDashboard(state)
             : selectFilteredAccounts(state);
+        const activeAccount = accounts.activeAccount;
+        const contextViewTree =
+            activeAccount && !isDashboard
+                ? contextTree
+                      .filter((item) => item.attributes.name === activeAccount)
+                      .map((item) => ({...item, children: []}))
+                : contextTree;
 
         return {
             ...accounts,
@@ -817,7 +867,9 @@ const makeMapStateToProps = () => {
 
             cluster: selectCluster(state),
 
-            activeAccountAggregation: selectActiveAccountAggregationRow(state),
+            activeAccountAggregation: activeAccount
+                ? null
+                : selectActiveAccountAggregationRow(state),
             favouriteAccountsSet,
             dashboardVisibilityMode: isDashboard
                 ? selectAccountsVisibilityModeOfDashboard(state)

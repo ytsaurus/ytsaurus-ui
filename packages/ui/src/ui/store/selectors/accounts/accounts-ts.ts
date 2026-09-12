@@ -290,19 +290,27 @@ function getResourceInfo(
     return getInfo(entry.attributes, recursive, mediumType);
 }
 
-export const selectAccountMasterMemoryMedia = createSelector([selectAccounts], (items = []) => {
-    const [item] = items;
-    if (!item) {
-        return [];
-    }
+export const selectAccountMasterMemoryMedia = createSelector(
+    [selectAccounts, selectActiveAccount, selectEditableAccount],
+    (accounts = [], activeAccount, editableAccount) => {
+        let account: AccountSelector | undefined = editableAccount;
+        if (!account?.name) {
+            account = activeAccount
+                ? accounts.find((item) => item.name === activeAccount)
+                : accounts[0];
+        }
+        if (!account) {
+            return [];
+        }
 
-    const perCell = ypath.getValue(item, '/@resource_usage/master_memory/per_cell');
-    const mediums = map_(keys_(perCell), (key) => {
-        return `per_cell/${key}`;
-    });
+        const perCell = ypath.getValue(account, '/@resource_usage/master_memory/per_cell');
+        const mediums = map_(keys_(perCell), (key) => {
+            return `per_cell/${key}`;
+        });
 
-    return ['total', 'chunk_host', ...mediums];
-});
+        return ['total', 'chunk_host', ...mediums];
+    },
+);
 
 const selectAccountsMasterMemoryColumns = createSelector(
     [selectActiveAccount, selectAccountsMasterMemoryContentMode],
