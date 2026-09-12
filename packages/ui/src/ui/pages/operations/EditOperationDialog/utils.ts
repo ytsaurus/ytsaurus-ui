@@ -1,6 +1,8 @@
 import {type OperationPool, type OperationPoolResourceLimits} from '../selectors';
-import i18n from './i18n';
-import {wrapApiPromiseByToaster} from '../../../utils/utils';
+import {
+    type SchedulingOptionsPerPoolTreeUpdate,
+    buildSchedulingOptionsUpdate,
+} from '../../../store/actions/operations/helpers/updateOperationAttributes';
 
 type NumberFieldValue = {value?: number; error?: string};
 
@@ -36,16 +38,6 @@ export function buildInitialValues(pools: OperationPool[]): FormValues {
     return formValues;
 }
 
-type SetPoolsAndWeightsOptions = {closeOnSuccess?: boolean};
-
-type SetPoolsAndWeightsFn = (
-    operation: {pools?: OperationPool[]},
-    poolsMap: Record<string, string>,
-    weightsMap: Record<string, number | undefined>,
-    resourceLimitsMap: Record<string, OperationPoolResourceLimits>,
-    options?: SetPoolsAndWeightsOptions,
-) => (dispatch: unknown) => Promise<unknown>;
-
 function collectMapsForTrees(values: FormValues, treesFilter?: Set<string>) {
     const poolsMap: Record<string, string> = {};
     const weightsMap: Record<string, number | undefined> = {};
@@ -80,33 +72,10 @@ function collectMapsForTrees(values: FormValues, treesFilter?: Set<string>) {
     return {poolsMap, weightsMap, resourceLimitsMap};
 }
 
-export async function submitTrees(
+export function getSchedulingOptionsUpdate(
     values: FormValues,
-    operation: {pools?: OperationPool[]},
-    dispatch: (action: unknown) => Promise<unknown>,
-    setPoolsAndWeights: SetPoolsAndWeightsFn,
-) {
+    operation: {id: string; pools: OperationPool[]},
+): SchedulingOptionsPerPoolTreeUpdate {
     const {poolsMap, weightsMap, resourceLimitsMap} = collectMapsForTrees(values);
-
-    await dispatch(
-        setPoolsAndWeights(operation, poolsMap, weightsMap, resourceLimitsMap, {
-            closeOnSuccess: true,
-        }),
-    );
-}
-
-export async function submitTreesWithToaster(
-    values: FormValues,
-    operation: {pools?: OperationPool[]; $value?: string},
-    dispatch: (action: unknown) => Promise<unknown>,
-    setPoolsAndWeights: SetPoolsAndWeightsFn,
-) {
-    await wrapApiPromiseByToaster(
-        submitTrees(values, operation, dispatch, setPoolsAndWeights) as Promise<unknown>,
-        {
-            toasterName: 'pools-weights-edit-all',
-            successTitle: i18n('alert_save-success', {operation: operation.$value}),
-            errorTitle: i18n('alert_save-failure', {operation: operation.$value}),
-        },
-    );
+    return buildSchedulingOptionsUpdate(operation.pools, poolsMap, weightsMap, resourceLimitsMap);
 }

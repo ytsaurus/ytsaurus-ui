@@ -83,7 +83,7 @@
     "@gravity-ui/i18n": "^1.8.0",
     "@gravity-ui/nodekit": "^2.10.0",
     "@ytsaurus/interface-helpers": "^1.3.0",
-    "@ytsaurus/javascript-wrapper": "^0.17.0",
+    "@ytsaurus/javascript-wrapper": "^0.18.0",
     "axios": "^1.8.4",
     "cacheable-lookup": "^6.1.0",
     "cookie-parser": "1.4.6",

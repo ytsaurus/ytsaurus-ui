@@ -166,6 +166,19 @@ export interface OperationIdParams {
     operation_id: string;
 }
 
+export interface PatchOperationSpecParams extends OperationIdParams {
+    patches: Array<{
+        path: string;
+        value: unknown;
+    }>;
+}
+
+export interface UpdateOperationParametersParams extends OperationIdParams {
+    _parameters: {
+        scheduling_options_per_pool_tree: Record<string, unknown>;
+    };
+}
+
 export interface BaseBatchParams {
     transaction_id?: string;
     ui_marker?: string;
@@ -957,6 +970,7 @@ export type OperationEvent = {
 export type ListOperationEventsResponse = Array<OperationEvent>;
 
 export type SupportedFeatures = {
+    cumulative_spec_patch?: boolean;
     compression_codecs?: Array<string>;
     erasure_codecs?: Array<string>;
     primitive_types?: Array<string>;

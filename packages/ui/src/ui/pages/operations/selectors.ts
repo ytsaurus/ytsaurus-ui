@@ -11,6 +11,10 @@ import {type FIX_MY_TYPE} from '../../types';
 import {type RootState} from '../../store/reducers';
 import {type JobsState} from '../../store/reducers/operations/jobs/jobs';
 import {type CypressNodeRaw} from '../../../shared/yt-types';
+import {
+    type CumulativeOperationSpecPatch,
+    applyOperationSpecPatch,
+} from '../../utils/operations/specification-patch';
 
 export interface OperationPoolResourceLimits {
     cpu?: number;
@@ -254,6 +258,10 @@ export class DetailedOperationSelector extends OperationSelector {
     typedProvidedSpec?: any;
     typedFullSpec?: any;
     typedUnrecognizedSpec?: any;
+    cumulativeSpecPatch?: CumulativeOperationSpecPatch;
+    typedCumulativeSpecPatch?: CumulativeOperationSpecPatch;
+    resultingSpec?: any;
+    typedResultingSpec?: any;
 
     live_preview: unknown;
 
@@ -274,6 +282,13 @@ export class DetailedOperationSelector extends OperationSelector {
         this.typedProvidedSpec = ypath.getValue(typedAttributes, '/provided_spec');
         this.typedFullSpec = ypath.getValue(typedAttributes, '/full_spec');
         this.typedUnrecognizedSpec = ypath.getValue(typedAttributes, '/unrecognized_spec');
+        this.cumulativeSpecPatch = ypath.getValue(attributes, '/cumulative_spec_patch');
+        this.typedCumulativeSpecPatch = ypath.getValue(typedAttributes, '/cumulative_spec_patch');
+        this.resultingSpec = applyOperationSpecPatch(fullSpec, this.cumulativeSpecPatch);
+        this.typedResultingSpec = applyOperationSpecPatch(
+            this.typedFullSpec,
+            this.typedCumulativeSpecPatch,
+        );
 
         this.title = ypath.getValue(spec, '/title');
 
@@ -310,8 +325,8 @@ export class DetailedOperationSelector extends OperationSelector {
 
             this.failedJobs = jobs.failed;
 
-            if (fullSpec) {
-                this.totalFailedJobs = ypath.getValue(fullSpec, '/max_failed_job_count');
+            if (this.resultingSpec) {
+                this.totalFailedJobs = ypath.getValue(this.resultingSpec, '/max_failed_job_count');
             }
             this.failedJobsProgress = this.totalFailedJobs
                 ? (this.failedJobs! / this.totalFailedJobs) * 100
