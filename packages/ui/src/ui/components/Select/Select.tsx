@@ -242,21 +242,20 @@ class CustomSelect extends React.Component<
         return text;
     };
 
-    renderFilter: SelectProps['renderFilter'] = ({ref, onChange, ...props}) => {
+    renderFilter: SelectProps['renderFilter'] = ({ref, onChange, style, ...props}) => {
         const {hideClear, value} = this.props;
         const filter = <TextInput controlRef={ref} onUpdate={onChange} {...props} />;
-        if (hideClear || !value?.length) {
-            return filter;
-        }
 
         return (
-            <div className={block('filter')}>
+            <div className={block('filter')} style={style}>
                 {filter}
-                <span className={block('filter-btn')}>
-                    <Button view="flat-secondary" onClick={() => this.props.onUpdate?.([])}>
-                        {i18n('action_clear')}
-                    </Button>
-                </span>
+                {!hideClear && Boolean(value?.length) && (
+                    <span className={block('filter-btn')}>
+                        <Button view="flat-secondary" onClick={() => this.props.onUpdate?.([])}>
+                            {i18n('action_clear')}
+                        </Button>
+                    </span>
+                )}
             </div>
         );
     };
