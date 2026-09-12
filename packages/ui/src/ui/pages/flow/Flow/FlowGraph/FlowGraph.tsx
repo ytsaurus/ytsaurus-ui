@@ -1,21 +1,14 @@
-import {
-    ECameraScaleLevel,
-    type TAnchor,
-    type TBlock,
-    type TBlockId,
-    type TConnection,
-} from '@gravity-ui/graph';
+import {ECameraScaleLevel, type Graph, type TBlockId} from '@gravity-ui/graph';
+import {GraphBlock, useGraphEvents} from '@gravity-ui/graph/react';
 import ClockIcon from '@gravity-ui/icons/svgs/clock.svg';
 import FileCodeIcon from '@gravity-ui/icons/svgs/file-code.svg';
 import ReceiptIcon from '@gravity-ui/icons/svgs/receipt.svg';
 import {Flex} from '@gravity-ui/uikit';
-import {type SVGIconSvgrData} from '../../../../types/uikit';
 import cn from 'bem-cn-lite';
 import partition_ from 'lodash/partition';
 import React from 'react';
 import {
     type FlowComputationStreamType,
-    type FlowComputationType,
     type FlowSink,
     type FlowStream,
 } from '../../../../../shared/yt-types';
@@ -27,9 +20,9 @@ import {
     YTGraph,
     type YTGraphBlock,
     type YTGraphData,
-    useConfig,
     useElkLayout,
     useGraphScale,
+    useYTGraphConfig,
 } from '../../../../components/YTGraph';
 import {FlowError} from '../../../../pages/flow/flow-components/FlowError/FlowError';
 import {ShowDataButton} from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
@@ -41,17 +34,34 @@ import {
     selectFlowZoomToNode,
 } from '../../../../store/selectors/flow/filters';
 import {selectCluster} from '../../../../store/selectors/global/cluster';
+import {type SVGIconSvgrData} from '../../../../types/uikit';
+import {type FlowComputationRuntimeType} from '../types';
 import './FlowGraph.scss';
 import i18n from './i18n';
 import {Computation} from './renderers/Computation';
 import {ComputationCanvasBlock} from './renderers/ComputationCanvas';
 import {ComputationGroupCanvasBlock} from './renderers/ComputationGroupCanvas';
+import {FlowGraphAnchors} from './renderers/FlowGraphAnchors/FlowGraphAnchors';
 import {STATUS_TO_BG_THEME} from './renderers/FlowGraphRenderer';
+import {useFlowMessagesDialogContext} from './renderers/FlowMessagesDialogContext/FlowMessagesDialogContextState';
 import {Sink} from './renderers/Sink';
 import {SinkCanvasBlock} from './renderers/SinkCanvas';
 import {Stream} from './renderers/Stream';
 import {StreamCanvasBlock} from './renderers/StreamCanvas';
 import {FlowGroupBlock} from './utils/FlowGroupBlock';
+import {
+    addComputationInOut,
+    addFlowConnection,
+    applyConnectionStyle,
+    getStreamsSummaryByAnchorType,
+    isComputationAnchorType,
+    isFlowComputationOrGroup,
+    makeBlock,
+    makeFlowComputationRuntimeData,
+    makeTimerAnchors,
+    mergeConnectionStreamStatus,
+} from './utils/utils';
+import {type FlowGraphConnection} from './utils/utils';
 
 const block = cn('yt-flow-graph');
 
@@ -74,8 +84,8 @@ export function FlowGraph({pipeline_path}: {pipeline_path: string}) {
 }
 
 export type FlowGraphBlock =
-    | (YTGraphBlock<'computation-group', FlowComputationType> & {stream_type?: never})
-    | (YTGraphBlock<'computation', FlowComputationType> & {stream_type?: never})
+    | (YTGraphBlock<'computation-group', FlowComputationRuntimeType> & {stream_type?: never})
+    | (YTGraphBlock<'computation', FlowComputationRuntimeType> & {stream_type?: never})
     | (YTGraphBlock<'stream', FlowStream> & {
           icon?: SVGIconSvgrData;
           stream_type?: FlowComputationStreamType;
@@ -85,6 +95,8 @@ export type FlowGraphBlock =
 export type FlowGraphBlockItem<T extends FlowGraphBlock['is']> = FlowGraphBlock & {is: T};
 
 export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
+    const [graph, setGraphInstance] = React.useState<Graph>();
+
     const {scale, setScale} = useGraphScale();
     const useGroups = scale === ECameraScaleLevel.Minimalistic;
 
@@ -94,7 +106,7 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
         setZoomToState(zoomTo);
     }, [zoomTo]);
 
-    const config = useConfig<FlowGraphBlock>(
+    const config = useYTGraphConfig<FlowGraphBlock>(
         {
             computation: ComputationCanvasBlock,
             stream: StreamCanvasBlock,
@@ -107,6 +119,8 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
     const {isEmpty, isLoading, data, groups, groupBlocks} = useFlowGraphData({
         pipeline_path,
     });
+
+    useFlowGraphEvents(graph);
 
     if (isLoading) {
         return <Loader visible centered />;
@@ -124,11 +138,18 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
                 setScale={setScale}
                 {...config}
                 data={useGroups && !zoomToState ? groups : data}
-                renderBlock={({className, style, data}) => {
+                renderBlock={({className, data, graph}) => {
                     return (
-                        <Flex className={block('item-container', className)} style={style}>
-                            {renderContent({item: data})}
-                        </Flex>
+                        <GraphBlock
+                            graph={graph}
+                            block={data}
+                            className={block('graph-block', className)}
+                        >
+                            <Flex className={block('item-container')}>
+                                {renderContent({item: data})}
+                            </Flex>
+                            <FlowGraphAnchors graph={graph} data={data} />
+                        </GraphBlock>
                     );
                 }}
                 renderPopup={({data}) => {
@@ -141,9 +162,37 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
                 customGroups={groupBlocks}
                 zoomToNode={zoomToState}
                 onZoomToFinished={() => setZoomToState(undefined)}
+                graphInstanceRef={setGraphInstance}
             />
         </div>
     );
+}
+
+function useFlowGraphEvents(graph?: Graph) {
+    const {setVisibleMessages} = useFlowMessagesDialogContext();
+
+    useGraphEvents(graph ?? null, {
+        onBlockAnchorSelectionChange({anchor: {id, blockId, type}, selected}) {
+            const block = graph?.api.getBlockById(blockId) as FlowGraphBlock;
+            if (
+                !graph ||
+                !selected ||
+                !isComputationAnchorType(type) ||
+                !isFlowComputationOrGroup(block)
+            ) {
+                return;
+            }
+
+            const summary = getStreamsSummaryByAnchorType(block.meta, type);
+            if (summary) {
+                setVisibleMessages(summary.messages);
+                requestAnimationFrame(() => {
+                    // We need to reset selection to display message for each click on a specific anchor
+                    graph.api.setAnchorSelection(blockId, id, false);
+                });
+            }
+        },
+    });
 }
 
 function FlowGraphToolbar({
@@ -224,16 +273,49 @@ const SINK_SIZE = {width: 200, height: 80};
 
 function useFlowGraphLoadedData({pipeline_path}: {pipeline_path: string}) {
     const cluster = useSelector(selectCluster);
-    return useFlowExecuteQuery<'describe-pipeline'>({
+    const {data, ...rest} = useFlowExecuteQuery<'describe-pipeline'>({
         cluster,
         parameters: {pipeline_path, flow_command: 'describe-pipeline'},
     });
+
+    return {data, ...rest};
+}
+
+function useFlowGraphRuntimeData({pipeline_path}: {pipeline_path: string}) {
+    const {data, ...rest} = useFlowGraphLoadedData({pipeline_path});
+
+    const dataWithRuntime = React.useMemo(() => {
+        if (!data) {
+            return data;
+        }
+
+        const {computations, ...restLoadedData} = data;
+
+        return {
+            ...restLoadedData,
+            computations: Object.entries(computations).reduce(
+                (acc, [key, item]) => {
+                    acc[key] = {
+                        ...item,
+                        runtimeData: makeFlowComputationRuntimeData(item),
+                    };
+                    return acc;
+                },
+                {} as Record<string, FlowComputationRuntimeType>,
+            ),
+        };
+    }, [data]);
+
+    return {
+        data: dataWithRuntime,
+        ...rest,
+    };
 }
 
 function useFlowGraphData(params: {pipeline_path: string}) {
-    const {data: loadedData} = useFlowGraphLoadedData(params);
+    const {data: loadedData} = useFlowGraphRuntimeData(params);
 
-    type FlowData = YTGraphData<FlowGraphBlock, TConnection>;
+    type FlowData = YTGraphData<FlowGraphBlock, FlowGraphConnection>;
 
     const data: {data: FlowData; groups: FlowData; groupById: Map<string, FlowGroupBlock>} =
         React.useMemo(() => {
@@ -246,22 +328,6 @@ function useFlowGraphData(params: {pipeline_path: string}) {
             };
 
             const blockById: Map<TBlockId, FlowGraphBlock> = new Map();
-
-            function addConnection<AnthorType extends string>(
-                connections: FlowData['connections'],
-                sourceBlockId: string,
-                targetBlockId: string,
-                {anchorType}: {anchorType?: AnthorType} = {},
-            ) {
-                const c: (typeof connections)[number] = {sourceBlockId, targetBlockId};
-                connections.push(c);
-                if (anchorType) {
-                    const src = blockById.get(sourceBlockId)!;
-                    const dst = blockById.get(targetBlockId)!;
-
-                    makeTimerAnchors(anchorType, src, dst, c);
-                }
-            }
 
             // Collect streams
             Object.values(streams).forEach((stream) => {
@@ -297,10 +363,16 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                         groupId,
                         backgroundTheme: STATUS_TO_BG_THEME[computation.status],
                         ...COMPUTATION_SIZE,
+                        anchors: [],
                     },
                 );
+                const {targetAnchorId, sourceAnchorId} = addComputationInOut(computationBlock);
+                addComputationInOut(groupBlock);
+
                 blockById.set(computationBlock.id, computationBlock);
                 res.data.blocks.push(computationBlock);
+
+                const {runtimeData} = computation;
 
                 function collectStreams<K extends FlowComputationStreamType>(
                     key: K,
@@ -310,16 +382,43 @@ function useFlowGraphData(params: {pipeline_path: string}) {
 
                     streams.forEach((id) => {
                         if (key === 'input_streams' || key === 'source_streams') {
-                            addConnection(res.data.connections, id, computation.id);
+                            const c = addFlowConnection(res.data.connections, id, computation.id, {
+                                targetAnchorId,
+                            });
+                            applyConnectionStyle(
+                                c,
+                                runtimeData.input.extendedStreams.get(id) ?? {},
+                            );
                         } else if (key === 'output_streams') {
-                            addConnection(res.data.connections, computation.id, id);
+                            const c = addFlowConnection(res.data.connections, computation.id, id, {
+                                sourceAnchorId,
+                            });
+                            applyConnectionStyle(
+                                c,
+                                runtimeData.output.extendedStreams.get(id) ?? {},
+                            );
                         } else if (key === 'timer_streams') {
-                            addConnection(res.data.connections, computation.id, id, {
-                                anchorType: key,
-                            });
-                            addConnection(res.data.connections, id, computation.id, {
-                                anchorType: key,
-                            });
+                            const computationBlock = blockById.get(computation.id)!;
+                            const timerBlock = blockById.get(id)!;
+
+                            const cOut = addFlowConnection(
+                                res.data.connections,
+                                computation.id,
+                                id,
+                                {sourceAnchorId},
+                            );
+                            makeTimerAnchors(computationBlock, timerBlock, cOut);
+                            const timerInfo = runtimeData.timer.extendedStreams.get(id) ?? {};
+                            applyConnectionStyle(cOut, timerInfo);
+
+                            const cIn = addFlowConnection(
+                                res.data.connections,
+                                id,
+                                computation.id,
+                                {targetAnchorId},
+                            );
+                            makeTimerAnchors(timerBlock, computationBlock, cIn);
+                            applyConnectionStyle(cIn, timerInfo);
                         }
 
                         if (options?.groupId) {
@@ -341,7 +440,7 @@ function useFlowGraphData(params: {pipeline_path: string}) {
             // Collect sinks
             Object.entries(sinks).forEach(([_key, item]) => {
                 const sink = makeBlock('sink', item, {...SINK_SIZE, icon: ReceiptIcon});
-                addConnection(res.data.connections, item.stream_id, item.id);
+                addFlowConnection(res.data.connections, item.stream_id, item.id);
                 blockById.set(sink.id, sink);
 
                 res.data.blocks.push(sink);
@@ -351,7 +450,7 @@ function useFlowGraphData(params: {pipeline_path: string}) {
             // Collect sources
             Object.entries(sources).forEach(([_key, item]) => {
                 const source = makeBlock('sink', item, {...SINK_SIZE, icon: FileCodeIcon});
-                addConnection(res.data.connections, item.id, item.stream_id);
+                addFlowConnection(res.data.connections, item.id, item.stream_id);
                 blockById.set(item.id, source);
 
                 res.data.blocks.push(source);
@@ -359,9 +458,9 @@ function useFlowGraphData(params: {pipeline_path: string}) {
             });
 
             // Transform connections to group connections
-            const connectionIds = new Set<string>();
+            const connectionById = new Map<string, (typeof res.data.connections)[number]>();
             res.data.connections.forEach((item) => {
-                const {sourceBlockId, targetBlockId} = item;
+                const {sourceBlockId, targetBlockId, styles, flowStreamStatus} = item;
                 const src = blockById.get(sourceBlockId!)!;
                 const dst = blockById.get(targetBlockId!)!;
 
@@ -383,9 +482,17 @@ function useFlowGraphData(params: {pipeline_path: string}) {
 
                 if (source && target) {
                     const id = `_${source}->${target}_`;
-                    if (!connectionIds.has(id)) {
-                        connectionIds.add(id);
-                        addConnection(res.groups.connections, source, target);
+
+                    let c = connectionById.get(id);
+                    if (c === undefined) {
+                        c = addFlowConnection(res.groups.connections, source, target, {
+                            styles,
+                            flowStreamStatus,
+                        });
+                        connectionById.set(id, c);
+                    } else {
+                        c.styles = Object.assign({}, c.styles, styles);
+                        mergeConnectionStreamStatus(c, flowStreamStatus);
                     }
                 }
             });
@@ -442,42 +549,4 @@ function useFlowGraphData(params: {pipeline_path: string}) {
         ...res,
         messages: loadedData?.messages,
     };
-}
-
-function makeBlock<
-    T extends FlowGraphBlock['is'],
-    D extends FlowGraphBlockItem<T>,
-    O extends Partial<D>,
->(type: T, item: D['meta'], options: O) {
-    return {
-        id: item.id,
-        is: type,
-        name: item.name ?? item.id,
-        selected: false,
-        anchors: [],
-        ...options,
-        meta: item,
-        // the values should be overriden by layout process
-        x: 0,
-        y: 0,
-    };
-}
-
-function makeTimerAnchors<T extends string>(type: T, src: TBlock, dst: TBlock, c: TConnection) {
-    const srcAnchor: TAnchor = {
-        id: `anchor:out:${src.id as string}:${dst.id as string}:`,
-        blockId: src.id,
-        type,
-    };
-    const dstAnchor: TAnchor = {
-        id: `anchor:in:${src.id as string}:${dst.id as string}:`,
-        blockId: dst.id,
-        type,
-    };
-
-    src.anchors?.push({...srcAnchor, index: src.anchors.length});
-    dst.anchors?.push({...dstAnchor, index: dst.anchors.length});
-
-    c.targetAnchorId = dstAnchor.id;
-    c.sourceAnchorId = srcAnchor.id;
 }

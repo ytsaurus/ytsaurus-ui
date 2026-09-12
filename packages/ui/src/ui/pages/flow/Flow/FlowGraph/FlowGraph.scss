@@ -17,6 +17,10 @@
         );
     }
 
+    &__graph-block {
+        border-radius: var(--g-border-radius-m);
+    }
+
     &__item-container {
         display: flex;
         overflow: hidden;

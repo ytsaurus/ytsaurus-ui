@@ -3,6 +3,7 @@ import isEmpty_ from 'lodash/isEmpty';
 
 import {
     ECameraScaleLevel,
+    ESelectionStrategy,
     type Graph,
     GraphState,
     type TBlockId,
@@ -41,12 +42,16 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     toolboxClassName,
     zoomOnScroll,
     autoCenter,
-    highlightConnectionsOnHover = false,
     onBlockClick,
+    graphInstanceRef,
 }: YTGraphProps<B, C>) {
     const theme = useThemeValue();
     const {graph, setEntities, start} = useGraph(config);
     const fitGraphRef = React.useRef(true);
+
+    React.useEffect(() => {
+        graphInstanceRef?.(graph);
+    }, [graphInstanceRef, graph]);
 
     useAutoGroups({allowAutoGroups, graph});
     useCustomGroups({customGroups, graph});
@@ -55,29 +60,33 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     const [hoveredBlockId, setHoveredBlockId] = React.useState<TBlockId | null>(null);
 
     React.useEffect(() => {
-        const highlightIds = new Set(selectedBlocks);
-        if (highlightConnectionsOnHover && hoveredBlockId) {
-            highlightIds.add(hoveredBlockId);
-        }
-        const connections = !highlightIds.size
-            ? data.connections?.map((item) => ({selected: false, ...item}))
-            : data?.connections?.map((item) => {
-                  if (
-                      highlightIds.has(item.sourceBlockId!) ||
-                      highlightIds.has(item.targetBlockId!)
-                  ) {
-                      return {selected: true, ...item};
-                  }
-                  return {selected: false, ...item};
-              });
-        setEntities({...data, connections});
-    }, [data, selectedBlocks, hoveredBlockId, highlightConnectionsOnHover, setEntities]);
+        setEntities(data);
+    }, [data, setEntities]);
 
     React.useEffect(() => {
-        if (!highlightConnectionsOnHover) {
-            return;
+        const highlightIds = new Set(selectedBlocks);
+        if (hoveredBlockId) {
+            highlightIds.add(hoveredBlockId);
         }
+        const store = graph.rootStore.connectionsList;
 
+        const connectionIds = store.$connections.value
+            .filter((connection) => {
+                return (
+                    highlightIds.has(connection.sourceBlockId) ||
+                    highlightIds.has(connection.targetBlockId)
+                );
+            })
+            .map((connection) => connection.id);
+
+        store.connectionSelectionBucket.updateSelection(
+            connectionIds,
+            true,
+            ESelectionStrategy.REPLACE,
+        );
+    }, [selectedBlocks, hoveredBlockId, graph]);
+
+    React.useEffect(() => {
         const handleMouseEnter = ({detail}: GraphMouseEvent) => {
             const block = isBlock(detail.target) ? detail.target : undefined;
             setHoveredBlockId(block ? (block.state as {id: TBlockId}).id : null);
@@ -91,13 +100,7 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
             graph.off('mouseenter', handleMouseEnter);
             graph.off('mouseleave', handleMouseLeave);
         };
-    }, [graph, isBlock, highlightConnectionsOnHover]);
-
-    React.useEffect(() => {
-        if (!highlightConnectionsOnHover) {
-            setHoveredBlockId(null);
-        }
-    }, [highlightConnectionsOnHover]);
+    }, [graph, isBlock]);
 
     React.useEffect(() => {
         if (config.settings) {

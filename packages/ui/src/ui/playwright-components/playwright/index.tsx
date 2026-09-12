@@ -37,6 +37,7 @@ beforeMount(async ({App}) => {
             getDefaultMiddleware({serializableCheck: false}).concat(rootApi.middleware),
         devTools: process.env.NODE_ENV !== 'production',
     });
+    Object.assign(window, {store});
     registerPlugins();
 
     return (

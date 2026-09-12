@@ -111,7 +111,7 @@
     "@gravity-ui/date-components": "^3.3.2",
     "@gravity-ui/date-utils": "^2.6.0",
     "@gravity-ui/dialog-fields": "^6.1.0",
-    "@gravity-ui/graph": "^1.7.3",
+    "@gravity-ui/graph": "^1.11.3",
     "@gravity-ui/icons": "^2.0.0",
     "@gravity-ui/illustrations": "^2.1.0",
     "@gravity-ui/navigation": "^4.0.18",

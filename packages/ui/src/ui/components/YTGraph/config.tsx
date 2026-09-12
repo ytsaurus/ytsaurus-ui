@@ -10,17 +10,27 @@ import {
     type TGraphColors,
 } from '@gravity-ui/graph';
 
-import {type HookGraphParams, MultipointConnection, useElk} from '@gravity-ui/graph/react';
+import {type HookGraphParams, type MultipointConnection, useElk} from '@gravity-ui/graph/react';
+
+import {YTBlockConnection} from './connections/YTBlockConnection';
+import {YTMultipointConnection} from './connections/YTMultipointConnection';
 
 import {type RecursivePartial} from '@gravity-ui/graph/build/utils/types/helpers';
 
 import {getCssColor} from '../../utils/get-css-color';
 import {useMemoizedIfEqual} from '../../hooks';
 import {type YTGraphBlock, type YTGraphData} from './types';
-import {NoopComponent} from './canvas/NoopComponent';
 
 export const getGraphColors = (): RecursivePartial<TGraphColors> => {
+    const canvasBackground = getCssColor('--g-color-base-background');
+
     return {
+        canvas: {
+            belowLayerBackground: canvasBackground,
+            layerBackground: canvasBackground,
+            border: canvasBackground,
+            dots: canvasBackground,
+        },
         connection: {
             background: getCssColor('--yql-graph-color-edge'),
             selectedBackground: getCssColor('--yql-graph-color-edge-highlight'),
@@ -34,7 +44,7 @@ export const getGraphColors = (): RecursivePartial<TGraphColors> => {
     };
 };
 
-export function useConfig<T extends TBlock>(
+export function useYTGraphConfig<T extends TBlock>(
     blockComponents: Record<T['is'], typeof CanvasBlock<T>>,
     {
         useDefaultConnection,
@@ -53,19 +63,17 @@ export function useConfig<T extends TBlock>(
 
     const config = React.useMemo(() => {
         const resolvedConnection = useDefaultConnection
-            ? undefined
-            : (connection ?? MultipointConnection);
+            ? YTBlockConnection
+            : (connection ?? YTMultipointConnection);
 
-        const config: HookGraphParams = {
+        const res: HookGraphParams = {
             settings: {
                 connection: resolvedConnection,
                 canDuplicateBlocks: false,
                 canCreateNewConnections: false,
                 canZoomCamera: true,
-                blockComponents,
+                blockComponents: blockComponentsCached,
                 canDrag,
-                // @ts-expect-error
-                background: NoopComponent,
             },
             viewConfiguration: {
                 colors: {
@@ -75,12 +83,12 @@ export function useConfig<T extends TBlock>(
         };
         const knownTypes = new Set(Object.keys(blockComponentsCached));
         return {
-            config,
+            config: res,
             isBlock: (v: unknown): v is CanvasBlock<T> => {
                 return knownTypes.has((v as Partial<CanvasBlock<T>>).state?.is!);
             },
         };
-    }, [blockComponentsCached, useDefaultConnection, connection]);
+    }, [canDrag, blockComponentsCached, useDefaultConnection, connection]);
 
     return {...config};
 }
