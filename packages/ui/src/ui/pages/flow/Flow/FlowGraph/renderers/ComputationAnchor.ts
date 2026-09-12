@@ -12,7 +12,7 @@ export class ComputationAnchor extends Anchor {
         return getStreamsSummaryByAnchorType(meta, type);
     }
 
-    render() {
+    override render() {
         const cameraLevel = this.context.camera.getCameraBlockScaleLevel();
         if (cameraLevel === ECameraScaleLevel.Detailed) {
             return;
