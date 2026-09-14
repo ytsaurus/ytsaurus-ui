@@ -16,6 +16,8 @@ export const WithStore: Decorator = (Story, context) => {
                 .concat(rootApi.middleware),
         devTools: process.env.NODE_ENV !== 'production',
     });
+    // Legacy consumers read the same store directly from window.
+    Object.assign(window, {store});
     context.parameters?.store?.setStore?.(store);
     return (
         <Provider store={store}>
