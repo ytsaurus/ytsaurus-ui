@@ -10,6 +10,7 @@ import Icon from '../../../components/Icon/Icon';
 import {OPERATION_TERMINAL_STATES, type OperationStates} from '../selectors';
 import {EditOperationDialog} from '../EditOperationDialog/EditOperationDialog';
 import i18n from '../EditOperationDialog/i18n';
+import {useOperationEditorData} from '../EditOperationDialog/useOperationEditorData';
 
 import './EditOperationButton.scss';
 
@@ -30,7 +31,8 @@ export function EditOperationButton({
     view,
     onSuccess,
 }: EditOperationButtonProps) {
-    const [visible, setVisible] = React.useState(false);
+    const {operationAttributes, specificationPatchSupported, isFetching, open, close} =
+        useOperationEditorData(operationId);
     const editable = !OPERATION_TERMINAL_STATES.has(operationState);
     const label = i18n('title_edit-operation');
     const iconOnly = view === 'edit-icon';
@@ -42,8 +44,9 @@ export function EditOperationButton({
                     size={iconOnly ? 's' : 'm'}
                     view={iconOnly ? 'flat-secondary' : 'outlined'}
                     title={label}
-                    disabled={!editable}
-                    onClick={() => setVisible(true)}
+                    disabled={!editable || isFetching}
+                    loading={isFetching}
+                    onClick={open}
                 >
                     <Icon awesome="pencil" color="secondary" />
                     {!iconOnly && <React.Fragment>&nbsp;{label}</React.Fragment>}
@@ -56,11 +59,12 @@ export function EditOperationButton({
                     </Tooltip>
                 )}
             </span>
-            {visible && (
+            {operationAttributes && (
                 <EditOperationDialog
-                    operationId={operationId}
+                    operationAttributes={operationAttributes}
+                    specificationPatchSupported={specificationPatchSupported}
                     visible
-                    onClose={() => setVisible(false)}
+                    onClose={close}
                     onSuccess={onSuccess}
                 />
             )}
