@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {Flex} from '@gravity-ui/uikit';
 import hammer from '../../../../common/hammer';
 import cn from 'bem-cn-lite';
 import trimEnd_ from 'lodash/trimEnd';
@@ -22,6 +23,7 @@ import {performAction, prepareActions} from '../../../../utils/operations/detail
 import {PathItem} from './PathItem';
 import i18n from './i18n';
 import {EditOperationButton} from '../../EditOperationButton/EditOperationButton';
+import {EditOperationDialog} from '../../EditOperationDialog/EditOperationDialog';
 
 const BLOCK_NAME = 'operations-list';
 const block = cn(BLOCK_NAME);
@@ -68,6 +70,36 @@ function UserPoolItem({awesomeIcon, children, title}) {
         </div>
     );
 }
+
+function ViewOperationButton({operationId}) {
+    const [visible, setVisible] = React.useState(false);
+
+    return (
+        <React.Fragment>
+            <Button
+                size="s"
+                view="flat-secondary"
+                title={i18n('action_show-pools-weights')}
+                onClick={() => setVisible(true)}
+            >
+                <Icon awesome="eye" />
+                &nbsp;{i18n('action_view')}
+            </Button>
+            {visible && (
+                <EditOperationDialog
+                    operationId={operationId}
+                    visible
+                    readOnly
+                    onClose={() => setVisible(false)}
+                />
+            )}
+        </React.Fragment>
+    );
+}
+
+ViewOperationButton.propTypes = {
+    operationId: PropTypes.string.isRequired,
+};
 
 export class OperationsListTableBase extends Component {
     static propTypes = {
@@ -152,15 +184,17 @@ export class OperationsListTableBase extends Component {
 
     renderMultiplePools(item) {
         return (
-            <span className={block('multiply-pools')}>
+            <Flex as="span" inline alignItems="center" gap={1} className={block('multiply-pools')}>
                 {item.pools.length}
+                <ViewOperationButton operationId={item.$value} />
                 <EditOperationButton
+                    className={block('edit-button')}
                     operationId={item.$value}
                     operationState={item.state}
                     view="edit-icon"
                     onSuccess={this.props.updateOperationsList}
                 />
-            </span>
+            </Flex>
         );
     }
 
@@ -178,7 +212,7 @@ export class OperationsListTableBase extends Component {
                     {multiplePools ? (
                         this.renderMultiplePools(item)
                     ) : (
-                        <React.Fragment>
+                        <Flex alignItems="center" gap={1} className={block('single-pool')}>
                             <TemplatePools
                                 cluster={cluster}
                                 pools={pools}
@@ -187,12 +221,13 @@ export class OperationsListTableBase extends Component {
                                 hideTree
                             />
                             <EditOperationButton
+                                className={block('edit-button')}
                                 operationId={item.$value}
                                 operationState={item.state}
                                 view="edit-icon"
                                 onSuccess={this.props.updateOperationsList}
                             />
-                        </React.Fragment>
+                        </Flex>
                     )}
                 </UserPoolItem>
                 {!multiplePools && (

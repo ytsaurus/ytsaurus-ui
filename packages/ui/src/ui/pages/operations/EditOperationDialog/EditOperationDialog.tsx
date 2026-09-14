@@ -48,6 +48,7 @@ const block = cn('yt-edit-operation-dialog');
 type Props = {
     operationId: string;
     visible: boolean;
+    readOnly?: boolean;
     onClose: () => void;
     onSuccess?: () => void | Promise<void>;
 };
@@ -208,7 +209,7 @@ function hasChanges(
     }
 }
 
-export function EditOperationDialog({operationId, visible, onClose, onSuccess}: Props) {
+export function EditOperationDialog({operationId, visible, readOnly, onClose, onSuccess}: Props) {
     const [submitErrors, setSubmitErrors] = useState<Array<YTError | Error>>([]);
     const isCumulativeSpecPatchSupported = useSelector(selectIsCumulativeSpecPatchSupported);
     const {
@@ -241,6 +242,7 @@ export function EditOperationDialog({operationId, visible, onClose, onSuccess}: 
     const isTerminal = operation
         ? OPERATION_TERMINAL_STATES.has(operation.state as OperationStates)
         : false;
+    const fieldsDisabled = readOnly || isTerminal;
 
     const {pools, initialValues, taskNames} = useMemo(() => {
         const operationPools = operation?.pools ?? [];
@@ -309,14 +311,17 @@ export function EditOperationDialog({operationId, visible, onClose, onSuccess}: 
                       title: i18n('tab_specification'),
                       fields: [
                           ...(operation
-                              ? makeSpecificationPatchFields(operation.resultingSpec, isTerminal)
+                              ? makeSpecificationPatchFields(
+                                    operation.resultingSpec,
+                                    fieldsDisabled,
+                                )
                               : []),
                           ...makeErrorFields(errors),
                       ],
                   },
               ]
             : []),
-        ...makePoolTreeTabs(pools, isTerminal, errors),
+        ...makePoolTreeTabs(pools, fieldsDisabled, errors),
     ] as unknown as Array<DialogTabField<DialogField<FormValues>>>;
 
     return (
@@ -335,6 +340,7 @@ export function EditOperationDialog({operationId, visible, onClose, onSuccess}: 
             isApplyDisabled={(state) =>
                 !operation ||
                 loading ||
+                readOnly ||
                 isTerminal ||
                 state.hasValidationErrors ||
                 !hasChanges(state.values, operation, taskNames, isCumulativeSpecPatchSupported)
