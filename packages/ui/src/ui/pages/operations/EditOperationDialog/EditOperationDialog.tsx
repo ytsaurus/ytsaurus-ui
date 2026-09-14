@@ -1,8 +1,6 @@
 import React, {useMemo, useState} from 'react';
 import cn from 'bem-cn-lite';
 
-import {Loader} from '@gravity-ui/uikit';
-
 import {type YTError} from '../../../../@types/types';
 import {OPERATION_TERMINAL_STATES, type OperationPool, type OperationStates} from '../selectors';
 import {
@@ -19,9 +17,6 @@ import {
 } from '../../../containers/Dialog';
 import {patchOperationSpec} from '../../../store/actions/operations/helpers/patchOperationSpec';
 import {updateOperationAttributes} from '../../../store/actions/operations/helpers/updateOperationAttributes';
-import {useGetOperationQuery} from '../../../store/api/yt';
-import {useSelector} from '../../../store/redux-hooks';
-import {selectIsCumulativeSpecPatchSupported} from '../../../store/selectors/global/supported-features';
 import {showErrorPopup} from '../../../utils/utils';
 import {operationSpecPatchToItems} from '../../../utils/operations/specification-patch';
 import {
@@ -39,14 +34,14 @@ import {
 
 import i18n from './i18n';
 import {validateNumber} from '../../../common/hammer/validate-number';
-import {YTApiId} from '../../../rum/rum-wrap-api';
 
 import './EditOperationDialog.scss';
 
 const block = cn('yt-edit-operation-dialog');
 
 type Props = {
-    operationId: string;
+    operationAttributes: OperationEditAttributes;
+    specificationPatchSupported: boolean;
     visible: boolean;
     readOnly?: boolean;
     onClose: () => void;
@@ -58,7 +53,6 @@ type FormValues = Record<string, PoolFormValues[string] | SpecificationPatchForm
 };
 
 const SPECIFICATION_TAB = 'specification';
-const OPERATION_EDIT_ATTRIBUTES = ['id', 'state', 'full_spec', 'runtime_parameters'] as const;
 
 function makePoolTreeTabs(
     pools: OperationPool[],
@@ -209,58 +203,36 @@ function hasChanges(
     }
 }
 
-export function EditOperationDialog({operationId, visible, readOnly, onClose, onSuccess}: Props) {
+export function EditOperationDialog({
+    operationAttributes,
+    specificationPatchSupported,
+    visible,
+    readOnly,
+    onClose,
+    onSuccess,
+}: Props) {
     const [submitErrors, setSubmitErrors] = useState<Array<YTError | Error>>([]);
-    const isCumulativeSpecPatchSupported = useSelector(selectIsCumulativeSpecPatchSupported);
-    const {
-        data: operationAttributes,
-        error: loadError,
-        isLoading,
-        isFetching,
-    } = useGetOperationQuery<OperationEditAttributes>(
-        {
-            id: YTApiId.operationEditData,
-            parameters: {
-                operation_id: operationId,
-                attributes: [
-                    ...OPERATION_EDIT_ATTRIBUTES,
-                    ...(isCumulativeSpecPatchSupported ? ['cumulative_spec_patch'] : []),
-                ],
-            },
-        },
-        {refetchOnMountOrArgChange: true},
-    );
-    const loading = isLoading || isFetching;
     const operation = useMemo(
-        () =>
-            !loading && !loadError && operationAttributes
-                ? prepareEditOperationData(operationAttributes)
-                : undefined,
-        [loadError, loading, operationAttributes],
+        () => prepareEditOperationData(operationAttributes),
+        [operationAttributes],
     );
 
-    const isTerminal = operation
-        ? OPERATION_TERMINAL_STATES.has(operation.state as OperationStates)
-        : false;
+    const isTerminal = OPERATION_TERMINAL_STATES.has(operation.state as OperationStates);
     const fieldsDisabled = readOnly || isTerminal;
 
     const {pools, initialValues, taskNames} = useMemo(() => {
-        const operationPools = operation?.pools ?? [];
+        const operationPools = operation.pools;
         return {
             pools: operationPools,
             initialValues: {
                 specification: getSpecificationPatchInitialValues(),
                 ...buildInitialValues(operationPools),
             },
-            taskNames: getSpecificationPatchTaskNames(operation?.resultingSpec),
+            taskNames: getSpecificationPatchTaskNames(operation.resultingSpec),
         };
     }, [operation]);
 
     const handleAdd = async (form: FormApi<FormValues>) => {
-        if (!operation) {
-            return;
-        }
-
         setSubmitErrors([]);
 
         const {values} = form.getState();
@@ -268,7 +240,7 @@ export function EditOperationDialog({operationId, visible, readOnly, onClose, on
             values,
             operation,
             taskNames,
-            isCumulativeSpecPatchSupported,
+            specificationPatchSupported,
         );
         const mutations: Array<Promise<void>> = [];
 
@@ -301,21 +273,16 @@ export function EditOperationDialog({operationId, visible, readOnly, onClose, on
         return null;
     }
 
-    const errors = [loadError, ...submitErrors];
+    const errors = submitErrors;
     const fields = [
-        ...(isCumulativeSpecPatchSupported
+        ...(specificationPatchSupported
             ? [
                   {
                       type: 'yt-edit-operation-tab' as const,
                       name: SPECIFICATION_TAB,
                       title: i18n('tab_specification'),
                       fields: [
-                          ...(operation
-                              ? makeSpecificationPatchFields(
-                                    operation.resultingSpec,
-                                    fieldsDisabled,
-                                )
-                              : []),
+                          ...makeSpecificationPatchFields(operation.resultingSpec, fieldsDisabled),
                           ...makeErrorFields(errors),
                       ],
                   },
@@ -326,7 +293,7 @@ export function EditOperationDialog({operationId, visible, readOnly, onClose, on
 
     return (
         <YTDFDialog<FormValues>
-            key={operation?.id ?? 'loading'}
+            key={operation.id}
             className={block()}
             size="l"
             visible={visible}
@@ -338,14 +305,11 @@ export function EditOperationDialog({operationId, visible, readOnly, onClose, on
                 textApply: i18n('action_save'),
             }}
             isApplyDisabled={(state) =>
-                !operation ||
-                loading ||
                 readOnly ||
                 isTerminal ||
                 state.hasValidationErrors ||
-                !hasChanges(state.values, operation, taskNames, isCumulativeSpecPatchSupported)
+                !hasChanges(state.values, operation, taskNames, specificationPatchSupported)
             }
-            waitingMessage={loading ? <Loader size="s" /> : undefined}
             fields={fields}
             modal
         />

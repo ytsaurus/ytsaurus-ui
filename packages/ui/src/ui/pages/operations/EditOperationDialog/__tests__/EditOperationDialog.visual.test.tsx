@@ -6,9 +6,6 @@ import {expect, test} from '../../../../playwright-components/core';
 import {EditOperationDialogStories} from '../__stories__';
 import {
     TEST_OPERATION_ID,
-    getLongPoolTreeOperationHandler,
-    getOperationHandler,
-    getTerminalOperationHandler,
     patchOperationSpecErrorHandler,
     patchOperationSpecHandler,
     updateOperationParametersHandler,
@@ -68,8 +65,7 @@ async function getEncodedParameters(request: Request) {
     return JSON.parse(Buffer.from(value, 'base64').toString('utf8')) as unknown;
 }
 
-test('EditOperationDialog: Specification form', async ({mount, expectScreenshot, page, router}) => {
-    await router.use(getOperationHandler);
+test('EditOperationDialog: Specification form', async ({mount, expectScreenshot, page}) => {
     await mount(<EditOperationDialogStories.Default />);
 
     const dialog = await waitForSpecification(page);
@@ -77,8 +73,7 @@ test('EditOperationDialog: Specification form', async ({mount, expectScreenshot,
     await expectScreenshot({component: dialog});
 });
 
-test('EditOperationDialog: Specification JSON', async ({mount, expectScreenshot, page, router}) => {
-    await router.use(getOperationHandler);
+test('EditOperationDialog: Specification JSON', async ({mount, expectScreenshot, page}) => {
     await mount(<EditOperationDialogStories.Default />);
 
     const dialog = await waitForSpecification(page);
@@ -94,8 +89,7 @@ test('EditOperationDialog: Specification JSON', async ({mount, expectScreenshot,
     await expectScreenshot({component: dialog});
 });
 
-test('EditOperationDialog: Pool tree', async ({mount, expectScreenshot, page, router}) => {
-    await router.use(getOperationHandler);
+test('EditOperationDialog: Pool tree', async ({mount, expectScreenshot, page}) => {
     await mount(<EditOperationDialogStories.Default />);
 
     const dialog = await waitForSpecification(page);
@@ -105,13 +99,7 @@ test('EditOperationDialog: Pool tree', async ({mount, expectScreenshot, page, ro
     await expectScreenshot({component: dialog});
 });
 
-test('EditOperationDialog: Long pool tree names', async ({
-    mount,
-    expectScreenshot,
-    page,
-    router,
-}) => {
-    await router.use(getLongPoolTreeOperationHandler);
+test('EditOperationDialog: Long pool tree names', async ({mount, expectScreenshot, page}) => {
     await mount(<EditOperationDialogStories.LongPoolTreeNames />);
 
     const dialog = await waitForSpecification(page);
@@ -125,9 +113,7 @@ test('EditOperationDialog: Unsupported specification patch', async ({
     mount,
     expectScreenshot,
     page,
-    router,
 }) => {
-    await router.use(getOperationHandler);
     await mount(<EditOperationDialogStories.UnsupportedSpecificationPatch />);
 
     const dialog = page.getByRole('dialog');
@@ -136,8 +122,7 @@ test('EditOperationDialog: Unsupported specification patch', async ({
     await expectScreenshot({component: dialog});
 });
 
-test('EditOperationDialog: Terminal operation', async ({mount, expectScreenshot, page, router}) => {
-    await router.use(getTerminalOperationHandler);
+test('EditOperationDialog: Terminal operation', async ({mount, expectScreenshot, page}) => {
     await mount(<EditOperationDialogStories.TerminalOperation />);
 
     const dialog = await waitForSpecification(page);
@@ -150,9 +135,7 @@ test('EditOperationDialog: Maximum failed jobs enables Save', async ({
     mount,
     expectScreenshot,
     page,
-    router,
 }) => {
-    await router.use(getOperationHandler);
     await mount(<EditOperationDialogStories.Default />);
 
     const dialog = await waitForSpecification(page);
@@ -167,9 +150,7 @@ test('EditOperationDialog: Maximum failed jobs enables Save', async ({
 test('EditOperationDialog: preserves JSON fields when switching editor modes', async ({
     mount,
     page,
-    router,
 }) => {
-    await router.use(getOperationHandler);
     await mount(<EditOperationDialogStories.Default />);
 
     await waitForSpecification(page);
@@ -190,11 +171,7 @@ test('EditOperationDialog: submits specification and pool tree changes', async (
     page,
     router,
 }) => {
-    await router.use(
-        getOperationHandler,
-        patchOperationSpecHandler,
-        updateOperationParametersHandler,
-    );
+    await router.use(patchOperationSpecHandler, updateOperationParametersHandler);
     await mount(<EditOperationDialogStories.Default />);
 
     const dialog = await waitForSpecification(page);
@@ -234,7 +211,7 @@ test('EditOperationDialog: displays partial submit error', async ({
     page,
     router,
 }) => {
-    await router.use(getOperationHandler, patchOperationSpecErrorHandler);
+    await router.use(patchOperationSpecErrorHandler);
     await mount(<EditOperationDialogStories.Default />);
 
     const dialog = await waitForSpecification(page);

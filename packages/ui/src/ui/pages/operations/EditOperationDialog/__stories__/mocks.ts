@@ -5,8 +5,6 @@ import {type OperationEditAttributes} from '../../../../utils/operations/edit-op
 export const TEST_CLUSTER = 'test-cluster.yt.my-domain.com';
 export const TEST_OPERATION_ID = '33ab3f-bf1df917-b35fe9ed-c70a4bf4';
 
-const getOperationUrl = /\/api\/v3\/get_operation$/;
-
 export const operation: OperationEditAttributes = {
     id: TEST_OPERATION_ID,
     state: 'running',
@@ -65,14 +63,6 @@ export const longPoolTreeOperation: OperationEditAttributes = {
         },
     },
 };
-
-function makeGetOperationHandler(data: OperationEditAttributes) {
-    return http.get(getOperationUrl, () => Response.json(data));
-}
-
-export const getOperationHandler = makeGetOperationHandler(operation);
-export const getTerminalOperationHandler = makeGetOperationHandler(terminalOperation);
-export const getLongPoolTreeOperationHandler = makeGetOperationHandler(longPoolTreeOperation);
 
 export const patchOperationSpecHandler = http.post(
     `https://${TEST_CLUSTER}/api/v3/patch_op_spec`,
