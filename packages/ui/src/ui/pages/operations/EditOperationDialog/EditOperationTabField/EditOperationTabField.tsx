@@ -21,27 +21,21 @@ export const EditOperationTabField = Object.assign(
 
         return (
             <div className={block(null, className)}>
-                {poolTrees.length > 0 && (
-                    <React.Fragment>
-                        <div className={block('pool-trees-title')}>
-                            {i18n('section_pool-trees')}
-                        </div>
-                        <TabFieldVertical
-                            className={block('pool-trees', {
-                                'with-separator': Boolean(specification),
-                            })}
-                            {...rest}
-                            activeTab={activeTab}
-                            tabItems={poolTrees}
-                            size="m"
-                            wrapTo={(node, item) => (
-                                <Tooltip content={item.name}>
-                                    <div className={block('pool-tree')}>{node}</div>
-                                </Tooltip>
-                            )}
-                        />
-                    </React.Fragment>
-                )}
+                <div className={block('pool-trees-title')}>{i18n('section_pool-trees')}</div>
+                <TabFieldVertical
+                    className={block('pool-trees', {
+                        'with-separator': Boolean(specification),
+                    })}
+                    {...rest}
+                    activeTab={activeTab}
+                    tabItems={poolTrees}
+                    size="m"
+                    wrapTo={(node, item) => (
+                        <Tooltip content={item.name}>
+                            <div className={block('pool-tree')}>{node}</div>
+                        </Tooltip>
+                    )}
+                />
                 {specification && (
                     <TabFieldVertical
                         className={block('specification')}
