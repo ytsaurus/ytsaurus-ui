@@ -16,6 +16,7 @@ import './EditOperationButton.scss';
 const block = cn('edit-operation-button');
 
 export type EditOperationButtonProps = {
+    className?: string;
     operationId: string;
     operationState: OperationStates;
     view: 'edit-button' | 'edit-icon';
@@ -23,6 +24,7 @@ export type EditOperationButtonProps = {
 };
 
 export function EditOperationButton({
+    className,
     operationId,
     operationState,
     view,
@@ -35,7 +37,7 @@ export function EditOperationButton({
 
     return (
         <React.Fragment>
-            <span className={block()}>
+            <span className={block({editable}, className)}>
                 <Button
                     size={iconOnly ? 's' : 'm'}
                     view={iconOnly ? 'flat-secondary' : 'outlined'}
