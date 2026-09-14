@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.3](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.3.2...components-v1.3.3) (2026-09-14)
+
+
+### Bug Fixes
+
+* **@ytsaurus/components:** better dependencies [YTFRONT-5272] ([49ce33b](https://github.com/ytsaurus/ytsaurus-ui/commit/49ce33bda0555bd542854f23fecfb0481dd8166c))
+
 ## [1.3.2](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.3.1...components-v1.3.2) (2026-08-24)
 
 
