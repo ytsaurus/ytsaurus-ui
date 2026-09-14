@@ -21,7 +21,7 @@ import {selectOperationDetailsLoadingStatus} from '../../../../../../store/selec
 import {useAppRumMeasureStart} from '../../../../../../rum/rum-app-measures';
 import {RumMeasureTypes} from '../../../../../../rum/rum-measure-types';
 import {isFinalLoadingStatus} from '../../../../../../utils/utils';
-import {isNullable} from '../../../../../../utils';
+import {isNullable} from '../../../../../../../shared/utils/toolkit/type/isNullable';
 import {useRumMeasureStop} from '../../../../../../rum/RumUiContext';
 import {type RootState} from '../../../../../../store/reducers';
 import YTHistogram, {

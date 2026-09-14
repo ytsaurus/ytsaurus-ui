@@ -6,7 +6,7 @@ import some_ from 'lodash/some';
 import sortBy_ from 'lodash/sortBy';
 
 import ypath from '../../../../common/thor/ypath';
-import {isNullable} from '../../../index';
+import {isNullable} from '../../../../../shared/utils/toolkit/type/isNullable';
 import i18n from './i18n';
 
 export function getOperationProgress(operation) {

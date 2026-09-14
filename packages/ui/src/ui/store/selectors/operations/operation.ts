@@ -6,7 +6,7 @@ import {createSelector} from 'reselect';
 import {formatByParams} from '../../../../shared/utils/format';
 import {type RootState} from '../../../store/reducers';
 import ypath from '../../../common/thor/ypath';
-import {isNullable} from '../../../utils/index';
+import {isNullable} from '../../../../shared/utils/toolkit/type/isNullable';
 import {type AlertInfo} from '../../../components/AlertEvents/AlertEvents';
 import {calculateLoadingStatus} from '../../../utils/utils';
 import {type FIX_MY_TYPE} from '../../../types';

@@ -6,7 +6,8 @@ import reduce_ from 'lodash/reduce';
 import ypath from '../../../../common/thor/ypath';
 import hammer from '../../../../common/hammer';
 import {getOperationProgress, hasProgressTasks} from './data-flow';
-import {isNullable, prepareTableColumns} from '../../../../utils/index';
+import {isNullable} from '../../../../../shared/utils/toolkit/type/isNullable';
+import {prepareTableColumns} from '../../../../utils/index';
 import i18n from './i18n';
 
 function sortCounters(reasonA, reasonB) {

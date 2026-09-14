@@ -10,7 +10,7 @@ import Multimeter from '../../../../../components/Multimeter/Multimeter';
 import {SubjectCard} from '../../../../../components/SubjectLink/SubjectLink';
 
 import {type TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
-import {isNullable} from '../../../../../utils';
+import {isNullable} from '../../../../../../shared/utils/toolkit/type/isNullable';
 import {selectTargetQueue} from '../../../../../store/selectors/navigation/tabs/consumer';
 
 import i18n from './i18n';

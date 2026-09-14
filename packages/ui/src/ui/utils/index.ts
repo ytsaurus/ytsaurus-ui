@@ -298,10 +298,6 @@ export function paramsToQuery(params: any): string {
     return qs.stringify(params, {encoder: (str) => customEncodeURIComponent(str)});
 }
 
-export function isNullable(value: unknown): value is null | undefined {
-    return value === null || value === undefined;
-}
-
 const FUTILE_RETRY_CODES: number[] = [
     yt.codes.NO_SUCH_USER,
     yt.codes.USER_IS_BANNED,

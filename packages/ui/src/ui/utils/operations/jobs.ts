@@ -2,7 +2,7 @@ import isEmpty_ from 'lodash/isEmpty';
 import some_ from 'lodash/some';
 
 import ypath from '../../common/thor/ypath';
-import {isNullable} from '../index';
+import {isNullable} from '../../../shared/utils/toolkit/type/isNullable';
 
 export function hasTaskHistograms(operation: unknown) {
     const progress = ypath.getValue(operation, '/@progress');

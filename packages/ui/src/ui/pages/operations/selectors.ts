@@ -4,7 +4,7 @@ import moment from 'moment';
 
 import ypath from '../../common/thor/ypath';
 import hammer from '../../common/hammer';
-import {isNullable} from '../../utils';
+import {isNullable} from '../../../shared/utils/toolkit/type/isNullable';
 import {createSelector} from 'reselect';
 import {remoteInputUrl} from '../../utils/operations/tabs/details/specification/specification';
 import {type FIX_MY_TYPE} from '../../types';
