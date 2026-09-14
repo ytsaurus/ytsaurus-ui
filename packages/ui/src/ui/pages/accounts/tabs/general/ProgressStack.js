@@ -9,7 +9,7 @@ import {Progress} from '@gravity-ui/uikit';
 
 import hammer from '../../../../common/hammer';
 import Account from '../../../../pages/accounts/selector';
-import {isNullable} from '../../../../utils';
+import {isNullable} from '../../../../../shared/utils/toolkit/type/isNullable';
 
 import {getDefaultSerieColor} from '../../../../constants/colors';
 import {getAccountName} from '../../../../store/selectors/accounts/accounts';
