@@ -19,7 +19,7 @@ import {
 import format from '../../../common/hammer/format';
 
 import ypath from '../../../common/thor/ypath';
-import {isNullable} from '../../../utils/index';
+import {isNullable} from '../../../../shared/utils/toolkit/type/isNullable';
 import {STATISTICS_FILTER_ALL_VALUE} from '../../../constants/operations/statistics';
 import {type RootState} from '../../../store/reducers';
 import {type ValueOf} from '../../../../@types/types';
