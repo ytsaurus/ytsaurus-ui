@@ -24,6 +24,7 @@ import {PathItem} from './PathItem';
 import i18n from './i18n';
 import {EditOperationButton} from '../../EditOperationButton/EditOperationButton';
 import {EditOperationDialog} from '../../EditOperationDialog/EditOperationDialog';
+import {useOperationEditorData} from '../../EditOperationDialog/useOperationEditorData';
 
 const BLOCK_NAME = 'operations-list';
 const block = cn(BLOCK_NAME);
@@ -72,7 +73,8 @@ function UserPoolItem({awesomeIcon, children, title}) {
 }
 
 function ViewOperationButton({operationId}) {
-    const [visible, setVisible] = React.useState(false);
+    const {operationAttributes, specificationPatchSupported, isFetching, open, close} =
+        useOperationEditorData(operationId);
 
     return (
         <React.Fragment>
@@ -80,17 +82,20 @@ function ViewOperationButton({operationId}) {
                 size="s"
                 view="flat-secondary"
                 title={i18n('action_show-pools-weights')}
-                onClick={() => setVisible(true)}
+                loading={isFetching}
+                disabled={isFetching}
+                onClick={open}
             >
                 <Icon awesome="eye" />
                 &nbsp;{i18n('action_view')}
             </Button>
-            {visible && (
+            {operationAttributes && (
                 <EditOperationDialog
-                    operationId={operationId}
+                    operationAttributes={operationAttributes}
+                    specificationPatchSupported={specificationPatchSupported}
                     visible
                     readOnly
-                    onClose={() => setVisible(false)}
+                    onClose={close}
                 />
             )}
         </React.Fragment>
