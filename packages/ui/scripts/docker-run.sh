@@ -22,8 +22,10 @@ PW_VERSION=$(echo $IMAGE_TAG | awk -F "-" '{print $1}' | sed -e 's/^v//')
 
 NAME=$(node -e 'console.log(require("./package.json").name)')
 NODE_MODULES_CACHE_DIR="$HOME/.cache/$(dirname $(readlink -f ./package.json) | sed -E s/[^a-zA-Z0-9.-]/_/g)"
+NPM_CACHE_DIR="$HOME/.cache/ytsaurus-ui/npm"
 
 echo Using cache directory: ${NODE_MODULES_CACHE_DIR}
+mkdir -p "$NPM_CACHE_DIR"
 
 command_exists() {
     command -v "$1" >/dev/null 2>&1
@@ -66,15 +68,17 @@ run_command() {
         useEnvFile="--env-file $envFile"
     fi
 
-    $CONTAINER_TOOL run --name ytsaurus-ui.tests \
+    $CONTAINER_TOOL run \
         --rm \
         --network host \
         -e PW_OPTIONS="${PW_OPTIONS:- }" \
         -e DOCKER_CI=1 \
+        -e NPM_CONFIG_CACHE=/npm-cache \
         -w /work \
         -v $(pwd):/work \
         -v "$NODE_MODULES_CACHE_DIR/node_modules:/work/node_modules" \
         -v "$NODE_MODULES_CACHE_DIR/.cache-playwright:/work/.cache-playwright" \
+        -v "$NPM_CACHE_DIR:/npm-cache" \
         $useEnvFile \
         "$IMAGE_NAME:$IMAGE_TAG" \
         /bin/bash -c "umask 0000; $toRun"
