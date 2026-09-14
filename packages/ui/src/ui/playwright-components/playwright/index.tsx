@@ -37,6 +37,8 @@ beforeMount(async ({App}) => {
             getDefaultMiddleware({serializableCheck: false}).concat(rootApi.middleware),
         devTools: process.env.NODE_ENV !== 'production',
     });
+    // Legacy consumers read the same store directly from window.
+    Object.assign(window, {store});
     registerPlugins();
 
     return (
