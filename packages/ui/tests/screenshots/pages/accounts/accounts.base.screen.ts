@@ -1,4 +1,6 @@
-import {Page, expect, test} from '@playwright/test';
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+import {expect, test} from '@playwright/test';
+import type {Page} from '@playwright/test';
 import {makeClusterUrl} from '../../../utils';
 import {BasePage} from '../../../widgets/BasePage';
 import {replaceInnerHtml, replaceInnerHtmlProgress} from '../../../utils/dom';

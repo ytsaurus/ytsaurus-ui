@@ -6,6 +6,9 @@ const ACCOUNTS_PREFIX = createPrefix('ACCOUNTS');
 export const FETCH_ACCOUNTS_RESOURCE = createActionTypes(
     ACCOUNTS_PREFIX + 'FETCH_ACCOUNTS_RESOURCE',
 );
+export const FETCH_ACCOUNTS_METADATA = createActionTypes(
+    ACCOUNTS_PREFIX + 'FETCH_ACCOUNTS_METADATA',
+);
 export const FETCH_ACCOUNTS_TOTAL_USAGE = createActionTypes(
     ACCOUNTS_PREFIX + 'FETCH_ACCOUNTS_TOTAL_USAGE',
 );
