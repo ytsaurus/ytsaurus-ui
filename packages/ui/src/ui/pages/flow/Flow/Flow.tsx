@@ -156,11 +156,14 @@ function FlowStatusToolbar() {
 function FlowState() {
     const pipeline_path = useSelector(selectFlowPipelinePath);
     const value = useSelector(selectFlowStatusData);
+    const {leader_controller_address} = useFlowAttributes(pipeline_path).data ?? {};
     const {
         name: leaderName,
-        address: leaderAddress,
+        address: rpcAddress,
         errorContent: leaderError,
     } = useFlowLeaderController(pipeline_path + '/flow_control');
+    // Old controllers publish the address only in the attribute.
+    const leaderAddress = rpcAddress ?? leader_controller_address;
     return (
         <React.Fragment>
             <Flex alignItems="baseline" justifyContent="space-between" gap={2}>
@@ -195,18 +198,19 @@ function FlowState() {
                             {
                                 key: 'leader_controller_address',
                                 label: i18n('leader-controller-address'),
-                                value: leaderError ? (
-                                    leaderError
-                                ) : (
-                                    <>
-                                        {leaderAddress ?? format.NO_VALUE}
-                                        <ClipboardButton
-                                            view="flat-secondary"
-                                            text={leaderAddress}
-                                            inlineMargins
-                                        />
-                                    </>
-                                ),
+                                value:
+                                    leaderError && !leaderAddress ? (
+                                        leaderError
+                                    ) : (
+                                        <>
+                                            {leaderAddress ?? format.NO_VALUE}
+                                            <ClipboardButton
+                                                view="flat-secondary"
+                                                text={leaderAddress}
+                                                inlineMargins
+                                            />
+                                        </>
+                                    ),
                                 className: block('meta-item'),
                             },
                         ],
