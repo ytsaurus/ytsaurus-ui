@@ -9,7 +9,6 @@ import {Query} from '../../../utils/navigation/content/table/query';
 type FlowAttributes = {
     monitoring_cluster: string;
     monitoring_project: string;
-    leader_controller_address: string;
     pipeline_name?: string;
 };
 
@@ -18,19 +17,14 @@ export function useFlowAttributes(path: string) {
         id: YTApiId.flowAttributes,
         parameters: {
             path: `${path}/@`,
-            attributes: [
-                'monitoring_cluster',
-                'monitoring_project',
-                'leader_controller_address',
-                'pipeline_name',
-            ],
+            attributes: ['monitoring_cluster', 'monitoring_project', 'pipeline_name'],
         },
     });
 }
 
-export function useFlowLeaderControllerName(path: string) {
+export function useFlowLeaderController(path: string) {
     const {data, error} = useSelectRowsQuery({
-        id: YTApiId.flowLeaderControllerName,
+        id: YTApiId.flowLeaderController,
         parameters: {
             query: Query.prepareQueryByKeys({
                 path,
@@ -44,8 +38,10 @@ export function useFlowLeaderControllerName(path: string) {
         },
     });
 
+    const row = data?.rows?.[0];
     return {
         errorContent: error ? <YTErrorInline error={error} /> : undefined,
-        data: ypath.getValue(data?.rows?.[0], '/value/name'),
+        name: ypath.getValue(row, '/value/name'),
+        address: ypath.getValue(row, '/value/rpc_address'),
     };
 }

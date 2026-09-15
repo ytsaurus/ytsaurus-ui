@@ -210,7 +210,7 @@ export const enum YTApiId {
     prometheusMonitoringLayout = 'prometheusMonitoringLayout',
     flowExecute = 'flowExecute',
     flowAttributes = 'flowAttributes',
-    flowLeaderControllerName = 'flowLeaderControllerName',
+    flowLeaderController = 'flowLeaderController',
 
     // Replicated table
     alterReplicationCard = 'alterReplicationCard',

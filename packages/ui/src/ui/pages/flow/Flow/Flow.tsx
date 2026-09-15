@@ -13,7 +13,7 @@ import {useUpdater} from '../../../hooks/use-updater';
 import format from '../../../common/hammer/format';
 import {
     useFlowAttributes,
-    useFlowLeaderControllerName,
+    useFlowLeaderController,
 } from '../../../pages/flow/flow-hooks/use-flow-attributes';
 import {loadFlowStatus, updateFlowState} from '../../../store/actions/flow/status';
 import {useFlowExecuteQuery} from '../../../store/api/yt/flow';
@@ -156,10 +156,11 @@ function FlowStatusToolbar() {
 function FlowState() {
     const pipeline_path = useSelector(selectFlowPipelinePath);
     const value = useSelector(selectFlowStatusData);
-    const {leader_controller_address} = useFlowAttributes(pipeline_path).data ?? {};
-    const {data: leaderName, errorContent: leaderError} = useFlowLeaderControllerName(
-        pipeline_path + '/flow_control',
-    );
+    const {
+        name: leaderName,
+        address: leaderAddress,
+        errorContent: leaderError,
+    } = useFlowLeaderController(pipeline_path + '/flow_control');
     return (
         <React.Fragment>
             <Flex alignItems="baseline" justifyContent="space-between" gap={2}>
@@ -194,12 +195,14 @@ function FlowState() {
                             {
                                 key: 'leader_controller_address',
                                 label: i18n('leader-controller-address'),
-                                value: (
+                                value: leaderError ? (
+                                    leaderError
+                                ) : (
                                     <>
-                                        {leader_controller_address}
+                                        {leaderAddress ?? format.NO_VALUE}
                                         <ClipboardButton
                                             view="flat-secondary"
-                                            text={leader_controller_address}
+                                            text={leaderAddress}
                                             inlineMargins
                                         />
                                     </>
