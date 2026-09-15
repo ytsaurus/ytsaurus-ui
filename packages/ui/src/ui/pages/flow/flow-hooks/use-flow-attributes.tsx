@@ -28,9 +28,9 @@ export function useFlowAttributes(path: string) {
     });
 }
 
-export function useFlowLeaderControllerName(path: string) {
+export function useFlowLeaderController(path: string) {
     const {data, error} = useSelectRowsQuery({
-        id: YTApiId.flowLeaderControllerName,
+        id: YTApiId.flowLeaderController,
         parameters: {
             query: Query.prepareQueryByKeys({
                 path,
@@ -44,8 +44,10 @@ export function useFlowLeaderControllerName(path: string) {
         },
     });
 
+    const row = data?.rows?.[0];
     return {
         errorContent: error ? <YTErrorInline error={error} /> : undefined,
-        data: ypath.getValue(data?.rows?.[0], '/value/name'),
+        name: ypath.getValue(row, '/value/name'),
+        address: ypath.getValue(row, '/value/rpc_address'),
     };
 }
