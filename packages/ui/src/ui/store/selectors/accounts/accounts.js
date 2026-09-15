@@ -2,11 +2,10 @@ import filter_ from 'lodash/filter';
 import forEach_ from 'lodash/forEach';
 import get_ from 'lodash/get';
 import isEmpty_ from 'lodash/isEmpty';
-import map_ from 'lodash/map';
 import set_ from 'lodash/set';
 
 import {createSelector} from 'reselect';
-import {ACCOUNTS_TABLE_ID, ROOT_ACCOUNT_NAME} from '../../../constants/accounts/accounts';
+import {ACCOUNTS_TABLE_ID} from '../../../constants/accounts/accounts';
 import {selectTables} from '../../../store/selectors/tables';
 import hammer from '../../../common/hammer';
 import ypath from '../../../common/thor/ypath';
@@ -14,12 +13,10 @@ import {
     selectAccountMasterMemoryMedia,
     selectAccountNames,
     selectAccountsColumnFields,
-    selectAccountsMapByName,
     selectAccountsTree,
 } from './accounts-ts';
 import {concatByAnd} from '../../../common/hammer/predicate';
 import {accountMemoryMediumToFieldName} from '../../../utils/accounts/accounts-selector';
-import {visitTreeItems} from '../../../utils/utils';
 
 export const selectActiveAccount = (state) => state.accounts.accounts.activeAccount;
 export const selectActiveMediumFilter = (state) => state.accounts.accounts.activeMediumFilter;
@@ -63,11 +60,6 @@ export const selectActiveAccountSubtree = createSelector(
 export const selectActiveAccountAggregationRow = createSelector(
     [selectActiveAccountSubtree, selectAccountMasterMemoryMedia],
     ({activeTreeItem}, masterMemoryMedia) => calcAggregationRow(activeTreeItem, masterMemoryMedia),
-);
-
-export const selectActiveAccountSubtreeNames = createSelector(
-    selectActiveAccountSubtree,
-    getActiveAccountSubtreeNamesImpl,
 );
 
 export const selectAccountsFlattenTree = createSelector(
@@ -244,44 +236,3 @@ function calcAggregationRow(treeItem, masterMemoryMedia) {
 
     return aggTreeItem;
 }
-
-function getActiveAccountSubtreeNamesImpl({activeTreeItem}) {
-    const res = [];
-    visitTreeItems(activeTreeItem, (item) => {
-        res.push(getAccountName(item));
-    });
-    return res;
-}
-
-export const selectActiveAccountBreadcrumbs = createSelector(
-    selectActiveAccount,
-    selectAccountsMapByName,
-    (activeAccount, nameToAccountMap) => {
-        const parentNode = (name) => {
-            const account = nameToAccountMap[name] || {attributes: {}};
-            return account && account.parent;
-        };
-
-        const loaded = nameToAccountMap[activeAccount] !== undefined;
-        const namesArr = [];
-        if (loaded) {
-            let name = activeAccount;
-            while (name && name !== ROOT_ACCOUNT_NAME) {
-                namesArr.push(name);
-                name = parentNode(name);
-            }
-        }
-        const items = [
-            {text: '<Accounts>', url: '', title: ''},
-            ...map_(namesArr.reverse(), (name) => {
-                return {
-                    value: name,
-                    text: name,
-                    url: `?account=${name}`,
-                    title: name,
-                };
-            }),
-        ];
-        return items;
-    },
-);
