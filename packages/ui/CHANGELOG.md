@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.26.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.25.0...ui-v3.26.0) (2026-09-15)
+
+
+### Features
+
+* **Flow/Graph:** display messages by click on computation anchors [YTFRONT-5792] ([5045100](https://github.com/ytsaurus/ytsaurus-ui/commit/5045100dc2c65f59cb048087dffedc6cc7a333de))
+
+
+### Bug Fixes
+
+* **Dashboard:** widget-table cell padding [YTFRONT-6028] ([fc09d5a](https://github.com/ytsaurus/ytsaurus-ui/commit/fc09d5a5604cb03936d389f4f8590f88f801b4a7))
+* **flow:** remove messages dialog import cycle ([9dbbb95](https://github.com/ytsaurus/ytsaurus-ui/commit/9dbbb95f65ef089277e729fd0e3bdb08d1dc99b7))
+* **unipika:** resolve root-relative URLs before wrapping in referrer redirect [YTFRONT-5896] ([d987c8a](https://github.com/ytsaurus/ytsaurus-ui/commit/d987c8af6305daa1c59f07608b5e0c27c97a78ae))
+
 ## [3.25.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.24.0...ui-v3.25.0) (2026-09-10)
 
 
