@@ -14,8 +14,11 @@ export class AclPage extends BasePage {
             this.page.waitForLoadState('load'),
             this.page.waitForLoadState('networkidle'),
             this.page.evaluate(() => document.fonts.ready),
-            this.waitForCSS('.navigation-acl__table-item_type_subjects', {'max-width': '320px'}),
         ]);
+
+        await this.waitForCSS('th.navigation-acl__table-item_type_subjects', {
+            'max-width': '320px',
+        });
     }
 
     async waitForClusterFontWeight() {
