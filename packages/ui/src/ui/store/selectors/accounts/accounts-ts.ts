@@ -23,7 +23,7 @@ import ypath from '../../../common/thor/ypath';
 import {accountMemoryMediumToFieldName} from '../../../utils/accounts/accounts-selector';
 import {calculateLoadingStatus, isFinalLoadingStatus} from '../../../utils/utils';
 
-function isTopLevelAccount(account: AccountSelector) {
+function isTopLevelAccount(account?: AccountSelector) {
     const parent = ypath.getValue(account, '/@parent_name');
     return !parent || parent === ROOT_ACCOUNT_NAME;
 }
@@ -290,19 +290,26 @@ function getResourceInfo(
     return getInfo(entry.attributes, recursive, mediumType);
 }
 
-export const selectAccountMasterMemoryMedia = createSelector([selectAccounts], (items = []) => {
-    const [item] = items;
-    if (!item) {
+function getAccountMasterMemoryMedia(account?: AccountSelector) {
+    if (!account) {
         return [];
     }
 
-    const perCell = ypath.getValue(item, '/@resource_usage/master_memory/per_cell');
-    const mediums = map_(keys_(perCell), (key) => {
-        return `per_cell/${key}`;
-    });
+    const perCell = ypath.getValue(account, '/@resource_usage/master_memory/per_cell');
+    const mediums = map_(keys_(perCell), (key) => `per_cell/${key}`);
 
     return ['total', 'chunk_host', ...mediums];
-});
+}
+
+export const selectAccountMasterMemoryMedia = createSelector(
+    [selectAccounts, selectActiveAccount],
+    (accounts = [], activeAccount) => {
+        const account = activeAccount
+            ? accounts.find((item) => item.name === activeAccount)
+            : accounts[0];
+        return getAccountMasterMemoryMedia(account);
+    },
+);
 
 const selectAccountsMasterMemoryColumns = createSelector(
     [selectActiveAccount, selectAccountsMasterMemoryContentMode],
@@ -615,28 +622,23 @@ function collectSubtreeItems(
 
     collected.add(account);
 
-    const res = [] as Array<string>;
+    const result: Array<string> = [];
     const {parent, children, attributes} = tree[account] || {};
-    const isTopLevel = isTopLevelAccount(attributes);
-    if (parent && tree[parent] && !isTopLevel && !collected.has(parent)) {
-        res.push(parent);
-        const parentItems = collectSubtreeItems(parent, tree, collected);
-        res.push(...parentItems);
+    if (parent && tree[parent] && !isTopLevelAccount(attributes) && !collected.has(parent)) {
+        result.push(parent);
+        result.push(...collectSubtreeItems(parent, tree, collected));
     }
     forEach_(children, (item) => {
-        if (collected.has(item.name)) {
-            return;
+        if (!collected.has(item.name)) {
+            result.push(item.name);
+            result.push(...collectSubtreeItems(item.name, tree, collected));
         }
-        res.push(item.name);
-        const childItems = collectSubtreeItems(item.name, tree, collected);
-        res.push(...childItems);
     });
-    return res;
+
+    return result;
 }
 
 export const selectIsEditableAccountOfTopLevel = createSelector(
     [selectAccountsMapByName, selectEditableAccount],
-    (mapByName, account) => {
-        return isTopLevelAccount(mapByName[account?.name]);
-    },
+    (mapByName, account) => isTopLevelAccount(mapByName[account?.name]),
 );

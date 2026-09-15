@@ -73,7 +73,7 @@ export function getAccountName(treeItem) {
 }
 
 function prepareSubtreeNames(tree, account) {
-    if (isEmpty_(tree) || isEmpty_(account)) {
+    if (isEmpty_(tree) || isEmpty_(account) || !tree[account.name]) {
         return [];
     }
 
