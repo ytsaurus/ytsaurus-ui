@@ -4,12 +4,11 @@ import sortBy_ from 'lodash/sortBy';
 import map_ from 'lodash/map';
 import uniq_ from 'lodash/uniq';
 
-import ypath from '../../../../../common/thor/ypath';
-
 import {PrometheusDashboardLazy} from '../../../../../containers/PrometheusDashboard/lazy';
-import {selectAccountsMapByName} from '../../../../../store/selectors/accounts/accounts-ts';
 import {selectMediumList} from '../../../../../store/selectors/thor';
 import {usePrometheusDashboardParams} from '../../../../../store/reducers/prometheusDashboard/prometheusDashboard-hooks';
+import {YTErrorBlock} from '../../../../../containers/Block/Block';
+import {useAccountMonitoringAttribute} from '../useAccountMonitoringAttribute';
 
 type LeftRightMedium = {
     left_medium?: string;
@@ -19,19 +18,27 @@ type LeftRightMedium = {
 const ACCOUNTS_DASHBOARD_TYPE = 'master-accounts';
 
 export function AccountsMonitorPrometheus({cluster, account}: {cluster: string; account: string}) {
-    const {accountData, params} = useAccountMonitoringParams({
+    const {accountData, error, params} = useAccountMonitoringParams({
         cluster,
         account,
     });
 
-    return !accountData ? null : (
-        <PrometheusDashboardLazy type={ACCOUNTS_DASHBOARD_TYPE} params={params} />
-    );
+    if (error) {
+        return <YTErrorBlock error={error} />;
+    }
+    if (!accountData) {
+        return null;
+    }
+    return <PrometheusDashboardLazy type={ACCOUNTS_DASHBOARD_TYPE} params={params} />;
 }
 
 function useAccountMonitoringParams({cluster, account}: {cluster: string; account: string}) {
     const mediumList: Array<string> = useSelector(selectMediumList);
-    const accountData = useSelector(selectAccountsMapByName)[account];
+    const {data: accountData, error} = useAccountMonitoringAttribute(
+        cluster,
+        account,
+        'resource_limits/disk_space_per_medium',
+    );
 
     const {params: selection, setParams: setSelection} =
         usePrometheusDashboardParams<LeftRightMedium>(ACCOUNTS_DASHBOARD_TYPE);
@@ -42,15 +49,7 @@ function useAccountMonitoringParams({cluster, account}: {cluster: string; accoun
         }
 
         const mediumsDescBySize = sortBy_(
-            map_(
-                ypath.getValue(accountData, '/@resource_limits/disk_space_per_medium') as Record<
-                    string,
-                    number
-                >,
-                (v, k) => {
-                    return {medium: k, limit: v};
-                },
-            ),
+            map_(accountData, (v, k) => ({medium: k, limit: v})),
             'limit',
         ).filter(Boolean);
 
@@ -81,5 +80,5 @@ function useAccountMonitoringParams({cluster, account}: {cluster: string; accoun
         return {value, text: value};
     });
 
-    return {options, params, selection, setSelection, accountData};
+    return {options, params, selection, setSelection, accountData, error};
 }
