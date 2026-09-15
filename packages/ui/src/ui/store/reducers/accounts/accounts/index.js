@@ -1,4 +1,4 @@
-import indexOf_ from 'lodash/indexOf';
+import findIndex_ from 'lodash/findIndex';
 
 import {getResponsibleUsers} from '../../../../utils/accounts/index';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../../constants/accounts';
@@ -72,7 +72,7 @@ const reducer = (state = initialState, action) => {
         case UPDATE_EDITABLE_ACCOUNT.SUCCESS: {
             const {accounts} = state;
             const {account} = action.data;
-            const index = indexOf_(accounts, (x) => x.name === account.name);
+            const index = findIndex_(accounts, (x) => x.name === account.name);
             const newAccounts = [...accounts];
             if (index === -1) {
                 newAccounts.push(account);

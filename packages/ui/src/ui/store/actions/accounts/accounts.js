@@ -187,10 +187,10 @@ export function fetchAccounts() {
 export function accountsIncreaseEditCounter() {
     return (dispatch, getState) => {
         const editCounter = selectAccountsEditCounter(getState());
-        return {
+        return dispatch({
             type: ACCOUNTS_DATA_FIELDS_ACTION,
             data: {editCounter: editCounter + 1, disableCacheForNextFetch: true},
-        };
+        });
     };
 }
 

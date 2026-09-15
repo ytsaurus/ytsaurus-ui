@@ -4,6 +4,7 @@ import block from 'bem-cn-lite';
 
 import {setAccountAbc} from '../../../../../../utils/accounts/editor';
 import {
+    accountsIncreaseEditCounter as increaseAccountsEditCounter,
     loadEditedAccount,
     setParentAccountAction,
 } from '../../../../../../store/actions/accounts/accounts';
@@ -37,6 +38,7 @@ export function WithHeader({
 interface ParentProps {
     account: AccountParsedData;
     loadEditedAccount: (name: string) => void;
+    accountsIncreaseEditCounter: () => void;
     setAccountParent: (name: string, parentName: string) => void;
     cluster: string;
     isAdmin: boolean;
@@ -117,6 +119,7 @@ class GeneralContent extends React.Component<Props> {
         const {id: abcServiceId, slug: value} = service ?? {};
         const {
             account: {name, abc: {slug, id} = {}},
+            accountsIncreaseEditCounter,
             loadEditedAccount,
         } = this.props;
         if (abcServiceId === id && slug === value) {
@@ -124,6 +127,7 @@ class GeneralContent extends React.Component<Props> {
         }
         await setAccountAbc(name, abcServiceId, value);
         loadEditedAccount(name);
+        accountsIncreaseEditCounter();
     };
 
     override render() {
@@ -148,6 +152,7 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = {
+    accountsIncreaseEditCounter: increaseAccountsEditCounter,
     loadEditedAccount,
     setAccountParent: setParentAccountAction,
 };
