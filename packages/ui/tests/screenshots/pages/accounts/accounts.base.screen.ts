@@ -1,4 +1,6 @@
-import {Page, expect, test} from '@playwright/test';
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+import {expect, test} from '@playwright/test';
+import type {Page} from '@playwright/test';
 import {makeClusterUrl} from '../../../utils';
 import {BasePage} from '../../../widgets/BasePage';
 import {replaceInnerHtml, replaceInnerHtmlProgress} from '../../../utils/dom';
@@ -9,6 +11,7 @@ const ACCOUNT_NAME_RULE = {'.accounts__item-name .g-link': 'e2e_XXXXXX_XXXXX'};
 class AccountsPage extends BasePage {
     async waitAccountRow() {
         await this.page.waitForSelector('.accounts__content tr :text("account-for-e2e")');
+        await expect(this.page.getByTestId('edit-account-account-for-e2e')).toBeEnabled();
     }
 
     async selectMode(
@@ -205,6 +208,7 @@ test('Accounts - List', async ({page}) => {
     await page.fill('span[data-qa="accounts-name-filter"] input', 'e2e');
     await page.waitForTimeout(300);
     await page.waitForLoadState('networkidle');
+    await accounts(page).waitAccountRow();
 
     await accounts(page).prepareListPage();
     await expect(page).toHaveScreenshot();

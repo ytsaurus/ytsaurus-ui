@@ -14,6 +14,7 @@ import {
     CHANGE_MEDIUM_TYPE_FILTER,
     CHANGE_NAME_FILTER,
     CLOSE_EDITOR_MODAL,
+    FETCH_ACCOUNTS_METADATA,
     FETCH_ACCOUNTS_NODES,
     FETCH_ACCOUNTS_RESOURCE,
     FETCH_ACCOUNTS_TOTAL_USAGE,
@@ -54,7 +55,54 @@ const attributesToLoad = [
     'folder_id',
 ];
 
-export function fetchAccounts() {
+const listAttributesToLoad = ['parent_name', 'abc'];
+
+const requestGenerations = new Map();
+
+function startRequest(scope) {
+    const generation = (requestGenerations.get(scope) || 0) + 1;
+    requestGenerations.set(scope, generation);
+    return generation;
+}
+
+function isLatestRequest(scope, generation) {
+    return requestGenerations.get(scope) === generation;
+}
+
+function getCacheParams(state) {
+    return selectAccountsDisabledCacheForNextFetch(state) ? {} : USE_CACHE;
+}
+
+function parseAccounts(rumId, accounts) {
+    const items = filter_(
+        ypath.getValue(accounts),
+        (item) => ypath.getValue(item) !== ROOT_ACCOUNT_NAME,
+    );
+    return rumId
+        .parse(YTApiId.accountsData, parseAccountsData(items))
+        .then((res) => map_(res, (item) => new Account(item)));
+}
+
+function isCurrentRequest(getState, cluster, editCounter) {
+    const state = getState();
+    return (
+        selectCluster(state) === cluster &&
+        (editCounter === undefined || selectAccountsEditCounter(state) === editCounter)
+    );
+}
+
+export function resetAccountsCacheIfCurrent(editCounter) {
+    return (dispatch, getState) => {
+        if (selectAccountsEditCounter(getState()) === editCounter) {
+            dispatch({
+                type: ACCOUNTS_DATA_FIELDS_ACTION,
+                data: {disableCacheForNextFetch: false},
+            });
+        }
+    };
+}
+
+export function fetchAccountsList() {
     return (dispatch, getState) => {
         dispatch({
             type: FETCH_ACCOUNTS_RESOURCE.REQUEST,
@@ -62,125 +110,171 @@ export function fetchAccounts() {
 
         const state = getState();
         const cluster = selectCluster(state);
-        const userName = selectCurrentUserName(state);
-        const disableCacheForNextFetch = selectAccountsDisabledCacheForNextFetch(state);
+        const editCounter = selectAccountsEditCounter(state);
+        const requestGeneration = startRequest('list');
+        const rumId = new RumWrapper(cluster, RumMeasureTypes.ACCOUNTS);
+        return rumId
+            .fetch(
+                YTApiId.accountsData,
+                ytApiV3Id.list(YTApiId.accountsData, {
+                    path: '//sys/accounts/',
+                    attributes: listAttributesToLoad,
+                    ...USE_MAX_SIZE,
+                    ...getCacheParams(state),
+                }),
+            )
+            .then((accounts) => parseAccounts(rumId, accounts))
+            .then((accounts) => {
+                if (
+                    !isLatestRequest('list', requestGeneration) ||
+                    !isCurrentRequest(getState, cluster, editCounter)
+                ) {
+                    return null;
+                }
+                dispatch({
+                    type: FETCH_ACCOUNTS_RESOURCE.SUCCESS,
+                    data: {accounts},
+                });
+                return accounts;
+            })
+            .catch((error) => {
+                if (
+                    isLatestRequest('list', requestGeneration) &&
+                    isCurrentRequest(getState, cluster, editCounter)
+                ) {
+                    dispatch({
+                        type: FETCH_ACCOUNTS_RESOURCE.FAILURE,
+                        data: {error},
+                    });
+                }
+                throw error;
+            });
+    };
+}
 
-        const cacheParams = disableCacheForNextFetch ? {} : USE_CACHE;
+export function fetchAccountsMetadata() {
+    return (dispatch, getState) => {
+        const state = getState();
+        const cluster = selectCluster(state);
+        const editCounter = selectAccountsEditCounter(state);
+        const requestGeneration = startRequest('metadata');
+        const rumId = new RumWrapper(cluster, RumMeasureTypes.ACCOUNTS);
+        dispatch({type: FETCH_ACCOUNTS_METADATA.REQUEST});
 
-        const requests = [
-            {
-                command: 'list',
-                parameters: {
+        return rumId
+            .fetch(
+                YTApiId.accountsData,
+                ytApiV3Id.list(YTApiId.accountsData, {
                     path: '//sys/accounts/',
                     attributes: attributesToLoad,
                     ...USE_MAX_SIZE,
-                    ...cacheParams,
-                },
-            },
-            {
-                command: 'get',
-                parameters: {
-                    path: '//sys/accounts/@',
-                    attributes: ['total_resource_limits', 'total_resource_usage'],
-                },
-            },
-            {
-                command: 'get',
-                parameters: {
-                    path: '//sys/cluster_nodes/@',
-                    attributes: [
-                        'available_space_per_medium',
-                        'io_statistics_per_medium',
-                        'used_space_per_medium',
-                    ],
-                },
-            },
-            {
-                command: 'get',
-                parameters: {
-                    path: '//sys/users/' + userName + '/@usable_accounts',
-                },
-            },
-        ];
-
-        const rumId = new RumWrapper(cluster, RumMeasureTypes.ACCOUNTS);
-        return rumId
-            .fetch(YTApiId.accountsData, ytApiV3Id.executeBatch(YTApiId.accountsData, {requests}))
-            .then((batchData) => {
-                dispatch({
-                    type: ACCOUNTS_DATA_FIELDS_ACTION,
-                    data: {disableCacheForNextFetch: false},
-                });
-
-                const [
-                    {error: accountsError, output: accounts},
-                    {error: resourceError, output: resources},
-                    {error: nodesError, output: nodes},
-                    {error: usableAccountsError, output: usableAccounts},
-                ] = batchData;
-                Promise.resolve(accountsError)
-                    .then((e) => {
-                        if (e) {
-                            throw e;
-                        }
-                        const items = filter_(
-                            ypath.getValue(accounts),
-                            (item) => ypath.getValue(item) !== ROOT_ACCOUNT_NAME,
-                        );
-                        return rumId
-                            .parse(YTApiId.accountsData, parseAccountsData(items))
-                            .then((res) => {
-                                dispatch({
-                                    type: FETCH_ACCOUNTS_RESOURCE.SUCCESS,
-                                    data: {
-                                        accounts: map_(res, (item) => new Account(item)),
-                                    },
-                                });
-                            });
-                    })
-                    .catch((error) => {
-                        dispatch({
-                            type: FETCH_ACCOUNTS_RESOURCE.FAILURE,
-                            data: {error},
-                        });
-                    });
-
-                if (!resourceError) {
-                    dispatch({
-                        type: FETCH_ACCOUNTS_TOTAL_USAGE.SUCCESS,
-                        data: resources,
-                    });
-                } else {
-                    dispatch({
-                        type: FETCH_ACCOUNTS_TOTAL_USAGE.FAILURE,
-                        data: {error: resourceError},
-                    });
+                    ...getCacheParams(state),
+                }),
+            )
+            .then((accounts) => parseAccounts(rumId, accounts))
+            .then((accounts) => {
+                if (
+                    !isLatestRequest('metadata', requestGeneration) ||
+                    !isCurrentRequest(getState, cluster, editCounter)
+                ) {
+                    return;
                 }
-
-                if (!nodesError) {
-                    dispatch({
-                        type: FETCH_ACCOUNTS_NODES.SUCCESS,
-                        data: nodes,
-                    });
-                } else {
-                    dispatch({
-                        type: FETCH_ACCOUNTS_NODES.FAILURE,
-                        data: {error: nodesError},
-                    });
-                }
-
-                if (!usableAccountsError) {
-                    dispatch({
-                        type: FETCH_ACCOUNTS_USABLE.SUCCESS,
-                        data: usableAccounts,
-                    });
-                } else {
-                    dispatch({
-                        type: FETCH_ACCOUNTS_USABLE.FAILURE,
-                        data: {error: usableAccountsError},
-                    });
+                dispatch({type: FETCH_ACCOUNTS_METADATA.SUCCESS, data: {accounts}});
+            })
+            .catch((error) => {
+                if (
+                    isLatestRequest('metadata', requestGeneration) &&
+                    isCurrentRequest(getState, cluster, editCounter)
+                ) {
+                    dispatch({type: FETCH_ACCOUNTS_METADATA.FAILURE, data: {error}});
                 }
             });
+    };
+}
+
+export function fetchAccountsTotals() {
+    return fetchAccountsResource(FETCH_ACCOUNTS_TOTAL_USAGE, '//sys/accounts/@', [
+        'total_resource_limits',
+        'total_resource_usage',
+    ]);
+}
+
+export function fetchAccountsNodes() {
+    return fetchAccountsResource(FETCH_ACCOUNTS_NODES, '//sys/cluster_nodes/@', [
+        'available_space_per_medium',
+        'io_statistics_per_medium',
+        'used_space_per_medium',
+    ]);
+}
+
+export function fetchUsableAccounts() {
+    return (dispatch, getState) => {
+        const state = getState();
+        const userName = selectCurrentUserName(state);
+        return fetchAccountsResource(
+            FETCH_ACCOUNTS_USABLE,
+            '//sys/users/' + userName + '/@usable_accounts',
+            undefined,
+        )(dispatch, getState);
+    };
+}
+
+function fetchAccountsResource(actionType, path, attributes) {
+    return (dispatch, getState) => {
+        const state = getState();
+        const cluster = selectCluster(state);
+        const editCounter = selectAccountsEditCounter(state);
+        const requestScope = actionType.SUCCESS;
+        const requestGeneration = startRequest(requestScope);
+        return ytApiV3Id
+            .get(YTApiId.accountsData, {path, ...(attributes ? {attributes} : {})})
+            .then((data) => {
+                if (
+                    isLatestRequest(requestScope, requestGeneration) &&
+                    isCurrentRequest(getState, cluster, editCounter)
+                ) {
+                    dispatch({type: actionType.SUCCESS, data});
+                }
+            })
+            .catch((error) => {
+                if (
+                    isLatestRequest(requestScope, requestGeneration) &&
+                    isCurrentRequest(getState, cluster, editCounter)
+                ) {
+                    dispatch({type: actionType.FAILURE, data: {error}});
+                }
+            });
+    };
+}
+
+export function fetchAccountsDetails() {
+    return (dispatch) =>
+        Promise.all([
+            dispatch(fetchAccountsMetadata()),
+            dispatch(fetchAccountsTotals()),
+            dispatch(fetchAccountsNodes()),
+            dispatch(fetchUsableAccounts()),
+        ]);
+}
+
+// Kept for callers outside the page updater (editor and account hierarchy actions).
+export function fetchAccounts() {
+    return (dispatch, getState) => {
+        const editCounter = selectAccountsEditCounter(getState());
+        return dispatch(fetchAccountsList())
+            .then((accounts) => {
+                if (!accounts) {
+                    return undefined;
+                }
+                return dispatch(fetchAccountsDetails()).then(() => accounts);
+            })
+            .then((accounts) => {
+                if (accounts) {
+                    dispatch(resetAccountsCacheIfCurrent(editCounter));
+                }
+                return accounts;
+            })
+            .catch(() => undefined);
     };
 }
 
@@ -189,7 +283,11 @@ export function accountsIncreaseEditCounter() {
         const editCounter = selectAccountsEditCounter(getState());
         return dispatch({
             type: ACCOUNTS_DATA_FIELDS_ACTION,
-            data: {editCounter: editCounter + 1, disableCacheForNextFetch: true},
+            data: {
+                editCounter: editCounter + 1,
+                disableCacheForNextFetch: true,
+                fullAccountsLoaded: false,
+            },
         });
     };
 }
@@ -220,16 +318,11 @@ export function loadEditedAccount(accountName) {
             .then(([item]) => {
                 dispatch({
                     type: UPDATE_EDITABLE_ACCOUNT.SUCCESS,
-                    data: {
-                        account: new Account(item),
-                        cluster,
-                    },
+                    data: {account: new Account(item), cluster},
                 });
             })
             .catch(() => {
-                dispatch({
-                    type: UPDATE_EDITABLE_ACCOUNT.FAILURE,
-                });
+                dispatch({type: UPDATE_EDITABLE_ACCOUNT.FAILURE});
             });
     };
 }
@@ -247,10 +340,7 @@ export function changeNameFilter(newFilter) {
 }
 
 export function showEditorModal(account) {
-    return {
-        type: OPEN_EDITOR_MODAL,
-        data: {account},
-    };
+    return {type: OPEN_EDITOR_MODAL, data: {account}};
 }
 
 export function setActiveAccount(account) {
