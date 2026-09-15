@@ -1,3 +1,5 @@
 {
-  "title_preview": "Preview"
+  "title_preview": "Preview",
+  "action_copy-content": "Copy",
+  "hold-shift-raw": "Hold SHIFT-key to copy raw value"
 }
