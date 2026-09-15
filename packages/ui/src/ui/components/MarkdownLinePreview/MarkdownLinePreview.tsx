@@ -5,18 +5,18 @@ import Icon from '../Icon/Icon';
 import Modal from '../Modal/Modal';
 import cn from 'bem-cn-lite';
 
-import {useMarkdown} from '../Markdown/Markdown';
+import {useMarkdown} from '../../hooks/useMarkdown';
 import './MarkdownLinePreview.scss';
 
 const block = cn('one-line-text-preview');
 const mdBlock = cn('yt-markdown');
 
-interface Props {
+type Props = {
     text: string;
     title: string;
     className?: string;
     allowHTML?: boolean;
-}
+};
 
 export function MarkdownLinePreview({text, title, className, allowHTML = false}: Props) {
     const [visible, setVisible] = useState(false);

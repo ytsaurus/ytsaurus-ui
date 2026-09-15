@@ -86,6 +86,16 @@ export interface ReducersAndUrlMapping {
     urlMapping?: Record<string, PathParameters>;
 }
 
+export type MarkdownRenderState =
+    {status: 'loading'} | {status: 'ready'} | {status: 'error'; error: unknown};
+
+export type MarkdownSetRenderState = (state: MarkdownRenderState) => void;
+
+export type RenderMarkdownParams = {
+    text: string;
+    setRenderState: MarkdownSetRenderState;
+};
+
 export interface SchedulingExtraTab {
     name: string;
     title?: string;
@@ -542,7 +552,7 @@ export interface UIFactory {
         error: Error | YTError;
     }) => React.ReactNode;
 
-    renderMarkdown(props: {text: string}): React.ReactNode;
+    renderMarkdown(params: RenderMarkdownParams): React.ReactNode;
 
     getAnalyticsService(): AnalyticsService[];
 
