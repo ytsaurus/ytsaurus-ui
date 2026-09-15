@@ -5,7 +5,7 @@ import {useSelector} from '../../../store/redux-hooks';
 
 import reduce_ from 'lodash/reduce';
 
-import {Redirect, Route, Switch} from 'react-router';
+import {Redirect, Route, Switch, useLocation} from 'react-router';
 
 import {formatByParams} from '../../../../shared/utils/format';
 
@@ -171,7 +171,10 @@ const connector = connect(mapStateToProps);
 export default connector(Accounts);
 
 function AccountsRumMeasure() {
-    const isFinalStatus = useSelector(selectAccountsIsFinalLoadingStatus);
+    const accountsFinalStatus = useSelector(selectAccountsIsFinalLoadingStatus);
+    const {pathname} = useLocation();
+    const isGeneralTab = pathname.endsWith('/' + AccountsTab.GENERAL);
+    const isFinalStatus = !isGeneralTab || accountsFinalStatus;
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.ACCOUNTS,

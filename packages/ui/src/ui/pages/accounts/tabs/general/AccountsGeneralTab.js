@@ -24,6 +24,7 @@ import {
 import AccountsTotal from './AccountsTotal';
 
 import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
+import Loader from '../../../../components/Loader/Loader';
 import withStickyHead from '../../../../components/ElementsTable/hocs/withStickyHead';
 import withStickyFooter from '../../../../components/ElementsTable/hocs/withStickyFooter';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
@@ -171,6 +172,9 @@ class AccountsGeneralTab extends Component {
         showEditor: PropTypes.bool.isRequired,
         usableError: PropTypes.object,
         usableErrorMessage: PropTypes.string,
+        fullAccountsLoaded: PropTypes.bool,
+        metadataFetching: PropTypes.bool,
+        metadataError: PropTypes.object,
         errorData: PropTypes.object,
         viewContext: PropTypes.string,
         loadTotals: PropTypes.bool,
@@ -262,11 +266,8 @@ class AccountsGeneralTab extends Component {
             mediumList &&
             (activeContentModeFilter === 'default' || activeContentModeFilter === 'disk_space');
 
-        const radioProps =
-            contextView === DASHBOARD_VIEW_CONTEXT
-                ? DB_VISIBILITY_MODE_PROPS
-                : ACCOUNTS_VISIBILITY_MODE_PROPS;
-
+        const isDashboard = contextView === DASHBOARD_VIEW_CONTEXT;
+        const radioProps = isDashboard ? DB_VISIBILITY_MODE_PROPS : ACCOUNTS_VISIBILITY_MODE_PROPS;
         return (
             <div className={b('toolbar', 'elements-section')}>
                 <div className={b('dashboard-visibility-mode', 'elements-toolbar__component')}>
@@ -675,6 +676,7 @@ class AccountsGeneralTab extends Component {
                             {...commonProps}
                             title={i18n('action_edit-account')}
                             onClick={handleClick}
+                            disabled={!self.props.fullAccountsLoaded}
                             qa={`edit-account-${item.name}`}
                         >
                             <Icon awesome="pencil" size={13} />
@@ -702,13 +704,27 @@ class AccountsGeneralTab extends Component {
             accountsTreeState,
             enable_per_account_tablet_accounting,
             dashboardVisibilityMode,
+            metadataFetching,
         } = this.props;
 
-        const tableProps = getTableProps(
+        const baseTableProps = getTableProps(
             activeAccount,
             activeContentModeFilter,
             activeMediumFilter,
         );
+        const tableProps = {
+            ...baseTableProps,
+            columns: {
+                ...baseTableProps.columns,
+                items: {
+                    ...baseTableProps.columns.items,
+                    name: {
+                        ...baseTableProps.columns.items.name,
+                        captionTail: metadataFetching ? <Loader visible /> : undefined,
+                    },
+                },
+            },
+        };
         const isLoading = fetching && !wasLoaded;
         const selectedIndex = activeAccount ? 0 : undefined;
 
@@ -764,7 +780,7 @@ class AccountsGeneralTab extends Component {
     }
 
     render() {
-        const {error, usableError, wasLoaded, viewContext, fetching} = this.props;
+        const {error, metadataError, usableError, wasLoaded, viewContext, fetching} = this.props;
 
         return (
             <div>
@@ -776,6 +792,7 @@ class AccountsGeneralTab extends Component {
                         content={
                             <div>
                                 {error && <YTErrorBlock error={this.props.errorData} />}
+                                {metadataError && <YTErrorBlock error={metadataError} />}
                                 {usableError && this.renderUsableError()}
                                 {(wasLoaded || fetching) && this.renderAccountsTable()}
                             </div>
