@@ -162,8 +162,8 @@ function FlowState() {
         address: rpcAddress,
         errorContent: leaderError,
     } = useFlowLeaderController(pipeline_path + '/flow_control');
-    // Old controllers publish the address only in the attribute.
-    const leaderAddress = rpcAddress ?? leader_controller_address;
+    const leaderAddress =
+        (typeof rpcAddress === 'string' && rpcAddress) || leader_controller_address || undefined;
     return (
         <React.Fragment>
             <Flex alignItems="baseline" justifyContent="space-between" gap={2}>
