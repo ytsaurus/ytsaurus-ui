@@ -16,8 +16,12 @@ export type YTEndpointApiArgs<CommandParameters> = ApiMethodParams<CommandParame
     cluster?: string;
 };
 
-export type OverrideDataType<T extends {data?: unknown}, Data> = Omit<T, 'data' | 'error'> & {
+export type OverrideDataType<T extends {data?: unknown}, Data> = Omit<
+    T,
+    'data' | 'currentData' | 'error'
+> & {
     data?: Data;
+    currentData?: Data;
     error?: YTError;
 };
 
