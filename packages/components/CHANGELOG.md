@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.3.3...components-v1.4.0) (2026-09-15)
+
+
+### Features
+
+* **MetaTable:** render Nirvana block URLs [YTFRONT-6026] ([60aaba7](https://github.com/ytsaurus/ytsaurus-ui/commit/60aaba748b1342a85ede8cd5f73e9f0e38a37cb6))
+
 ## [1.3.3](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.3.2...components-v1.3.3) (2026-09-14)
 
 
