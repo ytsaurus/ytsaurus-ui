@@ -145,12 +145,15 @@ export const createConfigurationList = (
 ) => {
     return Object.entries(data).map(([type, itemData]) => {
         const {net, net_bytes, vcpu, memory} = itemData.resource_guarantee;
+        const {deprecated, deprecation_reason} = itemData;
         return {
             id: type,
             type,
             memory: hammer.format['Bytes'](memory),
             net: hammer.format['BytesPerSecond'](net_bytes ? net_bytes : net / 8),
             vcpu: hammer.format['vCores'](vcpu),
+            deprecated,
+            deprecationReason: deprecation_reason,
             initialData: {...itemData.resource_guarantee, type},
         };
     });
