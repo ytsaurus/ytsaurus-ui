@@ -12,6 +12,19 @@
             width: 100%;
             overflow: auto scroll;
             max-width: 100%;
+
+            /*
+             * @gravity-ui/table ships BaseTable.css (`.gt-table__cell{padding:0}`) and Table.css
+             * (`.gt-styled-table__cell{padding:var(--_--cell-padding)}`) with equal specificity;
+             * which one wins depends on CSS chunk order in the production build, so pin it here.
+             * @see https://github.com/gravity-ui/table/issues/177
+             * @tag C135A595-86CB-47E2-852F-CB5A2DE4E6BC
+             */
+            .gt-table__cell,
+            .gt-table__header-cell,
+            .gt-table__footer-cell {
+                padding: var(--_--cell-padding);
+            }
         }
 
         .gt-table__header {
