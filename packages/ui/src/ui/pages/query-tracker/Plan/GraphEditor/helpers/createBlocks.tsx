@@ -7,6 +7,7 @@ import {iconToBase} from '../../../../../components/YTGraph/utils/iconToBase';
 import {getOperationType} from './getOperationType';
 import {getBlockIcon} from './getBlockIcon';
 import {type MultipointConnection} from '../types';
+import {getOperationPageUrlFromNodeProgress} from '../../services/getOperationPageUrlFromNodeProgress';
 
 export const BLOCK_SIDE = 180;
 
@@ -14,6 +15,7 @@ export const createBlocks = (
     graph: ProcessedGraph,
     progress: Progress | undefined,
     level: ECameraScaleLevel,
+    operationIdToCluster?: ReadonlyMap<string, string>,
 ): {blocks: QueriesNodeBlock[]; connections: MultipointConnection[]} => {
     const isMinimalisticView = level === ECameraScaleLevel.Minimalistic;
 
@@ -51,6 +53,10 @@ export const createBlocks = (
                 tablePath,
                 padding: 10,
                 nodeProgress: progress ? progress[node.id] : undefined,
+                operationUrl: getOperationPageUrlFromNodeProgress(
+                    progress ? progress[node.id] : undefined,
+                    operationIdToCluster,
+                ),
                 schemas: node.schemas,
                 details: node.details,
             },
