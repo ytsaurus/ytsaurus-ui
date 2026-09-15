@@ -233,3 +233,8 @@ export const selectIsQueryMemoryLimitSupported = createSelector(
         return features.query_memory_limit_in_tablet_nodes || false;
     },
 );
+
+export const selectIsCumulativeSpecPatchSupported = createSelector(
+    [selectSupportedFeatures],
+    (features) => features.cumulative_spec_patch === true,
+);

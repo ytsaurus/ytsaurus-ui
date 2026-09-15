@@ -6,7 +6,7 @@ import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary
 import {ClipboardButton, MetaTable} from '@ytsaurus/components';
 import Multimeter from '../../../../../components/Multimeter/Multimeter';
 import {type TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
-import {isNullable} from '../../../../../utils';
+import {isNullable} from '../../../../../../shared/utils/toolkit/type/isNullable';
 
 import i18n from './i18n';
 import './Meta.scss';
