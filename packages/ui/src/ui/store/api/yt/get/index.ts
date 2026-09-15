@@ -15,12 +15,13 @@ export const getApi = ytApi.injectEndpoints({
     }),
 });
 
-export function useGetQuery<T>(args: Parameters<typeof get>[0]) {
+export function useGetQuery<T>(args: Parameters<typeof get>[0], queryOptions?: {skip?: boolean}) {
     const useAutoRefresh = useSelector(selectUseAutoRefresh);
 
     const options = {
         pollingInterval: useAutoRefresh ? DEFAULT_UPDATER_TIMEOUT : undefined,
         skipPollingIfUnfocused: true,
+        ...queryOptions,
     };
 
     const effectiveArgs = useEffectiveClusterArgs(args);
