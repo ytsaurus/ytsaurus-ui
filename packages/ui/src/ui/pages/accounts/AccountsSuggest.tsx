@@ -115,14 +115,23 @@ export function AccountsSuggestWithLoading(
         items?: Array<string>;
         error?: YTError;
     }>({items: []});
-    React.useMemo(() => {
+    React.useEffect(() => {
+        let active = true;
         fetchFullList1M(YTApiId.listAccounts, {path: '//sys/accounts', ...USE_CACHE})
-            .then((items: Array<string>) => {
-                setState({items});
+            .then((loadedItems: Array<string>) => {
+                if (active) {
+                    setState({items: loadedItems});
+                }
             })
-            .catch((error: any) => {
-                setState({error});
+            .catch((requestError: unknown) => {
+                if (active) {
+                    setState({error: requestError as YTError});
+                }
             });
+
+        return () => {
+            active = false;
+        };
     }, []);
 
     return (

@@ -82,7 +82,7 @@ class AccountCreateDialog extends React.Component<ConnectedProps<typeof connecto
                     },
                     {
                         name: 'parentAccount',
-                        type: 'accountsSuggest',
+                        type: 'accounts-suggest-with-loading',
                         caption: i18n('field_parent-account'),
                         required: true,
                         extras: {
