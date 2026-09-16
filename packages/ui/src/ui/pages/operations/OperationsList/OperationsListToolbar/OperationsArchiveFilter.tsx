@@ -213,7 +213,7 @@ export default function OperationsArchiveFilter() {
             />
             <SelectButton type="submit" selected={checked} title={text} onClick={showModal}>
                 {text}
-                <Icon awesome="calendar-alt" />
+                <Icon awesome="calendar-alt" size={13} />
             </SelectButton>
         </div>
     );

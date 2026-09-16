@@ -75,7 +75,11 @@ export class StatisticsBase extends Component<Props> {
                 if (item.isLeafNode) {
                     return (
                         <span className={statisticsBlock('metric')} style={offsetStyle}>
-                            <Icon className={statisticsBlock('metric-icon')} awesome="chart-line" />
+                            <Icon
+                                className={statisticsBlock('metric-icon')}
+                                awesome="chart-line"
+                                size={14}
+                            />
                             <OperationStatisticName name={item.name} title={item.title} />
                         </span>
                     );
@@ -101,10 +105,12 @@ export class StatisticsBase extends Component<Props> {
                             <Icon
                                 className={statisticsBlock('group-icon-toggler')}
                                 awesome={togglerIconName}
+                                size={14}
                             />
                             <Icon
                                 className={statisticsBlock('group-icon')}
                                 awesome={itemIconName}
+                                size={14}
                             />
                             <span>{item.title}</span>
                         </span>
@@ -207,7 +213,7 @@ export class StatisticsBase extends Component<Props> {
                                 title={i18n('action_expand-all')}
                                 onClick={this.expandTable}
                             >
-                                <Icon awesome="arrow-to-bottom" />
+                                <Icon awesome="arrow-to-bottom" size={13} />
                             </Button>
                         </span>
 
@@ -217,7 +223,7 @@ export class StatisticsBase extends Component<Props> {
                                 title={i18n('action_collapse-all')}
                                 onClick={this.collapseTable}
                             >
-                                <Icon awesome="arrow-to-top" />
+                                <Icon awesome="arrow-to-top" size={13} />
                             </Button>
                         </span>
                     </div>

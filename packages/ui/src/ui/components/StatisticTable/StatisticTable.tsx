@@ -127,7 +127,7 @@ export function StatisticName({title, info}: {title: React.ReactNode; info?: Sta
             {title}{' '}
             {!emptyInfo && (
                 <Secondary>
-                    <Icon awesome={'question-circle'} />
+                    <Icon awesome={'question-circle'} size={14} />
                 </Secondary>
             )}
         </Tooltip>

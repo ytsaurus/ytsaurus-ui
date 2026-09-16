@@ -141,7 +141,9 @@ export class OperationsFilterPresetsBase extends Component {
                             >
                                 <span className={block('preset-content')}>
                                     <span className={block('preset-name')}>
-                                        {defaultPreset === presetId && <Icon awesome="star-alt" />}
+                                        {defaultPreset === presetId && (
+                                            <Icon awesome="star-alt" size={13} />
+                                        )}
                                         &ensp;
                                         {preset.name}
                                     </span>
@@ -150,7 +152,7 @@ export class OperationsFilterPresetsBase extends Component {
                                             className={block('preset-remove')}
                                             onClick={this.makeRemoveHandler(presetId)}
                                         >
-                                            <Icon face="solid" awesome="times" />
+                                            <Icon face="solid" awesome="times" size={13} />
                                         </span>
                                     )}
                                 </span>

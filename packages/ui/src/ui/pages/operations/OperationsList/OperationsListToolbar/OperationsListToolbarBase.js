@@ -218,7 +218,7 @@ export class OperationsListToolbarBase extends React.PureComponent {
                         onClick={toggleSaveFilterPresetDialog}
                         className={block('save-preset')}
                     >
-                        <Icon awesome={'save'} face={'regular'} />
+                        <Icon awesome={'save'} face={'regular'} size={13} />
                         &nbsp; {i18n('title_save-filter')}
                     </Button>
                 </div>

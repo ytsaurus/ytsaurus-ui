@@ -120,7 +120,7 @@ export function OperationPool({
 
             {!hideIcon && isEphemeral && (
                 <Tooltip content={i18n('context_ephemeral-pool')}>
-                    <Icon awesome="ghost" />
+                    <Icon awesome="ghost" size={14} />
                 </Tooltip>
             )}
             {!hideIcon && isLightweight && <LightWeightIcon />}
