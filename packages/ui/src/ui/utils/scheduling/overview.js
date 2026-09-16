@@ -53,14 +53,14 @@ export function prepareResources(data) {
         resourceTypes,
         (res, type) => {
             if (resourceUsage && resourceLimits) {
-                const data = {
+                const resourceData = {
                     type,
                     usage: Number(ypath.getValue(resourceUsage[type], '')),
                     limit: Number(ypath.getValue(resourceLimits[type], '')),
                 };
-                const progress = getResourceProgress(data);
+                const progress = getResourceProgress(resourceData);
 
-                res.push({...data, progress});
+                res.push({...resourceData, progress});
             }
             return res;
         },

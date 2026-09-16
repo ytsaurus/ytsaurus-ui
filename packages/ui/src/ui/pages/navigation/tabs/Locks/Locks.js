@@ -332,11 +332,11 @@ const mapDispatchToProps = {
 const LocksConnected = connect(mapStateToProps, mapDispatchToProps)(Locks);
 
 export default function LocksWithRum() {
-    const loadState = useSelector(selectLocksLoadStatus);
+    const locksLoadState = useSelector(selectLocksLoadStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_TAB_LOCKS,
-        startDeps: [loadState],
+        startDeps: [locksLoadState],
         allowStart: ([loadState]) => {
             return !isFinalLoadingStatus(loadState);
         },
@@ -344,7 +344,7 @@ export default function LocksWithRum() {
 
     useRumMeasureStop({
         type: RumMeasureTypes.NAVIGATION_TAB_LOCKS,
-        stopDeps: [loadState],
+        stopDeps: [locksLoadState],
         allowStop: ([loadState]) => {
             return isFinalLoadingStatus(loadState);
         },

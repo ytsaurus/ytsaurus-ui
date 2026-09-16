@@ -46,19 +46,19 @@ function Jobs({className}) {
 }
 
 export default function JobsWithRum(props) {
-    const loadState = useSelector(selectOperationJobsLoadingStatus);
+    const jobsLoadState = useSelector(selectOperationJobsLoadingStatus);
     /**
      * Selection of this value involves additional rerenders of the component
      * but without it RUM-measures will be wrongly too big it.
      * OperationDetail cannot stop measure for RumMeasureTypes.OPERATION by self,
      * it must be done by nesting tab-content.
      */
-    const operationLoadState = useSelector(selectOperationDetailsLoadingStatus);
+    const currentOperationLoadState = useSelector(selectOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.OPERATION_TAB_JOBS,
         additionalStartType: RumMeasureTypes.OPERATION,
-        startDeps: [loadState, operationLoadState],
+        startDeps: [jobsLoadState, currentOperationLoadState],
         allowStart: ([loadState, operationLoadState]) => {
             return !isFinalLoadingStatus(loadState) || !isFinalLoadingStatus(operationLoadState);
         },
@@ -66,7 +66,7 @@ export default function JobsWithRum(props) {
 
     useRumMeasureStop({
         type: RumMeasureTypes.OPERATION_TAB_JOBS,
-        stopDeps: [loadState, operationLoadState],
+        stopDeps: [jobsLoadState, currentOperationLoadState],
         allowStop: ([loadState, operationLoadState]) => {
             return isFinalLoadingStatus(loadState) && isFinalLoadingStatus(operationLoadState);
         },

@@ -1,0 +1,654 @@
+import React, {Component, Fragment} from 'react';
+import PropTypes from 'prop-types';
+import cn from 'bem-cn-lite';
+
+import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
+import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
+import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
+import {ClipboardButton, Tooltip} from '@ytsaurus/components';
+import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
+import RadioButton from '../../../../components/RadioButton/RadioButton';
+import {Flex, Loader, Progress, Text, Icon as UIKitIcon} from '@gravity-ui/uikit';
+import SvgCircleQuestion from '@gravity-ui/icons/svgs/circle-question.svg';
+import Histogram from '../../../../components/Histogram/Histogram';
+import Filter from '../../../../components/Filter/Filter';
+import Label from '../../../../components/Label';
+import Link from '../../../../containers/Link/Link';
+import Button from '../../../../components/Button/Button';
+import Icon from '../../../../components/Icon/Icon';
+import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
+
+import {NAVIGATION_TABLETS_TABLE_ID} from '../../../../constants/navigation/tabs/tablets';
+import {Page} from '../../../../constants/index';
+
+import {histogramItems, tableItems} from '../../../../utils/navigation/tabs/tables';
+import {asNumber} from '../../../../components/templates/utils';
+import hammer from '../../../../common/hammer';
+import ypath from '../../../../common/thor/ypath';
+import unipika from '../../../../common/thor/unipika';
+
+import {genTabletCellBundlesCellUrl} from '../../../../utils/tablet_cell_bundles';
+import {Host} from '../../../../containers/Host/Host';
+import {useSerieColor} from '../../../../hooks/use-serie-color';
+import i18n from './i18n';
+
+const block = cn('navigation-tablets');
+
+export class TabletsBase extends Component {
+    static typedValueProps = PropTypes.shape({
+        $type: PropTypes.string.isRequired,
+        $value: PropTypes.string.isRequired,
+    });
+
+    static tabletProps = PropTypes.shape({
+        index: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+
+        cell_id: PropTypes.string,
+        error_count: PropTypes.number,
+        last_commit_timestamp: PropTypes.number,
+        replication_error_count: PropTypes.number,
+        state: PropTypes.string,
+        tablet_id: PropTypes.string,
+
+        performance_counters: PropTypes.object,
+        statistics: PropTypes.object,
+
+        pivot_key: PropTypes.arrayOf(TabletsBase.typedValueProps),
+        replication_lag_time: PropTypes.number,
+        replication_mode: PropTypes.string,
+    });
+
+    static propTypes = {
+        // from connect
+        loading: PropTypes.bool.isRequired,
+        loaded: PropTypes.bool.isRequired,
+        error: PropTypes.bool.isRequired,
+        errorData: PropTypes.object.isRequired,
+
+        path: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired,
+        tabletsMode: PropTypes.string.isRequired,
+        tabletsFilter: PropTypes.string.isRequired,
+        activeHistogram: PropTypes.string.isRequired,
+        histogramCollapsed: PropTypes.bool.isRequired,
+        tablets: PropTypes.arrayOf(TabletsBase.tabletProps).isRequired,
+        histogram: PropTypes.shape({
+            data: PropTypes.array.isRequired,
+            format: PropTypes.string.isRequired,
+            dataName: PropTypes.string.isRequired,
+            dataFormat: PropTypes.string.isRequired,
+        }).isRequired,
+
+        loadTablets: PropTypes.func.isRequired,
+        abortAndReset: PropTypes.func.isRequired,
+        toggleHistogram: PropTypes.func.isRequired,
+        changeTabletsMode: PropTypes.func.isRequired,
+        changeTabletsFilter: PropTypes.func.isRequired,
+        changeActiveHistogram: PropTypes.func.isRequired,
+    };
+
+    static prepareStorePreloadProgress(storePreload) {
+        const completed = storePreload?.completed || 0;
+        const failed = storePreload?.failed || 0;
+        const pending = storePreload?.pending || 0;
+        const total = completed + failed + pending;
+
+        return {
+            text: hammer.format['Number'](completed) + ' / ' + hammer.format['Number'](total),
+            value: total > 0 ? ((failed + completed) / total) * 100 : 0,
+            stack: [
+                {
+                    value: total > 0 ? (completed / total) * 100 : 0,
+                    theme: 'info',
+                },
+                {
+                    value: total > 0 ? (failed / total) * 100 : 0,
+                    theme: 'danger',
+                },
+            ],
+        };
+    }
+
+    static rowClassName(item) {
+        const {level} = item;
+        return block('row', {top: level === 0});
+    }
+
+    static renderName(item) {
+        const {name, level, isCollapsed, cell_leader_address} = item;
+        const content =
+            level === 0 ? (
+                <React.Fragment>
+                    <Button
+                        view={'flat-secondary'}
+                        onClick={() => this.props.toggleExpandedHost(name)}
+                    >
+                        <Icon awesome={isCollapsed ? 'angle-down' : 'angle-up'} />
+                    </Button>{' '}
+                    {name === cell_leader_address
+                        ? TabletsBase.renderHost(item)
+                        : TabletsBase.renderCellId(item)}
+                </React.Fragment>
+            ) : (
+                TabletsBase.renderTabletId(item)
+            );
+
+        return <div className={block('name', {level})}>{content}</div>;
+    }
+
+    static isTopLevel(item) {
+        const {level, name, cell_leader_address, cell_id} = item;
+        return level === 0 && (name === cell_leader_address || name === cell_id);
+    }
+
+    static renderIndex(item, columnName) {
+        if (TabletsBase.isTopLevel(item) && item.childrenCount) {
+            return i18n('context_total-count', {count: item.childrenCount});
+        }
+        if (TabletsBase)
+            if (item.index === 'aggregation') {
+                return hammer.format['ReadableField'](item.index);
+            } else {
+                return hammer.format['Number'](item[columnName]);
+            }
+    }
+
+    static renderTabletId(item) {
+        const id = item.tablet_id;
+        const url = `${Page.TABLET}/${id}`;
+
+        return TabletsBase.renderIdWithLink(id, url);
+    }
+
+    static renderCellId(item) {
+        const id = item.cell_id;
+        const url = genTabletCellBundlesCellUrl(id);
+
+        return TabletsBase.renderIdWithLink(id, url);
+    }
+
+    static renderHost(item) {
+        const host = item.cell_leader_address;
+        return (
+            <Host
+                asTabletNode
+                address={host}
+                className={block('host')}
+                copyBtnClassName={block('copy-btn')}
+            />
+        );
+    }
+
+    static renderIdWithLink(id, url) {
+        return id ? (
+            <div className={block('id-link')}>
+                <Link url={url}>{id}</Link>
+                <ClipboardButton className={block('copy-btn')} view={'flat-secondary'} text={id} />
+            </div>
+        ) : (
+            hammer.format.NO_VALUE
+        );
+    }
+
+    static renderState(item, columnName) {
+        const state = item[columnName];
+        const theme = {
+            none: 'default',
+            unmounted: 'default',
+            mounted: 'info',
+            frozen: 'info',
+            freezing: 'warning',
+            unfreezing: 'warning',
+            mounting: 'warning',
+            unmounting: 'warning',
+            mixed: 'danger',
+        }[state];
+
+        return typeof state !== 'undefined' ? (
+            <Label theme={theme} text={state} />
+        ) : (
+            hammer.format.NO_VALUE
+        );
+    }
+
+    static renderPivotKey(item, columnName) {
+        const pivotKey = item[columnName];
+
+        const text = unipika.prettyprint(pivotKey, {
+            break: false,
+            indent: 0,
+            asHTML: false,
+        });
+        const title = text.split(',').join(',\n');
+
+        return typeof pivotKey !== 'undefined' ? (
+            <div className="elements-column_with-hover-button unipika navigation-tablets__pivot-key">
+                [
+                <span title={title} className="uint64 elements-ellipsis">
+                    {text.slice(1, -1)}
+                </span>
+                ]
+                <ClipboardButton
+                    text={text}
+                    view="flat-secondary"
+                    size="s"
+                    title={i18n('action_copy-pivot-key')}
+                />
+            </div>
+        ) : (
+            hammer.format.NO_VALUE
+        );
+    }
+
+    static renderReplicationLag(item, columnName) {
+        const replicationLag = item[columnName];
+        return hammer.format['TimeDuration'](replicationLag);
+    }
+
+    static renderReplicationMode(item, columnName) {
+        const replicationMode = item[columnName];
+        return typeof replicationMode !== 'undefined' ? (
+            <Label theme="info" text={replicationMode} />
+        ) : (
+            hammer.format.NO_VALUE
+        );
+    }
+
+    static renderActions(item) {
+        if (item.index === 'aggregation' || TabletsBase.isTopLevel(item)) {
+            return null;
+        } else {
+            const tablet = ypath.getValue(item, '/tablet_id');
+
+            return (
+                <ClickableAttributesButton
+                    title={item.tablet_id}
+                    path={`//sys/tablets/${tablet}`}
+                    withTooltip
+                />
+            );
+        }
+    }
+
+    static renderStorePreload(item, columnName) {
+        const storePreload = item[columnName];
+        const storePreloadProgress = TabletsBase.prepareStorePreloadProgress(storePreload);
+
+        return <Progress {...storePreloadProgress} />;
+    }
+
+    componentDidMount() {
+        this.props.loadTablets();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.path !== this.props.path) {
+            this.props.loadTablets();
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.abortAndReset();
+    }
+
+    get defaultItems() {
+        const {type, hasReplication} = this.props;
+
+        const newDefaultItemsForReplicatedTable = [
+            'index',
+            'tablet_id',
+            'cell_leader_address',
+            'state',
+            'cell_id',
+            'error_count',
+            'replication_error_count',
+            'pivot_key',
+            'actions',
+        ];
+        const newDefaultItemsForTable = [
+            'index',
+            'tablet_id',
+            'cell_leader_address',
+            'state',
+            'cell_id',
+            'error_count',
+            'pivot_key',
+            'actions',
+        ];
+
+        if (hasReplication) {
+            newDefaultItemsForReplicatedTable.splice(
+                7,
+                0,
+                'replication_lag_time',
+                'replication_mode',
+            );
+            newDefaultItemsForTable.splice(6, 0, 'replication_lag_time', 'replication_mode');
+        }
+
+        const newDefaultItems =
+            type === 'replicated_table'
+                ? newDefaultItemsForReplicatedTable
+                : newDefaultItemsForTable;
+
+        return newDefaultItems;
+    }
+
+    get tableSets() {
+        return {
+            default: {
+                items: this.defaultItems,
+            },
+            data: {
+                items: [
+                    'index',
+                    'tablet_id',
+                    'cell_leader_address',
+                    'unmerged_row_count',
+                    'uncompressed_data_size',
+                    'compressed_data_size',
+                    'disk_space',
+                    'actions',
+                ],
+            },
+            structure: {
+                items: [
+                    'index',
+                    'tablet_id',
+                    'cell_leader_address',
+                    'chunk_count',
+                    'partition_count',
+                    'store_count',
+                    'overlapping_store_count',
+                    'store_preload',
+                    'actions',
+                ],
+            },
+            performance: {
+                items: [
+                    'index',
+                    'cell_leader_address',
+                    'dynamic',
+                    'static_chunk',
+                    'unmerged_row_read_rate',
+                    'merged_row_read_rate',
+                    'actions',
+                ],
+            },
+            by_host: {
+                items: [
+                    'name_tablet_id',
+                    'index',
+                    'unmerged_row_count',
+                    'uncompressed_data_size',
+                    'compressed_data_size',
+                    'disk_space',
+                    'actions',
+                ],
+            },
+            by_cell: {
+                items: [
+                    'name_cell_id',
+                    'index',
+                    'unmerged_row_count',
+                    'uncompressed_data_size',
+                    'compressed_data_size',
+                    'disk_space',
+                    'actions',
+                ],
+            },
+        };
+    }
+
+    get tableSettings() {
+        const {tabletsMode} = this.props;
+
+        return {
+            css: block(),
+            theme: 'light',
+            cssHover: true,
+            striped: false,
+            tableId: NAVIGATION_TABLETS_TABLE_ID,
+            columns: {
+                items: tableItems,
+                sets: this.tableSets,
+                mode: tabletsMode,
+            },
+            templates: {
+                name_tablet_id: TabletsBase.renderName.bind(this),
+                name_cell_id: TabletsBase.renderName,
+                index: TabletsBase.renderIndex,
+                tablet_id: TabletsBase.renderTabletId,
+                cell_id: TabletsBase.renderCellId,
+                cell_leader_address: TabletsBase.renderHost,
+                state: TabletsBase.renderState,
+                pivot_key: TabletsBase.renderPivotKey,
+                actions: TabletsBase.renderActions,
+                store_preload: TabletsBase.renderStorePreload,
+                error_count: asNumber,
+                replication_error_count: asNumber,
+                chunk_count: asNumber,
+                partition_count: asNumber,
+                store_count: asNumber,
+                overlapping_store_count: asNumber,
+                unmerged_row_count: this.renderNumberProgress,
+                uncompressed_data_size: this.renderBytesProgress,
+                compressed_data_size: this.renderBytesProgress,
+                disk_space: this.renderBytesProgress,
+                static_chunk_read: asNumber,
+                static_chunk_lookup: asNumber,
+                dynamic_read: asNumber,
+                dynamic_lookup: asNumber,
+                dynamic_write: asNumber,
+                dynamic_delete: asNumber,
+                unmerged_row_read_rate: asNumber,
+                merged_row_read_rate: asNumber,
+                replication_lag_time: TabletsBase.renderReplicationLag,
+                replication_mode: TabletsBase.renderReplicationMode,
+            },
+            computeKey(item) {
+                return item.name || item.tablet_id;
+            },
+            itemMods(tablet) {
+                return (
+                    tablet.index === 'aggregation' && {
+                        aggregation: 'yes',
+                    }
+                );
+            },
+        };
+    }
+
+    renderProgress = (item, column, useBytes) => {
+        const {maxByLevel = []} = this.props;
+        const {level = 0, [column]: value, index} = item;
+        if (value === undefined) {
+            return hammer.format.NO_VALUE;
+        }
+        const {[column]: max} = maxByLevel[level] || {};
+        if (!max || index === 'aggregation') {
+            return asNumber(item, column);
+        }
+
+        const progress = (value / max) * 100;
+        const text = hammer.format[useBytes ? 'Bytes' : 'Number'](value);
+
+        if (level === 1) {
+            return <ThemedProgress progress={progress} text={text} colorIndex={3} />;
+        }
+
+        return <Progress value={progress} text={text} theme={'info'} />;
+    };
+
+    renderBytesProgress = (item, column) => {
+        return this.renderProgress(item, column, true);
+    };
+
+    renderNumberProgress = (item, column) => {
+        return this.renderProgress(item, column, false);
+    };
+
+    renderOverview() {
+        const {
+            tabletsFilter,
+            changeTabletsFilter,
+            tabletsMode,
+            changeTabletsMode,
+            isSearchByPivot,
+        } = this.props;
+
+        return (
+            <div className={block('overview')}>
+                <Flex alignItems="center" gap={1} className={block('tablets-filter-wrap')}>
+                    <Filter
+                        size="m"
+                        value={tabletsFilter}
+                        onChange={changeTabletsFilter}
+                        placeholder={i18n('context_filter-placeholder')}
+                        className={block('tablets-filter')}
+                    />
+                    <Tooltip content={i18n('context_filter-tooltip')}>
+                        {isSearchByPivot ? (
+                            <Label theme="info">{i18n('value_pivot-search')}</Label>
+                        ) : (
+                            <Text
+                                color="secondary"
+                                className={block('tablets-filter-tooltip-icon')}
+                            >
+                                <UIKitIcon data={SvgCircleQuestion} size={16} />
+                            </Text>
+                        )}
+                    </Tooltip>
+                </Flex>
+
+                <RadioButton
+                    size="m"
+                    value={tabletsMode}
+                    onChange={changeTabletsMode}
+                    name="navigation-tablets-mode"
+                    items={[
+                        {
+                            value: 'default',
+                            get text() {
+                                return i18n('value_default');
+                            },
+                        },
+                        {
+                            value: 'data',
+                            get text() {
+                                return i18n('value_data');
+                            },
+                        },
+                        {
+                            value: 'by_host',
+                            get text() {
+                                return i18n('value_data-by-nodes');
+                            },
+                        },
+                        {
+                            value: 'by_cell',
+                            get text() {
+                                return i18n('value_data-by-cells');
+                            },
+                        },
+                        {
+                            value: 'structure',
+                            get text() {
+                                return i18n('value_structure');
+                            },
+                        },
+                        {
+                            value: 'performance',
+                            get text() {
+                                return i18n('value_performance');
+                            },
+                        },
+                    ]}
+                />
+            </div>
+        );
+    }
+
+    renderContent() {
+        const {
+            tablets,
+            histogramCollapsed,
+            toggleHistogram,
+            histogram,
+            activeHistogram,
+            changeActiveHistogram,
+            collapsibleSize,
+        } = this.props;
+
+        return (
+            <Fragment>
+                <CollapsibleSection
+                    name={i18n('title_histogram')}
+                    collapsed={histogramCollapsed}
+                    onToggle={toggleHistogram}
+                    size={collapsibleSize}
+                >
+                    <Histogram
+                        activeHistogram={activeHistogram}
+                        handleHistogramChange={changeActiveHistogram}
+                        histogramItems={histogramItems}
+                        histogram={histogram}
+                    />
+                </CollapsibleSection>
+
+                <CollapsibleSection name={i18n('title_tablets')} size={collapsibleSize}>
+                    <WithStickyToolbar
+                        toolbar={this.renderOverview()}
+                        content={
+                            <ElementsTable
+                                {...this.tableSettings}
+                                items={tablets}
+                                rowClassName={TabletsBase.rowClassName}
+                                onItemClick={this.onRowClick}
+                            />
+                        }
+                    />
+                </CollapsibleSection>
+            </Fragment>
+        );
+    }
+
+    onRowClick = (item) => {
+        const {isTopLevel, name} = item;
+        if (isTopLevel) {
+            this.props.toggleExpandedHost(name);
+        }
+    };
+
+    render() {
+        const {loading, loaded} = this.props;
+        const initialLoading = loading && !loaded;
+
+        return (
+            <LoadDataHandler {...this.props}>
+                <ErrorBoundary>
+                    <div className={block({loading: initialLoading})}>
+                        {initialLoading ? <Loader /> : this.renderContent()}
+                    </div>
+                </ErrorBoundary>
+            </LoadDataHandler>
+        );
+    }
+}
+
+function ThemedProgress({progress, text, colorIndex}) {
+    const getColor = useSerieColor();
+    const color = getColor(colorIndex);
+    return (
+        <Progress
+            stack={[
+                {
+                    value: progress,
+                    color,
+                },
+            ]}
+            text={text}
+        />
+    );
+}

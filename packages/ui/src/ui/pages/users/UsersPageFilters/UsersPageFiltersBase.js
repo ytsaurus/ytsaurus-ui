@@ -1,0 +1,92 @@
+import React from 'react';
+import cn from 'bem-cn-lite';
+import PropTypes from 'prop-types';
+import {Checkbox} from '@gravity-ui/uikit';
+import i18n from './i18n';
+
+import Filter from '../../../components/Filter/Filter';
+import GroupSuggest from '../../../pages/components/GroupSuggest/GroupSuggest';
+import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
+import {GroupsLoader} from '../../../hooks/global';
+import {ShowCreateUserModalButton} from '../CreateUserModal/CreateUserModal';
+
+const block = cn('users-page-filters');
+
+export class UsersPageFiltersBase extends React.Component {
+    static propTypes = {
+        className: PropTypes.string,
+
+        bannedFilter: PropTypes.bool.isRequired,
+        setUsersBannedFilter: PropTypes.func.isRequired,
+
+        groupFilter: PropTypes.string.isRequired,
+        setUsersGroupFilter: PropTypes.func.isRequired,
+
+        nameFilter: PropTypes.string.isRequired,
+        setUsersNameFilter: PropTypes.func.isRequired,
+    };
+
+    toggleBannedFilter = () => {
+        const {bannedFilter, setUsersBannedFilter} = this.props;
+        setUsersBannedFilter(!bannedFilter);
+    };
+
+    render() {
+        const {className, nameFilter, groupFilter, bannedFilter} = this.props;
+
+        return (
+            <Toolbar
+                className={block(null, className)}
+                itemsToWrap={[
+                    {
+                        name: 'name',
+                        node: (
+                            <Filter
+                                className={block('username-filter')}
+                                hasClear
+                                size="m"
+                                type="text"
+                                value={nameFilter}
+                                placeholder={i18n('field_username-filter')}
+                                onChange={this.props.setUsersNameFilter}
+                            />
+                        ),
+                        shrinkable: true,
+                        growable: true,
+                        wrapperClassName: block('item'),
+                    },
+                    {
+                        name: 'group',
+                        node: (
+                            <GroupsLoader>
+                                <GroupSuggest
+                                    className={block('group-suggest')}
+                                    value={groupFilter ? [groupFilter] : undefined}
+                                    placeholder={i18n('field_group-filter')}
+                                    onChange={(vals) => this.props.setUsersGroupFilter(vals[0])}
+                                    disablePortal={false}
+                                />
+                            </GroupsLoader>
+                        ),
+                        shrinkable: true,
+                        growable: true,
+                        wrapperClassName: block('item'),
+                    },
+                    {
+                        name: 'banned',
+                        node: (
+                            <Checkbox
+                                size="l"
+                                checked={bannedFilter}
+                                content={i18n('value_banned')}
+                                onChange={this.toggleBannedFilter}
+                            />
+                        ),
+                    },
+                ]}
+            >
+                <ShowCreateUserModalButton />
+            </Toolbar>
+        );
+    }
+}

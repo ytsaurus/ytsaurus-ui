@@ -104,10 +104,10 @@ function Transaction({visible, handleClose, handleShow}) {
 const TransactionConnected = withVisible(Transaction);
 
 export default function TransactionWithRum() {
-    const loadState = useSelector(selectLoadState);
+    const navigationLoadState = useSelector(selectLoadState);
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_CONTENT_TRANSACTION,
-        startDeps: [loadState],
+        startDeps: [navigationLoadState],
         allowStart: ([loadState]) => {
             return !isFinalLoadingStatus(loadState);
         },
@@ -115,7 +115,7 @@ export default function TransactionWithRum() {
 
     useRumMeasureStop({
         type: RumMeasureTypes.NAVIGATION_CONTENT_TRANSACTION,
-        stopDeps: [loadState],
+        stopDeps: [navigationLoadState],
         allowStop: ([loadState]) => {
             return isFinalLoadingStatus(loadState);
         },
