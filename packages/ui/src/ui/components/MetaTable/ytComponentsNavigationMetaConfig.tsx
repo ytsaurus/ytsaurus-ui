@@ -10,7 +10,7 @@ import ChaosCellBundleLink from '../../pages/tablet_cell_bundles/ChaosCellBundle
 import UIFactory from '../../UIFactory';
 import {makeNavigationLink} from '../../utils/app-url';
 import {renderDefaultMetaOperationLink} from './presets/defaultMetaOperationLink';
-import {renderDefaultMarkdown} from './presets/defaultRenderMarkdown';
+import {renderDefaultNirvanaBlockUrl} from './presets/defaultRenderNirvanaBlockUrl';
 import AutomaticModeSwitch from '../../pages/navigation/content/Table/TableMeta/AutomaticModeSwitch';
 
 /**
@@ -20,7 +20,7 @@ import AutomaticModeSwitch from '../../pages/navigation/content/Table/TableMeta/
 export const ytComponentsNavigationMetaConfig: TYComponentsNavigationMetaConfig = {
     docsUrls,
     navigationLinkTemplate: makeNavigationLink,
-    renderMarkdown: renderDefaultMarkdown,
+    renderNirvanaBlockUrl: renderDefaultNirvanaBlockUrl,
     renderMetaOperationLink: renderDefaultMetaOperationLink,
     renderMetaTableAutomaticModeSwitch: (params: MetaTableAutomaticModeSwitchParams) => (
         <AutomaticModeSwitch value={params.value} onEdit={params.onEdit} />
