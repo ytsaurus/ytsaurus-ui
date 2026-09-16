@@ -1,4 +1,3 @@
-import React from 'react';
 import {createSelector} from 'reselect';
 
 import every_ from 'lodash/every';
@@ -20,8 +19,6 @@ import {NAMESPACES, SettingName} from '../../../../../shared/constants/settings'
 import {ContentMode, NAVIGATION_MAP_NODE_TABLE_ID} from '../../../../constants/navigation';
 import {Node} from '../../../../utils/navigation/content/map-nodes/node';
 import {MediumType} from '../../../../constants/index';
-import Chooser from '../../../../pages/navigation/content/MapNode/Chooser';
-import MultipleActions from '../../../../pages/navigation/content/MapNode/Actions/MultipleActions/MultipleActions';
 import {DYN_TABLES_ALLOWED_ACTIONS_BY_STATE} from './map-node-ts';
 import {formatDateForTableSort} from '../../../../utils/format-date-for-table-sort';
 import i18n from './i18n';
@@ -36,7 +33,6 @@ const selectTableColumns = createSelector(
         chooser: {
             sort: false,
             align: 'center',
-            renderHeader: () => <Chooser />,
             get caption() {
                 return i18n('field_chooser');
             },
@@ -161,7 +157,6 @@ const selectTableColumns = createSelector(
         multipleActions: {
             sort: false,
             align: 'center',
-            renderHeader: () => <MultipleActions />,
         },
     }),
 );

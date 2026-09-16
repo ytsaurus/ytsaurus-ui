@@ -26,7 +26,7 @@ import {
 import {tableItems} from '../../../../utils/navigation/content/transaction-map/table';
 import {getIconNameForType} from '../../../../utils/navigation/path-editor';
 import {selectPath, selectTransaction} from '../../../../store/selectors/navigation';
-import {itemNavigationAllowed} from '../../../../pages/navigation/Navigation/ContentViewer/helpers';
+import {itemNavigationAllowed} from '../../../../pages/navigation/Navigation/ContentViewer/helpers/itemNavigationAllowed';
 
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
