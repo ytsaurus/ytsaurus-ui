@@ -154,6 +154,7 @@ interface QueryTrackerSettings {
     'global::queryTracker::yqlAgentStage': string;
     'global::queryTracker::queriesListSidebarVisibilityMode': boolean;
     'global::queryTracker::history::Columns': string[];
+    'global::queryTracker::useNewQueriesView': boolean;
     'global::queryTracker::useNewGraphView': boolean;
     'global::queryTracker::graphAutoCenter': boolean;
     'global::queryTracker::suggestions': boolean;
