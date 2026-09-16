@@ -48,7 +48,7 @@ export function EditOperationButton({
                     loading={isFetching}
                     onClick={open}
                 >
-                    <Icon awesome="pencil" color="secondary" />
+                    <Icon awesome="pencil" color="secondary" size={13} />
                     {!iconOnly && <React.Fragment>&nbsp;{label}</React.Fragment>}
                 </Button>
                 {!editable && (
