@@ -181,36 +181,13 @@ function FlowState() {
                             {
                                 key: 'leader_controller_name',
                                 label: i18n('leader-controller-name'),
-                                value: leaderError ? (
-                                    leaderError
-                                ) : (
-                                    <>
-                                        {leaderName ?? format.NO_VALUE}
-                                        <ClipboardButton
-                                            view="flat-secondary"
-                                            text={leaderName}
-                                            inlineMargins
-                                        />
-                                    </>
-                                ),
+                                value: leaderError ?? renderCopyableValue(leaderName),
                                 className: block('meta-item'),
                             },
                             {
                                 key: 'leader_controller_address',
                                 label: i18n('leader-controller-address'),
-                                value:
-                                    leaderError && !leaderAddress ? (
-                                        leaderError
-                                    ) : (
-                                        <>
-                                            {leaderAddress ?? format.NO_VALUE}
-                                            <ClipboardButton
-                                                view="flat-secondary"
-                                                text={leaderAddress}
-                                                inlineMargins
-                                            />
-                                        </>
-                                    ),
+                                value: renderCopyableValue(leaderAddress),
                                 className: block('meta-item'),
                             },
                         ],
@@ -218,6 +195,17 @@ function FlowState() {
                 />
             </Flex>
         </React.Fragment>
+    );
+}
+
+function renderCopyableValue(value?: string) {
+    return !value ? (
+        format.NO_VALUE
+    ) : (
+        <>
+            {value}
+            <ClipboardButton view="flat-secondary" text={value} inlineMargins />
+        </>
     );
 }
 
