@@ -128,7 +128,9 @@ const selectTableColumns = createSelector(
             get caption() {
                 return i18n('field_tablet-st');
             },
-            title: i18n('context_tablet-static-memory'),
+            get title() {
+                return i18n('context_tablet-static-memory');
+            },
             sort: true,
             align: 'right',
         },
@@ -137,7 +139,9 @@ const selectTableColumns = createSelector(
             get caption() {
                 return i18n('field_master-mem');
             },
-            title: i18n('context_master-memory'),
+            get title() {
+                return i18n('context_master-memory');
+            },
             sort: true,
             align: 'right',
         },
@@ -167,6 +171,12 @@ export const selectPreparedTableColumns = createSelector(selectTableColumns, (co
         (preparedColumns, column, name) => {
             preparedColumns[name] = {
                 ...column,
+                get caption() {
+                    return column.caption;
+                },
+                get title() {
+                    return column.title;
+                },
                 name,
             };
         },
@@ -312,9 +322,27 @@ export const selectNodesInfo = createSelector(selectSortedNodes, (nodes) => {
 
     return map_(Object.entries(sumNodesType), (keyValue) => {
         const [key, value] = keyValue;
-        const type = key === 'undefined' ? i18n('value_unknown') : key;
         return {
-            type: hammer.format['Readable'](type),
+            get type() {
+                switch (key) {
+                    case 'table':
+                        return i18n('value_table');
+                    case 'map_node':
+                        return i18n('value_map-node');
+                    case 'link':
+                        return i18n('value_link');
+                    case 'file':
+                        return i18n('value_file');
+                    case 'document':
+                        return i18n('value_document');
+                    case 'journal':
+                        return i18n('value_journal');
+                    case 'undefined':
+                        return i18n('value_unknown');
+                    default:
+                        return hammer.format['Readable'](key);
+                }
+            },
             count: value,
         };
     });
