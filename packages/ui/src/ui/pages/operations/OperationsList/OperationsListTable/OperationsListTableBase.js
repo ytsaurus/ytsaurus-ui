@@ -64,7 +64,7 @@ function UserPoolItem({awesomeIcon, children, title}) {
         <div className={block('user-pool-item')}>
             <div className={block('user-pool-item-icon')}>
                 <Tooltip content={title} to={'left'} allowUnmounted>
-                    <Icon face={'solid'} awesome={awesomeIcon} />
+                    <Icon face={'solid'} awesome={awesomeIcon} size={14} />
                 </Tooltip>
             </div>
             <div className={block('user-pool-item-name')}>{children}</div>
@@ -86,7 +86,7 @@ function ViewOperationButton({operationId}) {
                 disabled={isFetching}
                 onClick={open}
             >
-                <Icon awesome="eye" />
+                <Icon awesome="eye" size={13} />
                 &nbsp;{i18n('action_view')}
             </Button>
             {operationAttributes && (
@@ -281,7 +281,7 @@ export class OperationsListTableBase extends Component {
                             }}
                             onClick={() => promptAction({...action, message, handler})}
                         >
-                            <Icon awesome={icon} />
+                            <Icon awesome={icon} size={13} />
                         </Button>
                     );
                 })}

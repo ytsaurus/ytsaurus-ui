@@ -222,7 +222,7 @@ export class OperationDetailBase extends React.Component<ReduxProps & RouteProps
                 title={hammer.format['ReadableField'](action.name)}
                 onClick={() => promptAction({...action, message, handler})}
             >
-                <Icon awesome={action.icon} />
+                <Icon awesome={action.icon} size={13} />
                 &nbsp;
                 {hammer.format['ReadableField'](action.name)}
             </Button>
