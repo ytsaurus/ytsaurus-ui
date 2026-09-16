@@ -48,6 +48,16 @@ export const queriesPage = ({cluster, hasQuerySuggestions}: Props) => {
                 />,
             ),
             makeItem(
+                'global::queryTracker::useNewQueriesView',
+                i18n('field_new-queries-view'),
+                'top',
+                <BooleanSettingItem
+                    settingKey="global::queryTracker::useNewQueriesView"
+                    description={i18n('context_new-queries-view-description')}
+                    oneLine
+                />,
+            ),
+            makeItem(
                 'global::queryTracker::useNewGraphView',
                 i18n('field_new-graph-progress'),
                 'top',
