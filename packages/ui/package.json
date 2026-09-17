@@ -116,6 +116,7 @@
     "@gravity-ui/icons": "^2.0.0",
     "@gravity-ui/illustrations": "^2.1.0",
     "@gravity-ui/navigation": "^4.0.18",
+    "@gravity-ui/querieskit": "^1.8.0",
     "@gravity-ui/react-data-table": "^2.1.1",
     "@gravity-ui/react-unipika": "^0.8.1",
     "@gravity-ui/table": "^1.18.0",
