@@ -16,16 +16,12 @@ import {UnipikaSettings} from '../../internal/Yson/StructuredYson/StructuredYson
 import i18n from './i18n';
 
 import './ColumnCell.scss';
-import {LogErrorFn} from '../../types';
+import type {LogErrorFn} from '../../types/yt-types';
+import {getCellCopyValues} from './getCellCopyValues';
 import type {ErrorBoundaryProps} from '../../internal/DefaultErrorBoundary';
 import DefaultErrorBoundary from '../../internal/DefaultErrorBoundary/ErrorBoundary';
 
 const block = cn('yt-column-cell');
-
-function unquote(v: string) {
-    const match = /^"(.*)"$/.exec(v);
-    return match ? match[1] : v;
-}
 
 type CellValueType =
     | null
@@ -134,11 +130,17 @@ export function ColumnCell({
           ? (value as {$value?: unknown}).$value
           : undefined;
 
-    const allowRawCopy = typeof rawValue === 'string' && isStringType(valueType, logger);
+    const {string, rawString} = getCellCopyValues({
+        escapedValue,
+        rawValue,
+        valueType,
+        logError: logger,
+    });
+    const allowRawCopy = rawString !== undefined;
     const useRawString = allowRawCopy && allowRawStrings;
     let shiftCopyValue;
     if (allowRawCopy) {
-        shiftCopyValue = useRawString ? unquote(escapedValue) : rawValue;
+        shiftCopyValue = useRawString ? string : rawString;
     }
     let copyTooltip = i18n('hold-shift-raw');
     if (useRawString) {
@@ -150,7 +152,7 @@ export function ColumnCell({
     ) : (
         <div className={'unipika-wrapper'}>
             <pre className={'unipika'}>
-                <span className={'string'}>{rawValue}</span>
+                <span className={'string'}>{rawString}</span>
             </pre>
         </div>
     );
@@ -184,7 +186,7 @@ export function ColumnCell({
                                 <ClipboardButton
                                     view="flat-secondary"
                                     size="m"
-                                    text={useRawString ? rawValue : unquote(escapedValue)}
+                                    text={useRawString ? rawString : string}
                                     shiftText={shiftCopyValue}
                                 />
                             </Tooltip>
@@ -214,24 +216,4 @@ export function ColumnCell({
             )}
         </div>
     );
-}
-
-function isStringType(type: string | TypeArray | undefined, logError: LogErrorFn) {
-    if (!type) {
-        return false;
-    }
-    if (typeof type === 'string') {
-        return type === 'string';
-    }
-
-    try {
-        if (type[0] !== 'DataType') {
-            return false;
-        }
-        const lower = type[1].toLowerCase();
-        return lower === 'string' || lower === 'json' || lower === 'utf8';
-    } catch (error: any) {
-        logError({message: `ColumnCell: unexpected type: '${JSON.stringify(type)}'`}, error);
-        return false;
-    }
 }
