@@ -29,7 +29,8 @@ export function MarkdownLinePreview({text, title, className, allowHTML = false}:
         setVisible(false);
     };
 
-    const {result} = useMarkdown({text, allowHTML});
+    const {data} = useMarkdown({text, allowHTML});
+    const result = data?.result;
 
     const {plainText, html} = React.useMemo(() => {
         const {html} = result ?? {};
