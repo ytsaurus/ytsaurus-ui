@@ -1,3 +1,4 @@
+import {Flex} from '@gravity-ui/uikit';
 import React, {type ComponentType, useEffect} from 'react';
 import {type ConnectedProps, connect} from 'react-redux';
 
@@ -59,24 +60,31 @@ const Consumer: React.VFC<PropsFromRedux> = ({
 
     return (
         <ErrorBoundary>
-            <TargetQueue />
-            <Meta
-                owner={owner}
-                partitionCount={partitionCount}
-                queueAgentHost={queueAgentHost}
-                readDataWeightRate={readDataWeightRate}
-                readRowCountRate={readRowCountRate}
-            />
-            <WithStickyToolbar
-                toolbar={
-                    <Toolbar
-                        itemsToWrap={[
-                            {node: <ConsumerToolbar extras={ExtraControls} />, growable: true},
-                        ]}
+            <Flex direction="column" gap={4}>
+                <TargetQueue />
+                <Flex direction="column">
+                    <Meta
+                        owner={owner}
+                        partitionCount={partitionCount}
+                        queueAgentHost={queueAgentHost}
+                        readDataWeightRate={readDataWeightRate}
+                        readRowCountRate={readRowCountRate}
                     />
-                }
-                content={<View />}
-            />
+                    <WithStickyToolbar
+                        toolbar={
+                            <Toolbar
+                                itemsToWrap={[
+                                    {
+                                        node: <ConsumerToolbar extras={ExtraControls} />,
+                                        growable: true,
+                                    },
+                                ]}
+                            />
+                        }
+                        content={<View />}
+                    />
+                </Flex>
+            </Flex>
             <RegisterConsumerDialog />
         </ErrorBoundary>
     );
