@@ -707,24 +707,12 @@ class AccountsGeneralTab extends Component {
             metadataFetching,
         } = this.props;
 
-        const baseTableProps = getTableProps(
+        const tableProps = getTableProps(
             activeAccount,
             activeContentModeFilter,
             activeMediumFilter,
+            {nameCaptionTail: metadataFetching ? <Loader visible /> : undefined},
         );
-        const tableProps = {
-            ...baseTableProps,
-            columns: {
-                ...baseTableProps.columns,
-                items: {
-                    ...baseTableProps.columns.items,
-                    name: {
-                        ...baseTableProps.columns.items.name,
-                        captionTail: metadataFetching ? <Loader visible /> : undefined,
-                    },
-                },
-            },
-        };
         const isLoading = fetching && !wasLoaded;
         const selectedIndex = activeAccount ? 0 : undefined;
 

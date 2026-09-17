@@ -11,6 +11,7 @@ import {YTApiId} from '../../../../rum/rum-wrap-api';
 import ypath from '../../../../common/thor/ypath';
 import {YTErrorBlock, type YTErrorBlockProps} from '../../../../containers/Block/Block';
 import {useGetQuery} from '../../../../store/api/yt/get';
+import {fieldTreeForEach} from '../../../../common/hammer/field-tree';
 
 interface AccountTree {
     [name: string]: AccountTree;
@@ -19,14 +20,11 @@ interface AccountTree {
 function collectAccountNames(account: string, tree?: AccountTree): Array<string> {
     const result = [account];
 
-    function visit(children?: AccountTree) {
-        Object.entries(children ?? {}).forEach(([name, nested]) => {
-            result.push(name);
-            visit(nested);
-        });
-    }
-
-    visit(tree);
+    fieldTreeForEach<never>(
+        tree ?? {},
+        (_value): _value is never => false,
+        (path) => result.push(path[path.length - 1]),
+    );
     return result;
 }
 

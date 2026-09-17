@@ -64,6 +64,10 @@ export const ACCOUNTS_ALLOWED_ROOT_TABS = {
 
 export const ACCOUNTS_DEFAULT_TAB = AccountsTab.GENERAL;
 
+export function isAccountsGeneralPath(pathname: string) {
+    return pathname.replace(/\/+$/, '').endsWith('/' + AccountsTab.GENERAL);
+}
+
 export const ROOT_ACCOUNT_NAME = 'root';
 
 export const AccountResourceName = {

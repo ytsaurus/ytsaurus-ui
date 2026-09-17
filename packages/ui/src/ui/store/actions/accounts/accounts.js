@@ -257,13 +257,15 @@ export function fetchAccountsDetails() {
         ]);
 }
 
-// Kept for callers outside the page updater (editor and account hierarchy actions).
-export function fetchAccounts() {
+const alwaysFetchDetails = () => true;
+
+// Also used outside the page updater by editor and account hierarchy actions.
+export function fetchAccounts({shouldFetchDetails = alwaysFetchDetails} = {}) {
     return (dispatch, getState) => {
         const editCounter = selectAccountsEditCounter(getState());
         return dispatch(fetchAccountsList())
             .then((accounts) => {
-                if (!accounts) {
+                if (!accounts || !shouldFetchDetails()) {
                     return undefined;
                 }
                 return dispatch(fetchAccountsDetails()).then(() => accounts);
