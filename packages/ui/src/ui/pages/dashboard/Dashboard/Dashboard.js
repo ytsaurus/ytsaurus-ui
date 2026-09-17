@@ -70,7 +70,7 @@ function Dashboard({currentAccount, setActiveAccount}) {
 
                 <div className={'elements-section'}>
                     <div className={headingBlock({size})}>{i18n('title_accounts')}</div>
-                    <AccountsUpdater loadAllAccountDetails />
+                    <AccountsUpdater />
                     <AccountsGeneralTab viewContext={DASHBOARD_VIEW_CONTEXT} />
                 </div>
             </div>

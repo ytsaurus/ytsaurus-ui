@@ -446,12 +446,21 @@ const tableSettings = {
     },
 };
 
-export default function getAccountsTableProps(activeAccount, contentMode, mediumType) {
+export default function getAccountsTableProps(
+    activeAccount,
+    contentMode,
+    mediumType,
+    {nameCaptionTail} = {},
+) {
     const settings = Object.assign({}, tableSettings);
     settings.columns = {
         mode: contentMode,
         items: {
             ...columnsItems,
+            name: {
+                ...columnsItems.name,
+                captionTail: nameCaptionTail,
+            },
             ...diskSpaceColumnsItems(mediumType),
         },
         sets: TREE_COLUMN_SETS,

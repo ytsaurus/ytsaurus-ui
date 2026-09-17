@@ -5,7 +5,7 @@ import {useSelector} from '../../../store/redux-hooks';
 
 import reduce_ from 'lodash/reduce';
 
-import {Redirect, Route, Switch, useLocation} from 'react-router';
+import {Redirect, Route, Switch} from 'react-router';
 
 import {formatByParams} from '../../../../shared/utils/format';
 
@@ -102,8 +102,6 @@ export class Accounts extends React.Component<
         return (
             <div className="elements-page__content">
                 <UpdateAccountsUsageAvailability />
-                <AccountsRumMeasure />
-                <AccountsUpdater />
                 <section className={b(null, 'elements-main-section')}>
                     <div className="elements-section">
                         <div className={b('heading')}>
@@ -121,7 +119,13 @@ export class Accounts extends React.Component<
                         <Switch>
                             <Route
                                 path={`${match.path}/${AccountsTab.GENERAL}`}
-                                component={AccountsGeneralTab}
+                                render={(routeProps) => (
+                                    <>
+                                        <AccountsUpdater />
+                                        <AccountsRumMeasure />
+                                        <AccountsGeneralTab {...routeProps} />
+                                    </>
+                                )}
                             />
                             {statsTab.show && (
                                 <Route
@@ -171,10 +175,7 @@ const connector = connect(mapStateToProps);
 export default connector(Accounts);
 
 function AccountsRumMeasure() {
-    const accountsFinalStatus = useSelector(selectAccountsIsFinalLoadingStatus);
-    const {pathname} = useLocation();
-    const isGeneralTab = pathname.endsWith('/' + AccountsTab.GENERAL);
-    const isFinalStatus = !isGeneralTab || accountsFinalStatus;
+    const isFinalStatus = useSelector(selectAccountsIsFinalLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.ACCOUNTS,

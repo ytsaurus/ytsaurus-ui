@@ -116,21 +116,21 @@ export function AccountsSuggestWithLoading(
         error?: YTError;
     }>({items: []});
     React.useEffect(() => {
-        let active = true;
+        let isMounted = true;
         fetchFullList1M(YTApiId.listAccounts, {path: '//sys/accounts', ...USE_CACHE})
             .then((loadedItems: Array<string>) => {
-                if (active) {
+                if (isMounted) {
                     setState({items: loadedItems});
                 }
             })
             .catch((requestError: unknown) => {
-                if (active) {
+                if (isMounted) {
                     setState({error: requestError as YTError});
                 }
             });
 
         return () => {
-            active = false;
+            isMounted = false;
         };
     }, []);
 
