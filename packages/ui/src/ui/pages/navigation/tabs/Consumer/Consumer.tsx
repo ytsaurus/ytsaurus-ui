@@ -18,6 +18,7 @@ import {
     selectStatusError,
 } from '../../../../store/selectors/navigation/tabs/consumer';
 
+import {RealPathNotice} from '../../components/RealPathNotice';
 import {QueueError} from '../Queue/QueueError';
 
 import TargetQueue from './TargetQueue/TargetQueue';
@@ -55,12 +56,18 @@ const Consumer: React.VFC<PropsFromRedux> = ({
     const {ExtraControls, View} = VIEWS[consumerMode] ?? emptyView;
 
     if (statusError) {
-        return <QueueError error={statusError} topMargin="none" />;
+        return (
+            <Flex direction="column" gap={4}>
+                <RealPathNotice />
+                <QueueError error={statusError} topMargin="none" />
+            </Flex>
+        );
     }
 
     return (
         <ErrorBoundary>
             <Flex direction="column" gap={4}>
+                <RealPathNotice />
                 <TargetQueue />
                 <Flex direction="column">
                     <Meta

@@ -20,6 +20,7 @@ import {
     selectWriteDataWeightRate,
     selectWriteRowCountRate,
 } from '../../../../store/selectors/navigation/tabs/queue';
+import {RealPathNotice} from '../../components/RealPathNotice';
 
 import Meta from './Meta/Meta';
 import QueueToolbar from './Toolbar/Toolbar';
@@ -61,12 +62,18 @@ const Queue: React.VFC<PropsFromRedux> = ({
     const items = useSelector(selectQueueStatusDataAlerts);
 
     if (statusError) {
-        return <QueueError error={statusError} topMargin="none" />;
+        return (
+            <Flex direction="column" gap={4}>
+                <RealPathNotice />
+                <QueueError error={statusError} topMargin="none" />
+            </Flex>
+        );
     }
 
     return (
         <ErrorBoundary>
             <Flex direction="column" gap={4}>
+                <RealPathNotice />
                 <Alerts items={items} marginDirection="none" />
                 <Flex direction="column">
                     <Meta
