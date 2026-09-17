@@ -12,7 +12,12 @@ type Props = {
 };
 
 export const MarkdownFallback = ({text, setRenderState}: Props) => {
-    const {data, loading, error} = useMarkdown({text, allowHTML: true, skipErrorToast: true});
+    const {data, loading, error} = useMarkdown({
+        text,
+        allowHTML: true,
+        linkify: true,
+        skipErrorToast: true,
+    });
     const {html} = data?.result ?? {};
 
     useEffect(() => {
