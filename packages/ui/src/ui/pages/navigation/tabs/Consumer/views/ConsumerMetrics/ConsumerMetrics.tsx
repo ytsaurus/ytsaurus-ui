@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {selectCluster} from '../../../../../../store/selectors/global';
-import {selectPath} from '../../../../../../store/selectors/navigation';
+import {selectAttributesPath} from '../../../../../../store/selectors/navigation';
 import {selectTargetQueue} from '../../../../../../store/selectors/navigation/tabs/consumer';
 import {useSelector} from '../../../../../../store/redux-hooks';
 import ErrorBoundary from '../../../../../../containers/ErrorBoundary/ErrorBoundary';
@@ -10,7 +10,7 @@ import UIFactory from '../../../../../../UIFactory';
 import i18n from './i18n';
 
 export default function ConsumerMetrics() {
-    const path = useSelector(selectPath);
+    const path = useSelector(selectAttributesPath);
     const cluster = useSelector(selectCluster);
     const {queue} = useSelector(selectTargetQueue) ?? {};
 
