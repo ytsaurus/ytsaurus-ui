@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 
 import {useDispatch, useSelector} from '../../store/redux-hooks';
 import {Flex, Text} from '@gravity-ui/uikit';
@@ -15,7 +15,7 @@ import {
     selectErrorPreviewCellPath,
 } from '../../store/selectors/modals/cell-preview';
 
-import {ClipboardButton} from '@ytsaurus/components';
+import {ClipboardButton, getCellCopyValues} from '@ytsaurus/components';
 import cn from 'bem-cn-lite';
 
 import {Yson} from '../../components/Yson/Yson';
@@ -23,6 +23,9 @@ import {YTErrorBlock} from '../../containers/Block/Block';
 import {type YsonSettings, selectPreviewCellYsonSettings} from '../../store/selectors/thor/unipika';
 import {closeCellPreviewAndCancelRequest} from '../../store/actions/modals/cell-preview';
 import {isMediaTag} from '../../utils/yql-types';
+import {prettyPrintSafe} from '../../utils/unipika';
+import type {UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {selectSettingTableDisplayRawStrings} from '../../store/selectors/settings';
 
 import './CellPreviewModal.scss';
 
@@ -40,10 +43,28 @@ export const CellPreviewModal: React.FC = () => {
     const error = useSelector(selectErrorPreviewCellPath);
 
     const unipikaSettings = useSelector(selectPreviewCellYsonSettings);
-    const previewSettings =
-        shouldDecodeUTF8 === undefined
-            ? unipikaSettings
-            : {...unipikaSettings, decodeUTF8: shouldDecodeUTF8};
+    const previewSettings = useMemo(
+        () =>
+            shouldDecodeUTF8 === undefined
+                ? unipikaSettings
+                : {...unipikaSettings, decodeUTF8: shouldDecodeUTF8},
+        [unipikaSettings, shouldDecodeUTF8],
+    );
+
+    const allowRawStrings = useSelector(selectSettingTableDisplayRawStrings);
+    const copyValues = useMemo(
+        () => getCopyValues(data, {...previewSettings, asHTML: false, nonBreakingIndent: false}),
+        [data, previewSettings],
+    );
+    const useRawString = copyValues?.rawString !== undefined && allowRawStrings;
+    const preparedCopyText = useRawString ? copyValues?.rawString : copyValues?.string;
+    const copyText = !loading && !error ? preparedCopyText : undefined;
+    let shiftCopyText;
+    if (copyValues?.rawString !== undefined) {
+        shiftCopyText = useRawString ? copyValues.string : copyValues.rawString;
+    }
+
+    const hasShiftValue = shiftCopyText !== undefined;
 
     return (
         <SimpleModal
@@ -60,9 +81,29 @@ export const CellPreviewModal: React.FC = () => {
                 direction="column"
             >
                 <Flex gap={2} direction="column">
-                    <Text variant="subheader-3" color="secondary">
-                        {noticeText}
-                    </Text>
+                    <Flex gap={2} alignItems="center" justifyContent="space-between">
+                        <Text variant="subheader-3" color="secondary">
+                            {noticeText}
+                        </Text>
+                        {copyText !== undefined && (
+                            <ClipboardButton
+                                view="flat-secondary"
+                                text={copyText}
+                                shiftText={shiftCopyText}
+                                size="s"
+                                title={hasShiftValue ? undefined : i18n('action_copy-content')}
+                                hoverContent={
+                                    hasShiftValue
+                                        ? i18n(
+                                              useRawString
+                                                  ? 'hold-shift-escaped'
+                                                  : 'hold-shift-raw',
+                                          )
+                                        : undefined
+                                }
+                            />
+                        )}
+                    </Flex>
                     {ytCliDownloadCommand ? (
                         <code className={block('command-wrapper')}>
                             <div className={block('command')}>
@@ -111,6 +152,25 @@ function getUnipikaNodeForYsonPreview(data: PreviewContentProps['data']) {
     }
 
     return data;
+}
+
+function getCopyValues(data: PreviewContentProps['data'], settings: UnipikaSettings) {
+    if (!data) {
+        return undefined;
+    }
+
+    if (data.$type === 'yql.tagged' && data.$tag && isMediaTag(data.$tag)) {
+        return undefined;
+    }
+
+    return getCellCopyValues({
+        escapedValue: prettyPrintSafe(getUnipikaNodeForYsonPreview(data), settings),
+        rawValue: data.$value,
+        valueType:
+            data.$type === 'yql.string' || data.$type === 'yql.json' || data.$type === 'yql.utf8'
+                ? 'string'
+                : data.$type,
+    });
 }
 
 function PreviewContent(props: PreviewContentProps) {
