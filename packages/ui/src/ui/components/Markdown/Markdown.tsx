@@ -30,7 +30,7 @@ const MarkdownImpl = ({text, errorMode}: Props) => {
 
     const customMarkdown = UIFactory.renderMarkdown({text, setRenderState});
 
-    return customMarkdown ?? <MarkdownFallback text={text} />;
+    return customMarkdown ?? <MarkdownFallback text={text} setRenderState={setRenderState} />;
 };
 
 export const Markdown = memo((props: Props) => {
