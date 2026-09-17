@@ -257,7 +257,7 @@ export function fetchAccountsDetails() {
         ]);
 }
 
-// Kept for callers outside the page updater (editor and account hierarchy actions).
+// Also used outside the page updater by editor and account hierarchy actions.
 export function fetchAccounts() {
     return (dispatch, getState) => {
         const editCounter = selectAccountsEditCounter(getState());

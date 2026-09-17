@@ -1,49 +1,20 @@
 import React from 'react';
-import {useLocation} from 'react-router';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
-import {
-    fetchAccountsDetails,
-    fetchAccountsList,
-    resetAccountsCacheIfCurrent,
-} from '../../../store/actions/accounts/accounts';
+import {fetchAccounts} from '../../../store/actions/accounts/accounts';
 import {selectAccountsEditCounter} from '../../../store/selectors/accounts/accounts-ts';
-import {AccountsTab} from '../../../constants/accounts/accounts';
 import {useUpdater} from '../../../hooks/use-updater';
 
-type Props = {
-    loadAllAccountDetails?: boolean;
-};
-
-export default function AccountsUpdater({loadAllAccountDetails = false}: Props) {
+export default function AccountsUpdater() {
     const dispatch = useDispatch();
-    const currentRequestRef = React.useRef('');
 
     const editCounter = useSelector(selectAccountsEditCounter);
-    const {pathname} = useLocation();
-    const isGeneralTab = pathname.replace(/\/+$/, '').endsWith('/' + AccountsTab.GENERAL);
-    const shouldLoadAllAccountDetails = loadAllAccountDetails || isGeneralTab;
-    const requestKey = `${pathname}:${editCounter}`;
-    currentRequestRef.current = requestKey;
 
     const update = React.useCallback(() => {
-        if (!shouldLoadAllAccountDetails) {
-            return Promise.resolve();
-        }
-
-        return dispatch(fetchAccountsList())
-            .then((accounts) => {
-                if (!accounts || currentRequestRef.current !== requestKey) {
-                    return undefined;
-                }
-                return dispatch(fetchAccountsDetails()).then(() => {
-                    dispatch(resetAccountsCacheIfCurrent(editCounter));
-                });
-            })
-            .catch(() => undefined);
+        return dispatch(fetchAccounts());
         // editCounter restarts the updater after account mutations.
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, editCounter, requestKey, shouldLoadAllAccountDetails]);
+    }, [dispatch, editCounter]);
 
     useUpdater(update);
 
