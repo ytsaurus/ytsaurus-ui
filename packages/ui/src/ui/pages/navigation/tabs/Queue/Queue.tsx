@@ -1,3 +1,4 @@
+import {Flex} from '@gravity-ui/uikit';
 import React, {type ComponentType, useEffect} from 'react';
 import {type ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../../store/redux-hooks';
@@ -65,24 +66,28 @@ const Queue: React.VFC<PropsFromRedux> = ({
 
     return (
         <ErrorBoundary>
-            <Alerts items={items} />
-            <Meta
-                family={family}
-                partitionCount={partitionCount}
-                queueAgentHost={queueAgentHost}
-                writeDataWeightRate={writeDataWeightRate}
-                writeRowCountRate={writeRowCountRate}
-            />
-            <WithStickyToolbar
-                toolbar={
-                    <Toolbar
-                        itemsToWrap={[
-                            {node: <QueueToolbar extras={ExtraControls} />, growable: true},
-                        ]}
+            <Flex direction="column" gap={4}>
+                <Alerts items={items} marginDirection="none" />
+                <Flex direction="column">
+                    <Meta
+                        family={family}
+                        partitionCount={partitionCount}
+                        queueAgentHost={queueAgentHost}
+                        writeDataWeightRate={writeDataWeightRate}
+                        writeRowCountRate={writeRowCountRate}
                     />
-                }
-                content={<View />}
-            />
+                    <WithStickyToolbar
+                        toolbar={
+                            <Toolbar
+                                itemsToWrap={[
+                                    {node: <QueueToolbar extras={ExtraControls} />, growable: true},
+                                ]}
+                            />
+                        }
+                        content={<View />}
+                    />
+                </Flex>
+            </Flex>
         </ErrorBoundary>
     );
 };
