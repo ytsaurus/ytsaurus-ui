@@ -4,11 +4,20 @@ import transform from '@diplodoc/transform';
 
 export function markdownToHtmlHandler(req: Request, res: Response) {
     try {
-        const {text, allowHTML} = req.body as {text: string; allowHTML: boolean};
+        const {
+            text,
+            allowHTML,
+            linkify = false,
+        } = req.body as {
+            text: string;
+            allowHTML: boolean;
+            linkify?: boolean;
+        };
         const result = transform(text, {
             disableLiquid: true,
             allowHTML,
             lang: 'en',
+            linkify,
         });
         res.send(result);
     } catch (err: any) {
