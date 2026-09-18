@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import {Flex} from '@gravity-ui/uikit';
 import hammer from '../../../../common/hammer';
 import cn from 'bem-cn-lite';
 import trimEnd_ from 'lodash/trimEnd';
@@ -21,14 +22,14 @@ import Link from '../../../../containers/Link/Link';
 import Icon from '../../../../components/Icon/Icon';
 import {OperationType} from '../../../../components/OperationType/OperationType';
 
-import {
-    showEditPoolsWeightsModal,
-    updateOperationsList,
-} from '../../../../store/actions/operations';
+import {updateOperationsList} from '../../../../store/actions/operations';
 import {performAction, prepareActions} from '../../../../utils/operations/detail';
 import {promptAction} from '../../../../store/actions/actions';
 import {PathItem} from './PathItem';
 import i18n from './i18n';
+import {EditOperationButton} from '../../EditOperationButton/EditOperationButton';
+import {EditOperationDialog} from '../../EditOperationDialog/EditOperationDialog';
+import {useOperationEditorData} from '../../EditOperationDialog/useOperationEditorData';
 
 import './OperationsListTable.scss';
 
@@ -70,13 +71,47 @@ function UserPoolItem({awesomeIcon, children, title}) {
         <div className={block('user-pool-item')}>
             <div className={block('user-pool-item-icon')}>
                 <Tooltip content={title} to={'left'} allowUnmounted>
-                    <Icon face={'solid'} awesome={awesomeIcon} />
+                    <Icon face={'solid'} awesome={awesomeIcon} size={14} />
                 </Tooltip>
             </div>
             <div className={block('user-pool-item-name')}>{children}</div>
         </div>
     );
 }
+
+function ViewOperationButton({operationId}) {
+    const {operationAttributes, specificationPatchSupported, isFetching, open, close} =
+        useOperationEditorData(operationId);
+
+    return (
+        <React.Fragment>
+            <Button
+                size="s"
+                view="flat-secondary"
+                title={i18n('action_show-pools-weights')}
+                loading={isFetching}
+                disabled={isFetching}
+                onClick={open}
+            >
+                <Icon awesome="eye" size={13} />
+                &nbsp;{i18n('action_view')}
+            </Button>
+            {operationAttributes && (
+                <EditOperationDialog
+                    operationAttributes={operationAttributes}
+                    specificationPatchSupported={specificationPatchSupported}
+                    visible
+                    readOnly
+                    onClose={close}
+                />
+            )}
+        </React.Fragment>
+    );
+}
+
+ViewOperationButton.propTypes = {
+    operationId: PropTypes.string.isRequired,
+};
 
 class OperationsListTable extends Component {
     static propTypes = {
@@ -85,7 +120,6 @@ class OperationsListTable extends Component {
         initialLoading: PropTypes.bool.isRequired,
         cluster: PropTypes.string.isRequired,
 
-        showEditPoolsWeightsModal: PropTypes.func.isRequired,
         promptAction: PropTypes.func.isRequired,
         updateOperationsList: PropTypes.func.isRequired,
         // from react-router
@@ -161,37 +195,23 @@ class OperationsListTable extends Component {
     };
 
     renderMultiplePools(item) {
-        const {showEditPoolsWeightsModal} = this.props;
-
         return (
-            <span className={block('multiply-pools')}>
+            <Flex as="span" inline alignItems="center" gap={1} className={block('multiply-pools')}>
                 {item.pools.length}
-                <Button
-                    size="s"
-                    view="flat-secondary"
-                    title={i18n('action_show-pools-weights')}
-                    className={block('view-button')}
-                    onClick={() => showEditPoolsWeightsModal(item, false)}
-                >
-                    <Icon awesome="eye" />
-                    &nbsp;{i18n('action_view')}
-                </Button>
-
-                <Button
-                    size="s"
-                    view="flat-secondary"
-                    title={i18n('action_edit-pools-weights')}
+                <ViewOperationButton operationId={item.$value} />
+                <EditOperationButton
                     className={block('edit-button')}
-                    onClick={() => showEditPoolsWeightsModal(item)}
-                >
-                    <Icon awesome="pencil" />
-                </Button>
-            </span>
+                    operationId={item.$value}
+                    operationState={item.state}
+                    view="edit-icon"
+                    onSuccess={this.props.updateOperationsList}
+                />
+            </Flex>
         );
     }
 
     renderUserPool = (item) => {
-        const {showEditPoolsWeightsModal, cluster} = this.props;
+        const {cluster} = this.props;
         const {pools, user, state} = item;
         const multiplePools = pools?.length > 1 || false;
 
@@ -204,24 +224,27 @@ class OperationsListTable extends Component {
                     {multiplePools ? (
                         this.renderMultiplePools(item)
                     ) : (
-                        <TemplatePools
-                            onEdit={() => showEditPoolsWeightsModal(item)}
-                            cluster={cluster}
-                            pools={pools}
-                            state={state}
-                            allowDetachEditBtn
-                            hideIcon
-                            hideTree
-                        />
+                        <Flex alignItems="center" gap={1} className={block('single-pool')}>
+                            <TemplatePools
+                                cluster={cluster}
+                                pools={pools}
+                                state={state}
+                                hideIcon
+                                hideTree
+                            />
+                            <EditOperationButton
+                                className={block('edit-button')}
+                                operationId={item.$value}
+                                operationState={item.state}
+                                view="edit-icon"
+                                onSuccess={this.props.updateOperationsList}
+                            />
+                        </Flex>
                     )}
                 </UserPoolItem>
                 {!multiplePools && (
                     <UserPoolItem awesomeIcon={'weight-hanging'} title={i18n('title_weight')}>
-                        <TemplateWeight
-                            onEdit={() => showEditPoolsWeightsModal(item)}
-                            operation={item}
-                            pool={pools[0]}
-                        />
+                        <TemplateWeight operation={item} pool={pools[0]} />
                     </UserPoolItem>
                 )}
             </React.Fragment>
@@ -265,7 +288,7 @@ class OperationsListTable extends Component {
                             }}
                             onClick={() => promptAction({...action, message, handler})}
                         >
-                            <Icon awesome={icon} />
+                            <Icon awesome={icon} size={13} />
                         </Button>
                     );
                 })}
@@ -388,7 +411,6 @@ function mapStateToProps({operations, global}) {
 }
 
 const mapDispatchToProps = {
-    showEditPoolsWeightsModal,
     promptAction,
     updateOperationsList,
 };

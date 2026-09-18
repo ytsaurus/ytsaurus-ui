@@ -65,7 +65,7 @@ import {
     selectAccountsAbcServiceIdSlugFilter,
     selectActiveAccountAggregationRow,
 } from '../../../../store/selectors/accounts/accounts';
-import {isNullable} from '../../../../utils';
+import {isNullable} from '../../../../../shared/utils/toolkit/type/isNullable';
 import {DASHBOARD_VIEW_CONTEXT} from '../../../../constants/index';
 import {AccountResourceName} from '../../../../constants/accounts/accounts';
 

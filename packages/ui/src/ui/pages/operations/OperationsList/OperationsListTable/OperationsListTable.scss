@@ -11,23 +11,30 @@
         }
     }
 
-    &__view-button {
-        margin-left: 5px;
-    }
-
     &__edit-button {
         margin: -5px 0;
-        margin-left: -5px;
-        display: none;
         transition: opacity 300ms ease;
+
+        &.edit-operation-button_editable {
+            display: none;
+        }
     }
 
-    &__multiply-pools {
-        &:hover {
-            #{$self}__edit-button {
-                display: unset;
-            }
+    .elements-table__row:hover &__edit-button {
+        display: inline-flex;
+    }
+
+    &__single-pool {
+        min-width: 0;
+
+        .meta-table-item__pools {
+            min-width: 0;
         }
+
+        .operation-pool {
+            margin-right: 0;
+        }
+
     }
 
     &__user-pool-item {
