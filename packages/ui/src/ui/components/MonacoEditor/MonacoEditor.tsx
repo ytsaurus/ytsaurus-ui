@@ -1,7 +1,7 @@
 import React, {type FC, type MutableRefObject, useCallback, useEffect, useRef} from 'react';
 import cn from 'bem-cn-lite';
 import key from 'hotkeys-js';
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import * as monaco from 'monaco-editor/editor/editor.api';
 // @ts-ignore
 import {initVimMode} from 'monaco-vim/src';
 import {useSelector} from '../../store/redux-hooks';
@@ -95,7 +95,7 @@ const MonacoEditor: FC<Props> = ({
             },
             lineNumbers: 'on',
             suggestOnTriggerCharacters: true,
-            wordBasedSuggestions: false,
+            wordBasedSuggestions: 'off',
             theme: THEMES[theme],
             ...monacoConfig,
         });

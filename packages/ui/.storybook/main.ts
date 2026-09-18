@@ -46,6 +46,11 @@ const config: StorybookConfig = {
             alias: {
                 ...config.resolve!.alias,
                 ...uiCoreConfig.resolve.alias,
+                // monaco-vim uses legacy paths that Monaco 0.56 no longer exports.
+                'monaco-editor/esm/vs': path.resolve(
+                    require.resolve('monaco-editor/editor/editor.api'),
+                    '../..',
+                ),
             },
             modules: [...config.resolve!.modules!, ...uiCoreConfig.resolve.modules],
             extensions: [...config.resolve!.extensions!, ...uiCoreConfig.resolve.extensions],

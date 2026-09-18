@@ -69,7 +69,17 @@ const config: PlaywrightTestConfig = {
                 }),
             ],
             resolve: {
-                alias: [{find: /^~(.*)$/, replacement: '$1'}],
+                alias: [
+                    {
+                        // monaco-vim uses legacy paths that Monaco 0.56 no longer exports.
+                        find: 'monaco-editor/esm/vs',
+                        replacement: resolve(
+                            require.resolve('monaco-editor/editor/editor.api'),
+                            '../..',
+                        ),
+                    },
+                    {find: /^~(.*)$/, replacement: '$1'},
+                ],
             },
             //@ts-ignore
             css: {
