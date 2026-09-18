@@ -18,7 +18,7 @@ export {DataTableYT, type Column, type DataTableYtProps} from './DataTableYT';
 export {NoContent} from './NoContent';
 export type {HotkeyProps} from './Hotkey';
 export {YqlValue} from './YqlValue';
-export {ColumnCell} from './ColumnCell';
+export {ColumnCell, getCellCopyValues} from './ColumnCell';
 export {ClipboardButton} from './ClipboardButton';
 export {SchemaDataType, DataTypeComponent} from './SchemaDataType';
 export type {SchemaDataTypeProps} from './SchemaDataType';
