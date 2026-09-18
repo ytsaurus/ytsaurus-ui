@@ -70,6 +70,18 @@ run_command() {
 
     mkdir -p node_modules .cache-playwright
 
+    snapshotArgs=()
+    if [ -n "${E2E_SNAPSHOT_DIR:-}" ]; then
+        if [[ "$E2E_SNAPSHOT_DIR" != /* || ! -d "$E2E_SNAPSHOT_DIR" ]]; then
+            echo "E2E_SNAPSHOT_DIR must be an existing absolute directory" >&2
+            exit 1
+        fi
+        snapshotArgs=(
+            --mount "type=bind,src=$E2E_SNAPSHOT_DIR,dst=/tmp/ytsaurus-ui.snapshots"
+            -e E2E_SNAPSHOT_DIR=/tmp/ytsaurus-ui.snapshots
+        )
+    fi
+
     $CONTAINER_TOOL run \
         --rm \
         --network host \
@@ -82,6 +94,7 @@ run_command() {
         -v "$NODE_MODULES_CACHE_DIR/.cache-playwright:/work/.cache-playwright" \
         -v "$NPM_CACHE_DIR:/npm-cache" \
         $useEnvFile \
+        "${snapshotArgs[@]}" \
         "$IMAGE_NAME:$IMAGE_TAG" \
         /bin/bash -c "umask 0000; $toRun"
 }
