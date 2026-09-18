@@ -1,4 +1,4 @@
-import indexOf_ from 'lodash/indexOf';
+import findIndex_ from 'lodash/findIndex';
 
 import {getResponsibleUsers} from '../../../../utils/accounts/index';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../../constants/accounts';
@@ -11,6 +11,7 @@ import {
     CHANGE_MEDIUM_TYPE_FILTER,
     CHANGE_NAME_FILTER,
     CLOSE_EDITOR_MODAL,
+    FETCH_ACCOUNTS_METADATA,
     FETCH_ACCOUNTS_NODES,
     FETCH_ACCOUNTS_RESOURCE,
     FETCH_ACCOUNTS_TOTAL_USAGE,
@@ -36,15 +37,18 @@ const persistedState = {
 const ephemeralState = {
     fetching: false,
     wasLoaded: false,
+    metadataFetching: false,
+    metadataError: undefined,
+    fullAccountsLoaded: false,
     loadTotals: false,
     loadNodes: false,
     error: false,
     errorData: {},
 
     accounts: [],
-    accountsTreeState: 'collapsed',
     editableAccount: {},
     showEditor: false,
+    accountsTreeState: 'collapsed',
     responsibleUsers: [],
     usableAccounts: [],
 
@@ -67,34 +71,24 @@ export const initialState = {
     ...ephemeralState,
 };
 
+function mergeAccountsWithLoadedDetails(accounts, previousAccounts) {
+    const previousAccountsByName = new Map(
+        previousAccounts.map((account) => [account.name, account]),
+    );
+    return accounts.map((account) => previousAccountsByName.get(account.name) ?? account);
+}
+
+// eslint-disable-next-line complexity
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case UPDATE_EDITABLE_ACCOUNT.SUCCESS: {
-            const {accounts} = state;
-            const {account} = action.data;
-            const index = indexOf_(accounts, (x) => x.name === account.name);
-            const newAccounts = [...accounts];
-            if (index === -1) {
-                newAccounts.push(account);
-            } else {
-                newAccounts[index] = account;
-            }
-
-            return {
-                ...state,
-                accounts: newAccounts,
-                editableAccount: action.data.account,
-                showEditor: true,
-            };
-        }
-
         case FETCH_ACCOUNTS_RESOURCE.SUCCESS: {
-            const responsibleUsers = getResponsibleUsers(action.data.accounts);
+            const accounts = mergeAccountsWithLoadedDetails(action.data.accounts, state.accounts);
+            const responsibleUsers = getResponsibleUsers(accounts);
             return {
                 ...state,
-                accounts: action.data.accounts,
+                accounts,
                 responsibleUsers,
-                filteredAccounts: action.data.accounts,
+                filteredAccounts: accounts,
                 fetching: false,
                 error: false,
                 wasLoaded: true,
@@ -111,6 +105,28 @@ const reducer = (state = initialState, action) => {
 
         case FETCH_ACCOUNTS_RESOURCE.REQUEST:
             return {...state, fetching: true};
+
+        case FETCH_ACCOUNTS_METADATA.REQUEST:
+            return {
+                ...state,
+                metadataFetching: true,
+                metadataError: undefined,
+                fullAccountsLoaded: false,
+            };
+
+        case FETCH_ACCOUNTS_METADATA.SUCCESS: {
+            const accounts = action.data.accounts;
+            return {
+                ...state,
+                accounts,
+                responsibleUsers: getResponsibleUsers(accounts),
+                metadataFetching: false,
+                fullAccountsLoaded: true,
+            };
+        }
+
+        case FETCH_ACCOUNTS_METADATA.FAILURE:
+            return {...state, metadataFetching: false, metadataError: action.data.error};
 
         case FETCH_ACCOUNTS_TOTAL_USAGE.SUCCESS:
             return {
@@ -167,26 +183,34 @@ const reducer = (state = initialState, action) => {
             return {...state, activeUsableFilter: true};
         }
 
-        case OPEN_EDITOR_MODAL: {
-            const editableAccount = action.data.account;
+        case UPDATE_EDITABLE_ACCOUNT.SUCCESS: {
+            const {account} = action.data;
+            const index = findIndex_(state.accounts, ({name}) => name === account.name);
+            const accounts = [...state.accounts];
+            if (index === -1) {
+                accounts.push(account);
+            } else {
+                accounts[index] = account;
+            }
 
-            return {
-                ...state,
-                editableAccount,
-                showEditor: true,
-            };
+            return {...state, accounts, editableAccount: account, showEditor: true};
         }
 
-        case CLOSE_EDITOR_MODAL: {
+        case OPEN_EDITOR_MODAL:
+            return {...state, editableAccount: action.data.account, showEditor: true};
+
+        case CLOSE_EDITOR_MODAL:
             return {...state, showEditor: false, editableAccount: {}};
-        }
 
         case SET_ACCOUNTS_TREE_STATE: {
             return {...state, accountsTreeState: action.data.treeState};
         }
 
         case SET_ACTIVE_ACCOUNT: {
-            return {...state, activeAccount: action.data.account};
+            return {
+                ...state,
+                activeAccount: action.data.account,
+            };
         }
 
         case ACCOUNTS_DATA_FIELDS_ACTION: {

@@ -10,13 +10,9 @@ import {
     selectIsActiveAccountInFavourites,
 } from '../../../store/selectors/favourites';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
-import {
-    selectAccountsMapByName,
-    selectActiveAccount,
-} from '../../../store/selectors/accounts/accounts-ts';
+import {selectActiveAccount} from '../../../store/selectors/accounts/accounts-ts';
 import {setActiveAccount} from '../../../store/actions/accounts/accounts';
 import {accountsToggleFavourite} from '../../../store/actions/favourites';
-import {selectActiveAccountBreadcrumbs} from '../../../store/selectors/accounts/accounts';
 
 import AccountCreate from '../tabs/general/Editor/AccountCreate';
 import {useHistory} from 'react-router';
@@ -28,24 +24,23 @@ import {ACCOUNTS_ALLOWED_ROOT_TABS, AccountsTab} from '../../../constants/accoun
 
 import './AccountsTopRowContent.scss';
 import UIFactory from '../../../UIFactory';
+import {useAccountAttributes} from '../useAccountAttributes';
 
 const block = cn('accounts-top-row-content');
 
 function AccountsTopRowContent() {
     const clusterUiConfig = useSelector(selectClusterUiConfig);
     const account = useSelector(selectActiveAccount);
-    const accountsByName = useSelector(selectAccountsMapByName);
-
-    const current = accountsByName[account];
+    const {data: accountAttributes} = useAccountAttributes(account);
 
     return (
         <RowWithName page={Page.ACCOUNTS} urlParams={{account: ''}}>
             <AccountsFavourites />
-            <AccountsBreadcrumbs />
+            <AccountsBreadcrumbs account={account} accountPath={accountAttributes?.path} />
             <span className={block('actions')}>
                 {UIFactory.renderTopRowExtraControlsForAccount({
                     clusterUiConfig,
-                    accountAttributes: current?.$attributes,
+                    accountAttributes,
                 })}
                 <AccountCreate className={block('create')} />
             </span>
@@ -84,38 +79,47 @@ function AccountsFavourites() {
 
 const ROOT_PLACEHOLDER = '<Root>';
 
-function AccountsBreadcrumbs() {
-    // @ts-ignore
-    const bcItems = useSelector(selectActiveAccountBreadcrumbs).slice(1);
+interface AccountsBreadcrumbsProps {
+    account: string;
+    accountPath?: string;
+}
+
+const ACCOUNT_TREE_PREFIX = '//sys/account_tree/';
+
+function AccountsBreadcrumbs({account, accountPath}: AccountsBreadcrumbsProps) {
     const dispatch = useDispatch();
     const cluster = useSelector(selectCluster);
     const history = useHistory();
 
     const handleBreadcrumbsClick = (key: string | number) => {
         dispatch(setActiveAccount(key === ROOT_PLACEHOLDER ? '' : key));
-        const account = key === ROOT_PLACEHOLDER ? '' : key;
-        const pathname = account
+        const selectedAccount = key === ROOT_PLACEHOLDER ? '' : key;
+        const pathname = selectedAccount
             ? window.location.pathname
             : calcRootPathname(window.location.pathname, cluster);
-        history.push(makeRoutedURL(pathname, {account}));
+        history.push(makeRoutedURL(pathname, {account: selectedAccount}));
     };
 
-    const items = React.useMemo(() => {
-        return [{text: ''}, ...bcItems].map((item) => {
-            const account = item.text;
-            const text = account || ROOT_PLACEHOLDER;
+    let accountNames: Array<string> = [];
+    if (accountPath?.startsWith(ACCOUNT_TREE_PREFIX)) {
+        accountNames = accountPath.slice(ACCOUNT_TREE_PREFIX.length).split('/');
+    } else if (account) {
+        accountNames = [account];
+    }
 
-            return (
-                <Breadcrumbs.Item
-                    key={text}
-                    href={calcRootPathname(window.location.pathname, cluster)}
-                    onClick={(e) => e.preventDefault()}
-                >
-                    {text}
-                </Breadcrumbs.Item>
-            );
-        });
-    }, [bcItems, cluster, window.location.pathname]);
+    const items = ['', ...accountNames].map((accountName) => {
+        const text = accountName || ROOT_PLACEHOLDER;
+
+        return (
+            <Breadcrumbs.Item
+                key={text}
+                href={calcRootPathname(window.location.pathname, cluster)}
+                onClick={(e) => e.preventDefault()}
+            >
+                {text}
+            </Breadcrumbs.Item>
+        );
+    });
 
     return (
         <Breadcrumbs className={block('breadcrumbs')} onAction={handleBreadcrumbsClick} showRoot>

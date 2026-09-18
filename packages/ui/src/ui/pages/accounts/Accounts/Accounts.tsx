@@ -102,7 +102,6 @@ export class Accounts extends React.Component<
         return (
             <div className="elements-page__content">
                 <UpdateAccountsUsageAvailability />
-                <AccountsRumMeasure />
                 <AccountsUpdater />
                 <section className={b(null, 'elements-main-section')}>
                     <div className="elements-section">
@@ -121,7 +120,12 @@ export class Accounts extends React.Component<
                         <Switch>
                             <Route
                                 path={`${match.path}/${AccountsTab.GENERAL}`}
-                                component={AccountsGeneralTab}
+                                render={(routeProps) => (
+                                    <>
+                                        <AccountsRumMeasure />
+                                        <AccountsGeneralTab {...routeProps} />
+                                    </>
+                                )}
                             />
                             {statsTab.show && (
                                 <Route
