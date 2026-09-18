@@ -154,6 +154,7 @@ const QUERIES_LIST_ATTRIBUTES = [
     'finish_time',
     'user',
     'engine',
+    'settings',
     'annotations',
     'is_tutorial',
     'access_control_objects',
