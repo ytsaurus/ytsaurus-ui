@@ -1,6 +1,10 @@
 import {type TConnection} from '@gravity-ui/graph';
 
-import {applyConnectionStyle, mergeConnectionStreamStatus} from './utils';
+import {
+    applyConnectionStyle,
+    makeStreamConsumersCenterY,
+    mergeConnectionStreamStatus,
+} from './utils';
 
 jest.mock('../../../../../components/YTGraph/constants', () => ({
     GRAPH_COLORS: {
@@ -72,5 +76,29 @@ describe('Flow graph connection stream status', () => {
             flowStreamStatus: {drained: true, backpressureDetected: true},
             styles: {background: 'warning'},
         });
+    });
+});
+
+describe('makeStreamConsumersCenterY', () => {
+    const getSortKey = makeStreamConsumersCenterY(
+        [
+            {sourceBlockId: 'both', targetBlockId: 'top'},
+            {sourceBlockId: 'both', targetBlockId: 'bottom'},
+            {sourceBlockId: 'top-only', targetBlockId: 'top'},
+            {sourceBlockId: 'not-laid-out', targetBlockId: 'missing'},
+        ],
+        [
+            {id: 'top', y: 0, height: 100},
+            {id: 'bottom', y: 200, height: 100},
+        ],
+    );
+
+    it.each([
+        {streamId: 'both', expected: 150},
+        {streamId: 'top-only', expected: 50},
+        {streamId: 'not-laid-out', expected: Infinity},
+        {streamId: 'no-consumers', expected: Infinity},
+    ])('returns $expected for $streamId', ({streamId, expected}) => {
+        expect(getSortKey(streamId)).toBe(expected);
     });
 });

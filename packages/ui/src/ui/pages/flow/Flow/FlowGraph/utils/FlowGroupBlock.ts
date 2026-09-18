@@ -1,3 +1,4 @@
+import sortBy_ from 'lodash/sortBy';
 import {type FlowComputationStreamType} from '../../../../../../shared/yt-types';
 import {type YTGraphBlock} from '../../../../../components/YTGraph';
 import {rumLogError} from '../../../../../rum/rum-counter';
@@ -31,6 +32,8 @@ export class FlowGroupBlock implements YTGraphBlock<
 
     sizes: {stream: Size; computation: Size};
 
+    outputStreamsOrder: Array<string>;
+
     constructor({
         id,
         computation,
@@ -53,6 +56,7 @@ export class FlowGroupBlock implements YTGraphBlock<
         this.backgroundTheme = backgroundTheme;
 
         this.sizes = {stream: streamSize, computation: computationSize};
+        this.outputStreamsOrder = computation.output_streams ?? [];
 
         Object.assign(this, this.recalcSize());
     }
@@ -90,6 +94,10 @@ export class FlowGroupBlock implements YTGraphBlock<
         };
     }
 
+    sortOutputStreams(getSortKey: (streamId: string) => number) {
+        this.outputStreamsOrder = sortBy_(this.meta.output_streams, getSortKey);
+    }
+
     updateBlockPosition<T extends FlowComputationStreamType | 'computation'>(
         type: T,
         block: FlowGraphBlockItem<'stream'> | FlowGraphBlockItem<'computation'>,
@@ -113,7 +121,8 @@ export class FlowGroupBlock implements YTGraphBlock<
         let index = 0;
         if (type !== 'computation') {
             const t = type as Exclude<typeof type, 'computation'>;
-            index = this.meta[t]?.indexOf(block.id);
+            const ids = t === 'output_streams' ? this.outputStreamsOrder : this.meta[t];
+            index = ids?.indexOf(block.id);
             if (index === -1) {
                 rumLogError(
                     {

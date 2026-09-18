@@ -1,4 +1,5 @@
 import {type TAnchor, type TBlock, type TBlockId, type TConnection} from '@gravity-ui/graph';
+import mean_ from 'lodash/mean';
 import {v4 as uuidv4} from 'uuid';
 import {
     type FlowComputationType,
@@ -211,6 +212,25 @@ export function makeTimerAnchors(src: TBlock, dst: TBlock, c: TConnection) {
 
     c.targetAnchorId = dstAnchor.id;
     c.sourceAnchorId = srcAnchor.id;
+}
+
+// Sorting output streams by the mean vertical center of their consumers keeps their connections
+// in the same order as the consumers.
+export function makeStreamConsumersCenterY(
+    connections: Array<Pick<TConnection, 'sourceBlockId' | 'targetBlockId'>>,
+    blocks: Array<Pick<TBlock, 'id' | 'y' | 'height'>>,
+) {
+    const centerYById = new Map<TBlockId | undefined, number>(
+        blocks.map(({id, y, height}) => [id, y + height / 2]),
+    );
+
+    return (streamId: string) => {
+        const centers = connections
+            .filter(({sourceBlockId}) => sourceBlockId === streamId)
+            .map(({targetBlockId}) => centerYById.get(targetBlockId))
+            .filter((y): y is number => y !== undefined);
+        return centers.length > 0 ? mean_(centers) : Infinity;
+    };
 }
 
 export function hasVisibleStreamsSummaryDetails(

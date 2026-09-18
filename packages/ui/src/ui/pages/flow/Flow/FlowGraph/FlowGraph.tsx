@@ -58,6 +58,7 @@ import {
     isFlowComputationOrGroup,
     makeBlock,
     makeFlowComputationRuntimeData,
+    makeStreamConsumersCenterY,
     makeTimerAnchors,
     mergeConnectionStreamStatus,
 } from './utils/utils';
@@ -512,6 +513,16 @@ function useFlowGraphData(params: {pipeline_path: string}) {
         });
 
         const [_groups, other] = partition_(blocks, ({is}) => is === 'computation-group');
+
+        const computations = data.data.blocks.flatMap((item) => {
+            const group = item.is === 'computation' && data.groupById.get(item.groupId ?? '');
+            return group ? [group.updateBlockPosition('computation', item)] : [];
+        });
+        const getSortKey = makeStreamConsumersCenterY(data.data.connections, [
+            ...computations,
+            ...other,
+        ]);
+        data.groupById.forEach((group) => group.sortOutputStreams(getSortKey));
 
         return {
             data: {
