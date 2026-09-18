@@ -9,52 +9,69 @@ import i18n from './i18n';
 type Params = {
     text: string;
     allowHTML?: boolean;
+    linkify?: boolean;
+    skipErrorToast?: boolean;
 };
 
-type Response = {
-    result?: {html?: string; plainText?: string};
+const transformMarkdown = async ({
+    text,
+    allowHTML,
+    linkify,
+    skipErrorToast,
+}: Params): Promise<OutputType> => {
+    const {data} = await wrapApiPromiseByToaster(
+        axios.post<OutputType>('/api/markdown-to-html', {
+            text,
+            allowHTML,
+            linkify,
+        }),
+        {
+            toasterName: 'useMarkdown',
+            skipSuccessToast: true,
+            skipErrorToast,
+            errorContent: i18n('alert_failed-to-transform'),
+        },
+    );
+    return data;
 };
 
-const emptyTransformResponse: OutputType = {
-    result: {html: '', headings: []},
-    logs: {info: [], warn: [], error: [], disabled: []},
+type TransformMarkdownState = {
+    data?: OutputType;
+    loading: boolean;
+    error?: unknown;
 };
 
-const transformMarkdown = async ({text, allowHTML}: Params): Promise<OutputType> => {
-    try {
-        const {data} = await wrapApiPromiseByToaster(
-            axios.post<Response>('/api/markdown-to-html', {
-                text,
-                allowHTML,
-            }),
-            {
-                toasterName: 'useMarkdown',
-                skipSuccessToast: true,
-                errorContent: i18n('alert_failed-to-transform'),
-            },
-        );
-        return data as OutputType;
-    } catch (error) {
-        return {
-            result: {...emptyTransformResponse['result']},
-            logs: {...emptyTransformResponse['logs'], error: [(error as Error).message]},
-        };
-    }
-};
-
-export const useMarkdown = ({text, allowHTML = true}: Params) => {
-    const [result, setResult] = useState<OutputType>(emptyTransformResponse);
+export const useMarkdown = ({
+    text,
+    allowHTML = true,
+    linkify = false,
+    skipErrorToast = false,
+}: Params) => {
+    const [state, setState] = useState<TransformMarkdownState>({loading: true});
 
     useEffect(() => {
+        let active = true;
+        setState({loading: true});
+
         const transform = async () => {
             try {
-                const data = await transformMarkdown({text, allowHTML});
+                const data = await transformMarkdown({text, allowHTML, linkify, skipErrorToast});
 
-                setResult(data);
-            } catch (error) {}
+                if (active) {
+                    setState({data, loading: false});
+                }
+            } catch (error) {
+                if (active) {
+                    setState({loading: false, error});
+                }
+            }
         };
         transform();
-    }, [text, allowHTML]);
 
-    return result;
+        return () => {
+            active = false;
+        };
+    }, [text, allowHTML, linkify, skipErrorToast]);
+
+    return state;
 };
