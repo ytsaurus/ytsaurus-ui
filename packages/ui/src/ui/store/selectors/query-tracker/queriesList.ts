@@ -141,3 +141,7 @@ export function selectQueriesListFilterParams(state: RootState): QueriesListPara
 export function selectQueryListHistoryColumns(state: RootState) {
     return selectSettingsData(state)['global::queryTracker::history::Columns'];
 }
+
+export function selectQueryListNewVisibleFields(state: RootState) {
+    return selectSettingsData(state)['global::queryTracker::history::NewVisibleFields'];
+}

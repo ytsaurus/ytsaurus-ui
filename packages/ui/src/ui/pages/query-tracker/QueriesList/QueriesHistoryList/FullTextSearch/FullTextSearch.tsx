@@ -8,7 +8,7 @@ import {
     selectQueriesList,
 } from '../../../../../store/selectors/query-tracker/queriesList';
 import {FullTextSearchItem} from '../FullTextSearchItem';
-import {prepareFullTextSearchItems} from '../helpers/prepareFullTextSearchItems';
+import {prepareFullTextSearchItems} from '../../helpers/prepareFullTextSearchItems';
 import {NoContent} from '@ytsaurus/components';
 import block from 'bem-cn-lite';
 import './FullTextSearch.scss';

@@ -18,6 +18,8 @@ import {Vcs} from '../Vcs';
 import {Navigation} from '../Navigation';
 import {setFilter} from '../../../store/reducers/query-tracker/queryListSlice';
 import i18n from './i18n';
+import {selectSettingsQueryTrackerNewQueriesView} from '../../../store/selectors/settings/settings-ts';
+import {QueriesHistory} from './QueriesHistory';
 
 const b = block('queries-list');
 
@@ -32,13 +34,21 @@ function getTabName(mode: QueriesListMode): string {
     return TabNames[mode];
 }
 
-const TabContent: Record<QueriesListMode, React.ReactNode> = {
-    [QueriesListMode.History]: (
+function QueriesHistoryTab() {
+    const useNewQueriesView = useSelector(selectSettingsQueryTrackerNewQueriesView);
+
+    return useNewQueriesView ? (
+        <QueriesHistory />
+    ) : (
         <>
             <QueriesHistoryListFilter className={b('filter')} />
             <QueriesHistoryList />
         </>
-    ),
+    );
+}
+
+const TabContent: Record<QueriesListMode, React.ReactNode> = {
+    [QueriesListMode.History]: <QueriesHistoryTab />,
     [QueriesListMode.Tutorials]: (
         <>
             <QueriesHistoryListFilter className={b('filter')} />
