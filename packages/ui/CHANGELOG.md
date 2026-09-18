@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.27.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.26.0...ui-v3.27.0) (2026-09-18)
+
+
+### Features
+
+* **Flow:** fall back to leader_controller_address attribute [[#1814](https://github.com/ytsaurus/ytsaurus-ui/issues/1814)] ([5466699](https://github.com/ytsaurus/ytsaurus-ui/commit/54666992d54dae475726c726381ed741faa86b0a))
+* **Flow:** read leader controller address from flow_control [[#1814](https://github.com/ytsaurus/ytsaurus-ui/issues/1814)] ([d84dfa0](https://github.com/ytsaurus/ytsaurus-ui/commit/d84dfa07ab3c8d0f264c5e8f4e7647f8416a2b0c))
+* **Queries:** add waitingRemoteId support [YTFRONT-5955] ([6bbcbd6](https://github.com/ytsaurus/ytsaurus-ui/commit/6bbcbd6e536bc52377489f185beef125fd1936d8))
+
+
+### Bug Fixes
+
+* **Flow:** align leader address fallback with RPC proxy [[#1814](https://github.com/ytsaurus/ytsaurus-ui/issues/1814)] ([612707a](https://github.com/ytsaurus/ytsaurus-ui/commit/612707a78b9412fddb273a54a414fe7579cffeb5))
+
 ## [3.26.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.25.0...ui-v3.26.0) (2026-09-16)
 
 
