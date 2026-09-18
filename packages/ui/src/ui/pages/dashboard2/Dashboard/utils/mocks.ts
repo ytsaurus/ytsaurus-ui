@@ -18,5 +18,5 @@ export const baseWidgetProps: PluginWidgetProps = {
     id: 'some_id',
     editMode: false,
     defaults: undefined,
-    gridLayout: undefined,
+    gridLayout: {},
 };
