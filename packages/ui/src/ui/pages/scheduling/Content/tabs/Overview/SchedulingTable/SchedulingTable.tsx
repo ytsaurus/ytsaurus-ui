@@ -731,20 +731,18 @@ function useSchedulingTableColumns() {
 
     const {columnVisibility, columnOrder} = React.useMemo(() => {
         const visible = new Set(visibleColumns);
-        const columnVisibility = columns.reduce(
+        const visibility = columns.reduce(
             (acc, {id}) => {
                 acc[id] = id === 'name' || id === 'actions' || visible.has(id);
                 return acc;
             },
             {} as Record<SchedulingColumn, boolean>,
         );
-        const columnOrder = [
-            ...visibleColumns.filter((col) => columnVisibility[col]),
-            ...Object.keys(columnVisibility).filter(
-                (col) => !columnVisibility[col as SchedulingColumn],
-            ),
+        const order = [
+            ...visibleColumns.filter((col) => visibility[col]),
+            ...Object.keys(visibility).filter((col) => !visibility[col as SchedulingColumn]),
         ];
-        return {columnVisibility, columnOrder};
+        return {columnVisibility: visibility, columnOrder: order};
     }, [visibleColumns, columns]);
 
     return {columns, columnVisibility, columnOrder};
@@ -974,7 +972,7 @@ function SchedulingColumnHeader(props: ColumnHeaderProps<SchedulingColumn>) {
 
     const [sortState] = useSelector(selectSchedulingSortState);
 
-    const order = props.column === sortState?.column ? sortState.order : undefined;
+    const sortOrder = props.column === sortState?.column ? sortState.order : undefined;
 
     const lastColumnRef = React.useRef(props.column);
 
@@ -1001,25 +999,25 @@ function SchedulingColumnHeader(props: ColumnHeaderProps<SchedulingColumn>) {
             {...props}
             title={effectiveTitle ?? effectiveShortTitle ?? format.ReadableField(column)}
             shortTitle={effectiveShortTitle}
-            order={order}
+            order={sortOrder}
             {...byOptions}
-            onSort={(column, order, {currentOrder}) => {
+            onSort={(columnName, order, {currentOrder}) => {
                 dispatch(
                     schedulingSetSortState(
-                        column && order
+                        columnName && order
                             ? [
                                   {
                                       column: currentOrder
-                                          ? column
-                                          : (lastColumnRef.current ?? column),
+                                          ? columnName
+                                          : (lastColumnRef.current ?? columnName),
                                       order,
                                   },
                               ]
                             : [],
                     ),
                 );
-                if (column) {
-                    lastColumnRef.current = column;
+                if (columnName) {
+                    lastColumnRef.current = columnName;
                 }
             }}
             sortIconSize={14}

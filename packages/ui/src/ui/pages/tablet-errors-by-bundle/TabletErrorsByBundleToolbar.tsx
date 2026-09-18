@@ -48,7 +48,7 @@ export function TabletErrorsByBundleToolbar({
     const tablePathFilter = useSelector(selectTabletErrorsByBundleTablePathFilter);
     const pageCount = useSelector(selectTabletErrorsByBundlePageCount);
 
-    const {from, to} = useTabletErrorsLoad(bundle, {
+    const {from: rangeFrom, to: rangeTo} = useTabletErrorsLoad(bundle, {
         methodsFilter,
         timeRangeFilter,
         pageFilter,
@@ -58,8 +58,8 @@ export function TabletErrorsByBundleToolbar({
     return (
         <div className={block(null, className)}>
             <YTTimeline
-                from={from}
-                to={to}
+                from={rangeFrom}
+                to={rangeTo}
                 shortcut={timeRangeFilter.shortcutValue}
                 onUpdate={({from, to, shortcutValue}) => {
                     dispatch(

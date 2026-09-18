@@ -176,7 +176,7 @@ function ChaosBundleResourceEditor({
 }: ChaosBundleResourceEditorProps) {
     const {bundleName = '', data} = bundleEditorData;
 
-    const limit = ypath.getValue(data, `/@resource_limits/${resourceType}`);
+    const resourceLimit = ypath.getValue(data, `/@resource_limits/${resourceType}`);
     const value = ypath.getValue(data, `/@resource_usage/${resourceType}`);
 
     const dispatch = useDispatch();
@@ -191,10 +191,10 @@ function ChaosBundleResourceEditor({
     return (
         <QuotaEditorWithHide
             format={FORMATS[resourceType]}
-            limit={limit}
+            limit={resourceLimit}
             onHide={toggleVisibility}
             onSave={onSave}
-            getInfoByName={() => ({limit, total: value})}
+            getInfoByName={() => ({limit: resourceLimit, total: value})}
             currentAccount={bundleName}
             parentOfCurrentAccount={''}
             max={Infinity}
@@ -241,7 +241,7 @@ function ChaosBundleAbcServiceEditor({
     setBunndleAttributes,
 }: ChaosBundleAbcServiceEditorProps) {
     const {bundleName, data} = bundleEditorData;
-    const slug = ypath.getValue(data, '/@abc/slug');
+    const abcSlug = ypath.getValue(data, '/@abc/slug');
     const allowEdit = useSelector(selectIsAdmin);
 
     const dispatch = useDispatch();
@@ -259,7 +259,7 @@ function ChaosBundleAbcServiceEditor({
     }, []);
 
     const control = UIFactory.renderControlAbcService({
-        value: {slug},
+        value: {slug: abcSlug},
         onChange: onAbcChange,
         placeholder: 'Select ABC service...',
         disabled: !allowEdit,

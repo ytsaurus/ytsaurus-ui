@@ -1,5 +1,4 @@
 import React from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
 import block from 'bem-cn-lite';
 import {Link} from 'react-router-dom';
 
@@ -12,28 +11,30 @@ import {Lock} from '@gravity-ui/icons';
 // @ts-ignore
 import format from '@ytsaurus/interface-helpers/lib/hammer/format';
 
-import {CLUSTER_GROUPS, CLUSTER_GROUPS_ORDER, DEFAULT_GROUP} from '../../constants/cluster-menu';
-import {utils} from '../../common/hammer/utils';
-import ElementsTable from '../../components/ElementsTable/ElementsTable';
-import {
-    fetchClusterAuthStatus,
-    fetchClusterAvailability,
-    fetchClusterVersions,
-} from '../../store/actions/clusters-menu';
-import {CLUSTER_MENU_TABLE_ID} from '../../constants/tables';
-import {getClusterAppearance} from '../../appearance';
-import {YT} from '../../config/yt-config';
-import './ClusterMenuBody.scss';
-import {type RootState} from '../../store/reducers';
-import {type ClusterConfigWithStatus} from '../../store/reducers/clusters-menu/clusters-menu';
-import {getAppBrowserHistory} from '../../store/window-store';
-import i18n from './i18n';
+import {CLUSTER_GROUPS, CLUSTER_GROUPS_ORDER, DEFAULT_GROUP} from '../../../constants/cluster-menu';
+import {utils} from '../../../common/hammer/utils';
+import ElementsTable from '../../../components/ElementsTable/ElementsTable';
+import {CLUSTER_MENU_TABLE_ID} from '../../../constants/tables';
+import {getClusterAppearance} from '../../../appearance';
+import {YT} from '../../../config/yt-config';
+import {type ClusterConfigWithStatus} from '../../../store/reducers/clusters-menu/clusters-menu';
+import {type OldSortState} from '../../../types';
+import {getAppBrowserHistory} from '../../../store/window-store';
+import i18n from '../i18n';
 
 const b = block('cluster-menu');
 
-type Props = ConnectedProps<typeof connector>;
+type Props = {
+    viewMode: 'dashboard' | 'table';
+    clusterFilter: string;
+    clusters: Record<string, ClusterConfigWithStatus>;
+    sortState: OldSortState<string>;
+    fetchClusterVersions: () => void;
+    fetchClusterAuthStatus: () => void;
+    fetchClusterAvailability: () => void;
+};
 
-class ClustersMenuBody extends React.Component<Props> {
+export class ClustersMenuBodyBase extends React.Component<Props> {
     override componentDidMount() {
         const {fetchClusterVersions, fetchClusterAvailability, fetchClusterAuthStatus} = this.props;
 
@@ -60,8 +61,8 @@ class ClustersMenuBody extends React.Component<Props> {
             {} as Record<string, Array<ClusterConfigWithStatus>>,
         );
 
-        forEach_(groups, (clusters) => {
-            clusters.sort(sortByClusterName);
+        forEach_(groups, (groupClusters) => {
+            groupClusters.sort(sortByClusterName);
         });
 
         return groups;
@@ -147,12 +148,12 @@ class ClustersMenuBody extends React.Component<Props> {
         return (
             <main key="body" className={b(null, 'elements-page__content')}>
                 {map_(CLUSTER_GROUPS_ORDER.concat(unknown), (groupName) => {
-                    const clusters = clusterGroups[groupName];
+                    const groupClusters = clusterGroups[groupName];
                     const {caption, size} = CLUSTER_GROUPS[groupName] ?? {caption: groupName};
 
                     return (
-                        clusters &&
-                        clusters.length && (
+                        groupClusters &&
+                        groupClusters.length && (
                             <div key={groupName} className={b('group')}>
                                 <div
                                     className={b(
@@ -164,7 +165,9 @@ class ClustersMenuBody extends React.Component<Props> {
                                     {caption}
                                 </div>
                                 <div className={b('list')}>
-                                    {map_(clusters, (cluster) => this.renderCluster(cluster, size))}
+                                    {map_(groupClusters, (cluster) =>
+                                        this.renderCluster(cluster, size),
+                                    )}
                                 </div>
                             </div>
                         )
@@ -294,23 +297,3 @@ class ClustersMenuBody extends React.Component<Props> {
         return null;
     }
 }
-
-function mapStateToProps(state: RootState) {
-    const {viewMode, clusterFilter, clusters} = state.clustersMenu;
-    return {
-        viewMode,
-        clusterFilter,
-        clusters,
-        sortState: state.tables[CLUSTER_MENU_TABLE_ID],
-    };
-}
-
-const mapDispatchToProps = {
-    fetchClusterVersions,
-    fetchClusterAuthStatus,
-    fetchClusterAvailability,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(ClustersMenuBody);

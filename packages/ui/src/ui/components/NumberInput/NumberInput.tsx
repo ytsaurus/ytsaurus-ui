@@ -149,12 +149,12 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
                 return i18n('error_wrong-format');
             }
 
-            const error = validator(value);
-            if (error) {
-                return error;
+            const validationError = validator(value);
+            if (validationError) {
+                return validationError;
             }
-        } catch (error) {
-            return String(error);
+        } catch (cause) {
+            return String(cause);
         }
 
         if (integerOnly && value % 1 !== 0) {

@@ -13,17 +13,17 @@ export function getGroupedClusters(clusters = YT.clusters) {
 
     const groups = reduce_(
         clusters,
-        (groups, cluster) => {
+        (acc, cluster) => {
             const currentGroup = cluster.group || DEFAULT_GROUP;
-            groups[currentGroup] = groups[currentGroup] || [];
-            groups[currentGroup].push(cluster);
-            return groups;
+            acc[currentGroup] = acc[currentGroup] || [];
+            acc[currentGroup].push(cluster);
+            return acc;
         },
         {} as Record<string, Array<ClusterConfig>>,
     );
 
-    forEach_(groups, (clusters) => {
-        clusters.sort(sortByClusterName);
+    forEach_(groups, (groupClusters) => {
+        groupClusters.sort(sortByClusterName);
     });
 
     return groups;

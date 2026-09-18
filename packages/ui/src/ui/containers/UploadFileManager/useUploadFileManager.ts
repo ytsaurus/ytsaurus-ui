@@ -53,8 +53,8 @@ export const useUploadFileManager = (opts: UseUploadFileManagerProps) => {
                 cluster,
                 filePath,
                 cancelHelper,
-                handleUploadProgress: (progressEvent: AxiosProgressEvent) =>
-                    setProgressEvent(progressEvent),
+                handleUploadProgress: (nextProgressEvent: AxiosProgressEvent) =>
+                    setProgressEvent(nextProgressEvent),
             })
                 .finally(() => setProgress(false))
                 .then(() => {

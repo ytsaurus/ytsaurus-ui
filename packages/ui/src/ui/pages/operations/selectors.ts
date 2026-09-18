@@ -368,9 +368,12 @@ export function getCounters(name: string, states: FIX_MY_TYPE, rawCounters: FIX_
     return hammer.filter.countCategoriesNG({
         items: map_(counters, (count, value) => ({count, value})),
         categories: hammer.filter.flattenCategoriesNG(states, 'name'),
-        custom: (item: {value: string; count: number}, counters: Record<string, number>) => {
-            counters[item.value] += item.count;
-            counters['all'] += item.count;
+        custom: (
+            item: {value: string; count: number},
+            categoryCounters: Record<string, number>,
+        ) => {
+            categoryCounters[item.value] += item.count;
+            categoryCounters['all'] += item.count;
         },
     });
 }

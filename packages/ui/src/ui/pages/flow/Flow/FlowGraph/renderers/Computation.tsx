@@ -112,16 +112,16 @@ const STATE_TO_THEME: Record<FlowComputationPartitionStates, ProgressTheme> = {
 function ComputaionProgress({stats, computationId}: ComputationProgressProps) {
     const {count = NaN, count_by_state} = stats ?? {};
     const {stack, history} = React.useMemo(() => {
-        const history: ComputationProgressHistoryProps['data'] = [];
-        const stack = Object.keys(count_by_state ?? {}).map((k) => {
+        const historyItems: ComputationProgressHistoryProps['data'] = [];
+        const stackItems = Object.keys(count_by_state ?? {}).map((k) => {
             const key = k as keyof Exclude<typeof count_by_state, undefined>;
             const v = count_by_state?.[key] ?? NaN;
             const theme = STATE_TO_THEME[key] ?? 'default';
-            history.push({value: v, type: key});
+            historyItems.push({value: v, type: key});
 
             return {value: (v / count) * 100, theme};
         });
-        return {stack: addProgressStackSpacers(stack), history};
+        return {stack: addProgressStackSpacers(stackItems), history: historyItems};
     }, [stats, count]);
 
     return (
