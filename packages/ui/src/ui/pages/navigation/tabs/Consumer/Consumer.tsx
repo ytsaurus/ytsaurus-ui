@@ -1,3 +1,4 @@
+import {Flex} from '@gravity-ui/uikit';
 import React, {type ComponentType, useEffect} from 'react';
 import {type ConnectedProps, connect} from 'react-redux';
 
@@ -17,6 +18,7 @@ import {
     selectStatusError,
 } from '../../../../store/selectors/navigation/tabs/consumer';
 
+import {RealPathNotice} from '../../components/RealPathNotice';
 import {QueueError} from '../Queue/QueueError';
 
 import TargetQueue from './TargetQueue/TargetQueue';
@@ -54,29 +56,42 @@ const Consumer: React.VFC<PropsFromRedux> = ({
     const {ExtraControls, View} = VIEWS[consumerMode] ?? emptyView;
 
     if (statusError) {
-        return <QueueError error={statusError} topMargin="none" />;
+        return (
+            <Flex direction="column" gap={4}>
+                <RealPathNotice />
+                <QueueError error={statusError} topMargin="none" />
+            </Flex>
+        );
     }
 
     return (
         <ErrorBoundary>
-            <TargetQueue />
-            <Meta
-                owner={owner}
-                partitionCount={partitionCount}
-                queueAgentHost={queueAgentHost}
-                readDataWeightRate={readDataWeightRate}
-                readRowCountRate={readRowCountRate}
-            />
-            <WithStickyToolbar
-                toolbar={
-                    <Toolbar
-                        itemsToWrap={[
-                            {node: <ConsumerToolbar extras={ExtraControls} />, growable: true},
-                        ]}
+            <Flex direction="column" gap={4}>
+                <RealPathNotice />
+                <TargetQueue />
+                <Flex direction="column">
+                    <Meta
+                        owner={owner}
+                        partitionCount={partitionCount}
+                        queueAgentHost={queueAgentHost}
+                        readDataWeightRate={readDataWeightRate}
+                        readRowCountRate={readRowCountRate}
                     />
-                }
-                content={<View />}
-            />
+                    <WithStickyToolbar
+                        toolbar={
+                            <Toolbar
+                                itemsToWrap={[
+                                    {
+                                        node: <ConsumerToolbar extras={ExtraControls} />,
+                                        growable: true,
+                                    },
+                                ]}
+                            />
+                        }
+                        content={<View />}
+                    />
+                </Flex>
+            </Flex>
             <RegisterConsumerDialog />
         </ErrorBoundary>
     );

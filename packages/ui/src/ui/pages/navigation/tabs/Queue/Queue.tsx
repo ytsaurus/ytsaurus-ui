@@ -1,3 +1,4 @@
+import {Flex} from '@gravity-ui/uikit';
 import React, {type ComponentType, useEffect} from 'react';
 import {type ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../../store/redux-hooks';
@@ -19,6 +20,7 @@ import {
     selectWriteDataWeightRate,
     selectWriteRowCountRate,
 } from '../../../../store/selectors/navigation/tabs/queue';
+import {RealPathNotice} from '../../components/RealPathNotice';
 
 import Meta from './Meta/Meta';
 import QueueToolbar from './Toolbar/Toolbar';
@@ -60,29 +62,39 @@ const Queue: React.VFC<PropsFromRedux> = ({
     const items = useSelector(selectQueueStatusDataAlerts);
 
     if (statusError) {
-        return <QueueError error={statusError} topMargin="none" />;
+        return (
+            <Flex direction="column" gap={4}>
+                <RealPathNotice />
+                <QueueError error={statusError} topMargin="none" />
+            </Flex>
+        );
     }
 
     return (
         <ErrorBoundary>
-            <Alerts items={items} />
-            <Meta
-                family={family}
-                partitionCount={partitionCount}
-                queueAgentHost={queueAgentHost}
-                writeDataWeightRate={writeDataWeightRate}
-                writeRowCountRate={writeRowCountRate}
-            />
-            <WithStickyToolbar
-                toolbar={
-                    <Toolbar
-                        itemsToWrap={[
-                            {node: <QueueToolbar extras={ExtraControls} />, growable: true},
-                        ]}
+            <Flex direction="column" gap={4}>
+                <RealPathNotice />
+                <Alerts items={items} marginDirection="none" />
+                <Flex direction="column">
+                    <Meta
+                        family={family}
+                        partitionCount={partitionCount}
+                        queueAgentHost={queueAgentHost}
+                        writeDataWeightRate={writeDataWeightRate}
+                        writeRowCountRate={writeRowCountRate}
                     />
-                }
-                content={<View />}
-            />
+                    <WithStickyToolbar
+                        toolbar={
+                            <Toolbar
+                                itemsToWrap={[
+                                    {node: <QueueToolbar extras={ExtraControls} />, growable: true},
+                                ]}
+                            />
+                        }
+                        content={<View />}
+                    />
+                </Flex>
+            </Flex>
         </ErrorBoundary>
     );
 };
