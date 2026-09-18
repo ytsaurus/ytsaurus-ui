@@ -24,6 +24,7 @@ function storageState() {
 export default defineConfig({
     timeout: 10000,
     testDir: E2E_TEST_DIR,
+    snapshotDir: process.env.E2E_SNAPSHOT_DIR,
     testMatch,
     /* Run tests in files in parallel */
     fullyParallel: headless,
