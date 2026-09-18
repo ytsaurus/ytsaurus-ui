@@ -134,7 +134,7 @@ export function query(state = initState, action: Actions): QueryState {
             };
         }
         case SET_QUERY_PATCH: {
-            const hasQuery = Boolean(action?.data?.query);
+            const hasQuery = Object.prototype.hasOwnProperty.call(action.data, 'query');
 
             return {
                 ...state,
@@ -142,7 +142,7 @@ export function query(state = initState, action: Actions): QueryState {
                     ...state.draft,
                     ...action.data,
                 },
-                dirtySinceLastSubmit: hasQuery,
+                dirtySinceLastSubmit: state.dirtySinceLastSubmit || hasQuery,
             };
         }
         case SET_QUERY_PARAMS: {

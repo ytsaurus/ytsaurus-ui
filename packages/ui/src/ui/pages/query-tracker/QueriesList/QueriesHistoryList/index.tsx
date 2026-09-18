@@ -4,7 +4,7 @@ import {useUpdater} from '../../../../hooks/use-updater';
 import block from 'bem-cn-lite';
 
 import './QueriesHistoryList.scss';
-import {requestQueriesList} from '../../../../store/actions/query-tracker/queriesList';
+import {refreshQueriesList} from '../../../../store/actions/query-tracker/queriesList';
 import {QUERY_POLLING_INTERVAL} from '../../../../constants/queries';
 import {HistoryList} from './HistoryList';
 import {selectIsFullTextSearchMode} from '../../../../store/selectors/query-tracker/queriesList';
@@ -16,7 +16,7 @@ function QueriesHistoryListUpdater() {
     const dispatch = useDispatch();
 
     const updateFn = React.useCallback(() => {
-        dispatch(requestQueriesList(true));
+        dispatch(refreshQueriesList());
     }, [dispatch]);
 
     useUpdater(updateFn, {timeout: QUERY_POLLING_INTERVAL});
