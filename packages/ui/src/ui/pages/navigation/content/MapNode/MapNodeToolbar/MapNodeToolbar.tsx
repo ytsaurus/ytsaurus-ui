@@ -47,6 +47,7 @@ import {UploadManagerCreate} from '../../Table/UploadManager/UploadManagerCreate
 import NodesTypes from '../NodesTypes/NodesTypes';
 
 import {ContentMode} from '../../../../../constants/navigation';
+import {MediumType} from '../../../../../constants';
 import {showLinkToModal} from '../../../../../store/actions/navigation/modals/link-to-modal';
 import {openCreateACOModal} from '../../../../../store/actions/navigation/modals/create-aco';
 import NavigationExtraActions from '../../../../../containers/NavigationExtraActions/NavigationExtraActions';
@@ -244,7 +245,10 @@ class MapNodeToolbarImpl extends React.PureComponent<MapNodeToolbarProps, State>
                                 value={mediumType}
                                 items={map_(mediumList, (type) => ({
                                     value: type,
-                                    text: hammer.format['ReadableField'](type),
+                                    text:
+                                        type === MediumType.ALL
+                                            ? i18n('value_all')
+                                            : hammer.format['ReadableField'](type),
                                 }))}
                                 onChange={setMediumType}
                                 width="max"

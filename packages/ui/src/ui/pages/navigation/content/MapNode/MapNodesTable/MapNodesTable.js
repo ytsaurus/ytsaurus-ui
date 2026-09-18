@@ -22,7 +22,7 @@ import WarningIcon from '../../../../../components/WarningIcon/WarningIcon';
 import {LOADING_STATUS, Page} from '../../../../../constants/index';
 import {NAVIGATION_MAP_NODE_TABLE_ID} from '../../../../../constants/navigation';
 import {ROOT_POOL_NAME, SchedulingTab} from '../../../../../constants/scheduling';
-import {itemNavigationAllowed} from '../../../../../pages/navigation/Navigation/ContentViewer/helpers';
+import {itemNavigationAllowed} from '../../../../../pages/navigation/Navigation/ContentViewer/helpers/itemNavigationAllowed';
 import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
 import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
 import {
@@ -54,6 +54,8 @@ import {isTrashNode} from '../../../../../utils/navigation/isTrashNode';
 import {isFinalLoadingStatus, showErrorPopup} from '../../../../../utils/utils';
 import AccountLink from '../../../../accounts/AccountLink';
 import PathActions from '../Actions/PathActions/PathActions';
+import MultipleActions from '../Actions/MultipleActions/MultipleActions';
+import Chooser from '../Chooser';
 import './MapNodesTable.scss';
 import i18n from './i18n';
 
@@ -373,7 +375,17 @@ class MapNodesTable extends Component {
             items: nodes,
             columns: {
                 ...this.tableProps.columns,
-                items: columns,
+                items: columns && {
+                    ...columns,
+                    chooser: {
+                        ...columns.chooser,
+                        renderHeader: () => <Chooser />,
+                    },
+                    multipleActions: {
+                        ...columns.multipleActions,
+                        renderHeader: () => <MultipleActions />,
+                    },
+                },
                 mode: contentMode,
             },
         };

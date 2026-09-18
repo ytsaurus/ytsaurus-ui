@@ -16,5 +16,11 @@
   "field_master-mem": "Master mem.",
   "context_master-memory": "Master memory",
   "field_tablet-count": "Tablet count",
-  "value_unknown": "Unknown"
+  "value_unknown": "Unknown",
+  "value_table": "Table",
+  "value_map-node": "Map node",
+  "value_link": "Link",
+  "value_file": "File",
+  "value_document": "Document",
+  "value_journal": "Journal"
 }
