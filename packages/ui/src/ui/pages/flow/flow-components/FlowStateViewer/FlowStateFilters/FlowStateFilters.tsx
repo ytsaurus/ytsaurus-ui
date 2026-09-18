@@ -1,0 +1,270 @@
+import React from 'react';
+import cn from 'bem-cn-lite';
+
+import {Button, Flex, Select, TextInput} from '@gravity-ui/uikit';
+
+import {SelectSingle} from '../../../../../components/Select/Select';
+import {useFlowExecuteQuery} from '../../../../../store/api/yt/flow';
+
+import {FlowStateKeyBuilder} from '../FlowStateKeyBuilder/FlowStateKeyBuilder';
+import {
+    getAvailableStateTargets,
+    getComputationStateNames,
+    getStateNameInputMode,
+    getStateNameSelectItems,
+    reconcileStateName,
+    reconcileStateTarget,
+    resolveKeySchema,
+} from '../state-filters';
+import i18n from './i18n';
+import i18nApiValues from '../i18n-api-values';
+import type {FlowStateFiltersValue} from '../types';
+import type {FlowStateTarget, FlowStaticSpec} from '../../../../../../shared/yt-types';
+
+import './FlowStateFilters.scss';
+
+const block = cn('yt-flow-state-filters');
+
+export type FlowStateFiltersProps = {
+    pipeline_path: string;
+    value: FlowStateFiltersValue;
+    onChange: (value: FlowStateFiltersValue) => void;
+    onReset: () => void;
+    fixedComputationId?: string;
+    staticSpec?: FlowStaticSpec;
+    rawKeyAvailable?: boolean;
+    actions?: React.ReactNode;
+};
+
+type FlowStateApiValueKey = Parameters<typeof i18nApiValues>[0];
+
+const TARGET_OPTIONS: Array<{value: FlowStateTarget; textKey: FlowStateApiValueKey}> = [
+    {value: 'all', textKey: 'value_kind-all'},
+    {value: 'key_state', textKey: 'value_kind-internal-key'},
+    {value: 'partition_state', textKey: 'value_kind-internal-partition'},
+    {value: 'external_key_state', textKey: 'value_kind-external'},
+];
+
+function toItems(values: Array<string>) {
+    return values.map((value) => ({value}));
+}
+
+function PartitionSelect({
+    pipeline_path,
+    computationId,
+    value,
+    onChange,
+}: {
+    pipeline_path: string;
+    computationId: string;
+    value?: string;
+    onChange: (partitionId?: string) => void;
+}) {
+    const {data} = useFlowExecuteQuery<'describe-computation'>({
+        parameters: {pipeline_path, flow_command: 'describe-computation'},
+        body: {computation_id: computationId},
+    });
+    const items = React.useMemo(
+        () =>
+            (data?.partitions ?? []).map(({partition_id}) => ({
+                value: partition_id,
+                text: partition_id,
+            })),
+        [data],
+    );
+    return (
+        <SelectSingle
+            className={block('control')}
+            width="max"
+            label={i18n('field_partition')}
+            placeholder={i18n('field_partition')}
+            value={value}
+            items={items}
+            hasClear
+            onChange={onChange}
+        />
+    );
+}
+
+export function FlowStateFilters({
+    pipeline_path,
+    value,
+    onChange,
+    onReset,
+    fixedComputationId,
+    staticSpec,
+    rawKeyAvailable = false,
+    actions,
+}: FlowStateFiltersProps) {
+    const {data: pipelineData} = useFlowExecuteQuery<'describe-pipeline'>({
+        parameters: {pipeline_path, flow_command: 'describe-pipeline'},
+        body: {},
+    });
+
+    const computationItems = React.useMemo(
+        () => toItems(Object.keys(pipelineData?.computations ?? {})),
+        [pipelineData],
+    );
+
+    const {keyColumns} = resolveKeySchema(
+        staticSpec,
+        value.computationId,
+        value.stateName,
+        value.target,
+    );
+    const stateNames = getComputationStateNames(staticSpec, value.computationId, value.target);
+    const availableTargets = getAvailableStateTargets(staticSpec, value.computationId);
+    const hasScope = Boolean(value.computationId || value.partitionId);
+    const stateNameInputMode = getStateNameInputMode(value.target);
+    const stateNameItems =
+        stateNameInputMode === 'suggested'
+            ? getStateNameSelectItems(stateNames, value.stateName)
+            : stateNames;
+    const stateNameDisabled =
+        !hasScope || (stateNameInputMode === 'declared-only' && !stateNameItems.length);
+
+    const handleComputation = (computationId?: string) => {
+        onChange({
+            ...value,
+            computationId,
+            partitionId: undefined,
+            keyValues: {},
+            rawKey: undefined,
+            stateName: undefined,
+            target: reconcileStateTarget(staticSpec, computationId, value.target),
+        });
+    };
+
+    return (
+        <Flex direction="column" gap={2}>
+            <Flex className={block('row', {primary: true})} gap={2} wrap alignItems="flex-end">
+                <SelectSingle
+                    className={block('control')}
+                    width="max"
+                    label={i18n('field_computation')}
+                    placeholder={i18n('field_computation')}
+                    value={value.computationId}
+                    items={computationItems}
+                    disabled={Boolean(fixedComputationId)}
+                    hasClear
+                    onChange={handleComputation}
+                />
+                <Select
+                    className={block('control')}
+                    width="max"
+                    label={i18n('field_state-kind')}
+                    aria-label={i18n('field_state-kind')}
+                    value={[value.target]}
+                    multiple={false}
+                    disabled={!hasScope}
+                    options={TARGET_OPTIONS.map(({value: target, textKey}) => ({
+                        value: target,
+                        content: i18nApiValues(textKey),
+                        disabled: !availableTargets[target],
+                        title: availableTargets[target]
+                            ? undefined
+                            : i18n('hint_target-unavailable'),
+                    }))}
+                    onUpdate={([next]) => {
+                        if (!hasScope) {
+                            return;
+                        }
+                        const target = next as FlowStateTarget;
+                        onChange({
+                            ...value,
+                            target,
+                            keyValues: target === 'partition_state' ? {} : value.keyValues,
+                            rawKey: target === 'partition_state' ? undefined : value.rawKey,
+                            stateName: reconcileStateName(
+                                value.stateName,
+                                target,
+                                getComputationStateNames(staticSpec, value.computationId, target),
+                            ),
+                        });
+                    }}
+                />
+                {stateNameInputMode === 'free-form' ? (
+                    <TextInput
+                        className={block('control')}
+                        label={i18n('field_state-name')}
+                        placeholder={i18n('field_state-name')}
+                        value={value.stateName ?? ''}
+                        disabled={stateNameDisabled}
+                        hasClear
+                        onUpdate={(stateName) => {
+                            if (!stateNameDisabled) {
+                                onChange({...value, stateName: stateName || undefined});
+                            }
+                        }}
+                    />
+                ) : (
+                    <SelectSingle
+                        className={block('control')}
+                        width="max"
+                        label={i18n('field_state-name')}
+                        placeholder={i18n('field_state-name')}
+                        value={value.stateName}
+                        items={toItems(stateNameItems)}
+                        disabled={stateNameDisabled}
+                        hasClear
+                        onChange={(stateName) => {
+                            if (!stateNameDisabled) {
+                                onChange({...value, stateName});
+                            }
+                        }}
+                    />
+                )}
+                {value.computationId ? (
+                    <PartitionSelect
+                        pipeline_path={pipeline_path}
+                        computationId={value.computationId}
+                        value={value.partitionId}
+                        onChange={(partitionId) => onChange({...value, partitionId})}
+                    />
+                ) : (
+                    <SelectSingle
+                        className={block('control')}
+                        width="max"
+                        label={i18n('field_partition')}
+                        placeholder={i18n('field_partition')}
+                        items={[]}
+                        disabled
+                    />
+                )}
+            </Flex>
+            <Flex className={block('row', {secondary: true})} gap={2} wrap alignItems="flex-end">
+                {value.computationId &&
+                    !value.partitionId &&
+                    (keyColumns.length > 0 || rawKeyAvailable || value.rawKey !== undefined) && (
+                        <FlowStateKeyBuilder
+                            columns={keyColumns}
+                            values={value.keyValues}
+                            rawKey={value.rawKey}
+                            onChange={(keyValues) =>
+                                onChange({
+                                    ...value,
+                                    keyValues,
+                                    rawKey: undefined,
+                                    target:
+                                        value.target === 'partition_state' ? 'all' : value.target,
+                                })
+                            }
+                            onRawKeyChange={(rawKey) =>
+                                onChange({
+                                    ...value,
+                                    keyValues: {},
+                                    rawKey,
+                                    target:
+                                        value.target === 'partition_state' ? 'all' : value.target,
+                                })
+                            }
+                        />
+                    )}
+                <Button view="outlined" onClick={onReset}>
+                    {i18n('action_reset-filters')}
+                </Button>
+                {actions}
+            </Flex>
+        </Flex>
+    );
+}
