@@ -70,7 +70,7 @@ function SourcePath({path}: {path: string}) {
                             key: 'source-path',
                             label: i18n('field_source-path'),
                             value: (
-                                <Flex alignItems="baseline" overflow="hidden">
+                                <Flex alignItems="baseline" overflow="hidden" gap={1}>
                                     <Text ellipsis>
                                         <RoutedLink view="secondary" href={url}>
                                             {path}
