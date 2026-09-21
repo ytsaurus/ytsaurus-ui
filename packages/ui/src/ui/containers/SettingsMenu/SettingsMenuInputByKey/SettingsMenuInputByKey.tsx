@@ -1,44 +1,46 @@
 import React, {useCallback, useState} from 'react';
 import cn from 'bem-cn-lite';
-import PropTypes from 'prop-types';
 
 import {TextInput} from '@gravity-ui/uikit';
 
+import {type KeysByType} from '../../../../@types/types';
+import {type DescribedSettings} from '../../../../shared/constants/settings-types';
+import {setSettingByKey} from '../../../store/actions/settings';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
+import {selectSettingsData} from '../../../store/selectors/settings/settings-base';
+
 const block = cn('elements-page');
 
-SettingsMenuInputBase.propTypes = {
-    // from connect
-    getSetting: PropTypes.func.isRequired,
-    setSetting: PropTypes.func.isRequired,
+type StringSettingKey = KeysByType<DescribedSettings, string> &
+    {
+        [K in keyof DescribedSettings]: string extends DescribedSettings[K] ? K : never;
+    }[keyof DescribedSettings];
 
-    // from parent
-    settingName: PropTypes.string.isRequired,
-    settingNS: PropTypes.object.isRequired,
-
-    heading: PropTypes.string,
-    description: PropTypes.string,
-    placeholder: PropTypes.string,
-    validator: PropTypes.func,
+export type SettingsMenuInputByKeyProps<T extends StringSettingKey> = {
+    settingKey: T;
+    heading?: string;
+    description?: React.ReactNode;
+    placeholder?: string;
+    validator?: (value: string) => string | null | undefined;
 };
 
-export function SettingsMenuInputBase({
-    getSetting,
-    setSetting,
-    settingName,
-    settingNS,
+export function SettingsMenuInputByKey<T extends StringSettingKey>({
+    settingKey,
     heading,
     description,
     placeholder,
     validator,
-}) {
-    const initialValue = getSetting(settingName, settingNS);
-    const [value, setValue] = useState(initialValue);
-    const error = validator?.(value);
+}: SettingsMenuInputByKeyProps<T>) {
+    const dispatch = useDispatch();
+    const settings = useSelector(selectSettingsData);
+    const [value, setValue] = useState<string>(settings[settingKey] ?? '');
+    const error = validator?.(value) || undefined;
+
     const handleBlur = useCallback(() => {
         if (!error) {
-            setSetting(settingName, settingNS, value);
+            dispatch(setSettingByKey(settingKey, value as DescribedSettings[T]));
         }
-    }, [setSetting, settingName, settingNS, value]);
+    }, [dispatch, error, settingKey, value]);
 
     return (
         <div className={block('settings-item')}>

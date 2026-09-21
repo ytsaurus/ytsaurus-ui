@@ -71,6 +71,7 @@ interface NavigationSettings {
     'global::navigation::enableTableSimilarity': boolean;
     'global::navigation::clusterPagePaneSizes': number | undefined;
     'global::navigation::defaultChytAlias': string;
+    'global::navigation::tableDisplayRawStrings': boolean;
     'global::navigation::sqlService': Array<'qtkit' | 'yqlkit'>;
     'global::navigation::annotationVisibility': 'partial' | 'visible';
 
@@ -148,6 +149,8 @@ interface AccountsSettings {
 export type Stage = string;
 
 interface QueryTrackerSettings {
+    'global::queryTracker::queryTrackerStage': string;
+    'global::queryTracker::yqlAgentStage': string;
     'global::queryTracker::queriesListSidebarVisibilityMode': boolean;
     'global::queryTracker::history::Columns': string[];
     'global::queryTracker::useNewGraphView': boolean;
@@ -171,6 +174,10 @@ interface ChytSettings {
 
 type DashboardSettings = {
     [key in `local::${Cluster}::dashboard::config`]: DashKitProps['config'];
+};
+
+type LocalNavigationSettings = {
+    [key in `local::${Cluster}::navigationDefaultPath`]: string;
 };
 
 type FavouritesSettings = {
@@ -240,6 +247,7 @@ export type DescribedSettings = GlobalSettings &
     ComponentsSettings &
     SchedulingSettings &
     DashboardSettings &
+    LocalNavigationSettings &
     FavouritesSettings;
 
 export type SettingKey = keyof DescribedSettings;

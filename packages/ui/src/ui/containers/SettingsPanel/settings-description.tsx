@@ -35,7 +35,7 @@ import {selectRecentPagesInfo} from '../../store/selectors/slideoutMenu';
 import {selectCurrentClusterNS} from '../../store/selectors/settings/settings-ts';
 import SettingsMenuItem from '../../containers/SettingsMenu/SettingsMenuItem';
 import SettingsMenuRadio from '../../containers/SettingsMenu/SettingsMenuRadio';
-import SettingsMenuInput from '../SettingsMenu/SettingsMenuInputByKey/SettingsMenuInputByKey';
+import {SettingsMenuInputByKey} from '../SettingsMenu/SettingsMenuInputByKey/SettingsMenuInputByKey';
 import {
     selectCurrentUserName,
     selectGlobalMasterVersion,
@@ -322,24 +322,22 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         SettingName.LOCAL.NAVIGATION_DEFAULT_PATH,
                         i18n('field_default-path'),
                         'top',
-                        <SettingsMenuInput
+                        <SettingsMenuInputByKey
                             placeholder={i18n('context_default-path-placeholder')}
                             description={i18n('context_default-path-description')}
                             validator={navigationPathValidator}
-                            settingName={SettingName.LOCAL.NAVIGATION_DEFAULT_PATH}
-                            settingNS={clusterNS}
+                            settingKey={`local::${cluster}::navigationDefaultPath`}
                         />,
                     ),
                 makeItem(
                     SettingName.NAVIGATION.DEFAULT_CHYT_ALIAS,
                     i18n('field_default-chyt-alias'),
                     'top',
-                    <SettingsMenuInput
+                    <SettingsMenuInputByKey
                         placeholder={i18n('context_default-chyt-alias-placeholder')}
                         description={i18n('context_default-chyt-alias-description')}
                         validator={chytAliasValidator}
-                        settingName={SettingName.NAVIGATION.DEFAULT_CHYT_ALIAS}
-                        settingNS={NAMESPACES.NAVIGATION}
+                        settingKey="global::navigation::defaultChytAlias"
                     />,
                 ),
                 makeItem(
