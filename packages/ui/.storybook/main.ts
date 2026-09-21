@@ -13,11 +13,7 @@ const config: StorybookConfig = {
                 rules: [
                     {
                         test: /\.(css|scss)$/i,
-                        use: [
-                            'style-loader',
-                            'css-loader',
-                            'sass-loader',
-                        ],
+                        use: ['style-loader', 'css-loader', 'sass-loader'],
                     },
                 ],
             },
@@ -31,13 +27,27 @@ const config: StorybookConfig = {
         reactDocgen: 'react-docgen-typescript',
     },
     webpackFinal: async (config) => {
-        const uiCoreConfig = await configureWebpackConfigForStorybook('production', {
-            includes: [path.resolve(__dirname, '../src')],
-            fallback: {
-                path: require.resolve('path-browserify'),
-                fs: false,
+        const uiCoreConfig = await configureWebpackConfigForStorybook(
+            'production',
+            {
+                includes: [path.resolve(__dirname, '../src')],
+                fallback: {
+                    path: require.resolve('path-browserify'),
+                    fs: false,
+                },
             },
-        });
+            [
+                {
+                    test: /\.otf$/,
+                    issuer: /\.s?css$/,
+                    type: 'asset/resource',
+                    generator: {
+                        filename: 'assets/fonts/[name].[contenthash:8][ext]',
+                        publicPath: '../',
+                    },
+                },
+            ],
+        );
 
         config.plugins!.unshift(...uiCoreConfig.plugins);
         config.resolve = {

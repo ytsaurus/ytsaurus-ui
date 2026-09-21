@@ -1,4 +1,8 @@
-import {ErrorMessage, NetworkCode} from '../../constants/navigation/modals/path-editing-popup';
+import {
+    NetworkCode,
+    getErrorMessage,
+    getUnknownErrorMessage,
+} from '../../constants/navigation/modals/path-editing-popup';
 
 import filter_ from 'lodash/filter';
 import find_ from 'lodash/find';
@@ -19,8 +23,8 @@ function getCorrectInnerError(innerErrors = []) {
 
 export function prepareErrorMessage(error) {
     return (
-        ErrorMessage[error.code] ||
-        ErrorMessage[getCorrectInnerError(error.inner_errors)?.code] ||
-        ErrorMessage['DEFAULT']
+        getErrorMessage(error.code) ||
+        getErrorMessage(getCorrectInnerError(error.inner_errors)?.code) ||
+        getUnknownErrorMessage()
     );
 }

@@ -21,7 +21,11 @@ import '../src/ui/containers/App/App.scss';
 
 configure({lang: 'en'});
 
-initialize();
+initialize({
+    serviceWorker: {
+        url: './mockServiceWorker.js',
+    },
+});
 
 const preview: Preview = {
     loaders: [mswLoader],

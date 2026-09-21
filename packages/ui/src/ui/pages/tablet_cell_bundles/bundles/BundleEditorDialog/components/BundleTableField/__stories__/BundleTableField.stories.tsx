@@ -15,7 +15,7 @@ const longDeprecated = makeRow(
 const meta: Meta<typeof BundleTableField> = {
     title: 'Pages/Tablet cell bundles/BundleTableField',
     component: BundleTableField,
-    parameters: {layout: 'centered'},
+    parameters: {layout: 'fullscreen'},
 };
 
 export default meta;
