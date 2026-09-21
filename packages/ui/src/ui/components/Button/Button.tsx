@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
@@ -19,61 +19,42 @@ export type ButtonProps<T extends ButtonCustomElementType = undefined> = {
     inlineMargins?: boolean;
 } & ButtonImplProps<T>;
 
-export default class Button extends Component<ButtonProps> {
-    static propTypes = {
-        hotkey: PropTypes.arrayOf(
-            PropTypes.shape({
-                keys: PropTypes.string.isRequired,
-                scope: PropTypes.string.isRequired,
-                handler: PropTypes.func.isRequired,
-            }),
-        ),
-        withTooltip: PropTypes.bool,
-        tooltipProps: PropTypes.object,
-        children: PropTypes.any,
-    };
+export function Button(props: ButtonProps) {
+    const {children, hotkey, tooltipProps, className, inlineMargins, withTooltip, ...buttonProps} =
+        props;
+    const buttonClassName = block({inline: inlineMargins}, className);
+    const button = (
+        <>
+            <ButtonImpl className={buttonClassName} {...buttonProps}>
+                {children}
+            </ButtonImpl>
+            {hotkey && <Hotkey settings={hotkey} />}
+        </>
+    );
 
-    static defaultProps = {
-        withTooltip: false,
-        size: 'm',
-        view: 'outlined',
-    };
-
-    renderSimpleButton() {
-        const {
-            children,
-            hotkey,
-            // Do not pass tooltipProps with buttonProps into IslandsButton
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            tooltipProps,
-            className,
-            inlineMargins,
-            withTooltip: _withTooltip,
-            ...buttonProps
-        } = this.props;
-
-        return (
-            <Fragment>
-                <ButtonImpl className={block({inline: inlineMargins}, className)} {...buttonProps}>
-                    {children}
-                </ButtonImpl>
-                {hotkey && <Hotkey settings={hotkey} />}
-            </Fragment>
-        );
-    }
-
-    renderButtonWithTooltip() {
-        const {tooltipProps} = this.props;
-
-        return <Tooltip {...tooltipProps}>{this.renderSimpleButton()}</Tooltip>;
-    }
-
-    override render() {
-        const {withTooltip} = this.props;
-
-        return withTooltip ? this.renderButtonWithTooltip() : this.renderSimpleButton();
-    }
+    return withTooltip ? <Tooltip {...tooltipProps}>{button}</Tooltip> : button;
 }
+
+Button.propTypes = {
+    hotkey: PropTypes.arrayOf(
+        PropTypes.shape({
+            keys: PropTypes.string.isRequired,
+            scope: PropTypes.string.isRequired,
+            handler: PropTypes.func.isRequired,
+        }),
+    ),
+    withTooltip: PropTypes.bool,
+    tooltipProps: PropTypes.object,
+    children: PropTypes.any,
+};
+
+Button.defaultProps = {
+    withTooltip: false,
+    size: 'm',
+    view: 'outlined',
+};
+
+export default Button;
 
 export function SelectButton(props: ButtonProps & Pick<ButtonImplProps, 'selected'>) {
     const {selected, view} = props;
