@@ -15,6 +15,7 @@ test('Job - Details', async ({page}) => {
 
     await test.step('Details', async () => {
         await page.click('.operation-detail-jobs__id-job-link');
+        await page.mouse.move(0, 0);
 
         replaceInnerHtml(page, {
             '.operation-detail__events-progress-percentage': 'X.X1X%',
