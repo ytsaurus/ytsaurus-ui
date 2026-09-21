@@ -11,6 +11,7 @@ import ElementsTableBase from '../../../../../../components/ElementsTable/Elemen
 import withStickyFooter from '../../../../../../components/ElementsTable/hocs/withStickyFooter';
 import withStickyHead from '../../../../../../components/ElementsTable/hocs/withStickyHead';
 import {Progress} from '@gravity-ui/uikit';
+import {Tooltip} from '@ytsaurus/components';
 import {
     TemplateReadable,
     TemplateTime,
@@ -109,7 +110,11 @@ export default class Events extends React.Component {
             },
             phase(event, columnName) {
                 const value = getValue(event, columnName);
-                return <TemplateReadable value={value} />;
+                return (
+                    <Tooltip content={value} ellipsis useFlex>
+                        <TemplateReadable value={value} />
+                    </Tooltip>
+                );
             },
             actions: (event) => {
                 const {attributes} = event || {};
