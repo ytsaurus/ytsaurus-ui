@@ -1,6 +1,5 @@
 import React from 'react';
 import {useSelector} from '../../store/redux-hooks';
-
 import compact_ from 'lodash/compact';
 import filter_ from 'lodash/filter';
 import forEach_ from 'lodash/forEach';
@@ -10,6 +9,7 @@ import {produce} from 'immer';
 
 import UIFactory from '../../UIFactory';
 
+import generalIcon from '../../assets/img/svg/tools-icon.svg';
 import paletteIcon from '../../assets/img/svg/palette-icon.svg';
 import closeTagIcon from '../../assets/img/svg/close-tag-icon.svg';
 import dataIcon from '../../assets/img/svg/data-icon.svg';
@@ -33,7 +33,6 @@ import {AGGREGATOR_RADIO_ITEMS} from '../../constants/operations/statistics';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import {selectRecentPagesInfo} from '../../store/selectors/slideoutMenu';
 import {selectCurrentClusterNS} from '../../store/selectors/settings/settings-ts';
-import SettingsMenuItem from '../../containers/SettingsMenu/SettingsMenuItem';
 import SettingsMenuRadio from '../../containers/SettingsMenu/SettingsMenuRadio';
 import {SettingsMenuInputByKey} from '../SettingsMenu/SettingsMenuInputByKey/SettingsMenuInputByKey';
 import {
@@ -68,6 +67,23 @@ function wrapEscapeText(text: string) {
     return `<span class="unipika"><span class="escape">${text}</span></span>`;
 }
 
+function renderHtmlDescription(description: string, highlight?: string) {
+    return (
+        <>
+            <span dangerouslySetInnerHTML={{__html: description}} />
+            {highlight && (
+                <>
+                    <br />
+                    <span
+                        className="yt-settings-item-annotation-highlight"
+                        dangerouslySetInnerHTML={{__html: highlight}}
+                    />
+                </>
+            )}
+        </>
+    );
+}
+
 function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
     const clusterNS = useSelector(selectCurrentClusterNS);
 
@@ -94,21 +110,19 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.GLOBAL.AUTO_REFRESH,
                 i18n('field_auto-refresh'),
                 'top',
-                <SettingsMenuItem
-                    settingName={SettingName.GLOBAL.AUTO_REFRESH}
-                    settingNS={NAMESPACES.GLOBAL}
-                    annotation={i18n('context_auto-refresh-description')}
-                    oneLine={true}
+                <BooleanSettingItem
+                    settingKey="global::autoRefresh"
+                    description={i18n('context_auto-refresh-description')}
+                    oneLine
                 />,
             ),
             makeItem(
                 SettingName.MENU.RECENT_CLUSTER_FIRST,
                 i18n('field_recent-clusters'),
                 'top',
-                <SettingsMenuItem
-                    settingName={SettingName.MENU.RECENT_CLUSTER_FIRST}
-                    settingNS={NAMESPACES.MENU}
-                    annotation={i18n('context_recent-clusters-description')}
+                <BooleanSettingItem
+                    settingKey="global::menu::recentClustersFirst"
+                    description={i18n('context_recent-clusters-description')}
                     oneLine
                 />,
             ),
@@ -116,10 +130,9 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.MENU.RECENT_PAGE_FIRST,
                 i18n('field_recent-pages'),
                 'top',
-                <SettingsMenuItem
-                    settingName={SettingName.MENU.RECENT_PAGE_FIRST}
-                    settingNS={NAMESPACES.MENU}
-                    annotation={i18n('context_recent-pages-description')}
+                <BooleanSettingItem
+                    settingKey="global::menu::recentPagesFirst"
+                    description={i18n('context_recent-pages-description')}
                     oneLine
                 />,
             ),
@@ -192,11 +205,10 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         SettingName.DEVELOPMENT.REGULAR_USER_UI,
                         i18n('field_regular-user-ui'),
                         'top',
-                        <SettingsMenuItem
-                            settingName={SettingName.DEVELOPMENT.REGULAR_USER_UI}
-                            settingNS={NAMESPACES.DEVELOPMENT}
-                            label={i18n('field_regular-user-ui')}
-                            annotation={i18n('context_regular-user-ui-description')}
+                        <BooleanSettingItem
+                            settingKey="global::development::regularUserUI"
+                            title={i18n('field_regular-user-ui')}
+                            description={i18n('context_regular-user-ui-description')}
                         />,
                     ),
                     makeItem(
@@ -240,22 +252,22 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.YSON.SHOW_DECODED,
                 i18n('field_decode-utf8'),
                 'top',
-                <SettingsMenuItem
-                    oneLine={true}
-                    settingName={SettingName.YSON.SHOW_DECODED}
-                    settingNS={NAMESPACES.YSON}
-                    annotation={i18n('context_decode-utf8-description')}
-                    annotationHighlight={i18n('context_decode-utf8-highlight')}
+                <BooleanSettingItem
+                    oneLine
+                    settingKey="global::yson::showDecoded"
+                    description={renderHtmlDescription(
+                        i18n('context_decode-utf8-description'),
+                        i18n('context_decode-utf8-highlight'),
+                    )}
                 />,
             ),
             makeItem(
                 SettingName.YSON.BINARY_AS_HEX,
                 i18n('field_binary-as-hex'),
                 'top',
-                <SettingsMenuItem
-                    settingName={SettingName.YSON.BINARY_AS_HEX}
-                    settingNS={NAMESPACES.YSON}
-                    annotation={i18n('context_binary-as-hex-description')}
+                <BooleanSettingItem
+                    settingKey="global::yson::binaryAsHex"
+                    description={i18n('context_binary-as-hex-description')}
                     oneLine
                 />,
             ),
@@ -263,14 +275,15 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.YSON.ESCAPE_WHITESPACES,
                 i18n('field_escape-and-highlight'),
                 'top',
-                <SettingsMenuItem
-                    settingName={SettingName.YSON.ESCAPE_WHITESPACES}
-                    settingNS={NAMESPACES.YSON}
-                    annotation={i18n('context_escape-whitespaces-description', {
-                        n: wrapEscapeText('\\n'),
-                        t: wrapEscapeText('\\t'),
-                    })}
-                    annotationHighlight={i18n('context_escape-whitespaces-highlight')}
+                <BooleanSettingItem
+                    settingKey="global::yson::escapeWhitespace"
+                    description={renderHtmlDescription(
+                        i18n('context_escape-whitespaces-description', {
+                            n: wrapEscapeText('\\n'),
+                            t: wrapEscapeText('\\t'),
+                        }),
+                        i18n('context_escape-whitespaces-highlight'),
+                    )}
                     oneLine
                 />,
             ),
@@ -278,10 +291,9 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.YSON.COMPACT,
                 i18n('field_compact-view'),
                 'top',
-                <SettingsMenuItem
-                    settingName={SettingName.YSON.COMPACT}
-                    settingNS={NAMESPACES.YSON}
-                    annotation={i18n('context_compact-view-description')}
+                <BooleanSettingItem
+                    settingKey="global::yson::compact"
+                    description={i18n('context_compact-view-description')}
                     oneLine
                 />,
             ),
@@ -344,10 +356,9 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     SettingName.NAVIGATION.USE_SMART_SORT,
                     i18n('field_smart-sort'),
                     'top',
-                    <SettingsMenuItem
-                        settingName={SettingName.NAVIGATION.USE_SMART_SORT}
-                        settingNS={NAMESPACES.NAVIGATION}
-                        annotation={i18n('context_smart-sort-description')}
+                    <BooleanSettingItem
+                        settingKey="global::navigation::useSmartSort"
+                        description={i18n('context_smart-sort-description')}
                         oneLine
                     />,
                 ),
@@ -355,10 +366,9 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     SettingName.NAVIGATION.GROUP_NODES,
                     i18n('field_group-nodes'),
                     'top',
-                    <SettingsMenuItem
-                        settingName={SettingName.NAVIGATION.GROUP_NODES}
-                        settingNS={NAMESPACES.NAVIGATION}
-                        annotation={i18n('context_group-nodes-description')}
+                    <BooleanSettingItem
+                        settingKey="global::navigation::groupNodes"
+                        description={i18n('context_group-nodes-description')}
                         oneLine
                     />,
                 ),
@@ -366,10 +376,9 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     SettingName.NAVIGATION.USE_SMART_FILTER,
                     i18n('field_smart-filter'),
                     'top',
-                    <SettingsMenuItem
-                        settingName={SettingName.NAVIGATION.USE_SMART_FILTER}
-                        settingNS={NAMESPACES.NAVIGATION}
-                        annotation={i18n('context_smart-filter-description')}
+                    <BooleanSettingItem
+                        settingKey="global::navigation::useSmartFilter"
+                        description={i18n('context_smart-filter-description')}
                         oneLine
                     />,
                 ),
@@ -377,18 +386,17 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     SettingName.NAVIGATION.ENABLE_PATH_AUTO_CORRECTION,
                     i18n('field_path-autocorrection'),
                     'top',
-                    <SettingsMenuItem
-                        settingName={SettingName.NAVIGATION.ENABLE_PATH_AUTO_CORRECTION}
-                        settingNS={NAMESPACES.NAVIGATION}
-                        annotation={
+                    <BooleanSettingItem
+                        settingKey="global::navigation::enablePathAutocorrection"
+                        description={renderHtmlDescription(
                             i18n('context_path-autocorrection-description') +
-                            ' ' +
-                            docsUrl(
-                                'For details see ' +
-                                    `<a class="link link_theme_normal" href="${UIFactory.docsUrls['faq:enablepathautocorrection']}" target="_blank">FAQ</a>` +
-                                    '.',
-                            )
-                        }
+                                ' ' +
+                                docsUrl(
+                                    'For details see ' +
+                                        `<a class="link link_theme_normal" href="${UIFactory.docsUrls['faq:enablepathautocorrection']}" target="_blank">FAQ</a>` +
+                                        '.',
+                                ),
+                        )}
                         oneLine
                     />,
                 ),
@@ -403,11 +411,10 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         SettingName.COMPONENTS.ENABLE_SIDE_BAR,
                         i18n('field_enable-side-bar'),
                         'top',
-                        <SettingsMenuItem
-                            settingName={SettingName.COMPONENTS.ENABLE_SIDE_BAR}
-                            settingNS={NAMESPACES.COMPONENTS}
-                            annotation={i18n('context_enable-side-bar-description')}
-                            oneLine={true}
+                        <BooleanSettingItem
+                            settingKey="global::components::enableSideBar"
+                            description={i18n('context_enable-side-bar-description')}
+                            oneLine
                         />,
                     ),
                 ],
@@ -498,10 +505,9 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     SettingName.NAVIGATION.ENABLE_TABLE_SIMILARITY,
                     i18n('field_guess-visible-columns'),
                     'top',
-                    <SettingsMenuItem
-                        settingName={SettingName.NAVIGATION.ENABLE_TABLE_SIMILARITY}
-                        settingNS={NAMESPACES.NAVIGATION}
-                        annotation={i18n('context_guess-visible-columns-description')}
+                    <BooleanSettingItem
+                        settingKey="global::navigation::enableTableSimilarity"
+                        description={i18n('context_guess-visible-columns-description')}
                         oneLine
                     />,
                 ),
@@ -509,10 +515,9 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     SettingName.NAVIGATION.TABLE_DISPLAY_RAW_STRINGS,
                     i18n('field_raw-strings'),
                     'top',
-                    <SettingsMenuItem
-                        annotation={i18n('context_raw-strings-description')}
-                        settingName={SettingName.NAVIGATION.TABLE_DISPLAY_RAW_STRINGS}
-                        settingNS={NAMESPACES.NAVIGATION}
+                    <BooleanSettingItem
+                        description={i18n('context_raw-strings-description')}
+                        settingKey="global::navigation::tableDisplayRawStrings"
                         oneLine
                     />,
                 ),
