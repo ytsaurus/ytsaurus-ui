@@ -7,7 +7,7 @@ module.exports = {
     verbose: true,
     testEnvironment: 'node',
     setupFilesAfterEnv: ['jest-extended'],
-    testMatch: ['<rootDir>/src/**/?(*.)spec.{js,jsx,ts,tsx}'],
+    testMatch: ['<rootDir>/src/**/*.spec.{js,jsx,ts,tsx}'],
     collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}'],
     transformIgnorePatterns: [],
     coveragePathIgnorePatterns: [
