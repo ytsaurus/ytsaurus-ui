@@ -1,6 +1,5 @@
 import React from 'react';
 import {useSelector} from '../../store/redux-hooks';
-import {type IconProps} from '@gravity-ui/uikit';
 
 import compact_ from 'lodash/compact';
 import filter_ from 'lodash/filter';
@@ -11,7 +10,6 @@ import {produce} from 'immer';
 
 import UIFactory from '../../UIFactory';
 
-import generalIcon from '../../assets/img/svg/tools-icon.svg';
 import paletteIcon from '../../assets/img/svg/palette-icon.svg';
 import closeTagIcon from '../../assets/img/svg/close-tag-icon.svg';
 import dataIcon from '../../assets/img/svg/data-icon.svg';
@@ -56,28 +54,11 @@ import {selectIsVcsVisible, selectVcsConfig} from '../../store/selectors/query-t
 import {SettingsMenuRadioByKey} from '../SettingsMenu/SettingsMenuSelect';
 import {BooleanSettingItem} from '../SettingsMenu/BooleanSettingItem';
 import {queriesPage} from './queriesPage';
+import {type SettingsPage, makeItem, makePage, makePageBySections} from './settings-page-builders';
+
+export {type SettingsPage, makeItem, makePage} from './settings-page-builders';
 
 import i18n from './i18n';
-
-export interface SettingsPage {
-    id: string;
-    title: string;
-    icon: IconProps;
-    sections: Array<SettingsSection>;
-}
-
-export interface SettingsSection {
-    id: string;
-    title: string;
-    items: Array<SettingsItem>;
-}
-
-export interface SettingsItem {
-    id: string;
-    title: string;
-    align?: 'top' | 'center';
-    content: React.ReactNode;
-}
 
 const {oauthTokenUrl} = uiSettings;
 
@@ -624,33 +605,6 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             ]),
         ),
     ]);
-}
-
-export function makePage(
-    id: string,
-    title: string,
-    icon: IconProps | undefined,
-    items: Array<SettingsItem>,
-): SettingsPage {
-    return makePageBySections(id, title, icon, [{id: `${id}/${id}`, title, items}]);
-}
-
-export function makePageBySections(
-    id: string,
-    title: string,
-    icon: IconProps | undefined,
-    sections: Array<SettingsSection>,
-) {
-    return {id, title, icon: icon || generalIcon, sections};
-}
-
-export function makeItem(
-    id: string,
-    title: string,
-    align?: SettingsItem['align'],
-    content?: React.ReactNode,
-): SettingsItem {
-    return {id, title, align, content};
 }
 
 export function useSettingsDescription(): Array<SettingsPage> {
