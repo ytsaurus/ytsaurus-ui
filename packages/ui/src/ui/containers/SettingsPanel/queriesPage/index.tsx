@@ -10,7 +10,7 @@ import {makeItem, makePage} from '../settings-page-builders';
 import i18n from './i18n';
 import {DefaultAcoSelect} from './DefaultAcoSelect';
 import {GraphAutoCenterSetting} from './GraphAutoCenterSetting';
-import SettingsMenuInput from '../../SettingsMenu/SettingsMenuInput';
+import SettingsMenuInput from '../../SettingsMenu/SettingsMenuInputByKey/SettingsMenuInputByKey';
 import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
 
 type Props = {
