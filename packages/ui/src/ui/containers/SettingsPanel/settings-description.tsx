@@ -35,7 +35,7 @@ import {selectRecentPagesInfo} from '../../store/selectors/slideoutMenu';
 import {selectCurrentClusterNS} from '../../store/selectors/settings/settings-ts';
 import SettingsMenuItem from '../../containers/SettingsMenu/SettingsMenuItem';
 import SettingsMenuRadio from '../../containers/SettingsMenu/SettingsMenuRadio';
-import SettingsMenuInput from '../SettingsMenu/SettingsMenuInput';
+import SettingsMenuInput from '../SettingsMenu/SettingsMenuInputByKey/SettingsMenuInputByKey';
 import {
     selectCurrentUserName,
     selectGlobalMasterVersion,
