@@ -6,7 +6,7 @@ import {
     LazyAddQueryTokenForm,
     LazyQueryTokenList,
 } from '../../../pages/query-tracker/QueryToken/lazy';
-import {makeItem, makePage} from '../settings-description';
+import {makeItem, makePage} from '../settings-page-builders';
 import i18n from './i18n';
 import {DefaultAcoSelect} from './DefaultAcoSelect';
 import {GraphAutoCenterSetting} from './GraphAutoCenterSetting';
