@@ -46,7 +46,12 @@
             "fixStyle": "inline-type-imports"
         }]
     },
-    "env": {
-        "jest": true
-    }
+    "overrides": [
+        {
+            "files": ["src/**/*.spec.{js,jsx,ts,tsx}"],
+            "env": {
+                "jest": true
+            }
+        }
+    ]
 }
