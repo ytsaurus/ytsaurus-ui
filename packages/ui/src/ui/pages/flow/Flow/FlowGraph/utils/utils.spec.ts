@@ -4,6 +4,7 @@ import {
     applyConnectionStyle,
     makeStreamConsumersCenterY,
     mergeConnectionStreamStatus,
+    orderSourcesLikeSourceStreams,
 } from './utils';
 
 jest.mock('../../../../../components/YTGraph/constants', () => ({
@@ -100,5 +101,57 @@ describe('makeStreamConsumersCenterY', () => {
         {streamId: 'no-consumers', expected: Infinity},
     ])('returns $expected for $streamId', ({streamId, expected}) => {
         expect(getSortKey(streamId)).toBe(expected);
+    });
+});
+
+describe('orderSourcesLikeSourceStreams', () => {
+    const blocks = [
+        {id: 'src-a', x: 0, y: 200},
+        {id: 'src-b', x: 0, y: 0},
+        {id: 'src-c', x: 10, y: 100},
+        {id: 'group', x: 300, y: 0},
+        {id: 'other', x: 0, y: 500},
+    ];
+    const connections = [
+        {sourceBlockId: 'src-a', targetBlockId: 'group', points: ['route-200']},
+        {sourceBlockId: 'src-b', targetBlockId: 'group', points: ['route-0']},
+        {sourceBlockId: 'src-c', targetBlockId: 'group', points: ['route-100']},
+        {sourceBlockId: 'other', targetBlockId: 'group', points: ['route-other']},
+    ];
+
+    function order(sourceIds: Array<string>) {
+        const res = orderSourcesLikeSourceStreams(
+            {blocks, connections},
+            new Map([['group', sourceIds]]),
+        );
+        return {
+            positions: Object.fromEntries(res.blocks.map(({id, x, y}) => [id, {x, y}])),
+            routes: Object.fromEntries(res.connections.map((c) => [c.sourceBlockId, c.points])),
+        };
+    }
+
+    it('hands out the laid-out slots top-down in the order of the source streams', () => {
+        const {positions, routes} = order(['src-a', 'src-b', 'src-c']);
+
+        expect(positions).toEqual({
+            'src-a': {x: 0, y: 0},
+            'src-b': {x: 10, y: 100},
+            'src-c': {x: 0, y: 200},
+            group: {x: 300, y: 0},
+            other: {x: 0, y: 500},
+        });
+        expect(routes).toEqual({
+            'src-a': ['route-0'],
+            'src-b': ['route-100'],
+            'src-c': ['route-200'],
+            other: ['route-other'],
+        });
+    });
+
+    it('keeps the layout when a source is not laid out', () => {
+        const {positions} = order(['src-a', 'src-b', 'missing']);
+
+        expect(positions['src-a']).toEqual({x: 0, y: 200});
+        expect(positions['src-b']).toEqual({x: 0, y: 0});
     });
 });

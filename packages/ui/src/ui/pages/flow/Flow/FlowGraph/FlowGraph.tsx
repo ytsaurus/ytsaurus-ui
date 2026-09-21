@@ -61,6 +61,7 @@ import {
     makeStreamConsumersCenterY,
     makeTimerAnchors,
     mergeConnectionStreamStatus,
+    orderSourcesLikeSourceStreams,
 } from './utils/utils';
 import {type FlowGraphConnection} from './utils/utils';
 
@@ -503,7 +504,25 @@ function useFlowGraphData(params: {pipeline_path: string}) {
 
     const elkRes = useElkLayout(data.groups);
     const res = React.useMemo(() => {
-        const {blocks, connections} = elkRes.data;
+        const sourceIdByStreamId = new Map(
+            data.data.connections.map(({sourceBlockId, targetBlockId}) => [
+                targetBlockId,
+                sourceBlockId,
+            ]),
+        );
+        const sourceIdsByGroupId = new Map(
+            [...data.groupById].map(([groupId, group]) => [
+                groupId,
+                (group.meta.source_streams ?? []).flatMap((streamId) => {
+                    const sourceId = sourceIdByStreamId.get(streamId);
+                    return sourceId === undefined ? [] : [sourceId];
+                }),
+            ]),
+        );
+        const {blocks, connections} = orderSourcesLikeSourceStreams(
+            elkRes.data,
+            sourceIdsByGroupId,
+        );
 
         blocks.forEach(({id, x, y}) => {
             const group = data.groupById.get(id);

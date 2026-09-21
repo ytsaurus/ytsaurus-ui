@@ -1,5 +1,6 @@
 import {type TAnchor, type TBlock, type TBlockId, type TConnection} from '@gravity-ui/graph';
 import mean_ from 'lodash/mean';
+import sortBy_ from 'lodash/sortBy';
 import {v4 as uuidv4} from 'uuid';
 import {
     type FlowComputationType,
@@ -230,6 +231,60 @@ export function makeStreamConsumersCenterY(
             .map(({targetBlockId}) => centerYById.get(targetBlockId))
             .filter((y): y is number => y !== undefined);
         return centers.length > 0 ? mean_(centers) : Infinity;
+    };
+}
+
+type LaidOutConnection = Pick<TConnection, 'sourceBlockId' | 'targetBlockId'> & {
+    points?: unknown;
+    labels?: unknown;
+};
+
+// Each source feeds exactly one source stream, so the laid-out slots of a group's sources
+// (positions together with the routes of their edges) can be handed out in the order of the
+// group's source streams: source -> source stream connections stop crossing, while the source
+// streams and the rest of the graph stay where they were.
+export function orderSourcesLikeSourceStreams<
+    B extends Pick<TBlock, 'id' | 'x' | 'y'>,
+    C extends LaidOutConnection,
+>(
+    {blocks, connections}: {blocks: Array<B>; connections: Array<C>},
+    sourceIdsByGroupId: Map<TBlockId, Array<TBlockId>>,
+) {
+    const blockById = new Map(blocks.map((item) => [item.id, item]));
+    const edgeKey = (source?: TBlockId, target?: TBlockId) => `${source}->${target}`;
+    const edgeByKey = new Map(
+        connections.map((item) => [edgeKey(item.sourceBlockId, item.targetBlockId), item]),
+    );
+
+    const positionById = new Map<TBlockId, Pick<B, 'x' | 'y'>>();
+    const routeByEdgeKey = new Map<string, Pick<C, 'points' | 'labels'>>();
+
+    sourceIdsByGroupId.forEach((sourceIds, groupId) => {
+        const slots = sourceIds.flatMap((id) => {
+            const block = blockById.get(id);
+            const edge = edgeByKey.get(edgeKey(id, groupId));
+            return block && edge ? [{block, edge}] : [];
+        });
+        if (slots.length < 2 || slots.length !== sourceIds.length) {
+            return;
+        }
+
+        sortBy_(slots, ({block}) => block.y).forEach(({block, edge}, index) => {
+            const id = sourceIds[index];
+            positionById.set(id, {x: block.x, y: block.y});
+            routeByEdgeKey.set(edgeKey(id, groupId), {points: edge.points, labels: edge.labels});
+        });
+    });
+
+    return {
+        blocks: blocks.map((item) => {
+            const position = positionById.get(item.id);
+            return position ? {...item, ...position} : item;
+        }),
+        connections: connections.map((item) => {
+            const route = routeByEdgeKey.get(edgeKey(item.sourceBlockId, item.targetBlockId));
+            return route ? {...item, ...route} : item;
+        }),
     };
 }
 
