@@ -10,8 +10,8 @@ import {makeItem, makePage} from '../settings-page-builders';
 import i18n from './i18n';
 import {DefaultAcoSelect} from './DefaultAcoSelect';
 import {GraphAutoCenterSetting} from './GraphAutoCenterSetting';
-import SettingsMenuInput from '../../SettingsMenu/SettingsMenuInputByKey/SettingsMenuInputByKey';
-import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
+import {SettingsMenuInputByKey} from '../../SettingsMenu/SettingsMenuInputByKey/SettingsMenuInputByKey';
+import {SettingName} from '../../../../shared/constants/settings';
 
 type Props = {
     cluster: string;
@@ -30,21 +30,19 @@ export const queriesPage = ({cluster, hasQuerySuggestions}: Props) => {
                 SettingName.QUERY_TRACKER.YQL_AGENT_STAGE,
                 i18n('field_yql-agent-stage'),
                 'top',
-                <SettingsMenuInput
+                <SettingsMenuInputByKey
                     placeholder={i18n('context_yql-agent-stage-placeholder')}
-                    settingName={SettingName.QUERY_TRACKER.YQL_AGENT_STAGE}
-                    settingNS={NAMESPACES.QUERY_TRACKER}
+                    settingKey="global::queryTracker::yqlAgentStage"
                 />,
             ),
             makeItem(
                 SettingName.QUERY_TRACKER.STAGE,
                 i18n('field_query-tracker-stage'),
                 'top',
-                <SettingsMenuInput
+                <SettingsMenuInputByKey
                     placeholder={i18n('context_query-tracker-stage-placeholder')}
                     description={i18n('context_query-tracker-stage-description')}
-                    settingName={SettingName.QUERY_TRACKER.STAGE}
-                    settingNS={NAMESPACES.QUERY_TRACKER}
+                    settingKey="global::queryTracker::queryTrackerStage"
                 />,
             ),
             makeItem(
