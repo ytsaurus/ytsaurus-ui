@@ -23,6 +23,34 @@ import {DYN_TABLES_ALLOWED_ACTIONS_BY_STATE} from './map-node-ts';
 import {formatDateForTableSort} from '../../../../utils/format-date-for-table-sort';
 import i18n from './i18n';
 
+export const TYPE_WEIGHTS = map_(
+    [
+        'tablet_cell',
+        'cell_node_map',
+        'cell_node',
+        'sys_node',
+        'access_control_object_namespace_map',
+        'access_control_object_namespace',
+        'topmost_transaction_map',
+        'transaction_map',
+        'map_node',
+        'link',
+        'table',
+        'file',
+        'document',
+        'journal',
+        'string_node',
+        'int64_node',
+        'uint64_node',
+        'double_node',
+        'boolean_node',
+    ],
+    (type, index, types) => ({type, weight: types.length - index}),
+).reduce((res, item) => {
+    res[item.type] = item.weight;
+    return res;
+}, {});
+
 export const selectFilterState = (state) => state.navigation.content.mapNode.filter;
 export const selectMediumType = (state) => state.navigation.content.mapNode.mediumType;
 
@@ -265,34 +293,6 @@ export const selectIsAllSelected = createSelector(
         return every_(values_(selected)) && selectedNodes.length === allNodes.length;
     },
 );
-
-export const TYPE_WEIGHTS = map_(
-    [
-        'tablet_cell',
-        'cell_node_map',
-        'cell_node',
-        'sys_node',
-        'access_control_object_namespace_map',
-        'access_control_object_namespace',
-        'topmost_transaction_map',
-        'transaction_map',
-        'map_node',
-        'link',
-        'table',
-        'file',
-        'document',
-        'journal',
-        'string_node',
-        'int64_node',
-        'uint64_node',
-        'double_node',
-        'boolean_node',
-    ],
-    (type, index, types) => ({type, weight: types.length - index}),
-).reduce((res, item) => {
-    res[item.type] = item.weight;
-    return res;
-}, {});
 
 export const selectSortedNodes = createSelector(
     [selectFilteredNodes, selectSortState, selectTableColumns, selectGetSetting],

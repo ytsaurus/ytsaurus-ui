@@ -58,7 +58,8 @@
         {
             "files": ["*.js", "*.jsx"],
             "rules": {
-                "no-shadow": "error"
+                "no-shadow": "error",
+                "no-use-before-define": "error"
             }
         },
         {
