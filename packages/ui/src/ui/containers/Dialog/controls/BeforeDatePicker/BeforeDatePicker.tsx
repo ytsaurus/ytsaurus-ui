@@ -169,7 +169,7 @@ class BeforeDatePicker extends React.Component<IdmDatePickerProps, State> {
 
     onChangePeriod = (valueStr: string) => {
         this.setState({period: valueStr});
-        const daysCount = Number.parseInt(valueStr);
+        const daysCount = Number.parseInt(valueStr, 10);
         if (String(daysCount) !== valueStr) {
             if (valueStr !== '') {
                 this.setState({periodError: i18n('alert_valid-number')});
