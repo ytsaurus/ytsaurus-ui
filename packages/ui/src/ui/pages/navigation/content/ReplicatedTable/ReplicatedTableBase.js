@@ -250,7 +250,10 @@ export class ReplicatedTableBase extends Component {
 
     static renderAutomaticModeSwitch(enableTableTracker, item, columnName) {
         const value = ReplicatedTableBase.tableItems[columnName].get(item);
-        const theme = !enableTableTracker ? 'unknown' : value ? 'enabled' : 'disabled';
+        let theme = 'unknown';
+        if (enableTableTracker) {
+            theme = value ? 'enabled' : 'disabled';
+        }
         const title = value ? i18n('value_enabled') : i18n('value_disabled');
         return (
             <Tooltip

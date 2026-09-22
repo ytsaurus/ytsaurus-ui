@@ -149,11 +149,12 @@ function ChytCliqueMetaTable() {
         const {start_time, finish_time, id} = yt_operation ?? {};
 
         const start_time_number = start_time ? moment(start_time).valueOf() : undefined;
-        const finish_time_number = finish_time
-            ? moment(finish_time).valueOf()
-            : start_time_number
-              ? Date.now()
-              : undefined;
+        let finish_time_number: number | undefined;
+        if (finish_time) {
+            finish_time_number = moment(finish_time).valueOf();
+        } else if (start_time_number) {
+            finish_time_number = Date.now();
+        }
 
         const duration =
             !start_time_number || !finish_time_number

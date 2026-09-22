@@ -267,12 +267,11 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
         queueAgentsStatuses = reduce_(
             queueAgentsStateResults,
             (acc, item, key) => {
-                acc[queueAgentsStateRequests[key].address] =
-                    typeof item.output !== 'undefined'
-                        ? item.output
-                            ? 'active'
-                            : 'standby'
-                        : 'offline';
+                let status = 'offline';
+                if (typeof item.output !== 'undefined') {
+                    status = item.output ? 'active' : 'standby';
+                }
+                acc[queueAgentsStateRequests[key].address] = status;
                 return acc;
             },
             {} as {[address: string]: string},

@@ -14,11 +14,12 @@ interface Props {
 
 function StoresDialog(props: Props) {
     const {visible, unorderedDynamicTable, stores, index, onClose} = props;
-    const title = unorderedDynamicTable
-        ? '/stores'
-        : index === -1
-          ? '/eden/stores'
-          : `partitions/${index}/stores`;
+    let title = `partitions/${index}/stores`;
+    if (unorderedDynamicTable) {
+        title = '/stores';
+    } else if (index === -1) {
+        title = '/eden/stores';
+    }
 
     return (
         <Dialog open={visible} onClose={onClose} hasCloseButton>

@@ -103,15 +103,16 @@ export function prepareFormattedValue(
     const $formattedValue = formatValue
         ? formatResults(convertedValue, settings)
         : i18n('value_escaped');
+    let $fullFormattedValue = '';
+    if (convertedValue === fullValue) {
+        $fullFormattedValue = $formattedValue;
+    } else if (formatValue) {
+        $fullFormattedValue = formatResults(fullValue, {...settings, maxStringSize: undefined});
+    }
     return {
         ...fullValue,
         $formattedValue,
-        $fullFormattedValue:
-            convertedValue === fullValue
-                ? $formattedValue
-                : formatValue
-                  ? formatResults(fullValue, {...settings, maxStringSize: undefined})
-                  : '',
+        $fullFormattedValue,
         $rawValue,
         $incomplete: flags.incomplete,
         $tagValue: tag,

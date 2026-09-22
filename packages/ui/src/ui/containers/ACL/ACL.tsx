@@ -334,18 +334,11 @@ class ACL extends Component<Props> {
                 render({row}) {
                     const expandable = 'expanded' in row;
                     const {row_access_predicate, aggregated_row_access_predicates} = row;
-                    return (
-                        <AclColumnsCell
-                            items={
-                                expandable
-                                    ? aggregated_row_access_predicates
-                                    : row_access_predicate
-                                      ? [row_access_predicate]
-                                      : []
-                            }
-                            expanadable={expandable}
-                        />
-                    );
+                    let items = aggregated_row_access_predicates;
+                    if (!expandable) {
+                        items = row_access_predicate ? [row_access_predicate] : [];
+                    }
+                    return <AclColumnsCell items={items} expanadable={expandable} />;
                 },
             } as Column<T>,
         };
