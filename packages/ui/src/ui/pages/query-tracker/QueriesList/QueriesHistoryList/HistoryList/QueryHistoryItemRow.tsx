@@ -1,6 +1,6 @@
 import React, {type FC} from 'react';
 import {type ListItemData} from '@gravity-ui/uikit';
-import type {QueryHistoryListColumn} from '../Columns/columns';
+import {type QueryHistoryListColumn, getQueryHistoryColumnFlex} from '../Columns/columns';
 import {type QueryItem} from '../../../../../types/query-tracker/api';
 import {useQueryItemUrl} from '../../../hooks/Query/useQueryItemUrl';
 import {RoutedLink} from '../../../../../containers/RoutedLink/RoutedLink';
@@ -24,7 +24,7 @@ export const QueryHistoryItemRow: FC<Props> = ({item, columns}) => {
                     <div
                         key={column.name}
                         className={b('cell')}
-                        style={{flex: `1 0 ${column.baseWidth}px`}}
+                        style={{flex: getQueryHistoryColumnFlex(column)}}
                     >
                         {column.render(item)}
                     </div>

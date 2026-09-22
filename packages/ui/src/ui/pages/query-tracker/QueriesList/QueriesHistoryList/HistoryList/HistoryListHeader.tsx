@@ -2,7 +2,7 @@ import React, {type FC} from 'react';
 import {Flex} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import './HistoryListHeader.scss';
-import {type QueryHistoryListColumn} from '../Columns/columns';
+import {type QueryHistoryListColumn, getQueryHistoryColumnFlex} from '../Columns/columns';
 
 const b = cn('yt-queries-history-list-header');
 
@@ -17,7 +17,7 @@ export const HistoryListHeader: FC<Props> = ({columns}) => {
                 <div
                     key={column.name}
                     className={b('item')}
-                    style={{flex: `1 0 ${column.baseWidth}px`}}
+                    style={{flex: getQueryHistoryColumnFlex(column)}}
                 >
                     {column.name}
                 </div>
