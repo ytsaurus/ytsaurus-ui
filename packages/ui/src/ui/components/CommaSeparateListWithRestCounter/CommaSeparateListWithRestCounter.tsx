@@ -106,7 +106,7 @@ export default class CommaSeparatedListWithRestCounter extends React.Component<
         const rows = [];
         let pos = 0;
 
-        const lh = parseInt(lineHeight);
+        const lh = parseInt(lineHeight, 10);
 
         let currentRow: Array<string> = [];
         let currentRowWidth = 0;

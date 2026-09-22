@@ -597,7 +597,7 @@ export default function AttributesEditor() {
 }
 
 function validateReplicationFactor(str: string): string | undefined {
-    const v = parseInt(str);
+    const v = parseInt(str, 10);
     if (!str || (String(str) === String(v) && v >= 1 && v <= 20)) {
         return undefined;
     }
