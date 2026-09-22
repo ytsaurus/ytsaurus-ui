@@ -100,17 +100,12 @@ export class JobLineRenderer extends AbstractEventRenderer {
                         ctx.fill();
                     }
                 }
-            } else {
+            } else if (width > 0) {
                 // Only draw if there's visible width
-                if (width > 0) {
-                    ctx.beginPath();
-                    ctx.fillStyle = convertToRGBA(
-                        color || DEFAULT_COLOR,
-                        isTransparent ? 0.4 : 0.7,
-                    );
-                    ctx.rect(startX, y0, width, h);
-                    ctx.fill();
-                }
+                ctx.beginPath();
+                ctx.fillStyle = convertToRGBA(color || DEFAULT_COLOR, isTransparent ? 0.4 : 0.7);
+                ctx.rect(startX, y0, width, h);
+                ctx.fill();
             }
             startX += width;
         });
