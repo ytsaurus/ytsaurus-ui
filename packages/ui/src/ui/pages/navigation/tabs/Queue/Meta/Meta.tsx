@@ -30,67 +30,72 @@ const Meta: React.VFC<Props> = ({
 }) => {
     return (
         <ErrorBoundary>
-            <div className="elements-heading elements-heading_size_xs">{i18n('title_meta')}</div>
-            <MetaTable
-                className={block()}
-                items={[
-                    [
-                        {
-                            key: 'partition-count',
-                            label: i18n('field_partition-count'),
-                            value: partitionCount,
-                            visible: !isNullable(partitionCount),
-                        },
-                        {
-                            key: 'family',
-                            label: i18n('field_family'),
-                            value: family,
-                            visible: !isNullable(family),
-                        },
-                        {
-                            key: 'queue-agent-host',
-                            label: i18n('field_queue-agent-host'),
-                            value: (
-                                <span className={block('queue-agent-host')}>
-                                    {queueAgentHost}
-                                    <ClipboardButton
-                                        text={queueAgentHost}
-                                        view="flat-secondary"
-                                        inlineMargins
+            <div>
+                <div className="elements-heading elements-heading_size_xs">
+                    {i18n('title_meta')}
+                </div>
+
+                <MetaTable
+                    className={block()}
+                    items={[
+                        [
+                            {
+                                key: 'partition-count',
+                                label: i18n('field_partition-count'),
+                                value: partitionCount,
+                                visible: !isNullable(partitionCount),
+                            },
+                            {
+                                key: 'family',
+                                label: i18n('field_family'),
+                                value: family,
+                                visible: !isNullable(family),
+                            },
+                            {
+                                key: 'queue-agent-host',
+                                label: i18n('field_queue-agent-host'),
+                                value: (
+                                    <span className={block('queue-agent-host')}>
+                                        {queueAgentHost}
+                                        <ClipboardButton
+                                            text={queueAgentHost}
+                                            view="flat-secondary"
+                                            inlineMargins
+                                        />
+                                    </span>
+                                ),
+                                visible: !isNullable(queueAgentHost),
+                            },
+                        ],
+                        [
+                            {
+                                key: 'write-row-count-rate',
+                                label: i18n('field_write-row-count-rate'),
+                                value: (
+                                    <Multimeter
+                                        {...writeRowCountRate}
+                                        show="1m"
+                                        format={format.RowsPerSecond}
                                     />
-                                </span>
-                            ),
-                            visible: !isNullable(queueAgentHost),
-                        },
-                    ],
-                    [
-                        {
-                            key: 'write-row-count-rate',
-                            label: i18n('field_write-row-count-rate'),
-                            value: (
-                                <Multimeter
-                                    {...writeRowCountRate}
-                                    show="1m"
-                                    format={format.RowsPerSecond}
-                                />
-                            ),
-                            visible: !isNullable(writeRowCountRate),
-                        },
-                        {
-                            key: 'write-data-weight-rate',
-                            label: i18n('field_write-data-weight-rate'),
-                            value: (
-                                <Multimeter
-                                    {...writeDataWeightRate}
-                                    show="1m"
-                                    format={format.BytesPerSecond}
-                                />
-                            ),
-                            visible: !isNullable(writeDataWeightRate),
-                        },
-                    ],
-                ]}
-            />
+                                ),
+                                visible: !isNullable(writeRowCountRate),
+                            },
+                            {
+                                key: 'write-data-weight-rate',
+                                label: i18n('field_write-data-weight-rate'),
+                                value: (
+                                    <Multimeter
+                                        {...writeDataWeightRate}
+                                        show="1m"
+                                        format={format.BytesPerSecond}
+                                    />
+                                ),
+                                visible: !isNullable(writeDataWeightRate),
+                            },
+                        ],
+                    ]}
+                />
+            </div>
         </ErrorBoundary>
     );
 };
