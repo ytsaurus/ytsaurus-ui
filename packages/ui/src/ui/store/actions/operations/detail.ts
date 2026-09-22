@@ -39,7 +39,7 @@ import {loadOperationAttributes} from './helpers/loadOperationAttributes';
 
 function loadIntermediateResourceUsage(
     operation: unknown,
-    callback: () => void,
+    onLoadComplete: () => void,
 ): ThunkAction<Promise<void>, RootState, unknown, OperationDetailActionType> {
     return async (dispatch) => {
         const outputTransaction = ypath.get(operation, '/@output_transaction_id');
@@ -52,7 +52,7 @@ function loadIntermediateResourceUsage(
                     path: '#' + outputTransaction + '/@resource_usage',
                 })
                 .then((resources) => {
-                    callback();
+                    onLoadComplete();
 
                     const intermediateResources = prepareIntermediateUsage(operation, resources);
 
@@ -62,11 +62,11 @@ function loadIntermediateResourceUsage(
                     });
                 })
                 .catch(() => {
-                    callback();
+                    onLoadComplete();
                     dispatch({type: LOAD_RESOURCE_USAGE.FAILURE});
                 });
         } else {
-            callback();
+            onLoadComplete();
             dispatch({type: LOAD_RESOURCE_USAGE.CANCELLED});
         }
     };
