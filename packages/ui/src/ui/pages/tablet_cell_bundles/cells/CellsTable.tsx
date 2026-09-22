@@ -232,7 +232,7 @@ class CellsTable extends React.Component<Props & ReduxProps> {
     }
 
     override render() {
-        const columns = this.props.columns.map((x) => Columns[x].call(this));
+        const columns = this.props.columns.map((x) => getColumn(this, x));
 
         const {data, loading, loaded} = this.props;
 
@@ -326,6 +326,10 @@ const Columns = {
         };
     },
 };
+
+function getColumn(table: CellsTable, name: keyof typeof Columns) {
+    return Columns[name].call(table);
+}
 
 export type ReduxProps = {
     cluster: string;

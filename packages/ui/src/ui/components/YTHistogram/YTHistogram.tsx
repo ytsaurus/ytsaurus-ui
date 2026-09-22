@@ -36,6 +36,10 @@ export interface YTHistogramProps {
     data: YTHistorgramData;
 }
 
+const renderDefaultTooltip: Required<YTHistogramProps>['renderTooltip'] = (y, x0, x1) => {
+    return i18n('context_tooltip-range', {y: y ?? '', x0: x0 ?? '', x1: x1 ?? ''});
+};
+
 function YTHistogram({
     className,
     data,
@@ -138,10 +142,6 @@ function genYagrData({min, max, count}: YTHistorgramData) {
 
     return {timeline, serieData, step: min === max ? 0 : step};
 }
-
-const renderDefaultTooltip: Required<YTHistogramProps>['renderTooltip'] = (y, x0, x1) => {
-    return i18n('context_tooltip-range', {y: y ?? '', x0: x0 ?? '', x1: x1 ?? ''});
-};
 
 export function calculateFormatSettings(
     data: YTHistorgramData | undefined,

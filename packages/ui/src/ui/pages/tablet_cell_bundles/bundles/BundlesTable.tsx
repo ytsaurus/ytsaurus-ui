@@ -353,7 +353,7 @@ class BundlesTable extends React.Component<ReduxProps> {
     }
 
     override render() {
-        const columns = this.props.columns.map((x) => Columns[x].call(this));
+        const columns = this.props.columns.map((x) => getColumn(this, x));
 
         const {data, total, loading, loaded} = this.props;
 
@@ -525,6 +525,10 @@ const Columns = {
         };
     },
 };
+
+function getColumn(table: BundlesTable, name: keyof typeof Columns) {
+    return Columns[name].call(table);
+}
 
 export type ReduxProps = {
     loading: boolean;

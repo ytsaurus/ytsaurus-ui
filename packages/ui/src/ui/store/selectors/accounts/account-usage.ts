@@ -398,13 +398,6 @@ const selectAccountUsageVisibleColumns = createSelector(
     },
 );
 
-export const selectAccountUsageSelectableColumns = createSelector(
-    [selectAccountUsageAvailableColumns],
-    (columns) => {
-        return filter_(columns, (item) => !ACCOUNT_USAGE_UNAVAILABLE_FIELDS.has(item));
-    },
-);
-
 export const ACCOUNT_USAGE_UNAVAILABLE_FIELDS = new Set([
     'type',
     'path',
@@ -413,6 +406,13 @@ export const ACCOUNT_USAGE_UNAVAILABLE_FIELDS = new Set([
     'medium:cache',
     'direct_child_count',
 ]);
+
+export const selectAccountUsageSelectableColumns = createSelector(
+    [selectAccountUsageAvailableColumns],
+    (columns) => {
+        return filter_(columns, (item) => !ACCOUNT_USAGE_UNAVAILABLE_FIELDS.has(item));
+    },
+);
 
 export const selectAccountUsageVisibleDataColumns = createSelector(
     [selectAccountUsageSelectableColumns, selectAccountUsageVisibleColumns],

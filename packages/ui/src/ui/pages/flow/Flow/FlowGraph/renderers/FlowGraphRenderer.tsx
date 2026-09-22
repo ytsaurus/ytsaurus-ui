@@ -20,6 +20,16 @@ import {useFlowMessagesDialogContext} from './FlowMessagesDialogContext/FlowMess
 
 const block = cn('yt-flow-graph-renderer');
 
+export const STATUS_TO_BG_THEME: Partial<
+    Record<FlowNodeStatusType, 'success' | 'info' | 'warning' | 'danger'>
+> = {
+    warning: 'warning',
+    alert: 'warning',
+    error: 'danger',
+    fatal: 'danger',
+    maximum: 'danger',
+};
+
 export function FlowIcon({data}: {data?: IconData}) {
     return !data ? null : (
         <Flex shrink={0}>
@@ -168,16 +178,6 @@ export function TextWithHighConsumption({
         </Tooltip>
     );
 }
-
-export const STATUS_TO_BG_THEME: Partial<
-    Record<FlowNodeStatusType, 'success' | 'info' | 'warning' | 'danger'>
-> = {
-    warning: 'warning',
-    alert: 'warning',
-    error: 'danger',
-    fatal: 'danger',
-    maximum: 'danger',
-};
 
 export function FlowNodeStatus({status}: {status: FlowNodeStatusType}) {
     return (

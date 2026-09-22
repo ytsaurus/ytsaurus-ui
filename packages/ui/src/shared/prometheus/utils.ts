@@ -64,7 +64,7 @@ export const year = day * 365;
  * @param to Interval end, ms from epoch
  * @returns Formatted string, e.g. 1d 3h
  */
-export const humanizeInterval = (from: number, to: number) => {
+export function humanizeInterval(from: number, to: number) {
     const duration = to - from;
     if (duration >= year) {
         const years = Math.floor(duration / year);
@@ -93,7 +93,7 @@ export const humanizeInterval = (from: number, to: number) => {
     }
     const minutes = Math.round(duration / minute);
     return `${minutes}m`;
-};
+}
 
 export function makeDiscoverValuesKey({label, match}: DiscoverValues) {
     return `_${label}_${match}_`;

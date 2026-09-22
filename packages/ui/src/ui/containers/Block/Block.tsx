@@ -63,26 +63,6 @@ export type YTErrorBlockProps = Omit<YTErrorBlockInternalProps, 'error'> & {
     error?: YTErrorBlockInternalProps['error'] | {error: string} | Error;
 };
 
-export function YTErrorBlock({error, ...props}: YTErrorBlockProps) {
-    const e = React.useMemo(() => {
-        if (typeof error === 'string') {
-            return {message: error};
-        }
-
-        if (error instanceof Error) {
-            return error;
-        }
-
-        return cloneDeepWith_(error, (value) => {
-            // Some UI-side errors might contain fields with `undefined`,
-            // such values might not be rendered as yson, so we have to replace them with null
-            return value === undefined ? null : undefined;
-        });
-    }, [error]);
-
-    return <YTErrorBlockImpl {...props} error={e} />;
-}
-
 class YTErrorBlockImpl extends React.Component<YTErrorBlockInternalProps> {
     static defaultProps = {
         type: 'error',
@@ -215,4 +195,24 @@ class YTErrorBlockImpl extends React.Component<YTErrorBlockInternalProps> {
             </React.Fragment>
         );
     }
+}
+
+export function YTErrorBlock({error, ...props}: YTErrorBlockProps) {
+    const e = React.useMemo(() => {
+        if (typeof error === 'string') {
+            return {message: error};
+        }
+
+        if (error instanceof Error) {
+            return error;
+        }
+
+        return cloneDeepWith_(error, (value) => {
+            // Some UI-side errors might contain fields with `undefined`,
+            // such values might not be rendered as yson, so we have to replace them with null
+            return value === undefined ? null : undefined;
+        });
+    }, [error]);
+
+    return <YTErrorBlockImpl {...props} error={e} />;
 }

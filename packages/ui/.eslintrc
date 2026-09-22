@@ -66,7 +66,10 @@
         {
             "files": ["*.ts", "*.tsx"],
             "rules": {
-                "@typescript-eslint/no-shadow": "error"
+                "@typescript-eslint/no-shadow": "error",
+                "@typescript-eslint/no-use-before-define": ["error", {
+                    "functions": false
+                }]
             }
         }
     ]

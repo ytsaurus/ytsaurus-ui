@@ -1312,10 +1312,10 @@ export const generateClickhouseOldSafariSuggestions = (
     };
 };
 
-export const generateClickhouseAdditionalSuggestion = (
+export function generateClickhouseAdditionalSuggestion(
     rangeToInsertSuggestion: IRange,
     parserResult: ClickHouseAutocompleteResult,
-) => {
+) {
     let result: languages.CompletionItem[] = [
         ...generateSuggestion({
             kind: languages.CompletionItemKind.TypeParameter,
@@ -1364,4 +1364,4 @@ export const generateClickhouseAdditionalSuggestion = (
     }
 
     return result;
-};
+}
