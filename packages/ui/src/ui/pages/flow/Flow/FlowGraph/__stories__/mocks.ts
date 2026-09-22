@@ -25,7 +25,10 @@ function makeExtendedStream(
     };
 }
 
-function makeComputation(extendedSourceStream?: FlowExtendedStreamType): FlowComputationType {
+function makeComputation(
+    extendedSourceStream?: FlowExtendedStreamType,
+    sourceStreams = [SOURCE_STREAM_ID],
+): FlowComputationType {
     return {
         id: 'computation',
         name: 'Computation',
@@ -46,7 +49,7 @@ function makeComputation(extendedSourceStream?: FlowExtendedStreamType): FlowCom
         },
         input_streams: [],
         output_streams: [OUTPUT_STREAM_ID],
-        source_streams: [SOURCE_STREAM_ID],
+        source_streams: sourceStreams,
         timer_streams: [],
         extended_input_streams: [],
         extended_output_streams: [],
@@ -120,3 +123,47 @@ export const messagesFlowGraphHandler = makeFlowGraphHandler(
 );
 
 export const emptyFlowGraphHandler = makeFlowGraphHandler(makeFlowGraphResponse());
+
+export const MULTIPLE_SOURCES = ['A', 'B', 'C'].map((key) => ({
+    sourceId: `source-${key.toLowerCase()}`,
+    sourceName: `Source ${key}`,
+    streamName: `Source stream ${key}`,
+    streamId: `source-stream-${key}`,
+}));
+
+// Sources are listed in the order of the computation's source streams, and ELK alone lays them out
+// bottom-up, so their connections cross unless the graph reorders them.
+function makeMultipleSourcesFlowGraphResponse(): FlowDescribePipelineData {
+    const {
+        streams: {[SOURCE_STREAM_ID]: sourceStream, ...streams},
+        sinks,
+    } = makeFlowGraphResponse();
+    return {
+        computations: {
+            computation: makeComputation(
+                undefined,
+                MULTIPLE_SOURCES.map(({streamId}) => streamId),
+            ),
+        },
+        streams: {
+            ...streams,
+            ...Object.fromEntries(
+                MULTIPLE_SOURCES.map(({streamId, streamName}) => [
+                    streamId,
+                    {...sourceStream, id: streamId, name: streamName},
+                ]),
+            ),
+        },
+        sources: Object.fromEntries(
+            MULTIPLE_SOURCES.map(({sourceId, sourceName, streamId}) => [
+                sourceId,
+                {id: sourceId, name: sourceName, status: 'info', stream_id: streamId},
+            ]),
+        ),
+        sinks,
+    };
+}
+
+export const multipleSourcesFlowGraphHandler = makeFlowGraphHandler(
+    makeMultipleSourcesFlowGraphResponse(),
+);

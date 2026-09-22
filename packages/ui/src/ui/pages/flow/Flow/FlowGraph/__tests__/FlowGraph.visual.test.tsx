@@ -5,12 +5,14 @@ import {expect, test} from '../../../../../playwright-components/core';
 import {FlowGraphStories} from '../__stories__';
 import {
     MESSAGE_TEXT,
+    MULTIPLE_SOURCES,
     SOURCE_NAME,
     backpressuredFlowGraphHandler,
     drainedFlowGraphHandler,
     emptyFlowGraphHandler,
     messagesFlowGraphHandler,
     mixedFlowGraphHandler,
+    multipleSourcesFlowGraphHandler,
 } from '../__stories__/mocks';
 
 const anchor = 'yt-flow-graph-anchors__computation-anchor';
@@ -132,5 +134,43 @@ test('FlowGraph: schematic anchors', async ({mount, expectScreenshot, page, rout
     await expect(page.locator('.yt-flow-graph__item-popup')).toHaveCount(0);
     await page.waitForTimeout(500);
 
+    await expectScreenshot();
+});
+
+test('FlowGraph: sources follow the order of their source streams', async ({
+    mount,
+    expectScreenshot,
+    page,
+    router,
+}) => {
+    await router.use(multipleSourcesFlowGraphHandler);
+    await mount(<FlowGraphStories.MultipleSources />);
+
+    async function getTopDown(names: Array<string>) {
+        const tops = await Promise.all(
+            names.map(async (name) => {
+                const block = page.locator('.graph-block-wrapper', {
+                    has: page.getByText(name, {exact: true}),
+                });
+                const box = await block.boundingBox();
+                if (!box) {
+                    throw new Error(`Block "${name}" must have measurable bounds`);
+                }
+                return {name, y: box.y};
+            }),
+        );
+        return tops.sort((l, r) => l.y - r.y).map(({name}) => name);
+    }
+
+    await page.getByText(MULTIPLE_SOURCES[0].sourceName, {exact: true}).waitFor();
+
+    const streamsTopDown = await getTopDown(MULTIPLE_SOURCES.map(({streamName}) => streamName));
+    const sourcesTopDown = await getTopDown(MULTIPLE_SOURCES.map(({sourceName}) => sourceName));
+    const sourceByStream = Object.fromEntries(
+        MULTIPLE_SOURCES.map(({streamName, sourceName}) => [streamName, sourceName]),
+    );
+
+    expect(streamsTopDown).toEqual(MULTIPLE_SOURCES.map(({streamName}) => streamName));
+    expect(sourcesTopDown).toEqual(streamsTopDown.map((name) => sourceByStream[name]));
     await expectScreenshot();
 });

@@ -12,6 +12,7 @@ import {
     emptyFlowGraphHandler,
     messagesFlowGraphHandler,
     mixedFlowGraphHandler,
+    multipleSourcesFlowGraphHandler,
 } from './mocks';
 
 yt.setup.setGlobalOption('proxy', 'test-cluster.yt.my-domain.com');
@@ -57,4 +58,9 @@ export const MessagesOnly: Story = {
 export const WithoutDetails: Story = {
     render: renderGraph,
     parameters: {msw: {handlers: [emptyFlowGraphHandler]}},
+};
+
+export const MultipleSources: Story = {
+    render: renderGraph,
+    parameters: {msw: {handlers: [multipleSourcesFlowGraphHandler]}},
 };
