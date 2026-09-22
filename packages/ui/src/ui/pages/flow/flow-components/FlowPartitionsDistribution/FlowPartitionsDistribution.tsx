@@ -3,7 +3,7 @@ import {Button, Flex, Icon, SegmentedRadioGroup, Text} from '@gravity-ui/uikit';
 import {Tooltip} from '@ytsaurus/components';
 import cn from 'bem-cn-lite';
 import minBy_ from 'lodash/minBy';
-import React from 'react';
+import React, {type ReactNode} from 'react';
 import {
     type FlowComputationDetailsType,
     type FlowViewNodePerformanceMetrics,
@@ -199,6 +199,36 @@ export function FlowPartitionsDistribution({computationId}: {computationId: stri
     }
 
     const heavyHitters = view === 'heavy-hitters';
+    let content: ReactNode;
+    if (heavyHitters) {
+        content = (
+            <FlowViewHeavyHitters
+                pipeline_path={pipeline_path}
+                computationId={computationId}
+                partitions={partitions}
+            />
+        );
+    } else if (flowViewFields) {
+        content = (
+            <FlowViewPartitionsCharts
+                pipeline_path={pipeline_path}
+                computationId={computationId}
+                partitions={partitions}
+                fields={flowViewFields}
+                metric={metric}
+                view={view}
+            />
+        );
+    } else {
+        content = (
+            <PartitionsCharts
+                items={items}
+                computationId={computationId}
+                metric={metric}
+                view={view}
+            />
+        );
+    }
 
     return (
         <Flex direction="column" gap={3}>
@@ -232,29 +262,7 @@ export function FlowPartitionsDistribution({computationId}: {computationId: stri
                     </Tooltip>
                 )}
             </Flex>
-            {heavyHitters ? (
-                <FlowViewHeavyHitters
-                    pipeline_path={pipeline_path}
-                    computationId={computationId}
-                    partitions={partitions}
-                />
-            ) : flowViewFields ? (
-                <FlowViewPartitionsCharts
-                    pipeline_path={pipeline_path}
-                    computationId={computationId}
-                    partitions={partitions}
-                    fields={flowViewFields}
-                    metric={metric}
-                    view={view}
-                />
-            ) : (
-                <PartitionsCharts
-                    items={items}
-                    computationId={computationId}
-                    metric={metric}
-                    view={view}
-                />
-            )}
+            {content}
         </Flex>
     );
 }
@@ -347,6 +355,31 @@ function PartitionsCharts({
 
     const valueTitle = unit === undefined ? i18n(field) : `${i18n(field)}, ${i18n(unit)}`;
 
+    let chart: ReactNode;
+    if (!items.length) {
+        chart = <Text color="secondary">{i18n('context_no-partitions')}</Text>;
+    } else if (view === 'by-partition') {
+        chart = (
+            <YTChartKitBars
+                data={items}
+                xAxisTitle={i18n('field_partitions-sorted')}
+                yAxisTitle={valueTitle}
+            />
+        );
+    } else {
+        chart = (
+            <YTChartKitHistogram
+                data={items.map(({value}) => value)}
+                barWidth={barWidth}
+                maxBarCount={50}
+                seriesName={i18n('field_partitions')}
+                yAxisMin={0}
+                xAxisTitle={valueTitle}
+                yAxisTitle={i18n('field_partitions')}
+            />
+        );
+    }
+
     return (
         <React.Fragment>
             <Text color="secondary">
@@ -367,27 +400,7 @@ function PartitionsCharts({
             <Text variant="caption-2" color="secondary">
                 {i18n(hint)}
             </Text>
-            <div className={block('chart')}>
-                {!items.length ? (
-                    <Text color="secondary">{i18n('context_no-partitions')}</Text>
-                ) : view === 'by-partition' ? (
-                    <YTChartKitBars
-                        data={items}
-                        xAxisTitle={i18n('field_partitions-sorted')}
-                        yAxisTitle={valueTitle}
-                    />
-                ) : (
-                    <YTChartKitHistogram
-                        data={items.map(({value}) => value)}
-                        barWidth={barWidth}
-                        maxBarCount={50}
-                        seriesName={i18n('field_partitions')}
-                        yAxisMin={0}
-                        xAxisTitle={valueTitle}
-                        yAxisTitle={i18n('field_partitions')}
-                    />
-                )}
-            </div>
+            <div className={block('chart')}>{chart}</div>
         </React.Fragment>
     );
 }

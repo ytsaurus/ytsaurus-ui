@@ -143,13 +143,15 @@ class ColumnsWrapper extends React.Component<Props & CWProps, CWState> {
         const {keyColumns} = this.state;
         const current = keyColumns[item.id];
 
-        const {icon, title} = (
-            !current
-                ? {icon: 'sort-alt', title: i18n('value_unordered')}
-                : current === DESCENDING
-                  ? {icon: 'sort-amount-up', title: i18n('value_descending')}
-                  : {icon: 'sort-amount-down-alt', title: i18n('value_ascending')}
-        ) as {icon: IconName; title: string};
+        let icon: IconName = 'sort-alt';
+        let title = i18n('value_unordered');
+
+        if (current) {
+            const descending = current === DESCENDING;
+
+            icon = descending ? 'sort-amount-up' : 'sort-amount-down-alt';
+            title = descending ? i18n('value_descending') : i18n('value_ascending');
+        }
 
         return (
             <React.Fragment>

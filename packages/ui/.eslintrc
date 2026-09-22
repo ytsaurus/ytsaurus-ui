@@ -6,6 +6,7 @@
         "no-console": "error",
         "radix": "error",
         "no-lonely-if": "error",
+        "no-nested-ternary": "error",
         "callback-return": "error",
         "no-param-reassign": ["error", {"props": false}],
         "new-cap": 0,

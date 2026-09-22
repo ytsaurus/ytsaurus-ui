@@ -133,11 +133,10 @@ function useLoadedPools(cluster?: string, poolTrees?: string[]): Array<string> |
     const defaultPoolTree = useDefaultPoolTree();
 
     React.useMemo(() => {
-        const localPoolTrees: string[] = resolvedPoolTrees.length
-            ? resolvedPoolTrees
-            : defaultPoolTree
-              ? [defaultPoolTree]
-              : [];
+        let localPoolTrees: string[] = resolvedPoolTrees;
+        if (!localPoolTrees.length) {
+            localPoolTrees = defaultPoolTree ? [defaultPoolTree] : [];
+        }
 
         if (!localPoolTrees.length) {
             return;

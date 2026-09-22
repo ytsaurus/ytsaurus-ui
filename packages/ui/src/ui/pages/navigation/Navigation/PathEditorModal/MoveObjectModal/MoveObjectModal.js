@@ -24,7 +24,10 @@ const mapStateToProps = (state) => {
         items,
     } = navigation.modals.moveObject;
 
-    const entityPath = !multipleMode ? objectPath : items.length !== 1 ? undefined : items[0]?.path;
+    let entityPath = objectPath;
+    if (multipleMode) {
+        entityPath = items.length === 1 ? items[0]?.path : undefined;
+    }
 
     return {
         error,

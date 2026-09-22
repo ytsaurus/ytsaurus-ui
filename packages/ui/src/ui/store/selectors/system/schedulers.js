@@ -74,14 +74,19 @@ export const selectSystemSchedulerAndAgentAlerts = createSelector(
 
 function connectedSchedulersToState(path, connectedHost) {
     const {connected, host} = connectedHost;
-    const state = typeof connected !== 'undefined' ? (connected ? 'active' : 'standby') : 'offline';
+    let state = 'offline';
+    if (typeof connected !== 'undefined') {
+        state = connected ? 'active' : 'standby';
+    }
     return {address: ypath.getValue(host, path), state};
 }
 
 function connectedAgentsToState(path, connectedHost) {
     const {connected, host} = connectedHost;
-    const state =
-        typeof connected !== 'undefined' ? (connected ? 'connected' : 'disconnected') : 'offline';
+    let state = 'offline';
+    if (typeof connected !== 'undefined') {
+        state = connected ? 'connected' : 'disconnected';
+    }
     return {address: ypath.getValue(host, path), state};
 }
 

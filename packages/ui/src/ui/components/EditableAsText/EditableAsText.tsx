@@ -111,91 +111,78 @@ export function EditableAsText(props: EditableAsTextProps) {
 
     const controlSize = size ? size : 'm';
 
-    return (
-        <>
-            {editMode ? (
-                <div
-                    className={block(
-                        {edit: !disableEdit, controls: Boolean(withControls)},
-                        className,
-                    )}
-                    data-edit-mode="true"
-                >
-                    {renderEditor ? (
-                        renderEditor({
-                            value: input,
-                            onChange: handleChange,
-                            className: block('control'),
-                            onBlur: closeEditMode,
-                            onApply,
-                        })
-                    ) : (
-                        <TextInput
-                            className={block('control')}
-                            autoFocus
-                            size={controlSize}
-                            value={input}
-                            onUpdate={handleChange}
-                            onKeyDown={handleKeyDown}
-                            onBlur={closeEditMode}
-                        />
-                    )}
-                    {withControls && (
-                        <>
-                            <Button
-                                className={block('control')}
-                                view={saveButtonView}
-                                extraProps={{onMouseDown: applyValue}}
-                                size={controlSize}
-                            >
-                                <Icon awesome={'check'} size={controlSize} />
-                            </Button>
-                            <Button
-                                className={block('control')}
-                                view={cancelButtonView}
-                                extraProps={{onMouseDown: closeAndResetValue}}
-                                size={controlSize}
-                            >
-                                <Icon awesome={'times'} size={controlSize} />
-                            </Button>
-                        </>
-                    )}
-                </div>
-            ) : renderContent ? (
-                renderContent({
-                    renderEditButton: () => (
-                        <>
-                            {!disableEdit && (
-                                <Button
-                                    className={block('control', {type: 'edit'})}
-                                    view="outlined"
-                                    onClick={startTextEdit}
-                                    size={controlSize}
-                                    qa="edit-text-button"
-                                >
-                                    <Icon awesome={'pencil'} size={controlSize} />
-                                </Button>
-                            )}
-                        </>
-                    ),
-                    className: block(null, className),
-                })
-            ) : (
-                <div className={block(null, className)}>
-                    {children}
-                    {!disableEdit && (
+    if (editMode) {
+        return (
+            <div
+                className={block({edit: !disableEdit, controls: Boolean(withControls)}, className)}
+                data-edit-mode="true"
+            >
+                {renderEditor ? (
+                    renderEditor({
+                        value: input,
+                        onChange: handleChange,
+                        className: block('control'),
+                        onBlur: closeEditMode,
+                        onApply,
+                    })
+                ) : (
+                    <TextInput
+                        className={block('control')}
+                        autoFocus
+                        size={controlSize}
+                        value={input}
+                        onUpdate={handleChange}
+                        onKeyDown={handleKeyDown}
+                        onBlur={closeEditMode}
+                    />
+                )}
+                {withControls && (
+                    <>
                         <Button
-                            className={block('control', {type: 'edit'})}
-                            view="outlined"
-                            onClick={startTextEdit}
+                            className={block('control')}
+                            view={saveButtonView}
+                            extraProps={{onMouseDown: applyValue}}
                             size={controlSize}
-                            qa="edit-text-button"
                         >
-                            <Icon awesome={'pencil'} size={controlSize} />
+                            <Icon awesome={'check'} size={controlSize} />
                         </Button>
-                    )}
-                </div>
-            )}
-        </>
+                        <Button
+                            className={block('control')}
+                            view={cancelButtonView}
+                            extraProps={{onMouseDown: closeAndResetValue}}
+                            size={controlSize}
+                        >
+                            <Icon awesome={'times'} size={controlSize} />
+                        </Button>
+                    </>
+                )}
+            </div>
+        );
+    }
+
+    const editButton = !disableEdit && (
+        <Button
+            className={block('control', {type: 'edit'})}
+            view="outlined"
+            onClick={startTextEdit}
+            size={controlSize}
+            qa="edit-text-button"
+        >
+            <Icon awesome={'pencil'} size={controlSize} />
+        </Button>
+    );
+
+    if (renderContent) {
+        return renderContent({
+            renderEditButton: () => <>{editButton}</>,
+            className: block(null, className),
+        });
+    }
+
+    return (
+        <div className={block(null, className)}>
+            {children}
+            {editButton}
+        </div>
     );
 }

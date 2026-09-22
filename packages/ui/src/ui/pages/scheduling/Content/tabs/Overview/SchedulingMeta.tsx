@@ -1,5 +1,5 @@
 import cn from 'bem-cn-lite';
-import React from 'react';
+import React, {type ReactNode} from 'react';
 import {useSelector} from 'react-redux';
 
 import {CircleInfo, TriangleExclamation} from '@gravity-ui/icons';
@@ -171,6 +171,13 @@ function renderProgress(
     const effectiveGuaranteeIsReduced = effectiveGuaranteed! < min!;
     const effectiveIsAutocalculated = effectiveGuaranteed! > (min ?? 0);
 
+    let statusIcon: ReactNode = null;
+    if (usageGreaterThanEffective || effectiveGuaranteeIsReduced) {
+        statusIcon = <Icon className={block('warning')} data={TriangleExclamation} />;
+    } else if (effectiveIsAutocalculated) {
+        statusIcon = <Icon className={block('secondary')} data={CircleInfo} />;
+    }
+
     return (
         <Tooltip
             content={
@@ -219,11 +226,7 @@ function renderProgress(
         >
             <Flex alignItems="center" gap={1}>
                 <Progress className={block('progress')} {...progressProps} />
-                {usageGreaterThanEffective || effectiveGuaranteeIsReduced ? (
-                    <Icon className={block('warning')} data={TriangleExclamation} />
-                ) : effectiveIsAutocalculated ? (
-                    <Icon className={block('secondary')} data={CircleInfo} />
-                ) : null}
+                {statusIcon}
             </Flex>
         </Tooltip>
     );

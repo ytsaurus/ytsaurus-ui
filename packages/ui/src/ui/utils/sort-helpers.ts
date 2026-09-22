@@ -16,13 +16,19 @@ export function compareWithUndefined<T>(
     orderK: OrderK = 1,
     undefinedOrderK: OrderK = 1,
 ) {
-    return l === r
-        ? 0
-        : l == undefined
-          ? undefinedOrderK
-          : r == undefined
-            ? -1 * undefinedOrderK
-            : orderK * (l > r ? 1 : -1);
+    if (l === r) {
+        return 0;
+    }
+
+    if (l == undefined) {
+        return undefinedOrderK;
+    }
+
+    if (r == undefined) {
+        return -1 * undefinedOrderK;
+    }
+
+    return orderK * (l > r ? 1 : -1);
 }
 
 export type ColumnSortInfo<T extends {}> = {
@@ -262,13 +268,11 @@ export function oldSortStateToOrderType<T extends string = string>(
         return asc ? 'asc' : 'desc';
     }
 
-    return undefinedAsc
-        ? asc
-            ? 'asc-undefined'
-            : 'desc-undefined'
-        : asc
-          ? 'undefined-asc'
-          : 'undefined-desc';
+    if (undefinedAsc) {
+        return asc ? 'asc-undefined' : 'desc-undefined';
+    }
+
+    return asc ? 'undefined-asc' : 'undefined-desc';
 }
 
 export function orderTypeToOldSortState(field?: string, orderType?: OrderType): OldSortState {

@@ -2,7 +2,7 @@ import {DropdownMenu, Flex, Progress, Text} from '@gravity-ui/uikit';
 import {MetaTable, Tooltip, YTText} from '@ytsaurus/components';
 import cn from 'bem-cn-lite';
 import moment from 'moment';
-import React from 'react';
+import React, {type ReactNode} from 'react';
 import {type KeysByType} from '../../../../../../../@types/types';
 import format from '../../../../../../common/hammer/format';
 import ColumnHeader, {
@@ -374,16 +374,12 @@ function useSchedulingTableColumns() {
                 cell: ({row: {original: item}}) => {
                     const {user} = item;
 
-                    const content =
-                        item.type === 'operation' ? (
-                            user ? (
-                                <SubjectCard name={user} type="user" />
-                            ) : (
-                                format.NO_VALUE
-                            )
-                        ) : (
-                            <PoolAbc pool={item} />
-                        );
+                    let content: ReactNode;
+                    if (item.type === 'operation') {
+                        content = user ? <SubjectCard name={user} type="user" /> : format.NO_VALUE;
+                    } else {
+                        content = <PoolAbc pool={item} />;
+                    }
 
                     return <TableCell>{content}</TableCell>;
                 },

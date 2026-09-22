@@ -233,7 +233,10 @@ function AccessLogMetadata() {
         },
         [dispatch, value],
     );
-    const valueStr = value === undefined ? '' : value ? 'only_attrs' : 'skip_attrs';
+    let valueStr = '';
+    if (value !== undefined) {
+        valueStr = value ? 'only_attrs' : 'skip_attrs';
+    }
     return (
         <Select
             value={valueStr ? [valueStr] : undefined}

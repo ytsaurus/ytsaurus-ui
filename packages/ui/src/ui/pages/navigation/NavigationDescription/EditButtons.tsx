@@ -14,16 +14,24 @@ export function EditButtons({readonly}: {readonly?: boolean}) {
 
     const {edit, save, cancel, isLoading, isSaving} = useDescriptionActions();
 
-    return editMode ? (
-        <Flex gap={1}>
-            <Button view={'action'} onClick={save} loading={isLoading || isSaving}>
-                {i18n('action_save')}
-            </Button>
-            <Button view={'flat'} onClick={cancel} disabled={isSaving}>
-                {i18n('action_cancel')}
-            </Button>
-        </Flex>
-    ) : readonly ? null : (
+    if (editMode) {
+        return (
+            <Flex gap={1}>
+                <Button view={'action'} onClick={save} loading={isLoading || isSaving}>
+                    {i18n('action_save')}
+                </Button>
+                <Button view={'flat'} onClick={cancel} disabled={isSaving}>
+                    {i18n('action_cancel')}
+                </Button>
+            </Flex>
+        );
+    }
+
+    if (readonly) {
+        return null;
+    }
+
+    return (
         <Button view={'outlined'} onClick={edit}>
             <Icon awesome={'pencil'} />
         </Button>
