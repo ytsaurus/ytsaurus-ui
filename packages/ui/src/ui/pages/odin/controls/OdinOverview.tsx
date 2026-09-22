@@ -82,6 +82,8 @@ const DATE_FORMAT = 'D MMM ';
 const TIME_FORMAT = 'HH:mm';
 const D_O_Y_FORMAT = 'DDD YYYY';
 
+const OverviewRow = React.memo(OverviewRowImpl);
+
 function formatByDates(from: Date, to: Date) {
     const isToday = moment(to).format(D_O_Y_FORMAT) === moment().format(D_O_Y_FORMAT);
     return isToday && moment(from).format(DATE_FORMAT) === moment(to).format(DATE_FORMAT)
@@ -518,8 +520,6 @@ function OverviewRowImpl(props: OverviewRowProps) {
         </React.Fragment>
     );
 }
-
-const OverviewRow = React.memo(OverviewRowImpl);
 
 interface OverviewRowDataProps extends OdinOverviewStateDataItem {
     name: string;

@@ -185,6 +185,15 @@ export async function pipeReadableToWriteable(
     return pipedDataSize;
 }
 
+export class ErrorWithCode extends UIBatchError {
+    httpStatusCode: number;
+
+    constructor(httpStatusCode: number, error: string | YTError<{attributes?: object}>) {
+        super(error);
+        this.httpStatusCode = httpStatusCode;
+    }
+}
+
 export async function sendAndLogError(
     ctx: AppContext,
     res: Response,
@@ -233,12 +242,3 @@ export async function sendAndLogError(
 export const makeAuthClusterCookieName = (ytAuthCluster: string) => {
     return `${ytAuthCluster}_${YT_CYPRESS_COOKIE_NAME}`;
 };
-
-export class ErrorWithCode extends UIBatchError {
-    httpStatusCode: number;
-
-    constructor(httpStatusCode: number, error: string | YTError<{attributes?: object}>) {
-        super(error);
-        this.httpStatusCode = httpStatusCode;
-    }
-}

@@ -36,55 +36,6 @@ type State = {
     currentTab: 'attributes' | 'details' | 'stderrs';
 };
 
-export default function ErrorDetails({error, ...props}: ErrorDetailsProps) {
-    const unipikaSettings = useSelector(selectYsonSettingsErrorDetails);
-
-    const normalizedError = React.useMemo(() => {
-        if (typeof error === 'string') {
-            return {message: error};
-        }
-
-        if (isAxiosError(error)) {
-            return error;
-        }
-
-        const {
-            message,
-            code,
-            inner_errors,
-            attributes,
-            yt_javascript_wrapper,
-            ...unexpectedErrorFields
-        } = error;
-
-        const hasUnexpectedFields = Object.keys(unexpectedErrorFields).length > 0;
-        let attrs = attributes;
-        if (hasUnexpectedFields) {
-            attrs = {unexpectedErrorFields};
-            if (attributes !== undefined) {
-                Object.assign(attrs, {attributes});
-            }
-        }
-
-        return {
-            message,
-            code,
-            inner_errors,
-            yt_javascript_wrapper,
-            ...(attrs ? {attributes: attrs} : {}),
-        };
-    }, [error]);
-
-    return (
-        <ErrorDetailsImpl
-            {...props}
-            error={normalizedError}
-            originalError={error}
-            unipikaSettings={unipikaSettings}
-        />
-    );
-}
-
 export function ErrorDetailsMessage({error}: {error: YTErrorRaw}) {
     const {message, code} = error;
 
@@ -302,4 +253,53 @@ class ErrorDetailsImpl extends React.Component<
             </div>
         );
     }
+}
+
+export default function ErrorDetails({error, ...props}: ErrorDetailsProps) {
+    const unipikaSettings = useSelector(selectYsonSettingsErrorDetails);
+
+    const normalizedError = React.useMemo(() => {
+        if (typeof error === 'string') {
+            return {message: error};
+        }
+
+        if (isAxiosError(error)) {
+            return error;
+        }
+
+        const {
+            message,
+            code,
+            inner_errors,
+            attributes,
+            yt_javascript_wrapper,
+            ...unexpectedErrorFields
+        } = error;
+
+        const hasUnexpectedFields = Object.keys(unexpectedErrorFields).length > 0;
+        let attrs = attributes;
+        if (hasUnexpectedFields) {
+            attrs = {unexpectedErrorFields};
+            if (attributes !== undefined) {
+                Object.assign(attrs, {attributes});
+            }
+        }
+
+        return {
+            message,
+            code,
+            inner_errors,
+            yt_javascript_wrapper,
+            ...(attrs ? {attributes: attrs} : {}),
+        };
+    }, [error]);
+
+    return (
+        <ErrorDetailsImpl
+            {...props}
+            error={normalizedError}
+            originalError={error}
+            unipikaSettings={unipikaSettings}
+        />
+    );
 }

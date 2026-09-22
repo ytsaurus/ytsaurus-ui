@@ -7,14 +7,7 @@ import UIFactory from '../../../UIFactory';
 import i18n from './i18n';
 
 export function useEditColumnRowGroupModal({groupType}: {groupType: 'column' | 'row'}) {
-    const handleClose = () => {
-        setModalProps((prevProps) => ({
-            ...prevProps,
-            visible: false,
-        }));
-    };
-
-    const [modalProps, setModalProps] = React.useState<EditGroupModalProps>({
+    const [modalProps, setModalProps] = React.useState<Omit<EditGroupModalProps, 'handleClose'>>({
         title: '',
         confirmText: '',
         disabledFields: [],
@@ -22,10 +15,16 @@ export function useEditColumnRowGroupModal({groupType}: {groupType: 'column' | '
         visible: false,
         showPredicate: false,
         showColumns: false,
-        handleClose,
         handleSubmit: (_value: Partial<EditGroupFormValues>) => Promise.resolve(),
         mode: 'Add',
     });
+
+    const handleClose = () => {
+        setModalProps((prevProps) => ({
+            ...prevProps,
+            visible: false,
+        }));
+    };
 
     const showColumns = groupType === 'column';
     const showPredicate = groupType === 'row';
@@ -47,7 +46,6 @@ export function useEditColumnRowGroupModal({groupType}: {groupType: 'column' | '
                 showColumns,
                 showPredicate,
                 handleSubmit: submit,
-                handleClose,
             });
         },
         editGroup: ({
@@ -67,7 +65,6 @@ export function useEditColumnRowGroupModal({groupType}: {groupType: 'column' | '
                 showColumns,
                 showPredicate,
                 handleSubmit: submit,
-                handleClose,
             });
         },
         deleteGroup: ({
@@ -89,10 +86,9 @@ export function useEditColumnRowGroupModal({groupType}: {groupType: 'column' | '
                 showColumns,
                 showPredicate,
                 handleSubmit: submit,
-                handleClose,
             });
         },
-        editGroupModalNode: <EditGroupModal {...modalProps} />,
+        editGroupModalNode: <EditGroupModal {...modalProps} handleClose={handleClose} />,
     };
 }
 

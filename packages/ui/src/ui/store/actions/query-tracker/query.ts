@@ -166,9 +166,9 @@ export const setUserLastChoice =
         dispatch(updateQueryDraft({settings: newSettings}));
     };
 
-const getCliqueControllerSupportByCluster = async (
+async function getCliqueControllerSupportByCluster(
     cluster: string,
-): Promise<QueryState['draft']['supportedEngines']> => {
+): Promise<QueryState['draft']['supportedEngines']> {
     if (!cluster) {
         return {
             spyt: false,
@@ -190,7 +190,7 @@ const getCliqueControllerSupportByCluster = async (
         spyt: Boolean(uiConfigOutput.livy_controller_base_url),
         ql: true,
     };
-};
+}
 
 export const loadTablePromptToQuery =
     (

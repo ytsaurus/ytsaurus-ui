@@ -118,26 +118,6 @@ export const saveToken =
         dispatch(setVcsConfig(newConfig));
     };
 
-export const getVcsRepositories =
-    (vcsId?: string): AsyncAction =>
-    async (dispatch) => {
-        dispatch(setVcs(vcsId));
-        await updateVcsSettings(dispatch, {type: vcsId, repository: '', branch: '', path: ''});
-
-        const {data} = await wrapApiPromiseByToaster<{
-            data: Repositories;
-        }>(axios.get('/api/vcs/repositories', {params: {vcsId}}), {
-            skipSuccessToast: true,
-            toasterName: 'get-vcs-repositories',
-        });
-
-        dispatch(setRepositories(data));
-        const keys = Object.keys(data);
-        if (keys.length === 1) {
-            dispatch(changeCurrentRepository(data[keys[0]].vcsId));
-        }
-    };
-
 export const getRepositoryBranches =
     (repositoryName: string): AsyncAction =>
     async (dispatch, getState) => {
@@ -327,6 +307,26 @@ export const changeCurrentRepository =
         await updateVcsSettings(dispatch, {repository: repositoryName, branch: '', path: ''});
         dispatch(getRepositoryBranches(repositoryName));
         dispatch(getRepositoryContent(''));
+    };
+
+export const getVcsRepositories =
+    (vcsId?: string): AsyncAction =>
+    async (dispatch) => {
+        dispatch(setVcs(vcsId));
+        await updateVcsSettings(dispatch, {type: vcsId, repository: '', branch: '', path: ''});
+
+        const {data} = await wrapApiPromiseByToaster<{
+            data: Repositories;
+        }>(axios.get('/api/vcs/repositories', {params: {vcsId}}), {
+            skipSuccessToast: true,
+            toasterName: 'get-vcs-repositories',
+        });
+
+        dispatch(setRepositories(data));
+        const keys = Object.keys(data);
+        if (keys.length === 1) {
+            dispatch(changeCurrentRepository(data[keys[0]].vcsId));
+        }
     };
 
 export const changeCurrentBranch =

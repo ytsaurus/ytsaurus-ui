@@ -49,42 +49,6 @@ export interface Item<T extends string = string> {
 
 const emptyValue: Array<string> = [];
 
-export default function SelectFacade<T extends string = string>(props: YTSelectProps<T>) {
-    const {items, onUpdate, onChange, value, ...rest} = props;
-    const {options, hashByValue} = React.useMemo(() => {
-        return prepareItems(items);
-    }, [items]);
-
-    const handleChange = React.useCallback(
-        (newValue: Required<YTSelectProps<T>>['value']) => {
-            onChange?.(newValue);
-            onUpdate?.(newValue);
-        },
-        [onChange, onUpdate],
-    );
-
-    const filteredValue = React.useMemo(() => {
-        const res = filter_(value, Boolean);
-        return res.length ? res : emptyValue;
-    }, [value]);
-
-    return (
-        <CustomSelect
-            onUpdate={handleChange as any}
-            {...rest}
-            {...{value: filteredValue, options, hashByValue}}
-        />
-    );
-}
-
-SelectFacade.isEmpty = (value: YTSelectProps['value']) => {
-    return !value?.length || (value.length === 1 && !value[0]);
-};
-
-SelectFacade.getDefaultValue = () => {
-    return undefined;
-};
-
 interface SelectSingleProps<T extends string> extends Omit<
     YTSelectProps<T>,
     'value' | 'onUpdate' | 'onChange'
@@ -261,6 +225,42 @@ class CustomSelect extends React.Component<
         );
     };
 }
+
+export default function SelectFacade<T extends string = string>(props: YTSelectProps<T>) {
+    const {items, onUpdate, onChange, value, ...rest} = props;
+    const {options, hashByValue} = React.useMemo(() => {
+        return prepareItems(items);
+    }, [items]);
+
+    const handleChange = React.useCallback(
+        (newValue: Required<YTSelectProps<T>>['value']) => {
+            onChange?.(newValue);
+            onUpdate?.(newValue);
+        },
+        [onChange, onUpdate],
+    );
+
+    const filteredValue = React.useMemo(() => {
+        const res = filter_(value, Boolean);
+        return res.length ? res : emptyValue;
+    }, [value]);
+
+    return (
+        <CustomSelect
+            onUpdate={handleChange as any}
+            {...rest}
+            {...{value: filteredValue, options, hashByValue}}
+        />
+    );
+}
+
+SelectFacade.isEmpty = (value: YTSelectProps['value']) => {
+    return !value?.length || (value.length === 1 && !value[0]);
+};
+
+SelectFacade.getDefaultValue = () => {
+    return undefined;
+};
 
 type Extra = Parameters<Required<SelectProps>['renderControl']>[0];
 

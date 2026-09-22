@@ -72,14 +72,14 @@ export const downloadFile = (
     };
 };
 
-const updateToaster = (
+function updateToaster(
     id: string,
     status: 'loading' | 'success' | 'failure',
     options?: {
         filename?: string;
         error?: YTError | AxiosError;
     },
-) => {
+) {
     if (status === 'loading') {
         toaster.add({
             title: i18n('title_downloading'),
@@ -115,4 +115,4 @@ const updateToaster = (
             ],
         });
     }
-};
+}

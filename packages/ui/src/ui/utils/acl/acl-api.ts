@@ -112,7 +112,7 @@ export function internalAclWithTypes(items: Array<ACE>) {
     });
 }
 
-export const getEffectiveAcl = (sysPath: string) => {
+export function getEffectiveAcl(sysPath: string) {
     return yt.v3.get({path: sysPath + '/@effective_acl'}).then((items: Array<ACE>) => {
         return internalAclWithTypes(items).then((data) => {
             return {
@@ -120,7 +120,7 @@ export const getEffectiveAcl = (sysPath: string) => {
             };
         });
     });
-};
+}
 
 export const getCombinedAcl = ({
     sysPath,

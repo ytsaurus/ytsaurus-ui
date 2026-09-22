@@ -30,6 +30,45 @@ export type Option<TypeName extends string, T> = {
     description?: string;
 };
 
+const CONVERTER: Record<string, ReturnType<typeof makeConverter>> = {
+    number: {
+        toFieldValue(value: unknown) {
+            return {value: value === null ? undefined : (value as number | undefined)};
+        },
+        fromFieldValue(value: any, _oldV?: any) {
+            return value?.value;
+        },
+    },
+    json: {
+        toFieldValue(value: unknown) {
+            return {value: value !== undefined ? JSON.stringify(value, null, 2) : undefined};
+        },
+        fromFieldValue(value: any, oldV?: any) {
+            try {
+                return JSON.parse(value.value);
+            } catch {
+                return oldV;
+            }
+        },
+    },
+    plain: {
+        toFieldValue(value: unknown) {
+            return JSON.stringify(value);
+        },
+        fromFieldValue(value: any, _oldV?: any) {
+            return value !== undefined ? JSON.parse(value) : undefined;
+        },
+    },
+    string_with_choices: {
+        toFieldValue(value: string) {
+            return value ? [value] : [];
+        },
+        fromFieldValue(value: Array<string>, _oldV?: any) {
+            return value?.[0];
+        },
+    },
+};
+
 export function descriptionToDialogField<T = unknown>(
     item: OptionDescription,
     {unipikaSettings, allowEdit, defaultPoolTree}: MakeDialogFieldsOptions,
@@ -144,45 +183,6 @@ function makeConverter<T>() {
         },
     };
 }
-
-const CONVERTER: Record<string, ReturnType<typeof makeConverter>> = {
-    number: {
-        toFieldValue(value: unknown) {
-            return {value: value === null ? undefined : (value as number | undefined)};
-        },
-        fromFieldValue(value: any, _oldV?: any) {
-            return value?.value;
-        },
-    },
-    json: {
-        toFieldValue(value: unknown) {
-            return {value: value !== undefined ? JSON.stringify(value, null, 2) : undefined};
-        },
-        fromFieldValue(value: any, oldV?: any) {
-            try {
-                return JSON.parse(value.value);
-            } catch {
-                return oldV;
-            }
-        },
-    },
-    plain: {
-        toFieldValue(value: unknown) {
-            return JSON.stringify(value);
-        },
-        fromFieldValue(value: any, _oldV?: any) {
-            return value !== undefined ? JSON.parse(value) : undefined;
-        },
-    },
-    string_with_choices: {
-        toFieldValue(value: string) {
-            return value ? [value] : [];
-        },
-        fromFieldValue(value: Array<string>, _oldV?: any) {
-            return value?.[0];
-        },
-    },
-};
 
 function converterByType(item: OptionDescription) {
     return CONVERTER[item.type] ?? makeConverter<any>();

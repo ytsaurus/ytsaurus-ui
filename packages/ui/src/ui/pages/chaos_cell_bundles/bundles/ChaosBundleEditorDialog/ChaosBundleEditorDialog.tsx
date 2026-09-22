@@ -45,6 +45,11 @@ const TABS = [
     },
 ];
 
+const FORMATS: {[resourceType: string]: 'Number' | 'Bytes'} = {
+    tablet_count: 'Number',
+    tablet_static_memory: 'Bytes',
+};
+
 export interface Props {
     bundleEditorData: ChaosCellBundleEditorState;
     hideBundleEditor(): void;
@@ -155,11 +160,6 @@ function ChaosBundleResourceUsage({
         </div>
     );
 }
-
-const FORMATS: {[resourceType: string]: 'Number' | 'Bytes'} = {
-    tablet_count: 'Number',
-    tablet_static_memory: 'Bytes',
-};
 
 interface ChaosBundleResourceEditorProps {
     bundleEditorData: ChaosCellBundleEditorState;
