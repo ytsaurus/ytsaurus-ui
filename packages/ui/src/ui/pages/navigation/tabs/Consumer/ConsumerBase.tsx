@@ -1,3 +1,4 @@
+import {Flex} from '@gravity-ui/uikit';
 import React, {type ComponentType, useEffect} from 'react';
 
 import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
@@ -49,24 +50,31 @@ export const ConsumerBase: React.VFC<PropsFromRedux> = ({
 
     return (
         <ErrorBoundary>
-            <TargetQueue />
-            <Meta
-                owner={owner}
-                partitionCount={partitionCount}
-                queueAgentHost={queueAgentHost}
-                readDataWeightRate={readDataWeightRate}
-                readRowCountRate={readRowCountRate}
-            />
-            <WithStickyToolbar
-                toolbar={
-                    <Toolbar
-                        itemsToWrap={[
-                            {node: <ConsumerToolbar extras={ExtraControls} />, growable: true},
-                        ]}
+            <Flex direction="column" gap={5}>
+                <TargetQueue />
+                <Flex direction="column">
+                    <Meta
+                        owner={owner}
+                        partitionCount={partitionCount}
+                        queueAgentHost={queueAgentHost}
+                        readDataWeightRate={readDataWeightRate}
+                        readRowCountRate={readRowCountRate}
                     />
-                }
-                content={<View />}
-            />
+                    <WithStickyToolbar
+                        toolbar={
+                            <Toolbar
+                                itemsToWrap={[
+                                    {
+                                        node: <ConsumerToolbar extras={ExtraControls} />,
+                                        growable: true,
+                                    },
+                                ]}
+                            />
+                        }
+                        content={<View />}
+                    />
+                </Flex>
+            </Flex>
             <RegisterConsumerDialog />
         </ErrorBoundary>
     );
