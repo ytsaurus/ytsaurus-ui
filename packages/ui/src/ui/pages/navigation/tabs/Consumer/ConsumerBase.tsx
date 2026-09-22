@@ -8,6 +8,7 @@ import {CONSUMER_MODE} from '../../../../constants/navigation/tabs/consumer';
 import {type TPerformanceCounters} from '../../../../store/reducers/navigation/tabs/queue/types';
 import {type YTError} from '../../../../types';
 
+import {RealPathNotice} from '../../components/RealPathNotice';
 import {QueueError} from '../Queue/QueueError';
 
 import TargetQueue from './TargetQueue/TargetQueue';
@@ -45,12 +46,18 @@ export const ConsumerBase: React.VFC<PropsFromRedux> = ({
     const {ExtraControls, View} = VIEWS[consumerMode] ?? emptyView;
 
     if (statusError) {
-        return <QueueError error={statusError} topMargin="none" />;
+        return (
+            <Flex direction="column" gap={5}>
+                <RealPathNotice />
+                <QueueError error={statusError} topMargin="none" />
+            </Flex>
+        );
     }
 
     return (
         <ErrorBoundary>
             <Flex direction="column" gap={5}>
+                <RealPathNotice />
                 <TargetQueue />
                 <Flex direction="column">
                     <Meta

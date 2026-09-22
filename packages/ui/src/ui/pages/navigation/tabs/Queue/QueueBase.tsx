@@ -21,6 +21,7 @@ import PartitionsExtraControls from './views/Partitions/PartitionsExtraControls'
 
 import {Exports} from './views/Exports/Exports';
 import {ExportsExtraControls} from './views/Exports/ExportsExtraControls';
+import {RealPathNotice} from '../../components/RealPathNotice';
 import {QueueError} from './QueueError';
 
 const emptyView = {ExtraControls: () => null, View: () => null};
@@ -51,12 +52,18 @@ export const QueueBase: React.VFC<PropsFromRedux> = ({
     const items = useSelector(selectQueueStatusDataAlerts);
 
     if (statusError) {
-        return <QueueError error={statusError} topMargin="none" />;
+        return (
+            <Flex direction="column" gap={5}>
+                <RealPathNotice />
+                <QueueError error={statusError} topMargin="none" />
+            </Flex>
+        );
     }
 
     return (
         <ErrorBoundary>
             <Flex direction="column" gap={5}>
+                <RealPathNotice />
                 <Alerts items={items} marginDirection="none" />
                 <Flex direction="column">
                     <Meta
