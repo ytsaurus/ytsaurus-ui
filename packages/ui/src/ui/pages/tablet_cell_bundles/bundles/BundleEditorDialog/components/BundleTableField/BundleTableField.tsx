@@ -130,7 +130,9 @@ function createTypeColumn(selectedType: string | undefined): TableColumnConfig<B
                             </Text>
                         </Tooltip>
                     ) : (
-                        item.type
+                        <Text variant="inherit" ellipsis>
+                            {item.type}
+                        </Text>
                     )}
                 </Flex>
                 {selectedType === item.id && item.deprecated && (
