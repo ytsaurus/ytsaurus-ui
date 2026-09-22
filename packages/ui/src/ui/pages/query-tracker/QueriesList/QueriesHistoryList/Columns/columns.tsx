@@ -21,12 +21,18 @@ export function isHeaderTableItem(b: TableItem): b is HeaderTableItem {
 export type QueryHistoryListColumn = {
     name: string;
     baseWidth: number;
+    grow?: boolean;
     render: (row: QueryItem) => React.ReactNode;
 };
+
+export function getQueryHistoryColumnFlex(column: QueryHistoryListColumn) {
+    return `${column.grow ? 1 : 0} 0 ${column.baseWidth}px`;
+}
 
 export const NameColumns: QueryHistoryListColumn = {
     name: 'Name',
     baseWidth: 100,
+    grow: true,
     render: (row) => {
         return <QueryHistoryNameCell row={row} />;
     },
