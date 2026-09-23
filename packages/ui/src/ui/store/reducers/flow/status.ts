@@ -32,7 +32,7 @@ const flowStatusSlice = createSlice({
             {payload: {pipeline_path}}: PayloadAction<Pick<FlowStatusState, 'pipeline_path'>>,
         ) {
             state.loading = true;
-            if (pipeline_path != state.pipeline_path) {
+            if (pipeline_path !== state.pipeline_path) {
                 Object.assign(state, {pipeline_path, data: undefined});
             }
         },

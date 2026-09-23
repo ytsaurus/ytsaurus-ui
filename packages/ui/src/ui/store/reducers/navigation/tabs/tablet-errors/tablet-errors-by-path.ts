@@ -58,7 +58,7 @@ const tabletErrorsByPathSlice = createSlice({
             {payload}: PayloadAction<Pick<TabletErrorsByPathState, 'table_path' | 'table_id'>>,
         ) {
             const {table_path, table_id} = payload;
-            if (table_path != state.table_path || table_id !== state.table_id) {
+            if (table_path !== state.table_path || table_id !== state.table_id) {
                 return {...state, ...payload, data: undefined, loading: true, error: undefined};
             }
             return {...state, loading: true, error: undefined};

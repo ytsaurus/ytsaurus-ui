@@ -48,7 +48,7 @@ function onError(error: any) {
         getWindowStore().dispatch({type: BAN_USER});
     } else if (code === yt.codes.USER_EXCEEDED_RPS) {
         getWindowStore().dispatch({type: BLOCK_USER});
-    } else if (code == yt.codes.XSRF_TOKEN_EXPIRED) {
+    } else if (code === yt.codes.XSRF_TOKEN_EXPIRED) {
         const content = `Your CSRF-token '${getToken()}' has expired. Please reaload the page`;
         // eslint-disable-next-line no-console
         console.log(content);
