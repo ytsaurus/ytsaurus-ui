@@ -6,7 +6,7 @@ export const selectAllowedExperimentalPages = (state: RootState) =>
 
 export const selectIsExperimentalPagesReady = (state: RootState) => {
     return (
-        UIFactory.getExperimentalPages().length == 0 ||
+        UIFactory.getExperimentalPages().length === 0 ||
         selectAllowedExperimentalPages(state) !== undefined
     );
 };
