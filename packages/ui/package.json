@@ -121,7 +121,7 @@
     "@gravity-ui/timeline": "^1.25.1",
     "@gravity-ui/tsconfig": "^1.0.0",
     "@gravity-ui/uikit": "^7.44.0",
-    "@gravity-ui/unipika": "^5.1.0",
+    "@gravity-ui/unipika": "^5.6.5",
     "@gravity-ui/websql-autocomplete": "^12.3.0",
     "@gravity-ui/yagr": "^5.1.0",
     "@playwright/experimental-ct-react": "1.53.1",
