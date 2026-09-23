@@ -91,7 +91,7 @@
     "@gravity-ui/i18n": "^1.8.0",
     "@gravity-ui/illustrations": "^2.1.0",
     "@gravity-ui/react-data-table": "^2.2.1",
-    "@gravity-ui/unipika": "^5.1.0",
+    "@gravity-ui/unipika": "^5.6.5",
     "@ytsaurus/interface-helpers": "^1.2.0",
     "axios": "^1.13.6",
     "bem-cn-lite": "^4.1.0",
