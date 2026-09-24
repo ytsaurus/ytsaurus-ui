@@ -21,7 +21,7 @@ interface Props extends Pick<
 /**
  * @deprecated
  * Uses the legacy `settingName`/`settingNS` pattern.
- * Use `SettingsMenuRadioByKey` instead.
+ * Use `SegmentedRadioGroupSettingItem` instead.
  */
 export const SettingsMenuRadio: VFC<Props> = (props) => {
     const {settingName, settingNS, onChange, ...rest} = props;
