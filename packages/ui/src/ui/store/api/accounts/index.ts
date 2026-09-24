@@ -8,6 +8,7 @@ import {
     fetchAccountEditorPath,
     fetchAccountEditorTree,
 } from './editor';
+import {type AccountNamesArgs, fetchAccountNames} from './names';
 import {fetchUsable} from './usable';
 
 export const accountsApi = rootApi.injectEndpoints({
@@ -23,12 +24,17 @@ export const accountsApi = rootApi.injectEndpoints({
             queryFn: fetchAccountEditorTree,
             providesTags: [YTApiId.accountsEditData],
         }),
+        accountNames: build.query<string[], AccountNamesArgs>({
+            queryFn: fetchAccountNames,
+            providesTags: [YTApiId.listAccounts],
+        }),
     }),
 });
 
 const {
     useAccountEditorPathQuery: useAccountEditorPathQueryBase,
     useAccountEditorTreeQuery: useAccountEditorTreeQueryBase,
+    useAccountNamesQuery: useAccountNamesQueryBase,
     useUsableAccountsQuery,
 } = accountsApi;
 
@@ -49,4 +55,8 @@ export function useAccountEditorTreeQuery<T>(
         data?: T;
         currentData?: T;
     };
+}
+
+export function useAccountNamesQuery(args: AccountNamesArgs, options?: {skip?: boolean}) {
+    return useAccountNamesQueryBase(useEffectiveClusterArgs(args), options);
 }
