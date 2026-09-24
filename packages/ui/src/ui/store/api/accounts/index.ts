@@ -10,9 +10,11 @@ import {
 } from './editor';
 import {type AccountNamesArgs, fetchAccountNames} from './names';
 import {
+    type DeleteAccountArgs,
     type UpdateAccountAbcArgs,
     type UpdateAccountParentArgs,
     type UpdateAccountQuotaArgs,
+    removeAccount,
     updateAccountAbc,
     updateAccountParent,
     updateAccountQuota,
@@ -48,6 +50,11 @@ export const accountsApi = rootApi.injectEndpoints({
             queryFn: updateAccountQuota,
             invalidatesTags: (result) => (result ? [YTApiId.accountsEditData] : []),
         }),
+        deleteAccount: build.mutation<string, DeleteAccountArgs>({
+            queryFn: removeAccount,
+            invalidatesTags: (result) =>
+                result ? [YTApiId.accountsEditData, YTApiId.listAccounts] : [],
+        }),
     }),
 });
 
@@ -55,6 +62,7 @@ const {
     useAccountEditorPathQuery: useAccountEditorPathQueryBase,
     useAccountEditorTreeQuery: useAccountEditorTreeQueryBase,
     useAccountNamesQuery: useAccountNamesQueryBase,
+    useDeleteAccountMutation,
     useUpdateAccountAbcMutation,
     useUpdateAccountParentMutation,
     useUpdateAccountQuotaMutation,
@@ -84,4 +92,9 @@ export function useAccountNamesQuery(args: AccountNamesArgs, options?: {skip?: b
     return useAccountNamesQueryBase(useEffectiveClusterArgs(args), options);
 }
 
-export {useUpdateAccountAbcMutation, useUpdateAccountParentMutation, useUpdateAccountQuotaMutation};
+export {
+    useDeleteAccountMutation,
+    useUpdateAccountAbcMutation,
+    useUpdateAccountParentMutation,
+    useUpdateAccountQuotaMutation,
+};

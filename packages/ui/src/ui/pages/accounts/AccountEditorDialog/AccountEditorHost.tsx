@@ -26,6 +26,7 @@ export interface AccountEditorHostProps {
     children: React.ReactNode;
     DataLoader?: React.ComponentType<AccountEditorDataLoaderProps>;
     onChanged?(change: AccountEditorChange): void;
+    onDeleted?(accountName: string): void;
 }
 
 const NOOP = () => undefined;
@@ -34,11 +35,13 @@ export function AccountEditorHost({
     children,
     DataLoader = AccountEditorDataLoader,
     onChanged = NOOP,
+    onDeleted = NOOP,
 }: AccountEditorHostProps) {
     const cluster = useSelector(selectCluster);
     const [openingAccountName, setOpeningAccountName] = React.useState<string>();
     const [openedAccountName, setOpenedAccountName] = React.useState<string>();
     const [data, setData] = React.useState<AccountEditorData>();
+    const [deleted, setDeleted] = React.useState(false);
     const currentAccountRef = React.useRef<string>();
     const pendingRequestRef = React.useRef<PendingRequest>();
 
@@ -51,6 +54,7 @@ export function AccountEditorHost({
         }
 
         currentAccountRef.current = accountName;
+        setDeleted(false);
         setOpeningAccountName(accountName);
 
         return new Promise<void>((resolve, reject) => {
@@ -64,6 +68,7 @@ export function AccountEditorHost({
         setOpeningAccountName(undefined);
         setOpenedAccountName(undefined);
         setData(undefined);
+        setDeleted(false);
     }, []);
 
     const handleLoadError = React.useCallback((accountName: string, error: unknown) => {
@@ -84,9 +89,12 @@ export function AccountEditorHost({
             autoHiding: false,
         });
 
-        if (pendingRequestRef.current?.accountName === accountName) {
-            pendingRequestRef.current.reject(error);
+        const isOpening = pendingRequestRef.current?.accountName === accountName;
+        if (!isOpening) {
+            return;
         }
+
+        pendingRequestRef.current?.reject(error);
         pendingRequestRef.current = undefined;
         currentAccountRef.current = undefined;
         setOpeningAccountName(undefined);
@@ -122,11 +130,18 @@ export function AccountEditorHost({
         [closeAccount, openAccount, openedAccountName, openingAccountName],
     );
     const currentAccountName = openingAccountName || openedAccountName;
+    const handleDeleted = React.useCallback(
+        (accountName: string) => {
+            setDeleted(true);
+            onDeleted(accountName);
+        },
+        [onDeleted],
+    );
 
     return (
         <AccountEditorContext.Provider value={contextValue}>
             {children}
-            {currentAccountName && (
+            {currentAccountName && !deleted && (
                 <DataLoader
                     accountName={currentAccountName}
                     cluster={cluster}
@@ -140,6 +155,7 @@ export function AccountEditorHost({
                     data={data}
                     onClose={closeAccount}
                     onChanged={onChanged}
+                    onDeleted={handleDeleted}
                 />
             )}
         </AccountEditorContext.Provider>
