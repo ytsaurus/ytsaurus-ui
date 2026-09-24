@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useDispatch, useSelector} from '../../store/redux-hooks';
 import block from 'bem-cn-lite';
 
@@ -14,46 +14,11 @@ import SelectFacade, {
 import {setSettingByKey} from '../../store/actions/settings';
 import {selectSettingsData} from '../../store/selectors/settings/settings-base';
 
-import {SettingsItemLayout, type SettingsItemLayoutProps} from './SettingsItemLayout';
+import {type SettingsItemLayoutProps} from './SettingsItemLayout';
 
 import './SettingsMenu.scss';
 
 const b = block('elements-page');
-
-type SettingsMenuSelectOption =
-    | {options: Array<{value: string; text: string}>}
-    | {getOptionsOnMount: () => Promise<Array<{value: string; text: string}>>};
-type SettingsMenuSelectProps = {
-    placeholder?: string;
-    label?: string;
-    getSetting: () => string;
-    setSetting: (value?: string) => void;
-} & SettingsMenuSelectOption;
-
-export const SettingsMenuSelect = (props: SettingsMenuSelectProps) => {
-    const settingValue = props.getSetting();
-    const [items, setItems] = useState('options' in props ? props.options : []);
-
-    useEffect(() => {
-        if ('getOptionsOnMount' in props) {
-            props?.getOptionsOnMount().then((options) => {
-                setItems(options);
-            });
-        }
-    }, []);
-
-    return (
-        <div className={b('settings-item', {select: true})} title={props.label}>
-            <SelectSingle
-                value={settingValue}
-                items={items}
-                onChange={(value) => props.setSetting(value)}
-                placeholder={props.placeholder}
-                width="max"
-            />
-        </div>
-    );
-};
 
 type SelectSettingItemProps<K extends KeysByType<DescribedSettings, string>> = {
     settingKey: K;
@@ -154,13 +119,15 @@ export function SegmentedRadioGroupSettingItem<
     options,
     displayValue,
     convertValue,
-    ...rest
+    description,
+    oneLine,
+    title,
 }: SegmentedRadioGroupSettingItemProps<K>) {
     const {value: storedValue, onUpdate} = useSettingByKey(settingKey);
     const value = displayValue ?? storedValue;
 
     return (
-        <SettingsItemLayout {...rest}>
+        <div className={b('settings-item', {'one-line': oneLine})} title={title}>
             <SegmentedRadioGroup
                 options={options.map(({value: optionValue, ...option}) => ({
                     ...option,
@@ -173,7 +140,12 @@ export function SegmentedRadioGroupSettingItem<
                 }}
                 qa={settingKey}
             />
-        </SettingsItemLayout>
+            {description && (
+                <div className={b('settings-description', 'elements-secondary-text')}>
+                    {description}
+                </div>
+            )}
+        </div>
     );
 }
 
