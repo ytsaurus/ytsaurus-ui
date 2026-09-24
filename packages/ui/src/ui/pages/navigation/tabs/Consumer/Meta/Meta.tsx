@@ -38,84 +38,92 @@ const Meta: React.FC<Props> = ({
 
     return (
         <ErrorBoundary>
-            <div className={block('header')}>
-                <div className={block('header-title', 'elements-heading elements-heading_size_xs')}>
-                    {i18n('title_meta')}
+            <div>
+                <div className={block('header')}>
+                    <div
+                        className={block(
+                            'header-title',
+                            'elements-heading elements-heading_size_xs',
+                        )}
+                    >
+                        {i18n('title_meta')}
+                    </div>
                 </div>
-            </div>
-            <MetaTable
-                className={block()}
-                items={[
-                    [
-                        {
-                            key: 'owner',
-                            label: i18n('field_owner'),
-                            value: owner && <SubjectCard name={owner} />,
-                            visible: !isNullable(owner),
-                        },
-                    ],
-                    [
-                        {
-                            key: 'vital',
-                            label: i18n('field_vital'),
-                            value: (
-                                <Label
-                                    theme="default"
-                                    text={vital ? i18n('value_true') : i18n('value_false')}
-                                />
-                            ),
-                            visible: !isNullable(vital),
-                        },
-                        {
-                            key: 'partition-count',
-                            label: i18n('field_partition-count'),
-                            value: partitionCount,
-                            visible: !isNullable(partitionCount),
-                        },
-                        {
-                            key: 'queue-agent-host',
-                            label: i18n('field_queue-agent-host'),
-                            value: (
-                                <span className={block('queue-agent-host')}>
-                                    {queueAgentHost}
-                                    <ClipboardButton
-                                        text={queueAgentHost}
-                                        view="flat-secondary"
-                                        inlineMargins
+
+                <MetaTable
+                    className={block()}
+                    items={[
+                        [
+                            {
+                                key: 'owner',
+                                label: i18n('field_owner'),
+                                value: owner && <SubjectCard name={owner} />,
+                                visible: !isNullable(owner),
+                            },
+                        ],
+                        [
+                            {
+                                key: 'vital',
+                                label: i18n('field_vital'),
+                                value: (
+                                    <Label
+                                        theme="default"
+                                        text={vital ? i18n('value_true') : i18n('value_false')}
                                     />
-                                </span>
-                            ),
-                            visible: !isNullable(queueAgentHost),
-                        },
-                    ],
-                    [
-                        {
-                            key: 'read-data-weight-rate',
-                            label: i18n('field_data-weight-read-rate'),
-                            value: (
-                                <Multimeter
-                                    {...readDataWeightRate}
-                                    show="1m"
-                                    format={format.BytesPerSecond}
-                                />
-                            ),
-                            visible: !isNullable(readDataWeightRate),
-                        },
-                        {
-                            key: 'read-row-count-rate',
-                            label: i18n('field_rows-read-rate'),
-                            value: (
-                                <Multimeter
-                                    {...readRowCountRate}
-                                    show="1m"
-                                    format={format.RowsPerSecond}
-                                />
-                            ),
-                            visible: !isNullable(readRowCountRate),
-                        },
-                    ],
-                ]}
-            />
+                                ),
+                                visible: !isNullable(vital),
+                            },
+                            {
+                                key: 'partition-count',
+                                label: i18n('field_partition-count'),
+                                value: partitionCount,
+                                visible: !isNullable(partitionCount),
+                            },
+                            {
+                                key: 'queue-agent-host',
+                                label: i18n('field_queue-agent-host'),
+                                value: (
+                                    <span className={block('queue-agent-host')}>
+                                        {queueAgentHost}
+                                        <ClipboardButton
+                                            text={queueAgentHost}
+                                            view="flat-secondary"
+                                            inlineMargins
+                                        />
+                                    </span>
+                                ),
+                                visible: !isNullable(queueAgentHost),
+                            },
+                        ],
+                        [
+                            {
+                                key: 'read-data-weight-rate',
+                                label: i18n('field_data-weight-read-rate'),
+                                value: (
+                                    <Multimeter
+                                        {...readDataWeightRate}
+                                        show="1m"
+                                        format={format.BytesPerSecond}
+                                    />
+                                ),
+                                visible: !isNullable(readDataWeightRate),
+                            },
+                            {
+                                key: 'read-row-count-rate',
+                                label: i18n('field_rows-read-rate'),
+                                value: (
+                                    <Multimeter
+                                        {...readRowCountRate}
+                                        show="1m"
+                                        format={format.RowsPerSecond}
+                                    />
+                                ),
+                                visible: !isNullable(readRowCountRate),
+                            },
+                        ],
+                    ]}
+                />
+            </div>
         </ErrorBoundary>
     );
 };

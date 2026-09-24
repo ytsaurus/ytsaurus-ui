@@ -83,7 +83,7 @@ export interface CollapsibleSectionProps {
     children?: React.ReactNode;
     overview?: React.ReactNode;
 
-    marginDirection?: 'top' | 'bottom';
+    marginDirection?: 'top' | 'bottom' | 'none';
 
     togglerRightPadding?: 'small';
 }
