@@ -10,7 +10,7 @@ import {makeItem, makePage} from '../settings-page-builders';
 import i18n from './i18n';
 import {DefaultAcoSelect} from './DefaultAcoSelect';
 import {GraphAutoCenterSetting} from './GraphAutoCenterSetting';
-import {SettingsMenuInputByKey} from '../../SettingsMenu/SettingsMenuInputByKey/SettingsMenuInputByKey';
+import {TextInputSettingItem} from '../../SettingsMenu/TextInputSettingItem/TextInputSettingItem';
 import {SettingName} from '../../../../shared/constants/settings';
 
 type Props = {
@@ -30,7 +30,7 @@ export const queriesPage = ({cluster, hasQuerySuggestions}: Props) => {
                 SettingName.QUERY_TRACKER.YQL_AGENT_STAGE,
                 i18n('field_yql-agent-stage'),
                 'top',
-                <SettingsMenuInputByKey
+                <TextInputSettingItem
                     placeholder={i18n('context_yql-agent-stage-placeholder')}
                     settingKey="global::queryTracker::yqlAgentStage"
                 />,
@@ -39,7 +39,7 @@ export const queriesPage = ({cluster, hasQuerySuggestions}: Props) => {
                 SettingName.QUERY_TRACKER.STAGE,
                 i18n('field_query-tracker-stage'),
                 'top',
-                <SettingsMenuInputByKey
+                <TextInputSettingItem
                     placeholder={i18n('context_query-tracker-stage-placeholder')}
                     description={i18n('context_query-tracker-stage-description')}
                     settingKey="global::queryTracker::queryTrackerStage"

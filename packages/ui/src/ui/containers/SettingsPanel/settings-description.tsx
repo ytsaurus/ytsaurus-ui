@@ -34,7 +34,7 @@ import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import {selectRecentPagesInfo} from '../../store/selectors/slideoutMenu';
 import {selectCurrentClusterNS} from '../../store/selectors/settings/settings-ts';
 import SettingsMenuRadio from '../../containers/SettingsMenu/SettingsMenuRadio';
-import {SettingsMenuInputByKey} from '../SettingsMenu/SettingsMenuInputByKey/SettingsMenuInputByKey';
+import {TextInputSettingItem} from '../SettingsMenu/TextInputSettingItem/TextInputSettingItem';
 import {
     selectCurrentUserName,
     selectGlobalMasterVersion,
@@ -334,7 +334,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         SettingName.LOCAL.NAVIGATION_DEFAULT_PATH,
                         i18n('field_default-path'),
                         'top',
-                        <SettingsMenuInputByKey
+                        <TextInputSettingItem
                             placeholder={i18n('context_default-path-placeholder')}
                             description={i18n('context_default-path-description')}
                             validator={navigationPathValidator}
@@ -345,7 +345,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     SettingName.NAVIGATION.DEFAULT_CHYT_ALIAS,
                     i18n('field_default-chyt-alias'),
                     'top',
-                    <SettingsMenuInputByKey
+                    <TextInputSettingItem
                         placeholder={i18n('context_default-chyt-alias-placeholder')}
                         description={i18n('context_default-chyt-alias-description')}
                         validator={chytAliasValidator}

@@ -16,7 +16,7 @@ type StringSettingKey = KeysByType<DescribedSettings, string> &
         [K in keyof DescribedSettings]: string extends DescribedSettings[K] ? K : never;
     }[keyof DescribedSettings];
 
-export type SettingsMenuInputByKeyProps<T extends StringSettingKey> = {
+export type TextInputSettingItemProps<T extends StringSettingKey> = {
     settingKey: T;
     heading?: string;
     description?: React.ReactNode;
@@ -24,13 +24,13 @@ export type SettingsMenuInputByKeyProps<T extends StringSettingKey> = {
     validator?: (value: string) => string | null | undefined;
 };
 
-export function SettingsMenuInputByKey<T extends StringSettingKey>({
+export function TextInputSettingItem<T extends StringSettingKey>({
     settingKey,
     heading,
     description,
     placeholder,
     validator,
-}: SettingsMenuInputByKeyProps<T>) {
+}: TextInputSettingItemProps<T>) {
     const dispatch = useDispatch();
     const settings = useSelector(selectSettingsData);
     const [value, setValue] = useState<string>(settings[settingKey] ?? '');
