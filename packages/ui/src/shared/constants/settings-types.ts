@@ -1,6 +1,7 @@
 import {type DashKitProps} from '@gravity-ui/dashkit';
 import {type NodeType} from './system';
 import {type QueryEngine} from './engines';
+import {type StartingPage} from './settings-ts';
 
 export type QueryToken = {
     name: string;
@@ -54,7 +55,7 @@ interface DevelopmentSettings {
 }
 
 interface MenuSettings {
-    'global::menu::startingPage': 'navigation' | 'operations' | 'dashboard' | 'system';
+    'global::menu::startingPage': StartingPage;
     'global::menu::preserveState': boolean;
     'global::menu::recentClustersFirst': boolean;
     'global::menu::recentPagesFirst': boolean;
@@ -90,7 +91,7 @@ interface ComponentsSettings {
 }
 
 interface SystemSettings {
-    'global::system::mastersHostType': 'container' | 'host';
+    'global::system::mastersHostType': 'host' | 'physicalHost';
     'global::system::mastersCollapsed': boolean | undefined;
     'global::system::schedulersCollapsed': boolean | undefined;
     'global::system::chunksCollapsed': boolean | undefined;
