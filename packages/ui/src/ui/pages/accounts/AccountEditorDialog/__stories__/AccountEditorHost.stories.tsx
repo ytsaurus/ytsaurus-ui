@@ -28,6 +28,7 @@ function EditorButtons() {
         <div style={{display: 'flex', gap: 8}}>
             <AccountEditButton accountName={accountName}>Edit account</AccountEditButton>
             <AccountEditButton accountName="another-account">Edit another</AccountEditButton>
+            <AccountEditButton accountName="root">Edit root</AccountEditButton>
             <OpenOnMount />
         </div>
     );

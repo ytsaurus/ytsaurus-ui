@@ -1,5 +1,4 @@
 import {connect} from 'react-redux';
-import {loadEditedAccount} from '../../../../../../store/actions/accounts/accounts';
 import {closeCreateModal} from '../../../../../../store/actions/accounts/editor';
 import {createAccountFromInfo} from '../../../../../../store/actions/accounts/editor-ts';
 import {type RootState} from '../../../../../../store/reducers';
@@ -25,7 +24,6 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = {
     closeCreateModal,
-    loadEditedAccount,
     createAccountFromInfo,
 };
 

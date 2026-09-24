@@ -11,6 +11,8 @@ import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {accountsIncreaseEditCounter, loadEditedAccount} from './accounts';
 import i18n from './i18n';
 import {type AccountQuotaParams, setAccountQuotaImpl} from '../../../utils/accounts/account-quota';
+import {accountsApi} from '../../../store/api/accounts';
+import {YTApiId} from '../../../rum/rum-wrap-api';
 
 export type {AccountQuotaParams};
 
@@ -70,16 +72,31 @@ export function createAccountFromInfo(newAccountInfo: NewAccountInfo): EditorAct
     return (dispatch) => {
         const {abcService, account, parentAccount, responsibles, createHome} = newAccountInfo;
 
-        return createAccount(account, parentAccount).then(() => {
-            const {id, slug} = abcService || {};
+        return createAccount(account, parentAccount)
+            .then(() => {
+                const {id, slug} = abcService || {};
 
-            return Promise.all([
-                setAccountAbc(account, id, slug).catch(() => {}),
-                createHome ? createAccountHome(account).catch(() => {}) : Promise.resolve(),
+                return Promise.all([
+                    setAccountAbc(account, id, slug).catch(() => {}),
+                    createHome ? createAccountHome(account).catch(() => {}) : Promise.resolve(),
+                    dispatch(
+                        setResponsibleUsers(
+                            responsibles,
+                            account,
+                            parentAccount !== ROOT_ACCOUNT_NAME,
+                        ),
+                    ).catch(() => {}),
+                ]);
+            })
+            .then((result: unknown[]) => {
                 dispatch(
-                    setResponsibleUsers(responsibles, account, parentAccount !== ROOT_ACCOUNT_NAME),
-                ).catch(() => {}),
-            ]);
-        });
+                    accountsApi.util.invalidateTags([
+                        YTApiId.listAccounts,
+                        YTApiId.accountsEditData,
+                    ]),
+                );
+                dispatch(accountsIncreaseEditCounter());
+                return result;
+            });
     };
 }
