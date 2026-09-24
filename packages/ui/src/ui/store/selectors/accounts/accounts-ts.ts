@@ -19,15 +19,10 @@ import {selectMediumListNoCache} from '../thor';
 import ypath from '../../../common/thor/ypath';
 
 import {accountMemoryMediumToFieldName} from '../../../utils/accounts/accounts-selector';
-import {
-    type AccountTreeNode,
-    getAccountQuotaSources,
-    isTopLevelAccount,
-    prepareAccountsTree,
-} from '../../../utils/accounts/accounts-tree';
+import {type AccountTreeNode, prepareAccountsTree} from '../../../utils/accounts/accounts-tree';
 import {calculateLoadingStatus, isFinalLoadingStatus} from '../../../utils/utils';
 
-export {getAccountQuotaSources, prepareAccountsTree};
+export {prepareAccountsTree};
 
 const selectAccountsLoading = (state: RootState) => state.accounts.accounts.fetching;
 const selectAccountsLoaded = (state: RootState) => state.accounts.accounts.wasLoaded;
@@ -48,9 +43,6 @@ export const selectAccountsContentMode = (state: RootState) =>
     state.accounts.accounts.activeContentModeFilter;
 export const selectAccountsMasterMemoryContentMode = (state: RootState) =>
     state.accounts.accounts.masterMemoryContentMode;
-export const selectEditableAccount = (state: RootState) =>
-    state.accounts.accounts.editableAccount as AccountSelector;
-
 export const selectAccountsDisabledCacheForNextFetch = (state: RootState) =>
     state.accounts.accounts.disableCacheForNextFetch;
 export const selectAccountsEditCounter = (state: RootState) => state.accounts.accounts.editCounter;
@@ -576,18 +568,3 @@ export function getAccountName(treeItem?: {attributes: AccountSelector}) {
     const {attributes: account} = treeItem || {};
     return account && account.name;
 }
-
-export const selectEditableAccountQuotaSources = createSelector(
-    [selectAccountsTree, selectEditableAccount],
-    (tree, account) => {
-        if (!account?.name || !tree) {
-            return [];
-        }
-        return getAccountQuotaSources(account.name, tree);
-    },
-);
-
-export const selectIsEditableAccountOfTopLevel = createSelector(
-    [selectAccountsMapByName, selectEditableAccount],
-    (mapByName, account) => isTopLevelAccount(mapByName[account?.name]),
-);
