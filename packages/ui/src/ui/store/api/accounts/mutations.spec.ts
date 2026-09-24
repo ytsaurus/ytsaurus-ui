@@ -1,8 +1,14 @@
-import {setAccountAbc, setAccountParent} from '../../../utils/accounts/editor';
+import {deleteAccount, setAccountAbc, setAccountParent} from '../../../utils/accounts/editor';
 import {setAccountQuotaImpl} from '../../../utils/accounts/account-quota';
-import {updateAccountAbc, updateAccountParent, updateAccountQuota} from './mutations';
+import {
+    removeAccount,
+    updateAccountAbc,
+    updateAccountParent,
+    updateAccountQuota,
+} from './mutations';
 
 jest.mock('../../../utils/accounts/editor', () => ({
+    deleteAccount: jest.fn(),
     setAccountAbc: jest.fn(),
     setAccountParent: jest.fn(),
 }));
@@ -15,12 +21,14 @@ jest.mock('../../actions/accounts/i18n', () => () => 'Quota updated');
 const setAccountAbcMock = jest.mocked(setAccountAbc);
 const setAccountParentMock = jest.mocked(setAccountParent);
 const setAccountQuotaMock = jest.mocked(setAccountQuotaImpl);
+const deleteAccountMock = jest.mocked(deleteAccount);
 
 describe('account general mutations', () => {
     beforeEach(() => {
         setAccountAbcMock.mockReset();
         setAccountParentMock.mockReset();
         setAccountQuotaMock.mockReset();
+        deleteAccountMock.mockReset();
     });
 
     it('updates ABC through the existing account editor API', async () => {
@@ -79,5 +87,14 @@ describe('account general mutations', () => {
             limitDiff: 2,
             resourcePath: 'node_count',
         });
+    });
+
+    it('deletes through the existing account editor API', async () => {
+        deleteAccountMock.mockResolvedValue(undefined);
+
+        await expect(removeAccount({cluster: 'cluster', accountName: 'account'})).resolves.toEqual({
+            data: 'account',
+        });
+        expect(deleteAccountMock).toHaveBeenCalledWith('account');
     });
 });

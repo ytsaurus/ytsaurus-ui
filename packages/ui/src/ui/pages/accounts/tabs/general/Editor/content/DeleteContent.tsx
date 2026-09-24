@@ -12,7 +12,7 @@ import {useDispatch} from '../../../../../../store/redux-hooks';
 import {type YTError} from '../../../../../../types';
 import {deleteAccount} from '../../../../../../utils/accounts/editor';
 import {toaster} from '../../../../../../utils/toaster';
-import {type FieldTree, fieldTreeForEach} from '../../../../../../common/hammer/field-tree';
+import {collectAccountResourceUsagePaths} from '../../../../../../utils/accounts/account-delete';
 
 import i18n from './i18n';
 
@@ -24,7 +24,7 @@ type Props = {
     account: AccountType;
 };
 
-type AccountType = CypressNode<{recursive_resource_usage: FieldTree<number>}, unknown> & {
+type AccountType = CypressNode<{recursive_resource_usage: Record<string, unknown>}, unknown> & {
     name: string;
 };
 
@@ -71,7 +71,7 @@ export function DeleteContent({account}: Props) {
     };
     const handleButtonClick = () =>
         setState((prevState) => {
-            const recursiveResourceUsageToFree = collectResourceUsagePaths(account);
+            const recursiveResourceUsageToFree = collectAccountResourceUsagePaths(account);
             return {...prevState, showConfirmMessage: true, recursiveResourceUsageToFree};
         });
 
@@ -123,20 +123,4 @@ export function DeleteContent({account}: Props) {
             </Button>
         </div>
     );
-}
-
-function collectResourceUsagePaths(account: AccountType) {
-    const res = new Set<string>();
-    fieldTreeForEach(
-        account.$attributes.recursive_resource_usage,
-        (v) => {
-            return typeof v === 'number';
-        },
-        (path, _tee, item) => {
-            if (item! > 0) {
-                res.add(path.join('/'));
-            }
-        },
-    );
-    return [...res];
 }
