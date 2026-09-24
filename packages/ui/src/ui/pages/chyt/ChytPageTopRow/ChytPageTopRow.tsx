@@ -5,9 +5,10 @@ import cn from 'bem-cn-lite';
 
 import ypath from '../../../common/thor/ypath';
 
-import {Breadcrumbs, Button, Flex, Text} from '@gravity-ui/uikit';
+import {Breadcrumbs, Flex, Text} from '@gravity-ui/uikit';
 
 import {ClipboardButton} from '@ytsaurus/components';
+import Button from '../../../components/Button/Button';
 import {YTDFDialog, makeErrorFields} from '../../../containers/Dialog';
 import Favourites, {type FavouritesItem} from '../../../components/Favourites/Favourites';
 import {EditableBreadcrumbs} from '../../../components/EditableBreadcrumbs';
@@ -206,7 +207,7 @@ function CreateChytButton() {
 
     return (
         <div className={block('create-clique')}>
-            <Button view="action" onClick={() => setVisible(!visible)}>
+            <Button actionRole="primary" view="action" onClick={() => setVisible(!visible)}>
                 {i18n('action_create-clique')}
             </Button>
             {visible && (

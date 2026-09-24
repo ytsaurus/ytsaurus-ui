@@ -231,7 +231,12 @@ export class MapNodeToolbarBase extends React.PureComponent<MapNodeToolbarProps,
                         <DropdownMenu
                             items={menuItems}
                             renderSwitcher={(props) => (
-                                <Button {...props} size="m" title={i18n('action_create-object')}>
+                                <Button
+                                    {...props}
+                                    actionRole="primary"
+                                    size="m"
+                                    title={i18n('action_create-object')}
+                                >
                                     {i18n('action_create-object')}
                                 </Button>
                             )}
