@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Button, {type ButtonProps} from '../../../components/Button/Button';
+import {ROOT_ACCOUNT_NAME} from '../../../constants/accounts/accounts';
 import Icon from '../../../components/Icon/Icon';
 import {useAccountEditor} from './AccountEditorContext';
 import i18n from './i18n';
@@ -31,7 +32,7 @@ export function AccountEditButton({accountName, disabled, ...props}: AccountEdit
     return (
         <Button
             {...props}
-            disabled={disabled || Boolean(openedAccountName) || anotherAccountIsOpening}
+            disabled={disabled || accountName === ROOT_ACCOUNT_NAME || anotherAccountIsOpening}
             loading={loading}
             title={props.title || i18n('action_edit-account')}
             onClick={handleClick}
