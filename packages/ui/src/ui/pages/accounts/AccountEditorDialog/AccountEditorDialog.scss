@@ -29,4 +29,13 @@
     &__tablet-warning {
         color: var(--warning-text);
     }
+
+    &__deleted {
+        display: flex;
+        min-height: 160px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+    }
 }
