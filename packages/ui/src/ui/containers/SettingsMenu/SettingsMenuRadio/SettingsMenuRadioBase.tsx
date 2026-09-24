@@ -20,7 +20,7 @@ export interface BaseProps {
 /**
  * @deprecated
  * Uses the legacy `settingName`/`settingNS` pattern.
- * Use `SettingsMenuRadioByKey` instead.
+ * Use `SegmentedRadioGroupSettingItem` instead.
  */
 export const SettingsMenuRadioBase = (props: BaseProps) => {
     const {

@@ -1,6 +1,6 @@
 import React from 'react';
 import compact_ from 'lodash/compact';
-import {BooleanSettingItem} from '../../SettingsMenu/BooleanSettingItem';
+import {CheckboxSettingItem} from '../../SettingsMenu/CheckboxSettingItem';
 import {Flex, Text} from '@gravity-ui/uikit';
 import {
     LazyAddQueryTokenForm,
@@ -49,7 +49,7 @@ export const queriesPage = ({cluster, hasQuerySuggestions}: Props) => {
                 'global::queryTracker::useNewGraphView',
                 i18n('field_new-graph-progress'),
                 'top',
-                <BooleanSettingItem
+                <CheckboxSettingItem
                     settingKey="global::queryTracker::useNewGraphView"
                     description={i18n('context_new-graph-progress-description')}
                     oneLine
@@ -67,7 +67,7 @@ export const queriesPage = ({cluster, hasQuerySuggestions}: Props) => {
                           'global::queryTracker::suggestions',
                           i18n('field_query-assistant'),
                           'top',
-                          <BooleanSettingItem
+                          <CheckboxSettingItem
                               settingKey="global::queryTracker::suggestions"
                               description={
                                   <Flex direction="column">
@@ -89,7 +89,7 @@ export const queriesPage = ({cluster, hasQuerySuggestions}: Props) => {
                 'global::queryTracker::disableCliqueReadinessCheck',
                 i18n('field_disable-clique-readiness-check'),
                 'top',
-                <BooleanSettingItem
+                <CheckboxSettingItem
                     settingKey="global::queryTracker::disableCliqueReadinessCheck"
                     description={i18n('context_disable-clique-readiness-check-description')}
                     oneLine

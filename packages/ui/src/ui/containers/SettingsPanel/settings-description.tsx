@@ -50,8 +50,8 @@ import Link from '../../containers/Link/Link';
 import Button from '../../components/Button/Button';
 import {AddVcsTokenForm, VcsList} from '../../pages/query-tracker/Vcs/SettingsMenu';
 import {selectIsVcsVisible, selectVcsConfig} from '../../store/selectors/query-tracker/vcs';
-import {SettingsMenuRadioByKey} from '../SettingsMenu/SettingsMenuSelect';
-import {BooleanSettingItem} from '../SettingsMenu/BooleanSettingItem';
+import {SegmentedRadioGroupSettingItem} from '../SettingsMenu/SettingsMenuSelect';
+import {CheckboxSettingItem} from '../SettingsMenu/CheckboxSettingItem';
 import {queriesPage} from './queriesPage';
 import {type SettingsPage, makeItem, makePage, makePageBySections} from './settings-page-builders';
 
@@ -100,7 +100,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 'global::newDashboardPage',
                 i18n('field_new-dashboard-page'),
                 'top',
-                <BooleanSettingItem
+                <CheckboxSettingItem
                     settingKey={'global::newDashboardPage'}
                     description={i18n('context_new-dashboard-page-description')}
                     oneLine
@@ -110,7 +110,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.GLOBAL.AUTO_REFRESH,
                 i18n('field_auto-refresh'),
                 'top',
-                <BooleanSettingItem
+                <CheckboxSettingItem
                     settingKey="global::autoRefresh"
                     description={i18n('context_auto-refresh-description')}
                     oneLine
@@ -120,7 +120,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.MENU.RECENT_CLUSTER_FIRST,
                 i18n('field_recent-clusters'),
                 'top',
-                <BooleanSettingItem
+                <CheckboxSettingItem
                     settingKey="global::menu::recentClustersFirst"
                     description={i18n('context_recent-clusters-description')}
                     oneLine
@@ -130,7 +130,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.MENU.RECENT_PAGE_FIRST,
                 i18n('field_recent-pages'),
                 'top',
-                <BooleanSettingItem
+                <CheckboxSettingItem
                     settingKey="global::menu::recentPagesFirst"
                     description={i18n('context_recent-pages-description')}
                     oneLine
@@ -144,7 +144,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                           'global::lang',
                           i18n('field_language'),
                           'top',
-                          <SettingsMenuRadioByKey
+                          <SegmentedRadioGroupSettingItem
                               settingKey="global::lang"
                               options={getConfigData().appLangs}
                           />,
@@ -184,7 +184,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 title: i18n('field_content-width'),
                 align: 'top',
                 content: (
-                    <SettingsMenuRadioByKey
+                    <SegmentedRadioGroupSettingItem
                         settingKey="global::maxContentWidth"
                         options={[
                             {value: 'standard', content: i18n('value_width-standard')},
@@ -205,7 +205,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         SettingName.DEVELOPMENT.REGULAR_USER_UI,
                         i18n('field_regular-user-ui'),
                         'top',
-                        <BooleanSettingItem
+                        <CheckboxSettingItem
                             settingKey="global::development::regularUserUI"
                             title={i18n('field_regular-user-ui')}
                             description={i18n('context_regular-user-ui-description')}
@@ -215,7 +215,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         'global::development::showAiChat',
                         i18n('field_ai-chat'),
                         'top',
-                        <BooleanSettingItem
+                        <CheckboxSettingItem
                             settingKey="global::development::showAiChat"
                             description={i18n('context_ai-chat-description')}
                             oneLine
@@ -252,7 +252,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.YSON.SHOW_DECODED,
                 i18n('field_decode-utf8'),
                 'top',
-                <BooleanSettingItem
+                <CheckboxSettingItem
                     oneLine
                     settingKey="global::yson::showDecoded"
                     description={renderHtmlDescription(
@@ -265,7 +265,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.YSON.BINARY_AS_HEX,
                 i18n('field_binary-as-hex'),
                 'top',
-                <BooleanSettingItem
+                <CheckboxSettingItem
                     settingKey="global::yson::binaryAsHex"
                     description={i18n('context_binary-as-hex-description')}
                     oneLine
@@ -275,7 +275,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.YSON.ESCAPE_WHITESPACES,
                 i18n('field_escape-and-highlight'),
                 'top',
-                <BooleanSettingItem
+                <CheckboxSettingItem
                     settingKey="global::yson::escapeWhitespace"
                     description={renderHtmlDescription(
                         i18n('context_escape-whitespaces-description', {
@@ -291,7 +291,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.YSON.COMPACT,
                 i18n('field_compact-view'),
                 'top',
-                <BooleanSettingItem
+                <CheckboxSettingItem
                     settingKey="global::yson::compact"
                     description={i18n('context_compact-view-description')}
                     oneLine
@@ -356,7 +356,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     SettingName.NAVIGATION.USE_SMART_SORT,
                     i18n('field_smart-sort'),
                     'top',
-                    <BooleanSettingItem
+                    <CheckboxSettingItem
                         settingKey="global::navigation::useSmartSort"
                         description={i18n('context_smart-sort-description')}
                         oneLine
@@ -366,7 +366,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     SettingName.NAVIGATION.GROUP_NODES,
                     i18n('field_group-nodes'),
                     'top',
-                    <BooleanSettingItem
+                    <CheckboxSettingItem
                         settingKey="global::navigation::groupNodes"
                         description={i18n('context_group-nodes-description')}
                         oneLine
@@ -376,7 +376,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     SettingName.NAVIGATION.USE_SMART_FILTER,
                     i18n('field_smart-filter'),
                     'top',
-                    <BooleanSettingItem
+                    <CheckboxSettingItem
                         settingKey="global::navigation::useSmartFilter"
                         description={i18n('context_smart-filter-description')}
                         oneLine
@@ -386,7 +386,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     SettingName.NAVIGATION.ENABLE_PATH_AUTO_CORRECTION,
                     i18n('field_path-autocorrection'),
                     'top',
-                    <BooleanSettingItem
+                    <CheckboxSettingItem
                         settingKey="global::navigation::enablePathAutocorrection"
                         description={renderHtmlDescription(
                             i18n('context_path-autocorrection-description') +
@@ -411,7 +411,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         SettingName.COMPONENTS.ENABLE_SIDE_BAR,
                         i18n('field_enable-side-bar'),
                         'top',
-                        <BooleanSettingItem
+                        <CheckboxSettingItem
                             settingKey="global::components::enableSideBar"
                             description={i18n('context_enable-side-bar-description')}
                             oneLine
@@ -427,7 +427,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         'global::components::memoryPopupShowAll',
                         i18n('field_show-empty-categories'),
                         'top',
-                        <BooleanSettingItem
+                        <CheckboxSettingItem
                             settingKey="global::components::memoryPopupShowAll"
                             description={i18n('context_show-empty-categories-description')}
                             oneLine
@@ -446,7 +446,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     'global::development::yqlTypes',
                     i18n('field_yql-v3-types'),
                     'top',
-                    <BooleanSettingItem settingKey="global::development::yqlTypes" oneLine />,
+                    <CheckboxSettingItem settingKey="global::development::yqlTypes" oneLine />,
                 ),
                 makeItem(
                     SettingName.NAVIGATION.ROWS_PER_TABLE_PAGE,
@@ -505,7 +505,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     SettingName.NAVIGATION.ENABLE_TABLE_SIMILARITY,
                     i18n('field_guess-visible-columns'),
                     'top',
-                    <BooleanSettingItem
+                    <CheckboxSettingItem
                         settingKey="global::navigation::enableTableSimilarity"
                         description={i18n('context_guess-visible-columns-description')}
                         oneLine
@@ -515,7 +515,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     SettingName.NAVIGATION.TABLE_DISPLAY_RAW_STRINGS,
                     i18n('field_raw-strings'),
                     'top',
-                    <BooleanSettingItem
+                    <CheckboxSettingItem
                         description={i18n('context_raw-strings-description')}
                         settingKey="global::navigation::tableDisplayRawStrings"
                         oneLine
@@ -567,7 +567,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         'global::editor::vimMode',
                         i18n('field_vim-mode'),
                         'top',
-                        <BooleanSettingItem
+                        <CheckboxSettingItem
                             settingKey="global::editor::vimMode"
                             description={i18n('context_vim-mode-description')}
                             oneLine
