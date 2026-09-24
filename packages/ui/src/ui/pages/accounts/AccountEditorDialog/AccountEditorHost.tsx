@@ -1,4 +1,5 @@
 import React from 'react';
+import noop_ from 'lodash/noop';
 
 import {type YTError} from '../../../../@types/types';
 import {ROOT_ACCOUNT_NAME} from '../../../constants/accounts/accounts';
@@ -13,6 +14,7 @@ import {
 } from './AccountEditorDataLoader';
 import {AccountEditorDialog} from './AccountEditorDialog';
 import {type AccountEditorData} from './prepareAccountEditorData';
+import {type AccountEditorChange} from './types';
 import i18n from './i18n';
 
 interface PendingRequest {
@@ -24,11 +26,13 @@ interface PendingRequest {
 export interface AccountEditorHostProps {
     children: React.ReactNode;
     DataLoader?: React.ComponentType<AccountEditorDataLoaderProps>;
+    onChanged?(change: AccountEditorChange): void;
 }
 
 export function AccountEditorHost({
     children,
     DataLoader = AccountEditorDataLoader,
+    onChanged = noop_,
 }: AccountEditorHostProps) {
     const cluster = useSelector(selectCluster);
     const [openingAccountName, setOpeningAccountName] = React.useState<string>();
@@ -143,6 +147,7 @@ export function AccountEditorHost({
                     accountName={openedAccountName}
                     data={data}
                     onClose={closeAccount}
+                    onChanged={onChanged}
                 />
             )}
         </AccountEditorContext.Provider>
