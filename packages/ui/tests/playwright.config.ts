@@ -55,6 +55,7 @@ export default defineConfig({
     expect: {
         toHaveScreenshot: {
             caret: 'hide',
+            threshold: 0.1,
         },
     },
 
