@@ -20,7 +20,7 @@ import {createErrorFromData} from '../../../../shared/utils/error';
 type QueryTrackerInfoResponse = Awaited<ReturnType<typeof ytApiV4Id.getQueryTrackerInfo>>;
 
 export const getQueryTrackerInfo = (): ThunkAction<
-    Promise<QueryTrackerInfoResponse>,
+    Promise<QueryTrackerInfoResponse | undefined>,
     any,
     any,
     QueryACOActions
