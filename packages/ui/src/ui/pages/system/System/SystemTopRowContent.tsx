@@ -38,6 +38,7 @@ export function CreateNotificationButton({clusterConfig}: {clusterConfig: Cluste
     return (
         <div className={block('create-notification')}>
             <Button
+                actionRole="primary"
                 view="action"
                 title={i18n('action_create-notification')}
                 href={url}

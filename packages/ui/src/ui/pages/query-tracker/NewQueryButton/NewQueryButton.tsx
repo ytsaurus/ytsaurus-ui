@@ -1,6 +1,7 @@
 import React, {type FC, type MouseEvent, useState} from 'react';
 import {useSelector} from '../../../store/redux-hooks';
-import {Button, Icon} from '@gravity-ui/uikit';
+import {Icon} from '@gravity-ui/uikit';
+import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
 import {selectIsQueryDraftEditted} from '../../../store/selectors/query-tracker/query';
 import FilePlusIcon from '@gravity-ui/icons/svgs/file-plus.svg';
@@ -58,7 +59,7 @@ export const NewQueryButton: FC<Props> = ({onClick, hideText}) => {
         <React.Fragment>
             <Button
                 qa="new-query-btn"
-                view="action"
+                view="outlined-action"
                 size="l"
                 title={i18n('title_new-query')}
                 href={`/${cluster}/${Page.QUERIES}`}

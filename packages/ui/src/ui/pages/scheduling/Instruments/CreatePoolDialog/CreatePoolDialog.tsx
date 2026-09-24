@@ -45,7 +45,12 @@ export default function CreatePoolButton() {
 
     return (
         <React.Fragment>
-            <Button view="action" disabled={!allowRoot && isRoot} onClick={handleShow}>
+            <Button
+                actionRole="primary"
+                view="action"
+                disabled={!allowRoot && isRoot}
+                onClick={handleShow}
+            >
                 {i18n('action_create-pool')}
             </Button>
             {visible && <CreatePoolDialog onClose={handleClose} />}
