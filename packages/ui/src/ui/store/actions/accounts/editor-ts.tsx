@@ -7,29 +7,11 @@ import {IdmObjectType} from '../../../constants/acl';
 import {updateAcl} from '../../../store/actions/acl';
 import UIFactory from '../../../UIFactory';
 import {type ResponsibleType} from '../../../utils/acl/acl-types';
-import {wrapApiPromiseByToaster} from '../../../utils/utils';
-import {accountsIncreaseEditCounter, loadEditedAccount} from './accounts';
-import i18n from './i18n';
-import {type AccountQuotaParams, setAccountQuotaImpl} from '../../../utils/accounts/account-quota';
+import {accountsIncreaseEditCounter} from './accounts';
 import {accountsApi} from '../../../store/api/accounts';
 import {YTApiId} from '../../../rum/rum-wrap-api';
 
-export type {AccountQuotaParams};
-
 type EditorAction = ThunkAction<any, RootState, any, FIX_MY_TYPE>;
-
-export function setAccountQuota(params: AccountQuotaParams): EditorAction {
-    return (dispatch) => {
-        const toasterName = params.account + '_' + params.resourcePath;
-        return wrapApiPromiseByToaster(setAccountQuotaImpl(params), {
-            toasterName,
-            successContent: i18n('alert_quota-updated'),
-        }).then(() => {
-            dispatch(loadEditedAccount(params.account));
-            dispatch(accountsIncreaseEditCounter());
-        });
-    };
-}
 
 function setResponsibleUsers(
     users: Array<ResponsibleType>,
