@@ -3,6 +3,10 @@ import forEach_ from 'lodash/forEach';
 import {type YTError} from '../../@types/types';
 import {type BatchResultsItem} from '../yt-types';
 
+export function createErrorFromData<T extends object>(data: T): Error & T {
+    return Object.assign(new Error(), data);
+}
+
 export class UIBatchError implements YTError {
     message = '';
 

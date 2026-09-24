@@ -15,6 +15,7 @@ import {selectSpytDefaultSettings} from '../../selectors/query-tracker/queryTrac
 import {setSettingByKey} from '../settings';
 import {toaster} from '../../../utils/toaster';
 import {mergeSpytDefaultSettingsIntoDraft} from './query';
+import {createErrorFromData} from '../../../../shared/utils/error';
 
 type QueryTrackerInfoResponse = Awaited<ReturnType<typeof ytApiV4Id.getQueryTrackerInfo>>;
 
@@ -41,13 +42,13 @@ export const getQueryTrackerInfo = (): ThunkAction<
                         rawError: AxiosError;
                     }) {
                         if (rawError?.response?.status === 404) {
-                            throw {
+                            throw createErrorFromData({
                                 data: parsedData,
-                                status: rawError?.response?.status,
-                            };
+                                status: rawError.response.status,
+                            });
                         }
 
-                        throw parsedData;
+                        throw createErrorFromData(parsedData);
                     },
                 },
                 parameters: {stage},

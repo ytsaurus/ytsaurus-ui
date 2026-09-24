@@ -44,7 +44,7 @@ export async function executeBatchWithRetries<T>(
     options: ExecuteBatchOptions,
 ): Promise<Array<BatchResultsItem<T>>> {
     let results: Array<BatchResultsItem<T>> = [];
-    let failedRequests: Array<BatchSubRequest> = [];
+    let failedRequestsToRetry: Array<BatchSubRequest> = [];
     let innerErrors: Array<YTError> = [];
     for (let i = 0; i < requests.length; i += MAX_REQUESTS_COUNT_PER_BATCH) {
         const from = i;
@@ -58,17 +58,17 @@ export async function executeBatchWithRetries<T>(
         } catch (err) {
             const e = err as any;
             if (!options?.allowRetries) {
-                const error = isBatchError(e) ? e.error : e;
+                const error = isBatchSliceError(e) ? e.error : e;
                 // eslint-disable-next-line no-console
                 console.error(error);
                 throw error;
             }
 
-            if (isBatchError<T>(e)) {
-                const {error, failed_requests, successful_results} = e;
-                results = results.concat(successful_results || []);
+            if (isBatchSliceError<T>(e)) {
+                const {error, failedRequests, successfulResults} = e;
+                results = results.concat(successfulResults || []);
                 innerErrors = innerErrors.concat(error?.inner_errors || []);
-                failedRequests = failedRequests.concat(failed_requests || []);
+                failedRequestsToRetry = failedRequestsToRetry.concat(failedRequests || []);
             } else {
                 rumLogError(
                     {
@@ -81,30 +81,41 @@ export async function executeBatchWithRetries<T>(
         }
     }
 
-    if (failedRequests.length) {
+    if (failedRequestsToRetry.length) {
         const error = {
             message: 'Failed sub-requests:',
             inner_errors: innerErrors,
         };
 
-        const tmp = await handleFailedRequests<T>(id, failedRequests, error, options);
+        const tmp = await handleFailedRequests<T>(id, failedRequestsToRetry, error, options);
         return results.concat(tmp);
     }
 
     return results;
 }
 
-const BATCH_ERROR_TYPE = {type: 'BATCH_ERROR_TYPE'};
+type BatchSliceErrorParams<T> = {
+    error: YTError | undefined;
+    failedRequests: Array<BatchSubRequest>;
+    successfulResults: Array<BatchResultsItem<T>>;
+};
 
-interface BatchError<T> {
-    type: typeof BATCH_ERROR_TYPE;
-    error: YTError;
-    failed_requests: Array<BatchSubRequest>;
-    successful_results: Array<BatchResultsItem<T>>;
+class BatchSliceError<T> extends Error {
+    error: YTError | undefined;
+    failedRequests: Array<BatchSubRequest>;
+    successfulResults: Array<BatchResultsItem<T>>;
+
+    constructor({error, failedRequests, successfulResults}: BatchSliceErrorParams<T>) {
+        super();
+
+        this.error = error;
+        this.failedRequests = failedRequests;
+        this.successfulResults = successfulResults;
+    }
 }
 
-function isBatchError<T>(error: any): error is BatchError<T> {
-    return error?.type === BATCH_ERROR_TYPE;
+function isBatchSliceError<T>(error: unknown): error is BatchSliceError<T> {
+    return error instanceof BatchSliceError;
 }
 
 async function handleBatchSlice<T>(
@@ -127,25 +138,23 @@ async function handleBatchSlice<T>(
                 return errorIndices.has(index);
             });
 
-            throw {
-                type: BATCH_ERROR_TYPE,
+            throw new BatchSliceError({
                 error,
-                failed_requests,
-                successful_results,
-            };
+                failedRequests: failed_requests,
+                successfulResults: successful_results,
+            });
         }
         return results;
     } catch (e) {
-        if (isBatchError<T>(e)) {
+        if (isBatchSliceError(e)) {
             throw e;
-        } else {
-            throw {
-                type: BATCH_ERROR_TYPE,
-                error: getBatchError([{error: e as any}], options.errorTitle),
-                failed_requests: requests,
-                successful_results: [],
-            };
         }
+
+        throw new BatchSliceError({
+            error: getBatchError([{error: e as any}], options.errorTitle),
+            failedRequests: requests,
+            successfulResults: [],
+        });
     }
 }
 
