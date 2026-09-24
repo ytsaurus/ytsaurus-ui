@@ -10,6 +10,7 @@ test('AccountEditorHost: opening blocks other edit buttons', async ({mount}) => 
     const component = await mount(<AccountEditorHostStories.Opening />);
 
     await expect(component.getByRole('button', {name: 'Edit another'})).toBeDisabled();
+    await expect(component.getByRole('button', {name: 'Edit root'})).toBeDisabled();
     await expect(component.getByRole('dialog')).toHaveCount(0);
 });
 
@@ -17,6 +18,7 @@ test('AccountEditorHost: opens the dialog only after data is ready', async ({mou
     const component = await mount(<AccountEditorHostStories.Opened />);
 
     await expect(page.getByRole('dialog')).toBeVisible();
+    await expect(component.getByRole('button', {name: 'Edit account'})).toBeEnabled();
     await expect(component.getByRole('button', {name: 'Edit another'})).toBeDisabled();
 });
 

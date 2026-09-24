@@ -29,7 +29,6 @@ export class AccountCreateDialogBase extends React.Component<{
     newAccountInfo: FormValues;
     isAdmin: boolean;
     closeCreateModal: (newAccountInfo?: FormValues) => void;
-    loadEditedAccount: (accountName?: string) => void;
     createAccountFromInfo: (newAccountInfo: NewAccountInfo) => Promise<unknown>;
 }> {
     override render() {
@@ -120,7 +119,7 @@ export class AccountCreateDialogBase extends React.Component<{
     }
 
     onSubmit = (form: FormApi<FormValues>) => {
-        const {createAccountFromInfo, closeCreateModal, loadEditedAccount} = this.props;
+        const {createAccountFromInfo, closeCreateModal} = this.props;
         const newAccountInfo = form.getState().values;
         if (!isRootAccount(newAccountInfo.parentAccount)) {
             newAccountInfo.abcService = undefined;
@@ -128,8 +127,6 @@ export class AccountCreateDialogBase extends React.Component<{
 
         return createAccountFromInfo(newAccountInfo).then(() => {
             closeCreateModal();
-            const {account} = newAccountInfo;
-            loadEditedAccount(account);
         });
     };
 

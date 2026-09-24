@@ -23,8 +23,6 @@ import AccountLink from '../../../AccountLink';
 import Icon from '../../../../../components/Icon/Icon';
 import CustomRadioButton from '../../../../../components/RadioButton/RadioButton';
 import ElementsTable from '../../../../../components/ElementsTable/ElementsTable';
-import Modal from '../../../../../components/Modal/Modal';
-import Editor from '../Editor/Editor';
 import AccountAlerts from '../AccountAlerts';
 import {Tooltip, Warning} from '@ytsaurus/components';
 import getTableProps from '../../../../../utils/accounts/tables';
@@ -41,9 +39,9 @@ import {ProgressStackByTreeItem} from '../ProgressStack';
 import i18n from '../i18n';
 import {TabletAccountingNotice} from '../Editor/content/TabletsContent';
 import AccountStaticConfiguration from '../AccountStaticConfiguration/AccountStaticConfiguration';
-import Button from '../../../../../components/Button/Button';
 import MasterMemoryTableMode from '../MasterMemoryTableMode';
 import UIFactory from '../../../../../UIFactory';
+import {AccountEditButton, AccountEditorHost} from '../../../AccountEditorDialog';
 
 const b = block('accounts');
 const progressTooltipClassname = b('progress-tooltip');
@@ -121,11 +119,8 @@ export class AccountsGeneralTabBase extends Component {
         activeContentModeFilter: PropTypes.string.isRequired,
         activeMediumFilter: PropTypes.string.isRequired,
         mediumList: PropTypes.array.isRequired,
-        editableAccount: PropTypes.object.isRequired,
-        showEditor: PropTypes.bool.isRequired,
         usableError: PropTypes.object,
         usableErrorMessage: PropTypes.string,
-        fullAccountsLoaded: PropTypes.bool,
         metadataFetching: PropTypes.bool,
         metadataError: PropTypes.object,
         errorData: PropTypes.object,
@@ -152,11 +147,9 @@ export class AccountsGeneralTabBase extends Component {
         changeContentFilter: PropTypes.func.isRequired,
         changeMediumFilter: PropTypes.func.isRequired,
         filterUsableAccounts: PropTypes.func.isRequired,
-        closeEditorModal: PropTypes.func.isRequired,
         loadUsers: PropTypes.func.isRequired,
         setAccountsTreeState: PropTypes.func.isRequired,
-        loadEditedAccount: PropTypes.func.isRequired,
-        showEditorModal: PropTypes.func.isRequired,
+        accountsIncreaseEditCounter: PropTypes.func.isRequired,
         setActiveAccount: PropTypes.func.isRequired,
         setAccountsVisibilityModeOfDashboard: PropTypes.func.isRequired,
         accountsToggleFavourite: PropTypes.func.isRequired,
@@ -304,8 +297,6 @@ export class AccountsGeneralTabBase extends Component {
             masterMemoryContentMode,
             clusterUiConfig,
         } = this.props;
-        const self = this;
-
         const templates = {
             name(treeItem, name, toggleStateFn, itemState) {
                 const {level = 0} = treeItem;
@@ -621,29 +612,22 @@ export class AccountsGeneralTabBase extends Component {
                     size: 's',
                 };
 
-                const handleClick = () => self.onEditClick(item);
-
                 return (
                     <span>
-                        <Button
+                        <AccountEditButton
                             {...commonProps}
+                            accountName={item.name}
                             title={i18n('action_edit-account')}
-                            onClick={handleClick}
-                            disabled={!self.props.fullAccountsLoaded}
                             qa={`edit-account-${item.name}`}
                         >
                             <Icon awesome="pencil" size={13} />
-                        </Button>
+                        </AccountEditButton>
                     </span>
                 );
             },
         };
 
         return templates;
-    }
-
-    onEditClick(account) {
-        this.props.showEditorModal(account);
     }
 
     renderAccountsTable() {
@@ -703,28 +687,14 @@ export class AccountsGeneralTabBase extends Component {
         this.props.setAccountsTreeState('mixed');
     };
 
-    renderEditorModal() {
-        const {closeEditorModal, editableAccount, showEditor} = this.props;
-
-        return (
-            editableAccount.name && (
-                <Modal
-                    onCancel={closeEditorModal}
-                    visible={showEditor}
-                    content={<Editor account={editableAccount} />}
-                    title={editableAccount.name}
-                    footer={false}
-                    size={'l'}
-                />
-            )
-        );
-    }
-
     render() {
         const {error, metadataError, usableError, wasLoaded, viewContext, fetching} = this.props;
 
         return (
-            <div>
+            <AccountEditorHost
+                onChanged={this.props.accountsIncreaseEditCounter}
+                onDeleted={this.props.accountsIncreaseEditCounter}
+            >
                 <div className={b()}>
                     {viewContext !== DASHBOARD_VIEW_CONTEXT && this.renderAccountsPageHeader()}
                     <WithStickyToolbar
@@ -740,8 +710,7 @@ export class AccountsGeneralTabBase extends Component {
                         }
                     />
                 </div>
-                {this.renderEditorModal()}
-            </div>
+            </AccountEditorHost>
         );
     }
 }
