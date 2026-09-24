@@ -23,7 +23,7 @@ interface Props {
 function HelpLink({url, text = i18n('value_help')}: Props) {
     return !url ? null : (
         <Link href={url} target="_blank" title={i18n('title_view-documentation')}>
-            <Icon awesome="book" />
+            <Icon awesome="book" size={14} />
             {text && <span className={block('text')}>{text}</span>}
         </Link>
     );
