@@ -7,24 +7,20 @@ import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
 
 import {setSetting} from '../../../store/actions/settings';
 import {accountsTrackVisit} from '../../../store/actions/favourites';
-import {setAccountParent} from '../../../utils/accounts/editor';
 import {
     ACCOUNTS_TABLE_ID,
     CHANGE_CONTENT_MODE_FILTER,
     CHANGE_MEDIUM_TYPE_FILTER,
     CHANGE_NAME_FILTER,
-    CLOSE_EDITOR_MODAL,
     FETCH_ACCOUNTS_METADATA,
     FETCH_ACCOUNTS_NODES,
     FETCH_ACCOUNTS_RESOURCE,
     FETCH_ACCOUNTS_TOTAL_USAGE,
     FETCH_ACCOUNTS_USABLE,
     FILTER_USABLE_ACCOUNTS,
-    OPEN_EDITOR_MODAL,
     ROOT_ACCOUNT_NAME,
     SET_ACCOUNTS_TREE_STATE,
     SET_ACTIVE_ACCOUNT,
-    UPDATE_EDITABLE_ACCOUNT,
 } from '../../../constants/accounts/accounts';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../constants/accounts';
 import {USE_CACHE, USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
@@ -292,41 +288,6 @@ export function accountsIncreaseEditCounter() {
     };
 }
 
-export function loadEditedAccount(accountName) {
-    return (dispatch, getState) => {
-        const state = getState();
-        const cluster = selectCluster(state);
-        dispatch({
-            type: UPDATE_EDITABLE_ACCOUNT.REQUEST,
-        });
-
-        const rumId = new RumWrapper(cluster, RumMeasureTypes.ACCOUNTS);
-        return rumId
-            .fetch(
-                YTApiId.accountsEditData,
-                ytApiV3Id.get(YTApiId.accountsEditData, {
-                    path: '//sys/accounts/' + accountName + '/@',
-                    attributes: attributesToLoad,
-                }),
-            )
-            .then((data) =>
-                rumId.parse(
-                    YTApiId.accountsEditData,
-                    parseAccountsData([{$value: accountName, $attributes: data}]),
-                ),
-            )
-            .then(([item]) => {
-                dispatch({
-                    type: UPDATE_EDITABLE_ACCOUNT.SUCCESS,
-                    data: {account: new Account(item), cluster},
-                });
-            })
-            .catch(() => {
-                dispatch({type: UPDATE_EDITABLE_ACCOUNT.FAILURE});
-            });
-    };
-}
-
 export function changeNameFilter(newFilter) {
     return (dispatch, getState) => {
         const {tables} = getState();
@@ -339,10 +300,6 @@ export function changeNameFilter(newFilter) {
     };
 }
 
-export function showEditorModal(account) {
-    return {type: OPEN_EDITOR_MODAL, data: {account}};
-}
-
 export function setActiveAccount(account) {
     return (dispatch) => {
         if (account) {
@@ -352,15 +309,6 @@ export function setActiveAccount(account) {
             type: SET_ACTIVE_ACCOUNT,
             data: {account},
         });
-    };
-}
-
-export function closeEditorModal() {
-    return (dispatch) => {
-        dispatch({
-            type: CLOSE_EDITOR_MODAL,
-        });
-        return dispatch(fetchAccounts());
     };
 }
 
@@ -394,14 +342,6 @@ export function setAccountsTreeState(treeState) {
     return {
         type: SET_ACCOUNTS_TREE_STATE,
         data: {treeState},
-    };
-}
-
-export function setParentAccountAction(name, parentName) {
-    return async (dispatch) => {
-        await setAccountParent(name, parentName);
-        dispatch(fetchAccounts());
-        await dispatch(loadEditedAccount(name));
     };
 }
 

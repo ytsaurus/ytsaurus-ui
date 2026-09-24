@@ -18,7 +18,7 @@ import {
     RESOURCES_USAGE_PREFIX,
     TOTAL_CHILDREN_RESOURCE_LIMIT,
 } from '../../../constants/accounts';
-import {type AccountQuotaParams} from '../../../store/actions/accounts/editor-ts';
+import {type AccountQuotaParams} from '../../../utils/accounts/account-quota';
 import {
     ACCOUNT_RESOURCE_TYPES_DESCRIPTION,
     type AccountResourceNameType,
@@ -28,6 +28,8 @@ import {ProgressStackByTreeItem} from '../tabs/general/ProgressStack';
 import {type AccountsTree} from '../../../store/selectors/accounts/accounts-ts';
 
 import i18n from './i18n';
+
+import './AccountQuota.scss';
 
 const block = cn('account-quota');
 
