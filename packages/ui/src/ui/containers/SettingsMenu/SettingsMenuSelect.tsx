@@ -59,15 +59,18 @@ type SelectSettingItemProps<K extends KeysByType<DescribedSettings, string>> = {
     settingKey: K;
     options: Array<Item<DescribedSettings[K]>>;
     description?: React.ReactNode;
+    displayValue?: DescribedSettings[K];
 };
 
 export function SelectSettingItem<K extends KeysByType<DescribedSettings, string>>({
     settingKey,
     options,
     description,
+    displayValue,
 }: SelectSettingItemProps<K>) {
     const dispatch = useDispatch();
-    const value = useSelector(selectSettingsData)[settingKey];
+    const storedValue = useSelector(selectSettingsData)[settingKey];
+    const value = displayValue ?? storedValue;
 
     return (
         <div className={b('settings-item', {select: true})}>
@@ -122,27 +125,52 @@ export function MultiSelectSettingItem<K extends KeysByType<DescribedSettings, A
     );
 }
 
-type SegmentedRadioGroupSettingItemProps<K extends KeysByType<DescribedSettings, string>> = Omit<
-    SettingsItemLayoutProps,
-    'children'
-> & {
-    settingKey: K;
-    options: SegmentedRadioGroupProps<DescribedSettings[K]>['options'];
-};
+type SegmentedSettingValue = string | number | boolean;
+type SegmentedOption<T extends SegmentedSettingValue> = Omit<
+    NonNullable<SegmentedRadioGroupProps['options']>[number],
+    'value'
+> & {value: T};
+type ConvertedSegmentedSettingValue<T extends SegmentedSettingValue> = T extends number
+    ? number
+    : T extends boolean
+      ? boolean
+      : T;
+type ConvertValueProps<T extends SegmentedSettingValue> = [T] extends [string]
+    ? {convertValue?: never}
+    : {convertValue: (value: string) => ConvertedSegmentedSettingValue<T>};
 
-export function SegmentedRadioGroupSettingItem<K extends KeysByType<DescribedSettings, string>>({
+type SegmentedRadioGroupSettingItemProps<
+    K extends KeysByType<DescribedSettings, SegmentedSettingValue>,
+> = Omit<SettingsItemLayoutProps, 'children'> & {
+    settingKey: K;
+    options: Array<SegmentedOption<DescribedSettings[K]>>;
+    displayValue?: DescribedSettings[K];
+} & ConvertValueProps<DescribedSettings[K]>;
+
+export function SegmentedRadioGroupSettingItem<
+    K extends KeysByType<DescribedSettings, SegmentedSettingValue>,
+>({
     settingKey,
     options,
+    displayValue,
+    convertValue,
     ...rest
 }: SegmentedRadioGroupSettingItemProps<K>) {
-    const {value, onUpdate} = useSettingByKey(settingKey);
+    const {value: storedValue, onUpdate} = useSettingByKey(settingKey);
+    const value = displayValue ?? storedValue;
 
     return (
         <SettingsItemLayout {...rest}>
             <SegmentedRadioGroup
-                options={options}
-                value={value}
-                onUpdate={onUpdate}
+                options={options.map(({value: optionValue, ...option}) => ({
+                    ...option,
+                    value: String(optionValue),
+                }))}
+                value={String(value)}
+                onUpdate={(nextValue) => {
+                    const convertedValue = convertValue ? convertValue(nextValue) : nextValue;
+                    onUpdate(convertedValue as DescribedSettings[K]);
+                }}
                 qa={settingKey}
             />
         </SettingsItemLayout>
@@ -159,7 +187,7 @@ function useSettingByKey<K extends keyof DescribedSettings>(settingKey: K) {
             (v: typeof value) => {
                 dispatch(setSettingByKey(settingKey, v));
             },
-            [settingKey],
+            [dispatch, settingKey],
         ),
     };
 }
