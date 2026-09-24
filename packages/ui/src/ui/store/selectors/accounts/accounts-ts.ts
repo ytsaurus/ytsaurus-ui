@@ -13,20 +13,21 @@ import {
     ACCOUNT_RESOURCE_TYPES_DESCRIPTION,
     AccountResourceName,
     type AccountResourceNameType,
-    ROOT_ACCOUNT_NAME,
 } from '../../../constants/accounts/accounts';
-import hammer from '../../../common/hammer';
 import {type FIX_MY_TYPE} from '../../../types';
 import {selectMediumListNoCache} from '../thor';
 import ypath from '../../../common/thor/ypath';
 
 import {accountMemoryMediumToFieldName} from '../../../utils/accounts/accounts-selector';
+import {
+    type AccountTreeNode,
+    getAccountQuotaSources,
+    isTopLevelAccount,
+    prepareAccountsTree,
+} from '../../../utils/accounts/accounts-tree';
 import {calculateLoadingStatus, isFinalLoadingStatus} from '../../../utils/utils';
 
-function isTopLevelAccount(account?: AccountSelector) {
-    const parent = ypath.getValue(account, '/@parent_name');
-    return !parent || parent === ROOT_ACCOUNT_NAME;
-}
+export {getAccountQuotaSources, prepareAccountsTree};
 
 const selectAccountsLoading = (state: RootState) => state.accounts.accounts.fetching;
 const selectAccountsLoaded = (state: RootState) => state.accounts.accounts.wasLoaded;
@@ -139,30 +140,7 @@ export const selectAccountsMapByName = createSelector(selectAccounts, (accounts)
 
 export const selectAccountsTree = createSelector([selectAccountsMapByName], prepareAccountsTree);
 
-type Tree<T> = {
-    attributes: T;
-    children: Array<T>;
-    name: string;
-    parent?: string;
-};
-
-export type AccountsTree = Tree<AccountSelector>;
-
-function prepareAccountsTree(
-    nameToAccountMap: Record<string, AccountSelector>,
-): Record<string, AccountsTree> {
-    const tree = hammer.treeList.prepareTree(nameToAccountMap, (item: AccountSelector) => {
-        if (nameToAccountMap[item.parent!] === undefined) {
-            // specific case when parent account is removed
-            // child should be attahed to the upper level
-            return '<Root>';
-        }
-
-        return item.parent || '<Root>';
-    });
-
-    return tree;
-}
+export type AccountsTree = AccountTreeNode<AccountSelector>;
 
 function makeStaticConfigurationItem(
     name: string,
@@ -605,38 +583,9 @@ export const selectEditableAccountQuotaSources = createSelector(
         if (!account?.name || !tree) {
             return [];
         }
-        const res = collectSubtreeItems(account.name, tree);
-
-        return res.sort();
+        return getAccountQuotaSources(account.name, tree);
     },
 );
-
-function collectSubtreeItems(
-    account: string,
-    tree: Record<string, AccountsTree>,
-    collected = new Set<string>(),
-): Array<string> {
-    if (collected.has(account)) {
-        return [];
-    }
-
-    collected.add(account);
-
-    const result: Array<string> = [];
-    const {parent, children, attributes} = tree[account] || {};
-    if (parent && tree[parent] && !isTopLevelAccount(attributes) && !collected.has(parent)) {
-        result.push(parent);
-        result.push(...collectSubtreeItems(parent, tree, collected));
-    }
-    forEach_(children, (item) => {
-        if (!collected.has(item.name)) {
-            result.push(item.name);
-            result.push(...collectSubtreeItems(item.name, tree, collected));
-        }
-    });
-
-    return result;
-}
 
 export const selectIsEditableAccountOfTopLevel = createSelector(
     [selectAccountsMapByName, selectEditableAccount],
