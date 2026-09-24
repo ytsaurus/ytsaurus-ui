@@ -55,17 +55,17 @@ export const SettingsMenuSelect = (props: SettingsMenuSelectProps) => {
     );
 };
 
-type SettingMenuSelectByKeyProps<K extends KeysByType<DescribedSettings, string>> = {
+type SelectSettingItemProps<K extends KeysByType<DescribedSettings, string>> = {
     settingKey: K;
     options: Array<Item<DescribedSettings[K]>>;
     description?: React.ReactNode;
 };
 
-export function SettingMenuSelectByKey<K extends KeysByType<DescribedSettings, string>>({
+export function SelectSettingItem<K extends KeysByType<DescribedSettings, string>>({
     settingKey,
     options,
     description,
-}: SettingMenuSelectByKeyProps<K>) {
+}: SelectSettingItemProps<K>) {
     const dispatch = useDispatch();
     const value = useSelector(selectSettingsData)[settingKey];
 
@@ -88,20 +88,18 @@ export function SettingMenuSelectByKey<K extends KeysByType<DescribedSettings, s
     );
 }
 
-type SettingMenuMultiSelectByKeyProps<K extends KeysByType<DescribedSettings, Array<string>>> = {
+type MultiSelectSettingItemProps<K extends KeysByType<DescribedSettings, Array<string>>> = {
     settingKey: K;
     options: Array<Item<DescribedSettings[K][number]>>;
     description?: React.ReactNode;
 };
 
-export function SettingMenuMultiSelectByKey<
-    K extends KeysByType<DescribedSettings, Array<string>>,
->({
+export function MultiSelectSettingItem<K extends KeysByType<DescribedSettings, Array<string>>>({
     settingKey,
     options,
     description,
     ...rest
-}: SettingMenuMultiSelectByKeyProps<K> &
+}: MultiSelectSettingItemProps<K> &
     Omit<YTSelectProps<string>, 'value' | 'items' | 'onChange' | 'onUpdate'>) {
     const {value, onUpdate} = useSettingByKey(settingKey);
 
@@ -124,7 +122,7 @@ export function SettingMenuMultiSelectByKey<
     );
 }
 
-type SettingsMenuRadioByKeyProps<K extends KeysByType<DescribedSettings, string>> = Omit<
+type SegmentedRadioGroupSettingItemProps<K extends KeysByType<DescribedSettings, string>> = Omit<
     SettingsItemLayoutProps,
     'children'
 > & {
@@ -132,11 +130,11 @@ type SettingsMenuRadioByKeyProps<K extends KeysByType<DescribedSettings, string>
     options: SegmentedRadioGroupProps<DescribedSettings[K]>['options'];
 };
 
-export function SettingsMenuRadioByKey<K extends KeysByType<DescribedSettings, string>>({
+export function SegmentedRadioGroupSettingItem<K extends KeysByType<DescribedSettings, string>>({
     settingKey,
     options,
     ...rest
-}: SettingsMenuRadioByKeyProps<K>) {
+}: SegmentedRadioGroupSettingItemProps<K>) {
     const {value, onUpdate} = useSettingByKey(settingKey);
 
     return (
