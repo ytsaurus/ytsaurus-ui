@@ -1,5 +1,8 @@
 import {type YTError} from '../../../../@types/types';
 import {setAccountAbc, setAccountParent} from '../../../utils/accounts/editor';
+import {type AccountQuotaParams, setAccountQuotaImpl} from '../../../utils/accounts/account-quota';
+import {wrapApiPromiseByToaster} from '../../../utils/utils';
+import accountsEditorI18n from '../../actions/accounts/i18n';
 
 interface AccountMutationArgs {
     accountName: string;
@@ -14,6 +17,8 @@ export interface UpdateAccountParentArgs extends AccountMutationArgs {
     parentName: string;
 }
 
+export type UpdateAccountQuotaArgs = AccountQuotaParams & {cluster: string};
+
 export async function updateAccountAbc({accountName, abc}: UpdateAccountAbcArgs) {
     try {
         await setAccountAbc(accountName, abc?.id, abc?.slug);
@@ -27,6 +32,18 @@ export async function updateAccountParent({accountName, parentName}: UpdateAccou
     try {
         await setAccountParent(accountName, parentName);
         return {data: accountName};
+    } catch (error) {
+        return {error: error as YTError};
+    }
+}
+
+export async function updateAccountQuota({cluster: _cluster, ...params}: UpdateAccountQuotaArgs) {
+    try {
+        await wrapApiPromiseByToaster(setAccountQuotaImpl(params), {
+            toasterName: `${params.account}_${params.resourcePath}`,
+            successContent: accountsEditorI18n('alert_quota-updated'),
+        });
+        return {data: params.account};
     } catch (error) {
         return {error: error as YTError};
     }

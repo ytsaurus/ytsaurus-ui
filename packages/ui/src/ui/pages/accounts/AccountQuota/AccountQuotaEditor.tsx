@@ -2,6 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
+import {Loader} from '@gravity-ui/uikit';
 
 import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import Icon from '../../../components/Icon/Icon';
@@ -44,6 +45,7 @@ interface ReduxProps {
     accountsTree: Record<string, AccountsTree>;
     setAccountQuota: (params: AccountQuotaParams) => void;
     sources: Array<string>;
+    isLoading?: boolean;
 }
 
 interface State {
@@ -54,7 +56,8 @@ export class AccountQuotaEditor extends React.Component<Props & ReduxProps, Stat
     override state: State = {};
 
     override render() {
-        const {title, type, mediumType, currentAccount, activeAccount, accountsTree} = this.props;
+        const {title, type, mediumType, currentAccount, activeAccount, accountsTree, isLoading} =
+            this.props;
         const {format} = ACCOUNT_RESOURCE_TYPES_DESCRIPTION[type];
         const {showEditor} = this.state;
         const {limit} = this.getInfoByName(currentAccount);
@@ -74,9 +77,9 @@ export class AccountQuotaEditor extends React.Component<Props & ReduxProps, Stat
                     <ClickableText
                         color="secondary"
                         className={block('edit')}
-                        onClick={this.toggleShowEditor}
+                        onClick={isLoading ? undefined : this.toggleShowEditor}
                     >
-                        <Icon awesome={'pencil'} />
+                        {isLoading ? <Loader size="s" /> : <Icon awesome={'pencil'} />}
                     </ClickableText>
                 </div>
                 {showEditor && (
