@@ -9,6 +9,12 @@ import {
     fetchAccountEditorTree,
 } from './editor';
 import {type AccountNamesArgs, fetchAccountNames} from './names';
+import {
+    type UpdateAccountAbcArgs,
+    type UpdateAccountParentArgs,
+    updateAccountAbc,
+    updateAccountParent,
+} from './mutations';
 import {fetchUsable} from './usable';
 
 export const accountsApi = rootApi.injectEndpoints({
@@ -28,6 +34,14 @@ export const accountsApi = rootApi.injectEndpoints({
             queryFn: fetchAccountNames,
             providesTags: [YTApiId.listAccounts],
         }),
+        updateAccountAbc: build.mutation<string, UpdateAccountAbcArgs>({
+            queryFn: updateAccountAbc,
+            invalidatesTags: (result) => (result ? [YTApiId.accountsEditData] : []),
+        }),
+        updateAccountParent: build.mutation<string, UpdateAccountParentArgs>({
+            queryFn: updateAccountParent,
+            invalidatesTags: (result) => (result ? [YTApiId.accountsEditData] : []),
+        }),
     }),
 });
 
@@ -35,6 +49,8 @@ const {
     useAccountEditorPathQuery: useAccountEditorPathQueryBase,
     useAccountEditorTreeQuery: useAccountEditorTreeQueryBase,
     useAccountNamesQuery: useAccountNamesQueryBase,
+    useUpdateAccountAbcMutation,
+    useUpdateAccountParentMutation,
     useUsableAccountsQuery,
 } = accountsApi;
 
@@ -60,3 +76,5 @@ export function useAccountEditorTreeQuery<T>(
 export function useAccountNamesQuery(args: AccountNamesArgs, options?: {skip?: boolean}) {
     return useAccountNamesQueryBase(useEffectiveClusterArgs(args), options);
 }
+
+export {useUpdateAccountAbcMutation, useUpdateAccountParentMutation};
