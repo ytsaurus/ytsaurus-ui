@@ -25,4 +25,8 @@
     &__section + &__section {
         margin-top: 10px;
     }
+
+    &__tablet-warning {
+        color: var(--warning-text);
+    }
 }
