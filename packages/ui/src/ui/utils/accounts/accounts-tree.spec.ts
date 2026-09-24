@@ -1,4 +1,9 @@
-import {getAccountQuotaSources, isTopLevelAccount, prepareAccountsTree} from './accounts-tree';
+import {
+    getAccountQuotaSources,
+    getAccountSubtreeNames,
+    isTopLevelAccount,
+    prepareAccountsTree,
+} from './accounts-tree';
 
 interface Account {
     name: string;
@@ -73,6 +78,20 @@ describe('account tree helpers', () => {
             const tree = prepareAccountsTree({top: makeAccount('top')});
 
             expect(getAccountQuotaSources('missing', tree)).toEqual([]);
+        });
+    });
+
+    describe('getAccountSubtreeNames', () => {
+        it('returns the account and its descendants only', () => {
+            const tree = prepareAccountsTree({
+                top: makeAccount('top'),
+                current: makeAccount('current', 'top'),
+                child: makeAccount('child', 'current'),
+                sibling: makeAccount('sibling', 'top'),
+            });
+
+            expect(getAccountSubtreeNames('current', tree)).toEqual(['current', 'child']);
+            expect(getAccountSubtreeNames('missing', tree)).toEqual([]);
         });
     });
 });

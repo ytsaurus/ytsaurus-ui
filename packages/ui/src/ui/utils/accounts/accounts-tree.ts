@@ -32,6 +32,30 @@ export function getAccountQuotaSources<T extends AccountTreeSource>(
     return collectSubtreeItems(account, tree).sort();
 }
 
+export function getAccountSubtreeNames<T extends AccountTreeSource>(
+    account: string,
+    tree: Record<string, AccountTreeNode<T>>,
+): Array<string> {
+    const result: Array<string> = [];
+    const visited = new Set<string>();
+
+    function visit(name: string) {
+        if (visited.has(name)) {
+            return;
+        }
+
+        visited.add(name);
+        result.push(name);
+        tree[name]?.children.forEach((child) => visit(child.name));
+    }
+
+    if (tree[account]) {
+        visit(account);
+    }
+
+    return result;
+}
+
 function collectSubtreeItems<T extends AccountTreeSource>(
     account: string,
     tree: Record<string, AccountTreeNode<T>>,
