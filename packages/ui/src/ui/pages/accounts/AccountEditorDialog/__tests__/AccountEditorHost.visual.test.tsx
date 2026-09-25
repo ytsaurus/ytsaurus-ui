@@ -1,10 +1,7 @@
 import React from 'react';
-import {composeStories} from '@storybook/react';
 
 import {expect, test} from '../../../../playwright-components/core';
-import * as AccountEditorHostStoryComponents from '../__stories__/AccountEditorHost.stories';
-
-const AccountEditorHostStories = composeStories(AccountEditorHostStoryComponents);
+import {AccountEditorHostStories} from '../__stories__';
 
 test('AccountEditorHost: opening blocks other edit buttons', async ({mount}) => {
     const component = await mount(<AccountEditorHostStories.Opening />);

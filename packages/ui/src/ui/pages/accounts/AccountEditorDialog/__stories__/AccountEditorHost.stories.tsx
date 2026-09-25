@@ -5,13 +5,28 @@ import {AccountEditButton} from '../AccountEditButton';
 import {useAccountEditor} from '../AccountEditorContext';
 import {type AccountEditorDataLoaderProps} from '../AccountEditorDataLoader';
 import {AccountEditorHost} from '../AccountEditorHost';
-import {prepareAccountEditorData} from '../prepareAccountEditorData';
+import {type AccountEditorData} from '../prepareAccountEditorData';
 
 const accountName = 'account';
-const editorData = prepareAccountEditorData(accountName, {
-    $attributes: {parent_name: 'root'},
-    $value: {},
-});
+const account = {
+    name: accountName,
+    parent: 'root',
+    abc: {},
+    hasRecursiveResources: false,
+};
+const editorData = {
+    accounts: [account],
+    accountsByName: {[accountName]: account},
+    tree: {
+        [accountName]: {
+            name: accountName,
+            parent: '<Root>',
+            attributes: account,
+            children: [],
+            leaves: [],
+        },
+    },
+} as unknown as AccountEditorData;
 
 function OpenOnMount() {
     const {openAccount} = useAccountEditor();
