@@ -9,19 +9,82 @@ import ypath from '../../common/thor/ypath';
 import {type AccountResourceInfo} from '../../constants/accounts/accounts';
 import {computeProgress, getProgressTheme} from '../../utils/progress';
 import formatLib from '../../common/hammer/format';
-import {type FIX_MY_TYPE} from '../../types';
+import {type CypressNode, type CypressNodeRaw} from '../../../shared/yt-types';
+import {type FieldTree} from '../../common/hammer/field-tree';
+
+type YsonNode<T> = CypressNodeRaw<Record<string, unknown>, T>;
+type YsonRecord<Key extends string, Value> = YsonNode<Record<Key, YsonNode<Value>>>;
+type MasterMemoryResourceName =
+    'master_memory_total' | 'master_memory_chunk_host' | `master_memory_per_cell_${string}`;
+
+function getYsonValue<T>(value: YsonNode<T> | undefined): T | undefined {
+    return ypath.getValue(value) as T | undefined;
+}
+
+interface MasterMemoryYson {
+    total?: YsonNode<number>;
+    chunk_host?: YsonNode<number>;
+    per_cell?: YsonRecord<string, number>;
+}
+
+interface DetailedMasterMemoryYson {
+    nodes?: YsonNode<number>;
+    chunks?: YsonNode<number>;
+    attributes?: YsonNode<number>;
+    tablets?: YsonNode<number>;
+    schemas?: YsonNode<number>;
+}
+
+interface AccountResourceYson {
+    node_count?: YsonNode<number>;
+    chunk_count?: YsonNode<number>;
+    tablet_count?: YsonNode<number>;
+    tablet_static_memory?: YsonNode<number>;
+    disk_space_per_medium?: YsonRecord<string, number>;
+    master_memory?: YsonNode<MasterMemoryYson>;
+    detailed_master_memory?: YsonNode<DetailedMasterMemoryYson>;
+}
+
+interface AccountAbc {
+    id?: number;
+    slug?: string;
+}
+
+type AccountAttributes = {
+    abc?: AccountAbc;
+    parent_name?: string;
+    responsibles?: Array<string>;
+    resource_usage?: YsonNode<AccountResourceYson>;
+    committed_resource_usage?: YsonNode<AccountResourceYson>;
+    resource_limits?: YsonNode<AccountResourceYson>;
+    recursive_resource_usage?: YsonNode<AccountResourceYson>;
+    recursive_committed_resource_usage?: YsonNode<AccountResourceYson>;
+    recursive_violated_resource_limits?: FieldTree<number>;
+};
+
+export type AccountInput = CypressNode<AccountAttributes, string>;
+
+interface ResourceSources<T> {
+    resourceUsage: T;
+    committedResourceUsage: T;
+    resourceLimits: T;
+    recursiveResourceUsage: T;
+    recursiveCommittedResourceUsage: T;
+}
+
+type AccountResourceSources = ResourceSources<AccountResourceYson>;
 
 export function accountMemoryMediumToFieldName(path: string) {
     return replace_(path, /\//g, '_');
 }
 
 export interface AccountParsedData {
-    $attributes: any;
+    $attributes: AccountAttributes;
     $value: string;
 
     name: string;
-    parent: string;
-    abc: {id: number; slug: string};
+    parent?: string;
+    abc: AccountAbc;
 
     stats: string; // stats url;
 
@@ -31,13 +94,16 @@ export interface AccountParsedData {
     hasRecursiveResources: boolean;
     recursiveResources: Record<string, AccountResources>;
 
-    master_memory_detailed: {
-        nodes: number;
-        chunks: number;
-        attributes: number;
-        tablets: number;
-        schemas: number;
+    master_memory_detailed?: {
+        nodes?: number;
+        chunks?: number;
+        attributes?: number;
+        tablets?: number;
+        schemas?: number;
     };
+    master_memory_total?: AccountResourceInfo;
+    master_memory_chunk_host?: AccountResourceInfo;
+    [key: `master_memory_per_cell_${string}`]: AccountResourceInfo | undefined;
 
     ownAlertsCount: number;
     alertsCount: number;
@@ -48,7 +114,7 @@ export interface AccountParsedData {
 
 interface AccountResources {}
 
-export function parseAccountData(data: any) {
+export function parseAccountData(data: AccountInput) {
     const dst: AccountParsedData = {
         recursiveResources: {},
         masterMemoryResources: {},
@@ -65,51 +131,112 @@ export function parseAccountData(data: any) {
     dst.responsibleUsersSet = new Set(dst.responsibleUsers);
     dst.parent = dst.$attributes.parent_name;
 
-    dst.hasRecursiveResources = Boolean(ypath.getValue(dst, '/@recursive_resource_usage'));
+    const recursiveResourceUsage = getYsonValue(dst.$attributes.recursive_resource_usage);
+    const resourceSources: AccountResourceSources = {
+        resourceUsage: getYsonValue(dst.$attributes.resource_usage) || {},
+        committedResourceUsage: getYsonValue(dst.$attributes.committed_resource_usage) || {},
+        resourceLimits: getYsonValue(dst.$attributes.resource_limits) || {},
+        recursiveResourceUsage: recursiveResourceUsage || {},
+        recursiveCommittedResourceUsage:
+            getYsonValue(dst.$attributes.recursive_committed_resource_usage) || {},
+    };
+    dst.hasRecursiveResources = Boolean(recursiveResourceUsage);
     dst.recursiveResources = {};
 
-    updateResource(dst, dst.$attributes, 'chunk_count', 'Number');
-    updateResource(dst, dst.$attributes, 'node_count', 'Number');
+    updateResource(dst, resourceSources, 'chunk_count', 'Number');
+    updateResource(dst, resourceSources, 'node_count', 'Number');
 
-    updateResource(dst, dst.$attributes, 'tablet_count', 'Number');
-    updateResource(dst, dst.$attributes, 'tablet_static_memory', 'Bytes');
+    updateResource(dst, resourceSources, 'tablet_count', 'Number');
+    updateResource(dst, resourceSources, 'tablet_static_memory', 'Bytes');
 
-    updateResourcePerMedium(dst, dst.$attributes, 'disk_space', 'Bytes');
+    updateResourcePerMedium(dst, resourceSources, 'disk_space', 'Bytes');
 
-    updateMasterMemory(dst, dst.$attributes);
+    updateMasterMemory(dst, resourceSources);
 
     dst.alertsCount = getAccountAlertsCount(dst);
 
     return dst;
 }
 
-function updateMasterMemory(dst: AccountParsedData, attributes: any) {
-    prepareResource(dst, attributes, 'master_memory/total', 'Bytes');
-    prepareResource(dst, attributes, 'master_memory/chunk_host', 'Bytes');
+function updateMasterMemory(dst: AccountParsedData, sources: AccountResourceSources) {
+    const masterMemorySources: ResourceSources<MasterMemoryYson> = {
+        resourceUsage: getYsonValue(sources.resourceUsage.master_memory) || {},
+        committedResourceUsage: getYsonValue(sources.committedResourceUsage.master_memory) || {},
+        resourceLimits: getYsonValue(sources.resourceLimits.master_memory) || {},
+        recursiveResourceUsage: getYsonValue(sources.recursiveResourceUsage.master_memory) || {},
+        recursiveCommittedResourceUsage:
+            getYsonValue(sources.recursiveCommittedResourceUsage.master_memory) || {},
+    };
 
-    const perCell = ypath.getValue(attributes, '/resource_usage/master_memory/per_cell');
-    forEach_(perCell, (_value, key) => {
-        prepareResource(dst, attributes, `master_memory/per_cell/${key}`, 'Bytes');
+    prepareResource(
+        dst,
+        'master_memory_total',
+        getResourceValues(masterMemorySources, 'total'),
+        'Bytes',
+    );
+    prepareResource(
+        dst,
+        'master_memory_chunk_host',
+        getResourceValues(masterMemorySources, 'chunk_host'),
+        'Bytes',
+    );
+
+    const perCellSources: ResourceSources<Record<string, YsonNode<number>>> = {
+        resourceUsage: getYsonValue(masterMemorySources.resourceUsage.per_cell) || {},
+        committedResourceUsage:
+            getYsonValue(masterMemorySources.committedResourceUsage.per_cell) || {},
+        resourceLimits: getYsonValue(masterMemorySources.resourceLimits.per_cell) || {},
+        recursiveResourceUsage:
+            getYsonValue(masterMemorySources.recursiveResourceUsage.per_cell) || {},
+        recursiveCommittedResourceUsage:
+            getYsonValue(masterMemorySources.recursiveCommittedResourceUsage.per_cell) || {},
+    };
+    forEach_(perCellSources.resourceUsage, (_value, key) => {
+        prepareResource(
+            dst,
+            `master_memory_per_cell_${key}`,
+            getResourceValues(perCellSources, key),
+            'Bytes',
+        );
     });
 
-    dst.master_memory_detailed = ypath.getValue(
-        attributes,
-        '/resource_usage/detailed_master_memory',
-    );
+    const detailed = getYsonValue(sources.resourceUsage.detailed_master_memory);
+    dst.master_memory_detailed = detailed && {
+        nodes: getYsonValue(detailed.nodes),
+        chunks: getYsonValue(detailed.chunks),
+        attributes: getYsonValue(detailed.attributes),
+        tablets: getYsonValue(detailed.tablets),
+        schemas: getYsonValue(detailed.schemas),
+    };
+}
+
+function getResourceValues<T, Key extends keyof T>(sources: ResourceSources<T>, key: Key) {
+    return {
+        total: sources.resourceUsage[key],
+        committed: sources.committedResourceUsage[key],
+        limit: sources.resourceLimits[key],
+        recursiveTotal: sources.recursiveResourceUsage[key],
+        recursiveCommitted: sources.recursiveCommittedResourceUsage[key],
+    };
 }
 
 function prepareResource(
     dst: AccountParsedData,
-    resourceAttributes: any,
-    path: string,
+    name: MasterMemoryResourceName,
+    values: {
+        total?: YsonNode<number>;
+        committed?: YsonNode<number>;
+        limit?: YsonNode<number>;
+        recursiveTotal?: YsonNode<number>;
+        recursiveCommitted?: YsonNode<number>;
+    },
     format: 'Bytes' | 'Number',
 ) {
-    const name = accountMemoryMediumToFieldName(path);
-    const committed = ypath.getValue(resourceAttributes, '/committed_resource_usage/' + path);
-    const limit = ypath.getValue(resourceAttributes, '/resource_limits/' + path);
-    (dst as FIX_MY_TYPE)[name] = prepareResourceInfo(
+    const committed = getYsonValue(values.committed);
+    const limit = getYsonValue(values.limit);
+    dst[name] = prepareResourceInfo(
         {
-            total: ypath.getValue(resourceAttributes, '/resource_usage/' + path),
+            total: getYsonValue(values.total),
             committed,
             limit,
         },
@@ -117,39 +244,32 @@ function prepareResource(
     );
 
     if (dst.hasRecursiveResources) {
-        const recursiveUsage = ypath.getValue(
-            resourceAttributes,
-            '/recursive_resource_usage/' + path,
-        );
-        const recursiveCommitted = ypath.getValue(
-            resourceAttributes,
-            '/recursive_committed_resource_usage/' + path,
-        );
         dst.recursiveResources[name] = prepareResourceInfo(
             {
-                total: recursiveUsage,
-                committed: recursiveCommitted,
-                limit: ypath.getValue(resourceAttributes, '/resource_limits/' + path),
+                total: getYsonValue(values.recursiveTotal),
+                committed: getYsonValue(values.recursiveCommitted),
+                limit,
             },
             format,
         );
     }
 }
 
+type ScalarResourceName = 'chunk_count' | 'node_count' | 'tablet_count' | 'tablet_static_memory';
+
 function updateResource(
     dst: AccountParsedData,
-    attributes: any,
-    name: string,
+    sources: AccountResourceSources,
+    name: ScalarResourceName,
     format: 'Bytes' | 'Number',
-    nameYPath = name,
 ) {
-    const committed = ypath.getValue(attributes, '/committed_resource_usage/' + nameYPath);
-    const limit = ypath.getValue(attributes, '/resource_limits/' + nameYPath);
+    const committed = getYsonValue(sources.committedResourceUsage[name]);
+    const limit = getYsonValue(sources.resourceLimits[name]);
     Object.assign(
         dst,
         updateResourceFields(
             {
-                total: ypath.getValue(attributes, '/resource_usage/' + nameYPath),
+                total: getYsonValue(sources.resourceUsage[name]),
                 committed,
                 limit,
             },
@@ -159,18 +279,15 @@ function updateResource(
     );
 
     if (dst.hasRecursiveResources) {
-        const recursiveUsage = ypath.getValue(attributes, '/recursive_resource_usage/' + nameYPath);
-        const recursiveCommitted = ypath.getValue(
-            attributes,
-            '/recursive_committed_resource_usage/' + nameYPath,
-        );
+        const recursiveUsage = getYsonValue(sources.recursiveResourceUsage[name]);
+        const recursiveCommitted = getYsonValue(sources.recursiveCommittedResourceUsage[name]);
         Object.assign(
             dst.recursiveResources,
             updateResourceFields(
                 {
                     total: recursiveUsage,
                     committed: recursiveCommitted,
-                    limit: ypath.getValue(attributes, '/resource_limits/' + nameYPath),
+                    limit,
                 },
                 name,
                 format,
@@ -181,55 +298,45 @@ function updateResource(
 
 function updateResourcePerMedium(
     dst: AccountParsedData,
-    attributes: any,
+    sources: AccountResourceSources,
     name: string,
     format: 'Bytes' | 'Number',
 ) {
     const path = 'disk_space_per_medium';
-    const recursiveTotalPerMedium = ypath.getValue(attributes, '/recursive_resource_usage/' + path);
-    const recursiveCommittedPerMedium = ypath.getValue(
-        attributes,
-        '/recursive_committed_resource_usage/' + path,
-    );
-    const totalPerMedium = ypath.getValue(attributes, '/resource_usage/' + path);
-    const committedPerMedium = ypath.getValue(attributes, '/committed_resource_usage/' + path);
-    const limitPerMedium = ypath.getValue(attributes, '/resource_limits/' + path);
+    const recursiveTotalPerMedium = getYsonValue(sources.recursiveResourceUsage[path]) || {};
+    const recursiveCommittedPerMedium =
+        getYsonValue(sources.recursiveCommittedResourceUsage[path]) || {};
+    const totalPerMedium = getYsonValue(sources.resourceUsage[path]) || {};
+    const committedPerMedium = getYsonValue(sources.committedResourceUsage[path]) || {};
+    const limitPerMedium = getYsonValue(sources.resourceLimits[path]) || {};
 
     dst.perMedium = {};
     forEach_(totalPerMedium, (mediumData, mediumName) => {
         dst.perMedium[mediumName] = updateResourceFields(
             {
-                total: mediumData,
-                committed: committedPerMedium[mediumName],
-                limit: limitPerMedium[mediumName],
+                total: getYsonValue(mediumData),
+                committed: getYsonValue(committedPerMedium[mediumName]),
+                limit: getYsonValue(limitPerMedium[mediumName]),
             },
             name,
             format,
         );
     });
 
-    let lastMedium;
-    try {
-        if (dst.hasRecursiveResources) {
-            dst.recursiveResources.perMedium = {};
-            forEach_(recursiveTotalPerMedium, (mediumData, mediumName) => {
-                lastMedium = mediumName;
-                (dst.recursiveResources as FIX_MY_TYPE).perMedium[mediumName] =
-                    updateResourceFields(
-                        {
-                            total: mediumData,
-                            committed: recursiveCommittedPerMedium[mediumName],
-                            limit: limitPerMedium?.[mediumName] ?? 0,
-                        },
-                        name,
-                        format,
-                    );
-            });
-        }
-    } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log({attributes, limitPerMedium, path, lastMedium});
-        throw e;
+    if (dst.hasRecursiveResources) {
+        const recursivePerMedium: Record<string, ReturnType<typeof updateResourceFields>> = {};
+        dst.recursiveResources.perMedium = recursivePerMedium;
+        forEach_(recursiveTotalPerMedium, (mediumData, mediumName) => {
+            recursivePerMedium[mediumName] = updateResourceFields(
+                {
+                    total: getYsonValue(mediumData),
+                    committed: getYsonValue(recursiveCommittedPerMedium[mediumName]),
+                    limit: getYsonValue(limitPerMedium[mediumName]) ?? 0,
+                },
+                name,
+                format,
+            );
+        });
     }
 }
 
