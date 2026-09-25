@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.4.0...components-v1.5.0) (2026-09-25)
+
+
+### Features
+
+* **ColumnCell:** extract shared copy values helper [YTFRONT-5629] ([cdf53db](https://github.com/ytsaurus/ytsaurus-ui/commit/cdf53db2fef2f2d12e57d303a81fb4bc02523f60))
+
 ## [1.4.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.3.3...components-v1.4.0) (2026-09-15)
 
 
