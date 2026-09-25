@@ -1,0 +1,10 @@
+{
+  "action_details": "Details",
+  "action_close": "Close",
+  "action_edit-account": "Edit account",
+  "alert_account-not-found": "Account {{accountName}} is absent from its account tree",
+  "alert_account-deleted": "Account {{accountName}} has been deleted",
+  "alert_editor-already-open": "Another account editor is already open",
+  "alert_load-failed": "Failed to load account {{accountName}}",
+  "alert_root-account": "The system root account cannot be edited"
+}

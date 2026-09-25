@@ -1,11 +1,12 @@
+import React from 'react';
 import {connect} from 'react-redux';
-import {loadEditedAccount} from '../../../../../../store/actions/accounts/accounts';
 import {closeCreateModal} from '../../../../../../store/actions/accounts/editor';
 import {createAccountFromInfo} from '../../../../../../store/actions/accounts/editor-ts';
 import {type RootState} from '../../../../../../store/reducers';
 import {selectActiveAccount} from '../../../../../../store/selectors/accounts/accounts';
 import {selectCurrentUserName} from '../../../../../../store/selectors/global';
 import {selectIsAdmin} from '../../../../../../store/selectors/global/is-developer';
+import {useAccountEditor} from '../../../../AccountEditorDialog';
 import '../AccountCreateDialog.scss';
 
 import {AccountCreateDialogBase, type FormValues} from './AccountCreateDialogBase';
@@ -25,11 +26,22 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = {
     closeCreateModal,
-    loadEditedAccount,
     createAccountFromInfo,
 };
 
-export const AccountCreateDialog = connect(
+const ConnectedAccountCreateDialog = connect(
     mapStateToProps,
     mapDispatchToProps,
 )(AccountCreateDialogBase);
+
+export function AccountCreateDialog() {
+    const {openAccount} = useAccountEditor();
+    const handleCreated = React.useCallback(
+        (accountName: string) => {
+            openAccount(accountName).catch(() => undefined);
+        },
+        [openAccount],
+    );
+
+    return <ConnectedAccountCreateDialog onCreated={handleCreated} />;
+}

@@ -24,5 +24,9 @@ export function setAccountsStateDataFields(
 }
 
 export function parseAccountsData(data: Array<unknown>) {
-    return Promise.all(map_(data, (item) => Promise.resolve(parseAccountData(item))));
+    return Promise.resolve(parseAccountsDataSync(data));
+}
+
+export function parseAccountsDataSync(data: Array<unknown>) {
+    return map_(data, (item) => parseAccountData(item));
 }

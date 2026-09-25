@@ -1,7 +1,5 @@
-import filter_ from 'lodash/filter';
 import forEach_ from 'lodash/forEach';
 import get_ from 'lodash/get';
-import isEmpty_ from 'lodash/isEmpty';
 import set_ from 'lodash/set';
 
 import {createSelector} from 'reselect';
@@ -11,7 +9,6 @@ import hammer from '../../../common/hammer';
 import ypath from '../../../common/thor/ypath';
 import {
     selectAccountMasterMemoryMedia,
-    selectAccountNames,
     selectAccountsColumnFields,
     selectAccountsTree,
 } from './accounts-ts';
@@ -25,21 +22,6 @@ export const selectAccountsNameFilter = (state) => state.accounts.accounts.activ
 export const selectAccountsAbcServiceIdSlugFilter = (state) =>
     state.accounts.accounts.abcServiceFilter;
 export const selectAccountsSortInfo = (state) => selectTables(state)[ACCOUNTS_TABLE_ID];
-
-export const selectEditableAccount = (state) => state.accounts.accounts.editableAccount;
-
-const selectEditableAccountSubtreeNames = createSelector(
-    [selectAccountsTree, selectEditableAccount],
-    prepareSubtreeNames,
-);
-
-export const selectEditableAccountParentSuggests = createSelector(
-    [selectAccountNames, selectEditableAccountSubtreeNames],
-    (allNames, excludeNames) => {
-        const excludeNamesSet = new Set(excludeNames);
-        return filter_(allNames, (name) => !excludeNamesSet.has(name));
-    },
-);
 
 const selectFlattenTree = createSelector(
     [
@@ -70,18 +52,6 @@ export const selectAccountsFlattenTree = createSelector(
 export function getAccountName(treeItem) {
     const {attributes: account} = treeItem || {};
     return account && account.name;
-}
-
-function prepareSubtreeNames(tree, account) {
-    if (isEmpty_(tree) || isEmpty_(account) || !tree[account.name]) {
-        return [];
-    }
-
-    const res = [];
-    hammer.treeList.treeForEach(tree[account.name], (node) => {
-        res.push(getAccountName(node));
-    });
-    return res;
 }
 
 function prepareAccountsFlattenTreeImpl(treeList, activeAccount, nameFilter = '', {slug} = {}) {

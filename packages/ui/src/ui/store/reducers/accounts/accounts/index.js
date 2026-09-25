@@ -1,5 +1,3 @@
-import findIndex_ from 'lodash/findIndex';
-
 import {getResponsibleUsers} from '../../../../utils/accounts/index';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../../constants/accounts';
 import {initialState as tableSortState} from '../../tables';
@@ -10,17 +8,14 @@ import {
     CHANGE_CONTENT_MODE_FILTER,
     CHANGE_MEDIUM_TYPE_FILTER,
     CHANGE_NAME_FILTER,
-    CLOSE_EDITOR_MODAL,
     FETCH_ACCOUNTS_METADATA,
     FETCH_ACCOUNTS_NODES,
     FETCH_ACCOUNTS_RESOURCE,
     FETCH_ACCOUNTS_TOTAL_USAGE,
     FETCH_ACCOUNTS_USABLE,
     FILTER_USABLE_ACCOUNTS,
-    OPEN_EDITOR_MODAL,
     SET_ACCOUNTS_TREE_STATE,
     SET_ACTIVE_ACCOUNT,
-    UPDATE_EDITABLE_ACCOUNT,
 } from '../../../../constants/accounts/accounts';
 import {mergeStateOnClusterChange} from '../../../../store/reducers/utils';
 
@@ -46,8 +41,6 @@ const ephemeralState = {
     errorData: {},
 
     accounts: [],
-    editableAccount: {},
-    showEditor: false,
     accountsTreeState: 'collapsed',
     responsibleUsers: [],
     usableAccounts: [],
@@ -182,25 +175,6 @@ const reducer = (state = initialState, action) => {
         case FILTER_USABLE_ACCOUNTS: {
             return {...state, activeUsableFilter: true};
         }
-
-        case UPDATE_EDITABLE_ACCOUNT.SUCCESS: {
-            const {account} = action.data;
-            const index = findIndex_(state.accounts, ({name}) => name === account.name);
-            const accounts = [...state.accounts];
-            if (index === -1) {
-                accounts.push(account);
-            } else {
-                accounts[index] = account;
-            }
-
-            return {...state, accounts, editableAccount: account, showEditor: true};
-        }
-
-        case OPEN_EDITOR_MODAL:
-            return {...state, editableAccount: action.data.account, showEditor: true};
-
-        case CLOSE_EDITOR_MODAL:
-            return {...state, showEditor: false, editableAccount: {}};
 
         case SET_ACCOUNTS_TREE_STATE: {
             return {...state, accountsTreeState: action.data.treeState};

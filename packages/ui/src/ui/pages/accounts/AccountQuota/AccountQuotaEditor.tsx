@@ -2,6 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
+import {Loader} from '@gravity-ui/uikit';
 
 import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import Icon from '../../../components/Icon/Icon';
@@ -17,7 +18,7 @@ import {
     RESOURCES_USAGE_PREFIX,
     TOTAL_CHILDREN_RESOURCE_LIMIT,
 } from '../../../constants/accounts';
-import {type AccountQuotaParams} from '../../../store/actions/accounts/editor-ts';
+import {type AccountQuotaParams} from '../../../utils/accounts/account-quota';
 import {
     ACCOUNT_RESOURCE_TYPES_DESCRIPTION,
     type AccountResourceNameType,
@@ -27,6 +28,8 @@ import {ProgressStackByTreeItem} from '../tabs/general/ProgressStack';
 import {type AccountsTree} from '../../../store/selectors/accounts/accounts-ts';
 
 import i18n from './i18n';
+
+import './AccountQuota.scss';
 
 const block = cn('account-quota');
 
@@ -44,6 +47,7 @@ interface ReduxProps {
     accountsTree: Record<string, AccountsTree>;
     setAccountQuota: (params: AccountQuotaParams) => void;
     sources: Array<string>;
+    isLoading?: boolean;
 }
 
 interface State {
@@ -54,7 +58,8 @@ export class AccountQuotaEditor extends React.Component<Props & ReduxProps, Stat
     override state: State = {};
 
     override render() {
-        const {title, type, mediumType, currentAccount, activeAccount, accountsTree} = this.props;
+        const {title, type, mediumType, currentAccount, activeAccount, accountsTree, isLoading} =
+            this.props;
         const {format} = ACCOUNT_RESOURCE_TYPES_DESCRIPTION[type];
         const {showEditor} = this.state;
         const {limit} = this.getInfoByName(currentAccount);
@@ -74,9 +79,9 @@ export class AccountQuotaEditor extends React.Component<Props & ReduxProps, Stat
                     <ClickableText
                         color="secondary"
                         className={block('edit')}
-                        onClick={this.toggleShowEditor}
+                        onClick={isLoading ? undefined : this.toggleShowEditor}
                     >
-                        <Icon awesome={'pencil'} />
+                        {isLoading ? <Loader size="s" /> : <Icon awesome={'pencil'} />}
                     </ClickableText>
                 </div>
                 {showEditor && (
