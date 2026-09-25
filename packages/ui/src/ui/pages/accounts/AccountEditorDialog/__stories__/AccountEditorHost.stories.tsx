@@ -1,11 +1,13 @@
 import React from 'react';
 import {type Meta, type StoryObj} from '@storybook/react';
+import {ToasterComponent, ToasterProvider} from '@gravity-ui/uikit';
 
 import {AccountEditButton} from '../AccountEditButton';
 import {useAccountEditor} from '../AccountEditorContext';
 import {type AccountEditorDataLoaderProps} from '../AccountEditorDataLoader';
 import {AccountEditorHost} from '../AccountEditorHost';
 import {type AccountEditorData} from '../prepareAccountEditorData';
+import {toaster} from '../../../../utils/toaster';
 
 const accountName = 'account';
 const account = {
@@ -71,9 +73,12 @@ function ErrorDataLoader({accountName: name, onError}: AccountEditorDataLoaderPr
 
 function StoryHost({DataLoader}: {DataLoader: React.ComponentType<AccountEditorDataLoaderProps>}) {
     return (
-        <AccountEditorHost DataLoader={DataLoader}>
-            <EditorButtons />
-        </AccountEditorHost>
+        <ToasterProvider toaster={toaster}>
+            <AccountEditorHost DataLoader={DataLoader}>
+                <EditorButtons />
+            </AccountEditorHost>
+            <ToasterComponent />
+        </ToasterProvider>
     );
 }
 
