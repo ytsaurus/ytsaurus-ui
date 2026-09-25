@@ -118,12 +118,16 @@ function PreviewContent(props: PreviewContentProps) {
 
     const [scrollContainer, setScrollContainer] = useState<HTMLDivElement | null>(null);
 
-    if (data?.$type === 'yql.string' || data?.$type === 'yql.json') {
-        return <pre className="elements-code">{data?.$value}</pre>;
+    if (!data) {
+        return null;
     }
 
-    if (data?.$type === 'yql.tagged' && data.$tag && isMediaTag(data.$tag)) {
-        return <img src={`data:${data.$tag};base64,${data?.$value}`} alt="image-preview" />;
+    if (data.$type === 'yql.string' || data.$type === 'yql.json') {
+        return <pre className="elements-code">{data.$value}</pre>;
+    }
+
+    if (data.$type === 'yql.tagged' && data.$tag && isMediaTag(data.$tag)) {
+        return <img src={`data:${data.$tag};base64,${data.$value}`} alt="image-preview" />;
     }
 
     return (
