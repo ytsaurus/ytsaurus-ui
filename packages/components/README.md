@@ -155,6 +155,22 @@ const additionalSchemaColumns: ExternalSchemaColumn[] = [
 
 A real example — external schema description columns (title/description with a source link) — lives in **`packages/ui`** (`useExternalSchemaColumns`).
 
+### Previewing truncated cells
+
+Values larger than the read limits (`field_weight_limit` / `string_weight_limit` of the request output format) arrive marked as incomplete, and the preview tab renders them as truncated. Pass **`onShowPreview`** to let the user load such a value in full: the cell then shows a preview button, awaits the handler, and it is up to you to put the loaded value back into `table`.
+
+```tsx
+<NavigationTable
+    table={table}
+    onShowPreview={async (columnName, rowIndex, tag) => {
+        const value = await loadFullCellValue({path, columnName, rowIndex, tag});
+        setTable((prev) => injectCellValue(prev, columnName, rowIndex, value));
+    }}
+/>;
+```
+
+`tag` is the YQL type tag of the value, when there is one; use it to decide whether the value can be shown inline or needs a dedicated viewer. Without `onShowPreview` no preview button is rendered.
+
 ---
 
 ## `useNavigationTableData` hook
