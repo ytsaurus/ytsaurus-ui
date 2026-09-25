@@ -1,5 +1,36 @@
 # Changelog
 
+## [3.27.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.26.0...ui-v3.27.0) (2026-09-25)
+
+
+### Features
+
+* **Accounts:** load account data progressively by tab [YTFRONT-5765] ([c073bc7](https://github.com/ytsaurus/ytsaurus-ui/commit/c073bc7facfa5f8e152d3896501ee0a827d6640a))
+* **Bundles:** mark deprecated instance sizes [YTFRONT-5980] ([b2a51ce](https://github.com/ytsaurus/ytsaurus-ui/commit/b2a51cefd90f7b2f462f61d100f15cf0a512d687))
+* **Flow:** fall back to leader_controller_address attribute [[#1814](https://github.com/ytsaurus/ytsaurus-ui/issues/1814)] ([5466699](https://github.com/ytsaurus/ytsaurus-ui/commit/54666992d54dae475726c726381ed741faa86b0a))
+* **Flow:** read leader controller address from flow_control [[#1814](https://github.com/ytsaurus/ytsaurus-ui/issues/1814)] ([d84dfa0](https://github.com/ytsaurus/ytsaurus-ui/commit/d84dfa07ab3c8d0f264c5e8f4e7647f8416a2b0c))
+* **MetaTable:** render YQL operation links with Markdown [YTFRONT-6026] ([89accdd](https://github.com/ytsaurus/ytsaurus-ui/commit/89accddf07ab0d6cd63b24b6cdd24f1a42b35ade))
+* **Queries:** add waitingRemoteId support [YTFRONT-5955] ([6bbcbd6](https://github.com/ytsaurus/ytsaurus-ui/commit/6bbcbd6e536bc52377489f185beef125fd1936d8))
+
+
+### Bug Fixes
+
+* **Accounts:** refresh account state after edits [YTFRONT-5765] ([1ada292](https://github.com/ytsaurus/ytsaurus-ui/commit/1ada2928fc86f80d32e6af7754f1153cd319c0f7))
+* **BundleTableField:** truncate long types with ellipsis [[#1827](https://github.com/ytsaurus/ytsaurus-ui/issues/1827)] ([39b7905](https://github.com/ytsaurus/ytsaurus-ui/commit/39b7905beddcd298b7ef076f7b6154dd7d2015d9))
+* **Flow/Graph:** order sources like their source streams [[#1828](https://github.com/ytsaurus/ytsaurus-ui/issues/1828)] ([9093991](https://github.com/ytsaurus/ytsaurus-ui/commit/90939916eb3991a1ec0ff30b1c1cd335b58ac3a7))
+* **Flow:** align leader address fallback with RPC proxy [[#1814](https://github.com/ytsaurus/ytsaurus-ui/issues/1814)] ([612707a](https://github.com/ytsaurus/ytsaurus-ui/commit/612707a78b9412fddb273a54a414fe7579cffeb5))
+* **HelpLink:** stabilize icon size [YTFRONT-5958] ([123a39c](https://github.com/ytsaurus/ytsaurus-ui/commit/123a39c1f136c16c9ff33962054e8a25e6d5a7e5))
+* **Job:** truncate long event phase names [YTFRONT-6059] ([071c731](https://github.com/ytsaurus/ytsaurus-ui/commit/071c7315730161c46aedaa2391a43b28c9fa1b26))
+* **Markdown:** handle fallback request errors [YTFRONT-6026] ([453b0dd](https://github.com/ytsaurus/ytsaurus-ui/commit/453b0dd54636d1affd2ceef07426e927af2edbf9))
+* **Markdown:** linkify plain URLs in fallback [YTFRONT-6026] ([eb2b1ff](https://github.com/ytsaurus/ytsaurus-ui/commit/eb2b1ff1f979eb0641058471aebe2e988ac870a3))
+* **Navigation/Content:** add gap before source-path copy button [YTFRONT-5813] ([da27f69](https://github.com/ytsaurus/ytsaurus-ui/commit/da27f6991976601be1fa276eeb4120f7eabead49))
+* **Navigation:** html injection [YTFRONT-6067] ([0dcea28](https://github.com/ytsaurus/ytsaurus-ui/commit/0dcea285c90a89408f8ac465298e84c4891a8390))
+* **Navigation:** localize map node labels [YTFRONT-5069] ([fc4ce24](https://github.com/ytsaurus/ytsaurus-ui/commit/fc4ce24da63080bab4d0e3f9e55af5fa0a7240de))
+* **Navigation:** use real paths for queue and consumer metrics [YTFRONT-5853] ([ec89662](https://github.com/ytsaurus/ytsaurus-ui/commit/ec896623cceea70c67987ee7cc6b2055d37b0c89))
+* **Queries:** prioritize query name column width [YTFRONT-6025] ([ec312fd](https://github.com/ytsaurus/ytsaurus-ui/commit/ec312fdf5d8cfc823fef66620550f024237f6cef))
+* **Queries:** skip legacy Livy for SPYT Connect [YTFRONT-6074] ([239d80d](https://github.com/ytsaurus/ytsaurus-ui/commit/239d80df254aa41cb2b46406a888e43a4e252fa4))
+* **Storybook:** verify production preview runtime [[#1827](https://github.com/ytsaurus/ytsaurus-ui/issues/1827)] ([954cf17](https://github.com/ytsaurus/ytsaurus-ui/commit/954cf17b3bae1895f2d42c6ce7b87bb8bbc10f8e))
+
 ## [3.26.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.25.0...ui-v3.26.0) (2026-09-16)
 
 
