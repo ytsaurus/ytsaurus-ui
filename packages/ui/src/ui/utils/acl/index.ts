@@ -1,4 +1,5 @@
 import {type YTPermissionType} from '../../../shared/yt-types';
+import {assertNever} from '../../../shared/utils/toolkit/assert';
 import {
     IdmObjectType,
     REGISTER_QUEUE_CONSUMER,
@@ -116,15 +117,17 @@ export type PreparedRole = TypedAclSubject & {
     types?: undefined;
 };
 
-export function prepareAclSubject(item: ResponsibleType): Subject {
-    switch (item.type) {
+export function prepareAclSubject({type, value}: ResponsibleType): Subject {
+    switch (type) {
         case 'users':
-            return {user: item.value};
+            return {user: value};
         case 'groups':
-            return {group: item.value};
+            return {group: value};
         case 'app':
-            return {tvm_id: item.value};
+            return {tvm_id: value};
     }
+
+    return assertNever(type, `Unsupported ACL subject type: '${type}'.`);
 }
 
 export function convertToUIPermissions<
