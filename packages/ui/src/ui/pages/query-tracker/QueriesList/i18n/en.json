@@ -2,5 +2,18 @@
   "tab_history": "History",
   "tab_tutorials": "Tutorials",
   "tab_vcs": "VCS",
-  "tab_navigation": "Navigation"
+  "tab_navigation": "Navigation",
+  "field_no-name": "No name",
+  "field_duration": "Duration",
+  "field_mode": "Mode",
+  "field_start-time": "Start time",
+  "field_engine": "Engine",
+  "field_sharing": "Sharing",
+  "filter_only-mine": "My queries only",
+  "filter_period": "Period",
+  "filter_engine": "Engine",
+  "filter_state": "State",
+  "value_all": "All",
+  "action_edit": "Edit",
+  "title_edit-query-name-error": "Failed to rename query"
 }

@@ -6,7 +6,7 @@ import {
     LazyAddQueryTokenForm,
     LazyQueryTokenList,
 } from '../../../pages/query-tracker/QueryToken/lazy';
-import {makeItem, makePage} from '../settings-description';
+import {makeItem, makePage} from '../settings-description-helpers';
 import i18n from './i18n';
 import {DefaultAcoSelect} from './DefaultAcoSelect';
 import {GraphAutoCenterSetting} from './GraphAutoCenterSetting';
@@ -45,6 +45,16 @@ export const queriesPage = ({cluster, hasQuerySuggestions}: Props) => {
                     description={i18n('context_query-tracker-stage-description')}
                     settingName={SettingName.QUERY_TRACKER.STAGE}
                     settingNS={NAMESPACES.QUERY_TRACKER}
+                />,
+            ),
+            makeItem(
+                'global::queryTracker::useNewQueriesView',
+                i18n('field_new-queries-view'),
+                'top',
+                <BooleanSettingItem
+                    settingKey="global::queryTracker::useNewQueriesView"
+                    description={i18n('context_new-queries-view-description')}
+                    oneLine
                 />,
             ),
             makeItem(

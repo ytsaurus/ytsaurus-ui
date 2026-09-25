@@ -25,4 +25,16 @@
     &__list-content {
         flex: 1;
     }
+
+    &__new-history {
+        flex: 1;
+        min-height: 0;
+        margin-top: 8px;
+    }
+
+    &__new-tutorials {
+        flex: 1;
+        min-height: 0;
+        margin-top: 8px;
+    }
 }
