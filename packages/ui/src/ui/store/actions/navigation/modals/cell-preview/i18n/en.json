@@ -1,4 +1,4 @@
 {
-  "alert_content-too-large": "Unable to load content more than 16MiB. Please use the command bellow to load it locally.",
+  "alert_content-too-large": "The cell content exceeds the preview limit of 16 MiB. Use the command below to download the full content.",
   "alert_use-command-to-load": "You could use the command bellow to load it locally."
 }

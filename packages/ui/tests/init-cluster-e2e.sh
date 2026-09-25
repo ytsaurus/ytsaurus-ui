@@ -300,3 +300,5 @@ if [ "${SKIP_QUERIES}" != "true" ]; then
 fi
 
 $(dirname $0)/init-cluster-e2e/table.truncated.image-audio.sh
+
+$(dirname $0)/init-cluster-e2e/table.preview-limit.image-audio.sh
