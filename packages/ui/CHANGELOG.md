@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.27.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.27.0...ui-v3.27.1) (2026-09-25)
+
+
+### Bug Fixes
+
+* **scripts:** create docker mount directories on host [YTFRONT-6030] ([f6d49de](https://github.com/ytsaurus/ytsaurus-ui/commit/f6d49dedde7a339d21ef89ebdb99c4425cb85496))
+
 ## [3.27.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.26.0...ui-v3.27.0) (2026-09-25)
 
 
