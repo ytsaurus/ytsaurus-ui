@@ -62,3 +62,59 @@ test('AccountEditorHost: reports a loading error and enables edit buttons', asyn
     await expect(component.getByRole('button', {name: 'Edit another'})).toBeEnabled();
     await expect(component.getByRole('dialog')).toHaveCount(0);
 });
+
+test('AccountEditorHost: keeps the dialog open after changing Parent', async ({mount, page}) => {
+    await page.route('**/api/v3/list**', async (route) => {
+        await route.fulfill({json: ['other-top-level']});
+    });
+    await page.route('**/api/v3/set**', async (route) => {
+        await route.fulfill({json: null});
+    });
+
+    await mount(<AccountEditorHostStories.OpenedAsAdmin />);
+
+    await page.getByRole('button', {name: '<Root>', exact: true}).click();
+    const requestPromise = page.waitForRequest('**/api/v3/set**');
+    await page.getByText('other-top-level', {exact: true}).click();
+    await requestPromise;
+
+    await expect(page.getByRole('dialog')).toBeVisible();
+    await expect(page.getByRole('button', {name: '<Root>', exact: true})).toBeEnabled();
+});
+
+test('AccountEditorHost: keeps the dialog usable after a Parent mutation error', async ({
+    mount,
+    page,
+}) => {
+    let resolveMutation: (() => void) | undefined;
+    const mutationGate = new Promise<void>((resolve) => {
+        resolveMutation = resolve;
+    });
+
+    await page.route('**/api/v3/list**', async (route) => {
+        await route.fulfill({json: ['other-top-level']});
+    });
+    await page.route('**/api/v3/set**', async (route) => {
+        await mutationGate;
+        await route.fulfill({
+            status: 500,
+            contentType: 'application/json',
+            body: JSON.stringify({message: 'Mutation failed'}),
+        });
+    });
+
+    await mount(<AccountEditorHostStories.OpenedAsAdmin />);
+
+    await page.getByRole('button', {name: '<Root>', exact: true}).click();
+    const requestPromise = page.waitForRequest('**/api/v3/set**');
+    const responsePromise = page.waitForResponse('**/api/v3/set**');
+    await page.getByText('other-top-level', {exact: true}).click();
+    await requestPromise;
+
+    await expect(page.getByRole('button', {name: 'root', exact: true})).toBeDisabled();
+    resolveMutation?.();
+    await responsePromise;
+
+    await expect(page.getByRole('dialog')).toBeVisible();
+    await expect(page.getByRole('button', {name: '<Root>', exact: true})).toBeEnabled();
+});
