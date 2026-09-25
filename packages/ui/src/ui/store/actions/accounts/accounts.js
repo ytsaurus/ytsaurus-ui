@@ -34,7 +34,7 @@ import {
     selectAccountsEditCounter,
 } from '../../../store/selectors/accounts/accounts-ts';
 import {RumWrapper, YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {parseAccountsData} from './accounts-ts';
+import {parseAccountsData, parseAccountsListData} from './accounts-ts';
 import Account from '../../../pages/accounts/selector';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 
@@ -73,13 +73,13 @@ function getCacheParams(state) {
     return selectAccountsDisabledCacheForNextFetch(state) ? {} : USE_CACHE;
 }
 
-function parseAccounts(rumId, accounts) {
+function parseAccounts(rumId, accounts, parseData = parseAccountsData) {
     const items = filter_(
         ypath.getValue(accounts),
         (item) => ypath.getValue(item) !== ROOT_ACCOUNT_NAME,
     );
     return rumId
-        .parse(YTApiId.accountsData, parseAccountsData(items))
+        .wrap(`parse.${YTApiId.accountsData}`, () => parseData(items))
         .then((res) => map_(res, (item) => new Account(item)));
 }
 
@@ -123,7 +123,7 @@ export function fetchAccountsList() {
                     ...getCacheParams(state),
                 }),
             )
-            .then((accounts) => parseAccounts(rumId, accounts))
+            .then((accounts) => parseAccounts(rumId, accounts, parseAccountsListData))
             .then((accounts) => {
                 if (
                     !isLatestRequest('list', requestGeneration) ||
@@ -310,8 +310,7 @@ export function loadEditedAccount(accountName) {
                 }),
             )
             .then((data) =>
-                rumId.parse(
-                    YTApiId.accountsEditData,
+                rumId.wrap(`parse.${YTApiId.accountsEditData}`, () =>
                     parseAccountsData([{$value: accountName, $attributes: data}]),
                 ),
             )
