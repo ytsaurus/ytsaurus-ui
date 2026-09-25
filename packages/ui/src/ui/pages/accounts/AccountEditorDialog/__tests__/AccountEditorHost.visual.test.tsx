@@ -22,6 +22,35 @@ test('AccountEditorHost: opens the dialog only after data is ready', async ({mou
     await expect(component.getByRole('button', {name: 'Edit another'})).toBeDisabled();
 });
 
+test('AccountEditorHost: disables ABC and Parent for a regular user', async ({mount, page}) => {
+    const accountNamesRequests: Array<string> = [];
+    page.on('request', (request) => {
+        if (request.url().includes('/api/v3/list')) {
+            accountNamesRequests.push(request.url());
+        }
+    });
+
+    await mount(<AccountEditorHostStories.Opened />);
+
+    await expect(page.getByRole('button', {name: 'Select ABC service...'})).toBeDisabled();
+    await expect(page.getByRole('button', {name: 'root', exact: true})).toBeDisabled();
+    expect(accountNamesRequests).toHaveLength(0);
+});
+
+test('AccountEditorHost: enables ABC and Parent for an administrator', async ({mount, page}) => {
+    await page.route('**/api/v3/list**', async (route) => {
+        await route.fulfill({json: ['parent', 'sibling']});
+    });
+
+    await mount(<AccountEditorHostStories.OpenedAsAdmin />);
+
+    await expect(page.getByRole('button', {name: 'Select ABC service...'})).toBeEnabled();
+    await expect(page.getByRole('button', {name: '<Root>', exact: true})).toBeEnabled();
+    await page.getByRole('button', {name: '<Root>', exact: true}).click();
+    await expect(page.getByText('parent', {exact: true})).toBeVisible();
+    await expect(page.getByText('sibling', {exact: true})).toBeVisible();
+});
+
 test('AccountEditorHost: reports a loading error and enables edit buttons', async ({
     mount,
     page,
