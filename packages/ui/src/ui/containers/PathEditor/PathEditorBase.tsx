@@ -360,7 +360,7 @@ export class PathEditorBase extends Component<PathEditorProps, PathEditorState> 
         const {errorMessage} = this.props;
 
         if (!errorMessage) {
-            return;
+            return undefined;
         }
 
         return <ErrorMessage className={b('item', {error: true})} message={errorMessage} />;

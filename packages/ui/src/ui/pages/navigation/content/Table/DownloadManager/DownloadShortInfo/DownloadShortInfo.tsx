@@ -23,7 +23,9 @@ export function DownloadShortInfo({id, filename}: Props) {
         useSelector((state: RootState) => selectDownloadTableInfo(state, id)) ?? {};
 
     useEffect(() => {
-        if (loaded && !loading) return;
+        if (loaded && !loading) {
+            return undefined;
+        }
         const interval = setInterval(() => {
             setTime(moment());
         }, 1000);

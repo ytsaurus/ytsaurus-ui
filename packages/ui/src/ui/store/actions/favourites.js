@@ -22,7 +22,7 @@ export function accountsTrackVisit(account) {
     return (dispatch, getState) => {
         const activeAccount = selectActiveAccount(getState());
         if (account === activeAccount) {
-            return;
+            return undefined;
         }
 
         const parentNS = selectAccountsNS(getState());
@@ -42,7 +42,7 @@ export function bundlesTrackVisit(bundle) {
         const state = getState();
         const activeBundle = selectTabletsActiveBundle(state);
         if (!bundle || bundle === activeBundle) {
-            return;
+            return undefined;
         }
         const parentNS = selectBundlesNS(state);
         return dispatch(trackLastVisited(bundle, parentNS));
@@ -102,7 +102,9 @@ export function navigationToggleFavourite(path, cluster) {
     getMetrics().countEvent('navigation_toggle-favourites');
 
     return (dispatch) => {
-        if (!cluster) return;
+        if (!cluster) {
+            return undefined;
+        }
 
         const parentNS = createNestedNS(cluster, NAMESPACES.LOCAL);
         return dispatch(toggleFavourite(path, parentNS));

@@ -296,6 +296,8 @@ export function fetchAccountUsage(): FiltersThunkAction {
             case 'tree-diff':
                 return dispatch(fetchAccountUsageTreeDiff());
         }
+
+        return undefined;
     };
 }
 

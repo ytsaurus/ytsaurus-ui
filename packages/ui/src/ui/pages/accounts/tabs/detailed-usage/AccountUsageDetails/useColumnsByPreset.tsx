@@ -226,6 +226,8 @@ export const useColumnsByPreset = (mediums: AccountUsageMediumKey[]) => {
                             />
                         );
                     }
+
+                    return undefined;
                 },
                 align: 'right',
                 width: 150,

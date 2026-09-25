@@ -132,6 +132,8 @@ export class LinksBase extends Component {
             case LinksTab.FAVOURITES:
                 return this.renderLists(favourites, favouriteAccounts);
         }
+
+        return undefined;
     }
 
     renderTabs() {

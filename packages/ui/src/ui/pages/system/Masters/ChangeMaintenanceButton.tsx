@@ -35,7 +35,9 @@ export const ChangeMaintenanceButton: FC<Props> = ({
     const [error, setError] = useState<Error | undefined>(undefined);
     const [visible, toggleVisible] = useToggle(false);
 
-    if (!path) return;
+    if (!path) {
+        return undefined;
+    }
 
     const handleMaintenanceChange = async (form: FormApi<FormData>) => {
         const {values} = form.getState();

@@ -103,6 +103,8 @@ export default class Events extends React.Component {
                         </div>
                     );
                 }
+
+                return undefined;
             },
             state(event, columnName) {
                 const value = getValue(event, columnName);

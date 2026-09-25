@@ -138,4 +138,6 @@ export async function ytTvmApiHandler(req: Request, res: Response) {
             responseStatus: (e as AxiosError)?.response?.status || 500,
         });
     }
+
+    return undefined;
 }

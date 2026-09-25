@@ -294,6 +294,8 @@ export function orderTypeToOldSortState(field?: string, orderType?: OrderType): 
         case 'undefined-desc':
             return {field, asc: false, undefinedAsc: false};
     }
+
+    return {};
 }
 
 export function compareVectors(left: any, right: any, orderK: OrderK, undefinedOrderK: OrderK) {

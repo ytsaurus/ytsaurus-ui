@@ -15,15 +15,17 @@ const useQueryDuration = (query: QueryItem) => {
     useEffect(() => {
         if (query.state === QueryStatus.DRAFT) {
             setDuration(null);
-            return;
+
+            return undefined;
         }
         if (isQueryCompleted(query)) {
             setDuration(query.finish_time ? queryDuration(query) : '-');
-            return;
+
+            return undefined;
         }
         setDuration(queryDuration(query));
         if (query.finish_time) {
-            return;
+            return undefined;
         }
         const timer = setInterval(() => setDuration(queryDuration(query)), 1000);
         return () => {

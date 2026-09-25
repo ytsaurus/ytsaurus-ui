@@ -124,7 +124,9 @@ const MonacoEditor: FC<Props> = ({
     }, []);
 
     useEffect(() => {
-        if (!vimMode || !editorRef?.current) return;
+        if (!vimMode || !editorRef?.current) {
+            return undefined;
+        }
         vimModeRef.current = initVimMode(editorRef?.current, statusRef?.current);
 
         return () => {

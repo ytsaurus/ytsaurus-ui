@@ -55,6 +55,8 @@ class ElementsTable extends Component {
                     `For tree-like tables, ${propName} prop of ${componentName} has to be a function`,
                 );
             }
+
+            return undefined;
         },
         onItemClick: PropTypes.func,
         getItemLink: PropTypes.func,
@@ -91,6 +93,8 @@ class ElementsTable extends Component {
                     `The ${propName} flag set to false is not allowed in conjunction with virtual flag set to true in ${componentName}.`,
                 );
             }
+
+            return undefined;
         },
         itemHeight: PropTypes.number,
         // ROW SELECTION

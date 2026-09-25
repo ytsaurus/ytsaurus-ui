@@ -166,7 +166,7 @@ export function accessLogResetFilters(): AccessLogFiltersThunkAction {
         const lastLoadedParams = selectAccessLogLastLoadedParams(getState());
         if (!lastLoadedParams.path) {
             // skip for initial loading
-            return;
+            return undefined;
         }
 
         return dispatch({type: ACCESS_LOG_RESET_FILTERS});

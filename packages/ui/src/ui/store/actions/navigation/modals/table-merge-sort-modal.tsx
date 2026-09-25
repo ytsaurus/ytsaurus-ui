@@ -234,7 +234,9 @@ export function runTableMerge(spec: MergeParams): TableMergeSortThunkAction {
 let cancelTokenSrc: Pick<CancelTokenSource, 'cancel'> = {cancel: () => {}};
 
 export function isPathStaticTable(path: string) {
-    if (!path) return;
+    if (!path) {
+        return undefined;
+    }
 
     cancelTokenSrc.cancel();
     return ytApiV3Id

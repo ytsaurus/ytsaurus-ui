@@ -6,7 +6,9 @@ import {YTErrorBlock} from '../../../containers/Block/Block';
 export const SystemAlert: FC<{className?: string}> = ({className}) => {
     const alerts = useSelector(selectMasterAlerts);
 
-    if (!alerts.length) return;
+    if (!alerts.length) {
+        return undefined;
+    }
 
     return (
         <div className={className}>

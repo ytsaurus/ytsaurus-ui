@@ -23,6 +23,8 @@ export function parseErrorFromResponse(data) {
     ) {
         return data.substring(startDelimeterIndex + ERROR_DELIMETER.length, endDelimeterIndex);
     }
+
+    return undefined;
 }
 
 export function prepareRows(rowData, reverseRows = false) {

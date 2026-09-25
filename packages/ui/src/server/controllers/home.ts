@@ -32,7 +32,8 @@ export function homeIndexFactory(entryName = 'main') {
         if (isEmpty_(clusterConfig) && cluster) {
             if (!req.ctx.config.ytAllowRemoteLocalProxy && !isLocalModeByEnvironment()) {
                 res.redirect('/');
-                return;
+
+                return undefined;
             }
             res.status(404).send(
                 `No config for cluster <b>${encodeURIComponent(cluster)}</b> exists.` +
@@ -40,7 +41,8 @@ export function homeIndexFactory(entryName = 'main') {
                     '<ol><li>FQDN of the cluster is correct</li>' +
                     '<li>The port is greater than or equal to 1000.</li></ol>',
             );
-            return;
+
+            return undefined;
         }
 
         const useRemoteSettings = isRemoteSettingsConfigured();
@@ -89,5 +91,7 @@ export function homeIndexFactory(entryName = 'main') {
         });
         const html = await ServerFactory.renderLayout(layoutConfig, req, res);
         res.send(html);
+
+        return undefined;
     };
 }

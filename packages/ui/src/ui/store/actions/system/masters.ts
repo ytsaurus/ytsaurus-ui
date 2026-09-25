@@ -417,6 +417,8 @@ export function loadMasters() {
                 return {isRetryFutile: true};
             }
         }
+
+        return undefined;
     };
 }
 

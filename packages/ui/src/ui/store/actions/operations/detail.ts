@@ -69,6 +69,8 @@ function loadIntermediateResourceUsage(
             onLoadComplete();
             dispatch({type: LOAD_RESOURCE_USAGE.CANCELLED});
         }
+
+        return undefined;
     };
 }
 

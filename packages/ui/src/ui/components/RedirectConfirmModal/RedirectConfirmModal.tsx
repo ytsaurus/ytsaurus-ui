@@ -18,7 +18,9 @@ export const RedirectConfirmModal: FC<Props> = ({title, message, ignoreSamePath 
     const handleNavigation = useCallback<TransitionPromptHook<unknown>>(
         (location) => {
             const samePath = window.location.pathname === location.pathname && ignoreSamePath;
-            if (skipRef.current || samePath) return;
+            if (skipRef.current || samePath) {
+                return undefined;
+            }
 
             locationRef.current = location;
             setShowModal(true);

@@ -92,12 +92,15 @@ PoolsMultiple.getDefaultValue = () => {
 };
 
 PoolsMultiple.validate = (value: PoolPair[]) => {
-    if (!value.length) return;
+    if (!value.length) {
+        return undefined;
+    }
     if (value?.[value.length - 1].tree && !value?.[value.length - 1]?.pool) {
         return i18n('alert_pool-option-required');
     }
     if (!value?.[value.length - 1]?.tree?.length) {
         return i18n('alert_tree-not-empty');
     }
-    return;
+
+    return undefined;
 };

@@ -139,7 +139,7 @@ function useLoadedPools(cluster?: string, poolTrees?: string[]): Array<string> |
         }
 
         if (!localPoolTrees.length) {
-            return;
+            return undefined;
         }
 
         let promise: Promise<string[]>;

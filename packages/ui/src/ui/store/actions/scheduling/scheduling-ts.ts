@@ -174,7 +174,7 @@ export function loadSchedulingData(): SchedulingThunkAction {
 export function deletePool(item?: {name: string; parent?: string}): SchedulingThunkAction {
     return (dispatch, getState) => {
         if (!item) {
-            return;
+            return undefined;
         }
 
         const state = getState();

@@ -64,6 +64,8 @@ Message.propTypes = {
                 `You have to provide dismissCallback to ${componentName} when showClose is true`,
             );
         }
+
+        return undefined;
     },
     content: PropTypes.oneOfType([PropTypes.node, PropTypes.arrayOf(PropTypes.string)]).isRequired,
     buttons: PropTypes.arrayOf(PropTypes.object),

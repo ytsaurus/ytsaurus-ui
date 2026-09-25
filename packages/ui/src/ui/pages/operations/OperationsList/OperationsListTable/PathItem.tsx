@@ -40,6 +40,8 @@ export function PathItem({caption, item, transaction_id, user_transaction_id}: P
         isTransactionAlive(user_transaction_id).then(() =>
             setActiveTransaction(user_transaction_id),
         );
+
+        return undefined;
     }, [table, user_transaction_id, transaction_id]);
 
     return (

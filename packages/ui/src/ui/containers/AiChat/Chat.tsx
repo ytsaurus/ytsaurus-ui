@@ -41,7 +41,9 @@ const Chat: FC<AiChatProps> = () => {
 
     useEffect(() => {
         const container = containerRef.current;
-        if (!container) return;
+        if (!container) {
+            return undefined;
+        }
 
         container.addEventListener('scroll', handleUserScroll);
         return () => {
