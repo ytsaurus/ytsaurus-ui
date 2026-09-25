@@ -83,7 +83,7 @@ export class GeneralContentBase extends React.Component<Props> {
         } = this.props;
 
         const control = UIFactory.renderControlAbcService({
-            value: {id, slug},
+            value: slug ? {id, slug} : undefined,
             onChange: this.onAbcServiceChanged,
             placeholder: i18n('field_abc-service-placeholder'),
             disabled: !isAdmin,
