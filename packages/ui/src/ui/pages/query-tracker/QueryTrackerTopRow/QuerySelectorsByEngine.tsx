@@ -20,7 +20,10 @@ import {
 } from '../../../store/selectors/query-tracker/queryAco';
 import cn from 'bem-cn-lite';
 import './QuerySelectorsByEngine.scss';
-import {selectAvailableSpytConnect} from '../../../store/selectors/query-tracker/queryTrackerEnginesInfo';
+import {
+    selectAvailableSpytConnect,
+    selectQueryTrackerInfoLoaded,
+} from '../../../store/selectors/query-tracker/queryTrackerEnginesInfo';
 
 const block = cn('yt-query-selector-by-engine');
 
@@ -32,6 +35,7 @@ export const QuerySelectorsByEngine: FC = () => {
     const availableYql = useSelector(selectAvailableYql);
     const effectiveYqlVersion = useSelector(selectEffectiveYqlVersion);
     const hasSpytConnect = useSelector(selectAvailableSpytConnect);
+    const queryTrackerInfoLoaded = useSelector(selectQueryTrackerInfoLoaded);
     const currentCluster = settings?.cluster;
 
     const options = useMemo(() => {
@@ -41,10 +45,14 @@ export const QuerySelectorsByEngine: FC = () => {
     }, [availableYql]);
 
     useEffect(() => {
-        if ((engine === QueryEngine.CHYT || engine === QueryEngine.SPYT) && currentCluster) {
+        const shouldLoadClique =
+            engine === QueryEngine.CHYT ||
+            (engine === QueryEngine.SPYT && queryTrackerInfoLoaded && !hasSpytConnect);
+
+        if (shouldLoadClique && currentCluster) {
             dispatch(loadCliqueByCluster(engine, currentCluster));
         }
-    }, [engine, currentCluster, dispatch]);
+    }, [engine, currentCluster, hasSpytConnect, queryTrackerInfoLoaded, dispatch]);
 
     const handleCliqueChange = (alias: string) => {
         dispatch(setQueryClique(alias));

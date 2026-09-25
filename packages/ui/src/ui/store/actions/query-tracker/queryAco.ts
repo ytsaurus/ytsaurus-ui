@@ -77,7 +77,9 @@ export const getQueryTrackerInfo = (): ThunkAction<
             })
             .catch((error) => {
                 // @todo Remove the condition when the method will be implemented on all clusters
-                if (error?.status !== 404) {
+                const queryTrackerInfoNotSupported = error?.status === 404;
+
+                if (!queryTrackerInfoNotSupported) {
                     toaster.add({
                         name: 'aco',
                         theme: 'danger',
@@ -89,6 +91,7 @@ export const getQueryTrackerInfo = (): ThunkAction<
 
                 dispatch({
                     type: QUERY_ACO_LOADING.FAILURE,
+                    data: {loaded: true},
                 });
             });
     };

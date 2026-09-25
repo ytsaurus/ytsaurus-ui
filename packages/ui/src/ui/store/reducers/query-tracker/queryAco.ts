@@ -32,7 +32,9 @@ export function queryAco(state = initialState, action: QueryACOActions): QueryAC
         case QUERY_ACO_LOADING.REQUEST: {
             return {
                 ...state,
+                data: initialState.data,
                 loading: true,
+                loaded: false,
             };
         }
 
@@ -49,8 +51,10 @@ export function queryAco(state = initialState, action: QueryACOActions): QueryAC
         case QUERY_ACO_LOADING.FAILURE: {
             return {
                 ...state,
+                data: initialState.data,
                 error: null,
                 loading: false,
+                loaded: action.data.loaded,
             };
         }
 
@@ -61,5 +65,5 @@ export function queryAco(state = initialState, action: QueryACOActions): QueryAC
 
 export type QueryACOActions =
     | ActionD<typeof QUERY_ACO_LOADING.SUCCESS, Pick<QueryACOState, 'data'>>
-    | Action<typeof QUERY_ACO_LOADING.FAILURE>
+    | ActionD<typeof QUERY_ACO_LOADING.FAILURE, Pick<QueryACOState, 'loaded'>>
     | Action<typeof QUERY_ACO_LOADING.REQUEST>;
