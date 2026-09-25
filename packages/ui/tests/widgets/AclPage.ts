@@ -16,7 +16,9 @@ export class AclPage extends BasePage {
             this.page.evaluate(() => document.fonts.ready),
         ]);
 
-        await this.waitForCSS('th.navigation-acl__table-item_type_subjects', {
+        const subjectsHeader = 'th.navigation-acl__table-item_type_subjects';
+        await this.page.locator(subjectsHeader).first().waitFor({state: 'visible'});
+        await this.waitForCSS(subjectsHeader, {
             'max-width': '320px',
         });
     }
