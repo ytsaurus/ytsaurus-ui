@@ -170,15 +170,21 @@ export const onCellPreview = ({
                 ? i18n('alert_content-too-large')
                 : i18n('alert_use-command-to-load');
 
-            if (dataHandler) {
+            if (dataHandler && !isIncomplete) {
                 dataHandler.onSuccess({columnName, rowIndex, data: loadedData});
             } else {
-                dispatch({
-                    type: CELL_PREVIEW.SUCCESS,
-                    data: {
-                        data,
-                        noticeText,
-                    },
+                batch(() => {
+                    if (dataHandler) {
+                        dispatch({type: CELL_PREVIEW.REQUEST, data: {ytCliDownloadCommand}});
+                        dispatch(openCellPreview());
+                    }
+                    dispatch({
+                        type: CELL_PREVIEW.SUCCESS,
+                        data: {
+                            data: dataHandler ? undefined : data,
+                            noticeText,
+                        },
+                    });
                 });
             }
         } catch (error: any) {
