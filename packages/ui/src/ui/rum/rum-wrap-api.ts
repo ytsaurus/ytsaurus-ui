@@ -313,6 +313,18 @@ export function wrapPromiseWithRum<T>(id: string, promise: Promise<T>) {
     });
 }
 
+export function wrapPromiseFactoryWithRum<T>(id: string, factory: () => Promise<T>) {
+    const start = rumGetTime();
+    const sendDelta = () => rumSendDelta(id, rumGetTime() - start);
+
+    try {
+        return factory().finally(sendDelta);
+    } catch (error) {
+        sendDelta();
+        return Promise.reject(error);
+    }
+}
+
 export class RumWrapper<Id extends ValueOf<typeof RumMeasureTypes>> {
     private id: Id;
     private prefix: string;
@@ -330,9 +342,9 @@ export class RumWrapper<Id extends ValueOf<typeof RumMeasureTypes>> {
         return wrapPromiseWithRum(wrapId, loadPromise);
     }
 
-    parse<T>(id: YTApiIdType, parsePromise: Promise<T>) {
+    parse<T>(id: YTApiIdType, parseFactory: () => Promise<T>) {
         const wrapId = this.gen('parse', id);
-        return wrapPromiseWithRum(wrapId, parsePromise);
+        return wrapPromiseFactoryWithRum(wrapId, parseFactory);
     }
 
     wrap<T>(stage: string, fn: () => T): ExcludePromise<T> {

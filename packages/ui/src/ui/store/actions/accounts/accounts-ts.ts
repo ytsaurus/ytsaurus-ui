@@ -3,7 +3,7 @@ import map_ from 'lodash/map';
 import {type ThunkAction} from 'redux-thunk';
 import {type RootState} from '../../../store/reducers';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../constants/accounts';
-import {parseAccountData} from '../../../utils/accounts/accounts-selector';
+import {type AccountInput, parseAccountData} from '../../../utils/accounts/accounts-selector';
 
 type AccountsThunkAction = ThunkAction<any, RootState, any, any>;
 
@@ -13,6 +13,23 @@ interface AccountListItem {
         abc?: unknown;
         parent_name?: string;
     };
+}
+
+interface SchedulerWithYield {
+    yield?: () => Promise<void>;
+}
+
+type WindowWithScheduler = Window & {
+    scheduler?: SchedulerWithYield;
+};
+
+const PARSE_TIME_CHECK_INTERVAL = 100;
+const PARSE_CHUNK_TARGET_MS = 40;
+
+function yieldToMainThread() {
+    const scheduler = (window as WindowWithScheduler).scheduler;
+
+    return scheduler?.yield?.() ?? new Promise<void>((resolve) => setTimeout(resolve, 0));
 }
 
 /**
@@ -31,8 +48,25 @@ export function setAccountsStateDataFields(
     };
 }
 
-export function parseAccountsData(data: Array<unknown>) {
-    return Promise.all(map_(data, (item) => Promise.resolve(parseAccountData(item))));
+export async function parseAccountsData(data: Array<AccountInput>) {
+    const result = [];
+    let chunkStartedAt = performance.now();
+
+    for (let index = 0; index < data.length; ++index) {
+        result.push(parseAccountData(data[index]));
+
+        const parsedCount = index + 1;
+        if (
+            parsedCount < data.length &&
+            parsedCount % PARSE_TIME_CHECK_INTERVAL === 0 &&
+            performance.now() - chunkStartedAt >= PARSE_CHUNK_TARGET_MS
+        ) {
+            await yieldToMainThread();
+            chunkStartedAt = performance.now();
+        }
+    }
+
+    return result;
 }
 
 export async function parseAccountsListData(data: Array<unknown>) {

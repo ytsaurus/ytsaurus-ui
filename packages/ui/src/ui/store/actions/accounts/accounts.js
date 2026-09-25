@@ -79,7 +79,7 @@ function parseAccounts(rumId, accounts, parseData = parseAccountsData) {
         (item) => ypath.getValue(item) !== ROOT_ACCOUNT_NAME,
     );
     return rumId
-        .wrap(`parse.${YTApiId.accountsData}`, () => parseData(items))
+        .parse(YTApiId.accountsData, () => parseData(items))
         .then((res) => map_(res, (item) => new Account(item)));
 }
 
@@ -310,7 +310,7 @@ export function loadEditedAccount(accountName) {
                 }),
             )
             .then((data) =>
-                rumId.wrap(`parse.${YTApiId.accountsEditData}`, () =>
+                rumId.parse(YTApiId.accountsEditData, () =>
                     parseAccountsData([{$value: accountName, $attributes: data}]),
                 ),
             )
