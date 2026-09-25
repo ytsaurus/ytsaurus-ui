@@ -1,17 +1,39 @@
 import React from 'react';
-import {type Meta, type StoryObj} from '@storybook/react';
+import {type Decorator, type Meta, type StoryObj} from '@storybook/react';
+import {ToasterComponent, ToasterProvider} from '@gravity-ui/uikit';
 
+import {configureUIFactory} from '../../../../UIFactory';
+import {defaultUIFactory} from '../../../../UIFactory/default-ui-factory';
+import {GLOBAL_PARTIAL} from '../../../../constants/global';
+import {useDispatch} from '../../../../store/redux-hooks';
 import {AccountEditButton} from '../AccountEditButton';
 import {useAccountEditor} from '../AccountEditorContext';
 import {type AccountEditorDataLoaderProps} from '../AccountEditorDataLoader';
 import {AccountEditorHost} from '../AccountEditorHost';
-import {prepareAccountEditorData} from '../prepareAccountEditorData';
+import {type AccountEditorData} from '../prepareAccountEditorData';
+import {type AccountEditorChange} from '../types';
+import {toaster} from '../../../../utils/toaster';
 
 const accountName = 'account';
-const editorData = prepareAccountEditorData(accountName, {
-    $attributes: {parent_name: 'root'},
-    $value: {},
-});
+const account = {
+    name: accountName,
+    parent: 'root',
+    abc: {},
+    hasRecursiveResources: false,
+};
+const editorData = {
+    accounts: [account],
+    accountsByName: {[accountName]: account},
+    tree: {
+        [accountName]: {
+            name: accountName,
+            parent: '<Root>',
+            attributes: account,
+            children: [],
+            leaves: [],
+        },
+    },
+} as unknown as AccountEditorData;
 
 function OpenOnMount() {
     const {openAccount} = useAccountEditor();
@@ -46,25 +68,65 @@ function LoadedDataLoader({accountName: name, onLoaded}: AccountEditorDataLoader
     return null;
 }
 
-function ErrorDataLoader({accountName: name, onError}: AccountEditorDataLoaderProps) {
-    React.useEffect(() => {
-        onError(name, new Error('Failed to load account'));
-    }, [name, onError]);
+function StoryHost({DataLoader}: {DataLoader?: React.ComponentType<AccountEditorDataLoaderProps>}) {
+    const [events, setEvents] = React.useState<Array<string>>([]);
+    const handleChanged = React.useCallback((change: AccountEditorChange) => {
+        setEvents((current) => [...current, change.kind]);
+    }, []);
+    const handleDeleted = React.useCallback((name: string) => {
+        setEvents((current) => [...current, `deleted:${name}`]);
+    }, []);
 
-    return null;
-}
-
-function StoryHost({DataLoader}: {DataLoader: React.ComponentType<AccountEditorDataLoaderProps>}) {
     return (
-        <AccountEditorHost DataLoader={DataLoader}>
-            <EditorButtons />
-        </AccountEditorHost>
+        <ToasterProvider toaster={toaster}>
+            <AccountEditorHost
+                DataLoader={DataLoader}
+                onChanged={handleChanged}
+                onDeleted={handleDeleted}
+            >
+                <EditorButtons />
+            </AccountEditorHost>
+            <div data-qa="editor-events">{events.join(',')}</div>
+            <ToasterComponent />
+        </ToasterProvider>
     );
 }
+
+function AdminState({children}: {children: React.ReactNode}) {
+    const dispatch = useDispatch();
+
+    React.useLayoutEffect(() => {
+        dispatch({type: GLOBAL_PARTIAL, data: {isDeveloper: true, mediumList: ['default']}});
+
+        return () => {
+            dispatch({type: GLOBAL_PARTIAL, data: {isDeveloper: false, mediumList: []}});
+        };
+    }, [dispatch]);
+
+    return children;
+}
+
+const withAdmin: Decorator = (Story) => (
+    <AdminState>
+        <Story />
+    </AdminState>
+);
+
+const withAbcControl: Decorator = (Story) => {
+    configureUIFactory({
+        ...defaultUIFactory,
+        renderControlAbcService: ({value, disabled}) => (
+            <button disabled={disabled}>{value?.slug || 'Select ABC service...'}</button>
+        ),
+    });
+
+    return <Story />;
+};
 
 const meta: Meta<typeof StoryHost> = {
     title: 'Pages/Accounts/AccountEditorHost',
     component: StoryHost,
+    decorators: [withAbcControl],
 };
 
 export default meta;
@@ -72,4 +134,9 @@ type Story = StoryObj<typeof StoryHost>;
 
 export const Opening: Story = {args: {DataLoader: LoadingDataLoader}};
 export const Opened: Story = {args: {DataLoader: LoadedDataLoader}};
-export const LoadError: Story = {args: {DataLoader: ErrorDataLoader}};
+export const OpenedAsAdmin: Story = {
+    args: {DataLoader: LoadedDataLoader},
+    decorators: [withAdmin],
+};
+export const LoadedThroughApi: Story = {};
+export const LoadedThroughApiAsAdmin: Story = {decorators: [withAdmin]};
