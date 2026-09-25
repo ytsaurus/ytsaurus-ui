@@ -98,6 +98,6 @@ const TruncatedCellPreviewDemo = () => {
  * full value and the consumer puts it back into `table`.
  */
 export const TruncatedCellPreview: StoryObj<DemoArgs> = {
-    argTypes: {state: {table: {disable: true}}},
+    parameters: {controls: {disable: true}},
     render: () => <TruncatedCellPreviewDemo />,
 };
