@@ -1,10 +1,7 @@
 import React from 'react';
-import {composeStories} from '@storybook/react';
 
 import {expect, test} from '../../../playwright-components/core';
-import * as AccountsSuggestStoryComponents from '../__stories__/AccountsSuggest.stories';
-
-const AccountsSuggestStories = composeStories(AccountsSuggestStoryComponents);
+import {AccountsSuggestStories} from '../__stories__';
 
 test('AccountsSuggest: loading', async ({mount, page}) => {
     const component = await mount(<AccountsSuggestStories.Loading />);
