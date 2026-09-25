@@ -42,7 +42,8 @@ type ColumnCellProps = {
     allowRawStrings?: boolean | null;
     rowIndex: number;
     columnName: string;
-    onShowPreview: (columnName: string, rowIndex: number, tag?: string) => void | Promise<void>;
+    /** Loads the full value of a truncated cell. Without it the preview button is not rendered. */
+    onShowPreview?: (columnName: string, rowIndex: number, tag?: string) => void | Promise<void>;
     useYqlTypes?: boolean;
     logError?: LogErrorFn;
     ErrorBoundaryComponent?: React.ComponentType<ErrorBoundaryProps>;
@@ -191,7 +192,7 @@ export function ColumnCell({
                                 />
                             </Tooltip>
                         )}
-                        {isIncompleteValue && (
+                        {isIncompleteValue && onShowPreview && (
                             <Button
                                 view="flat-secondary"
                                 size="m"

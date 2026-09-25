@@ -40,6 +40,39 @@ export const navigationTableSampleTable: NavigationTableData = {
     yqlTypes: null,
 };
 
+/** `payload` is what a cell holds once `onShowPreview` has loaded it in full. */
+export const navigationTableSampleTruncatedCell = {
+    column: 'payload',
+    rowIndex: 1,
+    truncatedValue: {$type: 'string', $value: '{"event":"click","ctx":', $incomplete: true},
+    fullValue: {
+        $type: 'string',
+        $value: '{"event":"click","ctx":{"page":"/home","ts":1717171717}}',
+    },
+};
+
+/** Second row is truncated, so its cell offers the preview button on hover. */
+export const navigationTableSampleTableWithTruncatedCell: NavigationTableData = {
+    name: '//home/demo/events',
+    columns: ['id', 'payload'],
+    rows: [
+        {
+            id: {$type: 'string', $value: '1'},
+            payload: {$type: 'string', $value: '{"event":"open"}'},
+        },
+        {
+            id: {$type: 'string', $value: '2'},
+            payload: navigationTableSampleTruncatedCell.truncatedValue,
+        },
+    ],
+    schema: [
+        {name: 'id', required: true, type: 'String'},
+        {name: 'payload', required: false, type: 'String'},
+    ],
+    meta: [[{key: 'row_count', value: '2'}]],
+    yqlTypes: null,
+};
+
 export const navigationTableStoryFrameStyle: CSSProperties = {
     minWidth: 560,
 };

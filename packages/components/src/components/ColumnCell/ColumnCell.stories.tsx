@@ -80,6 +80,18 @@ export const IncompleteYson: ColumnCellStory = {
     },
 };
 
+/** Without `onShowPreview` there is nothing to load the full value, so no preview button is shown. */
+export const IncompleteYsonWithoutPreviewHandler: ColumnCellStory = {
+    args: {
+        yqlTypes: null,
+        useYqlTypes: false,
+        value: {$incomplete: true, $value: 'Truncated…'},
+    },
+    render: (args: ColumnCellStoryArgs) => (
+        <ColumnCell {...(args as ComponentProps<typeof ColumnCell>)} onShowPreview={undefined} />
+    ),
+};
+
 export const RawString: ColumnCellStory = {
     args: {
         yqlTypes: null,

@@ -40,11 +40,21 @@ export type NavigationTableProps = {
     primitiveTypes?: SchemaDataTypeProps['primitiveTypes'];
     additionalSchemaColumns?: ExternalSchemaColumn[];
     renderSchemaTab?: (props: SchemaTabProps) => React.ReactNode;
+    /**
+     * Loads the full value of a cell truncated by the table read limits, for the preview tab.
+     * Without it cells keep rendering as truncated and no preview button is shown.
+     */
+    onShowPreview?: (columnName: string, rowIndex: number, tag?: string) => void | Promise<void>;
     renderPreviewTab?: (props: {
         table: NavigationTableData;
         onEditorInsert?: () => void | Promise<void>;
         ysonSettings?: UnipikaSettings;
         primitiveTypes?: SchemaDataTypeProps['primitiveTypes'];
+        onShowPreview?: (
+            columnName: string,
+            rowIndex: number,
+            tag?: string,
+        ) => void | Promise<void>;
     }) => React.ReactNode;
     renderMetaTab?: (props: {items: NavigationTableMeta[][]}) => React.ReactNode;
     className?: string;
@@ -62,6 +72,7 @@ export const NavigationTable: FC<NavigationTableProps> = ({
     emptyMessage,
     primitiveTypes,
     additionalSchemaColumns,
+    onShowPreview,
     renderSchemaTab,
     renderPreviewTab,
     renderMetaTab,
@@ -103,6 +114,7 @@ export const NavigationTable: FC<NavigationTableProps> = ({
         onEditorInsert: onInsertTableSelect,
         ysonSettings,
         primitiveTypes,
+        onShowPreview,
     };
     const previewContent =
         activeTab === TableTab.Preview &&

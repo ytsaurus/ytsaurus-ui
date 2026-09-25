@@ -18,7 +18,7 @@ export type ColumnCellStoryArgs = {
     rowIndex: number;
     columnName: string;
     useYqlTypes?: boolean;
-    onShowPreview: (columnName: string, rowIndex: number, tag?: string) => void | Promise<void>;
+    onShowPreview?: (columnName: string, rowIndex: number, tag?: string) => void | Promise<void>;
 };
 
 export const defaultColumnCellYsonSettings: ColumnCellStoryUnipikaSettings = {
