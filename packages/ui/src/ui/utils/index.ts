@@ -8,7 +8,6 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import i18n from './i18n';
 import {utils as hammerUtils} from '../common/hammer/utils';
 import format from '../common/hammer/format';
-import unipika from '../common/thor/unipika';
 import qs from 'qs';
 import Cookies from 'js-cookie';
 import {type UnipikaSettings} from '../components/Yson/StructuredYson/StructuredYsonTypes';
@@ -71,8 +70,9 @@ export function prepareAttributes(attributes: any, settings?: UnipikaSettings): 
                 return getPreparedValue(attribute, value);
             }
 
-            default:
-                prepareAttributes(attribute.$value, unipika.formatFromYSON(attribute, settings));
+            default: {
+                return undefined;
+            }
         }
     };
 
