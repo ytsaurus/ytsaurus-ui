@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {useSelector} from '../../../../../../store/redux-hooks';
 
 import {type RootState} from '../../../../../../store/reducers';
-import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operations';
 import {selectCluster} from '../../../../../../store/selectors/global';
 import {
     selectIsOperationInGpuTree,
@@ -38,11 +37,7 @@ const mapStateToProps = (state: RootState) => {
     };
 };
 
-const mapDispatchToProps = {
-    showEditPoolsWeightsModal,
-};
-
-const DetailsConnected = connect(mapStateToProps, mapDispatchToProps)(DetailsBase);
+const DetailsConnected = connect(mapStateToProps)(DetailsBase);
 
 export default function DetailsWithRum() {
     const operationLoadState = useSelector(selectOperationDetailsLoadingStatus);

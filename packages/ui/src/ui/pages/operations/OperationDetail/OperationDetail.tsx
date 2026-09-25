@@ -2,7 +2,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {useSelector} from '../../../store/redux-hooks';
 import {promptAction} from '../../../store/actions/actions';
-import {showEditPoolsWeightsModal} from '../../../store/actions/operations';
 import {getOperation} from '../../../store/actions/operations/detail';
 import {
     selectIsOperationInGpuTree,
@@ -83,7 +82,6 @@ const mapStateToProps = (state: RootState, routerProps: RouteProps) => {
 const mapDispatchToProps = {
     promptAction,
     getOperation,
-    showEditPoolsWeightsModal,
     updateListJobsFilter,
     listOperationEvents: (operationId: string) =>
         listOperationEventsApi.endpoints.listOperationEvents.initiate({
