@@ -29,16 +29,18 @@ function makeOdinIsAliveUrl(odinBaseUrl: string) {
     return `${odinBaseUrl}/is_alive`;
 }
 
+function getOdinIsAlive(odinBaseUrl: string) {
+    return axios.get(makeOdinIsAliveUrl(odinBaseUrl)).then(({data}) => data === true || data === 1);
+}
+
 function getAvailability(req: Request, clusters: Record<string, {id: string}>) {
     const odinBaseUrl = req.ctx.config.odinBaseUrl;
     const isMultiOdinBaseUrl = 'string' !== typeof odinBaseUrl;
 
-    const commonIsAlive = isMultiOdinBaseUrl
-        ? Promise.resolve({data: true})
-        : axios.request({url: makeOdinIsAliveUrl(odinBaseUrl)});
+    const commonIsAlive = isMultiOdinBaseUrl ? Promise.resolve(true) : getOdinIsAlive(odinBaseUrl);
 
     return commonIsAlive
-        .then(({data: commonAlive}) => {
+        .then((commonAlive) => {
             if (!commonAlive) {
                 return [];
             }
@@ -54,14 +56,14 @@ function getAvailability(req: Request, clusters: Record<string, {id: string}>) {
                     }
 
                     const alive = isMultiOdinBaseUrl
-                        ? axios.get(makeOdinIsAliveUrl(odinPath)).catch((e) => {
+                        ? getOdinIsAlive(odinPath).catch((e) => {
                               req.ctx.logError(`Error of getting ${odinPath}`, e);
-                              return {data: false};
+                              return false;
                           })
-                        : Promise.resolve({data: true});
+                        : Promise.resolve(true);
 
-                    return alive.then(({data}) => {
-                        if (data != true) {
+                    return alive.then((isAlive) => {
+                        if (!isAlive) {
                             return {};
                         }
 

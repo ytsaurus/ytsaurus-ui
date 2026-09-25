@@ -17,26 +17,25 @@ export const NetworkCode = {
     NODE_COUNT_LIMIT: 902,
 };
 
-export const ErrorMessage = {
-    get [NetworkCode.EXIST]() {
-        return i18n('alert_path-already-exists');
-    },
-    get [NetworkCode.INCORRECT_PATH]() {
-        return i18n('alert_incorrect-path');
-    },
-    get [NetworkCode.NETWORK_ERROR]() {
-        return i18n('alert_network-error');
-    },
-    get [NetworkCode.ACCESS_DENIED]() {
-        return i18n('alert_access-denied');
-    },
-    get [NetworkCode.MOUNT_ERROR]() {
-        return i18n('alert_mount-error');
-    },
-    get [NetworkCode.NODE_COUNT_LIMIT]() {
-        return i18n('alert_node-count-limit');
-    },
-    get DEFAULT() {
-        return i18n('alert_unknown-error');
-    },
-};
+export function getErrorMessage(code) {
+    switch (code) {
+        case NetworkCode.EXIST:
+            return i18n('alert_path-already-exists');
+        case NetworkCode.INCORRECT_PATH:
+            return i18n('alert_incorrect-path');
+        case NetworkCode.NETWORK_ERROR:
+            return i18n('alert_network-error');
+        case NetworkCode.ACCESS_DENIED:
+            return i18n('alert_access-denied');
+        case NetworkCode.MOUNT_ERROR:
+            return i18n('alert_mount-error');
+        case NetworkCode.NODE_COUNT_LIMIT:
+            return i18n('alert_node-count-limit');
+        default:
+            return undefined;
+    }
+}
+
+export function getUnknownErrorMessage() {
+    return i18n('alert_unknown-error');
+}

@@ -15,6 +15,7 @@ import {selectSpytDefaultSettings} from '../../selectors/query-tracker/queryTrac
 import {setSettingByKey} from '../settings';
 import {toaster} from '../../../utils/toaster';
 import {mergeSpytDefaultSettingsIntoDraft} from './query';
+import {createErrorFromData} from '../../../../shared/utils/error';
 
 type QueryTrackerInfoResponse = Awaited<ReturnType<typeof ytApiV4Id.getQueryTrackerInfo>>;
 
@@ -41,13 +42,13 @@ export const getQueryTrackerInfo = (): ThunkAction<
                         rawError: AxiosError;
                     }) {
                         if (rawError?.response?.status === 404) {
-                            throw {
+                            throw createErrorFromData({
                                 data: parsedData,
-                                status: rawError?.response?.status,
-                            };
+                                status: rawError.response.status,
+                            });
                         }
 
-                        throw parsedData;
+                        throw createErrorFromData(parsedData);
                     },
                 },
                 parameters: {stage},
@@ -77,7 +78,9 @@ export const getQueryTrackerInfo = (): ThunkAction<
             })
             .catch((error) => {
                 // @todo Remove the condition when the method will be implemented on all clusters
-                if (error?.status !== 404) {
+                const queryTrackerInfoNotSupported = error?.status === 404;
+
+                if (!queryTrackerInfoNotSupported) {
                     toaster.add({
                         name: 'aco',
                         theme: 'danger',
@@ -89,6 +92,7 @@ export const getQueryTrackerInfo = (): ThunkAction<
 
                 dispatch({
                     type: QUERY_ACO_LOADING.FAILURE,
+                    data: {loaded: true},
                 });
             });
     };

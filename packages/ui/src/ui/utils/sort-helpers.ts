@@ -20,11 +20,11 @@ export function compareWithUndefined<T>(
         return 0;
     }
 
-    if (l == undefined) {
+    if (l === undefined || l === null) {
         return undefinedOrderK;
     }
 
-    if (r == undefined) {
+    if (r === undefined || r === null) {
         return -1 * undefinedOrderK;
     }
 

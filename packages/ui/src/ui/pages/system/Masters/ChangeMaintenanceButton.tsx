@@ -47,7 +47,7 @@ export const ChangeMaintenanceButton: FC<Props> = ({
             });
         } catch (e) {
             setError(e as Error);
-            throw e as Error;
+            throw e;
         }
     };
 

@@ -114,7 +114,7 @@ export const selectSupportedTabs = createSelector(
         );
 
         if (
-            (attributes?.type === 'table' && attributes?.dynamic === true) ||
+            (attributes?.type === 'table' && isDynamic) ||
             attributes?.type === 'replicated_table' ||
             attributes?.type === 'replication_log_table'
         ) {
@@ -127,7 +127,7 @@ export const selectSupportedTabs = createSelector(
         });
 
         if (
-            attributes?.dynamic === true &&
+            isDynamic &&
             schema?.length > 0 &&
             !hasSortedColumns &&
             (attributes?.type === 'table' ||
@@ -137,7 +137,7 @@ export const selectSupportedTabs = createSelector(
             supportedByAttribute.push(Tab.QUEUE);
         }
 
-        if (attributes?.type == 'queue_consumer' || attributes?.treat_as_queue_consumer == true) {
+        if (attributes?.type === 'queue_consumer' || attributes?.treat_as_queue_consumer) {
             supportedByAttribute.push(Tab.CONSUMER);
         }
 

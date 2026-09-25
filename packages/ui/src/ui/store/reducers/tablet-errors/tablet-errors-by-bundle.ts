@@ -50,7 +50,7 @@ const tabletErrorsByBundleSlice = createSlice({
             state,
             {payload: {bundle}}: PayloadAction<Pick<TabletErrorsByBundleState, 'bundle'>>,
         ) {
-            if (bundle != state.bundle) {
+            if (bundle !== state.bundle) {
                 return {
                     ...state,
                     bundle,

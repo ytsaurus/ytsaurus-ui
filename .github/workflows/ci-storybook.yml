@@ -21,22 +21,15 @@ jobs:
           with:
             node-version: 24
             cache: "npm"
-        - name: Install AWS CLI
-          uses: unfor19/install-aws-cli-action@v1
-          with:
-            version: 2.22.35
-            arch: amd64
         - name: Install Packages
           run: npm ci
         - name: Build artifact
-          env:
-            AWS_ACCESS_KEY_ID: ${{ secrets.UI_S3_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.UI_S3_SECRET_KEY }}
           run: |
             cd packages/ui
             npx msw init ./public --save
-            aws s3 cp ./public/mockServiceWorker.js s3://public/mockServiceWorker.js --endpoint-url=https://ytsaurus-ui-test-results.s3-private.mds.yandex.net
             npm run build:storybook
+            npx playwright install chromium
+            npm run test:storybook:smoke
         - name: Create Static Artifact
           uses: actions/upload-artifact@v4
           with:
@@ -269,4 +262,3 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             header: Playwright @ytsaurus/components visual
             message: ${{ steps.upload_and_prepare_components_package.outputs.message }}
-

@@ -68,6 +68,8 @@ run_command() {
         useEnvFile="--env-file $envFile"
     fi
 
+    mkdir -p node_modules .cache-playwright
+
     $CONTAINER_TOOL run \
         --rm \
         --network host \

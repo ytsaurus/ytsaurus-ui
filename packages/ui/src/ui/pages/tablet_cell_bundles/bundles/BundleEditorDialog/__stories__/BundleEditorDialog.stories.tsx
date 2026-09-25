@@ -1,5 +1,9 @@
 import React, {useEffect} from 'react';
 import {type Meta, type StoryObj} from '@storybook/react';
+import {http} from 'msw';
+
+// @ts-expect-error
+import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {GLOBAL_PARTIAL} from '../../../../../constants/global';
 import {
@@ -17,10 +21,19 @@ import {
     bundleName,
 } from './fixtures';
 
+yt.setup.setGlobalOption('proxy', 'test-cluster.yt.my-domain.com');
+
+const accountsHandler = http.post('https://test-cluster.yt.my-domain.com/api/v3/list', () =>
+    Response.json(['sys']),
+);
+
 const meta: Meta<typeof BundleEditorDialog> = {
     title: 'Pages/Tablet cell bundles/BundleEditorDialog',
     component: BundleEditorDialog,
-    parameters: {layout: 'fullscreen'},
+    parameters: {
+        layout: 'fullscreen',
+        msw: {handlers: [accountsHandler]},
+    },
 };
 
 export default meta;

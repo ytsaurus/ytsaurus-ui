@@ -6,6 +6,7 @@ import ytLib from '@ytsaurus/javascript-wrapper';
 
 import {type FIX_MY_TYPE} from '../../@types/types';
 import {USE_SUPRESS_SYNC} from '../../shared/constants';
+import {createErrorFromData} from '../../shared/utils/error';
 import {snakeToCamelObject} from '../../shared/utils/snake-to-camel';
 import {type ClusterUiConfig} from '../../shared/yt-types';
 import {getApp} from '../ServerFactory';
@@ -73,11 +74,11 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
                         };
                     },
                     transformError({parsedData, rawError}: FIX_MY_TYPE) {
-                        throw {
+                        throw createErrorFromData({
                             data: parsedData,
                             status: rawError?.response?.status,
                             headers: rawError?.response?.headers,
-                        };
+                        });
                     },
                 },
                 parameters: {
@@ -127,11 +128,11 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
                         };
                     },
                     transformError({parsedData, rawError}: FIX_MY_TYPE) {
-                        throw {
+                        throw createErrorFromData({
                             data: parsedData,
                             status: rawError?.response?.status,
                             headers: rawError?.response?.headers,
-                        };
+                        });
                     },
                 },
                 parameters: {

@@ -1,6 +1,6 @@
 {
   "name": "@ytsaurus/ui",
-  "version": "3.26.0",
+  "version": "3.27.0",
   "repository": {
     "type": "github",
     "url": "https://github.com/ytsaurus/ytsaurus-ui/tree/main/packages/ui"
@@ -59,6 +59,7 @@
     "show:file-types": "find src -type f | rev | cut -d '.' -f 1 | rev | sort | uniq -c | sort -rn",
     "show:version": "echo ${npm_package_version}",
     "storybook": "storybook dev -p 8008",
+    "test:storybook:smoke": "playwright test -c .storybook/playwright.config.ts",
     "start": "NODE_OPTIONS=\"--max-http-header-size=204800 ${NODE_OPTIONS}\" node dist/server",
     "start:localmode": "bash -c '. scripts/dev.localmode-env.sh && TVM_DISABLED=true npm start'",
     "start:localmode:e2e": "APP_INSTALLATION=${APP_INSTALLATION:-e2e} npm run start:localmode",

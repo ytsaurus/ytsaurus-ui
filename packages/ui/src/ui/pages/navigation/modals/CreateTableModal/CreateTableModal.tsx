@@ -253,7 +253,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
         const columns = this.reorderColumns(columnsRaw);
 
         const attributes: Record<string, any> = {
-            dynamic: tableType === TableType.QUEUE || tableType == TableType.DYNAMIC,
+            dynamic: tableType === TableType.QUEUE || tableType === TableType.DYNAMIC,
             optimize_for,
         };
 
@@ -389,8 +389,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
 
     validateReplicasCount(str: string) {
         const v = Number(str);
-        // @ts-ignore
-        if (str != v || v !== Math.round(v)) {
+        if (v !== Math.round(v)) {
             return i18n('alert_replicas-count-must-be-integer');
         }
         if (v < 0 || v > 10) {

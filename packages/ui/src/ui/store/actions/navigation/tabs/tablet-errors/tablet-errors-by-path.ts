@@ -50,7 +50,7 @@ export function loadTabletErrorsByTablePath(
 
         const prevDataParams = selectTabletErrorsByPathDataParams(state);
         if (
-            currentPage != 0 &&
+            currentPage !== 0 &&
             !isEqual_(
                 omit_(prevDataParams, ['fixed_end_timestamp']),
                 omit_(params, ['fixed_end_timestamp']),
@@ -62,7 +62,7 @@ export function loadTabletErrorsByTablePath(
         }
 
         const prevData = selectTabletErrorsByPathData(state);
-        if (currentPage != 0 && prevData) {
+        if (currentPage !== 0 && prevData) {
             params.fixed_end_timestamp = prevData.fixed_end_timestamp;
         }
 

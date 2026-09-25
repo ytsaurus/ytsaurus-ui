@@ -8,6 +8,8 @@
         "no-lonely-if": "error",
         "no-nested-ternary": "error",
         "callback-return": "error",
+        "eqeqeq": "error",
+        "no-throw-literal": "error",
         "no-param-reassign": ["error", {"props": false}],
         "new-cap": 0,
         "import/order": 0,
