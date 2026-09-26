@@ -19,7 +19,7 @@ import {sortColumnsBySchema} from './sortColumnsBySchema';
 type Params = {
     table: NavigationTableData;
     ysonSettings?: UnipikaSettings;
-    onShowPreview: (columnName: string, rowIndex: number, tag?: string) => void;
+    onShowPreview?: (columnName: string, rowIndex: number, tag?: string) => void | Promise<void>;
     useYqlTypes?: boolean;
     primitiveTypes?: SchemaDataTypeProps['primitiveTypes'];
     logError?: LogErrorFn;

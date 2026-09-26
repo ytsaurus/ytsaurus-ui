@@ -20,6 +20,11 @@ type PreviewTabProps = {
     onEditorInsert?: () => void | Promise<void>;
     ysonSettings?: UnipikaSettings;
     primitiveTypes?: SchemaDataTypePrimitiveTypes;
+    /**
+     * Loads the full value of a cell truncated by the table read limits.
+     * Without it cells keep rendering as truncated and no preview button is shown.
+     */
+    onShowPreview?: (columnName: string, rowIndex: number, tag?: string) => void | Promise<void>;
     logError?: LogErrorFn;
     ErrorBoundaryComponent?: React.ComponentType<ErrorBoundaryProps>;
 };
@@ -29,10 +34,10 @@ export const NavigationPreviewTab: FC<PreviewTabProps> = ({
     onEditorInsert,
     ysonSettings,
     primitiveTypes,
+    onShowPreview,
     logError,
     ErrorBoundaryComponent,
 }) => {
-    const onShowPreview = () => {};
     const columns = useMemo(() => {
         return prepareColumns({
             table,
@@ -42,7 +47,7 @@ export const NavigationPreviewTab: FC<PreviewTabProps> = ({
             logError,
             ErrorBoundaryComponent,
         });
-    }, [table, ysonSettings, primitiveTypes]);
+    }, [table, ysonSettings, primitiveTypes, onShowPreview]);
 
     if (!table) return null;
 
