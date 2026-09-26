@@ -3,8 +3,13 @@ import {type ThunkAction} from 'redux-thunk';
 import {ytApiV4} from '../../../rum/rum-wrap-api';
 import {type RootState} from '../../../store/reducers';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
-import {selectFlowStatusPipelinePath} from '../../../store/selectors/flow/status';
-import {flowStatusActions} from '../../reducers/flow/status';
+import {wrapApiPromiseByToaster} from '../../../utils/utils';
+import i18n from '../../../pages/flow/i18n';
+import {
+    selectFlowRequestedAction,
+    selectFlowStatusPipelinePath,
+} from '../../../store/selectors/flow/status';
+import {type FlowStateAction, flowStatusActions} from '../../reducers/flow/status';
 
 type AsyncAction<R = void> = ThunkAction<R, RootState, unknown, any>;
 
@@ -37,15 +42,36 @@ export function updateFlowState({
     state,
 }: {
     pipeline_path: string;
-    state: 'start' | 'stop' | 'pause';
+    state: FlowStateAction;
 }): AsyncAction<Promise<void>> {
     return (dispatch, getState) => {
         const method = `${state}Pipeline` as const;
-        return ytApiV4[method]({pipeline_path}).then(() => {
-            const path = selectFlowStatusPipelinePath(getState());
-            if (path === pipeline_path) {
-                dispatch(loadFlowStatus(pipeline_path));
-            }
-        });
+        const isCurrent = () => selectFlowStatusPipelinePath(getState()) === pipeline_path;
+        if (isCurrent()) {
+            // The button stays blocked until the pipeline reaches the requested state.
+            dispatch(flowStatusActions.setRequestedAction({requestedAction: state}));
+        }
+        const errorTitles: Record<FlowStateAction, string> = {
+            start: i18n('failed-to-start'),
+            pause: i18n('failed-to-pause'),
+            stop: i18n('failed-to-stop'),
+        };
+        return wrapApiPromiseByToaster(ytApiV4[method]({pipeline_path}), {
+            toasterName: `flow_${state}_pipeline`,
+            skipSuccessToast: true,
+            errorTitle: errorTitles[state],
+        }).then(
+            () => {
+                if (isCurrent()) {
+                    dispatch(loadFlowStatus(pipeline_path));
+                }
+            },
+            () => {
+                // The error is already shown by the toaster.
+                if (isCurrent() && selectFlowRequestedAction(getState()) === state) {
+                    dispatch(flowStatusActions.setRequestedAction({requestedAction: undefined}));
+                }
+            },
+        );
     };
 }
