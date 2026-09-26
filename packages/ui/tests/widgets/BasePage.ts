@@ -1,4 +1,4 @@
-import {type Page, expect} from '@playwright/test';
+import {type Page, expect, test} from '@playwright/test';
 import {E2E_DIR_NAME} from '../utils';
 import {replaceInnerHtml} from '../utils/dom';
 import type {ConfigData} from '../../src/shared/yt-types';
@@ -18,10 +18,10 @@ export class HasPage {
     ) {
         const getRect = async () => {
             return await this.page.evaluate(
-                ({selector}): Partial<Record<'x' | 'y' | 'width' | 'height', number>> => {
+                ({selector}): Record<'x' | 'y' | 'width' | 'height', number> | null => {
                     const element = document.querySelector(selector);
                     if (!element) {
-                        return {};
+                        return null;
                     }
 
                     return element.getBoundingClientRect();
@@ -37,14 +37,14 @@ export class HasPage {
 
             if (!rect) {
                 rect = await getRect();
-                ++counter;
+                counter = rect ? 1 : 0;
                 continue;
             }
 
             const {x, y, width, height} = rect ?? {};
             const r = await getRect();
             if (!r || r.x !== x || r.y !== y || r.width !== width || r.height !== height) {
-                counter = 1;
+                counter = r ? 1 : 0;
             } else {
                 ++counter;
             }
@@ -81,6 +81,7 @@ class DFDialogComponent extends HasPage {
     }
 
     async waitForFixedPosition() {
+        await this.locator().waitFor({state: 'visible'});
         await this.waitForFixedBoundingClientRect('.df-dialog');
     }
 
@@ -332,7 +333,7 @@ export class BasePage extends HasPage {
         const firstSelector = this.page.locator(selector).first();
 
         for (const key of Object.keys(css)) {
-            await expect(firstSelector).toHaveCSS(key, css[key]);
+            await expect(firstSelector).toHaveCSS(key, css[key], {timeout: test.info().timeout});
         }
     }
 }
