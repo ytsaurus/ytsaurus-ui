@@ -1,17 +1,17 @@
 import React from 'react';
 import compact_ from 'lodash/compact';
-import {BooleanSettingItem} from '../../SettingsMenu/BooleanSettingItem';
+import {CheckboxSettingItem} from '../../SettingsMenu/CheckboxSettingItem';
 import {Flex, Text} from '@gravity-ui/uikit';
 import {
     LazyAddQueryTokenForm,
     LazyQueryTokenList,
 } from '../../../pages/query-tracker/QueryToken/lazy';
-import {makeItem, makePage} from '../settings-description';
+import {makeItem, makePage} from '../settings-page-builders';
 import i18n from './i18n';
 import {DefaultAcoSelect} from './DefaultAcoSelect';
 import {GraphAutoCenterSetting} from './GraphAutoCenterSetting';
-import SettingsMenuInput from '../../SettingsMenu/SettingsMenuInput';
-import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
+import {TextInputSettingItem} from '../../SettingsMenu/TextInputSettingItem/TextInputSettingItem';
+import {SettingName} from '../../../../shared/constants/settings';
 
 type Props = {
     cluster: string;
@@ -30,28 +30,26 @@ export const queriesPage = ({cluster, hasQuerySuggestions}: Props) => {
                 SettingName.QUERY_TRACKER.YQL_AGENT_STAGE,
                 i18n('field_yql-agent-stage'),
                 'top',
-                <SettingsMenuInput
+                <TextInputSettingItem
                     placeholder={i18n('context_yql-agent-stage-placeholder')}
-                    settingName={SettingName.QUERY_TRACKER.YQL_AGENT_STAGE}
-                    settingNS={NAMESPACES.QUERY_TRACKER}
+                    settingKey="global::queryTracker::yqlAgentStage"
                 />,
             ),
             makeItem(
                 SettingName.QUERY_TRACKER.STAGE,
                 i18n('field_query-tracker-stage'),
                 'top',
-                <SettingsMenuInput
+                <TextInputSettingItem
                     placeholder={i18n('context_query-tracker-stage-placeholder')}
                     description={i18n('context_query-tracker-stage-description')}
-                    settingName={SettingName.QUERY_TRACKER.STAGE}
-                    settingNS={NAMESPACES.QUERY_TRACKER}
+                    settingKey="global::queryTracker::queryTrackerStage"
                 />,
             ),
             makeItem(
                 'global::queryTracker::useNewGraphView',
                 i18n('field_new-graph-progress'),
                 'top',
-                <BooleanSettingItem
+                <CheckboxSettingItem
                     settingKey="global::queryTracker::useNewGraphView"
                     description={i18n('context_new-graph-progress-description')}
                     oneLine
@@ -69,7 +67,7 @@ export const queriesPage = ({cluster, hasQuerySuggestions}: Props) => {
                           'global::queryTracker::suggestions',
                           i18n('field_query-assistant'),
                           'top',
-                          <BooleanSettingItem
+                          <CheckboxSettingItem
                               settingKey="global::queryTracker::suggestions"
                               description={
                                   <Flex direction="column">
@@ -91,7 +89,7 @@ export const queriesPage = ({cluster, hasQuerySuggestions}: Props) => {
                 'global::queryTracker::disableCliqueReadinessCheck',
                 i18n('field_disable-clique-readiness-check'),
                 'top',
-                <BooleanSettingItem
+                <CheckboxSettingItem
                     settingKey="global::queryTracker::disableCliqueReadinessCheck"
                     description={i18n('context_disable-clique-readiness-check-description')}
                     oneLine

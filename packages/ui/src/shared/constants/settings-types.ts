@@ -1,6 +1,7 @@
 import {type DashKitProps} from '@gravity-ui/dashkit';
 import {type NodeType} from './system';
 import {type QueryEngine} from './engines';
+import {type StartingPage} from './settings-ts';
 
 export type QueryToken = {
     name: string;
@@ -54,7 +55,7 @@ interface DevelopmentSettings {
 }
 
 interface MenuSettings {
-    'global::menu::startingPage': 'navigation' | 'operations' | 'dashboard' | 'system';
+    'global::menu::startingPage': StartingPage;
     'global::menu::preserveState': boolean;
     'global::menu::recentClustersFirst': boolean;
     'global::menu::recentPagesFirst': boolean;
@@ -71,6 +72,7 @@ interface NavigationSettings {
     'global::navigation::enableTableSimilarity': boolean;
     'global::navigation::clusterPagePaneSizes': number | undefined;
     'global::navigation::defaultChytAlias': string;
+    'global::navigation::tableDisplayRawStrings': boolean;
     'global::navigation::sqlService': Array<'qtkit' | 'yqlkit'>;
     'global::navigation::annotationVisibility': 'partial' | 'visible';
 
@@ -89,7 +91,7 @@ interface ComponentsSettings {
 }
 
 interface SystemSettings {
-    'global::system::mastersHostType': 'container' | 'host';
+    'global::system::mastersHostType': 'host' | 'physicalHost';
     'global::system::mastersCollapsed': boolean | undefined;
     'global::system::schedulersCollapsed': boolean | undefined;
     'global::system::chunksCollapsed': boolean | undefined;
@@ -148,6 +150,8 @@ interface AccountsSettings {
 export type Stage = string;
 
 interface QueryTrackerSettings {
+    'global::queryTracker::queryTrackerStage': string;
+    'global::queryTracker::yqlAgentStage': string;
     'global::queryTracker::queriesListSidebarVisibilityMode': boolean;
     'global::queryTracker::history::Columns': string[];
     'global::queryTracker::useNewGraphView': boolean;
@@ -171,6 +175,10 @@ interface ChytSettings {
 
 type DashboardSettings = {
     [key in `local::${Cluster}::dashboard::config`]: DashKitProps['config'];
+};
+
+type LocalNavigationSettings = {
+    [key in `local::${Cluster}::navigationDefaultPath`]: string;
 };
 
 type FavouritesSettings = {
@@ -240,6 +248,7 @@ export type DescribedSettings = GlobalSettings &
     ComponentsSettings &
     SchedulingSettings &
     DashboardSettings &
+    LocalNavigationSettings &
     FavouritesSettings;
 
 export type SettingKey = keyof DescribedSettings;

@@ -1,11 +1,7 @@
 import React from 'react';
 import {useSelector} from '../../store/redux-hooks';
-import {type IconProps} from '@gravity-ui/uikit';
-
 import compact_ from 'lodash/compact';
-import filter_ from 'lodash/filter';
 import forEach_ from 'lodash/forEach';
-import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 import {produce} from 'immer';
 
@@ -32,12 +28,11 @@ import {getConfigData, uiSettings} from '../../config/ui-settings';
 import ypath from '../../common/thor/ypath';
 
 import {AGGREGATOR_RADIO_ITEMS} from '../../constants/operations/statistics';
-import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
+import {SettingName} from '../../../shared/constants/settings';
+import {STARTING_PAGE_IDS} from '../../../shared/constants/settings-ts';
 import {selectRecentPagesInfo} from '../../store/selectors/slideoutMenu';
 import {selectCurrentClusterNS} from '../../store/selectors/settings/settings-ts';
-import SettingsMenuItem from '../../containers/SettingsMenu/SettingsMenuItem';
-import SettingsMenuRadio from '../../containers/SettingsMenu/SettingsMenuRadio';
-import SettingsMenuInput from '../SettingsMenu/SettingsMenuInput';
+import {TextInputSettingItem} from '../SettingsMenu/TextInputSettingItem/TextInputSettingItem';
 import {
     selectCurrentUserName,
     selectGlobalMasterVersion,
@@ -53,31 +48,14 @@ import Link from '../../containers/Link/Link';
 import Button from '../../components/Button/Button';
 import {AddVcsTokenForm, VcsList} from '../../pages/query-tracker/Vcs/SettingsMenu';
 import {selectIsVcsVisible, selectVcsConfig} from '../../store/selectors/query-tracker/vcs';
-import {SettingsMenuRadioByKey} from '../SettingsMenu/SettingsMenuSelect';
-import {BooleanSettingItem} from '../SettingsMenu/BooleanSettingItem';
+import {SegmentedRadioGroupSettingItem} from '../SettingsMenu/SettingsMenuSelect';
+import {CheckboxSettingItem} from '../SettingsMenu/CheckboxSettingItem';
 import {queriesPage} from './queriesPage';
+import {type SettingsPage, makeItem, makePage, makePageBySections} from './settings-page-builders';
+
+export {type SettingsPage, makeItem, makePage} from './settings-page-builders';
 
 import i18n from './i18n';
-
-export interface SettingsPage {
-    id: string;
-    title: string;
-    icon: IconProps;
-    sections: Array<SettingsSection>;
-}
-
-export interface SettingsSection {
-    id: string;
-    title: string;
-    items: Array<SettingsItem>;
-}
-
-export interface SettingsItem {
-    id: string;
-    title: string;
-    align?: 'top' | 'center';
-    content: React.ReactNode;
-}
 
 const {oauthTokenUrl} = uiSettings;
 
@@ -85,6 +63,27 @@ const StartPageSettingMemo = React.memo(StartPageSetting);
 
 function wrapEscapeText(text: string) {
     return `<span class="unipika"><span class="escape">${text}</span></span>`;
+}
+
+function renderHtmlDescription(description: string, highlight?: string) {
+    return (
+        <>
+            <span dangerouslySetInnerHTML={{__html: description}} />
+            {highlight && (
+                <>
+                    <br />
+                    <span
+                        className="yt-settings-item-annotation-highlight"
+                        dangerouslySetInnerHTML={{__html: highlight}}
+                    />
+                </>
+            )}
+        </>
+    );
+}
+
+function legacyRadioOption<const T>(value: T, text: string) {
+    return {value, content: <>{text} </>};
 }
 
 function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
@@ -95,6 +94,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
     const vcsConfig = useSelector(selectVcsConfig);
     const isVcsVisible = useSelector(selectIsVcsVisible);
     const hasQuerySuggestions = Boolean(UIFactory.getInlineSuggestionsApi());
+    const {appLangs} = getConfigData();
 
     return compact_([
         makePage('general', i18n('title_general'), generalIcon, [
@@ -103,7 +103,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 'global::newDashboardPage',
                 i18n('field_new-dashboard-page'),
                 'top',
-                <BooleanSettingItem
+                <CheckboxSettingItem
                     settingKey={'global::newDashboardPage'}
                     description={i18n('context_new-dashboard-page-description')}
                     oneLine
@@ -113,21 +113,19 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.GLOBAL.AUTO_REFRESH,
                 i18n('field_auto-refresh'),
                 'top',
-                <SettingsMenuItem
-                    settingName={SettingName.GLOBAL.AUTO_REFRESH}
-                    settingNS={NAMESPACES.GLOBAL}
-                    annotation={i18n('context_auto-refresh-description')}
-                    oneLine={true}
+                <CheckboxSettingItem
+                    settingKey="global::autoRefresh"
+                    description={i18n('context_auto-refresh-description')}
+                    oneLine
                 />,
             ),
             makeItem(
                 SettingName.MENU.RECENT_CLUSTER_FIRST,
                 i18n('field_recent-clusters'),
                 'top',
-                <SettingsMenuItem
-                    settingName={SettingName.MENU.RECENT_CLUSTER_FIRST}
-                    settingNS={NAMESPACES.MENU}
-                    annotation={i18n('context_recent-clusters-description')}
+                <CheckboxSettingItem
+                    settingKey="global::menu::recentClustersFirst"
+                    description={i18n('context_recent-clusters-description')}
                     oneLine
                 />,
             ),
@@ -135,24 +133,23 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.MENU.RECENT_PAGE_FIRST,
                 i18n('field_recent-pages'),
                 'top',
-                <SettingsMenuItem
-                    settingName={SettingName.MENU.RECENT_PAGE_FIRST}
-                    settingNS={NAMESPACES.MENU}
-                    annotation={i18n('context_recent-pages-description')}
+                <CheckboxSettingItem
+                    settingKey="global::menu::recentPagesFirst"
+                    description={i18n('context_recent-pages-description')}
                     oneLine
                 />,
             ),
         ]),
         makePage('appearance', i18n('title_appearance'), paletteIcon, [
-            ...(getConfigData().appLangs
+            ...(appLangs
                 ? [
                       makeItem(
                           'global::lang',
                           i18n('field_language'),
                           'top',
-                          <SettingsMenuRadioByKey
+                          <SegmentedRadioGroupSettingItem
                               settingKey="global::lang"
-                              options={getConfigData().appLangs}
+                              options={appLangs}
                           />,
                       ),
                   ]
@@ -161,13 +158,12 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.GLOBAL.THEME,
                 i18n('field_theme'),
                 'top',
-                <SettingsMenuRadio
-                    settingName={SettingName.GLOBAL.THEME}
-                    settingNS={NAMESPACES.GLOBAL}
-                    items={[
-                        {value: 'light', text: i18n('value_theme-light')},
-                        {value: 'dark', text: i18n('value_theme-dark')},
-                        {value: 'system', text: i18n('value_theme-system')},
+                <SegmentedRadioGroupSettingItem
+                    settingKey="global::theme"
+                    options={[
+                        legacyRadioOption('light', i18n('value_theme-light')),
+                        legacyRadioOption('dark', i18n('value_theme-dark')),
+                        legacyRadioOption('system', i18n('value_theme-system')),
                     ]}
                 />,
             ),
@@ -175,13 +171,12 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.A11Y.USE_SAFE_COLORS,
                 i18n('field_contrast'),
                 'top',
-                <SettingsMenuRadio
-                    settingName={SettingName.A11Y.USE_SAFE_COLORS}
-                    settingNS={NAMESPACES.A11Y}
+                <SegmentedRadioGroupSettingItem
+                    settingKey="global::a11y::useSafeColors"
                     convertValue={(value) => value === 'true'}
-                    items={[
-                        {value: 'false', text: i18n('value_contrast-normal')},
-                        {value: 'true', text: i18n('value_contrast-high')},
+                    options={[
+                        legacyRadioOption(false, i18n('value_contrast-normal')),
+                        legacyRadioOption(true, i18n('value_contrast-high')),
                     ]}
                 />,
             ),
@@ -190,7 +185,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 title: i18n('field_content-width'),
                 align: 'top',
                 content: (
-                    <SettingsMenuRadioByKey
+                    <SegmentedRadioGroupSettingItem
                         settingKey="global::maxContentWidth"
                         options={[
                             {value: 'standard', content: i18n('value_width-standard')},
@@ -211,18 +206,17 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         SettingName.DEVELOPMENT.REGULAR_USER_UI,
                         i18n('field_regular-user-ui'),
                         'top',
-                        <SettingsMenuItem
-                            settingName={SettingName.DEVELOPMENT.REGULAR_USER_UI}
-                            settingNS={NAMESPACES.DEVELOPMENT}
-                            label={i18n('field_regular-user-ui')}
-                            annotation={i18n('context_regular-user-ui-description')}
+                        <CheckboxSettingItem
+                            settingKey="global::development::regularUserUI"
+                            title={i18n('field_regular-user-ui')}
+                            description={i18n('context_regular-user-ui-description')}
                         />,
                     ),
                     makeItem(
                         'global::development::showAiChat',
                         i18n('field_ai-chat'),
                         'top',
-                        <BooleanSettingItem
+                        <CheckboxSettingItem
                             settingKey="global::development::showAiChat"
                             description={i18n('context_ai-chat-description')}
                             oneLine
@@ -236,22 +230,12 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.YSON.FORMAT,
                 i18n('field_data-format'),
                 'top',
-                <SettingsMenuRadio
-                    settingName={SettingName.YSON.FORMAT}
-                    settingNS={NAMESPACES.YSON}
-                    items={[
-                        {
-                            value: 'yson',
-                            text: 'YSON',
-                        },
-                        {
-                            value: 'json',
-                            text: 'JSON',
-                        },
-                        {
-                            value: 'raw-json',
-                            text: 'Raw JSON',
-                        },
+                <SegmentedRadioGroupSettingItem
+                    settingKey="global::yson::format"
+                    options={[
+                        legacyRadioOption('yson', 'YSON'),
+                        legacyRadioOption('json', 'JSON'),
+                        legacyRadioOption('raw-json', 'Raw JSON'),
                     ]}
                 />,
             ),
@@ -259,22 +243,22 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.YSON.SHOW_DECODED,
                 i18n('field_decode-utf8'),
                 'top',
-                <SettingsMenuItem
-                    oneLine={true}
-                    settingName={SettingName.YSON.SHOW_DECODED}
-                    settingNS={NAMESPACES.YSON}
-                    annotation={i18n('context_decode-utf8-description')}
-                    annotationHighlight={i18n('context_decode-utf8-highlight')}
+                <CheckboxSettingItem
+                    oneLine
+                    settingKey="global::yson::showDecoded"
+                    description={renderHtmlDescription(
+                        i18n('context_decode-utf8-description'),
+                        i18n('context_decode-utf8-highlight'),
+                    )}
                 />,
             ),
             makeItem(
                 SettingName.YSON.BINARY_AS_HEX,
                 i18n('field_binary-as-hex'),
                 'top',
-                <SettingsMenuItem
-                    settingName={SettingName.YSON.BINARY_AS_HEX}
-                    settingNS={NAMESPACES.YSON}
-                    annotation={i18n('context_binary-as-hex-description')}
+                <CheckboxSettingItem
+                    settingKey="global::yson::binaryAsHex"
+                    description={i18n('context_binary-as-hex-description')}
                     oneLine
                 />,
             ),
@@ -282,14 +266,15 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.YSON.ESCAPE_WHITESPACES,
                 i18n('field_escape-and-highlight'),
                 'top',
-                <SettingsMenuItem
-                    settingName={SettingName.YSON.ESCAPE_WHITESPACES}
-                    settingNS={NAMESPACES.YSON}
-                    annotation={i18n('context_escape-whitespaces-description', {
-                        n: wrapEscapeText('\\n'),
-                        t: wrapEscapeText('\\t'),
-                    })}
-                    annotationHighlight={i18n('context_escape-whitespaces-highlight')}
+                <CheckboxSettingItem
+                    settingKey="global::yson::escapeWhitespace"
+                    description={renderHtmlDescription(
+                        i18n('context_escape-whitespaces-description', {
+                            n: wrapEscapeText('\\n'),
+                            t: wrapEscapeText('\\t'),
+                        }),
+                        i18n('context_escape-whitespaces-highlight'),
+                    )}
                     oneLine
                 />,
             ),
@@ -297,10 +282,9 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.YSON.COMPACT,
                 i18n('field_compact-view'),
                 'top',
-                <SettingsMenuItem
-                    settingName={SettingName.YSON.COMPACT}
-                    settingNS={NAMESPACES.YSON}
-                    annotation={i18n('context_compact-view-description')}
+                <CheckboxSettingItem
+                    settingKey="global::yson::compact"
+                    description={i18n('context_compact-view-description')}
                     oneLine
                 />,
             ),
@@ -310,11 +294,12 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.SYSTEM.MASTERS_HOST_TYPE,
                 i18n('field_host-type'),
                 'top',
-                <SettingsMenuRadio
+                <SegmentedRadioGroupSettingItem
                     description={i18n('context_host-type-description')}
-                    settingName={SettingName.SYSTEM.MASTERS_HOST_TYPE}
-                    settingNS={NAMESPACES.SYSTEM}
-                    items={mastersRadioButtonItems}
+                    settingKey="global::system::mastersHostType"
+                    options={mastersRadioButtonItems.map(({value, text}) =>
+                        legacyRadioOption(value as 'host' | 'physicalHost', text),
+                    )}
                 />,
             ),
         ]),
@@ -323,11 +308,12 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 SettingName.OPERATIONS.STATISTICS_AGGREGATION_TYPE,
                 i18n('field_statistics-type'),
                 'top',
-                <SettingsMenuRadio
+                <SegmentedRadioGroupSettingItem
                     description={i18n('context_statistics-type-description')}
-                    settingName={SettingName.OPERATIONS.STATISTICS_AGGREGATION_TYPE}
-                    settingNS={NAMESPACES.OPERATIONS}
-                    items={AGGREGATOR_RADIO_ITEMS}
+                    settingKey="global::operations::statisticsAggregationType"
+                    options={AGGREGATOR_RADIO_ITEMS.map(({value, text}) =>
+                        legacyRadioOption(value as 'avg' | 'min' | 'max' | 'sum' | 'count', text),
+                    )}
                 />,
             ),
         ]),
@@ -341,34 +327,31 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         SettingName.LOCAL.NAVIGATION_DEFAULT_PATH,
                         i18n('field_default-path'),
                         'top',
-                        <SettingsMenuInput
+                        <TextInputSettingItem
                             placeholder={i18n('context_default-path-placeholder')}
                             description={i18n('context_default-path-description')}
                             validator={navigationPathValidator}
-                            settingName={SettingName.LOCAL.NAVIGATION_DEFAULT_PATH}
-                            settingNS={clusterNS}
+                            settingKey={`local::${cluster}::navigationDefaultPath`}
                         />,
                     ),
                 makeItem(
                     SettingName.NAVIGATION.DEFAULT_CHYT_ALIAS,
                     i18n('field_default-chyt-alias'),
                     'top',
-                    <SettingsMenuInput
+                    <TextInputSettingItem
                         placeholder={i18n('context_default-chyt-alias-placeholder')}
                         description={i18n('context_default-chyt-alias-description')}
                         validator={chytAliasValidator}
-                        settingName={SettingName.NAVIGATION.DEFAULT_CHYT_ALIAS}
-                        settingNS={NAMESPACES.NAVIGATION}
+                        settingKey="global::navigation::defaultChytAlias"
                     />,
                 ),
                 makeItem(
                     SettingName.NAVIGATION.USE_SMART_SORT,
                     i18n('field_smart-sort'),
                     'top',
-                    <SettingsMenuItem
-                        settingName={SettingName.NAVIGATION.USE_SMART_SORT}
-                        settingNS={NAMESPACES.NAVIGATION}
-                        annotation={i18n('context_smart-sort-description')}
+                    <CheckboxSettingItem
+                        settingKey="global::navigation::useSmartSort"
+                        description={i18n('context_smart-sort-description')}
                         oneLine
                     />,
                 ),
@@ -376,10 +359,9 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     SettingName.NAVIGATION.GROUP_NODES,
                     i18n('field_group-nodes'),
                     'top',
-                    <SettingsMenuItem
-                        settingName={SettingName.NAVIGATION.GROUP_NODES}
-                        settingNS={NAMESPACES.NAVIGATION}
-                        annotation={i18n('context_group-nodes-description')}
+                    <CheckboxSettingItem
+                        settingKey="global::navigation::groupNodes"
+                        description={i18n('context_group-nodes-description')}
                         oneLine
                     />,
                 ),
@@ -387,10 +369,9 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     SettingName.NAVIGATION.USE_SMART_FILTER,
                     i18n('field_smart-filter'),
                     'top',
-                    <SettingsMenuItem
-                        settingName={SettingName.NAVIGATION.USE_SMART_FILTER}
-                        settingNS={NAMESPACES.NAVIGATION}
-                        annotation={i18n('context_smart-filter-description')}
+                    <CheckboxSettingItem
+                        settingKey="global::navigation::useSmartFilter"
+                        description={i18n('context_smart-filter-description')}
                         oneLine
                     />,
                 ),
@@ -398,18 +379,17 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     SettingName.NAVIGATION.ENABLE_PATH_AUTO_CORRECTION,
                     i18n('field_path-autocorrection'),
                     'top',
-                    <SettingsMenuItem
-                        settingName={SettingName.NAVIGATION.ENABLE_PATH_AUTO_CORRECTION}
-                        settingNS={NAMESPACES.NAVIGATION}
-                        annotation={
+                    <CheckboxSettingItem
+                        settingKey="global::navigation::enablePathAutocorrection"
+                        description={renderHtmlDescription(
                             i18n('context_path-autocorrection-description') +
-                            ' ' +
-                            docsUrl(
-                                'For details see ' +
-                                    `<a class="link link_theme_normal" href="${UIFactory.docsUrls['faq:enablepathautocorrection']}" target="_blank">FAQ</a>` +
-                                    '.',
-                            )
-                        }
+                                ' ' +
+                                docsUrl(
+                                    'For details see ' +
+                                        `<a class="link link_theme_normal" href="${UIFactory.docsUrls['faq:enablepathautocorrection']}" target="_blank">FAQ</a>` +
+                                        '.',
+                                ),
+                        )}
                         oneLine
                     />,
                 ),
@@ -424,11 +404,10 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         SettingName.COMPONENTS.ENABLE_SIDE_BAR,
                         i18n('field_enable-side-bar'),
                         'top',
-                        <SettingsMenuItem
-                            settingName={SettingName.COMPONENTS.ENABLE_SIDE_BAR}
-                            settingNS={NAMESPACES.COMPONENTS}
-                            annotation={i18n('context_enable-side-bar-description')}
-                            oneLine={true}
+                        <CheckboxSettingItem
+                            settingKey="global::components::enableSideBar"
+                            description={i18n('context_enable-side-bar-description')}
+                            oneLine
                         />,
                     ),
                 ],
@@ -441,7 +420,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         'global::components::memoryPopupShowAll',
                         i18n('field_show-empty-categories'),
                         'top',
-                        <BooleanSettingItem
+                        <CheckboxSettingItem
                             settingKey="global::components::memoryPopupShowAll"
                             description={i18n('context_show-empty-categories-description')}
                             oneLine
@@ -460,69 +439,57 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     'global::development::yqlTypes',
                     i18n('field_yql-v3-types'),
                     'top',
-                    <BooleanSettingItem settingKey="global::development::yqlTypes" oneLine />,
+                    <CheckboxSettingItem settingKey="global::development::yqlTypes" oneLine />,
                 ),
                 makeItem(
                     SettingName.NAVIGATION.ROWS_PER_TABLE_PAGE,
                     i18n('field_rows-per-page'),
                     'top',
-                    <SettingsMenuRadio
+                    <SegmentedRadioGroupSettingItem
                         description={i18n('context_rows-per-page-description')}
-                        settingName={SettingName.NAVIGATION.ROWS_PER_TABLE_PAGE}
-                        settingNS={NAMESPACES.NAVIGATION}
-                        items={[
-                            {
-                                value: String(10),
-                                text: '10',
-                            },
-                            {
-                                value: String(50),
-                                text: '50',
-                            },
-                            {
-                                value: String(100),
-                                text: '100',
-                            },
-                            {
-                                value: String(200),
-                                text: '200',
-                            },
-                        ]}
+                        settingKey="global::navigation::rowsPerTablePage"
                         convertValue={Number}
+                        options={[
+                            legacyRadioOption(10, '10'),
+                            legacyRadioOption(50, '50'),
+                            legacyRadioOption(100, '100'),
+                            legacyRadioOption(200, '200'),
+                        ]}
                     />,
                 ),
                 makeItem(
                     SettingName.NAVIGATION.MAXIMUM_TABLE_STRING_SIZE,
                     i18n('field_cell-size-limit'),
                     'top',
-                    <SettingsMenuRadio
+                    <SegmentedRadioGroupSettingItem
                         description={i18n('context_cell-size-limit-description')}
-                        settingName={SettingName.NAVIGATION.MAXIMUM_TABLE_STRING_SIZE}
-                        settingNS={NAMESPACES.NAVIGATION}
-                        items={cellSizeRadioButtonItems}
+                        settingKey="global::navigation::maximumTableStringSize"
                         convertValue={Number}
+                        options={cellSizeRadioButtonItems.map(({value, text}) =>
+                            legacyRadioOption(Number(value) as 1024 | 16384 | 32768 | 65536, text),
+                        )}
                     />,
                 ),
                 makeItem(
                     SettingName.NAVIGATION.DEFAULT_TABLE_COLUMN_LIMIT,
                     i18n('field_default-column-limit'),
                     'top',
-                    <SettingsMenuRadio
+                    <SegmentedRadioGroupSettingItem
                         description={i18n('context_default-column-limit-description')}
-                        settingName={SettingName.NAVIGATION.DEFAULT_TABLE_COLUMN_LIMIT}
-                        settingNS={NAMESPACES.NAVIGATION}
-                        items={pageSizeRadioButtonItems}
+                        settingKey="global::navigation::defaultTableColumnLimit"
                         convertValue={Number}
+                        options={pageSizeRadioButtonItems.map(({value, text}) =>
+                            legacyRadioOption(Number(value) as 10 | 50 | 100 | 200, text),
+                        )}
                     />,
                 ),
                 makeItem(
                     SettingName.NAVIGATION.ENABLE_TABLE_SIMILARITY,
                     i18n('field_guess-visible-columns'),
                     'top',
-                    <SettingsMenuItem
-                        settingName={SettingName.NAVIGATION.ENABLE_TABLE_SIMILARITY}
-                        settingNS={NAMESPACES.NAVIGATION}
-                        annotation={i18n('context_guess-visible-columns-description')}
+                    <CheckboxSettingItem
+                        settingKey="global::navigation::enableTableSimilarity"
+                        description={i18n('context_guess-visible-columns-description')}
                         oneLine
                     />,
                 ),
@@ -530,10 +497,9 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     SettingName.NAVIGATION.TABLE_DISPLAY_RAW_STRINGS,
                     i18n('field_raw-strings'),
                     'top',
-                    <SettingsMenuItem
-                        annotation={i18n('context_raw-strings-description')}
-                        settingName={SettingName.NAVIGATION.TABLE_DISPLAY_RAW_STRINGS}
-                        settingNS={NAMESPACES.NAVIGATION}
+                    <CheckboxSettingItem
+                        description={i18n('context_raw-strings-description')}
+                        settingKey="global::navigation::tableDisplayRawStrings"
                         oneLine
                     />,
                 ),
@@ -583,7 +549,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         'global::editor::vimMode',
                         i18n('field_vim-mode'),
                         'top',
-                        <BooleanSettingItem
+                        <CheckboxSettingItem
                             settingKey="global::editor::vimMode"
                             description={i18n('context_vim-mode-description')}
                             oneLine
@@ -624,33 +590,6 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             ]),
         ),
     ]);
-}
-
-export function makePage(
-    id: string,
-    title: string,
-    icon: IconProps | undefined,
-    items: Array<SettingsItem>,
-): SettingsPage {
-    return makePageBySections(id, title, icon, [{id: `${id}/${id}`, title, items}]);
-}
-
-export function makePageBySections(
-    id: string,
-    title: string,
-    icon: IconProps | undefined,
-    sections: Array<SettingsSection>,
-) {
-    return {id, title, icon: icon || generalIcon, sections};
-}
-
-export function makeItem(
-    id: string,
-    title: string,
-    align?: SettingsItem['align'],
-    content?: React.ReactNode,
-): SettingsItem {
-    return {id, title, align, content};
 }
 
 export function useSettingsDescription(): Array<SettingsPage> {
@@ -707,18 +646,19 @@ function StartPageSetting() {
     const {all} = useSelector(selectRecentPagesInfo);
 
     const pageItems = React.useMemo(() => {
-        const headerPages = filter_(all, (page) => Boolean(page.header));
-        return map_(headerPages, (page) => ({
-            value: page.id,
-            text: page.name,
-        }));
+        const pagesById = mapById(all);
+        return compact_(
+            STARTING_PAGE_IDS.map((pageId) => {
+                const page = pagesById[pageId];
+                return page?.header ? legacyRadioOption(pageId, page.name) : undefined;
+            }),
+        );
     }, [all]);
 
     return (
-        <SettingsMenuRadio
-            settingName={SettingName.MENU.STARTING_PAGE}
-            settingNS={NAMESPACES.MENU}
-            items={pageItems}
+        <SegmentedRadioGroupSettingItem
+            settingKey="global::menu::startingPage"
+            options={pageItems}
         />
     );
 }

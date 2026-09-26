@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useDispatch, useSelector} from '../../store/redux-hooks';
 import block from 'bem-cn-lite';
 
@@ -14,60 +14,28 @@ import SelectFacade, {
 import {setSettingByKey} from '../../store/actions/settings';
 import {selectSettingsData} from '../../store/selectors/settings/settings-base';
 
-import {SettingsItemLayout, type SettingsItemLayoutProps} from './SettingsItemLayout';
+import {type SettingsItemLayoutProps} from './SettingsItemLayout';
 
 import './SettingsMenu.scss';
 
 const b = block('elements-page');
 
-type SettingsMenuSelectOption =
-    | {options: Array<{value: string; text: string}>}
-    | {getOptionsOnMount: () => Promise<Array<{value: string; text: string}>>};
-type SettingsMenuSelectProps = {
-    placeholder?: string;
-    label?: string;
-    getSetting: () => string;
-    setSetting: (value?: string) => void;
-} & SettingsMenuSelectOption;
-
-export const SettingsMenuSelect = (props: SettingsMenuSelectProps) => {
-    const settingValue = props.getSetting();
-    const [items, setItems] = useState('options' in props ? props.options : []);
-
-    useEffect(() => {
-        if ('getOptionsOnMount' in props) {
-            props?.getOptionsOnMount().then((options) => {
-                setItems(options);
-            });
-        }
-    }, []);
-
-    return (
-        <div className={b('settings-item', {select: true})} title={props.label}>
-            <SelectSingle
-                value={settingValue}
-                items={items}
-                onChange={(value) => props.setSetting(value)}
-                placeholder={props.placeholder}
-                width="max"
-            />
-        </div>
-    );
-};
-
-type SettingMenuSelectByKeyProps<K extends KeysByType<DescribedSettings, string>> = {
+type SelectSettingItemProps<K extends KeysByType<DescribedSettings, string>> = {
     settingKey: K;
     options: Array<Item<DescribedSettings[K]>>;
     description?: React.ReactNode;
+    displayValue?: DescribedSettings[K];
 };
 
-export function SettingMenuSelectByKey<K extends KeysByType<DescribedSettings, string>>({
+export function SelectSettingItem<K extends KeysByType<DescribedSettings, string>>({
     settingKey,
     options,
     description,
-}: SettingMenuSelectByKeyProps<K>) {
+    displayValue,
+}: SelectSettingItemProps<K>) {
     const dispatch = useDispatch();
-    const value = useSelector(selectSettingsData)[settingKey];
+    const storedValue = useSelector(selectSettingsData)[settingKey];
+    const value = displayValue ?? storedValue;
 
     return (
         <div className={b('settings-item', {select: true})}>
@@ -88,20 +56,18 @@ export function SettingMenuSelectByKey<K extends KeysByType<DescribedSettings, s
     );
 }
 
-type SettingMenuMultiSelectByKeyProps<K extends KeysByType<DescribedSettings, Array<string>>> = {
+type MultiSelectSettingItemProps<K extends KeysByType<DescribedSettings, Array<string>>> = {
     settingKey: K;
     options: Array<Item<DescribedSettings[K][number]>>;
     description?: React.ReactNode;
 };
 
-export function SettingMenuMultiSelectByKey<
-    K extends KeysByType<DescribedSettings, Array<string>>,
->({
+export function MultiSelectSettingItem<K extends KeysByType<DescribedSettings, Array<string>>>({
     settingKey,
     options,
     description,
     ...rest
-}: SettingMenuMultiSelectByKeyProps<K> &
+}: MultiSelectSettingItemProps<K> &
     Omit<YTSelectProps<string>, 'value' | 'items' | 'onChange' | 'onUpdate'>) {
     const {value, onUpdate} = useSettingByKey(settingKey);
 
@@ -124,30 +90,62 @@ export function SettingMenuMultiSelectByKey<
     );
 }
 
-type SettingsMenuRadioByKeyProps<K extends KeysByType<DescribedSettings, string>> = Omit<
-    SettingsItemLayoutProps,
-    'children'
-> & {
-    settingKey: K;
-    options: SegmentedRadioGroupProps<DescribedSettings[K]>['options'];
-};
+type SegmentedSettingValue = string | number | boolean;
+type SegmentedOption<T extends SegmentedSettingValue> = Omit<
+    NonNullable<SegmentedRadioGroupProps['options']>[number],
+    'value'
+> & {value: T};
+type ConvertedSegmentedSettingValue<T extends SegmentedSettingValue> = T extends number
+    ? number
+    : T extends boolean
+      ? boolean
+      : T;
+type ConvertValueProps<T extends SegmentedSettingValue> = [T] extends [string]
+    ? {convertValue?: never}
+    : {convertValue: (value: string) => ConvertedSegmentedSettingValue<T>};
 
-export function SettingsMenuRadioByKey<K extends KeysByType<DescribedSettings, string>>({
+type SegmentedRadioGroupSettingItemProps<
+    K extends KeysByType<DescribedSettings, SegmentedSettingValue>,
+> = Omit<SettingsItemLayoutProps, 'children'> & {
+    settingKey: K;
+    options: Array<SegmentedOption<DescribedSettings[K]>>;
+    displayValue?: DescribedSettings[K];
+} & ConvertValueProps<DescribedSettings[K]>;
+
+export function SegmentedRadioGroupSettingItem<
+    K extends KeysByType<DescribedSettings, SegmentedSettingValue>,
+>({
     settingKey,
     options,
-    ...rest
-}: SettingsMenuRadioByKeyProps<K>) {
-    const {value, onUpdate} = useSettingByKey(settingKey);
+    displayValue,
+    convertValue,
+    description,
+    oneLine,
+    title,
+}: SegmentedRadioGroupSettingItemProps<K>) {
+    const {value: storedValue, onUpdate} = useSettingByKey(settingKey);
+    const value = displayValue ?? storedValue;
 
     return (
-        <SettingsItemLayout {...rest}>
+        <div className={b('settings-item', {'one-line': oneLine})} title={title}>
             <SegmentedRadioGroup
-                options={options}
-                value={value}
-                onUpdate={onUpdate}
+                options={options.map(({value: optionValue, ...option}) => ({
+                    ...option,
+                    value: String(optionValue),
+                }))}
+                value={String(value)}
+                onUpdate={(nextValue) => {
+                    const convertedValue = convertValue ? convertValue(nextValue) : nextValue;
+                    onUpdate(convertedValue as DescribedSettings[K]);
+                }}
                 qa={settingKey}
             />
-        </SettingsItemLayout>
+            {description && (
+                <div className={b('settings-description', 'elements-secondary-text')}>
+                    {description}
+                </div>
+            )}
+        </div>
     );
 }
 
@@ -161,7 +159,7 @@ function useSettingByKey<K extends keyof DescribedSettings>(settingKey: K) {
             (v: typeof value) => {
                 dispatch(setSettingByKey(settingKey, v));
             },
-            [settingKey],
+            [dispatch, settingKey],
         ),
     };
 }
