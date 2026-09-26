@@ -11,7 +11,20 @@
   "leader-controller-name": "Leader controller name",
   "open-in-navigation": "Open in Navigation",
   "failed-to-load-messages": "Failed to load messages",
+  "failed-to-start": "Failed to start the pipeline",
+  "failed-to-pause": "Failed to pause the pipeline",
+  "failed-to-stop": "Failed to stop the pipeline",
   "start": "Start",
+  "starting": "Starting",
   "stop": "Stop",
-  "pause": "Pause"
+  "stopping": "Stopping",
+  "pause": "Pause",
+  "pausing": "Pausing",
+  "cannot-start": "Can't start the pipeline",
+  "cannot-pause": "Can't pause the pipeline",
+  "cannot-stop": "Can't stop the pipeline",
+  "reason-start": "The pipeline is starting",
+  "reason-pause": "The pipeline is pausing",
+  "reason-stop": "The pipeline is stopping",
+  "reason-stopped": "The pipeline is stopped"
 }
