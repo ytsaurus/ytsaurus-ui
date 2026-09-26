@@ -102,8 +102,8 @@ export function OpenQueryButtons({className, autoOpen}: OpenQueryButtonProps) {
                         onClick={() => {
                             setPanelMode(panelMode === 'qt' ? undefined : 'qt');
                         }}
-                        pin="round-clear"
-                        view="action"
+                        pin="round-brick"
+                        view="outlined-info"
                         className={b('btn')}
                         selected={panelMode === 'qt'}
                         title={i18n('action_open-queries-widget')}
@@ -113,13 +113,13 @@ export function OpenQueryButtons({className, autoOpen}: OpenQueryButtonProps) {
                     </Button>
                     <Button
                         className={b('btn')}
-                        pin="clear-round"
-                        view="action"
+                        pin="brick-round"
+                        view="outlined-info"
                         href={createNewQueryUrl(cluster, QueryEngine.YQL, {path})}
                         target="_blank"
                         title={i18n('action_open-queries-page')}
                     >
-                        <Icon awesome="table" size={13} />
+                        <Icon awesome="external-link" size={13} />
                     </Button>
                 </div>
             )}

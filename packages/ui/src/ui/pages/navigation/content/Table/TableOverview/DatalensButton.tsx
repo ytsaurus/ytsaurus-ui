@@ -35,13 +35,13 @@ export default function DataLensButton({className}: {className: string}) {
     const btn = (
         <Button
             href={url}
-            view={'action'}
+            view="outlined-info"
             target="_blank"
             title={i18n('action_create-dataset-in-datalens')}
             disabled={!loaded || showTooltip}
         >
-            <Icon awesome={'chart-bar'} size={13} />
             DataLens
+            <Icon awesome="external-link" size={13} />
         </Button>
     );
 

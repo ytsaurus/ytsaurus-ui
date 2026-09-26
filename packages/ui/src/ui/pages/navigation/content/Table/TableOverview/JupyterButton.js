@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {useSelector} from '../../../../../store/redux-hooks';
 
 import Button from '../../../../../components/Button/Button';
-import Logo from '../../../../../assets/img/svg/jupyter-logo.svg';
+import Icon from '../../../../../components/Icon/Icon';
 
 import i18n from './i18n';
 
@@ -34,15 +34,13 @@ function JupyterButton({block}) {
             <Button
                 size="m"
                 href={url}
-                view="action"
+                view="outlined-info"
                 target="_blank"
                 title={i18n('title_open-in-jupyter')}
                 disabled={!loaded}
             >
-                <span className={block('jupyter-content')}>
-                    <Logo className={block('jupyter-logo')} width={22} height={22} />
-                    Jupyter
-                </span>
+                Jupyter
+                <Icon awesome="external-link" size={13} />
             </Button>
         </div>
     );
