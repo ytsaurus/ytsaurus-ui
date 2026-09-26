@@ -49,6 +49,8 @@ export function loadStoresData(storesId, index, unorderedDynamicTable) {
                         stores: prepareStores(results, storesId),
                     },
                 });
+
+                return undefined;
             })
             .catch((error) => {
                 if (error.code !== yt.codes.CANCELLED) {

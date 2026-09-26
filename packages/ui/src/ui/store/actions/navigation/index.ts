@@ -178,6 +178,8 @@ export function updateView(settings: {trackVisit?: boolean} = {}): NavigationThu
                     .catch((checkPermissionsError) => {
                         dispatchAccountPermissions({checkPermissionsError});
                     });
+
+                return undefined;
             })
             .catch((error) => {
                 if (error.code === yt.codes.CANCELLED) {

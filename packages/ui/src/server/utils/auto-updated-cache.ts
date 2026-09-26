@@ -24,7 +24,9 @@ export function createAutoUpdatedCache<TKey extends string | number, TRest exten
             })
             .then(() => delay(cacheTime))
             .then(() => {
-                if (store.get(key) !== promise) return;
+                if (store.get(key) !== promise) {
+                    return undefined;
+                }
                 return triggerUpdate(key, false, ...rest);
             })
             .catch(() => {

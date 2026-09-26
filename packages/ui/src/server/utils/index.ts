@@ -205,7 +205,7 @@ export async function sendAndLogError(
     if (ae) {
         ctx.logError('AxiosError', ae, extra);
         if (await pipeAxiosErrorOrFalse(ctx, res, ae)) {
-            return;
+            return undefined;
         }
 
         if (ae.response?.status) {

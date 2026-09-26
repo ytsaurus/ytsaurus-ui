@@ -53,7 +53,7 @@ export function fetchAccountUsageListDiff(): UsageListThunkAction {
         const timestamps = getFilterFromToTimestamps(state);
 
         if (!timestamps) {
-            return;
+            return undefined;
         }
 
         const filterParams = getFilterParameters(state);
@@ -111,7 +111,7 @@ export function fetchAccountUsageTreeDiff(): UsageTreeThunkAction {
         const timestamps = getFilterFromToTimestamps(state);
 
         if (!timestamps) {
-            return;
+            return undefined;
         }
 
         const filterParams = getFilterParameters(state);

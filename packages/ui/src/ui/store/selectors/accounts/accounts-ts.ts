@@ -273,6 +273,8 @@ function getAggregatedByType(
             return {progress: undefined, total, limit};
         }
     }
+
+    return undefined;
 }
 
 function getResourceInfo(

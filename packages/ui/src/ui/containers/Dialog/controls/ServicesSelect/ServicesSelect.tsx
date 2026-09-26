@@ -136,12 +136,15 @@ ServicesSelect.getDefaultValue = (): ServicePair[] => {
 };
 
 ServicesSelect.validate = (value: ServicePair[]) => {
-    if (!value.length) return;
+    if (!value.length) {
+        return undefined;
+    }
     if (value[value.length - 1]?.service && !value[value.length - 1]?.item) {
         const {service} = value[value.length - 1];
         return service === 'chyt'
             ? i18n('alert_clique-option-required')
             : i18n('alert_bundle-option-required');
     }
-    return;
+
+    return undefined;
 };

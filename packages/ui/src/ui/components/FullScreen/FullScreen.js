@@ -26,7 +26,7 @@ export default function FullScreen({enabled = false, children, className, onChan
     const callback = () => onChange(screenfull.isFullscreen);
     const listenScreenChange = () => {
         if (!isFullScreenAllowed()) {
-            return;
+            return undefined;
         }
 
         screenfull.on('change', callback);

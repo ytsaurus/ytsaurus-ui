@@ -52,6 +52,8 @@ export function getColumnEdgePosition(columnSet, columnItems, columnIndex, group
     } else if (isLastColumn || isLastGroupColumn) {
         return 'end';
     }
+
+    return undefined;
 }
 
 export function prepareColumnsData({items, sets, mode}, userMode) {

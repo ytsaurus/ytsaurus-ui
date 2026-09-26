@@ -65,6 +65,8 @@ function reducer(
         case TABLETS_BUNDLES_EDITOR_PARTIAL:
             return {...state, ...action.data};
     }
+
+    return state;
 }
 
 export type TabletCellBundleEditorAction =

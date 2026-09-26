@@ -156,6 +156,8 @@ export function applyMaintenance(
                 case 'rpc_proxy':
                     return dispatch(getProxies('rpc'));
             }
+
+            return undefined;
         };
 
         return wrapApiPromiseByToaster(ytApiV4Id.executeBatch(YTApiId.addMaintenance, {requests}), {

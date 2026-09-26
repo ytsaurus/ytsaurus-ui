@@ -391,6 +391,8 @@ class UploadManager extends React.Component<Props, State> {
         }
 
         this.setOverwriteConfirmationVisible(true);
+
+        return undefined;
     };
 
     onConfirmImpl = () => {

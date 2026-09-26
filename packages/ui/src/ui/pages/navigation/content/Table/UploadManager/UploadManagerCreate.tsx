@@ -344,7 +344,7 @@ class UploadManagerCreateImpl extends React.Component<Props, State> {
     onXlsxUpload = () => {
         const {file, fileType} = this.state;
         if (!file || fileType !== 'xlsx') {
-            return;
+            return undefined;
         }
 
         const {path: parentDir, cluster} = this.props;

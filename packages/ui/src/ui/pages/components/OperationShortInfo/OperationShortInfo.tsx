@@ -37,7 +37,7 @@ export function OperationShortInfo(props: Props) {
     const finishTimeRaw = ypath.getValue(operationInfo, '/finish_time');
     React.useEffect(() => {
         if (finishTimeRaw) {
-            return;
+            return undefined;
         }
         const timerId = setInterval(() => {
             yt.v3

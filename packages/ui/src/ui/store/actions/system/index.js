@@ -48,6 +48,8 @@ export function loadSchedulersAndAgents() {
                 if (isRetryFutile(error.code)) {
                     return {isRetryFutile: true};
                 }
+
+                return undefined;
             });
     };
 }

@@ -71,6 +71,8 @@ const serverFactory: ServerFactory = {
             case 'accessLogProd':
                 return req.yt.ytApiAuthHeaders;
         }
+
+        return undefined;
     },
 };
 

@@ -10,6 +10,7 @@
         "callback-return": "error",
         "eqeqeq": "error",
         "no-throw-literal": "error",
+        "consistent-return": "error",
         "no-param-reassign": ["error", {"props": false}],
         "new-cap": 0,
         "import/order": 0,

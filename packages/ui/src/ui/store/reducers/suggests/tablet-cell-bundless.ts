@@ -37,6 +37,8 @@ function stateReducer(state = initialState, action: TabletCellBundlesSuggestActi
         case 'SUGGEST_TABLET_CELL_BUNDLES_SUCCESS':
             return {...state, ...action.data};
     }
+
+    return state;
 }
 
 export type TabletCellBundlesSuggestAction =

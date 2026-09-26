@@ -1397,6 +1397,8 @@ export const NODES_TABLE_TEMPLATES: Templates = {
 
             return hammer.format['Number'](item.IOWeight[mediumName]);
         }
+
+        return undefined;
     },
     host(item) {
         return <Host address={item.host} />;

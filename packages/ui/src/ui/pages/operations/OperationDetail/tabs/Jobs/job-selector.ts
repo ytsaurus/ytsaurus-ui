@@ -184,5 +184,7 @@ export class Job implements RawJob {
                     url: this.prepareCommandURL('get_job_input', uiSettings),
                 };
         }
+
+        return undefined;
     }
 }

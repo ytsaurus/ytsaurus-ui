@@ -10,6 +10,8 @@ describe('hammer.tree-list', () => {
         if (entry.memberOf) {
             return entry.memberOf.length ? entry.memberOf : ROOT_NODE;
         }
+
+        return undefined;
     };
 
     describe('API', () => {

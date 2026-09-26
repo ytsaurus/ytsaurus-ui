@@ -120,6 +120,8 @@ export function prepareCompletedUsage(operation) {
 
         return statistics;
     }
+
+    return undefined;
 }
 
 export function prepareIntermediateUsage(operation, intermediate) {

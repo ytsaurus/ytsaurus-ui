@@ -225,7 +225,8 @@ export function retryExecuteBatch(id: string): ExecuteBatchThunkAction {
             rumLogError({
                 message: `executeBatch with retries, store does not contain any elements with id=${id}`,
             });
-            return;
+
+            return undefined;
         }
 
         dispatch(hideExecuteBatchRetryModal(id));

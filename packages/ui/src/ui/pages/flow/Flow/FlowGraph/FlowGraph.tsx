@@ -264,6 +264,8 @@ function renderContent({item, ...rest}: {item: FlowGraphBlock; detailed?: boolea
         case 'sink':
             return <Sink className={block('item')} item={item} {...rest} />;
     }
+
+    return undefined;
 }
 
 const ICON_BY_TYPE: Record<

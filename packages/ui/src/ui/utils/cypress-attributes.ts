@@ -166,8 +166,12 @@ export async function createParentsBeforeSet(nodePath: string, attributesToSet: 
             if (!isCreated) {
                 return yt.v3.set({path}, {});
             }
+
+            return undefined;
         });
     }
+
+    return undefined;
 }
 
 export function updateNodeAttributes(

@@ -75,7 +75,9 @@ export class LinkDecorator extends BaseDecorator {
 
     findLink({lineNumber, column}: monaco.Position): Link | undefined {
         const model = this.editor.getModel();
-        if (!model) return;
+        if (!model) {
+            return undefined;
+        }
 
         return this.links.find(
             ({position: {start, end}, line}) =>

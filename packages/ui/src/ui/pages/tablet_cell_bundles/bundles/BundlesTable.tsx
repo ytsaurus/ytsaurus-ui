@@ -259,7 +259,7 @@ class BundlesTable extends React.Component<ReduxProps> {
         } = this.props;
         const {bundle, nodes, enable_bundle_controller} = data?.row || {};
         if (!bundle) {
-            return;
+            return undefined;
         }
         const path = `${pathPrefix}${bundle}`;
 

@@ -100,7 +100,7 @@ export function rumLogError(params: LogErrorParams, error?: Error, silent = fals
     }
 
     if (!isAllowSendError(error!)) {
-        return;
+        return undefined;
     }
 
     const {href, ...rest} = params.additional || {};

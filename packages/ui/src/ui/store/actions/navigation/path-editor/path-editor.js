@@ -20,7 +20,7 @@ export function loadSuggestionsList({path, customFilter, cluster}) {
         }
 
         if (suggestionsPath === currentParentPath && suggestionsLoaded) {
-            return;
+            return undefined;
         }
         dispatch({type: FETCH_SUGGESTIONS.REQUEST});
 

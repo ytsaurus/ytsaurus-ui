@@ -59,6 +59,8 @@ function reducerImpl(
         case CREATE_POOL_DIALOG_TREE_CREATE_FAILURE:
             return {...state, error: action.data};
     }
+
+    return state;
 }
 
 function reducer(state: CreatePoolDialogState = initialState, action: CreatePoolDialogAction) {

@@ -144,6 +144,8 @@ export function loadAclData(
                 },
                 idmKind,
             });
+
+            return undefined;
         }
     };
 }

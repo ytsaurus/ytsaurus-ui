@@ -52,7 +52,7 @@ templates.add('operations/detail/specification/io', {
     },
     filters(item) {
         if (item.isFolder) {
-            return;
+            return undefined;
         }
 
         const filters = item.filters;
@@ -73,7 +73,7 @@ templates.add('operations/detail/specification/io', {
     },
     live_preview(item) {
         if (item.isFolder) {
-            return;
+            return undefined;
         }
 
         return item.livePreview.supported ? (
@@ -84,7 +84,7 @@ templates.add('operations/detail/specification/io', {
     },
     tags(item) {
         if (item.isFolder) {
-            return;
+            return undefined;
         }
 
         return item.primary || item.teleport || item.append || item.foreign ? (

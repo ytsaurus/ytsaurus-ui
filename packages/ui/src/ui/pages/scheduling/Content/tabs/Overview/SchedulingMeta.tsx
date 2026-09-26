@@ -101,6 +101,8 @@ export function SchedulingMeta() {
                     case 'user_slots':
                         return format.NumberSmart(v) + ' Slot*hours';
                 }
+
+                return undefined;
             };
 
             res.items.push([

@@ -47,7 +47,8 @@ export class GeneralContentBase extends React.Component<Props> {
     onParentChange = (parentName = '', {isOutsideClick}: {isOutsideClick?: boolean} = {}) => {
         if (isOutsideClick) {
             this.forceUpdate();
-            return;
+
+            return undefined;
         }
 
         const {
@@ -55,7 +56,7 @@ export class GeneralContentBase extends React.Component<Props> {
             setAccountParent,
         } = this.props;
         if (parent === parentName) {
-            return;
+            return undefined;
         }
         return setAccountParent(name, parentName);
     };

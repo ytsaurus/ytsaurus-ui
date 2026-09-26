@@ -195,7 +195,7 @@ export class YTGraphCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canv
         h: number;
     } & IconSrc) {
         if (!icon.src) {
-            return;
+            return undefined;
         }
 
         const {x, y} = this.state;

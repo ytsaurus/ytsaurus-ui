@@ -134,6 +134,8 @@ export function getProxies(type) {
             case PROXY_TYPE.CYPRESS:
                 return dispatch(getCypressProxies());
         }
+
+        return undefined;
     };
 }
 

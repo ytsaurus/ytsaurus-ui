@@ -79,5 +79,7 @@ export const onCellPreviewQueryResults = (
                 }
             }
         }
+
+        return undefined;
     };
 };

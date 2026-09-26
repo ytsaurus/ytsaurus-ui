@@ -22,4 +22,6 @@ export function prepareRuntime(operation) {
 
         return trees;
     }
+
+    return undefined;
 }

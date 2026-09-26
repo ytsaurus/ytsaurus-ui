@@ -106,6 +106,8 @@ function prepareEvents(events, params) {
 
         return preparedEventsData.events;
     }
+
+    return undefined;
 }
 
 export function prepareOperationEvents(operation) {

@@ -49,7 +49,9 @@ export const QueryEditorView = memo<Props>(function QueryEditorView({
     const runButtonDisabled = !isRunButtonActive;
 
     useEffect(() => {
-        if (!shouldPollClique || !queryCluster) return;
+        if (!shouldPollClique || !queryCluster) {
+            return undefined;
+        }
         const intervalId = setInterval(() => {
             dispatch(loadCliqueByCluster(QueryEngine.CHYT, queryCluster));
         }, INACTIVE_CLIQUE_REFRESH_INTERVAL);
