@@ -11,7 +11,7 @@ import {AUTH_FILE} from './contants';
 
 const headless = process.env.HEADLESS !== 'false';
 
-const {E2E_MATCH = '.spec.', E2E_TEST_DIR = './e2e'} = process.env;
+const {E2E_MATCH = '.spec.', E2E_SNAPSHOT_DIR, E2E_TEST_DIR = './e2e'} = process.env;
 const testMatch = new RegExp(E2E_MATCH.replace(/\./g, '\\.'));
 
 function storageState() {
@@ -24,6 +24,7 @@ function storageState() {
 export default defineConfig({
     timeout: 10000,
     testDir: E2E_TEST_DIR,
+    snapshotDir: E2E_SNAPSHOT_DIR,
     testMatch,
     /* Run tests in files in parallel */
     fullyParallel: headless,
