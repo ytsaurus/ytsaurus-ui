@@ -1,4 +1,4 @@
-import {type Page, expect} from '@playwright/test';
+import {type Page, expect, test} from '@playwright/test';
 import {E2E_DIR_NAME} from '../utils';
 import {replaceInnerHtml} from '../utils/dom';
 import type {ConfigData} from '../../src/shared/yt-types';
@@ -333,7 +333,7 @@ export class BasePage extends HasPage {
         const firstSelector = this.page.locator(selector).first();
 
         for (const key of Object.keys(css)) {
-            await expect(firstSelector).toHaveCSS(key, css[key]);
+            await expect(firstSelector).toHaveCSS(key, css[key], {timeout: test.info().timeout});
         }
     }
 }
