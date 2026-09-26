@@ -537,6 +537,7 @@ export interface ConfigData {
 export type PipelineParams = {
     pipeline_path: string;
     output_format?: 'web_json';
+    spec_path?: string;
 };
 
 export type TableParams = {
