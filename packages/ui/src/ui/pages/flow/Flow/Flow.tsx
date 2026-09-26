@@ -1,14 +1,15 @@
-import {Button, Flex, Link} from '@gravity-ui/uikit';
+import {Button, Flex, Link, Spin} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {Redirect, Route, Switch} from 'react-router';
 import {Page} from '../../../../shared/constants/settings';
 import {formatByParams} from '../../../../shared/utils/format';
 import {ClipboardButton, MetaTable} from '@ytsaurus/components';
-import Icon from '../../../components/Icon/Icon';
+import Icon, {type IconName} from '../../../components/Icon/Icon';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';
 import Tabs from '../../../components/Tabs/Tabs';
 import {YTErrorInline} from '../../../containers/YTErrorInline/YTErrorInline';
+import {DialogWrapper} from '../../../components/DialogWrapper/DialogWrapper';
 import {useUpdater} from '../../../hooks/use-updater';
 import format from '../../../common/hammer/format';
 import {
@@ -18,16 +19,21 @@ import {
 import {loadFlowStatus, updateFlowState} from '../../../store/actions/flow/status';
 import {useFlowExecuteQuery} from '../../../store/api/yt/flow';
 import {FlowTab} from '../../../store/reducers/flow/filters';
+import {type FlowStateAction} from '../../../store/reducers/flow/status';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
     selectFlowCurrentComputation,
     selectFlowCurrentWorker,
     selectFlowPipelinePath,
 } from '../../../store/selectors/flow/filters';
-import {selectFlowStatusData} from '../../../store/selectors/flow/status';
+import {
+    selectFlowActionInProgress,
+    selectFlowStatusData,
+} from '../../../store/selectors/flow/status';
 import {selectCluster} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 import {makeTabProps} from '../../../utils';
+import {toaster} from '../../../utils/toaster';
 import {FlowEntityTitle} from '../flow-components/FlowEntityHeader';
 import i18n from '../i18n';
 import './Flow.scss';
@@ -118,38 +124,126 @@ function FlowContent() {
     );
 }
 
-function FlowStatusToolbar() {
+const ACTION_POLLING_TIMEOUT = 3000;
+
+export function FlowStatusToolbar() {
     const dispatch = useDispatch();
 
     const pipeline_path = useSelector(selectFlowPipelinePath);
+    const actionInProgress = useSelector(selectFlowActionInProgress);
+    const status = useSelector(selectFlowStatusData);
 
     const updateFn = React.useCallback(() => {
         return dispatch(loadFlowStatus(pipeline_path));
     }, [pipeline_path, dispatch]);
 
-    useUpdater(updateFn);
+    // Watch the transition closely even if the user turned auto refresh off.
+    useUpdater(updateFn, {
+        timeout: actionInProgress ? ACTION_POLLING_TIMEOUT : undefined,
+        forceAutoRefresh: actionInProgress ? true : undefined,
+    });
 
-    const {onStart, onStop, onPause} = React.useMemo(() => {
-        return {
-            onStart: () => dispatch(updateFlowState({pipeline_path, state: 'start'})),
-            onStop: () => dispatch(updateFlowState({pipeline_path, state: 'stop'})),
-            onPause: () => dispatch(updateFlowState({pipeline_path, state: 'pause'})),
+    const [actionToConfirm, setActionToConfirm] = React.useState<FlowStateAction>();
+
+    React.useEffect(() => {
+        if (!actionInProgress) {
+            setActionToConfirm(undefined);
+        }
+    }, [actionInProgress]);
+
+    const {onStart, onStop, onPause, onConfirm} = React.useMemo(() => {
+        const sendAction = (action: FlowStateAction) =>
+            dispatch(updateFlowState({pipeline_path, state: action}));
+        const onAction = (action: FlowStateAction) => {
+            // The controller never moves a stopped pipeline to Paused.
+            if (action === 'pause' && status === 'Stopped') {
+                toaster.add({
+                    name: 'flow_pipeline_state',
+                    theme: 'warning',
+                    title: i18n('cannot-pause'),
+                    content: i18n('reason-stopped'),
+                });
+            } else if (actionInProgress && actionInProgress !== action) {
+                setActionToConfirm(action);
+            } else {
+                sendAction(action);
+            }
         };
-    }, [dispatch, pipeline_path]);
+        return {
+            onStart: () => onAction('start'),
+            onStop: () => onAction('stop'),
+            onPause: () => onAction('pause'),
+            onConfirm: (action: FlowStateAction) => {
+                setActionToConfirm(undefined);
+                sendAction(action);
+            },
+        };
+    }, [dispatch, pipeline_path, actionInProgress, status]);
 
     return (
         <Flex className={block('status-toolbar')} alignItems="baseline" gap={2}>
             <FlowMessagesLoaded />
-            <Button view="outlined" onClick={onStart}>
-                <Icon awesome="play-circle" /> {i18n('start')}
-            </Button>
-            <Button view="outlined" onClick={onPause}>
-                <Icon awesome="pause-circle" /> {i18n('pause')}
-            </Button>
-            <Button view="outlined" onClick={onStop}>
-                <Icon awesome="stop-circle" /> {i18n('stop')}
-            </Button>
+            <FlowStateButton
+                icon="play-circle"
+                title={i18n('start')}
+                progressTitle={i18n('starting')}
+                inProgress={actionInProgress === 'start'}
+                onClick={onStart}
+            />
+            <FlowStateButton
+                icon="pause-circle"
+                title={i18n('pause')}
+                progressTitle={i18n('pausing')}
+                inProgress={actionInProgress === 'pause'}
+                onClick={onPause}
+            />
+            <FlowStateButton
+                icon="stop-circle"
+                title={i18n('stop')}
+                progressTitle={i18n('stopping')}
+                inProgress={actionInProgress === 'stop'}
+                onClick={onStop}
+            />
+            {actionToConfirm && actionInProgress ? (
+                <DialogWrapper open onClose={() => setActionToConfirm(undefined)}>
+                    <DialogWrapper.Header caption={i18n('change-state')} />
+                    <DialogWrapper.Body>
+                        {i18n(`reason-${actionInProgress}`)} {i18n(`confirm-${actionToConfirm}`)}
+                    </DialogWrapper.Body>
+                    <DialogWrapper.Footer
+                        onClickButtonApply={() => onConfirm(actionToConfirm)}
+                        onClickButtonCancel={() => setActionToConfirm(undefined)}
+                        textButtonApply={i18n(actionToConfirm)}
+                        textButtonCancel={i18n('cancel')}
+                    />
+                </DialogWrapper>
+            ) : null}
         </Flex>
+    );
+}
+
+function FlowStateButton({
+    icon,
+    title,
+    progressTitle,
+    inProgress,
+    onClick,
+}: {
+    icon: IconName;
+    title: string;
+    progressTitle: string;
+    inProgress: boolean;
+    onClick: () => void;
+}) {
+    return (
+        <Button view="outlined" onClick={onClick} disabled={inProgress}>
+            {inProgress ? (
+                <Spin size="xs" className={block('action-spin')} />
+            ) : (
+                <Icon awesome={icon} />
+            )}{' '}
+            {inProgress ? progressTitle : title}
+        </Button>
     );
 }
 
