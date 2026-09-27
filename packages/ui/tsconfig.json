@@ -2,6 +2,7 @@
   "extends": "@gravity-ui/tsconfig/tsconfig.json",
   "compilerOptions": {
     "noImplicitOverride": true,
+    "noImplicitReturns": true,
     "target": "ES2018",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,

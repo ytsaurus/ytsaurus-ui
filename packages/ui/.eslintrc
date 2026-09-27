@@ -62,6 +62,7 @@
         {
             "files": ["*.js", "*.jsx"],
             "rules": {
+                "consistent-return": "error",
                 "no-shadow": "error",
                 "no-use-before-define": "error"
             }
@@ -69,6 +70,8 @@
         {
             "files": ["*.ts", "*.tsx"],
             "rules": {
+                "consistent-return": "off",
+                "@typescript-eslint/consistent-return": "off",
                 "@typescript-eslint/no-shadow": "error",
                 "@typescript-eslint/no-use-before-define": ["error", {
                     "functions": false
