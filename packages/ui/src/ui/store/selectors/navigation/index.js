@@ -36,6 +36,8 @@ export const selectParsedPath = createSelector(selectPath, (path) => {
     } catch (ex) {
         // eslint-disable-next-line no-console
         console.error(ex);
+
+        return undefined;
     }
 });
 export const selectActualPath = createSelector([selectPath, selectType], (path, type) => {

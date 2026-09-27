@@ -100,7 +100,8 @@ export function showUserEditorModal(username) {
                 type: USERS_EDIT_USER_DATA_FIELDS,
                 data: {showModal: true},
             });
-            return;
+
+            return undefined;
         }
 
         dispatch({type: USERS_EDIT_USER.REQUEST});

@@ -4,4 +4,6 @@ export function prepareError(operation) {
     if (operation.state === 'aborted' || operation.state === 'failed') {
         return ypath.getValue(operation, '/@result');
     }
+
+    return undefined;
 }

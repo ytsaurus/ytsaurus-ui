@@ -193,6 +193,8 @@ class Partitions extends Component {
                         aggregation: 'yes',
                     };
                 }
+
+                return undefined;
             },
         };
     }

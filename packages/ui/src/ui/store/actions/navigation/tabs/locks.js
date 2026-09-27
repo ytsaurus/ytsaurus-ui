@@ -65,6 +65,8 @@ function getTransactions(rowLocks) {
                     type: GET_LOCKS.SUCCESS,
                     data: {locks},
                 });
+
+                return undefined;
             })
             .catch((error) => {
                 dispatch({

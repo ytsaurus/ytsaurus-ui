@@ -243,6 +243,8 @@ export function loadChunks() {
                     if (isRetryFutile(error.code)) {
                         return {isRetryFutile: true};
                     }
+
+                    return undefined;
                 });
         }
     };
