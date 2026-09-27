@@ -85,6 +85,8 @@ export function createTable(path, attributes) {
                     });
                     return Promise.reject(error);
                 }
+
+                return undefined;
             });
     };
 }

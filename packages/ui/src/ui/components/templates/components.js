@@ -67,6 +67,8 @@ templates.add('components/nodes', {
 
             return hammer.format['Number'](item.IOWeight[mediumName]);
         }
+
+        return undefined;
     },
 
     host: templates.get('components').host,

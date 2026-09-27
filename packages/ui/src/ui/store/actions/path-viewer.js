@@ -15,7 +15,7 @@ import {
 const requests = new CancelHelper();
 const prepareAttributes = (attributes) => {
     if (!trim_(attributes)) {
-        return;
+        return undefined;
     }
 
     return map_(split_(attributes, ','), (name) => trim_(name));
@@ -65,6 +65,8 @@ export function loadData() {
                     }
                 });
         }
+
+        return undefined;
     };
 }
 

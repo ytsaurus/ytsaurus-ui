@@ -152,6 +152,8 @@ export class TabletsBase extends Component {
             } else {
                 return hammer.format['Number'](item[columnName]);
             }
+
+        return undefined;
     }
 
     static renderTabletId(item) {

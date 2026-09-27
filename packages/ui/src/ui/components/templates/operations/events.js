@@ -39,6 +39,8 @@ templates.add('operations/detail/events', {
                 </div>
             );
         }
+
+        return undefined;
     },
     state: printColumnAsReadableField,
 });
