@@ -26,7 +26,7 @@ const settings = {
 };
 
 export const ResultsTable = React.memo(
-    function ResultsTable({
+    function ResultsTableImpl({
         queryId,
         resultIndex,
         result,

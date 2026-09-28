@@ -87,7 +87,7 @@ type Props = {
     className?: string;
 };
 
-export const QueryResultDownloadManager = React.memo(function QueryResultDownloadManager({
+export const QueryResultDownloadManager = React.memo(function QueryResultDownloadManagerImpl({
     queryId,
     resultIndex,
     allColumns,

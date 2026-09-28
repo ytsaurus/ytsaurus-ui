@@ -8,7 +8,7 @@ type LinkAdapterProps = LinkProps & {
     navigate: () => void;
 };
 
-const LinkAdapter = forwardRef<HTMLAnchorElement, LinkAdapterProps>(function LinkAdapter(
+const LinkAdapter = forwardRef<HTMLAnchorElement, LinkAdapterProps>(function LinkAdapterImpl(
     {navigate, onClick, ...props},
     ref,
 ) {
@@ -21,7 +21,7 @@ export type RoutedLinkProps = LinkProps & {
     disablePreserveLocation?: boolean;
 };
 
-export const RoutedLink = forwardRef<HTMLAnchorElement, RoutedLinkProps>(function RoutedLink(
+export const RoutedLink = forwardRef<HTMLAnchorElement, RoutedLinkProps>(function RoutedLinkImpl(
     {disablePreserveLocation, ...linkProps},
     ref,
 ) {

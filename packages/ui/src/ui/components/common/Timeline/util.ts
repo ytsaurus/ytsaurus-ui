@@ -1,4 +1,3 @@
-/* eslint-disable valid-jsdoc */
 import moment, {type MomentInput, type unitOfTime} from 'moment';
 
 /** @deprecated */

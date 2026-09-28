@@ -11,7 +11,7 @@ type Props = {
     onChange: (columns: string[]) => void;
 };
 
-export const TableColumnsSelector = React.memo(function TableColumnsSelector({
+export const TableColumnsSelector = React.memo(function TableColumnsSelectorImpl({
     allColumns,
     columns,
     className,

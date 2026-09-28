@@ -346,6 +346,6 @@ export function loadQueryResultsErrors(
                 type: SET_QUERY_RESULTS_ERRORS,
                 data: {queryId: query.id, errors: resultsErrors},
             });
-        } catch (e) {}
+        } catch {}
     };
 }

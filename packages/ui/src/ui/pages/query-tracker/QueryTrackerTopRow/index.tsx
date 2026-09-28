@@ -60,7 +60,7 @@ const QueryTrackerTopRow: FC = () => {
                             annotations: {...annotations, title},
                         }),
                     );
-                } catch (err) {}
+                } catch {}
             }
         },
         [dispatch, id, annotations],

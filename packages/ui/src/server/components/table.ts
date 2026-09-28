@@ -46,7 +46,7 @@ export async function getColumnPreset(
     let columns: Array<string> = [];
     try {
         columns = JSON.parse(JSON.parse(result).columns_json);
-    } catch (e) {
+    } catch {
         throw new Error(`Failed to parse ${hash}-preset`);
     }
 

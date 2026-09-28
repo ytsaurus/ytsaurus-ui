@@ -554,7 +554,7 @@ function createNodeTagPredicate<K extends keyof typeof PropertiesByPredicate>(
                 return (node) => {
                     return some_(getTags(node), (tag) => re.test(tag));
                 };
-            } catch (e) {
+            } catch {
                 return () => false;
             }
         }

@@ -39,7 +39,7 @@ type Props = {
     minimized: boolean;
 };
 
-export const QueryResults = memo<Props>(function QueryResults({
+export const QueryResults = memo<Props>(function QueryResultsImpl({
     query,
     className,
     toolbar,

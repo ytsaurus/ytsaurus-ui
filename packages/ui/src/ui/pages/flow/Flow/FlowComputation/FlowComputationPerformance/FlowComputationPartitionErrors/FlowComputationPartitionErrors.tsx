@@ -21,8 +21,7 @@ const ROW_NAMES = [
 ] as const;
 type ErrorType = (typeof ROW_NAMES)[number];
 
-const COLUMN_NAMES = ['1m', '5m', '30m'] as const;
-type ErrorStatsColumn = (typeof COLUMN_NAMES)[number];
+type ErrorStatsColumn = '1m' | '5m' | '30m';
 
 type ErrorStatsRow = {type: ErrorType} & Partial<
     Record<ErrorStatsColumn, FlowComputationPartitionErrorsStatsItem>

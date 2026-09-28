@@ -184,11 +184,7 @@ function makeConverter<T>() {
     };
 }
 
-function converterByType(item: OptionDescription) {
-    return CONVERTER[item.type] ?? makeConverter<any>();
-}
-
-type Converter = ReturnType<typeof converterByType>;
+type Converter = ReturnType<typeof makeConverter>;
 
 function makeDialogField<FormValues = any>(
     item: OptionDescription,

@@ -75,7 +75,7 @@ function QueryReadyResultView({
 }
 
 export const QueryResultsView = React.memo(
-    function QueryResultsView({query, index}: {query: QueryItem; index: number}) {
+    function QueryResultsViewImpl({query, index}: {query: QueryItem; index: number}) {
         const result = useSelector((state: RootState) => selectQueryResult(state, query.id, index));
         const engine = useSelector(selectQueryEngine);
 

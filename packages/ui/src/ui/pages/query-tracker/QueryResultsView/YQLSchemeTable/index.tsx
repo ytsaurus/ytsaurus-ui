@@ -48,7 +48,7 @@ const config: Column<QueryResultColumn>[] = [
     },
 ];
 
-const SchemeTable = React.memo(function SchemeTable({result}: {result: QueryResultReadyState}) {
+const SchemeTable = React.memo(function SchemeTableImpl({result}: {result: QueryResultReadyState}) {
     return (
         <DataTable
             theme="yandex-cloud"

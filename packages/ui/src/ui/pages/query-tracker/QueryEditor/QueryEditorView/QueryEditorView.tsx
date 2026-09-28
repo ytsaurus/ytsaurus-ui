@@ -31,7 +31,7 @@ type Props = {
 
 const INACTIVE_CLIQUE_REFRESH_INTERVAL = 5000;
 
-export const QueryEditorView = memo<Props>(function QueryEditorView({
+export const QueryEditorView = memo<Props>(function QueryEditorViewImpl({
     onStartQuery,
     pathNavigation,
     hideAco,

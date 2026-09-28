@@ -33,6 +33,6 @@ export function fetchOriginatingQueuePath(): AsyncAction {
                 type: SET_ORIGINATING_QUEUE_PATH,
                 data: originatingPath[0].output,
             });
-        } catch (error: any) {}
+        } catch {}
     };
 }

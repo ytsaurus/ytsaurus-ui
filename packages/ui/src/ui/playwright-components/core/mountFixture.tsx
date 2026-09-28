@@ -1,7 +1,10 @@
 import React from 'react';
 import {type MountFixture, type PlaywrightFixture} from './types';
 
-export const mountFixture: PlaywrightFixture<MountFixture> = async ({mount: baseMount}, use) => {
+export const mountFixture: PlaywrightFixture<MountFixture> = async (
+    {mount: baseMount},
+    provide,
+) => {
     const mount: MountFixture = async (component, options) => {
         return baseMount(
             <div
@@ -23,5 +26,5 @@ export const mountFixture: PlaywrightFixture<MountFixture> = async ({mount: base
         );
     };
 
-    await use(mount);
+    await provide(mount);
 };

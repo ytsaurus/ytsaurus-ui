@@ -130,6 +130,6 @@ export function reloadUserSettings(login: string): SettingsThunkAction {
                       })
                     : allData;
             dispatch({type: UPDATE_SETTING_DATA, data});
-        } catch (e) {}
+        } catch {}
     };
 }

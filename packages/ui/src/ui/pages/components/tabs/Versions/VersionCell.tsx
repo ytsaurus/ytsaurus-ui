@@ -57,7 +57,7 @@ function VersionCell(props: Props) {
         try {
             const res = new RegExp(reHashFromNodeVersion).exec(version);
             return res?.groups?.hash;
-        } catch (e) {
+        } catch {
             return undefined;
         }
     }, [version]);

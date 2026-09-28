@@ -72,7 +72,7 @@ function getToken() {
 export const secureDecoding = (value: string) => {
     try {
         return unipika.decode(value);
-    } catch (e) {
+    } catch {
         return value;
     }
 };

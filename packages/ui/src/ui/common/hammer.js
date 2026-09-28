@@ -1,5 +1,3 @@
-/* eslint-env commonjs */
-
 import hammerExt from '@ytsaurus/interface-helpers/lib/hammer';
 
 import {countValues, prepare} from './hammer/aggregation';

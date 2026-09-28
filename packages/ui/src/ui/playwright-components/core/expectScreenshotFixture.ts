@@ -12,7 +12,7 @@ const defaultParams: CaptureScreenshotParams = {
 
 export const expectScreenshotFixture: PlaywrightFixture<ExpectScreenshotFixture> = async (
     {page},
-    use,
+    provide,
     testInfo,
 ) => {
     let counter = 0;
@@ -71,5 +71,5 @@ export const expectScreenshotFixture: PlaywrightFixture<ExpectScreenshotFixture>
         }
     };
 
-    await use(expectScreenshot);
+    await provide(expectScreenshot);
 };

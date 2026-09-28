@@ -51,7 +51,7 @@ export function prepareHeaders(headers) {
             const params = JSON.parse(responseParameters);
 
             return params['omitted_inaccessible_columns'] || [];
-        } catch (err) {
+        } catch {
             return [];
         }
     }
@@ -104,7 +104,7 @@ export function getParsedError(error) {
     let message;
     try {
         message = JSON.parse(error).message;
-    } catch (err) {
+    } catch {
         message = i18n('alert_table-reader-error');
     }
 

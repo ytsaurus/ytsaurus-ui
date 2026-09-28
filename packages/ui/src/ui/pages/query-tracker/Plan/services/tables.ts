@@ -49,7 +49,7 @@ export function parseTablePath(text: string) {
 export function parseRelativePath(path: string): YPathItem[] {
     try {
         return ypath.YPath.parseRelative(prepareYpathPath(path));
-    } catch (error) {
+    } catch {
         return [];
     }
 }

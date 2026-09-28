@@ -19,7 +19,7 @@ type Props = {
     setResultViewMode: (v: ResultMode) => void;
 };
 
-export const ResultView = memo<Props>(function ResultView({
+export const ResultView = memo<Props>(function ResultViewImpl({
     query,
     resultViewMode,
     setResultViewMode,

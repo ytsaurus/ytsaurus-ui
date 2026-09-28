@@ -106,7 +106,7 @@ export const summarizeConversationTitle =
             });
 
             dispatch(setConversations({items: newConversations}));
-        } catch (e) {}
+        } catch {}
     };
 
 const TITLE_GENERATION_FREQUENCY = 5;

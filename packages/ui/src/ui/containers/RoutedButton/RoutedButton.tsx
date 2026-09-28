@@ -8,7 +8,7 @@ type ButtonAdapterProps = ButtonLinkProps & {
     navigate: () => void;
 };
 
-const ButtonAdapter = forwardRef<HTMLAnchorElement, ButtonAdapterProps>(function ButtonAdapter(
+const ButtonAdapter = forwardRef<HTMLAnchorElement, ButtonAdapterProps>(function ButtonAdapterImpl(
     {navigate, onClick, ...props},
     ref,
 ) {
@@ -21,12 +21,11 @@ export type RoutedButtonProps = ButtonLinkProps & {
     disablePreserveLocation?: boolean;
 };
 
-export const RoutedButton = forwardRef<HTMLAnchorElement, RoutedButtonProps>(function RoutedButton(
-    {disablePreserveLocation, ...buttonProps},
-    ref,
-) {
-    const {href} = buttonProps;
-    const to = disablePreserveLocation ? href : () => makeRoutedURL(href);
+export const RoutedButton = forwardRef<HTMLAnchorElement, RoutedButtonProps>(
+    function RoutedButtonImpl({disablePreserveLocation, ...buttonProps}, ref) {
+        const {href} = buttonProps;
+        const to = disablePreserveLocation ? href : () => makeRoutedURL(href);
 
-    return <RouterLink {...buttonProps} component={ButtonAdapter} to={to} ref={ref} />;
-});
+        return <RouterLink {...buttonProps} component={ButtonAdapter} to={to} ref={ref} />;
+    },
+);

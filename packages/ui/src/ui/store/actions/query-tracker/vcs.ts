@@ -166,7 +166,7 @@ export const getRepositoryContent =
             dispatch(setListFilter(''));
             dispatch(setListError(false));
             dispatch(setList(result));
-        } catch (e) {
+        } catch {
             dispatch(setListError(true));
         } finally {
             dispatch(setPath(path));
@@ -212,7 +212,7 @@ export const getContentByPath =
                     content: response.data,
                 }),
             );
-        } catch (e) {
+        } catch {
             await dispatch(getRepositoryContent(path));
         }
     };

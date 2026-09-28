@@ -1,5 +1,3 @@
-/* eslint-env node */
-
 // Stabilize Date/moment formatting across developer machines and CI.
 process.env.TZ = 'UTC';
 

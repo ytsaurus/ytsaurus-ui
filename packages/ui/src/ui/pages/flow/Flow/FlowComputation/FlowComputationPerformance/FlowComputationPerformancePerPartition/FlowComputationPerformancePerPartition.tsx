@@ -15,8 +15,7 @@ import i18n from './i18n';
 const ROW_NAMES = ['cpu_usage', 'memory_usage', 'messages_per_second', 'bytes_per_second'] as const;
 type PerformanceRowName = (typeof ROW_NAMES)[number];
 
-const COLUMN_NAMES = ['total', 'average', 'max', 'min'] as const;
-type PerformanceColumn = (typeof COLUMN_NAMES)[number];
+type PerformanceColumn = 'total' | 'average' | 'max' | 'min';
 
 type PerformanceRow = {name: PerformanceRowName} & Partial<Record<PerformanceColumn, number>> &
     Partial<Record<`${PerformanceColumn}_example_partition`, string>>;

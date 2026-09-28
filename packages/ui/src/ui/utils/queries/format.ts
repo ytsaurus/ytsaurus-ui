@@ -44,7 +44,7 @@ export function formatResults(
 ) {
     try {
         return unipika.format(value, settings);
-    } catch (error) {
+    } catch {
         let valueStr: string;
         try {
             valueStr = JSON.stringify(value);

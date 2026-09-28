@@ -75,7 +75,7 @@ export const getDirectoryContent: Props = async ({model, monacoCursorPosition, e
 
             return acc;
         }, []);
-    } catch (e) {
+    } catch {
         return [];
     }
 };

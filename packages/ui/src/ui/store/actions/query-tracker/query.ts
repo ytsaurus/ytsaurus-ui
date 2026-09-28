@@ -372,7 +372,7 @@ export function loadQuery(
                 },
             });
             dispatch(loadVisualization());
-        } catch (e: unknown) {
+        } catch {
             dispatch(createEmptyQuery());
         } finally {
             dispatch(setCurrentClusterToQuery());
@@ -464,7 +464,7 @@ export function createQueryFromTablePath(
             } else {
                 dispatch(createEmptyQuery(engine));
             }
-        } catch (e) {
+        } catch {
             dispatch(createEmptyQuery(engine));
         } finally {
             dispatch(checkCliqueControllerIsSupported(cluster, engine));

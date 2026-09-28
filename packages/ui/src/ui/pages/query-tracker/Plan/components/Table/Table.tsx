@@ -195,7 +195,7 @@ type TableRowProps<T> = {
     active?: boolean;
     selected?: boolean;
 };
-const TableRow = React.memo(function TableRow({
+const TableRow = React.memo(function TableRowImpl({
     row,
     index,
     columns,

@@ -336,7 +336,7 @@ export function onSuccessLogin(login: string): YTThunkAction {
     return async (dispatch) => {
         try {
             await await dispatch(reloadUserSettings(login));
-        } catch (e) {}
+        } catch {}
         YT.parameters.login = login;
         dispatch({
             type: GLOBAL_PARTIAL,

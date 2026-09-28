@@ -25,7 +25,7 @@ export const prepareSeparatorValue = (v?: string) => {
     let res = v || '';
     try {
         res = JSON.parse(`"${v}"`);
-    } catch (e) {}
+    } catch {}
 
     let error;
     // getting size in bytes `new Blob(['ы']).size !== 'ы'.length`

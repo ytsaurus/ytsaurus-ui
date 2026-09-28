@@ -30,7 +30,7 @@ export function customEncodeURIComponent(value: string, toEncode = TO_ENCODE) {
                 res += encodeURI(c);
             }
         }
-    } catch (e) {
+    } catch {
         // emoji fix
         return encodeURI(value);
     }
@@ -50,7 +50,7 @@ export function parseSortStateArray(s: string) {
             if (column && order) {
                 res.push({column, order});
             }
-        } catch (e) {}
+        } catch {}
     });
 
     return res.length ? res : EMPTY_ARRAY;

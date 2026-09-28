@@ -15,7 +15,7 @@ export const parseStreamLine = (line: string): LLMStreamEvent | {text: string} |
 
     try {
         return JSON.parse(line.substring(6));
-    } catch (e) {
+    } catch {
         return null;
     }
 };
@@ -48,7 +48,7 @@ export const createMcpItem = (
                     value: result,
                 };
             }
-        } catch (e) {}
+        } catch {}
     }
 
     if (item.name === 'get_table_schema' && item.output) {
@@ -108,7 +108,7 @@ export const parseConversationItems = (
                         });
                         return acc;
                     }
-                } catch (e) {}
+                } catch {}
             }
 
             if (item.name === 'get_table_schema') {

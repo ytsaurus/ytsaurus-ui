@@ -16,7 +16,7 @@ import i18n from './i18n';
 
 const b = block('query-meta-info');
 
-export const QueryMetaInfo = React.memo(function QueryMetaInfo({
+export const QueryMetaInfo = React.memo(function QueryMetaInfoImpl({
     query,
     className,
 }: {

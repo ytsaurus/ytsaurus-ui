@@ -34,7 +34,7 @@ const useQueryDuration = (query: QueryItem) => {
     return duration;
 };
 
-export const QueryDuration = React.memo(function QueryDuration({
+export const QueryDuration = React.memo(function QueryDurationImpl({
     query,
     className,
 }: QueryDurationProps) {

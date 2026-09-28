@@ -29,7 +29,7 @@ export const textFileValidator = async (file: File): Promise<ValidationResult> =
         decoder.decode(arrayBuffer);
 
         return {isValid: true};
-    } catch (error) {
+    } catch {
         return {isValid: false, error: i18n('alert_invalid-text-file')};
     }
 };
