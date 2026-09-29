@@ -13,6 +13,7 @@ export const docsUrls = {
     'common:quota_request': '',
     'common:quotas#request_quota': '',
     'common:regular_system_processes': '',
+    'cypress:links': `${baseUrl}/user-guide/storage/links`,
     'cypress:ttl': `${baseUrl}/user-guide/storage/cypress#TTL`,
     'dynamic-tables:concepts#tablet_cell_bundles': `${baseUrl}/user-guide/dynamic-tables/concepts#tablet_cell_bundles`,
     'dynamic-tables:cross-dc': `${baseUrl}/user-guide/dynamic-tables/dynamic-tables-resources#georaspredelyonnye-klastery-cross-dc`,

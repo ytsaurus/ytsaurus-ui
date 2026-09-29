@@ -11,5 +11,8 @@
   "context_enter-id": "Enter id...",
   "action_set-transaction": "Set transaction",
   "action_refresh-page": "Refresh page [Shift+R]",
-  "action_restore": "Restore"
+  "action_restore": "Restore",
+  "value_symlink": "Symlink",
+  "context_symlink-description": "This link is a node of type link referencing another target object.",
+  "action_documentation": "Documentation"
 }
