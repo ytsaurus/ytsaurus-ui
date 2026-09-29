@@ -15,6 +15,10 @@ const LONG_POOL_TREE_NAME = 'physical_aarch64_with_a_very_long_pool_tree_name';
 
 test.use({viewport: {width: 1280, height: 900}});
 
+test.beforeEach(({browserName}) => {
+    test.slow(browserName === 'webkit', 'Edit operation dialog is slower in WebKit');
+});
+
 async function waitForSpecification(page: Page) {
     const dialog = page.getByRole('dialog');
 
@@ -73,7 +77,13 @@ test('EditOperationDialog: Specification form', async ({mount, expectScreenshot,
     await expectScreenshot({component: dialog});
 });
 
-test('EditOperationDialog: Specification JSON', async ({mount, expectScreenshot, page}) => {
+test('EditOperationDialog: Specification JSON', async ({
+    browserName,
+    mount,
+    expectScreenshot,
+    page,
+}) => {
+    test.slow(browserName === 'chromium', 'Monaco input is slower under parallel load');
     await mount(<EditOperationDialogStories.Default />);
 
     const dialog = await waitForSpecification(page);
@@ -148,9 +158,11 @@ test('EditOperationDialog: Maximum failed jobs enables Save', async ({
 });
 
 test('EditOperationDialog: preserves JSON fields when switching editor modes', async ({
+    browserName,
     mount,
     page,
 }) => {
+    test.slow(browserName === 'chromium', 'Monaco input is slower under parallel load');
     await mount(<EditOperationDialogStories.Default />);
 
     await waitForSpecification(page);

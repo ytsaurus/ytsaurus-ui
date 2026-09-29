@@ -15,6 +15,10 @@ import {
     multipleSourcesFlowGraphHandler,
 } from '../__stories__/mocks';
 
+test.beforeEach(({browserName}) => {
+    test.slow(browserName === 'webkit', 'Flow graph rendering is slower in WebKit');
+});
+
 const anchor = 'yt-flow-graph-anchors__computation-anchor';
 const summary = 'yt-flow-graph-anchors__summary-inner';
 
