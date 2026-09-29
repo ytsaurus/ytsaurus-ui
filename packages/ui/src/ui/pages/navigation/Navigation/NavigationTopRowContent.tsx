@@ -3,7 +3,7 @@ import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
-import {Breadcrumbs, Flex, type Key} from '@gravity-ui/uikit';
+import {Breadcrumbs, Flex, type Key, Label, Text} from '@gravity-ui/uikit';
 
 import {getMetrics} from '../../../common/utils/metrics';
 
@@ -33,7 +33,7 @@ import {
 import {NavigationFavorites} from '../../../containers/NavigationFavorites';
 import {type FavouritesItem} from '../../../components/Favourites/Favourites';
 import {ClipboardButton, Escaped, MetaTable, Tooltip} from '@ytsaurus/components';
-import Link from '../../../containers/Link/Link';
+import {RoutedLink} from '../../../containers/RoutedLink/RoutedLink';
 import Editor from '../../../components/Editor/Editor';
 import Button from '../../../components/Button/Button';
 import Icon from '../../../components/Icon/Icon';
@@ -48,6 +48,9 @@ import {Tab} from '../../../constants/navigation';
 import {inTrash} from '../../../utils/navigation/restore-object';
 import {makeNavigationLink} from '../../../utils/app-url';
 import {decodeEscapedAbsPath} from '../../../utils/navigation';
+import {docsUrl} from '../../../config';
+import UIFactory from '../../../UIFactory';
+import {makeLink} from '../../../utils/utils';
 
 import i18n from './i18n';
 
@@ -111,23 +114,60 @@ function NavigationPathToClipboard() {
     );
 }
 
-function NavigationTargetPathButton({decodedTargetPath}: {decodedTargetPath: string}) {
+function NavigationTargetPathLabel({decodedTargetPath}: {decodedTargetPath: string}) {
+    const targetPathUrl = makeNavigationLink({path: decodedTargetPath});
+
     return (
-        <Link url={makeNavigationLink({path: decodedTargetPath})} routed>
-            <Tooltip
-                content={
-                    <Flex gap={1}>
-                        <MetaTable items={[{key: 'target_path', value: decodedTargetPath}]} />
-                        <ClipboardButton text={decodedTargetPath} inlineMargins view="flat" />
-                    </Flex>
-                }
-                placement={'bottom'}
-            >
-                <Button view="flat-info" selected qa="qa:navitation:target-path">
-                    <Icon awesome="link" />
-                </Button>
-            </Tooltip>
-        </Link>
+        <Tooltip
+            content={
+                <Flex direction="column" gap={3} spacing={{p: 3}}>
+                    <MetaTable
+                        alignItems="baseline"
+                        items={[
+                            {
+                                key: 'target_path',
+                                value: (
+                                    <Flex gap={1} wrap="nowrap" alignItems="center">
+                                        <Text ellipsis>
+                                            <RoutedLink
+                                                title={targetPathUrl}
+                                                href={targetPathUrl}
+                                                disablePreserveLocation
+                                            >
+                                                {decodedTargetPath}
+                                            </RoutedLink>
+                                        </Text>
+
+                                        <ClipboardButton
+                                            view="flat-secondary"
+                                            text={decodedTargetPath}
+                                            size="s"
+                                        />
+                                    </Flex>
+                                ),
+                            },
+                        ]}
+                    />
+
+                    <Text>
+                        {i18n('context_symlink-description')}{' '}
+                        {docsUrl(
+                            makeLink(
+                                UIFactory.docsUrls['cypress:links'],
+                                i18n('action_documentation'),
+                            ),
+                        )}
+                    </Text>
+                </Flex>
+            }
+            placement="bottom"
+        >
+            <RoutedLink href={targetPathUrl} disablePreserveLocation>
+                <Label theme="info" size="xs" interactive qa="qa:navigation:target-path">
+                    {i18n('value_symlink')}
+                </Label>
+            </RoutedLink>
+        </Tooltip>
     );
 }
 
@@ -234,7 +274,7 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
             view={'top-row'}
             beforeEditorContent={
                 showBeforeEditorContent ? (
-                    <NavigationTargetPathButton decodedTargetPath={decodedTargetPath} />
+                    <NavigationTargetPathLabel decodedTargetPath={decodedTargetPath} />
                 ) : null
             }
             afterEditorContent={<NavigationPathToClipboard />}
@@ -282,12 +322,12 @@ function Transaction() {
         return (
             <div className={block('transaction')}>
                 <span className="elements-ellipsis">
-                    <Link
-                        routed
-                        url={`/${cluster}/${Page.NAVIGATION}?path=//sys/transactions/${transaction}`}
+                    <RoutedLink
+                        href={`/${cluster}/${Page.NAVIGATION}?path=//sys/transactions/${transaction}`}
+                        disablePreserveLocation
                     >
                         {transaction}
-                    </Link>
+                    </RoutedLink>
                 </span>
                 <Button
                     size="m"
