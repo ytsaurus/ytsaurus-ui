@@ -430,7 +430,7 @@ interface ShowMoreInlineProps {
     strippedDown: string;
     onClick?(): void;
 }
-function ShowMoreInline({formattedValue, strippedDown, onClick}: ShowMoreInlineProps) {
+export function ShowMoreInline({formattedValue, strippedDown, onClick}: ShowMoreInlineProps) {
     const [showFull, setShowFull] = React.useState(false);
     return (
         <React.Fragment>
@@ -464,7 +464,7 @@ interface TableCellProps {
     tag?: string;
 }
 
-function TableCell({children, rawValue, onPreviewClick, isTruncated, tag}: TableCellProps) {
+export function TableCell({children, rawValue, onPreviewClick, isTruncated, tag}: TableCellProps) {
     const cellNodeRef = React.useRef<HTMLDivElement>(null);
     const [mount, setMount] = React.useState(false);
 

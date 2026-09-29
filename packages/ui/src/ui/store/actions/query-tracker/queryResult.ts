@@ -179,6 +179,7 @@ export function loadQueryResult(
                     queryId,
                     index: resultIndex,
                     results: formattedResult,
+                    rawResult: result,
                     columns,
                     meta,
                 },
@@ -227,6 +228,7 @@ export function injectQueryResults({
                 rowIndex,
                 columnName,
                 cellData,
+                rawCell: {value, type: types[Number(typeIndex)]},
             },
         });
     };
@@ -288,6 +290,7 @@ export function updateQueryResult(
                         queryId,
                         index: resultIndex,
                         results: formattedResult,
+                        rawResult: result,
                         settings,
                         page,
                     },
