@@ -17,9 +17,10 @@ jobs:
     steps:
       - name: Start YC runner
         id: start-yc-runner
-        uses: yc-actions/yc-github-runner@v1
+        uses: yc-actions/yc-github-runner@v2
         with:
           mode: start
+          runner-version: "2.337.0"
           yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
           github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
           folder-id: b1gcvl619mdunf1cqqbv
@@ -319,7 +320,7 @@ jobs:
     if: ${{ always() }}
     steps:
       - name: Stop YC runner
-        uses: yc-actions/yc-github-runner@v1
+        uses: yc-actions/yc-github-runner@v2
         with:
           mode: stop
           yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
