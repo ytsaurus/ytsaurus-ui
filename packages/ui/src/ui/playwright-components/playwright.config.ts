@@ -95,6 +95,7 @@ const config: PlaywrightTestConfig = {
         },
         {
             name: 'webkit',
+            workers: process.env.CI ? 2 : undefined,
             use: {
                 ...devices['Desktop Safari'],
                 deviceScaleFactor: 2,
