@@ -459,12 +459,104 @@ describe('hammer.tree-list', () => {
                         'entry3',
                     ]);
                 });
+
+                it('Sorts leaves at every tree level', () => {
+                    treeList.attachTreeLeaves(
+                        treeNodes,
+                        {
+                            leaf4: {parent: 'entry1'},
+                            leaf3: {parent: 'entry1'},
+                            leaf2: {parent: ROOT_NODE},
+                            leaf1: {parent: ROOT_NODE},
+                        },
+                        (item) => item.parent,
+                    );
+
+                    sortedNodes = treeList.sortTree(
+                        treeNodes[ROOT_NODE],
+                        {field: 'name', asc: true},
+                        FIELDS,
+                    );
+
+                    expect(getChildrenNames(sortedNodes.leaves)).toEqual(['leaf1', 'leaf2']);
+                    expect(getChildrenNames(sortedNodes.children[0].leaves)).toEqual([
+                        'leaf3',
+                        'leaf4',
+                    ]);
+                });
+
+                it('Handles empty and single-item collections', () => {
+                    const singleChildRoot = treeList.prepareTree(
+                        {entry1: entries.entry1},
+                        parentGetter,
+                    )[ROOT_NODE];
+
+                    sortedNodes = treeList.sortTree(
+                        singleChildRoot,
+                        {field: 'name', asc: true},
+                        FIELDS,
+                    );
+
+                    expect(getChildrenNames(sortedNodes.children)).toEqual(['entry1']);
+                    expect(sortedNodes.leaves).toEqual([]);
+                    expect(sortedNodes.children[0].children).toEqual([]);
+                    expect(sortedNodes.children[0].leaves).toEqual([]);
+                });
             });
         });
 
         describe('flattenTree()', () => {
             it('Exports', () => {
                 expect(treeList.flattenTree).toBeDefined();
+            });
+
+            it('Returns an empty list for an empty root', () => {
+                expect(
+                    treeList.flattenTree({
+                        name: ROOT_NODE,
+                        attributes: {},
+                        children: [],
+                        leaves: [],
+                    }),
+                ).toEqual([]);
+            });
+
+            it('Flattens leaves before children and adds level and key', () => {
+                const root = {
+                    name: ROOT_NODE,
+                    attributes: {},
+                    children: [
+                        {
+                            name: 'child',
+                            attributes: {payload: 1},
+                            children: [],
+                            leaves: [
+                                {
+                                    name: 'nested-leaf',
+                                    attributes: {payload: 2},
+                                    isLeafNode: true,
+                                },
+                            ],
+                        },
+                    ],
+                    leaves: [
+                        {
+                            name: 'root-leaf',
+                            attributes: {payload: 3},
+                            isLeafNode: true,
+                        },
+                    ],
+                };
+                const originalRoot = cloneDeep_(root);
+
+                expect(
+                    treeList.flattenTree(root).map((node) => pick_(node, 'name', 'level', 'key')),
+                ).toEqual([
+                    {name: 'root-leaf', level: 0, key: 'Root/root-leaf'},
+                    {name: 'child', level: 0, key: 'Root/child'},
+                    {name: 'nested-leaf', level: 1, key: 'Root/child/nested-leaf'},
+                ]);
+                expect(root).toEqual(originalRoot);
             });
         });
     });
