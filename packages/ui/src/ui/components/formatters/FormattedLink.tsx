@@ -1,12 +1,30 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {withRouter} from 'react-router';
+import {type RouteComponentProps, withRouter} from 'react-router';
 
 import {computeStateQuery} from '../../utils/index';
-import Link from '../../containers/Link/Link';
+import Link, {type LinkProps} from '../../containers/Link/Link';
 import FormattedText from './FormattedText';
 
-function FormattedLink(props) {
+type RouteParams = {
+    cluster?: string;
+};
+
+export type FormattedLinkProps = {
+    state: {
+        page: string;
+        cluster?: string;
+        tab?: string;
+        [key: string]: unknown;
+    };
+    text: string | boolean | number | React.ReactElement;
+    className?: string;
+    asHTML?: boolean;
+    title?: string;
+    theme?: LinkProps['theme'];
+    onClick?: LinkProps['onClick'];
+};
+
+function FormattedLink(props: FormattedLinkProps & RouteComponentProps<RouteParams>) {
     const {state, theme = 'ghost', className, text, match, onClick, ...rest} = props;
     const url = computeStateQuery({cluster: match.params.cluster, ...state});
     return (
@@ -15,21 +33,4 @@ function FormattedLink(props) {
         </Link>
     );
 }
-FormattedLink.propTypes = {
-    state: PropTypes.shape({
-        page: PropTypes.string.isRequired,
-        cluster: PropTypes.string,
-        tab: PropTypes.string,
-    }).isRequired,
-    text: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
-    className: PropTypes.string,
-    theme: PropTypes.string,
-    onClick: PropTypes.func,
-    // from react-router
-    match: PropTypes.shape({
-        params: PropTypes.shape({
-            cluster: PropTypes.string,
-        }),
-    }),
-};
 export default withRouter(FormattedLink);

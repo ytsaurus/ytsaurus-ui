@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
 import {ClipboardButton} from '@ytsaurus/components';
@@ -8,11 +7,11 @@ import './FormattedId.scss';
 
 const block = cn('table-formatters-id');
 
-FormattedId.propTypes = {
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+export type FormattedIdProps = {
+    id: string | number;
 };
 
-export default function FormattedId({id}) {
+export default function FormattedId({id}: FormattedIdProps) {
     const [hovered, setHovered] = useState(false);
     const handleMouseEnter = () => setHovered(true);
     const handleMouseLeave = () => setHovered(false);
