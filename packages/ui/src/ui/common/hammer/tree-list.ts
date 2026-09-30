@@ -287,24 +287,31 @@ export function flattenTree<T extends TreeNode<unknown, unknown>>(
     level = 0,
     basePath = '',
 ) {
+    const result: Array<TreeNodeOrLeaf<T> & FlatItemDetails> = [];
+
+    appendFlattenedTree(result, treeNode, level, basePath);
+
+    return result;
+}
+
+function appendFlattenedTree<T extends TreeNode<unknown, unknown>>(
+    result: Array<TreeNodeOrLeaf<T> & FlatItemDetails>,
+    treeNode: T | T['children'][number],
+    level: number,
+    basePath: string,
+) {
     const currentPath = basePath + treeNode.name + '/';
 
-    let tree: Array<TreeNodeOrLeaf<T> & FlatItemDetails> = [];
+    for (const leaf of treeNode.leaves ?? []) {
+        result.push(augmentTreeNode(leaf, level, currentPath));
+    }
 
-    tree = tree.concat(
-        map_(treeNode.leaves, (leaf) => {
-            return augmentTreeNode(leaf, level, currentPath);
-        }),
-    );
-
-    each_(treeNode.children, (childNode) => {
+    for (const childNode of treeNode.children ?? []) {
         const node = augmentTreeNode(childNode, level, currentPath);
 
-        tree.push(node);
-        tree = tree.concat(flattenTree(node, level + 1, currentPath));
-    });
-
-    return tree;
+        result.push(node);
+        appendFlattenedTree(result, node, level + 1, currentPath);
+    }
 }
 
 export function treeForEach<T extends {children?: Array<T>}>(
