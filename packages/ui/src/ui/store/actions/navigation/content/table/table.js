@@ -436,6 +436,7 @@ export function updateTableData() {
                         const keyColumns = selectKeyColumns(state);
                         newOffsetValue = Query.prepareKey(
                             getColumnsValues(updatedRows[0], keyColumns),
+                            yqlTypes,
                         );
                     }
 
