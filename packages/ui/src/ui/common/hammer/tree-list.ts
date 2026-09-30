@@ -247,8 +247,12 @@ export function sortTree<T extends TreeNode<unknown, unknown>, FieldT extends st
     sortInfo: OldSortState,
     fields: Record<FieldT, FieldDescr<T>>,
 ) {
-    treeNode.children = utils.sort(treeNode.children, sortInfo, fields);
-    treeNode.leaves = utils.sort(treeNode.leaves, sortInfo, fields);
+    if (treeNode.children?.length > 1) {
+        treeNode.children = utils.sort(treeNode.children, sortInfo, fields);
+    }
+    if (treeNode.leaves?.length > 1) {
+        treeNode.leaves = utils.sort(treeNode.leaves, sortInfo, fields);
+    }
 
     treeNode.children = map_(treeNode.children, (c) => {
         const childEntry = c as typeof treeNode;
