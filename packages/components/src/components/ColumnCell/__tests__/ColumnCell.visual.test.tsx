@@ -52,7 +52,7 @@ test('ColumnCell: YsonNumber', async ({mount, expectScreenshot}) => {
     await expectScreenshot();
 });
 
-test('ColumnCell: IncompleteYson', async ({mount, expectScreenshot}) => {
+test('ColumnCell: IncompleteYson', async ({mount, expectScreenshot, page}) => {
     await mount(
         columnCellVisualTree(
             <ColumnCell
@@ -65,6 +65,20 @@ test('ColumnCell: IncompleteYson', async ({mount, expectScreenshot}) => {
         ),
     );
     await expectScreenshot();
+    await expectScreenshot({
+        nameSuffix: 'Preview',
+        beforeScreenshot: () => page.locator('.yt-column-cell').hover({position: {x: 1, y: 1}}),
+    });
+    await expectScreenshot({
+        nameSuffix: 'Tooltip',
+        component: page,
+        beforeScreenshot: async () => {
+            await page.getByRole('button', {name: 'Click to load the complete value'}).hover();
+            await page
+                .getByText('Click to load the complete value', {exact: true})
+                .waitFor({state: 'visible'});
+        },
+    });
 });
 
 test('ColumnCell: RawString', async ({mount, expectScreenshot}) => {

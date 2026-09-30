@@ -160,19 +160,58 @@ export function ColumnCell({
 
     const [isPreviewInProgress, setPreviewInProgress] = React.useState(false);
 
+    const showPreview = async () => {
+        if (isPreviewInProgress) {
+            return;
+        }
+
+        setPreviewInProgress(true);
+        try {
+            await onShowPreview(columnName, rowIndex, tag);
+        } finally {
+            setPreviewInProgress(false);
+        }
+    };
+
+    const handleIncompleteValueKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            showPreview();
+        }
+    };
+
+    const cellContent = isIncompleteTagged ? (
+        <Label theme="warning" text={i18n('incomplete-type', {tag})} />
+    ) : (
+        visibleValue
+    );
+
     return (
         <div
             className={block(null, className) /*dataTableBlock('value')*/}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
-            {isIncompleteTagged ? (
-                <Label theme="warning" text={i18n('incomplete-type', {tag})} />
+            {isIncompleteValue ? (
+                <Tooltip content={i18n('load-complete-value')}>
+                    <div
+                        className={block('incomplete-value')}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={i18n('load-complete-value')}
+                        aria-disabled={isPreviewInProgress}
+                        data-qa="truncated-preview-value"
+                        onClick={showPreview}
+                        onKeyDown={handleIncompleteValueKeyDown}
+                    >
+                        {cellContent}
+                    </div>
+                </Tooltip>
             ) : (
-                visibleValue
+                cellContent
             )}
             {(hovered || isIncompleteTagged) && (
-                <div className={block('control-button-wrapper')}>
+                <div className={block('control-button-wrapper', {preview: isIncompleteValue})}>
                     <Flex alignItems="center">
                         {value && !isIncompleteValue && (
                             <Tooltip
@@ -194,19 +233,10 @@ export function ColumnCell({
                         )}
                         {isIncompleteValue && onShowPreview && (
                             <Button
-                                view="flat-secondary"
+                                view="flat"
                                 size="m"
                                 qa="truncated-preview-button"
-                                onClick={async () => {
-                                    setPreviewInProgress(true);
-                                    try {
-                                        if (!isPreviewInProgress) {
-                                            await onShowPreview(columnName, rowIndex, tag);
-                                        }
-                                    } finally {
-                                        setPreviewInProgress(false);
-                                    }
-                                }}
+                                onClick={showPreview}
                                 loading={isPreviewInProgress}
                             >
                                 <UIKitIcon data={Eye} size="12" />
