@@ -1,4 +1,4 @@
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import * as monaco from 'monaco-editor/editor/editor.api';
 
 const lightRules = [
     {token: 'tablepath', foreground: '3e999f'},

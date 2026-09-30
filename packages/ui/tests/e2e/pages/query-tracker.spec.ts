@@ -71,11 +71,11 @@ class QueryTrackerPage extends BasePage {
     }
 
     async waitForSuggest(suggest: string) {
-        await expect(this.page.locator(`[aria-label="${suggest}"]`)).toBeVisible();
+        await expect(this.page.getByLabel(suggest, {exact: true})).toBeVisible();
     }
 
     async clickToSuggest(suggest: string) {
-        return this.page.locator(`[aria-label="${suggest}"]`).click();
+        return this.page.getByLabel(suggest, {exact: true}).click();
     }
 
     async setCursor(position: number) {
@@ -185,7 +185,7 @@ test.describe('@QueryTracker: Suggest scenarios', () => {
         test(`After typing SELECT * FROM  we expect next suggest: \`//\` with cursor should be right after \`//`, async () => {
             await queryTrackerPage.fillQueryEditor(['SELECT * FROM ']);
 
-            await queryTrackerPage.clickToSuggest('`//`');
+            await queryTrackerPage.clickToSuggest('`//`, Snippet');
 
             await queryTrackerPage.waitForText('SELECT * FROM `//`');
 
@@ -199,7 +199,7 @@ test.describe('@QueryTracker: Suggest scenarios', () => {
 
             await queryTrackerPage.waitForText('SELECT * FROM ``');
 
-            await queryTrackerPage.clickToSuggest('//');
+            await queryTrackerPage.clickToSuggest('//, Snippet');
 
             await queryTrackerPage.type('cursor_position');
 
@@ -225,7 +225,7 @@ test.describe('@QueryTracker: Suggest scenarios', () => {
 
             await queryTrackerPage.type('//');
 
-            await queryTrackerPage.clickToSuggest('tmp');
+            await queryTrackerPage.clickToSuggest('tmp, Folder');
 
             await queryTrackerPage.waitForText('SELECT * FROM `//tmp`');
         });
@@ -237,7 +237,7 @@ test.describe('@QueryTracker: Suggest scenarios', () => {
 
             await queryTrackerPage.type('//tm');
 
-            await queryTrackerPage.clickToSuggest('tmp');
+            await queryTrackerPage.clickToSuggest('tmp, Folder');
 
             await queryTrackerPage.waitForText('SELECT * FROM `//tmp`');
         });
@@ -253,11 +253,17 @@ test.describe('@QueryTracker: Suggest scenarios', () => {
 
             await queryTrackerPage.type(' ');
 
-            await queryTrackerPage.waitForSuggest(`empty (\`${E2E_DIR}/static-table\`), Column`);
+            await queryTrackerPage.waitForSuggest(
+                `empty (\`${E2E_DIR}/static-table\`), Column, Field`,
+            );
 
-            await queryTrackerPage.waitForSuggest(`key (\`${E2E_DIR}/static-table\`), Column`);
+            await queryTrackerPage.waitForSuggest(
+                `key (\`${E2E_DIR}/static-table\`), Column, Field`,
+            );
 
-            await queryTrackerPage.waitForSuggest(`value (\`${E2E_DIR}/static-table\`), Column`);
+            await queryTrackerPage.waitForSuggest(
+                `value (\`${E2E_DIR}/static-table\`), Column, Field`,
+            );
         });
     });
 });

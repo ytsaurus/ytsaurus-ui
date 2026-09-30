@@ -98,7 +98,7 @@ export function registerLanguage(def: ILang): void {
         if (mod.provideInlineSuggestionsFunction) {
             languages.registerInlineCompletionsProvider(languageId, {
                 provideInlineCompletions: mod.provideInlineSuggestionsFunction,
-                freeInlineCompletions: () => {},
+                disposeInlineCompletions: () => {},
             });
         }
     });

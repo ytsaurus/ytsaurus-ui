@@ -1,4 +1,5 @@
 import {ServiceConfig} from '@gravity-ui/app-builder';
+import path from 'path';
 
 const analyzeBundle: Required<ServiceConfig>['client']['analyzeBundle'] = process.env
     .ANALYZE_BUNDLE as any;
@@ -31,6 +32,18 @@ const client: ServiceConfig['client'] = {
     hiddenSourceMap: false,
     disableReactRefresh: true,
     analyzeBundle,
+    rspack(config) {
+        config.resolve ??= {};
+        config.resolve.alias = {
+            ...config.resolve.alias,
+            // monaco-vim uses legacy paths that Monaco 0.56 no longer exports.
+            'monaco-editor/esm/vs': path.resolve(
+                require.resolve('monaco-editor/editor/editor.api'),
+                '../..',
+            ),
+        };
+        return config;
+    },
 
     ...(port
         ? {
