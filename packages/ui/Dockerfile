@@ -65,13 +65,13 @@ FROM base AS builder
 RUN mkdir -p /opt/app
 WORKDIR /opt/app
 
+COPY package.json package-lock.json ./
+RUN npm run deps:install
+
 COPY scripts ./scripts
 COPY deploy ./deploy
 COPY deploy/nginx /etc/nginx
 COPY deploy/supervisor /etc/supervisor
-COPY package.json package-lock.json ./
-RUN npm run deps:install
-
 COPY . .
 RUN npm run build && npm run deps:truncate
 
