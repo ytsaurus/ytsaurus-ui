@@ -67,7 +67,16 @@ test('ColumnCell: IncompleteYson', async ({mount, expectScreenshot, page}) => {
     await expectScreenshot();
     await expectScreenshot({
         nameSuffix: 'Preview',
-        beforeScreenshot: () => page.locator('.yt-column-cell').hover({position: {x: 1, y: 1}}),
+        beforeScreenshot: async () => {
+            const cell = page.locator('.yt-column-cell');
+            const box = await cell.boundingBox();
+
+            if (!box) {
+                throw new Error('ColumnCell is not visible');
+            }
+
+            await cell.hover({position: {x: box.width - 1, y: 1}});
+        },
     });
     await expectScreenshot({
         nameSuffix: 'Tooltip',
