@@ -10,6 +10,7 @@ import {
 } from '../../../../../../components/TimelineBlock/renderer/AllocationLineRenderer';
 import {getTimeLineDisplayMode} from './getTimeLineDisplayMode';
 import {getJobTrackId} from './getJobTrackId';
+import {TIMELINE_HEIGHT} from '../constants';
 
 interface AllocationData {
     from: number;
@@ -68,7 +69,7 @@ export const prepareJobEvents = ({
             trackIndex: cookieIds.indexOf(allocation.trackId),
             from: allocation.from,
             to: allocation.to,
-            renderer: new AllocationLineRenderer(),
+            renderer: new AllocationLineRenderer(TIMELINE_HEIGHT),
             allocationId,
         }),
     );
@@ -107,7 +108,7 @@ export const prepareJobEvents = ({
             trackIndex: cookieIds.indexOf(trackId),
             from: firstEvent.startTime,
             to: lastEvent.endTime,
-            renderer: new JobLineRenderer(),
+            renderer: new JobLineRenderer(TIMELINE_HEIGHT),
             jobId: job.id,
             parts,
             displayMode,

@@ -109,7 +109,7 @@ export const OperationTimeline: FC = () => {
     useEffect(() => {
         if (!timeline.api) return;
 
-        timeline.api.setAxes(prepareAxis(jobs, 12, 15));
+        timeline.api.setAxes(prepareAxis(jobs, ROW_HEIGHT, 15));
         timeline.api.setMarkers(prepareMarkers(jobs));
     }, [jobs, timeline]);
 
