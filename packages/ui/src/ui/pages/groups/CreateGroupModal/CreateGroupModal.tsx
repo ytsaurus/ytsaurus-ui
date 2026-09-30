@@ -16,7 +16,7 @@ export const ShowCreateGroupModalButton: React.FC = () => {
     }
 
     return (
-        <Button view="action" onClick={onClick}>
+        <Button actionRole="primary" view="action" onClick={onClick}>
             {i18n('action_create-new')}
         </Button>
     );

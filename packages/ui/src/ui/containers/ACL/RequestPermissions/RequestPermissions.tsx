@@ -1,7 +1,7 @@
-import {Button, type ButtonProps} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React, {useCallback, useMemo} from 'react';
 import {compose} from 'redux';
+import Button, {type ButtonProps} from '../../../components/Button/Button';
 import {
     type DialogField,
     type FormApi,
@@ -338,6 +338,7 @@ function RequestPermissions(props: Props) {
             <div className={block(null, className)}>
                 <Button
                     className={buttonClassName}
+                    actionRole="primary"
                     view="action"
                     {...buttonProps}
                     onClick={handleShow}

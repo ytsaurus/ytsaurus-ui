@@ -11,7 +11,8 @@ import {
 } from '../../../../store/selectors/query-tracker/query';
 import {selectIsSupportedQtACO} from '../../../../store/selectors/query-tracker/queryAco';
 import {loadCliqueByCluster, runQuery} from '../../../../store/actions/query-tracker/query';
-import {Button, Flex, Icon} from '@gravity-ui/uikit';
+import {Flex, Icon} from '@gravity-ui/uikit';
+import Button from '../../../../components/Button/Button';
 import playIcon from '../../../../assets/img/svg/play.svg';
 import {QueryEngine} from '../../../../../shared/constants/engines';
 import {QueryACOSelect} from '../../QueryACO/QueryACOSelect';
@@ -112,6 +113,7 @@ export const QueryEditorView = memo<Props>(function QueryEditorView({
                 <div className="query-run-action">
                     <Flex gap={2} alignItems="center">
                         <Button
+                            actionRole="primary"
                             qa="qt-run"
                             view="action"
                             disabled={runButtonDisabled}
@@ -128,10 +130,18 @@ export const QueryEditorView = memo<Props>(function QueryEditorView({
                         <>
                             {engine === QueryEngine.YQL ? (
                                 <>
-                                    <Button qa="qt-validate" onClick={validateQueryCallback}>
+                                    <Button
+                                        qa="qt-validate"
+                                        view="normal"
+                                        onClick={validateQueryCallback}
+                                    >
                                         {i18n('action_validate')}
                                     </Button>
-                                    <Button qa="qt-explain" onClick={explainQueryCallback}>
+                                    <Button
+                                        qa="qt-explain"
+                                        view="normal"
+                                        onClick={explainQueryCallback}
+                                    >
                                         {i18n('action_explain')}
                                     </Button>
                                 </>

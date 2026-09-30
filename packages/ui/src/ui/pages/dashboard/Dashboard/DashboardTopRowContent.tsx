@@ -12,7 +12,7 @@ function DashboardTopRowContent() {
     return (
         <RowWithName page={Page.DASHBOARD}>
             <div className={block()}>
-                <RequestQuotaButton page={Page.DASHBOARD} />
+                <RequestQuotaButton actionRole="primary" page={Page.DASHBOARD} />
             </div>
         </RowWithName>
     );
