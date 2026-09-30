@@ -1,5 +1,4 @@
 import {JobLineRenderer} from '../../../../../../components/TimelineBlock/renderer/JobLineRenderer';
-import {ROW_HEIGHT} from '../constants';
 import {
     MarkerDeselectionMode,
     type TimeLineConfig,
@@ -34,10 +33,6 @@ export const createTimelineConfig = <
         },
     },
     viewConfiguration: {
-        axes: {
-            trackHeight: ROW_HEIGHT,
-            lineHeight: 12,
-        },
         markers: {
             collapseMinDistance: 10,
         },

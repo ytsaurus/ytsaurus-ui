@@ -7,6 +7,13 @@ export type AllocationLineEvent = TimelineEvent & {
 const MIN_LINE_WIDTH = 8;
 
 export class AllocationLineRenderer extends AbstractEventRenderer {
+    private readonly lineHeight: number;
+
+    constructor(lineHeight: number) {
+        super();
+        this.lineHeight = lineHeight;
+    }
+
     render(
         ctx: CanvasRenderingContext2D,
         _: AllocationLineEvent,
@@ -14,9 +21,8 @@ export class AllocationLineRenderer extends AbstractEventRenderer {
         rawX0: number,
         rawX1: number,
         y: number,
-        h: number,
     ) {
-        const height = h * 2;
+        const height = this.lineHeight * 2;
         const y0 = y - height / 2;
         ctx.beginPath();
         ctx.fillStyle = 'rgba(107, 132, 153, 0.3)';

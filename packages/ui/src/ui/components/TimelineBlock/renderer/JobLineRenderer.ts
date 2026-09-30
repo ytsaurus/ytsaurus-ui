@@ -41,6 +41,13 @@ const DEFAULT_COLOR = '#333';
 const SELECTION_OUTLINE_THICKNESS = 2;
 
 export class JobLineRenderer extends AbstractEventRenderer {
+    private readonly lineHeight: number;
+
+    constructor(lineHeight: number) {
+        super();
+        this.lineHeight = lineHeight;
+    }
+
     render(
         ctx: CanvasRenderingContext2D,
         event: JobLineEvent,
@@ -48,11 +55,12 @@ export class JobLineRenderer extends AbstractEventRenderer {
         rawX0: number,
         rawX1: number,
         y: number,
-        h: number,
+        _trackHeight: number,
         _: ViewConfiguration,
         timeToPosition: (t: number) => number,
     ) {
         const {displayMode, parts} = event;
+        const h = this.lineHeight;
         const y0 = y - h / 2;
         const {x1, x0} = this.getFixedXCoordinates(rawX0, rawX1);
         const isTransparent = displayMode === EventDisplayMode.Transparent;
