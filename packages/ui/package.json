@@ -181,7 +181,7 @@
     "lz-string": "^1.5.0",
     "moment": "^2.29.4",
     "moment-timezone": "^0.6.0",
-    "monaco-editor": "^0.40.0",
+    "monaco-editor": "^0.56.0",
     "monaco-editor-webpack-plugin": "^7.1.1",
     "monaco-vim": "^0.4.2",
     "msw": "^2.10.3",
