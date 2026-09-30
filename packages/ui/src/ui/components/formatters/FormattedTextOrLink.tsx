@@ -1,12 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-import FormattedText from './FormattedText';
-import FormattedLink from './FormattedLink';
+import FormattedText, {type FormattedTextProps} from './FormattedText';
+import FormattedLink, {type FormattedLinkProps} from './FormattedLink';
 
-export default function FormattedTextOrLink({asLink = false, ...props}) {
-    return asLink ? <FormattedLink {...props} /> : <FormattedText {...props} />;
+export type FormattedTextOrLinkProps = FormattedTextProps &
+    Partial<Omit<FormattedLinkProps, keyof FormattedTextProps>> & {
+        asLink?: boolean;
+    };
+
+export default function FormattedTextOrLink({asLink = false, ...props}: FormattedTextOrLinkProps) {
+    const linkProps = props as FormattedLinkProps;
+    return asLink ? <FormattedLink {...linkProps} /> : <FormattedText {...props} />;
 }
-FormattedTextOrLink.propTypes = {
-    asLink: PropTypes.bool,
-};
