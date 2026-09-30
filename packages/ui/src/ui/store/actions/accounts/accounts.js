@@ -1,7 +1,6 @@
 import ypath from '../../../common/thor/ypath';
 
 import filter_ from 'lodash/filter';
-import map_ from 'lodash/map';
 
 import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
 
@@ -35,7 +34,6 @@ import {
 } from '../../../store/selectors/accounts/accounts-ts';
 import {RumWrapper, YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {parseAccountsData, parseAccountsListData} from './accounts-ts';
-import Account from '../../../pages/accounts/selector';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 
 const attributesToLoad = [
@@ -78,9 +76,7 @@ function parseAccounts(rumId, accounts, parseData = parseAccountsData) {
         ypath.getValue(accounts),
         (item) => ypath.getValue(item) !== ROOT_ACCOUNT_NAME,
     );
-    return rumId
-        .parse(YTApiId.accountsData, () => parseData(items))
-        .then((res) => map_(res, (item) => new Account(item)));
+    return rumId.parse(YTApiId.accountsData, () => parseData(items));
 }
 
 function isCurrentRequest(getState, cluster, editCounter) {
@@ -317,7 +313,7 @@ export function loadEditedAccount(accountName) {
             .then(([item]) => {
                 dispatch({
                     type: UPDATE_EDITABLE_ACCOUNT.SUCCESS,
-                    data: {account: new Account(item), cluster},
+                    data: {account: item, cluster},
                 });
             })
             .catch(() => {

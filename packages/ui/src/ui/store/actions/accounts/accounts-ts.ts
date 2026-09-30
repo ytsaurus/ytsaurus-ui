@@ -1,6 +1,5 @@
-import map_ from 'lodash/map';
-
 import {type ThunkAction} from 'redux-thunk';
+import Account from '../../../pages/accounts/selector';
 import {type RootState} from '../../../store/reducers';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../constants/accounts';
 import {type AccountInput, parseAccountData} from '../../../utils/accounts/accounts-selector';
@@ -49,12 +48,12 @@ export function setAccountsStateDataFields(
     };
 }
 
-export async function parseAccountsData(data: Array<AccountInput>) {
+async function prepareAccounts<T>(data: Array<T>, prepareAccountData: (item: T) => object) {
     const result = [];
     let chunkStartedAt = performance.now();
 
     for (let index = 0; index < data.length; ++index) {
-        result.push(parseAccountData(data[index]));
+        result.push(new Account(prepareAccountData(data[index])));
 
         const parsedCount = index + 1;
         if (
@@ -70,8 +69,12 @@ export async function parseAccountsData(data: Array<AccountInput>) {
     return result;
 }
 
-export async function parseAccountsListData(data: Array<AccountListItem>) {
-    return map_(data, (item) => {
+export function parseAccountsData(data: Array<AccountInput>) {
+    return prepareAccounts(data, parseAccountData);
+}
+
+export function parseAccountsListData(data: Array<AccountListItem>) {
+    return prepareAccounts(data, (item) => {
         const attributes = item.$attributes || {};
         const name = item.$value;
 
