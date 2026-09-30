@@ -108,7 +108,7 @@
     "@gravity-ui/browserslist-config": "^4.4.0",
     "@gravity-ui/chartkit": "^8.0.1",
     "@gravity-ui/components": "^4.24.0",
-    "@gravity-ui/dashkit": "^9.3.2",
+    "@gravity-ui/dashkit": "^10.4.4",
     "@gravity-ui/date-components": "^3.3.2",
     "@gravity-ui/date-utils": "^2.6.0",
     "@gravity-ui/dialog-fields": "^6.1.0",

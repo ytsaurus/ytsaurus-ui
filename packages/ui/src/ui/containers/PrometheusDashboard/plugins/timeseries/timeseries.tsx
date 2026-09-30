@@ -40,7 +40,7 @@ export const renderPluginTimeseries: PrometheusPlugins['timeseries']['renderer']
 function ExpandablePrometheusChart({
     elementRef,
     ...props
-}: PrometheusChartProps & {elementRef: React.Ref<any>}) {
+}: PrometheusChartProps & {elementRef?: React.Ref<HTMLDivElement>}) {
     const {
         expandedId,
         timeRangeFilter: {from, to},
