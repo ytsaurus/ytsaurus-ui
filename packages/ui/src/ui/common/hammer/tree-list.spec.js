@@ -502,6 +502,15 @@ describe('hammer.tree-list', () => {
                     expect(sortedNodes.children[0].children).toEqual([]);
                     expect(sortedNodes.children[0].leaves).toEqual([]);
                 });
+
+                it('Handles missing children and leaves collections', () => {
+                    const root = {name: ROOT_NODE, attributes: {}};
+
+                    sortedNodes = treeList.sortTree(root, {field: 'name', asc: true}, FIELDS);
+
+                    expect(sortedNodes.children).toEqual([]);
+                    expect(sortedNodes.leaves).toBeUndefined();
+                });
             });
         });
 
