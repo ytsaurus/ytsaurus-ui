@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 module.exports = {
     validate: {
         // add webpack plugin with rules
@@ -43,7 +45,11 @@ module.exports = {
             // diff download size of entrypoints between input and reference stats. Fails if size diff is over the limit (10 kb)
             '@statoscope/webpack/diff-entry-download-size-limits': [
                 'error',
-                {byName: [{name: 'main', limits: {maxInitialSizeDiff: 10 * 1024}}]},
+                {
+                    // Monaco worker has its own "main" entrypoint.
+                    exclude: [{type: 'compilation', name: 'vs/editor/editor'}],
+                    byName: [{name: 'main', limits: {maxInitialSizeDiff: 10 * 1024}}],
+                },
             ],
             // diff download time of entrypoints between input and reference stats. Fails if download time is over the limit (500 ms)
             '@statoscope/webpack/diff-entry-download-time-limits': [
