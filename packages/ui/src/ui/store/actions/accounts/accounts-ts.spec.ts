@@ -26,7 +26,8 @@ describe('parseAccountsData', () => {
         const result = await parseAccountsData(data);
 
         expect(result).toHaveLength(1000);
-        expect(result[999].name).toBe('account-999');
+        expect(result[999]).toBeInstanceOf(Account);
+        expect(result[999]).toMatchObject({name: 'account-999'});
         expect(schedulerYield).toHaveBeenCalledTimes(2);
     });
 });
@@ -62,9 +63,9 @@ describe('parseAccountsListData', () => {
     });
 
     it('provides safe defaults for Account resource getters', async () => {
-        const [data] = await parseAccountsListData([{$value: 'account-b'}]);
-        const account = new Account(data);
+        const [account] = await parseAccountsListData([{$value: 'account-b'}]);
 
+        expect(account).toBeInstanceOf(Account);
         expect(account.getNodeCountProgressInfo()).toEqual({
             committed: undefined,
             uncommitted: undefined,
