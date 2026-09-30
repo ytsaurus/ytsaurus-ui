@@ -521,6 +521,23 @@ describe('hammer.tree-list', () => {
                 ).toEqual([]);
             });
 
+            it('Handles missing children and leaves collections', () => {
+                expect(
+                    treeList.flattenTree({
+                        name: ROOT_NODE,
+                        attributes: {},
+                        children: [{name: 'child', attributes: {payload: 1}}],
+                    }),
+                ).toEqual([
+                    {
+                        name: 'child',
+                        attributes: {payload: 1},
+                        level: 0,
+                        key: 'Root/child',
+                    },
+                ]);
+            });
+
             it('Flattens leaves before children and adds level and key', () => {
                 const root = {
                     name: ROOT_NODE,
