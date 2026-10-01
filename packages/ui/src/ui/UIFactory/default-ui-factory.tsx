@@ -193,6 +193,9 @@ export const defaultUIFactory: UIFactory = {
     getStatisticsComponentForBundle() {
         return undefined;
     },
+    getBundleExtraTabs() {
+        return [];
+    },
 
     renderNavigationExtraActions() {
         return null;

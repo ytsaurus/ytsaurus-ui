@@ -186,6 +186,15 @@ export type BundleMonitoringProps = {
     tablet_cell_bundle: string;
     bundleData: any;
 };
+export type BundleExtraTabProps = {
+    cluster: string;
+    bundle: string;
+};
+export type BundleExtraTab = {
+    name: string;
+    title: string;
+    component: React.ComponentType<BundleExtraTabProps>;
+};
 export type JobMonitoringProps = {
     cluster: string;
     operation: DetailedOperationSelector;
@@ -332,6 +341,8 @@ export interface UIFactory {
 
     getStatisticsComponentForBundle():
         undefined | React.ComponentType<{cluster: string; bundle: string; theme: string}>;
+
+    getBundleExtraTabs(): Array<BundleExtraTab>;
 
     renderNavigationExtraActions(params: {
         className?: string;
