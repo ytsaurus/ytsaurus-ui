@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.6.0...components-v1.6.1) (2026-10-01)
+
+
+### Bug Fixes
+
+* **ColumnCell:** make incomplete values easier to preview [YTFRONT-6082] ([db7d6a1](https://github.com/ytsaurus/ytsaurus-ui/commit/db7d6a1051e69996e09162281dbac4a76825ae9b))
+
 ## [1.6.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.5.0...components-v1.6.0) (2026-10-01)
 
 
