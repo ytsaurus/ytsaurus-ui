@@ -1,22 +1,19 @@
 import React, {type FC, useCallback} from 'react';
-import {Flex, List, Loader} from '@gravity-ui/uikit';
+import {List} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {
     selectHasNextPage,
+    selectHasQueriesListLoaded,
     selectIsQueriesListLoading,
     selectQueriesFilters,
     selectQueriesList,
 } from '../../../../../store/selectors/query-tracker/queriesList';
 import {FullTextSearchItem} from '../FullTextSearchItem';
 import {prepareFullTextSearchItems} from '../helpers/prepareFullTextSearchItems';
-import {NoContent} from '@ytsaurus/components';
-import block from 'bem-cn-lite';
-import './FullTextSearch.scss';
-import i18n from './i18n';
+import {QueriesListPlaceholder} from '../QueriesListPlaceholder/QueriesListPlaceholder';
 import {loadNextQueriesList} from '../../../../../store/actions/query-tracker/queriesList';
 import {QueriesHistoryCursorDirection} from '../../../../../store/reducers/query-tracker/query-tracker-contants';
 
-const b = block('yt-queries-full-text-search');
 const LIST_ITEM_HEIGHT = 162;
 const MAX_PREVIEW_LINES = 4;
 
@@ -25,30 +22,15 @@ export const FullTextSearch: FC = () => {
     const {filter} = useSelector(selectQueriesFilters);
     const items = useSelector(selectQueriesList);
     const isLoading = useSelector(selectIsQueriesListLoading);
+    const hasLoaded = useSelector(selectHasQueriesListLoaded);
     const hasNextPage = useSelector(selectHasNextPage);
 
     const handleLoadMore = useCallback(() => {
         dispatch(loadNextQueriesList(QueriesHistoryCursorDirection.PAST));
     }, [dispatch]);
 
-    if (isLoading && !items.length) {
-        return (
-            <Flex alignItems="center" justifyContent="center" className={b('no-content')}>
-                <Loader />
-            </Flex>
-        );
-    }
-
     if (!items.length) {
-        return (
-            <Flex alignItems="center" justifyContent="center" className={b('no-content')}>
-                <NoContent
-                    vertical
-                    warning={i18n('title_fulltext-search-empty')}
-                    hint={i18n('context_fulltext-search-empty-hint')}
-                />
-            </Flex>
-        );
+        return <QueriesListPlaceholder loading={isLoading} hasLoaded={hasLoaded} />;
     }
 
     return (

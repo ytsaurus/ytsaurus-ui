@@ -12,6 +12,7 @@ export type State = 'loading' | 'ready' | 'error';
 
 export type QueriesListState = {
     isLoading: boolean;
+    hasLoaded: boolean;
     items: QueryItem[];
     hasMore: boolean;
     timestamp: number; // Determines is the list is changed(by filter or cursor).
@@ -23,6 +24,7 @@ export type QueriesListState = {
 
 export const initialState: QueriesListState = {
     isLoading: false,
+    hasLoaded: false,
     items: [],
     hasMore: false,
     timestamp: 0,

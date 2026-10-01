@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {List, type ListItemData} from '@gravity-ui/uikit';
 import {
     selectHasNextPage,
+    selectHasQueriesListLoaded,
     selectIsQueriesListLoading,
     selectQueryListByDate,
 } from '../../../../../store/selectors/query-tracker/queriesList';
@@ -14,6 +15,7 @@ import './HistoryList.scss';
 import {type TableItem, isHeaderTableItem} from '../Columns/columns';
 import {HistoryListHeader} from './HistoryListHeader';
 import {HistoryListRow} from './HistoryListRow';
+import {QueriesListPlaceholder} from '../QueriesListPlaceholder/QueriesListPlaceholder';
 import {loadNextQueriesList} from '../../../../../store/actions/query-tracker/queriesList';
 import {QueriesHistoryCursorDirection} from '../../../../../store/reducers/query-tracker/query-tracker-contants';
 
@@ -25,6 +27,7 @@ export function HistoryList() {
     const dispatch = useDispatch();
     const itemsByDate = useSelector(selectQueryListByDate);
     const isLoading = useSelector(selectIsQueriesListLoading);
+    const hasLoaded = useSelector(selectHasQueriesListLoaded);
     const hasNextPage = useSelector(selectHasNextPage);
     const {columns} = useSelector(selectQueryListColumns);
     const selectedId = useSelector(selectQuery)?.id;
@@ -34,7 +37,6 @@ export function HistoryList() {
             return isHeaderTableItem(item) ? {...item, disabled: true} : item;
         });
     }, [itemsByDate]);
-    const isInitialLoading = isLoading && items.length === 0;
 
     const selectedItemIndex = useMemo(() => {
         return items.findIndex((item) => !isHeaderTableItem(item) && item.id === selectedId);
@@ -43,6 +45,10 @@ export function HistoryList() {
     const handleLoadMore = useCallback(() => {
         dispatch(loadNextQueriesList(QueriesHistoryCursorDirection.PAST));
     }, [dispatch]);
+
+    if (!items.length) {
+        return <QueriesListPlaceholder loading={isLoading} hasLoaded={hasLoaded} />;
+    }
 
     return (
         <div className={b()}>
@@ -54,7 +60,7 @@ export function HistoryList() {
                 itemHeight={LIST_ITEM_HEIGHT}
                 itemsHeight={LIST_ITEM_HEIGHT * items.length}
                 items={items}
-                loading={isInitialLoading || hasNextPage}
+                loading={hasNextPage}
                 onLoadMore={hasNextPage ? handleLoadMore : undefined}
                 selectedItemIndex={selectedItemIndex}
                 renderItem={(row) => {
