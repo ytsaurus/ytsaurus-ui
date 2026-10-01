@@ -1,21 +1,32 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
+import {Flex} from '@gravity-ui/uikit';
+
 import BundleGeneralMeta from './BundleGeneralMeta';
 import BundleConfigurationMeta, {
     ActiveAccountBundleControllerUpdater,
 } from './BundleConfigurationMeta';
+import UIFactory from '../../../UIFactory';
 
 import './BundleMetaTable.scss';
 
 const block = cn('bundle-meta-table');
 
-export default function BundleMetaTable() {
+type Props = {
+    cluster: string;
+    bundle?: string;
+};
+
+export default function BundleMetaTable({cluster, bundle}: Props) {
     return (
-        <div className={block('container')}>
+        <Flex className={block('container')} wrap alignItems="flex-start">
             <BundleGeneralMeta />
-            <BundleConfigurationMeta />
+            <Flex className={block('configuration')} alignItems="flex-start">
+                <BundleConfigurationMeta />
+                {UIFactory.renderBundleMetaTableExtraContent({cluster, bundle})}
+            </Flex>
             <ActiveAccountBundleControllerUpdater />
-        </div>
+        </Flex>
     );
 }

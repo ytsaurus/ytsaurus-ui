@@ -1,14 +1,23 @@
 .bundle-meta-table {
+    $group-gap: 50px;
+
+    &__container {
+        column-gap: $group-gap;
+
+        .meta-table__group:last-child {
+            margin-right: 0;
+        }
+    }
+
+    &__configuration {
+        column-gap: $group-gap;
+    }
+
     .meta-table__group {
         grid-gap: 6px 27px;
     }
 
     .g-progress {
         width: 200px;
-    }
-
-    &__container {
-        display: flex;
-        align-items: flex-start;
     }
 }

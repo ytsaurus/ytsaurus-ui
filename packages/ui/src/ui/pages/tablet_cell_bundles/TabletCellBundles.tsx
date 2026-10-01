@@ -252,7 +252,7 @@ function ActiveBundleDetails({
                     </div>
                 </div>
             )}
-            <BundleMetaTable />
+            <BundleMetaTable cluster={cluster} bundle={activeBundle} />
         </React.Fragment>
     );
 }

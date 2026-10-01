@@ -221,6 +221,9 @@ export const defaultUIFactory: UIFactory = {
     getExtraMetaTableItemsForBundle() {
         return undefined;
     },
+    renderBundleMetaTableExtraContent() {
+        return undefined;
+    },
 
     getComponentsNodeDashboardUrl() {
         return {};

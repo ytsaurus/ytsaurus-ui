@@ -416,6 +416,8 @@ export interface UIFactory {
         clusterUiConfig: ClusterUiConfig;
     }): undefined | Array<MetaTableItem>;
 
+    renderBundleMetaTableExtraContent(props: {cluster: string; bundle?: string}): React.ReactNode;
+
     renderAccountsTableItemExtraControls(props: {
         itemClassName?: string;
         cluster: string;
