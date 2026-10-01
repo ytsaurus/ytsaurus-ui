@@ -48,6 +48,7 @@ export type ReadTableDataResult =
       };
 
 export type ReadTableResult = ReadTableDataResult & {
+    incompleteColumns: boolean;
     columns: string[];
     omittedColumns?: string[];
     yqlTypes: TypeArray[] | null;

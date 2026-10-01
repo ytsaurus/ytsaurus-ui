@@ -16,6 +16,8 @@ export const loadTableAttributesByPath = async (
         clusterId: string;
         login: string;
         limit: number;
+        /** Columns to load, with key columns included automatically. Empty means default preview. */
+        columns?: string[];
         cellSize?: number;
         defaultTableColumnLimit?: number;
         useYqlTypes?: boolean;
@@ -27,7 +29,16 @@ export const loadTableAttributesByPath = async (
     const attributes = await loadTableAttributes(path, setup);
     const schema: NavigationTableSchema[] = ypath.getValue(attributes.schema);
     const outputFormat = getRequestOutputFormat({
-        columns: schema.map((i) => i.name),
+        columns: options.columns?.length
+            ? Array.from(
+                  new Set([
+                      ...schema
+                          .filter((column) => Boolean(column.sort_order))
+                          .map(({name}) => name),
+                      ...options.columns,
+                  ]),
+              )
+            : undefined,
         stringLimit: options?.cellSize,
         limit: options?.defaultTableColumnLimit,
         useYqlTypes: options?.useYqlTypes,
@@ -35,7 +46,7 @@ export const loadTableAttributesByPath = async (
 
     const requestFunction = attributes.dynamic ? loadDynamicTableRequest : loadStaticTable;
 
-    const {columns, rows, yqlTypes} = await requestFunction({
+    const {columns, rows, yqlTypes, incompleteColumns} = await requestFunction({
         login: options.login,
         path,
         setup,
@@ -61,6 +72,7 @@ export const loadTableAttributesByPath = async (
         schema,
         columns,
         yqlTypes,
+        incompleteColumns,
         meta,
     };
 };

@@ -11,12 +11,13 @@ export const loadNodeByPath =
             favorites: string[];
             login: string;
             limit: number;
+            columns?: string[];
             clusterId: string;
             docsUrls?: Record<string, string>;
         },
     ) =>
     async () => {
-        const {favorites = [], login, limit, clusterId, docsUrls} = config;
+        const {favorites = [], login, limit, clusterId, docsUrls, columns} = config;
 
         const type = await ytApiV3.get({
             setup,
@@ -26,7 +27,13 @@ export const loadNodeByPath =
         });
 
         if (isTableNode(type)) {
-            return loadTableAttributesByPath(path, setup, {login, limit, clusterId, docsUrls});
+            return loadTableAttributesByPath(path, setup, {
+                login,
+                limit,
+                clusterId,
+                docsUrls,
+                columns,
+            });
         } else if (isFolderNode(type)) {
             return loadFolderByPath(path, setup, favorites);
         } else {
