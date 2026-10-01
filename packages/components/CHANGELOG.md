@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.5.0...components-v1.6.0) (2026-10-01)
+
+
+### Features
+
+* **NavigationTable:** support truncated cell preview via onShowPreview ([7f89a8b](https://github.com/ytsaurus/ytsaurus-ui/commit/7f89a8b69bfd19ce4d3b9f85a121045df6ac2ee6))
+
 ## [1.5.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.4.0...components-v1.5.0) (2026-09-25)
 
 
