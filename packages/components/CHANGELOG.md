@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.2](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.6.1...components-v1.6.2) (2026-10-01)
+
+
+### Bug Fixes
+
+* **ColumnCell:** guard optional preview callback [YTFRONT-6082] ([83c9b1e](https://github.com/ytsaurus/ytsaurus-ui/commit/83c9b1e33c3eeb7d36816b02b8be926ba1dc8e98))
+
 ## [1.6.1](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.6.0...components-v1.6.1) (2026-10-01)
 
 
