@@ -30,6 +30,8 @@ export type NavigationTableData = {
     schema: NavigationTableSchema[];
     meta: NavigationTableMeta[][];
     yqlTypes: unknown[] | null;
+    /** Whether web_json excluded columns, including by explicit selection. */
+    incompleteColumns?: boolean;
 };
 
 export type NavigationTableDataAdapter = {
@@ -43,6 +45,8 @@ export type NavigationTable = {
     schema: NavigationTableSchema[];
     meta: NavigationTableMeta[][];
     yqlTypes: unknown[] | null;
+    /** Whether web_json excluded columns, including by explicit selection. */
+    incompleteColumns?: boolean;
 };
 
 export type ReadTableDataResult =
@@ -56,6 +60,7 @@ export type ReadTableDataResult =
       };
 
 export type ReadTableResult = ReadTableDataResult & {
+    incompleteColumns: boolean;
     columns: string[];
     omittedColumns?: string[];
     yqlTypes: TypeArray[] | null;

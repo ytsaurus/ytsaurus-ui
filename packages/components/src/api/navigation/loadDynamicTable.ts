@@ -5,6 +5,7 @@ import {ReadTableOutputFormat} from '../../types/yt-types';
 import {injectColumnsFromSchema} from './helpers/injectColumnsFromSchema';
 import {NavigationTableSchema, ReadTableResult} from '../../types/navigation';
 import {readDynamicTable} from './helpers/readDynamicTable';
+import i18n from './i18n';
 
 export type LoadDynamicTableParams = {
     path: string;
@@ -75,10 +76,14 @@ export async function loadDynamicTableRequest({
         return Promise.reject(new Error('Dynamic table has denied key columns'));
     }
 
+    if (availableColumns.length === 0) {
+        throw new Error(i18n('error_no-readable-columns'));
+    }
+
     const aColumns = availableColumns.map((col) => unipika.decode(col, showDecoded));
     const parameters = {
         query: Query.prepareQuery({
-            aColumns,
+            columns: aColumns,
             path,
             keyColumns,
             offset: 0,

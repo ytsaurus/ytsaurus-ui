@@ -24,7 +24,7 @@ export async function readStaticTable({
     const error = parseErrorFromResponse(data);
     if (error) return Promise.reject(getParsedError(error));
 
-    const {columns, rows, yqlTypes} = prepareRows(data, reverseRows);
+    const {columns, rows, yqlTypes, incompleteColumns} = prepareRows(data, reverseRows);
     const omittedColumns = prepareHeaders(headers);
 
     const valueFormat = parameters.output_format.$attributes.value_format;
@@ -34,6 +34,7 @@ export async function readStaticTable({
         omittedColumns,
         rows,
         yqlTypes,
+        incompleteColumns,
         useYqlTypes: valueFormat === 'yql',
     };
 }

@@ -25,7 +25,7 @@ export async function readDynamicTable({
     const error = parseErrorFromResponse(data);
     if (error) return Promise.reject(getParsedError(error));
 
-    const {columns, rows, yqlTypes} = prepareRows(data, reverseRows);
+    const {columns, rows, yqlTypes, incompleteColumns} = prepareRows(data, reverseRows);
 
     const valueFormat = parameters.output_format.$attributes.value_format;
 
@@ -33,6 +33,7 @@ export async function readDynamicTable({
         columns,
         rows,
         yqlTypes,
+        incompleteColumns,
         useYqlTypes: valueFormat === 'yql',
     };
 }
