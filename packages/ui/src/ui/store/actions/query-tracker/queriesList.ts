@@ -4,6 +4,7 @@ import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {type RootState} from '../../reducers';
 import {loadQueriesList} from './api';
 import {
+    selectHasQueriesListLoaded,
     selectQueriesFilters,
     selectQueriesList,
     selectQueriesListCursorParams,
@@ -37,6 +38,7 @@ export const resetQueryList =
         dispatch(
             updateListState({
                 items: [],
+                hasLoaded: false,
                 cursor: {
                     direction: QueriesHistoryCursorDirection.PAST,
                 },
@@ -51,7 +53,7 @@ export function requestQueriesList(silent = false): AsyncAction {
         const state = getState();
         const list = selectQueriesList(state);
 
-        if (!silent) {
+        if (!silent || !selectHasQueriesListLoaded(state)) {
             dispatch(setLoading(true));
         }
 
@@ -88,6 +90,7 @@ export function requestQueriesList(silent = false): AsyncAction {
             dispatch(
                 updateListState({
                     items,
+                    hasLoaded: true,
                     hasMore: result.incomplete,
                     timestamp: result.timestamp,
                 }),
@@ -97,7 +100,7 @@ export function requestQueriesList(silent = false): AsyncAction {
                 throw error;
             }
         } finally {
-            if (!silent && requestId === queriesListRequestSeq) {
+            if (requestId === queriesListRequestSeq) {
                 dispatch(setLoading(false));
             }
         }
@@ -153,6 +156,7 @@ export function applyListMode(listMode: QueriesListMode): AsyncAction {
                 filter: DefaultQueriesListFilter[listMode],
                 cursor: {direction: QueriesHistoryCursorDirection.PAST},
                 items: [],
+                hasLoaded: false,
             }),
         );
         dispatch(resetQueryList());
