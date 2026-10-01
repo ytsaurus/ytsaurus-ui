@@ -14,22 +14,11 @@ interface AccountListItem {
     };
 }
 
-interface SchedulerWithYield {
-    yield?: () => Promise<void>;
-}
-
-// `scheduler.yield()` is not included in TypeScript's DOM types yet.
-type WindowWithScheduler = Window & {
-    scheduler?: SchedulerWithYield;
-};
-
 const PARSE_TIME_CHECK_INTERVAL = 100;
 const PARSE_CHUNK_TARGET_MS = 40;
 
 function yieldToMainThread() {
-    const scheduler = (window as WindowWithScheduler).scheduler;
-
-    return scheduler?.yield?.() ?? new Promise<void>((resolve) => setTimeout(resolve, 0));
+    return new Promise<void>((resolve) => setTimeout(resolve, 0));
 }
 
 /**
