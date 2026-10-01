@@ -24,9 +24,9 @@ import '@gravity-ui/uikit/styles/styles.css';
 
 ## Entry points
 
-| Import | Purpose |
-|--------|---------|
-| **`@ytsaurus/components`** | Components (`ColumnCell`, `MetaTable`, …), types, hooks (`useNavigationTableData`), **HTTP helpers** for navigation (see below). |
+| Import                             | Purpose                                                                                                                                                     |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`@ytsaurus/components`**         | Components (`ColumnCell`, `MetaTable`, …), types, hooks (`useNavigationTableData`), **HTTP helpers** for navigation (see below).                            |
 | **`@ytsaurus/components/modules`** | **`NavigationTable`** shell plus **`NavigationSchemaTab`**, **`NavigationPreviewTab`**, **`NavigationMetaTab`** (and types such as `NavigationTableProps`). |
 
 The root entry re-exports **`src/api`**: a single place for loading table data and the YT API wrapper.
@@ -56,12 +56,18 @@ For **`YTApiSetup`** and full function signatures see the published types (`buil
 
 ---
 
+### Selecting columns
+
+Pass `columns: string[]` in the options of `loadTableAttributesByPath` or the config of `loadNodeByPath` to load specific columns. Key columns from the schema are included automatically and duplicate names are removed. Omit `columns` or pass `[]` to keep the default preview behavior controlled by `defaultTableColumnLimit`. An explicit selection takes precedence over that limit in the `web_json` output format.
+
+The result retains the full schema and the existing column list; the selection controls which column values are returned in rows. Both static and dynamic table loaders return `incompleteColumns: boolean`. This reflects the response's `incomplete_columns` flag: some columns were excluded by the output format, whether due to the default limit or an explicit selection. It does not by itself mean that the limit was exceeded or identify which columns were excluded. Consumers can use this flag to display their own indication.
+
 ## `NavigationTable` module
 
 Implementation: **`src/modules/NavigationTable`**. From npm:
 
 ```ts
-import { NavigationTable } from '@ytsaurus/components/modules';
+import {NavigationTable} from '@ytsaurus/components/modules';
 ```
 
 The component is **presentational**: you pass loaded data (`table`), optional schema filter (`filter`), callbacks, and YSON settings for preview. When `table` is null, `emptyMessage` is shown.
@@ -85,50 +91,51 @@ type LoadedNavigationTable = Awaited<ReturnType<typeof loadTableAttributesByPath
 const TABLE_PATH = '//home/my_cluster/my_table';
 
 export function TableExplorer() {
-    const [table, setTable] = useState<LoadedNavigationTable | null>(null);
-    const [schemaFilter, setSchemaFilter] = useState('');
-    const [error, setError] = useState<string | null>(null);
+  const [table, setTable] = useState<LoadedNavigationTable | null>(null);
+  const [schemaFilter, setSchemaFilter] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
-    const load = useCallback(async () => {
-        setError(null);
-        try {
-            const data = await loadTableAttributesByPath(
-                TABLE_PATH,
-                {
-                    proxy: 'https://your-yt-proxy.example/', // see YTApiSetup
-                    // requestHeaders, JSONSerializer, … as needed
-                },
-                {
-                    clusterId: 'my_cluster',
-                    login: 'robot-user',
-                    limit: 100,
-                    cellSize: 256,
-                    useYqlTypes: true,
-                    showDecoded: false,
-                    // docsUrls, navigationTableConfig — see option types
-                },
-            );
-            setTable(data);
-        } catch (e) {
-            setError(e instanceof Error ? e.message : String(e));
-        }
-    }, []);
+  const load = useCallback(async () => {
+    setError(null);
+    try {
+      const data = await loadTableAttributesByPath(
+        TABLE_PATH,
+        {
+          proxy: 'https://your-yt-proxy.example/', // see YTApiSetup
+          // requestHeaders, JSONSerializer, … as needed
+        },
+        {
+          clusterId: 'my_cluster',
+          login: 'robot-user',
+          limit: 100,
+          columns: ['zeliboba_relevance'], // Key columns are included automatically.
+          cellSize: 256,
+          useYqlTypes: true,
+          showDecoded: false,
+          // docsUrls, navigationTableConfig — see option types
+        },
+      );
+      setTable(data);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    }
+  }, []);
 
-    useEffect(() => {
-        void load();
-    }, [load]);
+  useEffect(() => {
+    void load();
+  }, [load]);
 
-    return (
-        <ThemeProvider theme="light">
-            {error && <p>{error}</p>}
-            <NavigationTable
-                table={table}
-                filter={schemaFilter}
-                onFilterChange={setSchemaFilter}
-                emptyMessage="Pick a table or load data"
-            />
-        </ThemeProvider>
-    );
+  return (
+    <ThemeProvider theme="light">
+      {error && <p>{error}</p>}
+      <NavigationTable
+        table={table}
+        filter={schemaFilter}
+        onFilterChange={setSchemaFilter}
+        emptyMessage="Pick a table or load data"
+      />
+    </ThemeProvider>
+  );
 }
 ```
 
@@ -142,12 +149,12 @@ Pass **`additionalSchemaColumns`** to append custom columns after the default **
 import {NavigationTable, type ExternalSchemaColumn} from '@ytsaurus/components/modules';
 
 const additionalSchemaColumns: ExternalSchemaColumn[] = [
-    {
-        name: 'description',
-        header: 'Description',
-        sortable: false,
-        render: ({row}) => row.name, // `row` is a NavigationTableSchema entry
-    },
+  {
+    name: 'description',
+    header: 'Description',
+    sortable: false,
+    render: ({row}) => row.name, // `row` is a NavigationTableSchema entry
+  },
 ];
 
 <NavigationTable table={table} additionalSchemaColumns={additionalSchemaColumns} />;
@@ -161,12 +168,12 @@ Values larger than the read limits (`field_weight_limit` / `string_weight_limit`
 
 ```tsx
 <NavigationTable
-    table={table}
-    onShowPreview={async (columnName, rowIndex, tag) => {
-        const value = await loadFullCellValue({path, columnName, rowIndex, tag});
-        setTable((prev) => injectCellValue(prev, columnName, rowIndex, value));
-    }}
-/>;
+  table={table}
+  onShowPreview={async (columnName, rowIndex, tag) => {
+    const value = await loadFullCellValue({path, columnName, rowIndex, tag});
+    setTable((prev) => injectCellValue(prev, columnName, rowIndex, value));
+  }}
+/>
 ```
 
 `tag` is the YQL type tag of the value, when there is one; use it to decide whether the value can be shown inline or needs a dedicated viewer. Without `onShowPreview` no preview button is rendered.
