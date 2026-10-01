@@ -1,5 +1,32 @@
 # Changelog
 
+## [3.28.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.27.0...ui-v3.28.0) (2026-10-01)
+
+
+### Features
+
+* **Flow:** disable state buttons until pipeline reaches requested state [YTFRONT-6077] ([9df4fe6](https://github.com/ytsaurus/ytsaurus-ui/commit/9df4fe68a4c28bd951d905f911d247e9e8edc683))
+* **Navigation:** copy big cells value [YTFRONT-5629] ([970c505](https://github.com/ytsaurus/ytsaurus-ui/commit/970c50572e5779e76e0e0fa52735598023b2ac38))
+* **Navigation:** highlight symlinks in the path bar [YTFRONT-6066] ([5c59d08](https://github.com/ytsaurus/ytsaurus-ui/commit/5c59d086bab7daa7fdd6bb7dfbe1a3b35f427779))
+* **Operation/Specification:** support runtime specification patches [YTFRONT-5272] ([b66c3e2](https://github.com/ytsaurus/ytsaurus-ui/commit/b66c3e23e3c8e2e162a098760cbdc16a4e018db0))
+
+
+### Bug Fixes
+
+* **Accounts:** allow rendering between account parsing chunks [YTFRONT-6021] ([37822ba](https://github.com/ytsaurus/ytsaurus-ui/commit/37822ba7afc1054064919f52e74e2c66df12b29f))
+* **Accounts:** avoid full parsing of lightweight account lists [YTFRONT-6021] ([c9e0f27](https://github.com/ytsaurus/ytsaurus-ui/commit/c9e0f27a384d3e9dea970d1243883889ce271bdc))
+* **Accounts:** chunk account model creation [YTFRONT-6021] ([ad9341d](https://github.com/ytsaurus/ytsaurus-ui/commit/ad9341d23b28ec9a1590638b6d5efef64428ec64))
+* **Navigation:** show download notice for oversized media cells [YTFRONT-6065] ([e5ee6cf](https://github.com/ytsaurus/ytsaurus-ui/commit/e5ee6cf624291ea5107c13bc8f0a7d5d2cbc850b))
+* **Operations:** stabilize icon sizes in screenshots [YTFRONT-5272] ([53f9302](https://github.com/ytsaurus/ytsaurus-ui/commit/53f93025f46b2b06b002eb1feabd0931cbfab294))
+* **scripts:** create docker mount directories on host [YTFRONT-6030] ([f6d49de](https://github.com/ytsaurus/ytsaurus-ui/commit/f6d49dedde7a339d21ef89ebdb99c4425cb85496))
+
+
+### Performance Improvements
+
+* **Accounts:** yield during account parsing [YTFRONT-6021] ([a6e2e1a](https://github.com/ytsaurus/ytsaurus-ui/commit/a6e2e1a76fa01f2d2d8eb3aea39811dbdeb8db4a))
+* **TreeList:** reduce flatten allocations [YTFRONT-6021] ([7673066](https://github.com/ytsaurus/ytsaurus-ui/commit/76730665c037b573caf26037785c9e69b0bf38fb))
+* **TreeList:** skip trivial tree sorting [YTFRONT-6021] ([597aed7](https://github.com/ytsaurus/ytsaurus-ui/commit/597aed70f12fbe7b2503e3929ba9ce748a73f5a4))
+
 ## [3.27.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.26.0...ui-v3.27.0) (2026-09-25)
 
 
