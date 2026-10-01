@@ -161,7 +161,7 @@ export function ColumnCell({
     const [isPreviewInProgress, setPreviewInProgress] = React.useState(false);
 
     const showPreview = async () => {
-        if (isPreviewInProgress) {
+        if (!onShowPreview || isPreviewInProgress) {
             return;
         }
 
@@ -192,7 +192,7 @@ export function ColumnCell({
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
-            {isIncompleteValue ? (
+            {isIncompleteValue && onShowPreview ? (
                 <Tooltip content={i18n('load-complete-value')}>
                     <div
                         className={block('incomplete-value')}
