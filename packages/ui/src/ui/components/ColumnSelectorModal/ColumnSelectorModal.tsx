@@ -6,7 +6,10 @@ import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
 import Modal from '../Modal/Modal';
-import ColumnSelector, {makeItemsCopy} from '../ColumnSelector/ColumnSelector';
+import ColumnSelector, {
+    type ColumnSelectorProps,
+    makeItemsCopy,
+} from '../ColumnSelector/ColumnSelector';
 import NoContentImage from '../../assets/img/svg/modal-no-content.svg';
 import i18n from './i18n';
 
@@ -185,7 +188,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
         description,
         className,
     }: {
-        props: object;
+        props: ColumnSelectorProps<ColumnSelectorItem<T>>;
         title: string;
         description: string;
         className?: string;
