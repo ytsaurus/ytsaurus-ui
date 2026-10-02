@@ -16,21 +16,31 @@ export type FormattedLinkProps = {
         tab?: string;
         [key: string]: unknown;
     };
-    text: Exclude<React.ReactNode, null | undefined>;
     className?: string;
-    asHTML?: boolean;
     title?: string;
     theme?: LinkProps['theme'];
     onClick?: LinkProps['onClick'];
-};
+} & (
+    | {text: React.ReactElement; asHTML?: boolean}
+    | (FormattedTextProps & {text: NonNullable<FormattedTextProps['text']>})
+);
 
 function FormattedLink(props: FormattedLinkProps & RouteComponentProps<RouteParams>) {
     const {state, theme = 'ghost', className, text, match, onClick, ...rest} = props;
     const url = computeStateQuery({cluster: match.params.cluster, ...state});
-    const formattedText = text as FormattedTextProps['text'];
+    const renderText = () => {
+        if (React.isValidElement<React.ReactElement['props']>(props.text)) {
+            return text;
+        }
+        return props.asHTML ? (
+            <FormattedText {...rest} text={props.text} asHTML />
+        ) : (
+            <FormattedText {...rest} text={props.text} asHTML={props.asHTML} />
+        );
+    };
     return (
         <Link routed url={url} theme={theme} onClick={onClick} className={className}>
-            {React.isValidElement(text) ? text : <FormattedText text={formattedText} {...rest} />}
+            {renderText()}
         </Link>
     );
 }
