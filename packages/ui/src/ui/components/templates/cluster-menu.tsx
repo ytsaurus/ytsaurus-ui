@@ -1,12 +1,25 @@
 import React from 'react';
-import {Link} from '@gravity-ui/uikit';
+import {Link as LinkImpl, type LinkProps} from '@gravity-ui/uikit';
 
 import StatusBulb from '../../components/StatusBulb/StatusBulb';
 import hammer from '../../common/hammer';
-import templates from './utils.js';
+import templates from './utils';
 import {getClusterAppearance} from '../../appearance';
 
-templates.add('cluster-menu', {
+// Keep the ignored legacy prop and the same UIKit component at runtime.
+const Link: React.ComponentType<LinkProps & {theme?: string}> = LinkImpl;
+
+type ClusterMenuItem = {
+    id: string;
+    name: string;
+    theme?: string;
+    environment?: string;
+    access: 'none' | 'granted';
+    status: 'available' | 'unavailable';
+    version?: string;
+};
+
+templates.add<ClusterMenuItem>('cluster-menu', {
     image(item) {
         const {theme} = item;
         const itemStyle = {
@@ -35,18 +48,22 @@ templates.add('cluster-menu', {
         );
     },
     access(item) {
-        const theme = {
-            none: 'disabled',
-            granted: 'enabled',
-        }[item.access];
+        const theme = (
+            {
+                none: 'disabled',
+                granted: 'enabled',
+            } as const
+        )[item.access];
 
         return <StatusBulb theme={theme} />;
     },
     status(item) {
-        const theme = {
-            available: 'enabled',
-            unavailable: 'disabled',
-        }[item.status];
+        const theme = (
+            {
+                available: 'enabled',
+                unavailable: 'disabled',
+            } as const
+        )[item.status];
 
         return <StatusBulb theme={theme} />;
     },
