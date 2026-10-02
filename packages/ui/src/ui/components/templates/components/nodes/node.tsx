@@ -14,10 +14,12 @@ templates.add<{cell_id?: string; peer_id?: number; state: TabletSlotState}>(
     'components/nodes/node',
     {
         cell_id(item) {
-            const url = genTabletCellBundlesCellUrl(item.cell_id as string, YT.cluster);
-
             return item.cell_id ? (
-                <Link url={url} theme="ghost" routed>
+                <Link
+                    url={genTabletCellBundlesCellUrl(item.cell_id, YT.cluster)}
+                    theme="ghost"
+                    routed
+                >
                     {item.cell_id}
                 </Link>
             ) : (
