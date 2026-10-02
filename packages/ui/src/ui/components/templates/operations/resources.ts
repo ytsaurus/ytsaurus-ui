@@ -1,7 +1,7 @@
 import templates from '../../../components/templates/utils';
 import hammer from '../../../common/hammer';
 
-templates.add('operations/detail/resources/intermediate', {
+templates.add<Record<string, number | string>>('operations/detail/resources/intermediate', {
     account(item, column) {
         return hammer.format['ValueOrDefault'](item[column]);
     },
