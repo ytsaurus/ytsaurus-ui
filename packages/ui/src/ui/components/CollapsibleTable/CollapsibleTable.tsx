@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
 import ElementsTable from '../../components/ElementsTable/ElementsTable';
@@ -12,14 +11,18 @@ import './CollapsibleTable.scss';
 const headingBlock = cn('elements-heading');
 const block = cn('collapsible-table');
 
-class CollapsibleTable extends Component {
-    static propTypes = {
-        allItemsCount: PropTypes.number.isRequired,
-        renderToggler: PropTypes.func.isRequired,
-        heading: PropTypes.string.isRequired,
-        className: PropTypes.string,
-    };
+export type CollapsibleTableProps = {
+    allItemsCount: number;
+    renderToggler: () => React.ReactNode;
+    heading: string;
+    className?: string;
+    items: object[];
+    columns?: object;
+    templates?: object;
+    css?: string;
+};
 
+class CollapsibleTable extends Component<CollapsibleTableProps> {
     renderHeading() {
         const {heading, allItemsCount} = this.props;
 
@@ -31,7 +34,7 @@ class CollapsibleTable extends Component {
         );
     }
 
-    render() {
+    override render() {
         const {className, renderToggler, ...rest} = this.props;
 
         return (
