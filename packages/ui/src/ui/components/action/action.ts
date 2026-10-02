@@ -8,8 +8,11 @@ const action = {
         return evt.ctrlKey || evt.metaKey || evt.button === 1;
     },
     isCheckboxClicked(evt: Pick<ActionMouseEvent, 'target'>) {
-        const target = evt.target as HTMLInputElement;
-        return target.type === 'checkbox' || target.className === 'checkbox__label';
+        const {target} = evt;
+        return (
+            ('type' in target && target.type === 'checkbox') ||
+            ('className' in target && target.className === 'checkbox__label')
+        );
     },
     textSelected() {
         return typeof document.getSelection === 'function'
@@ -19,7 +22,11 @@ const action = {
     isTableCellSelected() {
         if (typeof document.getSelection === 'function') {
             const selection = document.getSelection()!;
-            return selection.anchorNode && (selection.anchorNode as HTMLElement).tagName === 'TR';
+            return (
+                selection.anchorNode &&
+                'tagName' in selection.anchorNode &&
+                selection.anchorNode.tagName === 'TR'
+            );
         }
         return false;
     },
