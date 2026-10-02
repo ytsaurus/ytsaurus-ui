@@ -138,7 +138,7 @@ export default class ColumnSelector extends Component {
     };
 
     static defaultProps = {
-        itemRenderer: ({name, caption = name}) => renderText(caption, {asHTML: false}),
+        itemRenderer: ({name, caption = name}) => renderText({text: caption, asHTML: false}),
         isSortable: false,
         isHeadless: false,
         isSelectable: true,
