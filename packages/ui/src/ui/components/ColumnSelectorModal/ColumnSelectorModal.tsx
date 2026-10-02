@@ -37,7 +37,8 @@ export type ColumnSelectorItem<DataT> = {
 
 type Props<T> = ColumnSelectorModalProps<T>;
 
-type State<T> = Pick<Props<T>, 'items' | 'srcItems'> & {
+type State<T> = Pick<Props<T>, 'items'> & {
+    srcItems: Props<T>['items'];
     itemsOrder: Array<string>;
     isContentVisible: boolean;
 };
@@ -98,12 +99,12 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
         return items.sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
     }
 
-    _getSelectorProps<P>(props: P, items?: Props<T>['items']) {
+    _getSelectorProps<P>(props: P, items: Props<T>['items']) {
         return {
             ...props,
             items,
             showDisabledItems: true,
-            isHeadless: false,
+            isHeadless: false as const,
             isFilterable: true,
             onChange: this.onSourceChange,
         };

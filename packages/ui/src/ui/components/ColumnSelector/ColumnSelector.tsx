@@ -37,18 +37,16 @@ export type ColumnSelectorItem = {
 
 export type ColumnSelectorProps<T extends ColumnSelectorItem = ColumnSelectorItem> = {
     className?: string;
-    items: T[] | undefined;
     srcItems?: T[];
     showDisabledItems?: boolean;
     isSortable?: boolean;
     isSelectable?: boolean;
     isFilterable?: boolean;
     showSelectedOnly?: boolean;
-    isHeadless?: boolean;
     onChange: (data: {items: T[]}) => void;
     children?: React.ReactNode;
     itemRenderer?: {render(item: T): React.ReactNode}['render'];
-};
+} & ({isHeadless: true; items: T[] | undefined} | {isHeadless?: false; items: T[]});
 
 type ColumnSelectorState<T extends ColumnSelectorItem = ColumnSelectorItem> = {
     showSelectedOnly?: boolean;
@@ -197,7 +195,7 @@ export default class ColumnSelector<
     }
 
     get items() {
-        return this.props.isHeadless ? this.state.items! : (this.props.items as T[]);
+        return this.props.isHeadless ? this.state.items! : this.props.items;
     }
 
     get buttonALLisDisabled() {
