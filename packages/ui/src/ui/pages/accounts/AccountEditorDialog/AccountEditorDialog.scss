@@ -7,12 +7,8 @@
 
     &__sidebar {
         flex: 0 0 33%;
-        padding: 15px 15px 15px 30px;
+        padding: 15px 15px 15px 0;
         background-color: var(--light-background);
-
-        .elements-tabs {
-            margin-left: -30px;
-        }
     }
 
     &__content {
