@@ -1,39 +1,32 @@
-import {Popup} from '@gravity-ui/uikit';
+import {Popup, type PopupProps} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
-import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import templates from '../templates/templates';
 import './Dropdown.scss';
 
 const block = cn('yt-dropdown');
 
-class Dropdown extends Component {
-    static propTypes = {
-        button: PropTypes.oneOfType([PropTypes.element, PropTypes.object]).isRequired,
-        className: PropTypes.string,
-        popup: PropTypes.object,
-        directions: PropTypes.array,
-        trigger: PropTypes.oneOf(['click', 'hover']).isRequired,
-        template: PropTypes.oneOfType([
-            PropTypes.element,
-            PropTypes.shape({
-                key: PropTypes.string.isRequired,
-                data: PropTypes.object,
-            }),
-        ]).isRequired,
-        zIndexGroupLevel: PropTypes.number,
-    };
+export type DropdownProps = {
+    button: React.ReactElement<React.HTMLAttributes<HTMLElement>>;
+    className?: string;
+    popup?: Partial<PopupProps>;
+    directions?: PopupProps['placement'][];
+    trigger: 'click' | 'hover';
+    template: React.ReactElement | {key: string; data?: object};
+    zIndexGroupLevel?: number;
+};
 
-    static defaultProps = {
+class Dropdown extends Component<DropdownProps, {popupVisible: boolean}> {
+    static defaultProps: Pick<DropdownProps, 'zIndexGroupLevel' | 'directions'> = {
         zIndexGroupLevel: 1,
         directions: ['bottom-end', 'top-end'],
     };
 
-    state = {
+    override state = {
         popupVisible: false,
     };
 
-    anchor = React.createRef();
+    anchor = React.createRef<HTMLSpanElement>();
 
     toggle = () =>
         this.setState((prevState) => ({
@@ -58,12 +51,15 @@ class Dropdown extends Component {
 
     renderTemplate() {
         const {template} = this.props;
-        const {key, data} = this.props.template;
-        const renderer = templates.get(key).__default__;
+        if (React.isValidElement<React.ReactElement['props']>(template)) {
+            return React.cloneElement(template);
+        }
+        const {key, data} = template;
+        const renderer = templates.get<{
+            __default__: (this: Dropdown, data?: object) => React.ReactNode;
+        }>(key).__default__;
 
-        return React.isValidElement(template)
-            ? React.cloneElement(template)
-            : renderer.call(this, data);
+        return renderer.call(this, data);
     }
 
     renderPopup() {
@@ -86,7 +82,7 @@ class Dropdown extends Component {
         );
     }
 
-    render() {
+    override render() {
         const {className} = this.props;
 
         return (
