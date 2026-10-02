@@ -17,9 +17,9 @@ export type DropdownProps = {
 };
 
 class Dropdown extends Component<DropdownProps, {popupVisible: boolean}> {
-    static defaultProps = {
+    static defaultProps: Pick<DropdownProps, 'zIndexGroupLevel' | 'directions'> = {
         zIndexGroupLevel: 1,
-        directions: ['bottom-end', 'top-end'] as PopupProps['placement'][],
+        directions: ['bottom-end', 'top-end'],
     };
 
     override state = {
@@ -51,14 +51,15 @@ class Dropdown extends Component<DropdownProps, {popupVisible: boolean}> {
 
     renderTemplate() {
         const {template} = this.props;
-        const {key, data} = this.props.template as {key: string; data?: object};
+        if (React.isValidElement<React.ReactElement['props']>(template)) {
+            return React.cloneElement(template);
+        }
+        const {key, data} = template;
         const renderer = templates.get<{
             __default__: (this: Dropdown, data?: object) => React.ReactNode;
         }>(key).__default__;
 
-        return React.isValidElement(template)
-            ? React.cloneElement(template)
-            : renderer.call(this, data);
+        return renderer.call(this, data);
     }
 
     renderPopup() {
