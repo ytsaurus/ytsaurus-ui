@@ -3,12 +3,18 @@ import React from 'react';
 import FormattedText, {type FormattedTextProps} from './FormattedText';
 import FormattedLink, {type FormattedLinkProps} from './FormattedLink';
 
-export type FormattedTextOrLinkProps = FormattedTextProps &
-    Partial<Omit<FormattedLinkProps, keyof FormattedTextProps>> & {
-        asLink?: boolean;
+type TextOnlyProps = FormattedTextProps &
+    Partial<Omit<FormattedLinkProps, keyof FormattedTextProps>> & {asLink?: false};
+
+type TextOrLinkProps = FormattedTextProps &
+    Pick<FormattedLinkProps, 'state'> &
+    Partial<Omit<FormattedLinkProps, keyof FormattedTextProps | 'state'>> & {
+        text: NonNullable<FormattedTextProps['text']>;
+        asLink: boolean;
     };
 
-export default function FormattedTextOrLink({asLink = false, ...props}: FormattedTextOrLinkProps) {
-    const linkProps = props as FormattedLinkProps;
-    return asLink ? <FormattedLink {...linkProps} /> : <FormattedText {...props} />;
+export type FormattedTextOrLinkProps = TextOnlyProps | TextOrLinkProps;
+
+export default function FormattedTextOrLink(props: FormattedTextOrLinkProps) {
+    return props.asLink ? <FormattedLink {...props} /> : <FormattedText {...props} />;
 }
