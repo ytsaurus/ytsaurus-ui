@@ -1,25 +1,29 @@
 import React, {useEffect, useRef} from 'react';
 import screenfull from 'screenfull';
-import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
 const block = cn('fullscreen');
 
-FullScreen.propTypes = {
-    children: PropTypes.node.isRequired,
-    enabled: PropTypes.bool.isRequired,
-    className: PropTypes.string,
-    onChange: PropTypes.func,
+export type FullScreenProps = {
+    children: React.ReactNode;
+    enabled?: boolean;
+    className?: string;
+    onChange?: (enabled: boolean) => void;
 };
 
-export default function FullScreen({enabled = false, children, className, onChange = () => {}}) {
-    const container = useRef(null);
+export default function FullScreen({
+    enabled = false,
+    children,
+    className,
+    onChange = () => {},
+}: FullScreenProps) {
+    const container = useRef<HTMLDivElement>(null);
 
     const toggleScreen = () => {
         if (screenfull.isFullscreen && !enabled) {
             screenfull.exit();
         } else if (!screenfull.isFullscreen && enabled) {
-            screenfull.request(container.current);
+            screenfull.request(container.current as HTMLDivElement);
         }
     };
 
