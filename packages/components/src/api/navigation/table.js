@@ -26,6 +26,7 @@ export function prepareRows(rowData, reverseRows = false) {
     return {
         rows: rows,
         columns: data.all_column_names,
+        incompleteColumns: data.incomplete_columns === true || data.incomplete_columns === 'true',
         yqlTypes: data.yql_type_registry || null,
     };
 }

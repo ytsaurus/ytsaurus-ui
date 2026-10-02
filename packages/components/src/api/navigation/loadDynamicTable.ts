@@ -75,10 +75,14 @@ export async function loadDynamicTableRequest({
         return Promise.reject(new Error('Dynamic table has denied key columns'));
     }
 
+    if (availableColumns.length === 0) {
+        throw new Error('Dynamic table has no readable columns');
+    }
+
     const aColumns = availableColumns.map((col) => unipika.decode(col, showDecoded));
     const parameters = {
         query: Query.prepareQuery({
-            aColumns,
+            columns: aColumns,
             path,
             keyColumns,
             offset: 0,

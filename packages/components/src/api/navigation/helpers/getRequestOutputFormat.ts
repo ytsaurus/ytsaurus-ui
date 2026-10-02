@@ -1,5 +1,3 @@
-import map_ from 'lodash/map';
-import filter_ from 'lodash/filter';
 import {getDefaultRequestOutputFormat} from './getDefaultRequestOutputFormat';
 import {ReadTableOutputFormat} from '../../../types/yt-types';
 
@@ -9,25 +7,23 @@ export const getRequestOutputFormat = ({
     limit,
     useYqlTypes,
 }: {
-    columns: any[];
+    columns?: string[];
     stringLimit?: number;
     limit?: number;
     useYqlTypes?: boolean;
 }): ReadTableOutputFormat => {
-    const filteredColumns = filter_(columns, (column) => column.checked || column.keyColumn);
-    const columnNames = map_(filteredColumns, (column) => column.name);
     const outputFormat = getDefaultRequestOutputFormat({
         stringLimit,
         tableColumnLimit: limit,
         columnNamesLimit: 3000,
         useYqlTypes,
     });
-    if (columnNames.length) {
+    if (columns?.length) {
         return {
             ...outputFormat,
             $attributes: {
                 ...outputFormat.$attributes,
-                column_names: columnNames,
+                column_names: columns,
             },
         };
     }
