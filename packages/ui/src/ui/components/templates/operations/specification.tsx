@@ -13,13 +13,25 @@ import {Page} from '../../../constants/index';
 
 import hammer from '../../../common/hammer';
 import {paramsToQuery} from '../../../utils';
-import OperationIOLink from '../../../pages/operations/OperationIOLink/OperationIOLink';
+import OperationIOLink, {
+    type OperationIOLinkProps,
+} from '../../../pages/operations/OperationIOLink/OperationIOLink';
 import {YT} from '../../../config/yt-config';
 
 const block = cn('specification');
 const ellipsis = cn('elements-ellipsis');
 
-templates.add('operations/detail/specification/io', {
+type SpecificationItem = OperationIOLinkProps & {
+    filters?: {columns?: string[]; ranges?: object[]};
+    typedFilters?: object;
+    livePreview: React.ComponentProps<typeof TemplateLivePreivew> & {supported: boolean};
+    primary?: boolean;
+    teleport?: boolean;
+    append?: boolean;
+    foreign?: boolean;
+};
+
+templates.add<SpecificationItem>('operations/detail/specification/io', {
     name(item) {
         const {path, originalPath, transaction, remote, url: itemUrl} = item;
 
