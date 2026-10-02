@@ -1,57 +1,55 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import {TextInput} from '@gravity-ui/uikit';
 
 import Icon from '../Icon/Icon';
-import {Hotkey} from '@ytsaurus/components';
+import {Hotkey, type HotkeyProps} from '@ytsaurus/components';
 
 import './Pagination.scss';
-import Button from '../Button/Button';
+import Button, {type ButtonProps} from '../Button/Button';
 
 import i18n from './i18n';
 
-const paginationControlComponent = PropTypes.shape({
-    handler: PropTypes.func,
-    target: PropTypes.func,
-    disabled: PropTypes.bool,
-    hotkey: PropTypes.string,
-    hotkeyScope: PropTypes.string,
-    hotkeyHandler: PropTypes.func,
-}).isRequired;
+export type PaginationControl = {
+    handler?: React.MouseEventHandler<HTMLButtonElement>;
+    target?: () => void;
+    disabled?: boolean;
+    hotkey?: string;
+    hotkeyScope?: string;
+    hotkeyHandler?: HotkeyProps['settings'][number]['handler'];
+};
 
-const supportedSizes = ['s', 'm', 'l'];
+export type PaginationProps = {
+    className?: string;
+    size?: 's' | 'm' | 'l';
+    first: PaginationControl;
+    previous: PaginationControl;
+    next: PaginationControl;
+    last: PaginationControl;
+    tooltip?: string;
+    showInput?: boolean;
+    inputValue?: string;
+    onChange?: (value: string) => void;
+};
 const block = cn('elements-pagination');
 
-export default class Pagination extends React.Component {
-    static propTypes = {
-        className: PropTypes.string,
-        size: PropTypes.oneOf(supportedSizes),
-        first: paginationControlComponent,
-        previous: paginationControlComponent,
-        next: paginationControlComponent,
-        last: paginationControlComponent,
-        tooltip: PropTypes.string,
-        showInput: PropTypes.bool,
-        inputValue: PropTypes.string,
-        onChange: PropTypes.func,
-    };
+export default class Pagination extends React.Component<PaginationProps> {
     static defaultProps = {
-        size: 'm',
+        size: 'm' as const,
         showInput: false,
     };
 
-    renderComponent(name, control) {
+    renderComponent(name: 'first' | 'previous' | 'next' | 'last', control: PaginationControl) {
         const handler = control.handler;
 
         const disabled = typeof control.disabled === 'boolean' ? control.disabled : false;
 
         const {size, tooltip} = this.props;
-        const hotkeySettings = [
+        const hotkeySettings: HotkeyProps['settings'] = [
             {
-                keys: control.hotkey,
-                scope: control.hotkeyScope,
-                handler: control.hotkeyHandler,
+                keys: control.hotkey!,
+                scope: control.hotkeyScope!,
+                handler: control.hotkeyHandler!,
             },
         ];
 
@@ -76,7 +74,7 @@ export default class Pagination extends React.Component {
                             previous: 'clear-brick',
                             next: 'brick-clear',
                             last: 'brick-round',
-                        }[name]
+                        }[name] as ButtonProps['pin']
                     }
                 >
                     <Icon
@@ -86,7 +84,7 @@ export default class Pagination extends React.Component {
                                 previous: 'angle-left',
                                 next: 'angle-right',
                                 last: 'angle-double-right',
-                            }[name]
+                            }[name] as React.ComponentProps<typeof Icon>['awesome']
                         }
                         size={13}
                     />
@@ -111,7 +109,7 @@ export default class Pagination extends React.Component {
             />
         ) : null;
     }
-    render() {
+    override render() {
         const {first, previous, next, last, className} = this.props;
 
         return (
