@@ -56,7 +56,7 @@ export interface AccountSelector {
     $attributes: unknown;
     parent?: string;
 
-    master_memory_detailed: {
+    master_memory_detailed?: {
         nodes?: number;
         chunks?: number;
         attributes?: number;
