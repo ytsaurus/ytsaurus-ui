@@ -4,14 +4,14 @@ import block from 'bem-cn-lite';
 import Label from '../../components/Label';
 import Icon from '../../components/Icon/Icon';
 
-import templates from './utils.js';
+import templates, {type TemplateContext} from './utils';
 import hammer from '../../common/hammer';
 import i18n from './i18n';
 
 const b = block('system');
 
-templates.add('system/chunk-cells', {
-    __default__(item, columnName) {
+templates.add<object>('system/chunk-cells', {
+    __default__(this: TemplateContext<object, number>, item, columnName) {
         const column = this.getColumn(columnName);
         const value = column?.get?.(item);
         const theme = column?.label?.(value) || 'default';
@@ -19,7 +19,7 @@ templates.add('system/chunk-cells', {
 
         return <Label theme={theme} text={text} />;
     },
-    cell_tag(item, columnName) {
+    cell_tag(this: TemplateContext<object, number>, item, columnName) {
         const column = this.getColumn(columnName);
         const cellTag = column?.get?.(item);
 
