@@ -9,6 +9,7 @@ import {Breadcrumbs, Button, Flex, Text} from '@gravity-ui/uikit';
 
 import {ClipboardButton} from '@ytsaurus/components';
 import {YTDFDialog, makeErrorFields} from '../../../containers/Dialog';
+import {useErrorYsonSettings} from '../../../hooks/useErrorYsonSettings';
 import Favourites, {type FavouritesItem} from '../../../components/Favourites/Favourites';
 import {EditableBreadcrumbs} from '../../../components/EditableBreadcrumbs';
 import Suggest from '../../../components/Suggest/Suggest';
@@ -26,7 +27,10 @@ import {chytApiAction} from '../../../utils/strawberryControllerApi';
 import {chytCliqueCreate} from '../../../store/actions/chyt/list';
 import {chytToggleFavourite} from '../../../store/actions/favourites';
 import {type YTError} from '../../../../@types/types';
+import {type NumberInputWithErrorProps} from '../../../components/NumberInput/NumberInput';
 import {ChytCliquePageTab} from '../../../constants/chyt-page';
+import {useCreationOptions} from './useCreationOptions';
+import {creationNumberField} from './creation-options';
 
 import './ChytPageTopRow.scss';
 import i18n from './i18n';
@@ -191,6 +195,8 @@ function ChytAliasSuggest({
 type FormValues = {
     alias: string;
     instance_count: number;
+    instance_cpu?: NumberInputWithErrorProps['value'];
+    instance_total_memory?: NumberInputWithErrorProps['value'];
     tree: string[];
     pool: string;
     runAfterCreation: boolean;
@@ -201,15 +207,30 @@ function CreateChytButton() {
     const history = useHistory();
     const cluster = useSelector(selectCluster);
     const [visible, setVisible] = React.useState(false);
+    const isAdmin = useSelector(selectIsAdmin);
+    const unipikaSettings = useErrorYsonSettings();
+    const {load, loading, options} = useCreationOptions(cluster, isAdmin);
+    const resources = options?.resources;
 
     const [error, setError] = React.useState<YTError | undefined>();
 
     return (
         <div className={block('create-clique')}>
-            <Button view="action" onClick={() => setVisible(!visible)}>
+            <Button
+                view="action"
+                loading={loading}
+                onClick={async () => {
+                    if (visible && options) {
+                        setVisible(false);
+                    } else if (await load()) {
+                        setError(undefined);
+                        setVisible(true);
+                    }
+                }}
+            >
                 {i18n('action_create-clique')}
             </Button>
-            {visible && (
+            {visible && options && (
                 <WaitForDefaultPoolTree>
                     {({defaultPoolTree}) => (
                         <YTDFDialog<FormValues>
@@ -218,19 +239,21 @@ function CreateChytButton() {
                             headerProps={{title: i18n('action_create-clique')}}
                             onClose={() => setVisible(false)}
                             onAdd={(form) => {
-                                const {
-                                    values: {instance_count, ...rest},
-                                } = form.getState();
+                                const {values} = form.getState();
                                 return dispatch(
                                     chytCliqueCreate({
-                                        ...rest,
-                                        instance_count: instance_count || 1,
+                                        alias: values.alias,
+                                        pool: values.pool,
+                                        runAfterCreation: values.runAfterCreation,
+                                        instance_count: values.instance_count,
+                                        instance_cpu: values.instance_cpu?.value,
+                                        instance_total_memory: values.instance_total_memory?.value,
                                     }),
                                 )
                                     .then(() => {
                                         setError(undefined);
                                         history.push(
-                                            `/${cluster}/chyt/${rest.alias}/${ChytCliquePageTab.SPECLET}`,
+                                            `/${cluster}/chyt/${values.alias}/${ChytCliquePageTab.SPECLET}`,
                                         );
                                     })
                                     .catch((e) => {
@@ -250,11 +273,41 @@ function CreateChytButton() {
                                     type: 'range-input-picker',
                                     caption: i18n('field_instance-count'),
                                     extras: {
-                                        minValue: 1,
-                                        maxValue: 100,
+                                        minValue: resources?.instanceCount.min_value ?? 1,
+                                        maxValue: resources?.instanceCount.max_value ?? 100,
                                     },
                                     required: true,
                                 },
+                                ...(resources
+                                    ? [
+                                          {
+                                              ...creationNumberField<FormValues>(
+                                                  resources.instanceCpu,
+                                                  {
+                                                      allowEdit: true,
+                                                      defaultPoolTree,
+                                                      unipikaSettings,
+                                                  },
+                                              ),
+                                              name: 'instance_cpu',
+                                              caption: i18n('field_instance-cpu'),
+                                              tooltip: i18n('context_default-resources'),
+                                          },
+                                          {
+                                              ...creationNumberField<FormValues>(
+                                                  resources.instanceMemory,
+                                                  {
+                                                      allowEdit: true,
+                                                      defaultPoolTree,
+                                                      unipikaSettings,
+                                                  },
+                                              ),
+                                              name: 'instance_total_memory',
+                                              caption: i18n('field_instance-memory'),
+                                              tooltip: i18n('context_default-resources'),
+                                          },
+                                      ]
+                                    : []),
                                 {
                                     name: 'tree',
                                     type: 'pool-tree',
@@ -306,7 +359,7 @@ function CreateChytButton() {
                                 ...makeErrorFields([error]),
                             ]}
                             initialValues={{
-                                instance_count: 1,
+                                instance_count: resources?.instanceCount.default_value ?? 1,
                                 tree: [defaultPoolTree],
                                 runAfterCreation: true,
                             }}
