@@ -4,12 +4,12 @@ import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 
 import ypath from '../../../common/thor/ypath';
-import format from '../../../common/hammer/format';
 
 import {Breadcrumbs, Button, Flex, Text} from '@gravity-ui/uikit';
 
 import {ClipboardButton} from '@ytsaurus/components';
 import {YTDFDialog, makeErrorFields} from '../../../containers/Dialog';
+import {useErrorYsonSettings} from '../../../hooks/useErrorYsonSettings';
 import Favourites, {type FavouritesItem} from '../../../components/Favourites/Favourites';
 import {EditableBreadcrumbs} from '../../../components/EditableBreadcrumbs';
 import Suggest from '../../../components/Suggest/Suggest';
@@ -29,6 +29,8 @@ import {chytToggleFavourite} from '../../../store/actions/favourites';
 import {type YTError} from '../../../../@types/types';
 import {type NumberInputWithErrorProps} from '../../../components/NumberInput/NumberInput';
 import {ChytCliquePageTab} from '../../../constants/chyt-page';
+import {useCreationOptions} from './useCreationOptions';
+import {creationNumberField} from './creation-options';
 
 import './ChytPageTopRow.scss';
 import i18n from './i18n';
@@ -205,15 +207,30 @@ function CreateChytButton() {
     const history = useHistory();
     const cluster = useSelector(selectCluster);
     const [visible, setVisible] = React.useState(false);
+    const isAdmin = useSelector(selectIsAdmin);
+    const unipikaSettings = useErrorYsonSettings();
+    const {load, loading, options} = useCreationOptions(cluster, isAdmin);
+    const resources = options?.resources;
 
     const [error, setError] = React.useState<YTError | undefined>();
 
     return (
         <div className={block('create-clique')}>
-            <Button view="action" onClick={() => setVisible(!visible)}>
+            <Button
+                view="action"
+                loading={loading}
+                onClick={async () => {
+                    if (visible && options) {
+                        setVisible(false);
+                    } else if (await load()) {
+                        setError(undefined);
+                        setVisible(true);
+                    }
+                }}
+            >
                 {i18n('action_create-clique')}
             </Button>
-            {visible && (
+            {visible && options && (
                 <WaitForDefaultPoolTree>
                     {({defaultPoolTree}) => (
                         <YTDFDialog<FormValues>
@@ -228,7 +245,7 @@ function CreateChytButton() {
                                         alias: values.alias,
                                         pool: values.pool,
                                         runAfterCreation: values.runAfterCreation,
-                                        instance_count: values.instance_count || 1,
+                                        instance_count: values.instance_count,
                                         instance_cpu: values.instance_cpu?.value,
                                         instance_total_memory: values.instance_total_memory?.value,
                                     }),
@@ -256,42 +273,41 @@ function CreateChytButton() {
                                     type: 'range-input-picker',
                                     caption: i18n('field_instance-count'),
                                     extras: {
-                                        minValue: 1,
-                                        maxValue: 100,
+                                        minValue: resources?.instanceCount.min_value ?? 1,
+                                        maxValue: resources?.instanceCount.max_value ?? 100,
                                     },
                                     required: true,
                                 },
-                                {
-                                    name: 'instance_cpu',
-                                    type: 'number',
-                                    caption: i18n('field_instance-cpu'),
-                                    tooltip: i18n('context_default-resources'),
-                                    extras: {
-                                        // Match the default advertised by Strawberry DescribeOptions.
-                                        placeholder: format.Number(16),
-                                        min: 1,
-                                        max: 100,
-                                        integerOnly: true,
-                                        hidePrettyValue: true,
-                                        showHint: true,
-                                    },
-                                },
-                                {
-                                    name: 'instance_total_memory',
-                                    type: 'number',
-                                    caption: i18n('field_instance-memory'),
-                                    tooltip: i18n('context_default-resources'),
-                                    extras: {
-                                        // Match the default advertised by Strawberry DescribeOptions.
-                                        placeholder: format.Bytes(65 * 1024 ** 3),
-                                        min: 20 * 1024 ** 3,
-                                        max: 300 * 1024 ** 3,
-                                        format: 'Bytes',
-                                        integerOnly: true,
-                                        hidePrettyValue: true,
-                                        showHint: true,
-                                    },
-                                },
+                                ...(resources
+                                    ? [
+                                          {
+                                              ...creationNumberField<FormValues>(
+                                                  resources.instanceCpu,
+                                                  {
+                                                      allowEdit: true,
+                                                      defaultPoolTree,
+                                                      unipikaSettings,
+                                                  },
+                                              ),
+                                              name: 'instance_cpu',
+                                              caption: i18n('field_instance-cpu'),
+                                              tooltip: i18n('context_default-resources'),
+                                          },
+                                          {
+                                              ...creationNumberField<FormValues>(
+                                                  resources.instanceMemory,
+                                                  {
+                                                      allowEdit: true,
+                                                      defaultPoolTree,
+                                                      unipikaSettings,
+                                                  },
+                                              ),
+                                              name: 'instance_total_memory',
+                                              caption: i18n('field_instance-memory'),
+                                              tooltip: i18n('context_default-resources'),
+                                          },
+                                      ]
+                                    : []),
                                 {
                                     name: 'tree',
                                     type: 'pool-tree',
@@ -343,7 +359,7 @@ function CreateChytButton() {
                                 ...makeErrorFields([error]),
                             ]}
                             initialValues={{
-                                instance_count: 1,
+                                instance_count: resources?.instanceCount.default_value ?? 1,
                                 tree: [defaultPoolTree],
                                 runAfterCreation: true,
                             }}
