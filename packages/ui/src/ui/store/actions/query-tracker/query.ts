@@ -15,7 +15,7 @@ import {
     startQuery,
     updateACOQuery,
 } from './api';
-import {requestQueriesList} from './queriesList';
+import {refreshQueriesList, updateQueryInList} from './queriesList';
 import {
     SHARED_QUERY_ACO,
     selectCurrentDraftQueryACO,
@@ -386,6 +386,16 @@ export function updateQueryDraft(data: Partial<QueryState['draft']>) {
     return {type: SET_QUERY_PATCH, data};
 }
 
+export const updateQueryAnnotations =
+    (queryId: string, annotations: QueryItem['annotations']): AsyncAction =>
+    (dispatch, getState) => {
+        dispatch(updateQueryInList(queryId, {annotations}));
+
+        if (selectQueryDraft(getState()).id === queryId) {
+            dispatch(updateQueryDraft({annotations}));
+        }
+    };
+
 export const mergeSpytDefaultSettingsIntoDraft = (): AsyncAction => (dispatch, getState) => {
     const state = getState();
 
@@ -538,7 +548,7 @@ export function runQuery(
             dispatch(loadQuery(query_id));
         }
 
-        dispatch(requestQueriesList(true));
+        dispatch(refreshQueriesList());
     };
 }
 
@@ -553,7 +563,7 @@ export function abortCurrentQuery(): ThunkAction<any, RootState, any, SetQueryAc
                 errorTitle: 'Failed to abort query',
             });
             dispatch(loadQuery(currentQuery?.id, {dontReplaceQueryText: true}));
-            dispatch(requestQueriesList(true));
+            dispatch(refreshQueriesList());
         }
     };
 }
@@ -640,5 +650,5 @@ export const toggleShareQuery =
             type: UPDATE_ACO_QUERY,
             data: {access_control_objects: aco},
         });
-        dispatch(requestQueriesList(true));
+        dispatch(refreshQueriesList());
     };
