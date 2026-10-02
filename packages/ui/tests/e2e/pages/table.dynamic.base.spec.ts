@@ -1,5 +1,6 @@
 import {expect, test} from '@playwright/test';
 import {E2E_DIR, makeClusterTille, makeClusterUrl} from '../../utils';
+import {basePage} from '../../widgets/BasePage';
 
 const PATH = `${E2E_DIR}/dynamic-table`;
 
@@ -80,4 +81,57 @@ test('Dynamic table: column selector work properly', async ({page}) => {
 
     const emptyColHeader2 = await page.$('.data-table__table-wrapper th:nth-child(3)');
     expect(emptyColHeader2).toBeNull();
+});
+
+test('Dynamic table: timestamp keys should preserve pagination offsets', async ({page}) => {
+    test.setTimeout(30000);
+
+    await basePage(page).override_window__DATA__(
+        {},
+        {
+            'global::development::yqlTypes': true,
+            'global::navigation::rowsPerTablePage': 10,
+        },
+    );
+    await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/dynamic-timestamp-table`));
+
+    const table = page.locator('.navigation-table .data-table__table-wrapper');
+    const values = table.locator('tbody tr .yql_int64');
+    const nextPage = page.getByTitle('Next page', {exact: true});
+
+    const expectRows = async (start: number) => {
+        await expect(values).toHaveText(Array.from({length: 10}, (_, i) => String(start + i)));
+        // Query serialization must not change timestamp cells into Uint64 cells.
+        await expect(table.locator('tbody tr .yql_timestamp')).toHaveCount(10);
+    };
+    const expectOffset = async (offset: string) => {
+        await expect(page).toHaveURL((url) => url.searchParams.get('offsetValue') === offset);
+    };
+
+    await test.step('First page', async () => {
+        await expectRows(0);
+    });
+
+    await test.step('Second page preserves microseconds in the offset', async () => {
+        await nextPage.click();
+        await expectRows(10);
+        await expectOffset('(1704067200123466u)');
+    });
+    const secondPageUrl = page.url();
+
+    await test.step('Third page has no skipped or repeated rows', async () => {
+        await nextPage.click();
+        await expectRows(20);
+        await expectOffset('(1704067200123476u)');
+        await expect(nextPage).toBeDisabled();
+    });
+
+    // Backward pagination is disabled for dynamic tables; reopen the saved offset.
+    await test.step('Opening and reloading the saved second page', async () => {
+        await page.goto(secondPageUrl);
+        await expectRows(10);
+        await page.reload();
+        await expectRows(10);
+        await expectOffset('(1704067200123466u)');
+    });
 });
