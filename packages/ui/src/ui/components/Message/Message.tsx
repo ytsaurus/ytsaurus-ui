@@ -16,7 +16,7 @@ export type MessageProps = {
     theme?: string;
     showClose?: boolean;
     dismissCallback?: React.MouseEventHandler<HTMLButtonElement>;
-    content: React.ReactNode;
+    content: readonly React.ReactNode[];
     buttons?: Array<{text: string; callback: React.MouseEventHandler<HTMLButtonElement>}>;
 };
 
@@ -42,14 +42,11 @@ export default function Message({
                 </div>
             )}
 
-            {React.isValidElement(content)
-                ? // Preserve the existing object-shaped child; fixing it is a separate behavior change.
-                  ({content} as {content: React.ReactNode} & React.ReactElement)
-                : map_(content as readonly React.ReactNode[], (data, index) => (
-                      <p key={index} className={block('paragraph')}>
-                          {data}
-                      </p>
-                  ))}
+            {map_(content, (data, index) => (
+                <p key={index} className={block('paragraph')}>
+                    {data}
+                </p>
+            ))}
 
             {buttons && (
                 <div className={block('buttons')}>
