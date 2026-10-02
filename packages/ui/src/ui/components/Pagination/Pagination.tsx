@@ -69,22 +69,29 @@ export default class Pagination extends React.Component<PaginationProps> {
                         }[name]
                     }
                     pin={
-                        {
-                            first: 'round-brick',
-                            previous: 'clear-brick',
-                            next: 'brick-clear',
-                            last: 'brick-round',
-                        }[name] as ButtonProps['pin']
+                        (
+                            {
+                                first: 'round-brick',
+                                previous: 'clear-brick',
+                                next: 'brick-clear',
+                                last: 'brick-round',
+                            } satisfies Record<typeof name, ButtonProps['pin']>
+                        )[name]
                     }
                 >
                     <Icon
                         awesome={
-                            {
-                                first: 'angle-double-left',
-                                previous: 'angle-left',
-                                next: 'angle-right',
-                                last: 'angle-double-right',
-                            }[name] as React.ComponentProps<typeof Icon>['awesome']
+                            (
+                                {
+                                    first: 'angle-double-left',
+                                    previous: 'angle-left',
+                                    next: 'angle-right',
+                                    last: 'angle-double-right',
+                                } satisfies Record<
+                                    typeof name,
+                                    React.ComponentProps<typeof Icon>['awesome']
+                                >
+                            )[name]
                         }
                         size={13}
                     />
