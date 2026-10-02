@@ -47,6 +47,11 @@ export type StrawberryApi =
           params: {alias: string};
           response: WithResult<StrawberryDescribeOptionsType>;
       }
+    | {
+          action: 'describe_creation_options';
+          params: Record<string, never>;
+          response: WithResult<StrawberryDescribeOptionsType>;
+      }
     | {action: 'get_speclet'; params: {alias: string}; response: WithResult<unknown>}
     | {
           action: 'get_brief_info';
