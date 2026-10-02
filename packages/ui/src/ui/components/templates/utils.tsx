@@ -163,9 +163,11 @@ export function asNumber<K extends string>(item: Record<K, number>, columnName: 
     return hammer.format['Number'](item[columnName]);
 }
 
+const registeredTemplates: Record<string, object> = {};
+
 export default {
     __default__: defaultTemplate,
-    _templates: {} as Record<string, object>,
+    _templates: registeredTemplates,
     add<T>(
         templateId: string,
         templates: Record<string, (item: T, columnName: string) => React.ReactNode>,
