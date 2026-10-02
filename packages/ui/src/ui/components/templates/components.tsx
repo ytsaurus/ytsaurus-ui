@@ -9,12 +9,13 @@ import map_ from 'lodash/map';
 
 import {Link, Progress} from '@gravity-ui/uikit';
 
-import templates from '../../components/templates/utils.js';
+import templates from '../../components/templates/utils';
+import {type Node, type TabletSlotState} from '../../store/reducers/components/nodes/nodes/node';
 
 import hammer from '../../common/hammer';
 import {genTabletCellBundlesCellUrl} from '../../utils/tablet_cell_bundles';
 
-function renderUsage(used, limit, format) {
+function renderUsage(used: number, limit: number, format: 'Number' | 'Bytes') {
     const left = hammer.format[format](used);
     const right = hammer.format[format](limit);
 
@@ -56,11 +57,26 @@ const TABLET_SLOTS = {
         theme: 'success',
         text: 'L',
     },
-};
+} as const;
 
 const IO_WEIGHT_PREFIX = 'io_weight_';
 
-templates.add('components/nodes', {
+type NodeTemplateContext = {
+    props: {
+        templates: {
+            data: {
+                onMemoryProgressMouseEnter?: (
+                    item: Node,
+                    target: HTMLDivElement,
+                    event: React.MouseEvent<HTMLDivElement>,
+                ) => void;
+                onMemoryProgressMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
+            };
+        };
+    };
+};
+
+templates.add<Node>('components/nodes', {
     __default__(item, columnName) {
         if (typeof item.IOWeight === 'object' && columnName.indexOf(IO_WEIGHT_PREFIX) === 0) {
             const mediumName = columnName.slice(IO_WEIGHT_PREFIX.length);
@@ -71,9 +87,9 @@ templates.add('components/nodes', {
         return undefined;
     },
 
-    host: templates.get('components').host,
+    host: templates.get<Record<'host', (item: Node) => React.ReactNode>>('components').host,
 
-    state: templates.get('components').state,
+    state: templates.get<Record<'state', (item: Node) => React.ReactNode>>('components').state,
 
     rack(item) {
         return <span className="elements-monospace">{hammer.format['Address'](item.rack)}</span>;
@@ -91,7 +107,7 @@ templates.add('components/nodes', {
         return null;
     },
 
-    banned: templates.get('components').banned,
+    banned: templates.get<Record<'banned', (item: Node) => React.ReactNode>>('components').banned,
 
     decommissioned(item) {
         return item.decommissioned ? <span className={b({theme: 'default'})}>D</span> : '—';
@@ -108,7 +124,9 @@ templates.add('components/nodes', {
     },
 
     space(item) {
-        return <Progress value={item.spaceProgress} text={item.spaceText} theme="success" />;
+        return (
+            <Progress value={item.spaceProgress as number} text={item.spaceText} theme="success" />
+        );
     },
 
     space_limit(item) {
@@ -134,12 +152,12 @@ templates.add('components/nodes', {
     },
 
     cpu(item) {
-        return <Progress value={item.cpuProgress} text={item.cpuText} theme="success" />;
+        return <Progress value={item.cpuProgress as number} text={item.cpuText} theme="success" />;
     },
 
-    memory(item) {
+    memory(this: NodeTemplateContext, item) {
         const {onMemoryProgressMouseEnter, onMemoryProgressMouseLeave} = this.props.templates.data;
-        let onMouseEnterHandler;
+        let onMouseEnterHandler: React.MouseEventHandler<HTMLDivElement> | undefined;
 
         if (typeof onMemoryProgressMouseEnter === 'function') {
             onMouseEnterHandler = (event) =>
@@ -162,7 +180,13 @@ templates.add('components/nodes', {
     },
 
     network(item) {
-        return <Progress value={item.networkProgress} text={item.networkText} theme="success" />;
+        return (
+            <Progress
+                value={item.networkProgress as number}
+                text={item.networkText}
+                theme="success"
+            />
+        );
     },
 
     repair_slots(item) {
@@ -187,13 +211,13 @@ templates.add('components/nodes', {
 
     tablet_slots(item) {
         if (item.tabletSlots) {
-            return map_(keys_(item.tabletSlots.byState), (state) => {
+            return map_(keys_(item.tabletSlots.byState) as TabletSlotState[], (state) => {
                 const tabletSlots = item.tabletSlots.byState[state];
                 const {text, theme} = TABLET_SLOTS[state];
 
                 return (
                     <span key={state} className={b({theme})}>
-                        {text}:&nbsp;{tabletSlots.length}
+                        {text}:&nbsp;{tabletSlots!.length}
                     </span>
                 );
             });
@@ -211,13 +235,15 @@ templates.add('components/nodes', {
     },
 });
 
-templates.add('components/proxies', {
-    host: templates.get('components').host,
+type ProxyItem = {role: string; loadAverage: number; networkLoad: number; updatedAt: string};
 
-    state: templates.get('components').state,
+templates.add<ProxyItem>('components/proxies', {
+    host: templates.get<Record<'host', (item: ProxyItem) => React.ReactNode>>('components').host,
+
+    state: templates.get<Record<'state', (item: ProxyItem) => React.ReactNode>>('components').state,
 
     role(item) {
-        const roleThemes = {
+        const roleThemes: Record<string, string> = {
             control: 'default',
             data: 'default',
         };
@@ -228,7 +254,8 @@ templates.add('components/proxies', {
         return <span className={labelClassName}>{hammer.format['Address'](item.role)}</span>;
     },
 
-    banned: templates.get('components').banned,
+    banned: templates.get<Record<'banned', (item: ProxyItem) => React.ReactNode>>('components')
+        .banned,
 
     load_average(item) {
         return <span>{hammer.format['Number'](item.loadAverage, {digits: 2})}</span>;
@@ -243,36 +270,39 @@ templates.add('components/proxies', {
     },
 });
 
-templates.add('components/tablet-slots', {
-    cell_id(tabletSlot) {
-        if (typeof tabletSlot.cell_id === 'undefined') {
-            return hammer.format.NO_VALUE;
-        }
+templates.add<{cell_id?: string; peer_id?: number; state: TabletSlotState}>(
+    'components/tablet-slots',
+    {
+        cell_id(tabletSlot) {
+            if (typeof tabletSlot.cell_id === 'undefined') {
+                return hammer.format.NO_VALUE;
+            }
 
-        const tabletCellHref = genTabletCellBundlesCellUrl(tabletSlot.cell_id);
+            const tabletCellHref = genTabletCellBundlesCellUrl(tabletSlot.cell_id);
 
-        return (
-            <Link title={tabletSlot.cell_id} href={tabletCellHref} target="_blank">
-                {tabletSlot.cell_id}
-            </Link>
-        );
+            return (
+                <Link title={tabletSlot.cell_id} href={tabletCellHref} target="_blank">
+                    {tabletSlot.cell_id}
+                </Link>
+            );
+        },
+
+        peer_id(tabletSlot) {
+            if (typeof tabletSlot.peer_id === 'undefined') {
+                return hammer.format.NO_VALUE;
+            }
+
+            return tabletSlot.peer_id;
+        },
+
+        state(tabletSlot) {
+            const {text, theme} = TABLET_SLOTS[tabletSlot.state];
+
+            return (
+                <span className={b({theme})} title={tabletSlot.state}>
+                    {text}
+                </span>
+            );
+        },
     },
-
-    peer_id(tabletSlot) {
-        if (typeof tabletSlot.peer_id === 'undefined') {
-            return hammer.format.NO_VALUE;
-        }
-
-        return tabletSlot.peer_id;
-    },
-
-    state(tabletSlot) {
-        const {text, theme} = TABLET_SLOTS[tabletSlot.state];
-
-        return (
-            <span className={b({theme})} title={tabletSlot.state}>
-                {text}
-            </span>
-        );
-    },
-});
+);

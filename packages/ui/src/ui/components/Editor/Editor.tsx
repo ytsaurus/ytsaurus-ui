@@ -1,29 +1,29 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 import {TextInput} from '@gravity-ui/uikit';
 import key from 'hotkeys-js';
 
 import {Hotkey} from '@ytsaurus/components';
 
-const supportedSizes = ['xs', 's', 'm'];
-
-const propTypes = {
-    size: PropTypes.oneOf(supportedSizes),
-    value: PropTypes.string,
-    placeholder: PropTypes.string,
-    onApply: PropTypes.func.isRequired,
-    onCancel: PropTypes.func.isRequired,
-    scope: PropTypes.string.isRequired,
-    cancelOnBlur: PropTypes.bool,
+export type EditorProps = {
+    size?: Extract<React.ComponentProps<typeof TextInput>['size'], 's' | 'm'>;
+    value?: string;
+    placeholder?: string;
+    onApply: {apply(value: string | undefined): void}['apply'];
+    onCancel: () => void;
+    scope: string;
+    cancelOnBlur?: boolean;
+    visible?: boolean;
 };
 
 const defaultProps = {
-    size: 'm',
+    size: 'm' as const,
 };
 
-export default class Editor extends React.Component {
-    constructor(props) {
+export default class Editor extends React.Component<EditorProps, {value: string | undefined}> {
+    static defaultProps = defaultProps;
+
+    constructor(props: EditorProps) {
         super(props);
 
         this.onApply = this.onApply.bind(this);
@@ -36,7 +36,7 @@ export default class Editor extends React.Component {
             value: props.value,
         };
     }
-    willReceiveProps({value}) {
+    willReceiveProps({value}: Pick<EditorProps, 'value'>) {
         this.setState({value});
     }
     onApply() {
@@ -49,7 +49,7 @@ export default class Editor extends React.Component {
             this.props.onCancel();
         }
     }
-    onChange(value) {
+    onChange(value: string) {
         this.setState({value});
     }
     onFocus() {
@@ -62,7 +62,7 @@ export default class Editor extends React.Component {
             this.onCancel();
         }
     }
-    render() {
+    override render() {
         // console.log('<props>', this.props, '</props>');
 
         const {size, scope, placeholder} = this.props;
@@ -88,6 +88,3 @@ export default class Editor extends React.Component {
         );
     }
 }
-
-Editor.propTypes = propTypes;
-Editor.defaultProps = defaultProps;

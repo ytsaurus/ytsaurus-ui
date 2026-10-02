@@ -6,7 +6,10 @@ import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
 import Modal from '../Modal/Modal';
-import ColumnSelector, {makeItemsCopy} from '../ColumnSelector/ColumnSelector';
+import ColumnSelector, {
+    type ColumnSelectorProps,
+    makeItemsCopy,
+} from '../ColumnSelector/ColumnSelector';
 import NoContentImage from '../../assets/img/svg/modal-no-content.svg';
 import i18n from './i18n';
 
@@ -34,7 +37,8 @@ export type ColumnSelectorItem<DataT> = {
 
 type Props<T> = ColumnSelectorModalProps<T>;
 
-type State<T> = Pick<Props<T>, 'items' | 'srcItems'> & {
+type State<T> = Pick<Props<T>, 'items'> & {
+    srcItems: Props<T>['items'];
     itemsOrder: Array<string>;
     isContentVisible: boolean;
 };
@@ -95,12 +99,12 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
         return items.sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
     }
 
-    _getSelectorProps<P>(props: P, items?: Props<T>['items']) {
+    _getSelectorProps<P>(props: P, items: Props<T>['items']) {
         return {
             ...props,
             items,
             showDisabledItems: true,
-            isHeadless: false,
+            isHeadless: false as const,
             isFilterable: true,
             onChange: this.onSourceChange,
         };
@@ -185,7 +189,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
         description,
         className,
     }: {
-        props: object;
+        props: ColumnSelectorProps<ColumnSelectorItem<T>>;
         title: string;
         description: string;
         className?: string;

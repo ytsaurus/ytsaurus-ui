@@ -49,11 +49,14 @@ export const timeItems: React.ComponentProps<typeof RadioButton>['items'] = [
     },
 ];
 
-export interface CompactColumnSelectorProps<Names> {
+export interface CompactColumnSelectorProps<Names extends string> {
     items: Array<PartitionColumn<Names>>;
-    onChange: Function;
+    onChange: (data: {items: Array<PartitionColumn<Names>>}) => void;
 }
-export function CompactColumnSelector<Names>({items, onChange}: CompactColumnSelectorProps<Names>) {
+export function CompactColumnSelector<Names extends string>({
+    items,
+    onChange,
+}: CompactColumnSelectorProps<Names>) {
     return (
         <Dropdown
             className={block('filters-item')}

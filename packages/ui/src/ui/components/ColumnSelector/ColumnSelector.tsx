@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import {sortableContainer, sortableElement, sortableHandle} from 'react-sortable-hoc';
+import {
+    type SortEnd,
+    SortableContainer as sortableContainer,
+    SortableElement as sortableElement,
+    SortableHandle as sortableHandle,
+} from 'react-sortable-hoc';
 
 import each_ from 'lodash/each';
 import escapeRegExp_ from 'lodash/escapeRegExp';
@@ -14,7 +18,7 @@ import {List, TextInput} from '@gravity-ui/uikit';
 import Icon from '../../components/Icon/Icon';
 
 import {renderText} from '../../components/templates/utils';
-import Button from '../Button/Button';
+import Button, {type ButtonProps} from '../Button/Button';
 
 import i18n from './i18n';
 
@@ -22,7 +26,47 @@ import './ColumnSelector.scss';
 
 const block = cn('column-selector');
 
-export function makeItemsCopy(items) {
+export type ColumnSelectorItem = {
+    name: string;
+    checked: boolean;
+    keyColumn?: boolean;
+    caption?: string;
+    disabled?: boolean;
+    isDeletable?: boolean;
+};
+
+export type ColumnSelectorProps<T extends ColumnSelectorItem = ColumnSelectorItem> = {
+    className?: string;
+    srcItems?: T[];
+    showDisabledItems?: boolean;
+    isSortable?: boolean;
+    isSelectable?: boolean;
+    isFilterable?: boolean;
+    showSelectedOnly?: boolean;
+    onChange: (data: {items: T[]}) => void;
+    children?: React.ReactNode;
+    itemRenderer?: {render(item: T): React.ReactNode}['render'];
+} & ({isHeadless: true; items: T[] | undefined} | {isHeadless?: false; items: T[]});
+
+type ColumnSelectorState<T extends ColumnSelectorItem = ColumnSelectorItem> = {
+    showSelectedOnly?: boolean;
+    filter: string;
+    items?: T[];
+};
+type SortableListProps = Pick<
+    ColumnSelectorProps,
+    'isSortable' | 'isSelectable' | 'itemRenderer'
+> & {
+    items: ColumnSelectorItem[];
+    isDisabled?: boolean;
+    onCheckBoxChange: React.MouseEventHandler<HTMLSpanElement>;
+    useStaticSize?: boolean;
+};
+type SortableItemProps = Omit<SortableListProps, 'items' | 'useStaticSize'> & {
+    item: ColumnSelectorItem;
+};
+
+export function makeItemsCopy<T extends ColumnSelectorItem>(items?: T[]): T[] {
     return map_(items, (item) => {
         return {...item};
     });
@@ -34,8 +78,15 @@ const DragHandle = sortableHandle(() => (
     </div>
 ));
 
-const SortableItem = sortableElement(
-    ({item, isSortable, isSelectable, isDisabled, itemRenderer, onCheckBoxChange}) => {
+const SortableItem = sortableElement<SortableItemProps>(
+    ({
+        item,
+        isSortable,
+        isSelectable,
+        isDisabled,
+        itemRenderer,
+        onCheckBoxChange,
+    }: SortableItemProps) => {
         const active = !isDisabled && !item.disabled;
         const className = block('list-item', {
             selected: item.checked && active && 'yes',
@@ -43,7 +94,7 @@ const SortableItem = sortableElement(
             disabled: !active && 'yes',
         });
 
-        let showAction = true;
+        let showAction: boolean | undefined = true;
         if (item.checked) {
             showAction = 'isDeletable' in item ? item.isDeletable : true;
         }
@@ -53,7 +104,7 @@ const SortableItem = sortableElement(
                 {isSortable && item.checked && <DragHandle />}
                 <div className={block('list-item-name')}>
                     {item.keyColumn && <Icon awesome="key" />}
-                    {itemRenderer(item)}
+                    {itemRenderer!(item)}
                 </div>
                 {active && showAction && (
                     <span
@@ -72,7 +123,7 @@ const SortableItem = sortableElement(
 
 const LIST_ITEM_HEIGHT = 40;
 
-const SortableList = sortableContainer(
+const SortableList = sortableContainer<SortableListProps>(
     ({
         items,
         isSortable,
@@ -81,8 +132,12 @@ const SortableList = sortableContainer(
         onCheckBoxChange,
         isSelectable,
         useStaticSize,
-    }) => {
-        const renderItem = (item, isItemActive, itemIndex) => (
+    }: SortableListProps) => {
+        const renderItem = (
+            item: ColumnSelectorItem,
+            _isItemActive: boolean,
+            itemIndex: number,
+        ) => (
             <SortableItem
                 key={item.name}
                 index={itemIndex}
@@ -112,33 +167,12 @@ const SortableList = sortableContainer(
     },
 );
 
-export default class ColumnSelector extends Component {
-    static itemsProps = PropTypes.arrayOf(
-        PropTypes.shape({
-            name: PropTypes.string.isRequired,
-            checked: PropTypes.bool.isRequired,
-            keyColumn: PropTypes.bool,
-            caption: PropTypes.string,
-            disabled: PropTypes.bool,
-        }),
-    );
-
-    static propTypes = {
-        className: PropTypes.string,
-        items: ColumnSelector.itemsProps.isRequired,
-        showDisabledItems: PropTypes.bool,
-        isSortable: PropTypes.bool,
-        isSelectable: PropTypes.bool,
-        isFilterable: PropTypes.bool,
-        showSelectedOnly: PropTypes.bool,
-        isHeadless: PropTypes.bool,
-        onChange: PropTypes.func.isRequired,
-        children: PropTypes.node,
-        itemRenderer: PropTypes.func,
-    };
-
+export default class ColumnSelector<
+    T extends ColumnSelectorItem = ColumnSelectorItem,
+> extends Component<ColumnSelectorProps<T>, ColumnSelectorState<T>> {
     static defaultProps = {
-        itemRenderer: ({name, caption = name}) => renderText(caption, {asHTML: false}),
+        itemRenderer: ({name, caption = name}: ColumnSelectorItem) =>
+            renderText(caption, {asHTML: false}),
         isSortable: false,
         isHeadless: false,
         isSelectable: true,
@@ -146,11 +180,11 @@ export default class ColumnSelector extends Component {
         showSelectedOnly: false,
     };
 
-    constructor(props) {
+    constructor(props: ColumnSelectorProps<T>) {
         const {items, isHeadless, showSelectedOnly} = props;
         super(props);
 
-        const state = {
+        const state: ColumnSelectorState<T> = {
             showSelectedOnly,
             filter: '',
         };
@@ -161,7 +195,7 @@ export default class ColumnSelector extends Component {
     }
 
     get items() {
-        return this.props.isHeadless ? this.state.items : this.props.items;
+        return this.props.isHeadless ? this.state.items! : this.props.items;
     }
 
     get buttonALLisDisabled() {
@@ -175,13 +209,13 @@ export default class ColumnSelector extends Component {
     /*
       Takes items from the proper place (props or state), modifies them and writes them back at the same place.
      */
-    withActualItems(func) {
+    withActualItems(func: (data: {items: T[]}) => {items: T[]}) {
         const {onChange} = this.props;
         // headless widget keeps its state to itself, but calls onChange as a way of notifying caller about changes
         if (this.props.isHeadless) {
             const {items} = func({items: this.state.items || []});
             this.setState({items}, () => {
-                onChange({items: [...this.state.items]});
+                onChange({items: [...this.state.items!]});
             });
         } else {
             // widget inside modal passes all changes to the modal component where they are put into state
@@ -190,7 +224,7 @@ export default class ColumnSelector extends Component {
         }
     }
 
-    toggleItem = (name) => {
+    toggleItem = (name: string | null) => {
         this.withActualItems(({items}) => {
             const result = [...items];
             const index = result.findIndex((item) => item.name === name);
@@ -252,11 +286,11 @@ export default class ColumnSelector extends Component {
         });
     };
 
-    _handleCheckBoxChange = (event) => {
+    _handleCheckBoxChange = (event: React.MouseEvent<HTMLSpanElement>) => {
         this.toggleItem(event.currentTarget.getAttribute('data-item'));
     };
 
-    _handleSortEnd = ({oldIndex, newIndex}) => {
+    _handleSortEnd = ({oldIndex, newIndex}: SortEnd) => {
         if (oldIndex === newIndex) {
             return;
         }
@@ -294,7 +328,7 @@ export default class ColumnSelector extends Component {
         }));
     };
 
-    _changeFilter = (filter) => {
+    _changeFilter = (filter: string) => {
         this.setState({filter});
     };
 
@@ -311,7 +345,7 @@ export default class ColumnSelector extends Component {
 
     renderControls() {
         const {isFilterable, isSelectable, isSortable, isHeadless} = this.props;
-        const btnProps = {
+        const btnProps: ButtonProps = {
             size: 'm',
             className: block('controls-item'),
         };
@@ -359,12 +393,12 @@ export default class ColumnSelector extends Component {
         );
     }
 
-    filterItemsByName(items) {
+    filterItemsByName(items: T[]) {
         const re = new RegExp(escapeRegExp_(this.state.filter), 'i');
         return filter_(items, (item) => re.test(item.name));
     }
 
-    filterItems(items) {
+    filterItems(items: T[]) {
         const {showDisabledItems} = this.props;
         const result = showDisabledItems ? items : filter_(items, (item) => !item.disabled);
 
@@ -383,7 +417,7 @@ export default class ColumnSelector extends Component {
     getVisibleItemsMap() {
         return reduce_(
             this.filterItems(this.items),
-            (acc, item) => {
+            (acc: Record<string, T>, item) => {
                 acc[item.name] = item;
                 return acc;
             },
@@ -440,7 +474,7 @@ export default class ColumnSelector extends Component {
         );
     }
 
-    render() {
+    override render() {
         const {isHeadless, isSortable, className} = this.props;
         const classNames = block(
             {
