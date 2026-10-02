@@ -10,9 +10,9 @@ export {default as FormattedLink} from './FormattedLink';
 export {default as FormattedTextOrLink} from './FormattedTextOrLink';
 export {default as FormattedId} from './FormattedId/FormattedId';
 
-type FormatterContext<T> = {
+type FormatterContext<T, V = unknown> = {
     props: {
-        columns: Record<string, {get(item: T): unknown}>;
+        columns: Record<string, {get(item: T): V}>;
     };
 };
 
@@ -38,9 +38,13 @@ export function printColumnAsFloatNumber<T>(
     });
 }
 
-export function printColumnAsProgress<T>(this: FormatterContext<T>, item: T, columnName: string) {
+export function printColumnAsProgress<T>(
+    this: FormatterContext<T, ProgressProps>,
+    item: T,
+    columnName: string,
+) {
     const column = this.props.columns[columnName];
-    return <Progress {...(column.get(item) as ProgressProps)} />;
+    return <Progress {...column.get(item)} />;
 }
 
 export function printColumnAsTimeDuration<T>(
