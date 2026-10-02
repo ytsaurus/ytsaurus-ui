@@ -106,40 +106,15 @@ function Histogram(props: HistogramProps & ConnectedProps<typeof connector>) {
 
 // https://github.com/reduxjs/reselect#sharing-selectors-with-props-across-multiple-component-instances
 const makeMapStateToProps = () => {
-    // The legacy JavaScript selectors consume own props, which reselect's inferred types omit.
-    const getQuartiles = selectGetQuartiles() as (
-        state: RootState,
-        props: HistogramProps,
-    ) => {
-        min: number;
-        q25: number;
-        q50: number;
-        q75: number;
-        max: number;
-    };
-    const getPDF = selectGetPDF() as (
-        state: RootState,
-        props: HistogramProps,
-    ) => HistogramChartProps['pdf'];
-    const getECDF = selectGetECDF() as (
-        state: RootState,
-        props: HistogramProps,
-    ) => HistogramChartProps['ecdf'];
-    const getIsDataGood = selectGetIsDataGood() as (
-        state: RootState,
-        props: HistogramProps,
-    ) => boolean;
+    const getQuartiles = selectGetQuartiles();
+    const getPDF = selectGetPDF();
+    const getECDF = selectGetECDF();
+    const getIsDataGood = selectGetIsDataGood();
 
     return (state: RootState, props: HistogramProps) => {
-        const quartiles = getQuartiles(state, props) as {
-            min: number;
-            q25: number;
-            q50: number;
-            q75: number;
-            max: number;
-        };
-        const pdf = getPDF(state, props) as HistogramChartProps['pdf'];
-        const ecdf = getECDF(state, props) as HistogramChartProps['ecdf'];
+        const quartiles = getQuartiles(state, props);
+        const pdf = getPDF(state, props);
+        const ecdf = getECDF(state, props);
         const isDataGood = getIsDataGood(state, props);
 
         return {quartiles, pdf, ecdf, isDataGood};

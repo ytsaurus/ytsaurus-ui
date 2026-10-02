@@ -1,6 +1,10 @@
 import hammer from '../../common/hammer';
 import {createSelector} from 'reselect';
 
+/**
+ * @param {import('../reducers').RootState} state
+ * @param {import('../../components/Histogram/Histogram').HistogramProps} props
+ */
 const selectHistogram = (state, props) => props.histogram;
 
 export const selectGetQuartiles = () =>
