@@ -27,6 +27,8 @@ export type StrawberryApi =
                   active: boolean;
                   pool?: string;
                   instance_count: number;
+                  instance_cpu?: number;
+                  instance_total_memory?: number;
               };
           };
           response: void;

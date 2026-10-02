@@ -87,6 +87,8 @@ export function chytListAction<
 export function chytCliqueCreate(params: {
     alias: string;
     instance_count: number;
+    instance_cpu?: number;
+    instance_total_memory?: number;
     pool: string;
     runAfterCreation: boolean;
 }): ChytListThunkAction<void> {
@@ -95,7 +97,8 @@ export function chytCliqueCreate(params: {
         const cluster = selectCluster(state);
         const isAdmin = selectIsAdmin(state);
 
-        const {alias, runAfterCreation, pool, instance_count} = params;
+        const {alias, runAfterCreation, pool, instance_count, instance_cpu, instance_total_memory} =
+            params;
         return chytApiAction(
             'create',
             cluster,
@@ -104,6 +107,8 @@ export function chytCliqueCreate(params: {
                 speclet_options: {
                     active: runAfterCreation && Boolean(pool),
                     instance_count,
+                    ...(instance_cpu !== undefined ? {instance_cpu} : undefined),
+                    ...(instance_total_memory !== undefined ? {instance_total_memory} : undefined),
                     ...(pool ? {pool} : undefined),
                 },
             },
