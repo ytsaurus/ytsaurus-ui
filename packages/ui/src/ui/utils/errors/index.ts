@@ -42,6 +42,10 @@ export function getNotFoundError<T extends YTErrorRaw>(error: T): T | undefined 
     return getErrorWithCode([error], yt.codes.NOT_FOUND);
 }
 
+export function isPermissionDeniedOrNotFoundError(error: YTErrorRaw | undefined): boolean {
+    return Boolean(error && (getPermissionDeniedError(error) || getNotFoundError(error)));
+}
+
 export function appendInnerErrors(targetErr: any, innerErr: YTError) {
     const resolvedError = targetErr || new Error('Unexpected behavior: targetErr is undefined.');
 
