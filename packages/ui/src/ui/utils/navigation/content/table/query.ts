@@ -71,7 +71,7 @@ export class Query {
         }
 
         const [data, typeIndex] = value as YqlRawValue;
-        const yqlValue = [data, yqlTypes[Number(typeIndex)]];
+        const yqlValue = [data, prepareQueryValueType(yqlTypes[Number(typeIndex)])];
         return unipika.formatFromYQL(yqlValue, settings);
     }
 
@@ -173,4 +173,19 @@ function prepareKeyImpl(keys: Array<string>) {
         return '';
     }
     return wrap('round', keys.join(', '));
+}
+
+// Query literals use the underlying Uint64 representation of Timestamp.
+// Keep this conversion local to queries so cell rendering retains the original type.
+function prepareQueryValueType(type: TypeArray): TypeArray {
+    switch (type[0]) {
+        case 'DataType':
+            return type[1] === 'Timestamp' ? ['DataType', 'Uint64'] : type;
+        case 'OptionalType':
+            return ['OptionalType', prepareQueryValueType(type[1])];
+        case 'TaggedType':
+            return ['TaggedType', type[1], prepareQueryValueType(type[2])];
+        default:
+            return type;
+    }
 }
