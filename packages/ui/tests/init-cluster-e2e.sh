@@ -162,6 +162,8 @@ createAndMountDynamicTable "$DYN_TABLE" "[{name=key;sort_order=ascending;type=st
 yt set ${E2E_DIR}/dynamic-table/@mount_config/temp 1
 yt freeze-table ${DYN_TABLE}
 
+bash "$(dirname "$0")/init-cluster-e2e/table.dynamic.timestamp.sh"
+
 STATIC_TABLE=${E2E_DIR}/static-table
 yt create --attributes "{schema=[{name=key;type=string};{name=value;type=string};{name=empty;type=any}]}" table ${STATIC_TABLE}
 (
