@@ -6,7 +6,7 @@ import key from 'hotkeys-js';
 import {Hotkey} from '@ytsaurus/components';
 
 export type EditorProps = {
-    size?: 'xs' | 's' | 'm';
+    size?: Extract<React.ComponentProps<typeof TextInput>['size'], 's' | 'm'>;
     value?: string;
     placeholder?: string;
     onApply: {apply(value: string | undefined): void}['apply'];
@@ -70,7 +70,7 @@ export default class Editor extends React.Component<EditorProps, {value: string 
         return (
             <div className={block('elements-editor')()}>
                 <TextInput
-                    size={size as React.ComponentProps<typeof TextInput>['size']}
+                    size={size}
                     placeholder={placeholder}
                     value={this.state.value}
                     autoFocus
