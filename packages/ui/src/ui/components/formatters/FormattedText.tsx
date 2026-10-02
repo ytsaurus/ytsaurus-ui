@@ -10,16 +10,14 @@ import i18n from './i18n';
 const block = cn('elements-text');
 
 export type FormattedTextProps = {
-    text?: string | boolean | number;
     className?: string;
-    asHTML?: boolean;
     title?: string;
-};
+} & ({asHTML: true; text?: string} | {asHTML?: false; text?: string | boolean | number});
 
 function prepareTextProps(
-    text: FormattedTextProps['text'],
-    asHTML: boolean,
+    settings: FormattedTextProps,
 ): Pick<React.HTMLAttributes<HTMLSpanElement>, 'children' | 'dangerouslySetInnerHTML'> {
+    const {text, asHTML} = settings;
     const props: Pick<
         React.HTMLAttributes<HTMLSpanElement>,
         'children' | 'dangerouslySetInnerHTML'
@@ -28,7 +26,7 @@ function prepareTextProps(
     if (text !== undefined) {
         if (asHTML) {
             // Need to render html strings
-            props.dangerouslySetInnerHTML = {__html: text as string};
+            props.dangerouslySetInnerHTML = {__html: text};
         } else {
             try {
                 props.children = unipika.decode(String(text));
@@ -57,14 +55,10 @@ function prepareTextProps(
     return props;
 }
 
-export default function FormattedText({
-    text,
-    className: mixedClassName,
-    asHTML = false,
-    title = text as string | undefined,
-}: FormattedTextProps) {
+export default function FormattedText(settings: FormattedTextProps) {
+    const {text, className: mixedClassName, title = text as string | undefined} = settings;
     const className = mixedClassName ? block(null, mixedClassName) : block();
-    const textProps = prepareTextProps(text, asHTML);
+    const textProps = prepareTextProps(settings);
 
     return <span {...textProps} title={title} className={className} />;
 }
