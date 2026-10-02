@@ -17,6 +17,7 @@ export function useCreationOptions(cluster: string, isAdmin: boolean) {
     }>();
 
     React.useEffect(() => {
+        setState(undefined);
         return () => {
             ++requests.id;
             requests.cancelHelper.removeAllRequests();
