@@ -1,5 +1,4 @@
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
+import {type ConnectedProps, connect} from 'react-redux';
 import hammer from '../../common/hammer';
 import cn from 'bem-cn-lite';
 import React from 'react';
@@ -12,7 +11,8 @@ import {
     selectGetPDF,
     selectGetQuartiles,
 } from '../../store/selectors/histogram';
-import HistogramChart from './HistogramChart';
+import HistogramChart, {type HistogramChartProps} from './HistogramChart';
+import {type RootState} from '../../store/reducers';
 
 import './Histogram.scss';
 import {Checkbox, Select} from '@gravity-ui/uikit';
@@ -20,52 +20,19 @@ import i18n from './i18n';
 
 const block = cn('histogram');
 
-Histogram.quartilesProps = PropTypes.shape({
-    min: PropTypes.number,
-    q25: PropTypes.number,
-    q50: PropTypes.number,
-    q75: PropTypes.number,
-    max: PropTypes.number,
-});
-
-Histogram.pdfProps = PropTypes.shape({
-    bucketNumber: PropTypes.number,
-    bucketSize: PropTypes.number,
-    max: PropTypes.number,
-    min: PropTypes.number,
-    valueMax: PropTypes.number,
-    valueMin: PropTypes.number,
-    quartiles: Histogram.quartilesProps,
-    buckets: PropTypes.array,
-});
-
-Histogram.ecdfProps = PropTypes.shape({
-    min: PropTypes.number,
-    max: PropTypes.number,
-    steps: PropTypes.array,
-});
-
-Histogram.propTypes = {
-    // from parent
-    activeHistogram: PropTypes.string.isRequired,
-    handleHistogramChange: PropTypes.func.isRequired,
-    histogramItems: PropTypes.object.isRequired,
-
-    histogram: PropTypes.shape({
-        data: PropTypes.array.isRequired,
-        format: PropTypes.string.isRequired,
-        dataName: PropTypes.string.isRequired,
-        dataFormat: PropTypes.string.isRequired,
-    }).isRequired,
-
-    // from connect
-    quartiles: Histogram.quartilesProps.isRequired,
-    pdf: Histogram.pdfProps.isRequired,
-    ecdf: Histogram.ecdfProps.isRequired,
-    isDataGood: PropTypes.bool.isRequired,
+export type HistogramProps = {
+    activeHistogram: string;
+    handleHistogramChange: (value: string) => void;
+    histogramItems: Record<string, {title?: string}>;
+    histogram: {
+        data: number[];
+        format: HistogramChartProps['format'];
+        dataName: string;
+        dataFormat?: string;
+    };
 };
 
-function Histogram(props) {
+function Histogram(props: HistogramProps & ConnectedProps<typeof connector>) {
     const {activeHistogram, handleHistogramChange, histogramItems} = props;
     const {histogram, quartiles, pdf, ecdf, isDataGood} = props;
 
@@ -139,19 +106,45 @@ function Histogram(props) {
 
 // https://github.com/reduxjs/reselect#sharing-selectors-with-props-across-multiple-component-instances
 const makeMapStateToProps = () => {
-    const getQuartiles = selectGetQuartiles();
-    const getPDF = selectGetPDF();
-    const getECDF = selectGetECDF();
-    const getIsDataGood = selectGetIsDataGood();
+    // The legacy JavaScript selectors consume own props, which reselect's inferred types omit.
+    const getQuartiles = selectGetQuartiles() as (
+        state: RootState,
+        props: HistogramProps,
+    ) => {
+        min: number;
+        q25: number;
+        q50: number;
+        q75: number;
+        max: number;
+    };
+    const getPDF = selectGetPDF() as (
+        state: RootState,
+        props: HistogramProps,
+    ) => HistogramChartProps['pdf'];
+    const getECDF = selectGetECDF() as (
+        state: RootState,
+        props: HistogramProps,
+    ) => HistogramChartProps['ecdf'];
+    const getIsDataGood = selectGetIsDataGood() as (
+        state: RootState,
+        props: HistogramProps,
+    ) => boolean;
 
-    return (state, props) => {
-        const quartiles = getQuartiles(state, props);
-        const pdf = getPDF(state, props);
-        const ecdf = getECDF(state, props);
+    return (state: RootState, props: HistogramProps) => {
+        const quartiles = getQuartiles(state, props) as {
+            min: number;
+            q25: number;
+            q50: number;
+            q75: number;
+            max: number;
+        };
+        const pdf = getPDF(state, props) as HistogramChartProps['pdf'];
+        const ecdf = getECDF(state, props) as HistogramChartProps['ecdf'];
         const isDataGood = getIsDataGood(state, props);
 
         return {quartiles, pdf, ecdf, isDataGood};
     };
 };
 
-export default connect(makeMapStateToProps)(Histogram);
+const connector = connect(makeMapStateToProps);
+export default connector(Histogram);
