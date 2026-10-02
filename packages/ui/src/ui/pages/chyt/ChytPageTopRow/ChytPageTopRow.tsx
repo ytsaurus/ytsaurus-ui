@@ -4,6 +4,7 @@ import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 
 import ypath from '../../../common/thor/ypath';
+import format from '../../../common/hammer/format';
 
 import {Breadcrumbs, Button, Flex, Text} from '@gravity-ui/uikit';
 
@@ -266,10 +267,13 @@ function CreateChytButton() {
                                     caption: i18n('field_instance-cpu'),
                                     tooltip: i18n('context_default-resources'),
                                     extras: {
+                                        // Match the default advertised by Strawberry DescribeOptions.
+                                        placeholder: format.Number(16),
                                         min: 1,
                                         max: 100,
                                         integerOnly: true,
                                         hidePrettyValue: true,
+                                        showHint: true,
                                     },
                                 },
                                 {
@@ -278,6 +282,8 @@ function CreateChytButton() {
                                     caption: i18n('field_instance-memory'),
                                     tooltip: i18n('context_default-resources'),
                                     extras: {
+                                        // Match the default advertised by Strawberry DescribeOptions.
+                                        placeholder: format.Bytes(65 * 1024 ** 3),
                                         min: 20 * 1024 ** 3,
                                         max: 300 * 1024 ** 3,
                                         format: 'Bytes',
