@@ -1,14 +1,32 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
 import Button from '../../components/Button/Button';
-import Icon from '../../components/Icon/Icon';
+import IconImpl, {type IconProps} from '../../components/Icon/Icon';
 import i18n from './i18n';
 
 const block = cn('elements-message');
+
+// Preserve the legacy ignored prop rather than changing the rendered icon during migration.
+const Icon: React.ComponentType<IconProps & {type?: string}> = IconImpl;
+
+type MessageCloseProps =
+    | {
+          showClose: true;
+          dismissCallback: React.MouseEventHandler<HTMLButtonElement>;
+      }
+    | {
+          showClose?: false;
+          dismissCallback?: React.MouseEventHandler<HTMLButtonElement>;
+      };
+
+export type MessageProps = {
+    theme?: string;
+    content: readonly React.ReactNode[];
+    buttons?: Array<{text: string; callback: React.MouseEventHandler<HTMLButtonElement>}>;
+} & MessageCloseProps;
 
 export default function Message({
     theme = 'default',
@@ -16,7 +34,7 @@ export default function Message({
     dismissCallback,
     content,
     buttons,
-}) {
+}: MessageProps) {
     return (
         <div className={block({theme})}>
             {showClose && (
@@ -32,13 +50,11 @@ export default function Message({
                 </div>
             )}
 
-            {React.isValidElement(content)
-                ? {content}
-                : map_(content, (data, index) => (
-                      <p key={index} className={block('paragraph')}>
-                          {data}
-                      </p>
-                  ))}
+            {map_(content, (data, index) => (
+                <p key={index} className={block('paragraph')}>
+                    {data}
+                </p>
+            ))}
 
             {buttons && (
                 <div className={block('buttons')}>
@@ -54,19 +70,3 @@ export default function Message({
         </div>
     );
 }
-
-Message.propTypes = {
-    theme: PropTypes.string,
-    showClose: PropTypes.bool,
-    dismissCallback: (props, propName, componentName) => {
-        if (props.showClose && typeof props[propName] !== 'function') {
-            return new Error(
-                `You have to provide dismissCallback to ${componentName} when showClose is true`,
-            );
-        }
-
-        return undefined;
-    },
-    content: PropTypes.oneOfType([PropTypes.node, PropTypes.arrayOf(PropTypes.string)]).isRequired,
-    buttons: PropTypes.arrayOf(PropTypes.object),
-};
