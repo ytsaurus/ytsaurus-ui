@@ -36,24 +36,27 @@ const rateItems: React.ComponentProps<typeof RadioButton>['items'] = [
 
 export const timeItems: React.ComponentProps<typeof RadioButton>['items'] = [
     {
-        value: '1m' as keyof TPerformanceCounters,
+        value: '1m' satisfies keyof TPerformanceCounters,
         text: '1m',
     },
     {
-        value: '1h' as keyof TPerformanceCounters,
+        value: '1h' satisfies keyof TPerformanceCounters,
         text: '1h',
     },
     {
-        value: '1d' as keyof TPerformanceCounters,
+        value: '1d' satisfies keyof TPerformanceCounters,
         text: '1d',
     },
 ];
 
-export interface CompactColumnSelectorProps<Names> {
+export interface CompactColumnSelectorProps<Names extends string> {
     items: Array<PartitionColumn<Names>>;
-    onChange: Function;
+    onChange: (data: {items: Array<PartitionColumn<Names>>}) => void;
 }
-export function CompactColumnSelector<Names>({items, onChange}: CompactColumnSelectorProps<Names>) {
+export function CompactColumnSelector<Names extends string>({
+    items,
+    onChange,
+}: CompactColumnSelectorProps<Names>) {
     return (
         <Dropdown
             className={block('filters-item')}
