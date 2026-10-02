@@ -96,16 +96,16 @@ export default class DeletePermissionModal extends Component {
                                 },
                                 {
                                     key: 'subjects',
-                                    value: renderText(subjects?.join(', ')),
+                                    value: renderText({text: subjects?.join(', ')}),
                                 },
                                 {
                                     key: 'permissions',
-                                    value: renderText(permissions?.join(', ')),
+                                    value: renderText({text: permissions?.join(', ')}),
                                     visible: type === 'object',
                                 },
                                 {
                                     key: 'private columns',
-                                    value: renderText(columns?.join(', ')),
+                                    value: renderText({text: columns?.join(', ')}),
                                     visible: type === 'columns',
                                 },
                                 {

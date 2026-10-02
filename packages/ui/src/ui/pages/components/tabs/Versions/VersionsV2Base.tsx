@@ -199,7 +199,7 @@ export class VersionsV2Base extends React.Component<ReduxProps> {
                     format={format.ReadableField}
                 />
             ),
-            error: (item) => printColumnAsError(item.error),
+            error: (item) => printColumnAsError(item.error as YTError | string | null | undefined),
             address: (item) => {
                 return (
                     <Host
