@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.28.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.28.0...ui-v3.28.1) (2026-10-02)
+
+
+### Bug Fixes
+
+* **QueryTracker:** show empty history state [YTFRONT-6083] ([14c5d8d](https://github.com/ytsaurus/ytsaurus-ui/commit/14c5d8db30c49fa1adbfa30cdcafa68805baf986))
+* **ui:** use released components package [YTFRONT-6082] ([5a50321](https://github.com/ytsaurus/ytsaurus-ui/commit/5a5032132076b58cb053a9915f7c23cbe9829c8f))
+
 ## [3.28.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.27.0...ui-v3.28.0) (2026-10-01)
 
 
