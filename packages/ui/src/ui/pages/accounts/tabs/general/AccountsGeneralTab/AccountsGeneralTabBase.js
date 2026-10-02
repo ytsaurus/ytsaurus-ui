@@ -38,6 +38,7 @@ import {AccountResourceName} from '../../../../../constants/accounts/accounts';
 import {ProgressStackByTreeItem} from '../ProgressStack';
 import i18n from '../i18n';
 import {TabletAccountingNotice} from '../Editor/content/TabletsContent';
+import AccountCreateDialog from '../Editor/AccountCreateDialog';
 import AccountStaticConfiguration from '../AccountStaticConfiguration/AccountStaticConfiguration';
 import MasterMemoryTableMode from '../MasterMemoryTableMode';
 import UIFactory from '../../../../../UIFactory';
@@ -695,6 +696,9 @@ export class AccountsGeneralTabBase extends Component {
                 onChanged={this.props.accountsIncreaseEditCounter}
                 onDeleted={this.props.accountsIncreaseEditCounter}
             >
+                {/* The create trigger lives in the top row, outside this provider's React tree.
+                    Keep the dialog here so it can use AccountEditorContext to open the new account. */}
+                <AccountCreateDialog />
                 <div className={b()}>
                     {viewContext !== DASHBOARD_VIEW_CONTEXT && this.renderAccountsPageHeader()}
                     <WithStickyToolbar

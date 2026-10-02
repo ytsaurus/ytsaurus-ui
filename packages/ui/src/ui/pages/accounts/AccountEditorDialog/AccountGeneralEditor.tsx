@@ -69,7 +69,12 @@ export function AccountGeneralEditor({accountName, data, onChanged}: AccountGene
     };
 
     const abcControl = UIFactory.renderControlAbcService({
-        value: account.abc,
+        value: account.abc.slug
+            ? {
+                  id: account.abc.id,
+                  slug: account.abc.slug,
+              }
+            : undefined,
         onChange: handleAbcChange,
         placeholder: contentI18n('field_abc-service-placeholder'),
         disabled: !isAdmin || abcMutation.isLoading,
