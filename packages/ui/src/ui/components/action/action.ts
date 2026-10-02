@@ -1,25 +1,29 @@
 import {isLinkExternal} from '../../common/utils/url';
+import {type MouseEvent} from 'react';
+
+type ActionMouseEvent = MouseEvent<Element>;
 
 const action = {
-    openInAnotherTab(evt) {
+    openInAnotherTab(evt: Pick<ActionMouseEvent, 'ctrlKey' | 'metaKey' | 'button'>) {
         return evt.ctrlKey || evt.metaKey || evt.button === 1;
     },
-    isCheckboxClicked(evt) {
-        return evt.target.type === 'checkbox' || evt.target.className === 'checkbox__label';
+    isCheckboxClicked(evt: Pick<ActionMouseEvent, 'target'>) {
+        const target = evt.target as HTMLInputElement;
+        return target.type === 'checkbox' || target.className === 'checkbox__label';
     },
     textSelected() {
         return typeof document.getSelection === 'function'
-            ? !document.getSelection().isCollapsed
+            ? !document.getSelection()!.isCollapsed
             : false;
     },
     isTableCellSelected() {
         if (typeof document.getSelection === 'function') {
-            const selection = document.getSelection();
-            return selection.anchorNode && selection.anchorNode.tagName === 'TR';
+            const selection = document.getSelection()!;
+            return selection.anchorNode && (selection.anchorNode as HTMLElement).tagName === 'TR';
         }
         return false;
     },
-    onClick(evt, skipSelectionCheck) {
+    onClick(evt: ActionMouseEvent, skipSelectionCheck?: boolean) {
         evt.stopPropagation();
 
         if (!action.textSelected() || skipSelectionCheck) {
@@ -28,7 +32,7 @@ const action = {
 
             if (action.openInAnotherTab(evt)) {
                 if (!targetIsLink) {
-                    window.open(url);
+                    window.open(url!);
                 }
                 return;
             }
@@ -36,11 +40,17 @@ const action = {
             evt.preventDefault();
         }
     },
-    makeEntryClickHandler(evt, clickHandler, linkHandler) {
-        return (...args) => {
+    makeEntryClickHandler<
+        Args extends Array<string | number | boolean | object | null | undefined>,
+    >(
+        evt: ActionMouseEvent,
+        clickHandler?: (...args: Args) => void,
+        linkHandler?: (...args: Args) => string | undefined | null,
+    ) {
+        return (...args: Args) => {
             // Firefox default action on Ctrl + Click a table cell is to select the cell - remove the selection
             if (action.isTableCellSelected()) {
-                document.getSelection().removeAllRanges();
+                document.getSelection()!.removeAllRanges();
             }
             // Do not call handler on right button click or if text is selected
             if (action.textSelected() || action.isCheckboxClicked(evt) || evt.button === 2) {
