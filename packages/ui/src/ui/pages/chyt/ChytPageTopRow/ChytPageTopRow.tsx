@@ -26,6 +26,7 @@ import {chytApiAction} from '../../../utils/strawberryControllerApi';
 import {chytCliqueCreate} from '../../../store/actions/chyt/list';
 import {chytToggleFavourite} from '../../../store/actions/favourites';
 import {type YTError} from '../../../../@types/types';
+import {type NumberInputWithErrorProps} from '../../../components/NumberInput/NumberInput';
 import {ChytCliquePageTab} from '../../../constants/chyt-page';
 
 import './ChytPageTopRow.scss';
@@ -191,6 +192,8 @@ function ChytAliasSuggest({
 type FormValues = {
     alias: string;
     instance_count: number;
+    instance_cpu?: NumberInputWithErrorProps['value'];
+    instance_total_memory?: NumberInputWithErrorProps['value'];
     tree: string[];
     pool: string;
     runAfterCreation: boolean;
@@ -218,19 +221,21 @@ function CreateChytButton() {
                             headerProps={{title: i18n('action_create-clique')}}
                             onClose={() => setVisible(false)}
                             onAdd={(form) => {
-                                const {
-                                    values: {instance_count, ...rest},
-                                } = form.getState();
+                                const {values} = form.getState();
                                 return dispatch(
                                     chytCliqueCreate({
-                                        ...rest,
-                                        instance_count: instance_count || 1,
+                                        alias: values.alias,
+                                        pool: values.pool,
+                                        runAfterCreation: values.runAfterCreation,
+                                        instance_count: values.instance_count || 1,
+                                        instance_cpu: values.instance_cpu?.value,
+                                        instance_total_memory: values.instance_total_memory?.value,
                                     }),
                                 )
                                     .then(() => {
                                         setError(undefined);
                                         history.push(
-                                            `/${cluster}/chyt/${rest.alias}/${ChytCliquePageTab.SPECLET}`,
+                                            `/${cluster}/chyt/${values.alias}/${ChytCliquePageTab.SPECLET}`,
                                         );
                                     })
                                     .catch((e) => {
@@ -254,6 +259,32 @@ function CreateChytButton() {
                                         maxValue: 100,
                                     },
                                     required: true,
+                                },
+                                {
+                                    name: 'instance_cpu',
+                                    type: 'number',
+                                    caption: i18n('field_instance-cpu'),
+                                    tooltip: i18n('context_default-resources'),
+                                    extras: {
+                                        min: 1,
+                                        max: 100,
+                                        integerOnly: true,
+                                        hidePrettyValue: true,
+                                    },
+                                },
+                                {
+                                    name: 'instance_total_memory',
+                                    type: 'number',
+                                    caption: i18n('field_instance-memory'),
+                                    tooltip: i18n('context_default-resources'),
+                                    extras: {
+                                        min: 20 * 1024 ** 3,
+                                        max: 300 * 1024 ** 3,
+                                        format: 'Bytes',
+                                        integerOnly: true,
+                                        hidePrettyValue: true,
+                                        showHint: true,
+                                    },
                                 },
                                 {
                                     name: 'tree',
