@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import moment from 'moment';
+import moment, {type Moment} from 'moment';
 
-import {TextInput} from '@gravity-ui/uikit';
+import {TextInput as TextInputImpl, type TextInputProps} from '@gravity-ui/uikit';
 
-import Icon from '../Icon/Icon';
+import Icon, {type IconProps} from '../Icon/Icon';
 import i18n from './i18n';
 
 import './TimePicker.scss';
@@ -15,29 +15,35 @@ const block = cn('timepicker');
 const DISPLAY_FORMAT = 'HH:mm';
 const invalidTitle = i18n('error_invalid-time');
 
+// Retain legacy props ignored by the current UIKit implementation.
+const TextInput: React.ComponentType<
+    TextInputProps & {
+        theme?: string;
+        iconRight?: React.ReactNode;
+        controlAttrs?: React.InputHTMLAttributes<HTMLInputElement>;
+    }
+> = TextInputImpl;
+
 export const MomentObjectType = PropTypes.shape({
     _isAMomentObject: PropTypes.oneOf([true]),
 });
 
-export default class TimePicker extends Component {
-    static propTypes = {
-        date: PropTypes.oneOfType([PropTypes.string, MomentObjectType]).isRequired,
-        onChange: PropTypes.func.isRequired,
-        disabled: PropTypes.bool,
-        minDate: PropTypes.oneOfType([PropTypes.string, MomentObjectType]),
-    };
+export type TimePickerProps = {
+    date: string | Moment;
+    onChange: (date: string) => void;
+    disabled?: boolean;
+    minDate?: string | Moment | null;
+};
 
+type TimePickerState = {time: string; date: string | Moment};
+
+export default class TimePicker extends Component<TimePickerProps, TimePickerState> {
     static defaultProps = {
         minDate: null,
         disabled: false,
     };
 
-    state = {
-        time: '',
-        date: '',
-    };
-
-    static getDerivedStateFromProps(nextProps, prevState) {
+    static getDerivedStateFromProps(nextProps: TimePickerProps, prevState: TimePickerState) {
         if (nextProps.date !== prevState.date) {
             return {
                 time: moment(nextProps.date).format(DISPLAY_FORMAT),
@@ -48,21 +54,26 @@ export default class TimePicker extends Component {
         return null;
     }
 
-    _checkInputTimeValidity(textTime) {
+    override state: TimePickerState = {
+        time: '',
+        date: '',
+    };
+
+    _checkInputTimeValidity(textTime: string) {
         return (
             new RegExp('[0-9]{2}:[0-9]{2}').test(textTime) &&
             moment(textTime, DISPLAY_FORMAT).isValid()
         );
     }
 
-    _checkDateValidity(textDate) {
+    _checkDateValidity(textDate: string) {
         const {minDate} = this.props;
         const newDate = moment(textDate).unix();
 
         return minDate ? newDate > moment(minDate).unix() : true;
     }
 
-    _prepareOutputDate(textTime) {
+    _prepareOutputDate(textTime: string) {
         const {date} = this.state;
         const currentDate = moment(date);
         const newDate = moment(textTime, DISPLAY_FORMAT);
@@ -74,7 +85,7 @@ export default class TimePicker extends Component {
         return newDate.toISOString();
     }
 
-    handleTimeChange = (newTime) => {
+    handleTimeChange = (newTime: string) => {
         const {onChange} = this.props;
         const isValidFormat = this._checkInputTimeValidity(newTime);
 
@@ -87,11 +98,11 @@ export default class TimePicker extends Component {
         }
     };
 
-    renderIcon(icon) {
+    renderIcon(icon: IconProps['awesome']) {
         return <Icon awesome={icon} />;
     }
 
-    render() {
+    override render() {
         const {time} = this.state;
         const {disabled} = this.props;
         const newDate = this._prepareOutputDate(time);
