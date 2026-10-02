@@ -342,6 +342,7 @@ function useFlowGraphData(params: {pipeline_path: string}) {
             Object.values(streams).forEach((stream) => {
                 const streamBlock = makeBlock('stream', stream, {
                     name: stream.name,
+                    icon: FileCodeIcon,
                     ...STREAM_SIZE,
                 });
 
@@ -445,6 +446,12 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                 collectStreams('source_streams', {groupId});
                 collectStreams('timer_streams', {groupId});
             });
+
+            res.groups.blocks.push(
+                ...res.data.blocks.filter(
+                    ({is, groupId}) => is === 'stream' && groupId === undefined,
+                ),
+            );
 
             // Collect sinks
             Object.entries(sinks).forEach(([_key, item]) => {

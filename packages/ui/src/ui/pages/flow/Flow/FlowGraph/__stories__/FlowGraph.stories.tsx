@@ -10,6 +10,7 @@ import {
     backpressuredFlowGraphHandler,
     drainedFlowGraphHandler,
     emptyFlowGraphHandler,
+    inputOnlyStreamFlowGraphHandler,
     messagesFlowGraphHandler,
     mixedFlowGraphHandler,
     multipleSourcesFlowGraphHandler,
@@ -58,6 +59,11 @@ export const MessagesOnly: Story = {
 export const WithoutDetails: Story = {
     render: renderGraph,
     parameters: {msw: {handlers: [emptyFlowGraphHandler]}},
+};
+
+export const InputOnlyStream: Story = {
+    render: renderGraph,
+    parameters: {msw: {handlers: [inputOnlyStreamFlowGraphHandler]}},
 };
 
 export const MultipleSources: Story = {

@@ -7,9 +7,12 @@ import {
 } from '../../../../../../shared/yt-types';
 
 export const SOURCE_NAME = 'Pipeline source';
+export const INPUT_ONLY_STREAM_NAME = 'Input-only stream';
+export const INPUT_ONLY_SINK_NAME = 'Input-only sink';
 export const MESSAGE_TEXT = 'The stream has diagnostic messages';
 
 const SOURCE_STREAM_ID = 'source-stream';
+const INPUT_ONLY_STREAM_ID = 'input-only-stream';
 const OUTPUT_STREAM_ID = 'output-stream';
 
 function makeExtendedStream(
@@ -28,6 +31,7 @@ function makeExtendedStream(
 function makeComputation(
     extendedSourceStream?: FlowExtendedStreamType,
     sourceStreams = [SOURCE_STREAM_ID],
+    inputStreams: Array<string> = [],
 ): FlowComputationType {
     return {
         id: 'computation',
@@ -47,7 +51,7 @@ function makeComputation(
                 transient: 0,
             },
         },
-        input_streams: [],
+        input_streams: inputStreams,
         output_streams: [OUTPUT_STREAM_ID],
         source_streams: sourceStreams,
         timer_streams: [],
@@ -123,6 +127,36 @@ export const messagesFlowGraphHandler = makeFlowGraphHandler(
 );
 
 export const emptyFlowGraphHandler = makeFlowGraphHandler(makeFlowGraphResponse());
+
+function makeInputOnlyStreamFlowGraphResponse(): FlowDescribePipelineData {
+    const response = makeFlowGraphResponse();
+
+    response.computations.computation = makeComputation(
+        undefined,
+        [SOURCE_STREAM_ID],
+        [INPUT_ONLY_STREAM_ID],
+    );
+    response.streams[INPUT_ONLY_STREAM_ID] = {
+        id: INPUT_ONLY_STREAM_ID,
+        name: INPUT_ONLY_STREAM_NAME,
+        status: 'info',
+        bytes_per_second: 0,
+        messages_per_second: 0,
+        inflight_bytes: 0,
+        inflight_rows: 0,
+    };
+    response.sinks.sink = {
+        ...response.sinks.sink,
+        name: INPUT_ONLY_SINK_NAME,
+        stream_id: INPUT_ONLY_STREAM_ID,
+    };
+
+    return response;
+}
+
+export const inputOnlyStreamFlowGraphHandler = makeFlowGraphHandler(
+    makeInputOnlyStreamFlowGraphResponse(),
+);
 
 export const MULTIPLE_SOURCES = ['A', 'B', 'C'].map((key) => ({
     sourceId: `source-${key.toLowerCase()}`,
