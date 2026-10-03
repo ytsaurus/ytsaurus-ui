@@ -1,0 +1,91 @@
+import React from 'react';
+import cn from 'bem-cn-lite';
+
+import {Table, type TableColumnConfig, Text} from '@gravity-ui/uikit';
+import {ClipboardButton} from '@ytsaurus/components';
+
+import {getStateRowId} from '../state-requests';
+import {serializeRawStateValue} from '../state-values';
+import i18n from './i18n';
+import type {FlowStateResultRow} from '../types';
+
+import './RowsSummary.scss';
+
+const block = cn('yt-flow-delete-states-rows-summary');
+const MAX_LISTED_ROWS = 20;
+
+type PreviewRow = FlowStateResultRow & {id: string};
+
+function CompleteValue({value}: {value: unknown}) {
+    const text = serializeRawStateValue(value);
+    return (
+        <span className={block('complete-value')}>
+            <Text className={block('complete-value-text')}>{text}</Text>
+            <span className={block('hover-action')}>
+                <ClipboardButton
+                    text={text}
+                    view="flat-secondary"
+                    aria-label={i18n('action_copy-value')}
+                    title={i18n('action_copy-value')}
+                />
+            </span>
+        </span>
+    );
+}
+
+const requiredColumns: Array<TableColumnConfig<PreviewRow>> = [
+    {id: 'computationId', name: () => i18n('column_computation')},
+    {id: 'stateName', name: () => i18n('column_state-name')},
+];
+
+const partitionColumn: TableColumnConfig<PreviewRow> = {
+    id: 'partitionId',
+    name: () => i18n('column_partition'),
+};
+
+const keyColumn: TableColumnConfig<PreviewRow> = {
+    id: 'key',
+    name: () => i18n('column_key'),
+    template: (row) => serializeRawStateValue(row.key),
+};
+
+const valueColumn: TableColumnConfig<PreviewRow> = {
+    id: 'value',
+    name: () => i18n('column_value'),
+    template: (row) => <CompleteValue value={row.value} />,
+};
+
+function getPreviewColumns(rows: Array<FlowStateResultRow>): Array<TableColumnConfig<PreviewRow>> {
+    return [
+        ...requiredColumns,
+        ...(rows.some((row) => Boolean(row.partitionId)) ? [partitionColumn] : []),
+        ...(rows.some((row) => row.key !== undefined && row.key !== null) ? [keyColumn] : []),
+        valueColumn,
+    ];
+}
+
+export function RowsSummary({rows}: {rows: Array<FlowStateResultRow>}) {
+    const listed = rows.slice(0, MAX_LISTED_ROWS).map((row) => ({
+        ...row,
+        id: getStateRowId(row),
+    }));
+    return (
+        <div className={block()}>
+            <Text>{i18n('text_delete-selected-explanation', {count: String(rows.length)})}</Text>
+            <div className={block('table-pane')}>
+                <Table
+                    className={block('table')}
+                    columns={getPreviewColumns(rows)}
+                    data={listed}
+                    getRowId="id"
+                    verticalAlign="middle"
+                />
+            </div>
+            {rows.length > MAX_LISTED_ROWS && (
+                <Text color="secondary">
+                    {i18n('text_and-n-more', {count: String(rows.length - MAX_LISTED_ROWS)})}
+                </Text>
+            )}
+        </div>
+    );
+}

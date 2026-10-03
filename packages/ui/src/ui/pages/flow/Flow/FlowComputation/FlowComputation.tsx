@@ -5,18 +5,21 @@ import {Page} from '../../../../../shared/constants/settings';
 import Tabs from '../../../../components/Tabs/Tabs';
 import {FlowEntityTitle} from '../../../../pages/flow/flow-components/FlowEntityHeader';
 import {FlowError} from '../../../../pages/flow/flow-components/FlowError/FlowError';
-import {FlowMessagesCollapsible} from '../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
 import {FlowPartitionsDistribution} from '../../../../pages/flow/flow-components/FlowPartitionsDistribution/FlowPartitionsDistribution';
 import {
     FlowPathMeta,
     getLoadedDataMetaItems,
 } from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
+import {FlowComputationStateTab} from '../../flow-components/FlowStateViewer/FlowComputationStateTab';
+import {FlowComputationMessages} from '../../flow-components/FlowStateViewer/FlowComputationMessages/FlowComputationMessages';
+import i18nFlowState from '../../flow-components/FlowStateViewer/i18n';
 import {useFlowExecuteQuery} from '../../../../store/api/yt';
 import {filtersSlice} from '../../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {selectFlowPipelinePath} from '../../../../store/selectors/flow/filters';
 import {selectCluster} from '../../../../store/selectors/global/cluster';
-import UIFactory from '../../../../UIFactory';
+import UIFactory, {type FlowComputationMonitorProps} from '../../../../UIFactory';
+import {makeFlowComputationTabLink} from '../../../../utils/app-url';
 import './FlowComputation.scss';
 import {FlowComputationPartitions} from './FlowComputationPartitions';
 import {FlowComputationPerformance} from './FlowComputationPerformance/FlowComputationPerformance';
@@ -24,6 +27,16 @@ import {FlowPartition} from './FlowPartition/FlowPartition';
 import i18n from './i18n';
 
 const block = cn('yt-flow-computation');
+
+type FlowComputationExtraTab = {
+    value: string;
+    title: string;
+    component: React.ComponentType<FlowComputationMonitorProps>;
+};
+
+const extraTabs: Array<FlowComputationExtraTab> = [
+    {value: 'state', title: i18nFlowState('mode_state'), component: FlowComputationStateTab},
+];
 
 export function FlowComputation() {
     const dispatch = useDispatch();
@@ -64,7 +77,37 @@ export function FlowComputation() {
                         render={() => <FlowComputationMonitor computation={computation} />}
                     />
                 )}
+                {extraTabs.map((tab) => (
+                    <Route
+                        key={tab.value}
+                        exact
+                        path={`${path}/${tab.value}`}
+                        render={() => (
+                            <FlowComputationExtraTabView computation={computation} tab={tab} />
+                        )}
+                    />
+                ))}
             </Switch>
+        </div>
+    );
+}
+
+function FlowComputationExtraTabView({
+    computation,
+    tab,
+}: {
+    computation: string;
+    tab: FlowComputationExtraTab;
+}) {
+    const pipeline_path = useSelector(selectFlowPipelinePath);
+    const {data} = useFlowComputationData({computation, pipeline_path});
+    const TabComponent = tab.component;
+
+    return (
+        <div className={block()}>
+            <FlowEntityTitle title={computation} status={data?.status} />
+            <FlowComputationTabs computation={computation} />
+            <TabComponent path={pipeline_path} computation={computation} />
         </div>
     );
 }
@@ -83,7 +126,7 @@ function FlowComputationTabs({computation}: {computation: string}) {
                 {
                     value: 'details',
                     text: i18n('details'),
-                    url: `/${cluster}/${Page.FLOWS}/computations/${encodeURIComponent(computation)}/details`,
+                    url: makeFlowComputationTabLink({cluster, computation, tab: 'details'}),
                     routed: true,
                     show: true,
                 },
@@ -97,9 +140,15 @@ function FlowComputationTabs({computation}: {computation: string}) {
                 {
                     value: 'monitor',
                     text: i18n('monitoring'),
-                    url: `/${cluster}/${Page.FLOWS}/computations/${encodeURIComponent(computation)}/monitor`,
+                    url: makeFlowComputationTabLink({cluster, computation, tab: 'monitor'}),
                     show: true,
                 },
+                ...extraTabs.map((tab) => ({
+                    value: tab.value,
+                    text: tab.title,
+                    url: makeFlowComputationTabLink({cluster, computation, tab: tab.value}),
+                    show: true,
+                })),
             ]}
         />
     );
@@ -127,7 +176,11 @@ function FlowComputationDetails({computation}: {computation: string}) {
             {Boolean(error) && <FlowError error={error} />}
             <FlowComputationPerformance data={data} onClick={onClick} />
             <div className={block('messages')}>
-                <FlowMessagesCollapsible messages={data?.messages} />
+                <FlowComputationMessages
+                    path={pipeline_path}
+                    computation={computation}
+                    messages={data?.messages}
+                />
             </div>
             <FlowComputationPartitions partitions={data?.partitions} />
             <div ref={scrollToRef} />

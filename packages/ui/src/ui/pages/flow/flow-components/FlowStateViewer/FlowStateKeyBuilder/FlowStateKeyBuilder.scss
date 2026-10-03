@@ -1,0 +1,22 @@
+.yt-flow-state-key-builder {
+    width: min(420px, 100%);
+
+    &__raw-input {
+        width: 100%;
+    }
+
+    &__launcher {
+        flex: none;
+    }
+}
+
+.yt-flow-state-key-dialog {
+    &__field {
+        width: 100%;
+
+        .g-text-input__control {
+            padding-top: 4px;
+            padding-bottom: 6px;
+        }
+    }
+}
