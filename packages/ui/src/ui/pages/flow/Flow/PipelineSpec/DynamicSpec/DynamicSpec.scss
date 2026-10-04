@@ -1,0 +1,141 @@
+.yt-flow-dynamic-spec {
+    &__value {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        max-width: 480px;
+    }
+
+    &__value-button {
+        display: inline-flex;
+        max-width: 380px;
+        overflow-x: auto;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+        cursor: pointer;
+        text-align: left;
+        user-select: text;
+
+        &:not([aria-disabled='true']):hover {
+            background-color: var(--g-color-base-simple-hover);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--g-color-line-focus);
+            outline-offset: 2px;
+            border-radius: 2px;
+        }
+
+        &[aria-disabled='true'] {
+            cursor: default;
+        }
+    }
+
+    [data-dynamic-spec-value] {
+        display: inline-flex;
+        cursor: pointer;
+        user-select: text;
+        text-decoration: underline dotted var(--g-color-text-secondary);
+        text-underline-offset: 3px;
+
+        &:hover {
+            background-color: var(--g-color-base-simple-hover);
+            text-decoration-style: solid;
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--g-color-line-focus);
+            outline-offset: 2px;
+            border-radius: 2px;
+        }
+
+        &[aria-disabled='true'] {
+            cursor: default;
+            text-decoration: none;
+        }
+    }
+
+    [data-dynamic-spec-override],
+    [data-dynamic-spec-override] .unipika,
+    [data-dynamic-spec-override] :is(.number, .int64, .uint64, .double, .string, .boolean, .null) {
+        color: var(--g-color-text-positive);
+    }
+
+    &__toolbar {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+
+    &__attribution {
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 4px 12px;
+        padding-left: 16px;
+        color: var(--g-color-text-secondary);
+        font-family: var(--g-font-family-sans);
+    }
+
+    &__comment {
+        max-width: 440px;
+        overflow-wrap: anywhere;
+    }
+
+    &__time {
+        white-space: nowrap;
+    }
+
+    &__attribution_compact {
+        flex-wrap: nowrap;
+
+        .yt-flow-dynamic-spec__comment {
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    &__attribution_override {
+        color: var(--g-color-text-positive);
+    }
+
+    &__attribution time {
+        white-space: nowrap;
+    }
+
+    &__patches {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    &__version,
+    &__path {
+        font-family: var(--g-font-family-monospace);
+    }
+
+    &__overrides {
+        overflow-x: auto;
+    }
+
+    &__table {
+        width: 100%;
+        border-collapse: collapse;
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+            border-bottom: 1px solid var(--g-color-line-generic);
+        }
+    }
+}

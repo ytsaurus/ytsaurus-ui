@@ -1,7 +1,7 @@
 import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
 
 import {type YTError} from '../../../../@types/types';
-import {type Int64} from '../../../../shared/yt-types';
+import {type FlowDynamicSpecSnapshot, type Int64} from '../../../../shared/yt-types';
 
 export type FlowSpecState = {
     loaded: boolean;
@@ -9,7 +9,14 @@ export type FlowSpecState = {
     error: YTError | undefined;
 
     pipeline_path: string | undefined;
-    data: {spec: unknown; version: Int64} | undefined;
+    data:
+        | {
+              spec: unknown;
+              version: Int64;
+              dynamic_spec_state?: FlowDynamicSpecSnapshot;
+              dynamic_spec_state_unavailable?: boolean;
+          }
+        | undefined;
 };
 
 const initialState: FlowSpecState = {
@@ -28,7 +35,7 @@ const reducers = {
     ) {
         Object.assign(state, {loading: true, error: undefined});
         if (pipeline_path !== state.pipeline_path) {
-            Object.assign(state, {pipeline_path, data: undefined});
+            Object.assign(state, {pipeline_path, data: undefined, loaded: false});
         }
     },
     onSuccess(state: FlowSpecState, {payload: {data}}: PayloadAction<Pick<FlowSpecState, 'data'>>) {
