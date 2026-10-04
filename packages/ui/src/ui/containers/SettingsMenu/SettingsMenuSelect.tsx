@@ -104,13 +104,14 @@ type ConvertValueProps<T extends SegmentedSettingValue> = [T] extends [string]
     ? {convertValue?: never}
     : {convertValue: (value: string) => ConvertedSegmentedSettingValue<T>};
 
-type SegmentedRadioGroupSettingItemProps<
-    K extends KeysByType<DescribedSettings, SegmentedSettingValue>,
-> = Omit<SettingsItemLayoutProps, 'children'> & {
+export type SegmentedRadioGroupSettingItemProps<K, V extends SegmentedSettingValue> = Omit<
+    SettingsItemLayoutProps,
+    'children'
+> & {
     settingKey: K;
-    options: Array<SegmentedOption<DescribedSettings[K]>>;
-    displayValue?: DescribedSettings[K];
-} & ConvertValueProps<DescribedSettings[K]>;
+    options: Array<SegmentedOption<V>>;
+    displayValue?: V;
+} & ConvertValueProps<V>;
 
 export function SegmentedRadioGroupSettingItem<
     K extends KeysByType<DescribedSettings, SegmentedSettingValue>,
@@ -122,7 +123,7 @@ export function SegmentedRadioGroupSettingItem<
     description,
     oneLine,
     title,
-}: SegmentedRadioGroupSettingItemProps<K>) {
+}: SegmentedRadioGroupSettingItemProps<K, DescribedSettings[K]>) {
     const {value: storedValue, onUpdate} = useSettingByKey(settingKey);
     const value = displayValue ?? storedValue;
 
