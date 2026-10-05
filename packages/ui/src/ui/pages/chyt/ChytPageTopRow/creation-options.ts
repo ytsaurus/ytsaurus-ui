@@ -19,21 +19,6 @@ export type CreationOptions =
     | {legacy: false; resources: ReturnType<typeof parseCreationOptions>}
     | {legacy: true; resources?: never};
 
-export function isCreationOptionsUnsupported(error: unknown): boolean {
-    const response = (error as {response?: {status?: number; data?: unknown}})?.response;
-    // Missing command routes on older Strawberry versions return 404.
-    if (response?.status === 404 || response?.status === 501) return true;
-    // Also support an older UI proxy that has not allowed this action yet.
-    const message =
-        typeof response?.data === 'string'
-            ? response.data
-            : (response?.data as {message?: string})?.message;
-    return (
-        response?.status === 400 &&
-        Boolean(message?.includes("action - 'describe_creation_options', is not supported"))
-    );
-}
-
 export function parseCreationOptions(groups: OptionsGroup[]) {
     const options = groups.flatMap((group) => group.options);
     function resource(name: string, types: ResourceOption['type'][]): ResourceOption {

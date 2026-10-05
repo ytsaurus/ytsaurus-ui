@@ -4,7 +4,7 @@ import {
 } from '../../../containers/Dialog/df-dialog-utils';
 import format from '../../../common/hammer/format';
 
-import {isCreationOptionsUnsupported, parseCreationOptions} from './creation-options';
+import {parseCreationOptions} from './creation-options';
 
 const groups: OptionsGroup[] = [
     {
@@ -56,34 +56,5 @@ describe('CHYT creation descriptors', () => {
         expect(() =>
             parseCreationOptions([{...groups[0], options: groups[0].options.slice(0, 2)}]),
         ).toThrow('instance_total_memory');
-    });
-
-    it.each([404, 501])('allows the legacy form when the method is unavailable (%s)', (status) => {
-        expect(isCreationOptionsUnsupported({response: {status}})).toBe(true);
-    });
-
-    it('recognizes an old UI proxy allowlist error', () => {
-        expect(
-            isCreationOptionsUnsupported({
-                response: {
-                    status: 400,
-                    data: {message: "CHYT action - 'describe_creation_options', is not supported"},
-                },
-            }),
-        ).toBe(true);
-    });
-
-    it.each([400, 401, 403, 500, 502, 503, 504])(
-        'does not hide validation, authentication or server errors (%s)',
-        (status) => {
-            expect(
-                isCreationOptionsUnsupported({response: {status, data: {message: 'Failed'}}}),
-            ).toBe(false);
-        },
-    );
-
-    it('does not hide network failures or cancellations', () => {
-        expect(isCreationOptionsUnsupported(new Error('Network error'))).toBe(false);
-        expect(isCreationOptionsUnsupported({code: 'ERR_CANCELED'})).toBe(false);
     });
 });
