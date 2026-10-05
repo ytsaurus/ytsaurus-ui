@@ -70,6 +70,14 @@ const CONVERTER: Record<string, ReturnType<typeof makeConverter>> = {
 };
 
 export function descriptionToDialogField<T = unknown>(
+    item: Extract<OptionDescription, {type: 'int64' | 'uint64' | 'byte_count'}>,
+    options: MakeDialogFieldsOptions,
+): Extract<DialogField<T>, {type: 'number'}> & {converter: Converter};
+export function descriptionToDialogField<T = unknown>(
+    item: OptionDescription,
+    options: MakeDialogFieldsOptions,
+): DialogField<T> & {initialValue?: unknown; converter: Converter};
+export function descriptionToDialogField<T = unknown>(
     item: OptionDescription,
     {unipikaSettings, allowEdit, defaultPoolTree}: MakeDialogFieldsOptions,
 ): DialogField<T> & {initialValue?: unknown; converter: Converter} {
