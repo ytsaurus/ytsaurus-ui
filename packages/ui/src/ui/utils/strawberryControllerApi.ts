@@ -12,6 +12,11 @@ export type StrawberryDescribeOptionsType = Array<OptionsGroup>;
 
 export type StrawberryApi =
     | {
+          action: 'describe';
+          params: Record<string, never>;
+          response: {commands: Array<{name: string}>; clusters: Array<string>};
+      }
+    | {
           action: 'list';
           params: {attributes?: Array<StrawberryListAttributes>};
           response: StrawberryListResponse;
