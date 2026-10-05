@@ -30,7 +30,7 @@ import {type YTError} from '../../../../@types/types';
 import {type NumberInputWithErrorProps} from '../../../components/NumberInput/NumberInput';
 import {ChytCliquePageTab} from '../../../constants/chyt-page';
 import {useCreationOptions} from './useCreationOptions';
-import {creationNumberField} from './creation-options';
+import {descriptionToDialogField} from '../../../containers/Dialog/df-dialog-utils';
 
 import './ChytPageTopRow.scss';
 import i18n from './i18n';
@@ -211,6 +211,7 @@ function CreateChytButton() {
     const unipikaSettings = useErrorYsonSettings();
     const {load, loading, options} = useCreationOptions(cluster, isAdmin);
     const resources = options?.resources;
+    const resourceFieldSettings = {allowEdit: true, unipikaSettings};
 
     const [error, setError] = React.useState<YTError | undefined>();
 
@@ -281,28 +282,18 @@ function CreateChytButton() {
                                 ...(resources
                                     ? [
                                           {
-                                              ...creationNumberField<FormValues>(
+                                              ...descriptionToDialogField<FormValues>(
                                                   resources.instanceCpu,
-                                                  {
-                                                      allowEdit: true,
-                                                      defaultPoolTree,
-                                                      unipikaSettings,
-                                                  },
+                                                  {...resourceFieldSettings, defaultPoolTree},
                                               ),
-                                              name: 'instance_cpu',
                                               caption: i18n('field_instance-cpu'),
                                               tooltip: i18n('context_default-resources'),
                                           },
                                           {
-                                              ...creationNumberField<FormValues>(
+                                              ...descriptionToDialogField<FormValues>(
                                                   resources.instanceMemory,
-                                                  {
-                                                      allowEdit: true,
-                                                      defaultPoolTree,
-                                                      unipikaSettings,
-                                                  },
+                                                  {...resourceFieldSettings, defaultPoolTree},
                                               ),
-                                              name: 'instance_total_memory',
                                               caption: i18n('field_instance-memory'),
                                               tooltip: i18n('context_default-resources'),
                                           },

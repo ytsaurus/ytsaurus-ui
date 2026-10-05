@@ -1,23 +1,13 @@
 import {
     type OptionDescription,
     type OptionsGroup,
-    descriptionToDialogField,
 } from '../../../containers/Dialog/df-dialog-utils';
 
 type ResourceOption = Extract<OptionDescription, {type: 'int64' | 'uint64' | 'byte_count'}>;
 
-export function creationNumberField<FormValues = unknown>(
-    option: ResourceOption,
-    settings: Parameters<typeof descriptionToDialogField>[1],
-) {
-    const field = descriptionToDialogField<FormValues>(option, settings);
-    if (field.type !== 'number') throw new Error(`Invalid numeric resource: ${option.name}`);
-    return {name: field.name, type: field.type, extras: field.extras};
-}
-
-export type CreationOptions =
-    | {legacy: false; resources: ReturnType<typeof parseCreationOptions>}
-    | {legacy: true; resources?: never};
+export type CreationOptions = {
+    resources?: ReturnType<typeof parseCreationOptions>;
+};
 
 export function parseCreationOptions(groups: OptionsGroup[]) {
     const options = groups.flatMap((group) => group.options);
