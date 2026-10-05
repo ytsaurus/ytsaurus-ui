@@ -10,7 +10,8 @@ beforeEach(() => jest.resetAllMocks());
 
 it('requests controller defaults without alias and preserves configured values', async () => {
     const cancelToken = axios.CancelToken.source().token;
-    api.mockResolvedValue({
+    api.mockResolvedValueOnce({commands: [{name: 'describe_creation_options'}], clusters: []});
+    api.mockResolvedValueOnce({
         result: [
             {
                 title: 'Resources',
@@ -52,6 +53,15 @@ it('requests controller defaults without alias and preserves configured values',
             instanceMemory: {default_value: 48 * 1024 ** 3},
         },
     });
+});
+
+it('does not request creation options when describe does not advertise the command', async () => {
+    api.mockResolvedValueOnce({commands: [{name: 'describe_options'}], clusters: []});
+    await expect(
+        loadCreationOptions('old-cluster', false, axios.CancelToken.source().token),
+    ).resolves.toEqual({legacy: true});
+    expect(api).toHaveBeenCalledTimes(1);
+    expect(api.mock.calls[0][0]).toBe('describe');
 });
 
 it('returns the original form mode silently for an older controller', async () => {

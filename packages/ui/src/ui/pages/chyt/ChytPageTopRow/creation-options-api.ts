@@ -13,6 +13,19 @@ export async function loadCreationOptions(
     cancelToken: CancelToken,
 ): Promise<CreationOptions> {
     try {
+        const {commands} = await chytApiAction(
+            'describe',
+            cluster,
+            {},
+            {
+                isAdmin,
+                cancelToken,
+                skipErrorToast: true,
+            },
+        );
+        if (!commands.some(({name}) => name === 'describe_creation_options')) {
+            return {legacy: true};
+        }
         const {result} = await chytApiAction(
             'describe_creation_options',
             cluster,

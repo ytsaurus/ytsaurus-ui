@@ -30,6 +30,7 @@ const getBaseUrlConfigParameter = (engine: string) => {
 async function strawberryProxyApiImpl(req: Request, res: Response) {
     const {action, engine, ytAuthCluster: cluster} = req.params;
     const ALLOWED_ACTIONS = new Set([
+        'describe',
         'list',
         'create',
         'remove',
@@ -81,10 +82,10 @@ async function strawberryProxyApiImpl(req: Request, res: Response) {
 
     return axios
         .request({
-            url: `${baseUrl}/${cluster}/${action}`,
-            method: 'POST',
+            url: action === 'describe' ? `${baseUrl}/describe` : `${baseUrl}/${cluster}/${action}`,
+            method: action === 'describe' ? 'GET' : 'POST',
             headers,
-            data: req.body,
+            data: action === 'describe' ? undefined : req.body,
             timeout: 100000,
             responseType: 'stream',
         })
