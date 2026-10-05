@@ -11,8 +11,8 @@ export async function loadCreationOptions(
     const requestOptions = {isAdmin, cancelToken, skipErrorToast: true};
     const {commands} = await chytApiAction('describe', cluster, {}, requestOptions);
     if (!commands.some(({name}) => name === 'describe_creation_options')) {
-        return {legacy: true};
+        return {};
     }
     const {result} = await chytApiAction('describe_creation_options', cluster, {}, requestOptions);
-    return {legacy: false, resources: parseCreationOptions(result)};
+    return {resources: parseCreationOptions(result)};
 }

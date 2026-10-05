@@ -46,7 +46,6 @@ it('requests controller defaults without alias and preserves configured values',
         },
     );
     expect(options).toMatchObject({
-        legacy: false,
         resources: {
             instanceCount: {default_value: 3},
             instanceCpu: {default_value: 12},
@@ -59,21 +58,18 @@ it('does not request creation options when describe does not advertise the comma
     api.mockResolvedValueOnce({commands: [{name: 'describe_options'}], clusters: []});
     await expect(
         loadCreationOptions('old-cluster', false, axios.CancelToken.source().token),
-    ).resolves.toEqual({legacy: true});
+    ).resolves.toEqual({});
     expect(api).toHaveBeenCalledTimes(1);
     expect(api.mock.calls[0][0]).toBe('describe');
 });
 
-it.each([401, 403, 404, 500, 501, 504])(
-    'propagates errors instead of using legacy mode (%s)',
-    async (status) => {
-        const error = {response: {status}};
-        api.mockRejectedValue(error);
-        await expect(
-            loadCreationOptions('test-cluster', false, axios.CancelToken.source().token),
-        ).rejects.toBe(error);
-    },
-);
+it('propagates request errors', async () => {
+    const error = new Error('Controller request failed');
+    api.mockRejectedValueOnce(error);
+    await expect(
+        loadCreationOptions('test-cluster', false, axios.CancelToken.source().token),
+    ).rejects.toBe(error);
+});
 
 it('propagates request cancellation', async () => {
     const source = axios.CancelToken.source();
