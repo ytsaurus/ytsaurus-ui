@@ -18,6 +18,9 @@ export const selectQueriesListState = (state: RootState) => state.queryTracker.l
 
 export const selectIsQueriesListLoading = (state: RootState) => state.queryTracker.list.isLoading;
 
+export const selectHasQueriesListLoaded = (state: RootState) =>
+    selectQueriesListState(state).hasLoaded;
+
 export const selectQueriesList = (state: RootState) => selectQueriesListState(state).items;
 
 export const selectHasQueriesListMore = (state: RootState) => selectQueriesListState(state).hasMore;
