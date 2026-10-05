@@ -64,14 +64,7 @@ it('does not request creation options when describe does not advertise the comma
     expect(api.mock.calls[0][0]).toBe('describe');
 });
 
-it('returns the original form mode silently for an older controller', async () => {
-    api.mockRejectedValue({response: {status: 404}});
-    await expect(
-        loadCreationOptions('old-cluster', false, axios.CancelToken.source().token),
-    ).resolves.toEqual({legacy: true});
-});
-
-it.each([401, 403, 500, 504])(
+it.each([401, 403, 404, 500, 501, 504])(
     'propagates errors instead of using legacy mode (%s)',
     async (status) => {
         const error = {response: {status}};
