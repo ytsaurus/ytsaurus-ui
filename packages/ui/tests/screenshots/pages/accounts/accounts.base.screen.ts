@@ -30,11 +30,11 @@ class AccountsPage extends BasePage {
 
     async showEditor(account: string) {
         await this.page.getByTestId(`edit-account-${account}`).click();
-        await this.page.waitForSelector('.accounts-editor__edit');
+        await expect(this.page.getByRole('dialog')).toBeVisible();
     }
 
     async selectEditorPage(name: 'Disk space' | 'Nodes' | 'Chunks' | 'Master memory' | 'Delete') {
-        await this.page.click(`.accounts-editor__edit-tabs :text("${name}")`, {force: true});
+        await this.page.getByRole('dialog').getByText(name, {exact: true}).click();
         await this.page.mouse.move(0, 0);
     }
 

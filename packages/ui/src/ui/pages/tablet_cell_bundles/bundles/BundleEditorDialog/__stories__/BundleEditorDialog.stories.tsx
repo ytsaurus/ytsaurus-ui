@@ -23,7 +23,7 @@ import {
 
 yt.setup.setGlobalOption('proxy', 'test-cluster.yt.my-domain.com');
 
-const accountsHandler = http.post('https://test-cluster.yt.my-domain.com/api/v3/list', () =>
+const accountsHandler = http.post('*/api/yt/test-cluster/api/v3/list', () =>
     Response.json(['sys']),
 );
 
