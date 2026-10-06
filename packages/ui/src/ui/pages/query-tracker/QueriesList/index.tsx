@@ -1,7 +1,11 @@
 import React, {useEffect, useRef} from 'react';
 import block from 'bem-cn-lite';
-import {Tab, TabList, TabPanel, TabProvider} from '@gravity-ui/uikit';
-import {QueriesHistoryList} from './QueriesHistoryList';
+import {BranchesRight, ClockArrowRotateLeft, Folder, GraduationCap} from '@gravity-ui/icons';
+import {Icon} from '@gravity-ui/uikit';
+import {
+    QueriesSidebar,
+    type QueriesSidebarTab,
+} from '@gravity-ui/querieskit/widgets/QueriesSidebar';
 
 import {
     selectQueriesListMode,
@@ -12,12 +16,14 @@ import {DefaultQueriesListFilter, QueriesListMode} from '../../../types/query-tr
 import {applyListMode, resetQueryList} from '../../../store/actions/query-tracker/queriesList';
 
 import './index.scss';
-import {QueriesTutorialList} from './QueriesTutorialList';
-import {QueriesHistoryListFilter} from './QueriesListFilter';
 import {Vcs} from '../Vcs';
-import {Navigation} from '../Navigation';
+import {QueriesNavigationAdapter} from '../Navigation/QueriesNavigationAdapter/QueriesNavigationAdapter';
+import {LegacyQueriesList} from './LegacyQueriesList';
 import {setFilter} from '../../../store/reducers/query-tracker/queryListSlice';
 import i18n from './i18n';
+import {selectSettingsQueryTrackerNewQueriesView} from '../../../store/selectors/settings/settings-ts';
+import {QueriesHistory} from './QueriesHistory';
+import {QueriesTutorials} from './QueriesTutorials';
 
 const b = block('queries-list');
 
@@ -32,59 +38,80 @@ function getTabName(mode: QueriesListMode): string {
     return TabNames[mode];
 }
 
-const TabContent: Record<QueriesListMode, React.ReactNode> = {
-    [QueriesListMode.History]: (
-        <>
-            <QueriesHistoryListFilter className={b('filter')} />
-            <QueriesHistoryList />
-        </>
-    ),
-    [QueriesListMode.Tutorials]: (
-        <>
-            <QueriesHistoryListFilter className={b('filter')} />
-            <QueriesTutorialList className={b('list-content')} />
-        </>
-    ),
+const tabContent: Record<QueriesListMode, React.ReactNode> = {
+    [QueriesListMode.History]: <QueriesHistory />,
+    [QueriesListMode.Tutorials]: <QueriesTutorials />,
     [QueriesListMode.VCS]: <Vcs />,
-    [QueriesListMode.Navigation]: <Navigation />,
+    [QueriesListMode.Navigation]: <QueriesNavigationAdapter />,
+};
+
+const tabIcons = {
+    [QueriesListMode.History]: ClockArrowRotateLeft,
+    [QueriesListMode.Tutorials]: GraduationCap,
+    [QueriesListMode.VCS]: Folder,
+    [QueriesListMode.Navigation]: BranchesRight,
 };
 
 export function QueriesList() {
     const dispatch = useDispatch();
     const activeTab = useSelector(selectQueriesListMode);
     const tabsList = useSelector(selectQueriesListTabs);
+    const useNewQueriesView = useSelector(selectSettingsQueryTrackerNewQueriesView);
     const isInitializedRef = useRef(false);
 
     useEffect(() => {
+        if (!tabsList.includes(activeTab)) {
+            const fallbackTab = tabsList[0];
+            if (fallbackTab) {
+                isInitializedRef.current = true;
+                dispatch(applyListMode(fallbackTab));
+            }
+            return;
+        }
+
         if (!isInitializedRef.current) {
             isInitializedRef.current = true;
             dispatch(setFilter(DefaultQueriesListFilter[activeTab]));
             dispatch(resetQueryList());
         }
-    }, [dispatch, activeTab]);
+    }, [dispatch, activeTab, tabsList]);
 
     const handleTabSelect = (tabId: string) => {
-        dispatch(applyListMode(tabId as QueriesListMode));
+        const nextTab = tabsList.find((tab) => tab === tabId);
+        if (nextTab && nextTab !== activeTab) {
+            dispatch(applyListMode(nextTab));
+        }
     };
 
+    // Wait for Redux to adopt the fallback before mounting a data adapter.
+    if (!tabsList.includes(activeTab)) return null;
+
+    const tabs = tabsList.map((id) => ({id, title: getTabName(id)}));
+    const sidebarTabs: QueriesSidebarTab[] = tabs.map(({id, title}) => ({
+        id,
+        type: 'custom',
+        title,
+        icon: <Icon data={tabIcons[id]} size={16} />,
+        renderContent: () => <div className={b('sidebar-content')}>{tabContent[id]}</div>,
+    }));
+
     return (
-        <div className={b()}>
-            <TabProvider value={activeTab} onUpdate={handleTabSelect}>
-                <TabList className={b('tabs')}>
-                    {tabsList.map((tab) => (
-                        <Tab key={tab} value={tab}>
-                            {getTabName(tab)}
-                        </Tab>
-                    ))}
-                </TabList>
-                <div className={b('content')}>
-                    {tabsList.map((tab) => (
-                        <TabPanel key={tab} value={tab}>
-                            {TabContent[tab]}
-                        </TabPanel>
-                    ))}
-                </div>
-            </TabProvider>
+        <div className={b({new: useNewQueriesView})}>
+            {useNewQueriesView ? (
+                <QueriesSidebar
+                    className={b('sidebar')}
+                    tabs={sidebarTabs}
+                    activeTab={activeTab}
+                    onActiveTabChange={handleTabSelect}
+                    keepMounted={false}
+                />
+            ) : (
+                <LegacyQueriesList
+                    tabs={tabs}
+                    activeTab={activeTab}
+                    onTabChange={handleTabSelect}
+                />
+            )}
         </div>
     );
 }

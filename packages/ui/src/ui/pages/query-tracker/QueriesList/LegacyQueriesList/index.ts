@@ -1,0 +1,1 @@
+export {LegacyQueriesList} from './LegacyQueriesList';
