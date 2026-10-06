@@ -1,5 +1,6 @@
 import {type YTError} from '../../../../@types/types';
 import {USE_CACHE, USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
+import {ROOT_ACCOUNT_NAME} from '../../../constants/accounts/accounts';
 import {YTApiId, type YTApiSetup, ytApiV3Id} from '../../../rum/rum-wrap-api';
 
 export interface AccountNamesArgs {
@@ -18,7 +19,7 @@ export async function fetchAccountNames({setup}: AccountNamesArgs) {
             },
         });
 
-        return {data};
+        return {data: data.filter((name) => name !== ROOT_ACCOUNT_NAME)};
     } catch (error) {
         return {error: error as YTError};
     }
