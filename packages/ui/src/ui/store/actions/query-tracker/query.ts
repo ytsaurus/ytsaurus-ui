@@ -15,7 +15,7 @@ import {
     startQuery,
     updateACOQuery,
 } from './api';
-import {refreshQueriesList} from './queriesList';
+import {refreshQueriesList, updateQueryInList} from './queriesList';
 import {
     SHARED_QUERY_ACO,
     selectCurrentDraftQueryACO,
@@ -385,6 +385,16 @@ export function loadQuery(
 export function updateQueryDraft(data: Partial<QueryState['draft']>) {
     return {type: SET_QUERY_PATCH, data};
 }
+
+export const updateQueryAnnotations =
+    (queryId: string, annotations: QueryItem['annotations']): AsyncAction =>
+    (dispatch, getState) => {
+        dispatch(updateQueryInList(queryId, {annotations}));
+
+        if (selectQueryDraft(getState()).id === queryId) {
+            dispatch(updateQueryDraft({annotations}));
+        }
+    };
 
 export const mergeSpytDefaultSettingsIntoDraft = (): AsyncAction => (dispatch, getState) => {
     const state = getState();
