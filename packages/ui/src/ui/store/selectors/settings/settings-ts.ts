@@ -31,6 +31,13 @@ export const selectSettingsQueryTrackerNewGraphType = createSelector(selectSetti
     return data['global::queryTracker::useNewGraphView'] || false;
 });
 
+export const selectSettingsQueryTrackerNewQueriesView = createSelector(
+    selectSettingsData,
+    (data) => {
+        return data['global::queryTracker::useNewQueriesView'] || false;
+    },
+);
+
 export const selectSettingsQueryTrackerGraphAutoCenter = createSelector(
     selectSettingsData,
     (data) => {
