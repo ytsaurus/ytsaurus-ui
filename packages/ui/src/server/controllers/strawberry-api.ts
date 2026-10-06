@@ -38,7 +38,7 @@ async function strawberryProxyApiImpl(req: Request, res: Response) {
         'stop',
         'get_brief_info',
         'describe_options',
-        'describe_creation_options',
+        'describe_default_options',
         'edit_options',
         'get_speclet',
     ]);

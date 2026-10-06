@@ -10,7 +10,7 @@ beforeEach(() => jest.resetAllMocks());
 
 it('requests controller defaults without alias and preserves configured values', async () => {
     const cancelToken = axios.CancelToken.source().token;
-    api.mockResolvedValueOnce({commands: [{name: 'describe_creation_options'}], clusters: []});
+    api.mockResolvedValueOnce({commands: [{name: 'describe_default_options'}], clusters: []});
     api.mockResolvedValueOnce({
         result: [
             {
@@ -36,7 +36,7 @@ it('requests controller defaults without alias and preserves configured values',
     });
     const options = await loadCreationOptions('test-cluster', true, cancelToken);
     expect(api).toHaveBeenCalledWith(
-        'describe_creation_options',
+        'describe_default_options',
         'test-cluster',
         {},
         {
