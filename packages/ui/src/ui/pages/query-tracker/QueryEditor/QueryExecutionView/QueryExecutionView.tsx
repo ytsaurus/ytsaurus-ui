@@ -34,7 +34,7 @@ import {isAbortable} from '../../utils/query';
 import {abortCurrentQuery} from '../../../../store/actions/query-tracker/query';
 import stopIcon from '../../../../assets/img/svg/icons/stop-circle.svg';
 import {QueryProgress} from '../../QueryResults/QueryResultActions/QueryProgress';
-import {QueryChartTab} from '../../QueryResults/QueryChartTab';
+import {QueryDashboardCharts} from './QueryDashboardCharts';
 import {parseResultTabIndex} from '../../QueryResults/helpers/parseResultTabIndex';
 import {extractOperationIdToCluster} from '../../QueryResults/helpers/extractOperationIdToCluster';
 import {useMonaco} from '../../hooks/useMonaco';
@@ -123,7 +123,7 @@ export function QueryExecutionView({query, resultViewMode, setResultViewMode}: P
                 title,
                 type: 'charts',
                 renderContent: () => (
-                    <QueryChartTab
+                    <QueryDashboardCharts
                         key={`${query.id}/${id}`}
                         query={query}
                         resultIndex={parseResultTabIndex(id) || 0}

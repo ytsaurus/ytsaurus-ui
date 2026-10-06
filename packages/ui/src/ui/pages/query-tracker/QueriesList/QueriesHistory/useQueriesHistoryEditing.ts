@@ -1,8 +1,7 @@
 import React from 'react';
 import {type QueryListEditingConfig, type QueryListRowAction} from '@gravity-ui/querieskit';
 
-import {setQueryName} from '../../../../store/actions/query-tracker/api';
-import {updateQueryAnnotations} from '../../../../store/actions/query-tracker/query';
+import {setQueryName} from '../../../../store/actions/query-tracker/queryAnnotations';
 import {useDispatch} from '../../../../store/redux-hooks';
 import {QueryStatus} from '../../../../types/query-tracker';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
@@ -22,17 +21,12 @@ export function useQueriesHistoryEditing() {
 
     const handleSubmit = React.useCallback(
         async (item: HistoryRow, title: string) => {
-            const annotations = {...item.queryItem.annotations, title};
             try {
-                await wrapApiPromiseByToaster(
-                    dispatch(setQueryName(item.queryItem.id, annotations)),
-                    {
-                        toasterName: `edit_query_name_${item.id}`,
-                        skipSuccessToast: true,
-                        errorTitle: i18n('title_edit-query-name-error'),
-                    },
-                );
-                dispatch(updateQueryAnnotations(item.queryItem.id, annotations));
+                await wrapApiPromiseByToaster(dispatch(setQueryName(item.queryItem.id, title)), {
+                    toasterName: `edit_query_name_${item.id}`,
+                    skipSuccessToast: true,
+                    errorTitle: i18n('title_edit-query-name-error'),
+                });
                 setEditingId(undefined);
             } catch (_) {}
         },
