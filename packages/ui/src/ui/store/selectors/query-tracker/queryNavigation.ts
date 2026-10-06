@@ -74,17 +74,26 @@ export const selectClustersByFilter: (state: RootState) => ReturnType<typeof sel
         return clusters.filter(({name}) => filterValueInText(name, filter));
     });
 
-export const selectNodeListByFilter = createSelector(
-    [selectNavigationNodes, selectNavigationFilter, selectNavigationPath, selectFavouritePaths],
-    (nodes, filter, path, favouritePaths) => {
-        const isRoot = !path || path === '/';
-        const parentPath = isRoot ? path : path.split('/').slice(0, -1).join('/');
-
+export const selectFilteredNavigationNodes = createSelector(
+    [selectNavigationNodes, selectNavigationFilter, selectFavouritePaths],
+    (nodes, filter, favouritePaths) => {
         const favouritePathSet = new Set(favouritePaths);
         const nodesWithFavoriteState = nodes.map((node) => {
             const isFavorite = favouritePathSet.has(node.path);
             return node.isFavorite === isFavorite ? node : {...node, isFavorite};
         });
+
+        if (!filter) return nodesWithFavoriteState;
+
+        return nodesWithFavoriteState.filter(({name}) => filterValueInText(name, filter));
+    },
+);
+
+export const selectNodeListByFilter = createSelector(
+    [selectFilteredNavigationNodes, selectNavigationPath],
+    (nodes, path) => {
+        const isRoot = !path || path === '/';
+        const parentPath = isRoot ? path : path.split('/').slice(0, -1).join('/');
 
         const upItem: NavigationNode = {
             name: '...',
@@ -93,14 +102,6 @@ export const selectNodeListByFilter = createSelector(
             isFavorite: false,
         };
 
-        if (!filter) return isRoot ? nodesWithFavoriteState : [upItem, ...nodesWithFavoriteState];
-
-        const result = nodesWithFavoriteState.filter(({name}) => filterValueInText(name, filter));
-
-        if (!isRoot) {
-            result.unshift(upItem);
-        }
-
-        return result;
+        return isRoot ? nodes : [upItem, ...nodes];
     },
 );
