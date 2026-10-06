@@ -9,7 +9,7 @@ import {
     selectQueriesList,
 } from '../../../../../store/selectors/query-tracker/queriesList';
 import {FullTextSearchItem} from '../FullTextSearchItem';
-import {prepareFullTextSearchItems} from '../helpers/prepareFullTextSearchItems';
+import {prepareFullTextSearchItems} from '../../helpers/prepareFullTextSearchItems';
 import {QueriesListPlaceholder} from '../QueriesListPlaceholder/QueriesListPlaceholder';
 import {loadNextQueriesList} from '../../../../../store/actions/query-tracker/queriesList';
 import {QueriesHistoryCursorDirection} from '../../../../../store/reducers/query-tracker/query-tracker-contants';
