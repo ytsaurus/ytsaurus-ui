@@ -53,7 +53,7 @@ export type StrawberryApi =
           response: WithResult<StrawberryDescribeOptionsType>;
       }
     | {
-          action: 'describe_creation_options';
+          action: 'describe_default_options';
           params: Record<string, never>;
           response: WithResult<StrawberryDescribeOptionsType>;
       }

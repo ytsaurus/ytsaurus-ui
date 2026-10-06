@@ -10,9 +10,9 @@ export async function loadCreationOptions(
 ): Promise<CreationOptions> {
     const requestOptions = {isAdmin, cancelToken, skipErrorToast: true};
     const {commands} = await chytApiAction('describe', cluster, {}, requestOptions);
-    if (!commands.some(({name}) => name === 'describe_creation_options')) {
+    if (!commands.some(({name}) => name === 'describe_default_options')) {
         return {};
     }
-    const {result} = await chytApiAction('describe_creation_options', cluster, {}, requestOptions);
+    const {result} = await chytApiAction('describe_default_options', cluster, {}, requestOptions);
     return {resources: parseCreationOptions(result)};
 }
