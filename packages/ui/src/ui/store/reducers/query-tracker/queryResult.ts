@@ -1,3 +1,5 @@
+import {type TypeArray} from '@ytsaurus/components';
+
 import {type ActionD} from '../../../types';
 import {TABLE_DEFAULTS} from '../../../constants/settings/table';
 import {getSettingsInitialData} from '../settings';
@@ -66,6 +68,7 @@ export function queryResult(state = initialState, action: QueryResultsActions): 
                         state: QueryResultState.Ready,
                         columns: action.data.columns,
                         results: action.data.results,
+                        rawResult: action.data.rawResult,
                         meta: action.data.meta,
                         page: 0,
                         settings: {
@@ -88,6 +91,22 @@ export function queryResult(state = initialState, action: QueryResultsActions): 
             const rows = [...queryResultsTab.results];
             queryResultsTab.results = rows;
 
+            if (queryResultsTab.rawResult && action.data.rawCell) {
+                const {rawResult} = queryResultsTab;
+                const {value, type} = action.data.rawCell;
+                const typeIndex = rawResult.yql_type_registry.length;
+                const rawRows = [...rawResult.rows];
+                rawRows[rowIndex] = {
+                    ...rawRows[rowIndex],
+                    [columnName]: [value, String(typeIndex)],
+                };
+                queryResultsTab.rawResult = {
+                    ...rawResult,
+                    rows: rawRows,
+                    yql_type_registry: [...rawResult.yql_type_registry, type],
+                };
+            }
+
             const rowData = {...rows[rowIndex], [columnName]: cellData};
             rows[rowIndex] = rowData;
 
@@ -107,6 +126,7 @@ export function queryResult(state = initialState, action: QueryResultsActions): 
                         ...(results[action.data.index] as QueryResultReadyState),
                         state: QueryResultState.Ready,
                         results: action.data.results,
+                        rawResult: action.data.rawResult,
                         page: action.data.page,
                     },
                 },
@@ -169,6 +189,7 @@ export type SetQueryResultsAction = ActionD<
         queryId: QueryItem['id'];
         index: number;
         results: QueryResultReadyState['results'];
+        rawResult?: QueryResultReadyState['rawResult'];
         columns: QueryResultReadyState['columns'];
         meta: QueryResultReadyState['meta'];
     }
@@ -180,6 +201,7 @@ export type SetQueryResultsPageAction = ActionD<
         queryId: QueryItem['id'];
         index: number;
         results: QueryResultReadyState['results'];
+        rawResult?: QueryResultReadyState['rawResult'];
         page: number;
     }
 >;
@@ -222,5 +244,6 @@ export type QueryResultsActions =
               rowIndex: number;
               columnName: string;
               cellData: QueryResultReadyState['results'][number][string];
+              rawCell?: {value: unknown; type: TypeArray};
           }
       >;
