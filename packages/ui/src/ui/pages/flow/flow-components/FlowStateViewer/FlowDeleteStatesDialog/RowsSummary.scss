@@ -1,0 +1,24 @@
+.yt-flow-delete-states-rows-summary {
+    &__table-pane {
+        overflow-x: visible;
+    }
+
+    &__complete-value {
+        max-width: 360px;
+    }
+
+    &__complete-value-text {
+        overflow-wrap: anywhere;
+    }
+
+    &__hover-action {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    tr:hover &__hover-action,
+    tr:focus-within &__hover-action {
+        opacity: 1;
+        pointer-events: auto;
+    }
+}

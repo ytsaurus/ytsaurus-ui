@@ -12,6 +12,25 @@ type Params = {
     worker?: string;
 };
 
+const makeFlowComputationPath = ({
+    cluster,
+    computation,
+}: {
+    cluster?: string;
+    computation: string;
+}): string =>
+    `/${cluster || YT.cluster}/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/${encodeURIComponent(computation)}`;
+
+export const makeFlowComputationTabLink = ({
+    cluster,
+    computation,
+    tab,
+}: {
+    cluster?: string;
+    computation: string;
+    tab: string;
+}): string => `${makeFlowComputationPath({cluster, computation})}/${tab}`;
+
 export const makeFlowLink = ({
     path,
     cluster,
@@ -26,7 +45,7 @@ export const makeFlowLink = ({
     const params = new URLSearchParams({path});
 
     if (tab === FlowTab.COMPUTATIONS && computation) {
-        pathname += `/${encodeURIComponent(computation)}`;
+        pathname = makeFlowComputationPath({cluster, computation});
         if (partition) {
             pathname += `/partition/${encodeURIComponent(partition)}`;
         } else {

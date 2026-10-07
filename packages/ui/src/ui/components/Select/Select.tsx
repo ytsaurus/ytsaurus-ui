@@ -4,6 +4,7 @@ import cn from 'bem-cn-lite';
 
 import {
     Button,
+    Flex,
     Select,
     type SelectOption,
     type SelectProps,
@@ -206,22 +207,21 @@ class CustomSelect extends React.Component<
         return text;
     };
 
-    renderFilter: SelectProps['renderFilter'] = ({ref, onChange, ...props}) => {
+    renderFilter: SelectProps['renderFilter'] = ({ref, onChange, style, ...props}) => {
         const {hideClear, value} = this.props;
         const filter = <TextInput controlRef={ref} onUpdate={onChange} {...props} />;
-        if (hideClear || !value?.length) {
-            return filter;
-        }
 
         return (
-            <div className={block('filter')}>
+            <Flex alignItems="center" style={style}>
                 {filter}
-                <span className={block('filter-btn')}>
-                    <Button view="flat-secondary" onClick={() => this.props.onUpdate?.([])}>
-                        {i18n('action_clear')}
-                    </Button>
-                </span>
-            </div>
+                {!hideClear && Boolean(value?.length) && (
+                    <Flex as="span" alignItems="center" className={block('filter-btn')}>
+                        <Button view="flat-secondary" onClick={() => this.props.onUpdate?.([])}>
+                            {i18n('action_clear')}
+                        </Button>
+                    </Flex>
+                )}
+            </Flex>
         );
     };
 }
