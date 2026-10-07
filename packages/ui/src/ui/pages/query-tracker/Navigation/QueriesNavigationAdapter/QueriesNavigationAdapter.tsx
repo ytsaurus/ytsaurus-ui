@@ -15,7 +15,7 @@ import {type NavigationNode} from '@ytsaurus/components';
 import {Page} from '../../../../constants';
 import {Tab} from '../../../../constants/navigation';
 import {NavigationError} from '../NavigationBody/NavigationError';
-import {NavigationTable} from '../NavigationTable';
+import {useNavigationTableDetail} from './useNavigationTableDetail';
 import {NavigationClusterAvatar} from './NavigationClusterAvatar/NavigationClusterAvatar';
 import {HeaderActions} from '../NavigationHeader/HeaderActions';
 import {NodeListRow} from '../NodeList/NodeListRow/NodeListRow';
@@ -123,6 +123,7 @@ export function QueriesNavigationAdapter() {
     const error = useSelector(selectNavigationError);
     const table = useSelector(selectNavigationTable);
     const engine = useSelector(selectQueryEngine);
+    const tableDetail = useNavigationTableDetail();
     const [sort, setSort] = useState<NavigationSortOrder>('asc');
 
     useEffect(() => {
@@ -212,7 +213,9 @@ export function QueriesNavigationAdapter() {
             detail={{
                 openedItem,
                 onItemOpen: handleItemOpen,
-                resolve: () => ({tabs: [], emptyContent: <NavigationTable />}),
+                resolve: () => tableDetail,
+                search: filter,
+                onSearchUpdate: (value) => dispatch(setFilter(value)),
             }}
             renderNavigationItem={({item, isParentRow}) => {
                 if (isParentRow || !item.node) {
