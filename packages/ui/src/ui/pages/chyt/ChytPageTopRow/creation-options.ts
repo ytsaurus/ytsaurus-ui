@@ -9,10 +9,6 @@ export type CreationOptions = {
     resources?: ReturnType<typeof parseCreationOptions>;
 };
 
-function isSafeInteger(value: unknown): value is number {
-    return Number.isSafeInteger(value);
-}
-
 export function parseCreationOptions(groups: OptionsGroup[]) {
     const options = groups.flatMap((group) => group.options);
 
@@ -25,14 +21,18 @@ export function parseCreationOptions(groups: OptionsGroup[]) {
     }
 
     const instanceCount = resource('instance_count', ['int64', 'uint64']);
-    const {default_value: defaultValue, min_value: minValue, max_value: maxValue} = instanceCount;
+    const {
+        default_value: defaultValue,
+        min_value: minValue,
+        max_value: maxValue,
+    } = instanceCount as Required<ResourceOption>;
 
     if (
-        !isSafeInteger(defaultValue) ||
+        !Number.isSafeInteger(defaultValue) ||
         defaultValue < 1 ||
-        !isSafeInteger(minValue) ||
+        !Number.isSafeInteger(minValue) ||
         minValue < 1 ||
-        !isSafeInteger(maxValue) ||
+        !Number.isSafeInteger(maxValue) ||
         defaultValue < minValue ||
         defaultValue > maxValue
     ) {
