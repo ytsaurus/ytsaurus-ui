@@ -21,18 +21,20 @@ const groups: OptionsGroup[] = [
 ];
 
 describe('CHYT creation descriptors', () => {
-    it.each(['default_value', 'min_value', 'max_value'] as const)(
-        'rejects a missing instance count %s',
-        (field) => {
-            const options = groups[0].options.map((option) =>
-                option.name === 'instance_count' ? {...option, [field]: undefined} : option,
-            );
+    it('preserves instance count defaults and bounds supplied by the controller', () => {
+        const instanceCount = {
+            name: 'instance_count',
+            type: 'int64' as const,
+            default_value: 0,
+            min_value: 0,
+            max_value: 250,
+        };
+        const options = [instanceCount, ...groups[0].options.slice(1)];
 
-            expect(() => parseCreationOptions([{...groups[0], options}])).toThrow(
-                'Invalid instance count defaults or bounds',
-            );
-        },
-    );
+        expect(parseCreationOptions([{...groups[0], options}]).instanceCount).toEqual(
+            instanceCount,
+        );
+    });
 
     it('rejects incomplete descriptions instead of silently using hardcoded defaults', () => {
         expect(() => parseCreationOptions([])).toThrow();

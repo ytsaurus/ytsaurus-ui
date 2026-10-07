@@ -274,8 +274,10 @@ function CreateChytButton() {
                                     type: 'range-input-picker',
                                     caption: i18n('field_instance-count'),
                                     extras: {
-                                        minValue: resources?.instanceCount.min_value ?? 1,
-                                        maxValue: resources?.instanceCount.max_value ?? 100,
+                                        minValue: resources ? resources.instanceCount.min_value : 1,
+                                        maxValue: resources
+                                            ? resources.instanceCount.max_value
+                                            : 100,
                                     },
                                     required: true,
                                 },
@@ -350,7 +352,9 @@ function CreateChytButton() {
                                 ...makeErrorFields([error]),
                             ]}
                             initialValues={{
-                                instance_count: resources?.instanceCount.default_value ?? 1,
+                                instance_count: resources
+                                    ? resources.instanceCount.default_value
+                                    : 1,
                                 tree: [defaultPoolTree],
                                 runAfterCreation: true,
                             }}
