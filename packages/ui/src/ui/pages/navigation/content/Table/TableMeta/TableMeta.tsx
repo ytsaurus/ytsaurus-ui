@@ -1,6 +1,7 @@
 import React, {useMemo} from 'react';
 import cn from 'bem-cn-lite';
 import {connect} from 'react-redux';
+import {Flex} from '@gravity-ui/uikit';
 import {useSelector} from '../../../../../store/redux-hooks';
 import ypath from '../../../../../common/thor/ypath';
 
@@ -85,9 +86,15 @@ function TableMeta({
     ]);
 
     return (
-        <CollapsibleSection name={i18n('title_metadata')} size={UI_COLLAPSIBLE_SIZE}>
-            <MetaTable legacyGroupSpacing className={block()} items={items} />
-            {remountNeeded && <RemountAlert />}
+        <CollapsibleSection
+            name={i18n('title_metadata')}
+            size={UI_COLLAPSIBLE_SIZE}
+            marginDirection="bottom"
+        >
+            <Flex direction="column" gap={5}>
+                <MetaTable className={block()} items={items} />
+                {remountNeeded && <RemountAlert />}
+            </Flex>
         </CollapsibleSection>
     );
 }
