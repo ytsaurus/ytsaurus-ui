@@ -1,4 +1,4 @@
-import templates from './utils.js';
+import templates from './utils';
 import './components';
 import './operations';
 import './system';

@@ -6,6 +6,7 @@ import {Event} from '../../../utils/operations/tabs/details/events/events';
 
 import hammer from '../../../common/hammer';
 import templates, {
+    type TemplateContext,
     printColumnAsReadableField,
     printColumnAsTime,
     printColumnAsTimeDurationWithMs,
@@ -13,15 +14,18 @@ import templates, {
 
 const block = cn('operation-detail');
 
-templates.add('operations/detail/events', {
+type OperationEvent = {state: string; progress: {duration: number}};
+type EventContext = TemplateContext<OperationEvent, {theme: string; value: number}>;
+
+templates.add<OperationEvent>('operations/detail/events', {
     start_time: printColumnAsTime,
     finish_time: printColumnAsTime,
-    duration(item, columnName) {
+    duration(this: TemplateContext<OperationEvent, number>, item, columnName) {
         return Event.isNotFinalState(item)
             ? printColumnAsTimeDurationWithMs.call(this, item, columnName)
             : hammer.format.NO_VALUE;
     },
-    progress(item, columnName) {
+    progress(this: EventContext, item, columnName) {
         if (Event.isNotFinalState(item) && item.state !== 'total') {
             const progress = item.progress.duration;
             const column = this.getColumn(columnName);

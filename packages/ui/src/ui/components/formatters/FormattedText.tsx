@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
+import {type YTError} from '../../../@types/types';
 import unipika from '../../common/thor/unipika';
 import Label from '../Label';
 import {showErrorPopup} from '../../utils/utils';
@@ -9,8 +9,19 @@ import i18n from './i18n';
 
 const block = cn('elements-text');
 
-function prepareTextProps(text, asHTML) {
-    const props = {};
+export type FormattedTextProps = {
+    className?: string;
+    title?: string;
+} & ({asHTML: true; text?: string} | {asHTML?: false; text?: string | boolean | number});
+
+function prepareTextProps(
+    settings: FormattedTextProps,
+): Pick<React.HTMLAttributes<HTMLSpanElement>, 'children' | 'dangerouslySetInnerHTML'> {
+    const {text, asHTML} = settings;
+    const props: Pick<
+        React.HTMLAttributes<HTMLSpanElement>,
+        'children' | 'dangerouslySetInnerHTML'
+    > = {};
 
     if (text !== undefined) {
         if (asHTML) {
@@ -29,7 +40,7 @@ function prepareTextProps(text, asHTML) {
                             onClick={() =>
                                 showErrorPopup({
                                     message: i18n('alert_text-cannot-be-decoded'),
-                                    inner_errors: [e],
+                                    inner_errors: [e as YTError],
                                 })
                             }
                         >
@@ -44,20 +55,10 @@ function prepareTextProps(text, asHTML) {
     return props;
 }
 
-export default function FormattedText({
-    text,
-    className: mixedClassName,
-    asHTML = false,
-    title = text,
-}) {
-    const className = mixedClassName ? block(false, mixedClassName) : block();
-    const textProps = prepareTextProps(text, asHTML);
+export default function FormattedText(settings: FormattedTextProps) {
+    const {text, className: mixedClassName, title = text as string | undefined} = settings;
+    const className = mixedClassName ? block(null, mixedClassName) : block();
+    const textProps = prepareTextProps(settings);
 
     return <span {...textProps} title={title} className={className} />;
 }
-FormattedText.propTypes = {
-    text: PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]),
-    className: PropTypes.string,
-    asHTML: PropTypes.bool,
-    title: PropTypes.string,
-};
