@@ -18,6 +18,7 @@ export function useCreationOptions(cluster: string, isAdmin: boolean) {
 
     React.useEffect(() => {
         setState(undefined);
+
         return () => {
             ++requests.id;
             requests.cancelHelper.removeAllRequests();
@@ -27,6 +28,7 @@ export function useCreationOptions(cluster: string, isAdmin: boolean) {
     async function load() {
         const id = ++requests.id;
         setState({cluster, isAdmin, loading: true});
+
         try {
             const options = await wrapApiPromiseByToaster(
                 loadCreationOptions(
@@ -40,17 +42,24 @@ export function useCreationOptions(cluster: string, isAdmin: boolean) {
                     errorTitle: i18n('alert_load-options-failed'),
                 },
             );
-            if (id !== requests.id) return false;
+
+            if (id !== requests.id) {
+                return false;
+            }
+
             setState({cluster, isAdmin, loading: false, options});
+
             return true;
         } catch (error) {
             if (id === requests.id && !isCancelled(error)) {
                 setState({cluster, isAdmin, loading: false});
             }
+
             return false;
         }
     }
 
     const current = state?.cluster === cluster && state.isAdmin === isAdmin ? state : undefined;
+
     return {load, loading: current?.loading ?? false, options: current?.options};
 }
