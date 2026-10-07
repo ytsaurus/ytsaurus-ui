@@ -80,12 +80,15 @@ async function strawberryProxyApiImpl(req: Request, res: Response) {
         accept: 'application/json',
     };
 
+    const request =
+        action === 'describe'
+            ? {url: `${baseUrl}/describe`, method: 'GET', data: undefined}
+            : {url: `${baseUrl}/${cluster}/${action}`, method: 'POST', data: req.body};
+
     return axios
         .request({
-            url: action === 'describe' ? `${baseUrl}/describe` : `${baseUrl}/${cluster}/${action}`,
-            method: action === 'describe' ? 'GET' : 'POST',
+            ...request,
             headers,
-            data: action === 'describe' ? undefined : req.body,
             timeout: 100000,
             responseType: 'stream',
         })
