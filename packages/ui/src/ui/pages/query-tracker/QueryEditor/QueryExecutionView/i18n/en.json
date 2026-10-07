@@ -8,8 +8,14 @@
   "action_charts-retry": "Retry",
   "context_charts-missing-columns": "Some saved charts cannot be displayed because their source columns are unavailable.",
   "context_charts-empty": "No charts yet",
-  "context_charts-add": "Add a chart and select data series by their Y and X column names.",
+  "context_charts-add": "Add a chart and select its source columns.",
   "context_charts-no-data": "No plottable data. Charts require result rows with a numeric column.",
+  "value_chart-line": "Line",
+  "value_chart-area": "Area",
+  "value_chart-scatter": "Scatter",
+  "value_chart-bar-x": "Vertical bars",
+  "value_chart-bar-y": "Horizontal bars",
+  "value_chart-pie": "Pie",
   "action_load-more": "Load more",
   "alert_load-result-error": "Failed to load query result"
 }

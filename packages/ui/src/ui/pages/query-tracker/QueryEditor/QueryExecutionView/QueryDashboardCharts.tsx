@@ -12,8 +12,9 @@ import {loadQueryResult} from '../../../../store/actions/query-tracker/queryResu
 import {saveQueryDashboardConfig} from '../../../../store/actions/query-tracker/queryDashboard';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
 import {
+    dashboardChartTypes,
     describeDashboardItems,
-    prepareChartDataSource,
+    prepareChartFields,
     prepareDashboardLayout,
     readDashboardConfig,
     restoreDashboardItems,
@@ -45,10 +46,10 @@ export function QueryDashboardCharts({
     const revision = useRef(0);
     const [saveState, setSaveState] = useState<'saved' | 'saving' | 'error'>('saved');
     const rows = result?.resultReady ? result.results : emptyRows;
-    const prepared = useMemo(() => prepareChartDataSource(rows), [rows]);
+    const prepared = useMemo(() => prepareChartFields(rows), [rows]);
     const items = useMemo(
-        () => restoreDashboardItems(config.charts, rows, prepared),
-        [config.charts, rows, prepared],
+        () => restoreDashboardItems(config.charts, prepared),
+        [config.charts, prepared],
     );
     const layout = useMemo(
         () =>
@@ -125,22 +126,27 @@ export function QueryDashboardCharts({
                 <Text color="secondary">{i18n('context_charts-missing-columns')}</Text>
             )}
             <DashboardCharts
-                dataSource={prepared.dataSource}
+                editorMode="fields"
+                chartFieldsEditorProps={{
+                    ...prepared,
+                    chartTypeOptions: dashboardChartTypes.map((value) => ({
+                        value,
+                        content: i18n(`value_chart-${value}`),
+                    })),
+                }}
                 chartItems={items}
                 defaultLayout={layout}
                 emptyTitle={i18n('context_charts-empty')}
                 emptyDescription={
-                    rows.length && Object.keys(prepared.dataSource).length
+                    rows.length &&
+                    prepared.getFieldOptions({chartType: 'line', role: 'measure'}).length
                         ? i18n('context_charts-add')
                         : i18n('context_charts-no-data')
                 }
                 onItemsChange={(nextItems) => {
                     const visible = new Set(items.map(({id}) => id));
                     const unavailable = configRef.current.charts.filter(({id}) => !visible.has(id));
-                    const charts = [
-                        ...describeDashboardItems(nextItems, prepared.references),
-                        ...unavailable,
-                    ];
+                    const charts = [...describeDashboardItems(nextItems), ...unavailable];
                     change({
                         charts,
                         layout: prepareDashboardLayout(
