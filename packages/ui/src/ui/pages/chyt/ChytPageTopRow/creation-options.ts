@@ -20,27 +20,8 @@ export function parseCreationOptions(groups: OptionsGroup[]) {
         return option as ResourceOption;
     }
 
-    const instanceCount = resource('instance_count', ['int64', 'uint64']);
-    const {
-        default_value: defaultValue,
-        min_value: minValue,
-        max_value: maxValue,
-    } = instanceCount as Required<ResourceOption>;
-
-    if (
-        !Number.isSafeInteger(defaultValue) ||
-        defaultValue < 1 ||
-        !Number.isSafeInteger(minValue) ||
-        minValue < 1 ||
-        !Number.isSafeInteger(maxValue) ||
-        defaultValue < minValue ||
-        defaultValue > maxValue
-    ) {
-        throw new Error('Invalid instance count defaults or bounds');
-    }
-
     return {
-        instanceCount,
+        instanceCount: resource('instance_count', ['int64', 'uint64']),
         instanceCpu: resource('instance_cpu', ['int64', 'uint64']),
         instanceMemory: resource('instance_total_memory', ['byte_count']),
     };
