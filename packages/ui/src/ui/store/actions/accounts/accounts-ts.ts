@@ -62,6 +62,10 @@ export function parseAccountsData(data: Array<AccountInput>) {
     return prepareAccounts(data, parseAccountData);
 }
 
+export function parseAccountsDataSync(data: Array<AccountInput>) {
+    return data.map((item) => parseAccountData(item));
+}
+
 export function parseAccountsListData(data: Array<AccountListItem>) {
     return prepareAccounts(data, (item) => {
         const attributes = item.$attributes || {};

@@ -1,12 +1,16 @@
 import {CircleInfo} from '@gravity-ui/icons';
 import {Flex, Icon} from '@gravity-ui/uikit';
 import React from 'react';
+import {useHistory} from 'react-router';
 import Button from '../../../../../components/Button/Button';
 import {Tooltip} from '@ytsaurus/components';
-import AccountCreateDialog from '../../../../../pages/accounts/tabs/general/Editor/AccountCreateDialog';
+import {Page} from '../../../../../constants';
+import {AccountsTab} from '../../../../../constants/accounts/accounts';
 import {openCreateModal} from '../../../../../store/actions/accounts/editor';
+import {makeRoutedURL} from '../../../../../store/location';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {selectActiveAccount} from '../../../../../store/selectors/accounts/accounts-ts';
+import {selectCluster} from '../../../../../store/selectors/global';
 import {selectCurrentClusterConfig} from '../../../../../store/selectors/global/cluster';
 import {selectIsAdmin} from '../../../../../store/selectors/global/is-developer';
 import UIFactory from '../../../../../UIFactory';
@@ -18,10 +22,12 @@ interface Props {
 
 function AccountCreate({className}: Props) {
     const currentAccount = useSelector(selectActiveAccount);
+    const cluster = useSelector(selectCluster);
     const clusterConfig = useSelector(selectCurrentClusterConfig);
     const isDeveloper = useSelector(selectIsAdmin);
 
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const {disableCreate, disableCreateNotice} =
         UIFactory.isAccountCreateDisabled({
@@ -30,6 +36,14 @@ function AccountCreate({className}: Props) {
             isDeveloper,
         }) ?? {};
 
+    const handleClick = React.useCallback(() => {
+        const generalPath = `/${cluster}/${Page.ACCOUNTS}/${AccountsTab.GENERAL}`;
+        if (history.location.pathname !== generalPath) {
+            history.push(makeRoutedURL(generalPath));
+        }
+        dispatch(openCreateModal());
+    }, [cluster, dispatch, history]);
+
     return (
         <span className={className}>
             <Tooltip content={disableCreate && disableCreateNotice}>
@@ -37,7 +51,7 @@ function AccountCreate({className}: Props) {
                     <Button
                         view="action"
                         title={i18n('title_create-account')}
-                        onClick={() => dispatch(openCreateModal())}
+                        onClick={handleClick}
                         disabled={disableCreate}
                     >
                         {i18n('title_create-account')}
@@ -45,7 +59,6 @@ function AccountCreate({className}: Props) {
                     {disableCreate && Boolean(disableCreateNotice) && <Icon data={CircleInfo} />}
                 </Flex>
             </Tooltip>
-            <AccountCreateDialog />
         </span>
     );
 }

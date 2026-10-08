@@ -1,11 +1,13 @@
 import React, {useEffect} from 'react';
 import {type Meta, type StoryObj} from '@storybook/react';
-import {http} from 'msw';
+import {http, passthrough} from 'msw';
 
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
+import {YT_API_REQUEST_ID_HEADER} from '../../../../../../shared/constants';
 import {GLOBAL_PARTIAL} from '../../../../../constants/global';
+import {YTApiId} from '../../../../../rum/rum-wrap-api';
 import {
     TABLETS_BUNDLES_EDITOR_PARTIAL,
     TABLETS_BUNDLES_PARTIAL,
@@ -23,9 +25,13 @@ import {
 
 yt.setup.setGlobalOption('proxy', 'test-cluster.yt.my-domain.com');
 
-const accountsHandler = http.post('https://test-cluster.yt.my-domain.com/api/v3/list', () =>
-    Response.json(['sys']),
-);
+const accountsHandler = http.post('*', ({request}) => {
+    if (request.headers.get(YT_API_REQUEST_ID_HEADER) !== YTApiId.listAccounts) {
+        return passthrough();
+    }
+
+    return Response.json(['sys']);
+});
 
 const meta: Meta<typeof BundleEditorDialog> = {
     title: 'Pages/Tablet cell bundles/BundleEditorDialog',

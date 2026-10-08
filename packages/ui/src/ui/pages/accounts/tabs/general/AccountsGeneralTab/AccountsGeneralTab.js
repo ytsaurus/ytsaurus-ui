@@ -14,18 +14,16 @@ import {loadUsers} from '../../../../../store/actions/accounts/editor';
 import {accountsToggleFavourite} from '../../../../../store/actions/favourites';
 import {selectMediumList} from '../../../../../store/selectors/thor';
 import {
+    accountsIncreaseEditCounter,
     changeContentFilter,
     changeMediumFilter,
     changeNameFilter,
-    closeEditorModal,
     filterUsableAccounts,
-    loadEditedAccount,
     setAccountsAbcServiceFilter,
     setAccountsTreeState,
     setAccountsVisibilityMode,
     setAccountsVisibilityModeOfDashboard,
     setActiveAccount,
-    showEditorModal,
 } from '../../../../../store/actions/accounts/accounts';
 import {
     selectAccountsAbcServiceIdSlugFilter,
@@ -101,12 +99,10 @@ const mapDispatchToProps = {
     changeContentFilter,
     changeMediumFilter,
     filterUsableAccounts,
-    closeEditorModal,
     loadUsers,
     setAccountsTreeState,
-    loadEditedAccount,
     setActiveAccount,
-    showEditorModal,
+    accountsIncreaseEditCounter,
     accountsToggleFavourite,
     setAccountsVisibilityModeOfDashboard,
     setAccountsVisibilityMode,
