@@ -14,7 +14,9 @@ export type MetaTableStoryExampleKey =
     | 'booleanValues'
     | 'hiddenRow'
     | 'rowGap'
-    | 'withIcon';
+    | 'withIcon'
+    | 'legacyWithTitle'
+    | 'legacyGrouped';
 
 export const metaTableStoryConfigs: Record<MetaTableStoryExampleKey, MetaTableProps> = {
     basic: {
@@ -92,6 +94,26 @@ export const metaTableStoryConfigs: Record<MetaTableStoryExampleKey, MetaTablePr
             {key: 'region', value: 'eu-west'},
         ],
     },
+    legacyWithTitle: {
+        legacyGroupSpacing: true,
+        title: 'Table attributes',
+        items: [
+            {key: 'type', value: 'table'},
+            {key: 'revision', value: '42'},
+        ],
+    },
+    legacyGrouped: {
+        legacyGroupSpacing: true,
+        title: 'Metadata',
+        items: [
+            [
+                {key: 'chunk_count', value: '42'},
+                {key: 'tablet_count', value: '7'},
+            ],
+            [{key: 'erasure_codec', value: 'lrc_12_2_2'}],
+        ],
+        subTitles: ['Chunks', 'Storage'],
+    },
 };
 
 /** Stable order for Playwright screenshots (matches story `example` options). */
@@ -105,6 +127,8 @@ export const metaTableVisualCaseOrder: MetaTableStoryExampleKey[] = [
     'hiddenRow',
     'rowGap',
     'withIcon',
+    'legacyWithTitle',
+    'legacyGrouped',
 ];
 
 export const metaTableStoryFrameStyle: CSSProperties = {

@@ -8,7 +8,7 @@ import isNil_ from 'lodash/isNil';
 import cn from 'bem-cn-lite';
 
 import {format} from '../../utils';
-import {Icon, Link} from '@gravity-ui/uikit';
+import {Flex, Icon, Link} from '@gravity-ui/uikit';
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 
 import {Secondary} from '../Text';
@@ -28,6 +28,8 @@ export interface MetaTableProps {
     qa?: string;
     rowGap?: 4;
     alignItems?: 'baseline';
+    /** Enables legacy group margins instead of gaps. Defaults to false. */
+    legacyGroupSpacing?: boolean;
 }
 
 export interface MetaTableItem {
@@ -154,17 +156,22 @@ export class MetaTable extends Component<MetaTableProps> {
     }
 
     override render() {
-        const {items, className, title, subTitles, qa} = this.props;
+        const {items, className, title, subTitles, qa, legacyGroupSpacing} = this.props;
         const {groups, withInnerGroups, groupTitles} = splitItems(items, subTitles);
+        const renderedGroups = withInnerGroups
+            ? map_(withInnerGroups, (item, index) => this.renderGroup(item, index, groupTitles))
+            : this.renderGroup(groups, 0);
 
         return (
-            <div className={block(null, className)} data-qa={qa}>
+            <div className={block()} data-qa={qa}>
                 {title && this.renderTitle(title)}
-                {withInnerGroups
-                    ? map_(withInnerGroups, (item, index) =>
-                          this.renderGroup(item, index, groupTitles),
-                      )
-                    : this.renderGroup(groups, 0)}
+
+                <Flex
+                    className={block('groups', {'legacy-spacing': legacyGroupSpacing}, className)}
+                    wrap="wrap"
+                >
+                    {renderedGroups}
+                </Flex>
             </div>
         );
     }
