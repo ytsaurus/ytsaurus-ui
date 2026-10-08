@@ -25,8 +25,8 @@ jobs:
           github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
           folder-id: b1gcvl619mdunf1cqqbv
           image-id: fd8q5h7f9c5lpd474h12
-          zone-id: "ru-central1-b"
-          subnet-id: e2lno1rkqo63l729dlo7
+          zone-id: "ru-central1-a"
+          subnet-id: e9b515fu62r5id45usun
           cores: 4
           memory: 16GB
           core-fraction: 100
