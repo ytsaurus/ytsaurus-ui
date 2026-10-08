@@ -78,6 +78,10 @@ function flowRuntimeId(id: string) {
     return `${id}__${uuid}`;
 }
 
+export function makeComputationGroupId(computationId: string) {
+    return flowRuntimeId(`COMPUTATION_GROUP_${computationId}`);
+}
+
 export const COMPUTATION_IN = 'COMPUTATION_IN';
 export const COMPUTATION_OUT = 'COMPUTATION_OUT';
 export const COMPUTATION_TIMER_IN = 'COMPUTATION_TIMER_IN';
@@ -180,6 +184,16 @@ export function addFlowConnection(
     dstConnections.push(c);
 
     return c;
+}
+
+export function collapseConnectionEndpoints(
+    src: Pick<FlowGraphBlock, 'id' | 'groupId'>,
+    dst: Pick<FlowGraphBlock, 'id' | 'groupId'>,
+): {sourceBlockId: string; targetBlockId: string} | undefined {
+    const sourceBlockId = src.groupId ?? src.id;
+    const targetBlockId = dst.groupId ?? dst.id;
+
+    return sourceBlockId === targetBlockId ? undefined : {sourceBlockId, targetBlockId};
 }
 
 export function makeBlock<

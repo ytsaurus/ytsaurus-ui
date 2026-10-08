@@ -53,10 +53,12 @@ import {
     addComputationInOut,
     addFlowConnection,
     applyConnectionStyle,
+    collapseConnectionEndpoints,
     getStreamsSummaryByAnchorType,
     isComputationAnchorType,
     isFlowComputationOrGroup,
     makeBlock,
+    makeComputationGroupId,
     makeFlowComputationRuntimeData,
     makeTimerAnchors,
     mergeConnectionStreamStatus,
@@ -338,20 +340,51 @@ function useFlowGraphData(params: {pipeline_path: string}) {
 
             const blockById: Map<TBlockId, FlowGraphBlock> = new Map();
 
+            const streamPlacementById = new Map<
+                string,
+                {
+                    groupId: string;
+                    stream_type: FlowComputationStreamType;
+                    icon?: SVGIconSvgrData;
+                }
+            >();
+
+            Object.values(computations).forEach((computation) => {
+                const groupId = makeComputationGroupId(computation.id);
+
+                (['output_streams', 'source_streams', 'timer_streams'] as const).forEach(
+                    (streamType) => {
+                        computation[streamType]?.forEach((streamId) => {
+                            streamPlacementById.set(streamId, {
+                                groupId,
+                                stream_type: streamType,
+                                ...ICON_BY_TYPE[streamType],
+                            });
+                        });
+                    },
+                );
+            });
+
             // Collect streams
             Object.values(streams).forEach((stream) => {
+                const placement = streamPlacementById.get(stream.id);
                 const streamBlock = makeBlock('stream', stream, {
                     name: stream.name,
+                    ...placement,
                     ...STREAM_SIZE,
                 });
 
                 blockById.set(streamBlock.id, streamBlock);
                 res.data.blocks.push(streamBlock);
+
+                if (!placement) {
+                    res.groups.blocks.push(streamBlock);
+                }
             });
 
             // Collect computations and their groups
             Object.entries(computations).forEach(([_name, computation]) => {
-                const groupId = `\n\n__group(${computation.id})__\n\n`;
+                const groupId = makeComputationGroupId(computation.id);
 
                 const groupBlock = new FlowGroupBlock({
                     id: groupId,
@@ -383,10 +416,7 @@ function useFlowGraphData(params: {pipeline_path: string}) {
 
                 const {runtimeData} = computation;
 
-                function collectStreams<K extends FlowComputationStreamType>(
-                    key: K,
-                    options?: {groupId: string},
-                ) {
+                function collectStreams<K extends FlowComputationStreamType>(key: K) {
                     const streamIds = computation[key] ?? [];
 
                     streamIds.forEach((id) => {
@@ -429,21 +459,13 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                             makeTimerAnchors(timerBlock, timerComputationBlock, cIn);
                             applyConnectionStyle(cIn, timerInfo);
                         }
-
-                        if (options?.groupId) {
-                            Object.assign(blockById.get(id)!, {
-                                stream_type: key,
-                                ...options,
-                                ...ICON_BY_TYPE[key],
-                            });
-                        }
                     });
                 }
 
                 collectStreams('input_streams');
-                collectStreams('output_streams', {groupId});
-                collectStreams('source_streams', {groupId});
-                collectStreams('timer_streams', {groupId});
+                collectStreams('output_streams');
+                collectStreams('source_streams');
+                collectStreams('timer_streams');
             });
 
             // Collect sinks
@@ -473,23 +495,10 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                 const src = blockById.get(sourceBlockId!)!;
                 const dst = blockById.get(targetBlockId!)!;
 
-                let source: string | undefined;
-                let target: string | undefined;
+                const endpoints = collapseConnectionEndpoints(src, dst);
 
-                if (src.groupId && dst.groupId) {
-                    if (src.groupId !== dst.groupId) {
-                        source = src.groupId;
-                        target = dst.groupId;
-                    }
-                } else if (src.groupId) {
-                    source = src.groupId;
-                    target = dst.id;
-                } else if (dst.groupId) {
-                    source = src.id;
-                    target = dst.groupId;
-                }
-
-                if (source && target) {
+                if (endpoints) {
+                    const {sourceBlockId: source, targetBlockId: target} = endpoints;
                     const id = `_${source}->${target}_`;
 
                     let c = connectionById.get(id);

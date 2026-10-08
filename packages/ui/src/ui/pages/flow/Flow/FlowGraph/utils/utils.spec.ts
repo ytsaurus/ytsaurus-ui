@@ -2,6 +2,8 @@ import {type TConnection} from '@gravity-ui/graph';
 
 import {
     applyConnectionStyle,
+    collapseConnectionEndpoints,
+    makeComputationGroupId,
     mergeConnectionStreamStatus,
     orderSourcesLikeSourceStreams,
 } from './utils';
@@ -76,6 +78,47 @@ describe('Flow graph connection stream status', () => {
             flowStreamStatus: {drained: true, backpressureDetected: true},
             styles: {background: 'warning'},
         });
+    });
+});
+
+describe('collapseConnectionEndpoints', () => {
+    it.each([
+        {
+            name: 'keeps a connection between top-level blocks',
+            src: {id: 'input-stream'},
+            dst: {id: 'sink'},
+            expected: {sourceBlockId: 'input-stream', targetBlockId: 'sink'},
+        },
+        {
+            name: 'projects a block to its group',
+            src: {id: 'stream', groupId: 'source-group'},
+            dst: {id: 'sink'},
+            expected: {sourceBlockId: 'source-group', targetBlockId: 'sink'},
+        },
+        {
+            name: 'projects both blocks to their groups',
+            src: {id: 'output', groupId: 'source-group'},
+            dst: {id: 'input', groupId: 'target-group'},
+            expected: {sourceBlockId: 'source-group', targetBlockId: 'target-group'},
+        },
+        {
+            name: 'drops a connection inside one group',
+            src: {id: 'computation', groupId: 'group'},
+            dst: {id: 'output', groupId: 'group'},
+            expected: undefined,
+        },
+    ])('$name', ({src, dst, expected}) => {
+        expect(collapseConnectionEndpoints(src, dst)).toEqual(expected);
+    });
+});
+
+describe('makeComputationGroupId', () => {
+    it('returns a stable runtime-only id without layout control characters', () => {
+        const groupId = makeComputationGroupId('computation');
+
+        expect(makeComputationGroupId('computation')).toBe(groupId);
+        expect(makeComputationGroupId('other-computation')).not.toBe(groupId);
+        expect(groupId).not.toContain('\n');
     });
 });
 
