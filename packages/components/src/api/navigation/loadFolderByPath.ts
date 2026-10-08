@@ -6,7 +6,7 @@ export const loadFolderByPath = async (
     path: string,
     setup: YTApiSetup,
     favorites: string[] = [],
-) => {
+): Promise<NavigationNode[]> => {
     const response = await ytApiV3.list({
         setup,
         parameters: {
