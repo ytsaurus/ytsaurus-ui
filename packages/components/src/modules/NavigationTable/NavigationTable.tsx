@@ -32,6 +32,7 @@ const TABLE_TAB_FROM_INITIAL: Record<NavigationTableInitialTab, TableTab> = {
 export type NavigationTableProps = {
     table?: NavigationTableData;
     initialActiveTab?: NavigationTableInitialTab;
+    legacyGroupSpacing?: boolean;
     filter?: string;
     onFilterChange?: (value: string) => void;
     onInsertTableSelect?: () => void | Promise<void>;
@@ -56,7 +57,10 @@ export type NavigationTableProps = {
             tag?: string,
         ) => void | Promise<void>;
     }) => React.ReactNode;
-    renderMetaTab?: (props: {items: NavigationTableMeta[][]}) => React.ReactNode;
+    renderMetaTab?: (props: {
+        items: NavigationTableMeta[][];
+        legacyGroupSpacing?: boolean;
+    }) => React.ReactNode;
     className?: string;
     logError?: LogErrorFn;
     ErrorBoundaryComponent?: React.ComponentType<ErrorBoundaryProps>;
@@ -65,6 +69,7 @@ export type NavigationTableProps = {
 export const NavigationTable: FC<NavigationTableProps> = ({
     table,
     initialActiveTab,
+    legacyGroupSpacing,
     filter,
     onFilterChange,
     onInsertTableSelect,
@@ -131,9 +136,9 @@ export const NavigationTable: FC<NavigationTableProps> = ({
     const metaContent =
         activeTab === TableTab.Meta &&
         (renderMetaTab ? (
-            renderMetaTab({items: table.meta})
+            renderMetaTab({items: table.meta, legacyGroupSpacing})
         ) : (
-            <NavigationMetaTab metadata={table.meta} />
+            <NavigationMetaTab metadata={table.meta} legacyGroupSpacing={legacyGroupSpacing} />
         ));
 
     return (
