@@ -19,7 +19,7 @@ export const NavigationHeader: FC = () => {
     const filter = useSelector(selectNavigationFilter);
     const nodeType = useSelector(selectNavigationNodeType);
 
-    const showFilter = nodeType !== BodyType.Table;
+    const showFilter = nodeType === BodyType.Tree || nodeType === BodyType.Cluster;
 
     const handleFilterChange = (value: string) => {
         dispatch(setFilter(value));
