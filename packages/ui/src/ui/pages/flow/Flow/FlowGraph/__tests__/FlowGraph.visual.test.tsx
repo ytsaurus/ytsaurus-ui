@@ -4,12 +4,16 @@ import {expect, test} from '../../../../../playwright-components/core';
 
 import {FlowGraphStories} from '../__stories__';
 import {
+    INPUT_ONLY_SINK_NAME,
+    INPUT_ONLY_STREAM_NAME,
+    ISOLATED_STREAM_NAME,
     MESSAGE_TEXT,
     MULTIPLE_SOURCES,
     SOURCE_NAME,
     backpressuredFlowGraphHandler,
     drainedFlowGraphHandler,
     emptyFlowGraphHandler,
+    inputOnlyStreamFlowGraphHandler,
     messagesFlowGraphHandler,
     mixedFlowGraphHandler,
     multipleSourcesFlowGraphHandler,
@@ -124,6 +128,77 @@ test('FlowGraph: anchor without details is hidden', async ({mount, page, router}
 
     await page.getByText(SOURCE_NAME, {exact: true}).waitFor();
     await expect(page.locator(`.${anchor}`)).toHaveCount(0);
+});
+
+test('FlowGraph: input-only stream does not overlap sink', async ({
+    mount,
+    expectScreenshot,
+    page,
+    router,
+}) => {
+    test.slow();
+
+    await router.use(inputOnlyStreamFlowGraphHandler);
+    await mount(<FlowGraphStories.InputOnlyStream />);
+
+    const graph = page.locator('.yt-flow-graph__graph');
+    await graph.hover();
+    for (let i = 0; i < 3; ++i) {
+        await page.mouse.wheel(0, -700);
+    }
+
+    const graphBlocks = page.locator('.graph-block-wrapper');
+    const inputOnlyStream = graphBlocks.filter({
+        hasText: INPUT_ONLY_STREAM_NAME,
+    });
+    const sink = graphBlocks.filter({
+        hasText: INPUT_ONLY_SINK_NAME,
+    });
+    const isolatedStream = graphBlocks.filter({hasText: ISOLATED_STREAM_NAME});
+
+    await expect(graphBlocks).toHaveCount(7, {timeout: 15_000});
+    await expect(inputOnlyStream).toHaveCount(1);
+    await expect(inputOnlyStream.locator('.g-icon')).toHaveCount(0);
+    await expect(isolatedStream).toHaveCount(1);
+    await expect(isolatedStream).toBeVisible();
+    await expect(isolatedStream.locator('.g-icon')).toHaveCount(0);
+    await expect(sink).toHaveCount(1);
+
+    const [inputOnlyStreamBox, sinkBox] = await Promise.all([
+        inputOnlyStream.boundingBox(),
+        sink.boundingBox(),
+    ]);
+    if (!inputOnlyStreamBox || !sinkBox) {
+        throw new Error('Flow graph blocks must have measurable bounds');
+    }
+
+    const overlapWidth = Math.max(
+        0,
+        Math.min(inputOnlyStreamBox.x + inputOnlyStreamBox.width, sinkBox.x + sinkBox.width) -
+            Math.max(inputOnlyStreamBox.x, sinkBox.x),
+    );
+    const overlapHeight = Math.max(
+        0,
+        Math.min(inputOnlyStreamBox.y + inputOnlyStreamBox.height, sinkBox.y + sinkBox.height) -
+            Math.max(inputOnlyStreamBox.y, sinkBox.y),
+    );
+    const overlapArea = overlapWidth * overlapHeight;
+
+    expect(
+        overlapArea,
+        `Expected no overlap, got input-only stream ${JSON.stringify(inputOnlyStreamBox)}, ` +
+            `sink ${JSON.stringify(sinkBox)}, overlap area ${overlapArea}px²`,
+    ).toBe(0);
+
+    await graph.hover();
+    for (let i = 0; i < 5; ++i) {
+        await page.mouse.wheel(0, 700);
+    }
+    await expect(graphBlocks).toHaveCount(0);
+    await graph.hover({position: {x: 10, y: 10}});
+    await expect(page.locator('.yt-flow-graph__item-popup')).toHaveCount(0);
+    await page.waitForTimeout(500);
+    await expectScreenshot();
 });
 
 test('FlowGraph: schematic anchors', async ({mount, expectScreenshot, page, router}) => {
