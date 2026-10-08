@@ -3,17 +3,33 @@
 .meta-table {
     --yt-meta-table-columns: repeat(2, auto);
 
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
+    &__groups {
+        align-items: flex-start;
+        gap: 20px 50px;
 
-    &__group {
-        margin-right: 50px;
-        margin-bottom: 20px;
-
-        &:only-child {
+        .meta-table__group {
             margin: 0;
         }
+
+        // Legacy layout: preserve group margins expected by existing pages.
+        &_legacy-spacing {
+            gap: 0;
+
+            .meta-table__group {
+                margin-right: 50px;
+                margin-bottom: 20px;
+
+                &:only-child {
+                    margin: 0;
+                }
+            }
+        }
+    }
+
+    // Legacy layout: a title previously prevented the single group from matching :only-child.
+    &__title + &__groups_legacy-spacing .meta-table__group:only-child {
+        margin-right: 50px;
+        margin-bottom: 20px;
     }
 
     &__title {

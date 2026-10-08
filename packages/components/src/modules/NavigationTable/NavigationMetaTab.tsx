@@ -8,8 +8,9 @@ const b = cn('ytc-navigation-table-meta-tab');
 
 type Props = {
     metadata: NavigationTableData['meta'];
+    legacyGroupSpacing?: boolean;
 };
 
-export const NavigationMetaTab: FC<Props> = ({metadata}) => {
-    return <MetaTable className={b()} items={metadata} />;
+export const NavigationMetaTab: FC<Props> = ({metadata, legacyGroupSpacing}) => {
+    return <MetaTable className={b()} items={metadata} legacyGroupSpacing={legacyGroupSpacing} />;
 };
