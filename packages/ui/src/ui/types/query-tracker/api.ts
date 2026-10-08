@@ -3,6 +3,7 @@ import {type Plan, type Progress} from '../../pages/query-tracker/Plan/models/pl
 import {type TypeArray} from '@ytsaurus/components';
 import {type QueriesHistoryCursorDirection} from '../../store/reducers/query-tracker/query-tracker-contants';
 import {type VisualizationState} from '../../store/reducers/query-tracker/queryChartSlice';
+import type {DashboardChartsConfig} from './dashboardCharts';
 import {type YTError} from '../index';
 import {type QueryStatus} from './index';
 import {QueryEngine} from '../../../shared/constants/engines';
@@ -118,6 +119,7 @@ export interface QueryItem extends DraftQuery {
     annotations?: {
         title?: string;
         chartConfig?: VisualizationState;
+        dashboardChartsConfig?: DashboardChartsConfig;
         is_tutorial?: boolean;
     };
 }
