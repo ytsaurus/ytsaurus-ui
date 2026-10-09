@@ -76,8 +76,13 @@ export function ColumnCell({
             ? YqlValue.getFormattedValue(value[0], formatType, {
                   ...cellUnipikaSettings,
                   asHTML: false,
+                  nonBreakingIndent: false,
               })
-            : unipika.prettyprint(value, {...cellUnipikaSettings, asHTML: false});
+            : unipika.prettyprint(value, {
+                  ...cellUnipikaSettings,
+                  asHTML: false,
+                  nonBreakingIndent: false,
+              });
     const formattedValue =
         formatType && value && Array.isArray(value) ? (
             <YqlValue
