@@ -14,7 +14,7 @@ import {
 export const conf: languages.LanguageConfiguration = {
     comments: {
         lineComment: '--',
-        blockComment: ['```', '```'],
+        blockComment: ['/*', '*/'],
     },
     brackets: [
         ['{', '}'],
@@ -172,6 +172,8 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
         ],
         cppComment: [
             [/[^*/]+/, 'comment'],
+            [/\/\*/, {token: 'comment.quote', next: '@push'}],
+            [/\*\//, {token: 'comment.quote', next: '@pop'}],
             [/./, 'comment'],
         ],
         numbers: [[/[+-]?\d+(?:(?:\.\d*)?(?:[eE][+-]?\d+)?)?\b/, 'number']],
