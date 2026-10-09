@@ -13,6 +13,8 @@ import {useQueryACO} from '../QueryACO/useQueryACO';
 import hammer from '../../../common/hammer';
 import {updateTitle} from '../../../store/actions/global';
 import {ResultView} from './ResultView';
+import {QueryExecutionView} from './QueryExecutionView/QueryExecutionView';
+import {selectSettingsQueryTrackerNewQueriesView} from '../../../store/selectors/settings/settings-ts';
 import {QueryEditorView} from './QueryEditorView';
 
 const b = block('query-container');
@@ -34,6 +36,8 @@ export const QueryEditor: FC<Props> = ({
 }) => {
     const dispatch = useDispatch();
     const query = useCurrentQuery();
+    const useNewQueriesView = useSelector(selectSettingsQueryTrackerNewQueriesView);
+    const ResultComponent = useNewQueriesView ? QueryExecutionView : ResultView;
     const {isQueryTrackerInfoLoading} = useQueryACO();
 
     const [resultViewMode, setResultViewMode] = useState<ResultMode>('minimized');
@@ -66,6 +70,14 @@ export const QueryEditor: FC<Props> = ({
     const isMainQueryLoading = useSelector(selectIsQueryLoading);
     const isLoading = isQueryTrackerInfoLoading || isMainQueryLoading;
 
+    const editor = resultViewMode !== 'full' && (
+        <QueryEditorView
+            onStartQuery={onStartQuery}
+            pathNavigation={pathNavigation}
+            hideAco={hideAco}
+        />
+    );
+
     return (
         <>
             {isLoading && (
@@ -79,16 +91,12 @@ export const QueryEditor: FC<Props> = ({
                 onResizeEnd={setSize}
                 getInitialSizes={() => partSizes}
             >
-                {resultViewMode !== 'full' && (
-                    <QueryEditorView
-                        onStartQuery={onStartQuery}
-                        pathNavigation={pathNavigation}
-                        hideAco={hideAco}
-                    />
-                )}
+                {/* Keep the new panel in the second pane when the editor is hidden. */}
+                {useNewQueriesView ? <React.Fragment>{editor}</React.Fragment> : editor}
 
                 {query?.id && isExecuted && (
-                    <ResultView
+                    <ResultComponent
+                        key={useNewQueriesView ? query.id : undefined}
                         query={query}
                         setResultViewMode={setResultViewMode}
                         resultViewMode={resultViewMode}

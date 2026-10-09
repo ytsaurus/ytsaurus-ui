@@ -10,7 +10,6 @@ import {getClusterConfigByName, getClusterProxy} from '../../selectors/global';
 import {selectMergedUiSettings} from '../../selectors/global/cluster';
 import {type RootState} from '../../reducers';
 import {makeDirectDownloadPath} from '../../../utils/navigation';
-import {UPDATE_QUERIES_LIST} from '../../reducers/query-tracker/query-tracker-contants';
 import {
     selectEffectiveApiStage,
     selectQueryAnnotations,
@@ -154,6 +153,7 @@ const QUERIES_LIST_ATTRIBUTES = [
     'finish_time',
     'user',
     'engine',
+    'settings',
     'annotations',
     'is_tutorial',
     'access_control_objects',
@@ -435,29 +435,6 @@ export function getQueryResultMetaList(
             setup: getQTApiSetup(),
         });
         return results;
-    };
-}
-
-export function setQueryName(
-    query_id: string,
-    annotations: QueryItem['annotations'],
-): ThunkAction<Promise<any>, RootState, any, AnyAction> {
-    return async (dispatch, getState) => {
-        const state = getState();
-        const {stage} = selectQueryTrackerRequestOptions(state);
-        await ytApiV4Id.alterQuery(YTApiId.alterQuery, {
-            parameters: {
-                stage,
-                query_id,
-                annotations,
-            },
-            setup: getQTApiSetup(),
-        });
-        const query = await dispatch(getQuery(query_id));
-        dispatch({
-            type: UPDATE_QUERIES_LIST,
-            data: [query],
-        });
     };
 }
 

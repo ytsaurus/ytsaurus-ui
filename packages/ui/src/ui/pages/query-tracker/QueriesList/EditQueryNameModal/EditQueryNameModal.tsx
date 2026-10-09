@@ -4,11 +4,8 @@ import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 
 import {type QueryItem} from '../../../../types/query-tracker/api';
-import {setQueryName} from '../../../../store/actions/query-tracker/api';
-import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {updateQueryInList} from '../../../../store/actions/query-tracker/queriesList';
-import {selectQueryDraft} from '../../../../store/selectors/query-tracker/query';
-import {updateQueryDraft} from '../../../../store/actions/query-tracker/query';
+import {setQueryName} from '../../../../store/actions/query-tracker/queryAnnotations';
+import {useDispatch} from '../../../../store/redux-hooks';
 import i18n from './i18n';
 
 export interface Props {
@@ -22,7 +19,6 @@ interface FormValues {
 
 export default function EditQueryNameModal({query: {state, annotations, id}, className}: Props) {
     const dispatch = useDispatch();
-    const currentDraft = useSelector(selectQueryDraft);
     const [error, setError] = useState<Error | undefined>(undefined);
     const [visible, setVisible] = useState(false);
 
@@ -30,21 +26,7 @@ export default function EditQueryNameModal({query: {state, annotations, id}, cla
         const {name} = form.getState().values;
         setError(undefined);
         try {
-            const updatedAnnotations = {...annotations, title: name};
-            await dispatch(setQueryName(id, updatedAnnotations));
-            dispatch(
-                updateQueryInList(id, {
-                    annotations: updatedAnnotations,
-                }),
-            );
-
-            if (currentDraft.id === id) {
-                dispatch(
-                    updateQueryDraft({
-                        annotations: {...currentDraft.annotations, title: name},
-                    }),
-                );
-            }
+            await dispatch(setQueryName(id, name));
         } catch (err) {
             setError(err as Error);
             throw err;

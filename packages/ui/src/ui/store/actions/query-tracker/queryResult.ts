@@ -12,6 +12,7 @@ import {
 import {type Type, getSchemaDateType, parseV3Type} from '@ytsaurus/components';
 import {
     selectHasQueryResult,
+    selectQueryResult,
     selectQueryResultGlobalSettings,
     selectQueryResultSettings,
 } from '../../selectors/query-tracker/queryResult';
@@ -39,6 +40,8 @@ import {
     SET_QUERY_RESULTS_SETTINGS,
 } from '../../reducers/query-tracker/query-tracker-contants';
 import {ytApiV3} from '../../../rum/rum-wrap-api';
+import executionI18n from '../../../pages/query-tracker/QueryEditor/QueryExecutionView/i18n';
+import {appendQueryResultPage} from '../../../utils/query-tracker/queryResultPages';
 
 export function applySettings(
     queryId: QueryItem['id'],
@@ -179,6 +182,7 @@ export function loadQueryResult(
                     queryId,
                     index: resultIndex,
                     results: formattedResult,
+                    rawResult: result,
                     columns,
                     meta,
                 },
@@ -190,6 +194,73 @@ export function loadQueryResult(
                     queryId,
                     index: resultIndex,
                     error: e as Error,
+                },
+            });
+        }
+    };
+}
+
+export function loadNextQueryResult(
+    queryId: string,
+    resultIndex: number,
+): ThunkAction<Promise<void>, RootState, unknown, QueryResultsActions> {
+    return async (dispatch, getState) => {
+        const previous = selectQueryResult(getState(), queryId, resultIndex);
+        if (previous?.state !== QueryResultState.Ready || !previous.rawResult) return;
+        const start = previous.results.length;
+        if (start >= previous.meta.data_statistics.row_count) return;
+
+        dispatch({type: REQUEST_QUERY_RESULTS, data: {queryId, index: resultIndex}});
+        try {
+            const next = await wrapApiPromiseByToaster(
+                dispatch(
+                    readQueryResults({
+                        query_id: queryId,
+                        result_index: resultIndex,
+                        cursor: {start, end: start + QUERY_RESULT_ROWS_LIMIT},
+                        columns: previous.columns.map(({name}) => name),
+                        settings: {cellsSize: previous.settings.cellSize},
+                    }),
+                ),
+                {
+                    toasterName: `load_result_page_${queryId}_${resultIndex}`,
+                    skipSuccessToast: true,
+                    errorTitle: executionI18n('alert_load-result-error'),
+                },
+            );
+            // A cell preview may have completed while the next page was loading.
+            const current = selectQueryResult(getState(), queryId, resultIndex);
+            if (!current?.resultReady || !current.rawResult) return;
+            const rows = next.rows.map((row) =>
+                Object.fromEntries(
+                    Object.entries(row).map(([name, [value, type]]) => [
+                        name,
+                        prepareFormattedValue(value, next.yql_type_registry[Number(type)]),
+                    ]),
+                ),
+            );
+            dispatch({
+                type: SET_QUERY_RESULTS_PAGE,
+                data: {
+                    queryId,
+                    index: resultIndex,
+                    page: 0,
+                    results: [...current.results, ...rows],
+                    rawResult: appendQueryResultPage(current.rawResult, next),
+                },
+            });
+        } catch {
+            // The toaster reports the failure; keep loaded rows available and allow retry.
+            const current = selectQueryResult(getState(), queryId, resultIndex);
+            if (!current?.resultReady) return;
+            dispatch({
+                type: SET_QUERY_RESULTS_PAGE,
+                data: {
+                    queryId,
+                    index: resultIndex,
+                    page: current.page,
+                    results: current.results,
+                    rawResult: current.rawResult,
                 },
             });
         }
@@ -227,6 +298,7 @@ export function injectQueryResults({
                 rowIndex,
                 columnName,
                 cellData,
+                rawCell: {value, type: types[Number(typeIndex)]},
             },
         });
     };
@@ -288,6 +360,7 @@ export function updateQueryResult(
                         queryId,
                         index: resultIndex,
                         results: formattedResult,
+                        rawResult: result,
                         settings,
                         page,
                     },
