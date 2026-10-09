@@ -19,6 +19,9 @@ jobs:
   build:
     name: Warm main Docker cache
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -26,9 +29,15 @@ jobs:
         uses: docker/setup-buildx-action@v4
         with:
           version: latest
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build UI
         uses: docker/build-push-action@v7
         with:
           context: packages/ui
-          cache-from: type=gha,version=2,scope=ui-main
-          cache-to: type=gha,version=2,scope=ui-main,mode=max
+          cache-from: type=registry,ref=ghcr.io/ytsaurus/ui-nightly:buildcache-main
+          cache-to: type=registry,ref=ghcr.io/ytsaurus/ui-nightly:buildcache-main,mode=max
