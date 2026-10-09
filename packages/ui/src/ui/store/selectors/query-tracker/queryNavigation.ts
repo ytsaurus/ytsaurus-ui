@@ -104,3 +104,6 @@ export const selectNodeListByFilter = createSelector(
         return result;
     },
 );
+
+export const selectNavigationSchemaFilter = (state: RootState) =>
+    state.queryTracker.queryNavigation.schemaFilter;
