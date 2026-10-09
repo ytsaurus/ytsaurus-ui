@@ -67,6 +67,7 @@ const CONSUMER_PARTITIONS_COLUMNS: Array<{id: ConsumerPartitionsColumns; caption
 ];
 
 export interface ConsumerFiltersState {
+    consumerName: string | undefined;
     consumerMode: CONSUMER_MODE;
     consumerPartitionIndex: string;
     consumerRateMode: CONSUMER_RATE_MODE;
@@ -76,6 +77,7 @@ export interface ConsumerFiltersState {
 }
 
 export const initialState: ConsumerFiltersState = {
+    consumerName: undefined,
     consumerMode: CONSUMER_MODE.METRICS,
     consumerPartitionIndex: '',
     consumerRateMode: CONSUMER_RATE_MODE.ROWS,
