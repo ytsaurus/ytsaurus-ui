@@ -9,24 +9,28 @@ export function useScrollMargin({
 }) {
     const [scrollMargin, setScrollMargin] = React.useState<number>();
 
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         if (!element) {
             return undefined;
         }
 
-        const id = setInterval(() => {
-            const {y: bodyY} = document.body.getBoundingClientRect();
-            const {y} = element.getBoundingClientRect();
+        const updateScrollMargin = () => {
+            const {top} = element.getBoundingClientRect();
+            const nextScrollMargin = Math.round(top + window.scrollY);
 
-            const diff = Math.round(y - bodyY);
+            setScrollMargin((currentScrollMargin) =>
+                currentScrollMargin === nextScrollMargin ? currentScrollMargin : nextScrollMargin,
+            );
+        };
 
-            if (scrollMargin !== diff) {
-                setScrollMargin(diff);
-            }
-        }, timeout);
+        updateScrollMargin();
 
-        return () => clearInterval(id);
-    }, [scrollMargin, element, timeout]);
+        const intervalId = setInterval(updateScrollMargin, timeout);
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [element, timeout]);
 
     return scrollMargin;
 }
