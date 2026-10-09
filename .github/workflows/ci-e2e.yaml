@@ -68,10 +68,7 @@ jobs:
           tags: |
             ${{ steps.image.outputs.nightly }}
             ${{ steps.image.outputs.stable }}
-          cache-from: |
-            type=gha,version=2,scope=ui-main
-            type=gha,version=2,scope=ui-pr-${{ github.event.pull_request.number }}
-          cache-to: type=gha,version=2,scope=ui-pr-${{ github.event.pull_request.number }},mode=max,ignore-error=true
+          cache-from: type=registry,ref=ghcr.io/ytsaurus/ui-nightly:buildcache-main
       - name: Install YTsaurus client
         run: |
           pip install ytsaurus-client --upgrade
