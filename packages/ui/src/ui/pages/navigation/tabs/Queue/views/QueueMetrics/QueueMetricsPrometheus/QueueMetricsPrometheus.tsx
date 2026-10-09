@@ -4,7 +4,7 @@ import {PrometheusDashboardLazy} from '../../../../../../../containers/Prometheu
 import {type UIFactory} from '../../../../../../../UIFactory';
 
 type Props = React.ComponentProps<
-    Exclude<ReturnType<UIFactory['getComponentForConsumerMetrics']>, undefined>
+    Exclude<ReturnType<UIFactory['getComonentForQueueMetrics']>, undefined>
 >;
 
 export function QueueMetricsPrometheus({cluster, path}: Props) {

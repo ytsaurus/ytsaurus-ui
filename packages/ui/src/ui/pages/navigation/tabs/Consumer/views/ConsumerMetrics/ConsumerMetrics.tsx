@@ -14,7 +14,7 @@ import i18n from './i18n';
 
 export default function ConsumerMetrics() {
     const path = useSelector(selectAttributesPath);
-    const cluster = useSelector(selectCluster);
+    const consumerCluster = useSelector(selectCluster);
     const {queue} = useSelector(selectTargetQueue) ?? {};
     const consumerName = useSelector(selectConsumerName);
 
@@ -37,7 +37,7 @@ export default function ConsumerMetrics() {
         <ErrorBoundary>
             <MetricsComponent
                 key={consumerName}
-                {...{cluster, path, targetQueue: queue, consumerName}}
+                {...{consumerCluster, path, targetQueue: queue, consumerName}}
             />{' '}
         </ErrorBoundary>
     );
