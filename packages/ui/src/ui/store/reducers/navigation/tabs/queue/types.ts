@@ -1,4 +1,5 @@
 import {type YTError} from '../../../../../types';
+import {type QueueRegistrationPath} from '../../../../../utils/navigation/queue-registration';
 
 export interface TPerformanceCounters {
     '1m': number;
@@ -22,7 +23,7 @@ export interface YtQueueStatus {
 
 export interface YtQueueConsumer {
     vital: boolean; // DA
-    consumer: string;
+    consumer: QueueRegistrationPath;
     error?: YTError; // may be missing
     read_data_weight_rate: TPerformanceCounters; // (unimplemented)
     read_row_count_rate: TPerformanceCounters; // (unimplemented)

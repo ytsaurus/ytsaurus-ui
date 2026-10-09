@@ -5,6 +5,9 @@ import reduce_ from 'lodash/reduce';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 
 import {
+    selectConsumerError,
+    selectConsumerName,
+    selectConsumerNames,
     selectConsumerRegisteredQueues,
     selectTargetQueue,
     selectTargetQueueError,
@@ -16,6 +19,7 @@ import {findCommonPathParent, genNavigationUrl} from '../../../../../utils/navig
 import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import {type Item, SelectSingle} from '../../../../../components/Select/Select';
 import {changeConsumerFilters} from '../../../../../store/actions/navigation/tabs/consumer/filters';
+import {parseQueueRegistrationPath} from '../../../../../utils/navigation/queue-registration';
 
 import i18n from './i18n';
 
@@ -24,24 +28,38 @@ import './TargetQueue.scss';
 const block = cn('target-queue');
 
 export default function TargetQueue() {
+    const dispatch = useDispatch();
+    const names = useSelector(selectConsumerNames);
+    const name = useSelector(selectConsumerName);
+    const consumerError = useSelector(selectConsumerError);
     const {queue} = useSelector(selectTargetQueue) ?? {};
     const error = useSelector(selectTargetQueueError);
 
     let clusterQueueUrl;
     if (queue) {
-        const firstColon = queue.indexOf(':');
-        if (firstColon === -1) {
-            throw new Error(
-                'Unexpected behavior: queue should be formatted like "${cluster}:${path}"',
-            );
-        }
-        const cluster = queue.slice(0, firstColon);
-        const path = queue.slice(firstColon + 1);
+        const {cluster, path} = parseQueueRegistrationPath(queue);
         clusterQueueUrl = genNavigationUrl({cluster, path});
     }
 
     return (
         <div className={block()}>
+            {names !== undefined && (
+                <div className={block('consumer')}>
+                    <div className="elements-heading elements-heading_size_xs">
+                        {i18n('title_consumer-name')}
+                    </div>
+                    <SelectSingle
+                        value={name}
+                        items={names.map((value) => ({value, text: value}))}
+                        onChange={(consumerName) =>
+                            dispatch(changeConsumerFilters({consumerName, targetQueue: undefined}))
+                        }
+                        placeholder={i18n('action_select-consumer')}
+                        width="auto"
+                    />
+                </div>
+            )}
+            {consumerError && <YTErrorBlock error={consumerError} topMargin="half" />}
             <div className="elements-heading elements-heading_size_xs">
                 {i18n('title_target-queue')}
             </div>
@@ -66,6 +84,7 @@ interface ConsumerQueueSelectorProps {
 export function ConsumerQueueSelector({className, children}: ConsumerQueueSelectorProps) {
     const dispatch = useDispatch();
     const registrations = useSelector(selectConsumerRegisteredQueues);
+    const isMultiConsumer = useSelector(selectConsumerNames) !== undefined;
 
     const handleSelect = (value?: string) => {
         const item = value ? registrations?.find(({queue}) => queue === value) : undefined;
@@ -73,13 +92,16 @@ export function ConsumerQueueSelector({className, children}: ConsumerQueueSelect
     };
 
     const {prefix, items, renderItem} = React.useMemo(() => {
-        const pref = reduce_(
-            registrations,
-            (acc, {queue}) => {
-                return findCommonPathParent(acc, queue);
-            },
-            registrations?.[0]?.queue ?? '',
-        );
+        const pref =
+            registrations?.length === 1
+                ? ''
+                : reduce_(
+                      registrations,
+                      (acc, {queue}) => {
+                          return findCommonPathParent(acc, queue);
+                      },
+                      registrations?.[0]?.queue ?? '',
+                  );
 
         const options = map_(registrations, ({queue}) => {
             return {
@@ -88,13 +110,6 @@ export function ConsumerQueueSelector({className, children}: ConsumerQueueSelect
             };
         });
 
-        if (options.length === 1) {
-            const [{value}] = options;
-            requestAnimationFrame(() => {
-                handleSelect(value);
-            });
-        }
-
         return {
             prefix: pref,
             items: options,
@@ -102,13 +117,13 @@ export function ConsumerQueueSelector({className, children}: ConsumerQueueSelect
                 return item.value.slice(pref.length);
             },
         };
-    }, [registrations, dispatch]);
+    }, [registrations]);
 
     const {queue} = useSelector(selectTargetQueue) ?? {};
 
     return (
         <div className={block('selector', className)}>
-            {items.length > 1 ? (
+            {isMultiConsumer || items.length > 1 ? (
                 <>
                     <Prefix text={prefix} />{' '}
                     <SelectSingle

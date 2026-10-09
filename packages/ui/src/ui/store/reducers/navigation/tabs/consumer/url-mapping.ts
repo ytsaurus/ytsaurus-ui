@@ -5,6 +5,10 @@ import {initialState} from '../../../../../store/reducers/navigation/tabs/consum
 import {updateIfChanged} from '../../../../../utils/utils';
 
 export const consumerParams = {
+    cName: {
+        stateKey: 'navigation.tabs.consumer.filters.consumerName',
+        initialState: initialState.consumerName,
+    },
     cMode: {
         stateKey: 'navigation.tabs.consumer.filters.consumerMode',
         initialState: initialState.consumerMode,
@@ -25,6 +29,11 @@ export const consumerParams = {
 
 export function getNavigationConsumerPreparedState(state: RootState, {query}: {query: RootState}) {
     return produce(state, (draft) => {
+        updateIfChanged(
+            draft.navigation.tabs.consumer.filters,
+            'consumerName',
+            query.navigation.tabs.consumer.filters.consumerName,
+        );
         updateIfChanged(
             draft.navigation.tabs.consumer.filters,
             'consumerMode',

@@ -3,12 +3,13 @@ import {
     CONSUMER_PARTITIONS_LOAD_REQUEST,
     CONSUMER_PARTITIONS_LOAD_SUCCESS,
 } from '../../../../../constants/navigation/tabs/consumer';
-import {type Action} from 'redux';
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
 import {type ActionD, type YTError} from '../../../../../types';
 import {type YtConsumerPartition} from './types';
 
 export interface ConsumerPartitionsState {
+    requestKey?: string;
+    requestId?: number;
     partitionsLoading: boolean;
     partitionsLoaded: boolean;
     partitionsError: YTError | null;
@@ -25,7 +26,12 @@ export const initialState: ConsumerPartitionsState = {
 function reducer(state = initialState, action: ConsumerPartitionsAction): ConsumerPartitionsState {
     switch (action.type) {
         case CONSUMER_PARTITIONS_LOAD_REQUEST: {
-            return {...state, partitionsLoading: true};
+            return {
+                ...(state.requestKey === action.data.requestKey ? state : initialState),
+                ...action.data,
+                partitionsError: null,
+                partitionsLoading: true,
+            };
         }
 
         case CONSUMER_PARTITIONS_LOAD_SUCCESS: {
@@ -49,7 +55,7 @@ function reducer(state = initialState, action: ConsumerPartitionsAction): Consum
 }
 
 export type ConsumerPartitionsAction =
-    | Action<typeof CONSUMER_PARTITIONS_LOAD_REQUEST>
+    | ActionD<typeof CONSUMER_PARTITIONS_LOAD_REQUEST, {requestKey: string; requestId: number}>
     | ActionD<typeof CONSUMER_PARTITIONS_LOAD_SUCCESS, YtConsumerPartition[]>
     | ActionD<typeof CONSUMER_PARTITIONS_LOAD_FAILURE, YTError>;
 
