@@ -1,5 +1,6 @@
 import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {type RootState} from '../../../../../store/reducers';
+import {type QueueRegistrationPath} from '../../../../../utils/navigation/queue-registration';
 
 type ConsumersState = {
     createDialogVisibility: boolean;
@@ -7,11 +8,11 @@ type ConsumersState = {
 } & (
     | {
           unregisterDialogVisibility: true;
-          consumerPath: string;
+          consumerPath: QueueRegistrationPath;
       }
     | {
           unregisterDialogVisibility: boolean;
-          consumerPath?: string;
+          consumerPath?: QueueRegistrationPath;
       }
 );
 
@@ -34,7 +35,10 @@ const consumersSlice = createSlice({
             ...state,
             registerDialogVisibility: !state.registerDialogVisibility,
         }),
-        openUnregisterDialog: (state, {payload}: PayloadAction<{consumerPath: string}>) => ({
+        openUnregisterDialog: (
+            state,
+            {payload}: PayloadAction<{consumerPath: QueueRegistrationPath}>,
+        ) => ({
             ...state,
             consumerPath: payload.consumerPath,
             unregisterDialogVisibility: true,

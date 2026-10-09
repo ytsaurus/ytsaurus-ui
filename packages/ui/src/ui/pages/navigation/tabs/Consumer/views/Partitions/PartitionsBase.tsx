@@ -7,7 +7,10 @@ import {YTErrorBlock} from '../../../../../../containers/Block/Block';
 import {type SelectedPartition} from '../../../../../../store/selectors/navigation/tabs/consumer';
 import {type YTError} from '../../../../../../types';
 import {NoContent} from '../../../../../../components/NoContent';
-import {selectTargetQueue} from '../../../../../../store/selectors/navigation/tabs/consumer';
+import {
+    selectConsumerPartitionsRequestKey,
+    selectTargetQueue,
+} from '../../../../../../store/selectors/navigation/tabs/consumer';
 
 import i18n from './i18n';
 
@@ -24,12 +27,13 @@ export const PartitionsBase: React.VFC<PropsFromRedux> = ({
     partitionsLoaded,
 }) => {
     const {queue} = useSelector(selectTargetQueue) ?? {};
+    const requestKey = useSelector(selectConsumerPartitionsRequestKey);
 
     useEffect(() => {
         if (queue) {
             loadConsumerPartitions(queue);
         }
-    }, [queue]);
+    }, [queue, requestKey, loadConsumerPartitions]);
 
     if (!queue) {
         return (

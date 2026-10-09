@@ -1,4 +1,9 @@
 import React from 'react';
+import {
+    type QueueRegistrationPath,
+    formatQueueRegistrationPath,
+    parseQueueRegistrationPath,
+} from '../../../../../utils/navigation/queue-registration';
 import moment from 'moment';
 import {type Column} from '@gravity-ui/react-data-table';
 
@@ -145,22 +150,26 @@ export function user<T>(name: string, getter: (row: T) => string): Column<T> {
     };
 }
 
-export function ypath<T>(name: string, getter: (row: T) => string): Column<T> {
+export function ypath<T>(name: string, getter: (row: T) => QueueRegistrationPath): Column<T> {
     return {
         name,
         render({row}) {
             const consumer = getter(row);
             if (!consumer) return null;
 
-            const [cluster, path] = consumer.split(':');
-            const url = genNavigationUrl({cluster, path});
+            const {cluster, path, consumerName} = parseQueueRegistrationPath(consumer);
+            const url =
+                genNavigationUrl({cluster, path}) +
+                (consumerName === undefined
+                    ? ''
+                    : `&tab=consumer&cName=${encodeURIComponent(consumerName)}`);
 
             return (
                 <Link url={url} routed>
-                    {consumer}
+                    {formatQueueRegistrationPath(consumer)}
                 </Link>
             );
         },
-        sortAccessor: getter,
+        sortAccessor: (row) => formatQueueRegistrationPath(getter(row)),
     };
 }

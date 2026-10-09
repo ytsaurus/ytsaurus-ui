@@ -1,4 +1,6 @@
 {
+  "title_consumer-name": "Consumer name",
+  "action_select-consumer": "Select consumer...",
   "title_target-queue": "Target queue",
   "action_select-queue": "Select queue..."
 }

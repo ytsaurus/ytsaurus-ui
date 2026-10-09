@@ -2,7 +2,10 @@ import React from 'react';
 
 import {selectCluster} from '../../../../../../store/selectors/global';
 import {selectAttributesPath} from '../../../../../../store/selectors/navigation';
-import {selectTargetQueue} from '../../../../../../store/selectors/navigation/tabs/consumer';
+import {
+    selectConsumerName,
+    selectTargetQueue,
+} from '../../../../../../store/selectors/navigation/tabs/consumer';
 import {useSelector} from '../../../../../../store/redux-hooks';
 import ErrorBoundary from '../../../../../../containers/ErrorBoundary/ErrorBoundary';
 import {NoContent} from '../../../../../../components/NoContent';
@@ -13,6 +16,7 @@ export default function ConsumerMetrics() {
     const path = useSelector(selectAttributesPath);
     const cluster = useSelector(selectCluster);
     const {queue} = useSelector(selectTargetQueue) ?? {};
+    const consumerName = useSelector(selectConsumerName);
 
     const MetricsComponent = UIFactory.getComponentForConsumerMetrics()!;
 
@@ -31,7 +35,10 @@ export default function ConsumerMetrics() {
 
     return (
         <ErrorBoundary>
-            <MetricsComponent {...{cluster, path, targetQueue: queue}} />{' '}
+            <MetricsComponent
+                key={consumerName}
+                {...{cluster, path, targetQueue: queue, consumerName}}
+            />{' '}
         </ErrorBoundary>
     );
 }

@@ -458,6 +458,7 @@ export interface UIFactory {
               cluster: string;
               path: string;
               targetQueue?: string;
+              consumerName?: string;
           }>;
 
     getComonentForQueueMetrics(): undefined | React.ComponentType<{cluster: string; path: string}>;

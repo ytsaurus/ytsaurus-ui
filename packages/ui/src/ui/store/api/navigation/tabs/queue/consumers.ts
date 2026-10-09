@@ -1,4 +1,5 @@
 import {type BaseQueryApi} from '@reduxjs/toolkit/query';
+import {type QueueRegistrationPath} from '../../../../../utils/navigation/queue-registration';
 
 import {type RootState} from '../../../../../store/reducers';
 import {selectPath} from '../../../../../store/selectors/navigation';
@@ -134,7 +135,10 @@ export async function registerConsumer(args: RegisterConsumersMutationArgs, api:
     }
 }
 
-export async function unregisterConsumer(args: {consumerPath: string}, api: BaseQueryApi) {
+export async function unregisterConsumer(
+    args: {consumerPath: QueueRegistrationPath},
+    api: BaseQueryApi,
+) {
     try {
         const {consumerPath} = args;
 
