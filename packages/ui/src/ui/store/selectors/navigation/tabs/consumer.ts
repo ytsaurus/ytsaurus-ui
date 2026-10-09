@@ -1,6 +1,8 @@
 import {createSelector} from 'reselect';
 import {type RootState} from '../../../../store/reducers';
 import {emptyRate} from './queue';
+import {selectPath, selectTransaction} from '..';
+import {selectCluster} from '../../global';
 
 export const selectConsumerPartitionIndex = (state: RootState) =>
     state.navigation.tabs.consumer.filters.consumerPartitionIndex;
@@ -14,16 +16,37 @@ export const selectConsumerPartitionsColumns = (state: RootState) =>
 export const selectConsumerTimeWindow = (state: RootState) =>
     state.navigation.tabs.consumer.filters.consumerTimeWindow;
 
-export const selectTargetQueue = (state: RootState) =>
-    state.navigation.tabs.consumer.filters.targetQueue;
+export const selectConsumerNames = (state: RootState) =>
+    state.navigation.tabs.consumer.status.consumerData?.queue_consumer_names;
+
+export const selectConsumerName = (state: RootState) => {
+    const names = selectConsumerNames(state);
+    const name = state.navigation.tabs.consumer.filters.consumerName;
+    return name !== undefined && names?.includes(name) ? name : names?.[0];
+};
+
+const selectStatusData = (state: RootState) => {
+    const data = state.navigation.tabs.consumer.status.consumerData;
+    const name = selectConsumerName(state);
+    if (data?.queue_consumer_names === undefined) return data;
+    return name === undefined ? undefined : data.consumers?.[name];
+};
+
+export const selectConsumerError = (state: RootState) => selectStatusData(state)?.error;
 
 export const selectConsumerRegisteredQueues = (state: RootState) =>
-    state.navigation.tabs.consumer.status.consumerData?.registrations;
+    selectConsumerError(state) ? undefined : selectStatusData(state)?.registrations;
 
-export const selectQueueAgentHost = (state: RootState) =>
-    state.navigation.tabs.consumer.status.consumerData?.queue_agent_host;
+export const selectTargetQueue = (state: RootState) => {
+    const registrations = selectConsumerRegisteredQueues(state);
+    const target = state.navigation.tabs.consumer.filters.targetQueue;
+    return (
+        registrations?.find(({queue}) => queue === target?.queue) ??
+        (registrations?.length === 1 ? registrations[0] : undefined)
+    );
+};
 
-const selectStatusData = (state: RootState) => state.navigation.tabs.consumer.status.consumerData;
+export const selectQueueAgentHost = (state: RootState) => selectStatusData(state)?.queue_agent_host;
 
 const selectTargetQueueStatusData = (state: RootState) => {
     const statusData = selectStatusData(state);
@@ -60,8 +83,23 @@ export const selectStatusLoaded = (state: RootState) =>
 export const selectConsumerMode = (state: RootState) =>
     state.navigation.tabs.consumer.filters.consumerMode;
 
-const selectPartitionsData = (state: RootState) =>
-    state.navigation.tabs.consumer.partitions.partitionsData;
+export const selectConsumerPartitionsRequestKey = (state: RootState) =>
+    JSON.stringify([
+        selectCluster(state),
+        selectPath(state),
+        selectTransaction(state),
+        selectConsumerName(state),
+        selectTargetQueue(state)?.queue,
+    ]);
+
+const selectCurrentPartitions = (state: RootState) => {
+    const partitions = state.navigation.tabs.consumer.partitions;
+    return partitions.requestKey === selectConsumerPartitionsRequestKey(state)
+        ? partitions
+        : undefined;
+};
+
+const selectPartitionsData = (state: RootState) => selectCurrentPartitions(state)?.partitionsData;
 
 export const selectPartitions = createSelector(
     [selectConsumerPartitionIndex, selectPartitionsData],
@@ -81,10 +119,10 @@ export const selectPartitions = createSelector(
 export type SelectedPartition = NonNullable<ReturnType<typeof selectPartitions>>[0];
 
 export const selectPartitionsError = (state: RootState) =>
-    state.navigation.tabs.consumer.partitions.partitionsError;
+    selectCurrentPartitions(state)?.partitionsError ?? null;
 
 export const selectPartitionsLoading = (state: RootState) =>
-    state.navigation.tabs.consumer.partitions.partitionsLoading;
+    selectCurrentPartitions(state)?.partitionsLoading ?? false;
 
 export const selectPartitionsLoaded = (state: RootState) =>
-    state.navigation.tabs.consumer.partitions.partitionsLoaded;
+    selectCurrentPartitions(state)?.partitionsLoaded ?? false;

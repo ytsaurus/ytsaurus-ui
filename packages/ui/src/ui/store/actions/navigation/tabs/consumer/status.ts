@@ -9,26 +9,25 @@ import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
 import {type RootState} from '../../../../../store/reducers';
 import {type ConsumerStatusAction} from '../../../../../store/reducers/navigation/tabs/consumer/status';
 import {selectPath, selectTransaction} from '../../../../../store/selectors/navigation';
-import {type ConsumerFiltersAction} from '../../../../../store/reducers/navigation/tabs/consumer/filters';
 import {prepareRequest} from '../../../../../utils/navigation';
-import {
-    selectConsumerRegisteredQueues,
-    selectTargetQueue,
-} from '../../../../../store/selectors/navigation/tabs/consumer';
-import {changeConsumerFilters} from './filters';
+import {selectCluster} from '../../../../../store/selectors/global';
 
-type ConsumerThunkAction = ThunkAction<
-    void,
-    RootState,
-    unknown,
-    ConsumerStatusAction | ConsumerFiltersAction
->;
+type ConsumerThunkAction = ThunkAction<void, RootState, unknown, ConsumerStatusAction>;
+
+let latestRequestId = 0;
 
 export function loadConsumerStatus(): ConsumerThunkAction {
     return (dispatch, getState) => {
         const state = getState();
         const path = selectPath(state);
         const transaction = selectTransaction(state);
+        const cluster = selectCluster(state);
+        const requestId = ++latestRequestId;
+        const isCurrent = () =>
+            requestId === latestRequestId &&
+            path === selectPath(getState()) &&
+            transaction === selectTransaction(getState()) &&
+            cluster === selectCluster(getState());
 
         dispatch({type: CONSUMER_STATUS_LOAD_REQUEST});
         return ytApiV3Id
@@ -37,6 +36,7 @@ export function loadConsumerStatus(): ConsumerThunkAction {
                 prepareRequest('/@queue_consumer_status', {path, transaction}),
             )
             .then((data) => {
+                if (!isCurrent()) return;
                 if (data.error) {
                     throw data.error;
                 }
@@ -44,15 +44,9 @@ export function loadConsumerStatus(): ConsumerThunkAction {
                     type: CONSUMER_STATUS_LOAD_SUCCESS,
                     data,
                 });
-
-                const state2 = getState();
-                const targetQueue = selectTargetQueue(state2);
-                const queues = selectConsumerRegisteredQueues(state2);
-                if (targetQueue && !queues?.find(({queue}) => targetQueue.queue === queue)) {
-                    dispatch(changeConsumerFilters({targetQueue: undefined}));
-                }
             })
             .catch((error: Error) => {
+                if (!isCurrent()) return;
                 dispatch({
                     type: CONSUMER_STATUS_LOAD_FAILURE,
                     data: error,

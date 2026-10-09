@@ -1,4 +1,5 @@
 import {createSelector} from 'reselect';
+import {formatQueueRegistrationPath} from '../../../../utils/navigation/queue-registration';
 
 import {type RootState} from '../../../reducers';
 import {type YtQueueStatus} from '../../../reducers/navigation/tabs/queue/types';
@@ -114,7 +115,9 @@ export const selectConsumers = createSelector(
                 read_data_weight_rate: emptyRate,
                 read_row_count_rate: emptyRate,
             }))
-            ?.filter((item) => item.consumer.includes(queueConsumerName)),
+            ?.filter((item) =>
+                formatQueueRegistrationPath(item.consumer).includes(queueConsumerName),
+            ),
 );
 
 export type SelectedConsumer = NonNullable<ReturnType<typeof selectConsumers>>[0];

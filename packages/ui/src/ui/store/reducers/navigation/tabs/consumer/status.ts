@@ -24,15 +24,20 @@ export interface ConsumerQueueInfo {
     vital: boolean;
 }
 
+export interface ConsumerStatusData {
+    error?: YTError;
+    queue_agent_host?: string;
+    queues?: Record<string, YtConsumerStatus>;
+    registrations?: Array<ConsumerQueueInfo>;
+    queue_consumer_names?: string[];
+    consumers?: Record<string, ConsumerStatusData>;
+}
+
 export interface ConsumerStatusState {
     statusLoading: boolean;
     statusLoaded: boolean;
     statusError: YTError | null;
-    consumerData: {
-        queue_agent_host?: string;
-        queues?: Record<string, YtConsumerStatus>;
-        registrations?: Array<ConsumerQueueInfo>;
-    } | null;
+    consumerData: ConsumerStatusData | null;
 }
 
 export const initialState: ConsumerStatusState = {
