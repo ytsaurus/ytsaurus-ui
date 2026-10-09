@@ -1,5 +1,29 @@
 # Changelog
 
+## [3.29.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.28.0...ui-v3.29.0) (2026-10-09)
+
+
+### Features
+
+* **CHYT:** configure CPU and memory when creating a clique [YTFRONT-6086] ([f2d8dd5](https://github.com/ytsaurus/ytsaurus-ui/commit/f2d8dd56fa361ef540b3d618d611d6f13cddc8a4))
+
+
+### Bug Fixes
+
+* **CHYT:** narrow numeric descriptor field types [YTFRONT-6086] ([c02ec4d](https://github.com/ytsaurus/ytsaurus-ui/commit/c02ec4dfc16cb4728e58a61d1cb68d3ef4847f49))
+* **CHYT:** reset creation options on context changes [YTFRONT-6086] ([0cdce63](https://github.com/ytsaurus/ytsaurus-ui/commit/0cdce6366a9677617154c5966cc4482c3bdef4a8))
+* **CHYT:** use renamed controller defaults command [YTFRONT-6086] ([3aa7f8d](https://github.com/ytsaurus/ytsaurus-ui/commit/3aa7f8df4c340456f300dcc28dac54ce24e84d9d))
+* **FlowGraph:** include input-only streams in layout [YTFRONT-6081] ([ea55afc](https://github.com/ytsaurus/ytsaurus-ui/commit/ea55afc5dd188b0f372dd71178112a6bdff99edb))
+* **QueryTracker:** show empty history state [YTFRONT-6083] ([14c5d8d](https://github.com/ytsaurus/ytsaurus-ui/commit/14c5d8db30c49fa1adbfa30cdcafa68805baf986))
+* **ui:** use released components package [YTFRONT-6082] ([5a50321](https://github.com/ytsaurus/ytsaurus-ui/commit/5a5032132076b58cb053a9915f7c23cbe9829c8f))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @ytsaurus/components bumped from ^1.6.2 to ^1.7.0
+
 ## [3.28.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.27.0...ui-v3.28.0) (2026-10-01)
 
 
