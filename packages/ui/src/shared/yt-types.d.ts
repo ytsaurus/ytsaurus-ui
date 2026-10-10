@@ -546,6 +546,28 @@ export type TableParams = {
 
 export type Int64 = string | number | {$type: 'int64'; $value: string};
 
+export type FlowDynamicSpecOverride = {
+    operation: 'inherit' | 'set' | 'remove' | 'map';
+    version?: Int64 | null;
+    value?: unknown;
+    children?: Record<string, FlowDynamicSpecOverride>;
+};
+
+export type FlowDynamicSpecAudit = {
+    version: Int64;
+    timestamp: string;
+    comment?: string | null;
+};
+
+export type FlowDynamicSpecSnapshot = {
+    version: Int64;
+    base_spec: unknown;
+    effective_spec: unknown;
+    override_spec: FlowDynamicSpecOverride;
+    audit: Array<FlowDynamicSpecAudit>;
+    runtime_target_state?: string | null;
+};
+
 export type ExpectedVersion = {
     expected_version?: Int64;
 };
@@ -636,6 +658,55 @@ export type GetQueryTrackerInfoResponse = {
 };
 
 export type FlowExecuteTypes = {
+    'set-pipeline-dynamic-spec': {
+        ParamsType: {
+            flow_command: 'set-pipeline-dynamic-spec';
+            pipeline_path: string;
+            input_format?: unknown;
+            output_format?: 'web_json';
+        };
+        BodyType: {body: {spec: unknown; path: string; comment?: string; expected_version: Int64}};
+        ResponseType: {version: Int64};
+    };
+    'cancel-pipeline-dynamic-spec-patch': {
+        ParamsType: {
+            flow_command: 'cancel-pipeline-dynamic-spec-patch';
+            pipeline_path: string;
+            input_format?: unknown;
+            output_format?: 'web_json';
+        };
+        BodyType: {body: {version: Int64; expected_version: Int64}};
+        ResponseType: {version: Int64};
+    };
+    'cancel-pipeline-dynamic-spec-override': {
+        ParamsType: {
+            flow_command: 'cancel-pipeline-dynamic-spec-override';
+            pipeline_path: string;
+            input_format?: unknown;
+            output_format?: 'web_json';
+        };
+        BodyType: {body: {path: string; expected_version: Int64}};
+        ResponseType: {version: Int64};
+    };
+    'reset-pipeline-dynamic-spec-override': {
+        ParamsType: {
+            flow_command: 'reset-pipeline-dynamic-spec-override';
+            pipeline_path: string;
+            input_format?: unknown;
+            output_format?: 'web_json';
+        };
+        BodyType: {body: {expected_version: Int64}};
+        ResponseType: {version: Int64};
+    };
+    'get-pipeline-dynamic-spec-state': {
+        ParamsType: {
+            flow_command: 'get-pipeline-dynamic-spec-state';
+            pipeline_path: string;
+            output_format?: 'web_json';
+        };
+        BodyType: {body?: undefined};
+        ResponseType: FlowDynamicSpecSnapshot;
+    };
     'describe-computation': {
         ParamsType: {
             flow_command: 'describe-computation';
