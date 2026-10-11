@@ -23,16 +23,17 @@ jobs:
           runner-version: "2.337.0"
           yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
           github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
-          folder-id: b1gcvl619mdunf1cqqbv
+          folder-id: ${{ vars.YC_FOLDER_ID }}
           image-id: fd8q5h7f9c5lpd474h12
-          zone-id: "ru-central1-a"
-          subnet-id: e9b515fu62r5id45usun
+          zone-id: ${{ vars.YC_ZONE_ID }}
+          subnet-id: ${{ vars.YC_SUBNET_ID }}
           cores: 4
           memory: 16GB
           core-fraction: 100
           disk-type: network-ssd-nonreplicated
           disk-size: 93GB
           public-ip: false
+          ttl: PT36H
 
   e2e-build:
     name: Build docker image
