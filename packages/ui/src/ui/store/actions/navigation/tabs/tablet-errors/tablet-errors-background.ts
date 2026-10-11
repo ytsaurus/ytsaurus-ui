@@ -122,25 +122,34 @@ function loadTabletErrorsCountOfReplicatedTable({
 }: LoadTabletErrorOptions): TabletErrorsThunkAction {
     return (dispatch) => {
         return wrapApiPromiseByToaster(
-            ytApiV3Id.executeBatch<number>(YTApiId.navigationTabletErrorsCountReplicatedTable, {
-                requests: [
-                    {
-                        command: 'get',
-                        parameters: {
-                            path: `${path}/@replicas/@error_count`,
-                        },
-                    },
-                    {command: 'get', parameters: {path: `${path}/@tablet_error_count`}},
-                ],
+            ytApiV3Id.executeBatch<any>(YTApiId.navigationTabletErrorsCountReplicatedTable, {
+                parameters: {
+                    requests: [
+                        // Fetch full replicas map, sum per-replica error_count
+                        {command: 'get', parameters: {path: `${path}/@replicas`}},
+                        // Table-level counter if present
+                        {command: 'get', parameters: {path: `${path}/@tablet_error_count`}},
+                    ],
+                },
                 cancellation: saveCancelTokenSource,
             }),
             {
                 toasterName: 'tablet_errors_count',
                 skipSuccessToast: true,
             },
-        ).then((results) => {
-            const count = results.reduce((acc, {output = 0}) => acc + output, 0);
-            dispatch(updateTabletErrrosCount(count, path));
+        ).then(([{output: replicas}, {output: tabletErrorCount}]) => {
+            let replicasErrors = 0;
+            if (replicas && typeof replicas === 'object') {
+                try {
+                    replicasErrors = Object.values(replicas as Record<string, any>)
+                        .map((r: any) => (typeof r?.error_count === 'number' ? r.error_count : 0))
+                        .reduce((a: number, b: number) => a + b, 0);
+                } catch {
+                    replicasErrors = 0;
+                }
+            }
+            const tableErrors = typeof tabletErrorCount === 'number' ? tabletErrorCount : 0;
+            dispatch(updateTabletErrrosCount(replicasErrors + tableErrors, path));
         });
     };
 }
