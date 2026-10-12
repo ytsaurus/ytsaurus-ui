@@ -126,8 +126,7 @@ export default function Table({
                 accessor: (cells: Record<string, unknown> = {}) => cells[name],
                 sortable: sortable && Boolean(type.simple),
                 sortAccessor: (cells: Record<string, Node> = {}) => {
-                    const cell = cells[name];
-                    return cell?.$sortValue ?? cell?.$value;
+                    return getCellSortValue(cells[name]);
                 },
                 render(data) {
                     if (typeof column.render === 'function') {
@@ -333,6 +332,52 @@ export default function Table({
         );
     }
     return message ? <div className={block('message', {error: isError})}>{message}</div> : null;
+}
+
+function getCellSortValue(cell?: Node) {
+    if (cell?.$sortValue !== undefined) {
+        return cell.$sortValue;
+    }
+
+    const value = cell?.$value;
+    if (value === null || value === undefined) {
+        return value;
+    }
+
+    switch (cell?.$type) {
+        case 'yql.int8':
+        case 'yql.int16':
+        case 'yql.int32':
+        case 'yql.int64':
+        case 'yql.uint8':
+        case 'yql.uint16':
+        case 'yql.uint32':
+        case 'yql.uint64':
+            return getIntegerSortValue(value);
+        case 'yql.float':
+        case 'yql.double':
+            if (typeof value === 'string') {
+                return value.trim() ? Number(value) : NaN;
+            }
+            return typeof value === 'number' ? value : NaN;
+        default:
+            return value;
+    }
+}
+
+function getIntegerSortValue(value: unknown) {
+    if (typeof value === 'string' && !/^[+-]?\d+$/.test(value.trim())) {
+        return NaN;
+    }
+    if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'bigint') {
+        return NaN;
+    }
+    try {
+        // Keep all 64-bit integer digits; Number would lose precision.
+        return BigInt(value);
+    } catch {
+        return NaN;
+    }
 }
 
 type Comparator<T> = (v1: T, v2: T) => number;
