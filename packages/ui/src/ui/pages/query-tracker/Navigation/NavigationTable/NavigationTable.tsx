@@ -1,16 +1,22 @@
 import React, {type FC, useCallback} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {NavigationTable as NavigationTableComponent} from '@ytsaurus/components/modules';
 import {
+    NavigationSchemaTab,
+    NavigationTable as NavigationTableComponent,
+} from '@ytsaurus/components/modules';
+import {Loader} from '@gravity-ui/uikit';
+import {LoadingPlaceholder} from '../NavigationBody/LoadingPlaceholder';
+import {
+    selectIsQueryNavigationLoading,
     selectNavigationCluster,
     selectNavigationClusterConfig,
-    selectNavigationFilter,
     selectNavigationPath,
+    selectNavigationSchemaFilter,
     selectNavigationTable,
 } from '../../../../store/selectors/query-tracker/queryNavigation';
 import {selectQueryEngine} from '../../../../store/selectors/query-tracker/query';
 import {selectPageSize} from '../../../../store/selectors/navigation/content/table-ts';
-import {setFilter} from '../../../../store/reducers/query-tracker/queryNavigationSlice';
+import {setSchemaFilter} from '../../../../store/reducers/query-tracker/queryNavigationSlice';
 import {selectYsonSettingsDisableDecode} from '../../../../store/selectors/thor/unipika';
 import {useMonaco} from '../../hooks/useMonaco';
 import {createTableSelect} from '../helpers/createTableSelect';
@@ -28,10 +34,12 @@ export const NavigationTable: FC = () => {
     const engine = useSelector(selectQueryEngine);
     const limit = useSelector(selectPageSize);
     const path = useSelector(selectNavigationPath);
-    const filter = useSelector(selectNavigationFilter);
+    const filter = useSelector(selectNavigationSchemaFilter);
     const {getEditor} = useMonaco();
 
-    const additionalSchemaColumns = useExternalSchemaColumns(cluster, path);
+    const loading = useSelector(selectIsQueryNavigationLoading);
+    const {columns: additionalSchemaColumns, loading: additionalSchemaLoading} =
+        useExternalSchemaColumns(cluster, path);
 
     const handleInsertTableSelect = useCallback(async () => {
         if (!clusterConfig) return;
@@ -42,14 +50,26 @@ export const NavigationTable: FC = () => {
 
     const handleFilterChange = useCallback(
         (value: string) => {
-            dispatch(setFilter(value));
+            dispatch(setSchemaFilter(value));
         },
         [dispatch],
     );
 
+    if (loading) return <LoadingPlaceholder />;
+
     return (
         <NavigationTableComponent
             table={table}
+            renderSchemaTab={(props) => (
+                <>
+                    {additionalSchemaLoading && (
+                        <div role="status">
+                            <Loader size="s" />
+                        </div>
+                    )}
+                    <NavigationSchemaTab {...props} />
+                </>
+            )}
             filter={filter}
             onFilterChange={handleFilterChange}
             onInsertTableSelect={handleInsertTableSelect}

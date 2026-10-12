@@ -1,7 +1,11 @@
 import React, {type FC} from 'react';
 import {NavigationEmpty} from './NavigationEmpty';
 import {useSelector} from '../../../../store/redux-hooks';
-import {selectNavigationNodeType} from '../../../../store/selectors/query-tracker/queryNavigation';
+import {
+    selectNavigationCluster,
+    selectNavigationNodeType,
+    selectNavigationPath,
+} from '../../../../store/selectors/query-tracker/queryNavigation';
 import {BodyType} from '../../../../store/reducers/query-tracker/queryNavigationSlice';
 import {ClusterList} from '../ClusterList';
 import {NodeList} from '../NodeList';
@@ -12,11 +16,14 @@ import {NavigationError} from './NavigationError';
 export const NavigationBody: FC = () => {
     const nodeType = useSelector(selectNavigationNodeType);
 
+    const cluster = useSelector(selectNavigationCluster);
+    const path = useSelector(selectNavigationPath);
+
     switch (nodeType) {
         case BodyType.Tree:
             return <NodeList />;
         case BodyType.Table:
-            return <NavigationTable />;
+            return <NavigationTable key={`${cluster}:${path}`} />;
         case BodyType.Cluster:
             return <ClusterList />;
         case BodyType.Loading:

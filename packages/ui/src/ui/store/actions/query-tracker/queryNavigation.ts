@@ -1,3 +1,4 @@
+import {nanoid} from '@reduxjs/toolkit';
 import {type ThunkAction} from 'redux-thunk';
 import {type RootState} from '../../reducers';
 import {type Action} from 'redux';
@@ -8,16 +9,11 @@ import {
 import {
     BodyType,
     type NavigationNode,
-    type NavigationTable,
+    failNavigation,
+    receiveNodes,
+    receiveTable,
     setCluster,
-    setError,
-    setFilter,
-    setLoading,
-    setNodeType,
-    setNodes,
-    setPath,
-    setPathTargetNode,
-    setTable,
+    startNavigation,
 } from '../../reducers/query-tracker/queryNavigationSlice';
 import {
     selectClusterConfigs,
@@ -27,7 +23,6 @@ import {
     selectNavigationNodes,
     selectNavigationPath,
 } from '../../selectors/query-tracker/queryNavigation';
-import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {JSONSerializer} from '../../../common/yt-api';
 import {isTableNode} from '../../../utils/navigation/isTableNode';
@@ -50,168 +45,103 @@ import {ytComponentsNavigationMetaConfig} from '../../../components/MetaTable/yt
 
 type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
 
-const loadPathTargetNode =
-    (path: string): AsyncAction =>
-    async (dispatch, getState) => {
-        const state = getState();
-        const clusterConfig = selectNavigationClusterConfig(state);
-        const nodeList = selectNavigationNodes(state);
+const isCurrentRequest = (state: RootState, requestId: string) =>
+    state.queryTracker.queryNavigation.requestId === requestId;
 
-        const nodeFromList = nodeList.find((node) => node.path === path);
-        if (nodeFromList?.type) {
-            dispatch(
-                setPathTargetNode({
-                    type: nodeFromList.type,
-                    dynamic: nodeFromList.dynamic,
-                }),
-            );
-            return;
-        }
+async function loadPathTargetNode(path: string, clusterConfig: ClusterConfig) {
+    const results = await ytApiV3Id.executeBatch(YTApiId.navigationGetPath, {
+        setup: {proxy: getClusterProxy(clusterConfig), JSONSerializer},
+        parameters: {
+            requests: [
+                {command: 'get', parameters: {path: `${path}/@type`}},
+                {command: 'get', parameters: {path: `${path}/@dynamic`}},
+            ],
+        },
+    });
+    return {type: results[0].output as string, dynamic: Boolean(results[1].output)};
+}
 
-        if (!clusterConfig) return;
-
-        try {
-            const setup = {
-                proxy: getClusterProxy(clusterConfig),
-                JSONSerializer,
-            };
-
-            const results = await ytApiV3Id.executeBatch(YTApiId.navigationGetPath, {
-                parameters: {
-                    requests: [
-                        {
-                            command: 'get',
-                            parameters: {
-                                path: `${path}/@type`,
-                            },
-                        },
-                        {
-                            command: 'get',
-                            parameters: {
-                                path: `${path}/@dynamic`,
-                            },
-                        },
-                    ],
-                },
-                setup,
-            });
-
-            dispatch(
-                setPathTargetNode({
-                    type: results[0].output as string,
-                    dynamic: Boolean(results[1].output),
-                }),
-            );
-        } catch {
-            dispatch(setPathTargetNode(undefined));
-        }
-    };
-
-// nodes list by path
 export const loadNodeByPath =
-    (path: string): AsyncAction =>
+    (rawPath: string): AsyncAction =>
     async (dispatch, getState) => {
         const state = getState();
         const clusterConfig = selectNavigationClusterConfig(state);
-        const favorites = selectFavouritePaths(state);
-
         if (!clusterConfig) return;
-
-        const setup = {
-            proxy: getClusterProxy(clusterConfig),
-            JSONSerializer,
-        };
-
-        dispatch(setLoading(true));
-        const nodes = await wrapApiPromiseByToaster(loadFolderByPath(path, setup, favorites), {
-            skipSuccessToast: true,
-            toasterName: 'query_navigation_node',
-            errorTitle: 'Navigation node open failure',
-        }).finally(() => {
-            dispatch(setLoading(false));
-        });
-
-        if (!nodes) return;
-
-        dispatch(setFilter(''));
-        dispatch(setPath(path));
-        dispatch(setNodeType(BodyType.Tree));
-        dispatch(setPathTargetNode(undefined));
-        dispatch(setNodes(nodes as NavigationNode[]));
+        const path = rawPath || '/';
+        const requestId = nanoid();
+        const favorites = selectFavouritePaths(state);
+        dispatch(startNavigation({requestId, path, nodeType: BodyType.Tree}));
+        try {
+            const nodes = await loadFolderByPath(
+                path,
+                {
+                    proxy: getClusterProxy(clusterConfig),
+                    JSONSerializer,
+                },
+                favorites,
+            );
+            dispatch(receiveNodes({requestId, nodes: nodes as NavigationNode[]}));
+        } catch (error) {
+            dispatch(failNavigation({requestId, error: error as YTError}));
+        }
     };
 
-// load table by path
 export const loadTableAttributesByPath =
-    (path: string): AsyncAction =>
+    (rawPath: string): AsyncAction =>
     async (dispatch, getState) => {
         const state = getState();
         const clusterConfig = selectNavigationClusterConfig(state);
-        const {cellSize, pageSize} = selectQueryResultGlobalSettings();
-        const defaultTableColumnLimit = selectDefaultTableColumnLimit(state);
-        const useYqlTypes = selectIsYqlTypesEnabled(state);
-        const login = selectCurrentUserName(state);
-        const ysonSettings = selectYsonSettingsDisableDecode(state);
-
         if (!clusterConfig) return;
-
-        const setup = {
-            proxy: getClusterProxy(clusterConfig),
-            JSONSerializer,
-        };
-
+        const path = rawPath || '/';
+        const requestId = nanoid();
+        dispatch(startNavigation({requestId, path, nodeType: BodyType.Table}));
+        const {cellSize, pageSize} = selectQueryResultGlobalSettings();
+        const setup = {proxy: getClusterProxy(clusterConfig), JSONSerializer};
+        const nodeFromList = selectNavigationNodes(state).find((node) => node.path === path);
         try {
-            await dispatch(loadPathTargetNode(path));
-            const tableData = await loadTableAttributesByPathFromComponents(path, setup, {
-                clusterId: clusterConfig.id,
-                login,
-                limit: pageSize,
-                cellSize,
-                defaultTableColumnLimit,
-                useYqlTypes,
-                showDecoded: ysonSettings.showDecoded,
-                navigationTableConfig: ytComponentsNavigationMetaConfig,
-            });
-
-            dispatch(setPath(path));
-            dispatch(setTable(tableData as NavigationTable));
-            dispatch(setNodeType(BodyType.Table));
-        } catch (e) {
-            toaster.add({
-                theme: 'danger',
-                autoHiding: false,
-                name: 'Load table data error',
-                title: e ? (e as Error).message : "Can't load table data",
-            });
+            const [table, targetNode] = await Promise.all([
+                loadTableAttributesByPathFromComponents(path, setup, {
+                    clusterId: clusterConfig.id,
+                    login: selectCurrentUserName(state),
+                    limit: pageSize,
+                    cellSize,
+                    defaultTableColumnLimit: selectDefaultTableColumnLimit(state),
+                    useYqlTypes: selectIsYqlTypesEnabled(state),
+                    showDecoded: selectYsonSettingsDisableDecode(state).showDecoded,
+                    navigationTableConfig: ytComponentsNavigationMetaConfig,
+                }),
+                nodeFromList?.type
+                    ? Promise.resolve({type: nodeFromList.type, dynamic: nodeFromList.dynamic})
+                    : loadPathTargetNode(path, clusterConfig).catch(() => undefined),
+            ]);
+            dispatch(receiveTable({requestId, table, targetNode}));
+        } catch (error) {
+            dispatch(failNavigation({requestId, error: error as YTError}));
         }
     };
 
 export const loadPath =
-    (path: string, clusterConfig: ClusterConfig): AsyncAction =>
-    async (dispatch) => {
+    (rawPath: string, clusterConfig: ClusterConfig): AsyncAction =>
+    async (dispatch, getState) => {
+        const path = rawPath || '/';
+        const requestId = nanoid();
+        dispatch(setCluster(clusterConfig.id));
+        dispatch(startNavigation({requestId, path, nodeType: BodyType.Loading}));
         try {
-            dispatch(setCluster(clusterConfig.id));
-            dispatch(setPath(path));
-
             const type = await ytApiV3Id.get(YTApiId.navigationGetType, {
-                setup: {
-                    proxy: getClusterProxy(clusterConfig),
-                    JSONSerializer,
-                },
-                parameters: {
-                    path: `${path}/@type`,
-                },
+                setup: {proxy: getClusterProxy(clusterConfig), JSONSerializer},
+                parameters: {path: `${path}/@type`},
             });
-
+            if (!isCurrentRequest(getState(), requestId)) return;
             if (isTableNode(type)) {
                 await dispatch(loadTableAttributesByPath(path));
             } else if (isFolderNode(type)) {
                 await dispatch(loadNodeByPath(path));
             } else {
-                throw new Error("Сan't open this type of node");
+                throw new Error("Can't open this type of node");
             }
-        } catch (e) {
-            dispatch(setError(e as YTError));
-            dispatch(setNodeType(BodyType.Error));
+        } catch (error) {
+            dispatch(failNavigation({requestId, error: error as YTError}));
         }
     };
 
@@ -219,22 +149,13 @@ export const setNavigationCluster =
     (clusterId: string): AsyncAction =>
     async (dispatch) => {
         dispatch(setCluster(clusterId));
-        dispatch(setPath('/'));
         await dispatch(loadNodeByPath('/'));
     };
 
-export const initNavigation = (): AsyncAction => async (dispatch, getState) => {
+export const initNavigation = (): AsyncAction => (dispatch, getState) => {
     const state = getState();
     const clusterConfig = selectNavigationClusterConfig(state);
-    const path = selectNavigationPath(state);
-
-    if (!clusterConfig) return;
-
-    if (path) {
-        dispatch(setNodeType(BodyType.Loading));
-    }
-
-    dispatch(loadPath(path, clusterConfig));
+    if (clusterConfig) dispatch(loadPath(selectNavigationPath(state), clusterConfig));
 };
 
 export const copyPathToClipboard =
@@ -292,10 +213,7 @@ export const openPath =
 
         const cleanPath = path.replace(/\/+$/, '');
 
-        await dispatch(
-            setSettingByKey('global::queryTracker::queriesListSidebarVisibilityMode', true),
-        );
+        dispatch(setSettingByKey('global::queryTracker::queriesListSidebarVisibilityMode', true));
         dispatch(setListMode(QueriesListMode.Navigation));
-        dispatch(setNodeType(BodyType.Loading));
         dispatch(loadPath(cleanPath, clusterConfig));
     };

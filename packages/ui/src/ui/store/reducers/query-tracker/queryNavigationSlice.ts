@@ -23,6 +23,10 @@ export type RepoNavigationState = {
     path: string;
     cluster: string | undefined;
     filter: string;
+    filterContext?: {cluster: string | undefined; path: string};
+    schemaFilter: string;
+    schemaContext?: {cluster: string | undefined; path: string};
+    requestId?: string;
     nodes: NavigationNode[];
     pathTargetNode?: Pick<NavigationNode, 'type' | 'dynamic'>;
     table?: NavigationTable;
@@ -35,6 +39,7 @@ export const initialState: RepoNavigationState = {
     path: '/',
     cluster: undefined,
     filter: '',
+    schemaFilter: '',
     nodes: [],
     table: undefined,
     error: undefined,
@@ -44,10 +49,84 @@ const queryNavigationSlice = createSlice({
     name: 'queryNavigation',
     initialState,
     reducers: {
-        setLoading: (state, action: PayloadAction<boolean>) => {
-            state.loading = action.payload;
+        startNavigation(
+            state,
+            {
+                payload,
+            }: PayloadAction<{
+                requestId: string;
+                path: string;
+                nodeType: BodyType;
+            }>,
+        ) {
+            state.requestId = payload.requestId;
+            state.path = payload.path;
+            state.nodeType = payload.nodeType;
+            state.error = undefined;
+            state.table = undefined;
+            state.pathTargetNode = undefined;
+            state.loading = true;
+            if (payload.nodeType === BodyType.Table) {
+                if (
+                    state.schemaContext?.cluster !== state.cluster ||
+                    state.schemaContext?.path !== payload.path
+                ) {
+                    state.schemaFilter = '';
+                }
+                state.schemaContext = {cluster: state.cluster, path: payload.path};
+            }
+            if (payload.nodeType === BodyType.Tree) {
+                state.nodes = [];
+                if (
+                    state.filterContext?.cluster !== state.cluster ||
+                    state.filterContext?.path !== payload.path
+                ) {
+                    state.filter = '';
+                }
+                state.filterContext = {cluster: state.cluster, path: payload.path};
+            }
+        },
+        receiveNodes(
+            state,
+            {payload}: PayloadAction<{requestId: string; nodes: NavigationNode[]}>,
+        ) {
+            if (state.requestId !== payload.requestId) return;
+            state.nodes = payload.nodes;
+            state.loading = false;
+        },
+        receiveTable(
+            state,
+            {
+                payload,
+            }: PayloadAction<{
+                requestId: string;
+                table: NavigationTable;
+                targetNode?: Pick<NavigationNode, 'type' | 'dynamic'>;
+            }>,
+        ) {
+            if (state.requestId !== payload.requestId) return;
+            state.table = payload.table;
+            state.pathTargetNode = payload.targetNode;
+            state.loading = false;
+        },
+        failNavigation(state, {payload}: PayloadAction<{requestId: string; error: YTError}>) {
+            if (state.requestId !== payload.requestId) return;
+            state.loading = false;
+            state.error = payload.error;
+            state.nodeType = BodyType.Error;
         },
         setCluster(state, {payload}: PayloadAction<string | undefined>) {
+            if (payload === state.cluster) return;
+            state.requestId = undefined;
+            state.loading = false;
+            state.table = undefined;
+            state.pathTargetNode = undefined;
+            state.error = undefined;
+            state.filter = '';
+            state.filterContext = undefined;
+            state.schemaFilter = '';
+            state.schemaContext = undefined;
+            state.nodes = [];
             state.cluster = payload;
         },
         setPath(state, {payload}: PayloadAction<string>) {
@@ -55,35 +134,28 @@ const queryNavigationSlice = createSlice({
         },
         setNodeType(state, {payload}: PayloadAction<BodyType>) {
             state.nodeType = payload;
+            state.requestId = undefined;
         },
         setFilter(state, {payload}: PayloadAction<string>) {
             state.filter = payload;
+            state.filterContext = {cluster: state.cluster, path: state.path};
         },
-        setNodes(state, {payload}: PayloadAction<any>) {
-            state.nodes = payload;
-        },
-        setPathTargetNode(state, {payload}: PayloadAction<RepoNavigationState['pathTargetNode']>) {
-            state.pathTargetNode = payload;
-        },
-        setTable(state, {payload}: PayloadAction<NavigationTable>) {
-            state.table = payload;
-        },
-        setError(state, {payload}: PayloadAction<RepoNavigationState['error']>) {
-            state.error = payload;
+        setSchemaFilter(state, {payload}: PayloadAction<string>) {
+            state.schemaFilter = payload;
         },
     },
 });
 
 export const {
-    setLoading,
+    startNavigation,
+    receiveNodes,
+    receiveTable,
+    failNavigation,
     setFilter,
+    setSchemaFilter,
     setCluster,
     setPath,
     setNodeType,
-    setNodes,
-    setPathTargetNode,
-    setTable,
-    setError,
 } = queryNavigationSlice.actions;
 
 export const queryNavigationReducer = queryNavigationSlice.reducer;
