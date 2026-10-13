@@ -41,6 +41,14 @@ export const TYPED_OUTPUT_FORMAT = {
     },
 };
 
+export const TYPED_INPUT_FORMAT = {
+    ...TYPED_OUTPUT_FORMAT,
+    $attributes: {
+        ...TYPED_OUTPUT_FORMAT.$attributes,
+        encode_utf8: false,
+    },
+};
+
 // Menu
 const MENU_PREFIX = createPrefix('MENU');
 

@@ -1,0 +1,42 @@
+.yt-flow-state-key-builder {
+    width: min(420px, 100%);
+
+    &__raw-input {
+        width: 100%;
+    }
+
+    &__launcher {
+        flex: none;
+    }
+}
+
+.yt-flow-state-key-dialog {
+    // The inline form takes its width from the outer accessible dialog.
+    .df-page-dialog.df-page-dialog_size_s {
+        width: 100%;
+    }
+
+    &__field + &__field {
+        margin-top: 12px;
+    }
+
+    & &__field {
+        width: 100%;
+        min-height: 0;
+
+        // Labels live inside TextInput; keep the original compact field spacing.
+        .df-dialog__label {
+            display: none;
+        }
+
+        .df-dialog__field-wrapper.df-dialog__field-wrapper_full-width {
+            padding-top: 0;
+            margin-bottom: 0;
+        }
+
+        .g-text-input__control {
+            padding-top: 4px;
+            padding-bottom: 6px;
+        }
+    }
+}
