@@ -25,7 +25,7 @@ export function QueryTrackerOpenButton({className, cluster, path}: Props) {
     let buttonView: ButtonProps['view'];
     if (queryId && !isEdited) {
         url = createQueryUrl(cluster, queryId);
-        buttonView = 'action';
+        buttonView = 'outlined-action';
     } else {
         url = createNewQueryUrl(cluster, engine, {
             path,

@@ -103,6 +103,7 @@ class Modal extends Component<ModalProps> {
         } else {
             return (
                 <Button
+                    actionRole="modal"
                     view={confirmTheme}
                     loading={loading}
                     disabled={this._isConfirmDisabled()}
