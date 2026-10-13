@@ -24,7 +24,7 @@ function SharePresetButton(props: Props) {
         <Tooltip content={i18n('context_share-columns')}>
             <Button
                 {...props}
-                pin={'clear-round'}
+                pin={'brick-round'}
                 onClick={handleClick}
                 qa="table-columns-share-button"
             >
@@ -43,7 +43,7 @@ function SavePresetButton(props: Props) {
 
     return (
         <Tooltip content={i18n('context_remember-columns')}>
-            <Button {...props} pin={'clear-round'} onClick={handleClick}>
+            <Button {...props} pin={'brick-round'} onClick={handleClick}>
                 <Icon awesome={'save'} size={13} />
             </Button>
         </Tooltip>

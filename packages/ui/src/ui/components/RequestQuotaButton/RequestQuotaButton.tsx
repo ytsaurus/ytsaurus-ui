@@ -18,6 +18,7 @@ export function RequestQuotaButton(props: Props) {
     return isDocsAllowed() && url !== '' ? (
         <span className={className}>
             <Button
+                actionRole="secondary"
                 view={'action'}
                 onClick={async () => {
                     getMetrics().countEvent('request_quota', page);

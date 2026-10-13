@@ -5,7 +5,7 @@ import i18n from '../i18n';
 
 import Icon from '../../../../../../components/Icon/Icon';
 import Button from '../../../../../../components/Button/Button';
-import {Secondary} from '@ytsaurus/components';
+import {YTText} from '@ytsaurus/components';
 import ColumnsPresetButton from '../ColumnsPresetButton';
 import {getConfigData} from '../../../../../../config/ui-settings';
 
@@ -40,7 +40,7 @@ export function ColumnSelectorButtonBase({
 }: Props) {
     const allowPickColumns = !loading || isStrict;
     const showAllColumns = allColumns.length === visibleColumns.length;
-    const view = showAllColumns ? 'outlined' : 'action';
+    const view = showAllColumns ? 'outlined' : 'outlined-action';
 
     const {allowUserColumnPresets} = getConfigData();
     return (
@@ -52,15 +52,12 @@ export function ColumnSelectorButtonBase({
                 onClick={openColumnSelectorModal}
                 view={view}
                 pin={allowUserColumnPresets ? 'round-brick' : 'round-round'}
-                style={showAllColumns ? undefined : actionStyle}
+                style={allowUserColumnPresets ? actionStyle : undefined}
                 qa="table-columns-button"
             >
                 <Icon awesome="filter" face="solid" size={13} />
                 {i18n('action_columns')}
-                <Secondary disabled={!showAllColumns}>
-                    {' '}
-                    {visibleColumns.length + '/' + allColumns.length}
-                </Secondary>
+                <YTText> {visibleColumns.length + '/' + allColumns.length}</YTText>
             </Button>
             {allowUserColumnPresets && (
                 <ColumnsPresetButton view={view} disabled={!allowPickColumns} />
