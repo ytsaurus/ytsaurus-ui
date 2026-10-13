@@ -35,6 +35,7 @@ function AccountCreate({className}: Props) {
             <Tooltip content={disableCreate && disableCreateNotice}>
                 <Flex gap={1} alignItems="center">
                     <Button
+                        actionRole="primary"
                         view="action"
                         title={i18n('title_create-account')}
                         onClick={() => dispatch(openCreateModal())}
