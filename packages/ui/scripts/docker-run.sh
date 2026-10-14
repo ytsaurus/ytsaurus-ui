@@ -40,6 +40,39 @@ else
     exit 1
 fi
 
+# Opt in when BASE_URL is served on the same machine as the container engine.
+# External stands keep their normal DNS resolution when E2E_LOCAL_UI is unset.
+localUiArgs=()
+
+configure_local_ui() {
+    if [ "${E2E_LOCAL_UI:-0}" != "1" ]; then
+        return
+    fi
+
+    local uiDomain hostIp
+    uiDomain=$(node -p 'new URL(process.env.BASE_URL).hostname')
+    case "$(uname -s)" in
+        Linux)
+            # --network host shares the Linux host's loopback.
+            hostIp=127.0.0.1
+            ;;
+        Darwin)
+            hostIp=host-gateway
+            ;;
+        *)
+            echo "E2E_LOCAL_UI is only supported on macOS and Linux" >&2
+            exit 1
+            ;;
+    esac
+
+    if [ -z "$uiDomain" ]; then
+        echo "Cannot determine the local UI hostname" >&2
+        exit 1
+    fi
+    localUiArgs=(--add-host "$uiDomain:$hostIp")
+    echo "Local UI: $uiDomain -> $hostIp"
+}
+
 run_command() {
     toRun="$@"
 
@@ -64,7 +97,7 @@ run_command() {
         trap "rm -f $envFile" EXIT
 
         names=$(xargs <"$(dirname "$0")/../tests/env.names.txt" | tr ' ' '|')
-        env | grep -P "^($names)=" >"$envFile" || true
+        env | grep -E "^($names)=" >"$envFile" || true
         useEnvFile="--env-file $envFile"
     fi
 
@@ -94,6 +127,7 @@ run_command() {
         -v "$NODE_MODULES_CACHE_DIR/.cache-playwright:/work/.cache-playwright" \
         -v "$NPM_CACHE_DIR:/npm-cache" \
         $useEnvFile \
+        "${localUiArgs[@]}" \
         "${snapshotArgs[@]}" \
         "$IMAGE_NAME:$IMAGE_TAG" \
         /bin/bash -c "umask 0000; $toRun"
@@ -105,6 +139,8 @@ if [ "$action" = "clear-cache" ]; then
     rm -rf "$NODE_MODULES_CACHE_DIR"
     exit 0
 fi
+
+configure_local_ui
 
 checksumFile="${NODE_MODULES_CACHE_DIR}/package-lock.json.shasum"
 

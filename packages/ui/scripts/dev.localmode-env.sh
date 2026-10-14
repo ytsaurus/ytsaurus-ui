@@ -4,14 +4,21 @@ if [ "${needToStop}" = "y" -o "${needToStop}" = "Y" ]; then
   useStop=1
 fi
 
-read -p "Proxy host [$(hostname)]: " proxyHost
-if [ -z "$proxyHost" ]; then
-  proxyHost=$(hostname)
-fi
-
-read -p "Proxy port [8000]: " proxyPort
-if [ -z "$proxyPort" ]; then
+dockerHostname=$(hostname)
+if [ "${E2E_LOCAL_UI:-0}" = "1" ]; then
+  proxyHost=localhost
   proxyPort=8000
+  dockerHostname=localhost
+else
+  read -p "Proxy host [$(hostname)]: " proxyHost
+  if [ -z "$proxyHost" ]; then
+    proxyHost=$(hostname)
+  fi
+
+  read -p "Proxy port [8000]: " proxyPort
+  if [ -z "$proxyPort" ]; then
+    proxyPort=8000
+  fi
 fi
 
 export APP_ENV=local
@@ -45,7 +52,7 @@ if [ $? -ne 0 -o "${useStop}" = "1" ]; then
     $runScript
       --cluster-name $YT_LOCAL_CLUSTER_ID
       --yt-version stable
-      --docker-hostname $(hostname)
+      --docker-hostname $dockerHostname
       --fqdn localhost
       --node-count 2
       --ui-app-installation ${APP_INSTALLATION:-''}
