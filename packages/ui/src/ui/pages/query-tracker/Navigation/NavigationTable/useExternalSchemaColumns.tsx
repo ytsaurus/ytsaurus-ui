@@ -15,6 +15,8 @@ const EXTERNAL_COLUMNS = ['title', 'description'] as const;
 type ExternalColumn = (typeof EXTERNAL_COLUMNS)[number];
 
 type State = {
+    cluster?: string;
+    path?: string;
     externalSchema?: Map<string, ExternalSchemaDescription>;
     externalSchemaUrl?: string;
     externalSchemaError?: YTError;
@@ -50,12 +52,17 @@ export function useExternalSchemaColumns(
             .load(cluster, path)
             .then(({url, externalSchema}: ExternalSchemaDescriptionResponse) => {
                 if (!cancelled) {
-                    setState({externalSchemaUrl: url, externalSchema});
+                    setState({cluster, path, externalSchemaUrl: url, externalSchema});
                 }
             })
             .catch((error: YTError) => {
                 if (!cancelled) {
-                    setState({externalSchema: new Map(), externalSchemaError: error});
+                    setState({
+                        cluster,
+                        path,
+                        externalSchema: new Map(),
+                        externalSchemaError: error,
+                    });
                 }
             });
 
@@ -64,7 +71,8 @@ export function useExternalSchemaColumns(
         };
     }, [cluster, path]);
 
-    const {externalSchema, externalSchemaUrl, externalSchemaError} = state;
+    const {externalSchema, externalSchemaUrl, externalSchemaError} =
+        state.cluster === cluster && state.path === path ? state : {};
 
     return useMemo(() => {
         if (!externalSchema) {

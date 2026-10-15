@@ -66,6 +66,14 @@ export const QueryEditor: FC<Props> = ({
     const isMainQueryLoading = useSelector(selectIsQueryLoading);
     const isLoading = isQueryTrackerInfoLoading || isMainQueryLoading;
 
+    const editor = resultViewMode !== 'full' && (
+        <QueryEditorView
+            onStartQuery={onStartQuery}
+            pathNavigation={pathNavigation}
+            hideAco={hideAco}
+        />
+    );
+
     return (
         <>
             {isLoading && (
@@ -79,13 +87,7 @@ export const QueryEditor: FC<Props> = ({
                 onResizeEnd={setSize}
                 getInitialSizes={() => partSizes}
             >
-                {resultViewMode !== 'full' && (
-                    <QueryEditorView
-                        onStartQuery={onStartQuery}
-                        pathNavigation={pathNavigation}
-                        hideAco={hideAco}
-                    />
-                )}
+                {editor}
 
                 {query?.id && isExecuted && (
                     <ResultView

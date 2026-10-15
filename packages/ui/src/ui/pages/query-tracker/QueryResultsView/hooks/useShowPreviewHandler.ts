@@ -14,38 +14,32 @@ type Props = {
     resultIndex: number;
 };
 
-export function useShowPreviewHandler({queryId, resultIndex}: Props) {
+export function useQueryResultsPreviewHandler({queryId}: Pick<Props, 'queryId'>) {
     const dispatch = useDispatch();
+    const cancelHelper = React.useMemo(() => new CancelHelper(), []);
+    const cancelPreviews = React.useCallback(
+        () => cancelHelper.removeAllRequests(),
+        [cancelHelper],
+    );
 
-    const {dataHandler, onShowPreview} = React.useMemo(() => {
-        const cancelHelper = new CancelHelper();
-
-        const cellDataHandler = {
-            onStartLoading: () => {},
-            onSuccess: ({columnName, rowIndex, data}) => {
-                dispatch(
-                    injectQueryResults({
-                        queryId,
-                        resultIndex,
-                        columnName,
-                        rowIndex,
-                        data,
-                    }),
-                );
-            },
-            onError: onErrorTableCellPreview,
-
-            cancelHelper,
-            saveCancellation: (token) => {
-                cancelHelper.saveCancelToken(token);
-            },
-        } as CellDataHandlerQueries & {cancelHelper: CancelHelper};
-
-        const showPreview = async (
-            columnName: string,
-            rowIndex: number,
-            tag: string | undefined,
-        ) => {
+    const onShowPreview = React.useCallback(
+        async (resultIndex: number, columnName: string, rowIndex: number, tag?: string) => {
+            const cellDataHandler: CellDataHandlerQueries = {
+                onStartLoading: () => {},
+                onSuccess: ({columnName: name, rowIndex: row, data}) => {
+                    dispatch(
+                        injectQueryResults({
+                            queryId,
+                            resultIndex,
+                            columnName: name,
+                            rowIndex: row,
+                            data,
+                        }),
+                    );
+                },
+                onError: onErrorTableCellPreview,
+                saveCancellation: (token) => cancelHelper.saveCancelToken(token),
+            };
             const allowInlinePreview = isInlinePreviewAllowed(tag);
             await dispatch(
                 onCellPreviewQueryResults(
@@ -53,18 +47,26 @@ export function useShowPreviewHandler({queryId, resultIndex}: Props) {
                     resultIndex,
                     {columnName, rowIndex},
                     allowInlinePreview ? cellDataHandler : undefined,
+                    // Modal requests retain their own cancellation and also follow this query.
+                    allowInlinePreview ? undefined : cellDataHandler.saveCancellation,
                 ),
             );
-        };
+        },
+        [queryId, dispatch, cancelHelper],
+    );
 
-        return {dataHandler: cellDataHandler, onShowPreview: showPreview};
-    }, [queryId, resultIndex, dispatch]);
+    React.useEffect(() => cancelPreviews, [cancelPreviews, queryId]);
 
-    React.useEffect(() => {
-        return () => {
-            dataHandler.cancelHelper.removeAllRequests();
-        };
-    }, [dataHandler]);
+    return {onShowPreview, cancelPreviews};
+}
 
+export function useShowPreviewHandler({queryId, resultIndex}: Props) {
+    const {onShowPreview: showPreview, cancelPreviews} = useQueryResultsPreviewHandler({queryId});
+    React.useEffect(() => cancelPreviews, [cancelPreviews, resultIndex]);
+    const onShowPreview = React.useCallback(
+        (columnName: string, rowIndex: number, tag?: string) =>
+            showPreview(resultIndex, columnName, rowIndex, tag),
+        [showPreview, resultIndex],
+    );
     return {onShowPreview};
 }

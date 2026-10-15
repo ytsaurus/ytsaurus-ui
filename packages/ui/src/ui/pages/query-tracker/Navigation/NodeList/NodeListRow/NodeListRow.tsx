@@ -18,7 +18,7 @@ const b = cn('navigation-node-list-row');
 
 type Props = {
     node: NavigationNode;
-    onClick: (path: string, type: string | undefined) => void;
+    onClick?: (path: string, type: string | undefined) => void;
     onFavoriteToggle: (favoritePath: string) => void;
     onNewWindowOpen: (path: string) => void;
     onClipboardCopy: (path: string) => void;
@@ -40,7 +40,7 @@ export const NodeListRow: FC<Props> = ({
 
     const handleClick = () => {
         if (!isSupported) return;
-        onClick(path, type);
+        onClick?.(path, type);
     };
 
     const handleStop = (e: MouseEvent<HTMLButtonElement>) => {
@@ -55,7 +55,7 @@ export const NodeListRow: FC<Props> = ({
     return (
         <div
             className={b({unsupported: !isSupported, active: menuOpen || pathMenuOpen})}
-            onClick={handleClick}
+            onClick={onClick ? handleClick : undefined}
         >
             <div className={b('icon-wrap')}>
                 <MapNodeIcon node={{$attributes: node}} />

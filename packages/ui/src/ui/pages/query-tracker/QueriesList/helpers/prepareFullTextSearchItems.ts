@@ -1,4 +1,4 @@
-import {type QueryItem} from '../../../../../types/query-tracker/api';
+import {type QueryItem} from '../../../../types/query-tracker/api';
 
 const lineIndexAtCharIndex = (lines: string[], charIndex: number) => {
     let charPos = 0;
@@ -68,14 +68,14 @@ export const prepareFullTextSearchItems = ({
     const trimmed = filter?.trim();
     if (!trimmed) return items;
 
-    return items.map((i) => {
+    return items.map((item) => {
         const {text, firstLineNumber} = prepareQueryPreview({
-            query: i.query ?? '',
+            query: item.query ?? '',
             filter: trimmed,
             maxLines,
         });
         return {
-            ...i,
+            ...item,
             query: text,
             queryPreviewLineNumberStart: firstLineNumber,
         };

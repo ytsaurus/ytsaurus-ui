@@ -31,6 +31,8 @@ import {SET_QUERY_PARAMS} from '../../../store/reducers/query-tracker/query-trac
 import {RedirectConfirmModal} from '../../../components/RedirectConfirmModal';
 import {selectLastUserChoiceQueryEngine} from '../../../store/selectors/settings/settings-queries';
 import i18n from './i18n';
+import {selectSettingsQueryTrackerNewQueriesView} from '../../../store/selectors/settings/settings-ts';
+import {QueriesPageLazy} from '../QueriesPage/lazy';
 
 const b = cn('query-tracker-page');
 
@@ -113,6 +115,7 @@ export default function QueryTracker({match}: Props) {
         useQueriesListSidebarToggle();
     const isQueryStateDirty = useSelector(selectDirtySinceLastSubmit);
     const fileEditor = useSelector(selectFileEditor);
+    const newView = useSelector(selectSettingsQueryTrackerNewQueriesView);
     usePreventUnload({shouldListen: isQueryStateDirty});
     const [sizes, setSize] = useState(initialSizes);
     const getSize = useMemo(() => {
@@ -144,20 +147,24 @@ export default function QueryTracker({match}: Props) {
                 <Route path={`${match.path}/:queryId`} component={QueryPage} />
             </Switch>
             <QueriesPooling>
-                <FlexSplitPane
-                    className={b('container')}
-                    direction={FlexSplitPane.HORIZONTAL}
-                    onResizeEnd={setSize}
-                    minSize={minSize}
-                    getInitialSizes={getSize}
-                >
-                    {isQueriesListSidebarVisible && <LazyQueriesList />}
-                    <QueryEditorSplit
-                        fileEditorFullWidth={fileEditor.isFullWidth}
-                        fileEditorVisible={fileEditor.isOpen}
-                        onStartQuery={goToCreatedQuery}
-                    />
-                </FlexSplitPane>
+                {newView ? (
+                    <QueriesPageLazy onStartQuery={goToCreatedQuery} />
+                ) : (
+                    <FlexSplitPane
+                        className={b('container')}
+                        direction={FlexSplitPane.HORIZONTAL}
+                        onResizeEnd={setSize}
+                        minSize={minSize}
+                        getInitialSizes={getSize}
+                    >
+                        {isQueriesListSidebarVisible && <LazyQueriesList />}
+                        <QueryEditorSplit
+                            fileEditorFullWidth={fileEditor.isFullWidth}
+                            fileEditorVisible={fileEditor.isOpen}
+                            onStartQuery={goToCreatedQuery}
+                        />
+                    </FlexSplitPane>
+                )}
             </QueriesPooling>
             <CellPreviewModal />
             {isQueryStateDirty && (
