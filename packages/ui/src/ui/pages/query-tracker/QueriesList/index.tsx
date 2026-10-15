@@ -1,26 +1,17 @@
 import React, {useEffect, useRef} from 'react';
 import block from 'bem-cn-lite';
-import {Tab, TabList, TabPanel, TabProvider} from '@gravity-ui/uikit';
-import {QueriesHistoryList} from './QueriesHistoryList';
-
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
     selectQueriesListMode,
     selectQueriesListTabs,
 } from '../../../store/selectors/query-tracker/queriesList';
-import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {DefaultQueriesListFilter, QueriesListMode} from '../../../types/query-tracker/queryList';
 import {applyListMode, resetQueryList} from '../../../store/actions/query-tracker/queriesList';
-
-import './index.scss';
-import {QueriesTutorialList} from './QueriesTutorialList';
-import {QueriesHistoryListFilter} from './QueriesListFilter';
-import {Vcs} from '../Vcs';
-import {Navigation} from '../Navigation';
 import {setFilter} from '../../../store/reducers/query-tracker/queryListSlice';
+import {LegacyQueriesList} from './LegacyQueriesList';
 import i18n from './i18n';
-
+import './index.scss';
 const b = block('queries-list');
-
 function getTabName(mode: QueriesListMode): string {
     const TabNames: Record<QueriesListMode, string> = {
         [QueriesListMode.History]: i18n('tab_history'),
@@ -32,23 +23,6 @@ function getTabName(mode: QueriesListMode): string {
     return TabNames[mode];
 }
 
-const TabContent: Record<QueriesListMode, React.ReactNode> = {
-    [QueriesListMode.History]: (
-        <>
-            <QueriesHistoryListFilter className={b('filter')} />
-            <QueriesHistoryList />
-        </>
-    ),
-    [QueriesListMode.Tutorials]: (
-        <>
-            <QueriesHistoryListFilter className={b('filter')} />
-            <QueriesTutorialList className={b('list-content')} />
-        </>
-    ),
-    [QueriesListMode.VCS]: <Vcs />,
-    [QueriesListMode.Navigation]: <Navigation />,
-};
-
 export function QueriesList() {
     const dispatch = useDispatch();
     const activeTab = useSelector(selectQueriesListMode);
@@ -56,35 +30,37 @@ export function QueriesList() {
     const isInitializedRef = useRef(false);
 
     useEffect(() => {
+        if (!tabsList.includes(activeTab)) {
+            const fallbackTab = tabsList[0];
+            if (fallbackTab) {
+                isInitializedRef.current = true;
+                dispatch(applyListMode(fallbackTab));
+            }
+            return;
+        }
+
         if (!isInitializedRef.current) {
             isInitializedRef.current = true;
             dispatch(setFilter(DefaultQueriesListFilter[activeTab]));
             dispatch(resetQueryList());
         }
-    }, [dispatch, activeTab]);
+    }, [dispatch, activeTab, tabsList]);
 
     const handleTabSelect = (tabId: string) => {
-        dispatch(applyListMode(tabId as QueriesListMode));
+        const nextTab = tabsList.find((tab) => tab === tabId);
+        if (nextTab && nextTab !== activeTab) {
+            dispatch(applyListMode(nextTab));
+        }
     };
 
+    if (!tabsList.includes(activeTab)) return null;
     return (
         <div className={b()}>
-            <TabProvider value={activeTab} onUpdate={handleTabSelect}>
-                <TabList className={b('tabs')}>
-                    {tabsList.map((tab) => (
-                        <Tab key={tab} value={tab}>
-                            {getTabName(tab)}
-                        </Tab>
-                    ))}
-                </TabList>
-                <div className={b('content')}>
-                    {tabsList.map((tab) => (
-                        <TabPanel key={tab} value={tab}>
-                            {TabContent[tab]}
-                        </TabPanel>
-                    ))}
-                </div>
-            </TabProvider>
+            <LegacyQueriesList
+                tabs={tabsList.map((id) => ({id, title: getTabName(id)}))}
+                activeTab={activeTab}
+                onTabChange={handleTabSelect}
+            />
         </div>
     );
 }

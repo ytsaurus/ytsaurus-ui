@@ -45,7 +45,7 @@ export const FileEditor: FC = () => {
     if (!file) return null;
 
     return (
-        <div className={block()}>
+        <div className={block()} data-qa="query-file-editor">
             <div className={block('header')}>
                 <div className={block('header-side')}>
                     <Icon data={FileIcon} size={16} />
@@ -54,13 +54,13 @@ export const FileEditor: FC = () => {
                     </Text>
                 </div>
                 <div className={block('header-side')}>
-                    <Button view="flat" onClick={handleOnWidthToggle}>
+                    <Button qa="query-file-toggle-width" view="flat" onClick={handleOnWidthToggle}>
                         <Icon
                             data={fileEditor.isFullWidth ? LayoutColumnsIcon : SquareIcon}
                             size={16}
                         />
                     </Button>
-                    <Button view="flat" onClick={handleOnClose}>
+                    <Button qa="query-file-close" view="flat" onClick={handleOnClose}>
                         <Icon data={XmarkIcon} size={16} />
                     </Button>
                 </div>
