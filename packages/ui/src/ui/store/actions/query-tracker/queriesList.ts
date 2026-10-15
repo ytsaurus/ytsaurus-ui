@@ -5,6 +5,7 @@ import {type RootState} from '../../reducers';
 import {loadQueriesList} from './api';
 import {
     selectHasQueriesListLoaded,
+    selectHasQueriesListMore,
     selectQueriesFilters,
     selectQueriesList,
     selectQueriesListCursorParams,
@@ -32,26 +33,27 @@ const QUERIES_LIST_LIMIT = 20;
 const queriesListCancelHelper = new CancelHelper();
 let queriesListRequestSeq = 0;
 
-export const resetQueryList =
-    (silent = false): AsyncAction =>
-    (dispatch) => {
-        dispatch(
-            updateListState({
-                items: [],
-                hasLoaded: false,
-                cursor: {
-                    direction: QueriesHistoryCursorDirection.PAST,
-                },
-            }),
-        );
-        dispatch(requestQueriesList(silent));
-    };
+export const resetQueryList = (): AsyncAction => (dispatch) => {
+    dispatch(
+        updateListState({
+            isLoading: true,
+            items: [],
+            hasMore: false,
+            hasLoaded: false,
+            cursor: {
+                direction: QueriesHistoryCursorDirection.PAST,
+            },
+        }),
+    );
+    dispatch(requestQueriesList());
+};
 
-export function requestQueriesList(silent = false): AsyncAction {
+export function requestQueriesList(silent = false, preservePagination = false): AsyncAction {
     return async (dispatch, getState) => {
         const requestId = ++queriesListRequestSeq;
         const state = getState();
         const list = selectQueriesList(state);
+        const hasMore = selectHasQueriesListMore(state);
 
         if (!silent || !selectHasQueriesListLoaded(state)) {
             dispatch(setLoading(true));
@@ -91,7 +93,10 @@ export function requestQueriesList(silent = false): AsyncAction {
                 updateListState({
                     items,
                     hasLoaded: true,
-                    hasMore: result.incomplete,
+                    hasMore:
+                        preservePagination && list.length > result.queries.length
+                            ? hasMore
+                            : result.incomplete,
                     timestamp: result.timestamp,
                 }),
             );
@@ -104,6 +109,13 @@ export function requestQueriesList(silent = false): AsyncAction {
                 dispatch(setLoading(false));
             }
         }
+    };
+}
+
+export function refreshQueriesList(silent = true): AsyncAction {
+    return (dispatch) => {
+        dispatch(setCursor({direction: QueriesHistoryCursorDirection.PAST}));
+        return dispatch(requestQueriesList(silent, true));
     };
 }
 
@@ -134,7 +146,7 @@ export function resetFilter(): AsyncAction {
         const currentFilter = selectQueriesFilters(state);
 
         dispatch(setFilter({...DefaultQueriesListFilter[listMode], filter: currentFilter.filter}));
-        dispatch(requestQueriesList());
+        dispatch(resetQueryList());
     };
 }
 
@@ -143,8 +155,7 @@ export function applyFilter(patch: QueriesListFilter): AsyncAction {
         const filter = selectQueriesFilters(getState());
 
         dispatch(setFilter({...filter, ...patch}));
-        const silent = !('filter' in patch);
-        dispatch(resetQueryList(silent));
+        dispatch(resetQueryList());
     };
 }
 
