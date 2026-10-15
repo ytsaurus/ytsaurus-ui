@@ -4,15 +4,10 @@ if [ "${needToStop}" = "y" -o "${needToStop}" = "Y" ]; then
   useStop=1
 fi
 
-read -p "Proxy host [$(hostname)]: " proxyHost
-if [ -z "$proxyHost" ]; then
-  proxyHost=$(hostname)
-fi
-
+read -p "Proxy host [localhost]: " proxyHost
+proxyHost=${proxyHost:-localhost}
 read -p "Proxy port [8000]: " proxyPort
-if [ -z "$proxyPort" ]; then
-  proxyPort=8000
-fi
+proxyPort=${proxyPort:-8000}
 
 export APP_ENV=local
 export PROXY=$proxyHost:$proxyPort
@@ -45,7 +40,8 @@ if [ $? -ne 0 -o "${useStop}" = "1" ]; then
     $runScript
       --cluster-name $YT_LOCAL_CLUSTER_ID
       --yt-version stable
-      --docker-hostname $(hostname)
+      --docker-hostname $proxyHost
+      --proxy-port $proxyPort
       --fqdn localhost
       --node-count 2
       --ui-app-installation ${APP_INSTALLATION:-''}
@@ -120,5 +116,5 @@ fi
 
 if [ "$PROMETHEUS" != "" ]; then
   npm run e2e:localmode:monitoring:init
-  export PROMETHEUS_BASE_URL=http://$(hostname):9090
+  export PROMETHEUS_BASE_URL=http://localhost:9090
 fi
