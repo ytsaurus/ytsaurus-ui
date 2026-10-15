@@ -2,13 +2,17 @@ import {type Request, type Response} from 'express';
 import {type ExpressKit} from '@gravity-ui/expresskit';
 import forEach_ from 'lodash/forEach';
 import {YT_LOCAL_CLUSTER_ID} from './constants';
-import {type ConfigData} from '../shared/yt-types';
+import {type ConfigData, type YTConfig} from '../shared/yt-types';
 import renderLayout, {type AppLayoutConfig} from './render-layout';
-import {isLocalModeByEnvironment} from './utils';
+import {isLocalModeByEnvironment} from './utils/local-mode';
 import {type VcsApi} from '../shared/vcs';
 import {type CustomVCSType, type VCSSettings} from '../shared/ui-settings';
 
 export interface ServerFactory {
+    getClustersConfigResult(): {
+        config?: Pick<YTConfig, 'clusters'>;
+        errors?: ConfigData['configurationErrors'];
+    };
     getExtraRootPages(): Array<string>;
     isLocalClusterId(cluster: string): boolean;
     getHomeRedirectedUrl(cluster: string | undefined, req: Request): Promise<string | undefined>;
@@ -46,6 +50,9 @@ export function getApp() {
 }
 
 const serverFactory: ServerFactory = {
+    getClustersConfigResult() {
+        return {};
+    },
     getExtraRootPages() {
         return [];
     },

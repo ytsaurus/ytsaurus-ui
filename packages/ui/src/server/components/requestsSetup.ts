@@ -81,9 +81,9 @@ export function getYTApiClusterSetup(
     return {isLocalCluster, ...getClusterSetup(clusterConfig)};
 }
 
-export function getRobotYTApiSetup(cluster: string): YTApiUserSetup {
+export function getRobotYTApiSetup(cluster: string, clusterConfig?: ClusterConfig): YTApiUserSetup {
     const oauthToken = getRobotOAuthToken(cluster);
-    const config = getYTApiClusterSetup(cluster);
+    const config = clusterConfig ? getClusterSetup(clusterConfig) : getYTApiClusterSetup(cluster);
 
     const {setup, ...rest} = config;
 
