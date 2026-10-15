@@ -40,18 +40,26 @@ else
     exit 1
 fi
 
-# On macOS, host loopback addresses must point to the Mac rather than the VM.
+# On macOS, map the host's names to the Mac rather than the VM.
 addHostArgs=()
 
 configure_host_args() {
-    if [ "$(uname -s)" != "Darwin" ] || [ -z "${BASE_URL:-}" ]; then
+    if [ "$(uname -s)" != "Darwin" ]; then
+        return
+    fi
+
+    addHostArgs=(--add-host "$(hostname):host-gateway")
+    echo "Host mapping: $(hostname) -> host-gateway"
+
+    if [ -z "${BASE_URL:-}" ]; then
         return
     fi
 
     local urlHostname
-    urlHostname=$(node "$(dirname "$0")/resolve-loopback-host.js")
-    if [ -n "$urlHostname" ]; then
-        addHostArgs=(--add-host "$urlHostname:host-gateway")
+    urlHostname=$(node "$(dirname "$0")/resolve-local-host.js" "$BASE_URL")
+
+    if [ -n "$urlHostname" ] && [ "$urlHostname" != "$(hostname)" ]; then
+        addHostArgs+=(--add-host "$urlHostname:host-gateway")
         echo "Host mapping: $urlHostname -> host-gateway"
     fi
 }

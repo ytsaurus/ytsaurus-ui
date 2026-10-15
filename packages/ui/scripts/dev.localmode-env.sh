@@ -4,8 +4,8 @@ if [ "${needToStop}" = "y" -o "${needToStop}" = "Y" ]; then
   useStop=1
 fi
 
-read -p "Proxy host [localhost]: " proxyHost
-proxyHost=${proxyHost:-localhost}
+read -p "Proxy host [$(hostname)]: " proxyHost
+proxyHost=${proxyHost:-$(hostname)}
 read -p "Proxy port [8000]: " proxyPort
 proxyPort=${proxyPort:-8000}
 
@@ -47,6 +47,13 @@ if [ $? -ne 0 -o "${useStop}" = "1" ]; then
       --ui-app-installation ${APP_INSTALLATION:-''}
       --init-operations-archive
   "
+
+  if [ "$(uname -s)" = "Darwin" ]; then
+    mappedProxyHost=$(node scripts/resolve-local-host.js "$PROXY") || return 1
+    if [ -n "$mappedProxyHost" ]; then
+      command="$command --extra-ui-docker-opts --add-host=$mappedProxyHost:host-gateway"
+    fi
+  fi
 
   (
     echo
@@ -116,5 +123,5 @@ fi
 
 if [ "$PROMETHEUS" != "" ]; then
   npm run e2e:localmode:monitoring:init
-  export PROMETHEUS_BASE_URL=http://localhost:9090
+  export PROMETHEUS_BASE_URL=http://$(hostname):9090
 fi
