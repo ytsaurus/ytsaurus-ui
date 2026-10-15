@@ -40,6 +40,22 @@ else
     exit 1
 fi
 
+# On macOS, host loopback addresses must point to the Mac rather than the VM.
+addHostArgs=()
+
+configure_host_args() {
+    if [ "$(uname -s)" != "Darwin" ] || [ -z "${BASE_URL:-}" ]; then
+        return
+    fi
+
+    local urlHostname
+    urlHostname=$(node "$(dirname "$0")/resolve-loopback-host.js")
+    if [ -n "$urlHostname" ]; then
+        addHostArgs=(--add-host "$urlHostname:host-gateway")
+        echo "Host mapping: $urlHostname -> host-gateway"
+    fi
+}
+
 run_command() {
     toRun="$@"
 
@@ -64,7 +80,7 @@ run_command() {
         trap "rm -f $envFile" EXIT
 
         names=$(xargs <"$(dirname "$0")/../tests/env.names.txt" | tr ' ' '|')
-        env | grep -P "^($names)=" >"$envFile" || true
+        env | grep -E "^($names)=" >"$envFile" || true
         useEnvFile="--env-file $envFile"
     fi
 
@@ -94,6 +110,7 @@ run_command() {
         -v "$NODE_MODULES_CACHE_DIR/.cache-playwright:/work/.cache-playwright" \
         -v "$NPM_CACHE_DIR:/npm-cache" \
         $useEnvFile \
+        "${addHostArgs[@]}" \
         "${snapshotArgs[@]}" \
         "$IMAGE_NAME:$IMAGE_TAG" \
         /bin/bash -c "umask 0000; $toRun"
@@ -105,6 +122,8 @@ if [ "$action" = "clear-cache" ]; then
     rm -rf "$NODE_MODULES_CACHE_DIR"
     exit 0
 fi
+
+configure_host_args
 
 checksumFile="${NODE_MODULES_CACHE_DIR}/package-lock.json.shasum"
 
