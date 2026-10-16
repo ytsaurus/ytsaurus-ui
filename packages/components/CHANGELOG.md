@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.0.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.6.2...components-v2.0.0) (2026-10-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* **MetaTable:** use gap layout for metadata groups by default [YTFRONT-6096]
+
+### Features
+
+* **components:** support table column selection and report incomplete columns [YTFRONT-6084] ([1e61892](https://github.com/ytsaurus/ytsaurus-ui/commit/1e618927149b894afc76eeed1f0c803b6fb9c35c))
+
+
+### Bug Fixes
+
+* **MetaTable:** use gap layout for metadata groups by default [YTFRONT-6096] ([4010c87](https://github.com/ytsaurus/ytsaurus-ui/commit/4010c875b8ee45951b36b6fa76d248d92f403da8))
+
 ## [1.6.2](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.6.1...components-v1.6.2) (2026-10-01)
 
 
