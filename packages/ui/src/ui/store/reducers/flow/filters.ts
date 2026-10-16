@@ -47,6 +47,8 @@ export const FlowTab = {
     COMPUTATIONS: 'computations',
     WORKERS: 'workers',
     MONITORING: 'monitoring',
+    LOGS: 'logs',
+    STATE: 'state',
     STATIC_SPEC: 'static_spec',
     DYNAMIC_SPEC: 'dynamic_spec',
 } as const;
