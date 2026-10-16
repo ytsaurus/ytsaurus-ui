@@ -401,6 +401,9 @@ export const defaultUIFactory: UIFactory = {
     renderJobLogsTab() {
         return undefined;
     },
+    getFlowLogsTab: () => {
+        return undefined;
+    },
     getAiChatMessageComponent() {
         return undefined;
     },
