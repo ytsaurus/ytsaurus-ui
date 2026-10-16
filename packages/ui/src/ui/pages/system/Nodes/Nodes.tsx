@@ -2,6 +2,8 @@ import cn from 'bem-cn-lite';
 import map_ from 'lodash/map';
 import React, {useState} from 'react';
 import {type ConnectedProps, connect} from 'react-redux';
+import {SegmentedRadioGroup} from '@gravity-ui/uikit';
+import {type DescribedSettings} from '../../../../shared/constants/settings-types';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
 import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
@@ -17,6 +19,8 @@ import {StickyContainer} from '../../../components/StickyContainer/StickyContain
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
 import {useMemoizedIfEqual, useUpdater} from '../../../hooks';
+import {setSettingByKey} from '../../../store/actions/settings';
+import {selectSettingsData} from '../../../store/selectors/settings/settings-base';
 import {setSettingsSystemNodesCollapsed} from '../../../store/actions/settings/settings';
 import {loadSystemNodes} from '../../../store/actions/system/nodes';
 import {type RoleGroupInfo} from '../../../store/reducers/system/proxies';
@@ -57,7 +61,9 @@ function RackGroup({
     counters,
     makeComponentNodesUrl,
     makeRoleGroupUrl,
+    short,
 }: {
+    short: boolean;
     name: string;
     data: Array<RoleGroupInfo>;
     counters: NodesProps['counters'];
@@ -72,7 +78,7 @@ function RackGroup({
     });
 
     return (
-        <div key={groupName} className={block()}>
+        <div key={groupName} className={block({short})}>
             <div className={block('group-summary', headingCN)}>
                 <Link
                     theme="primary"
@@ -82,13 +88,15 @@ function RackGroup({
                 >
                     {groupName}
                 </Link>
-                <ExpandButton
-                    className={block('expand-btn')}
-                    expanded={expandAll}
-                    toggleExpanded={() => setExpandAll(!expandAll)}
-                    all
-                    showText
-                />
+                {!short && (
+                    <ExpandButton
+                        className={block('expand-btn')}
+                        expanded={expandAll}
+                        toggleExpanded={() => setExpandAll(!expandAll)}
+                        all
+                        showText
+                    />
+                )}
                 <SystemStateOverview
                     counters={counters?.[groupName]}
                     stateThemeMappings={STATE_THEME_MAPPING}
@@ -101,19 +109,21 @@ function RackGroup({
                     }}
                 />
             </div>
-            <RoleGroupsContainer>
-                {map_(roleGroup, (group) => {
-                    return (
-                        <RoleGroup
-                            key={group.name}
-                            data={group}
-                            makeUrl={makeRoleGroupUrl}
-                            showFlags
-                            forceExpand={expandAll}
-                        />
-                    );
-                })}
-            </RoleGroupsContainer>
+            {!short && (
+                <RoleGroupsContainer>
+                    {map_(roleGroup, (group) => {
+                        return (
+                            <RoleGroup
+                                key={group.name}
+                                data={group}
+                                makeUrl={makeRoleGroupUrl}
+                                showFlags
+                                forceExpand={expandAll}
+                            />
+                        );
+                    })}
+                </RoleGroupsContainer>
+            )}
         </div>
     );
 }
@@ -171,6 +181,18 @@ const Nodes = (props: NodesProps) => {
                 <div className={block('node-type')}>
                     <SystemNodeTypeSelector />
                 </div>
+                <div className={block('view-mode')}>
+                    <span id="system-nodes-view-label">{i18n('field_view')}</span>
+                    <SegmentedRadioGroup
+                        aria-labelledby="system-nodes-view-label"
+                        value={props.viewMode}
+                        onUpdate={props.setViewMode}
+                        options={[
+                            {value: 'normal', content: i18n('value_normal')},
+                            {value: 'short', content: i18n('value_short')},
+                        ]}
+                    />
+                </div>
                 <SystemStateOverview
                     counters={overviewCounters}
                     stateThemeMappings={STATE_THEME_MAPPING}
@@ -205,6 +227,8 @@ const Nodes = (props: NodesProps) => {
         return map_(roleGroups, (roleGroup, groupName) => {
             return (
                 <RackGroup
+                    key={groupName}
+                    short={props.viewMode === 'short'}
                     name={groupName}
                     data={roleGroup}
                     counters={counters}
@@ -258,12 +282,15 @@ function mapStateToProps(state: RootState) {
         overviewCounters,
         collapsed: selectSettingsSystemNodesCollapsed(state),
         nodeType: selectSettingSystemNodesNodeType(state),
+        viewMode: selectSettingsData(state)['global::system::nodesViewMode'] ?? 'normal',
         roleGroups,
     };
 }
 
 const mapDispatchToProps = {
     setSettingsSystemNodesCollapsed,
+    setViewMode: (value: NonNullable<DescribedSettings['global::system::nodesViewMode']>) =>
+        setSettingByKey('global::system::nodesViewMode', value),
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
