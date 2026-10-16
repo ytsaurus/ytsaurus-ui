@@ -18,6 +18,7 @@ function TransactionInfo(props: Props) {
     const {data} = props;
     return (
         <MetaTable
+            legacyGroupSpacing
             items={[
                 {
                     key: 'id',

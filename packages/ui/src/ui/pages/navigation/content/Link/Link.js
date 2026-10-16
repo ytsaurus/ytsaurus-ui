@@ -24,6 +24,7 @@ function Link({attributes}) {
     return (
         <div className={block()}>
             <MetaTable
+                legacyGroupSpacing
                 items={[
                     main(attributes),
                     [

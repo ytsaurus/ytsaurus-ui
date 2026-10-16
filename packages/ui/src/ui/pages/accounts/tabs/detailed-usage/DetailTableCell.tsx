@@ -67,5 +67,7 @@ export const DetailTableCell: FC<Props> = ({value, versionedValue, viewType, for
         {key: 'versionedValue', label: 'Uncommitted', value: versionedValue},
     ];
 
-    return <Tooltip content={<MetaTable items={tooltipItems} />}>{content}</Tooltip>;
+    return (
+        <Tooltip content={<MetaTable legacyGroupSpacing items={tooltipItems} />}>{content}</Tooltip>
+    );
 };

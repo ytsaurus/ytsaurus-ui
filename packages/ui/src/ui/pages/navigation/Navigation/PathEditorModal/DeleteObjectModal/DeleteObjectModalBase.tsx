@@ -232,7 +232,11 @@ export class DeleteObjectModalBase extends Component<DeleteObjectModalProps> {
                             <span className={block('path')}>{(item as DeleteObjectItem).path}</span>
                         </p>
 
-                        <MetaTable className={block('meta')} items={buildItems()} />
+                        <MetaTable
+                            legacyGroupSpacing
+                            className={block('meta')}
+                            items={buildItems()}
+                        />
 
                         {this.renderPermanentlyCheckbox()}
                     </div>

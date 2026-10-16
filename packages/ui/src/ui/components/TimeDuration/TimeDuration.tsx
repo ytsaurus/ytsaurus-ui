@@ -37,6 +37,7 @@ export function TimeDuration({value, onChange, error}: TimeDurationProps) {
                 content={
                     <div>
                         <MetaTable
+                            legacyGroupSpacing
                             items={[
                                 makeItems({
                                     y: i18n('value_years'),

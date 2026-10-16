@@ -186,6 +186,7 @@ export default function BundleConfigurationMeta() {
 
     return (
         <MetaTable
+            legacyGroupSpacing
             className={block()}
             subTitles={[i18n('title_bundle-configuration')]}
             items={[bundleGroup]}

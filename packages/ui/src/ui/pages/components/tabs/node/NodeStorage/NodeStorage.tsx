@@ -36,6 +36,7 @@ function NodeStorage(node: NodeStorageProps): ReturnType<React.VFC> {
     return (
         <>
             <MetaTable
+                legacyGroupSpacing
                 className={block('meta')}
                 items={[
                     {
@@ -64,7 +65,7 @@ function NodeStorage(node: NodeStorageProps): ReturnType<React.VFC> {
 
             {ioItems.length > 0 && <h4 className={block('heading')}>{i18n('title_io-weight')}</h4>}
 
-            <MetaTable items={ioItems} />
+            <MetaTable legacyGroupSpacing items={ioItems} />
         </>
     );
 }

@@ -74,6 +74,7 @@ function ExperimentAssignmentsItem(props: ItemProps) {
     return (
         <div>
             <MetaTable
+                legacyGroupSpacing
                 items={[
                     [
                         {

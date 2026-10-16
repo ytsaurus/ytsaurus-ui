@@ -255,7 +255,7 @@ export class OperationJobsTableBase extends React.Component {
             },
         ];
 
-        return <MetaTable items={items} />;
+        return <MetaTable legacyGroupSpacing items={items} />;
     };
 
     renderActions = (item) => {

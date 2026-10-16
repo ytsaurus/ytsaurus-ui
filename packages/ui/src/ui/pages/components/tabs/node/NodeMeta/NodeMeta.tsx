@@ -135,6 +135,7 @@ function NodeMeta({
     return (
         <div className={block()}>
             <MetaTable
+                legacyGroupSpacing
                 className={block('column', {type: 'meta'})}
                 items={compact_([metaTableItems, tagsItems, urlItems])}
             />

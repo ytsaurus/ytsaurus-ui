@@ -27,6 +27,7 @@ export const hasResourcesMeta = (node: NodeResourcesProps) =>
 function NodeResources(node: NodeResourcesProps): ReturnType<React.VFC> {
     return (
         <MetaTable
+            legacyGroupSpacing
             items={[
                 {
                     key: 'user-slots',

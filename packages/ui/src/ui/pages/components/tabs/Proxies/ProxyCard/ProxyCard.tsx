@@ -101,6 +101,7 @@ export class ProxyCard extends Component<ProxyCardProps> {
 
         return (
             <MetaTable
+                legacyGroupSpacing
                 items={[
                     {
                         key: 'state',

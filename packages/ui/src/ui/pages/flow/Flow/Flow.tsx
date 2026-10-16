@@ -268,6 +268,7 @@ function FlowState() {
             </Flex>
             <Flex>
                 <MetaTable
+                    legacyGroupSpacing
                     className={block('meta')}
                     items={[
                         getFlowPathMetaItems(pipeline_path),

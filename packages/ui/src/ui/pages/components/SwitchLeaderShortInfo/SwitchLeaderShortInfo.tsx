@@ -47,6 +47,7 @@ export function SwitchLeaderShortInfo(props: Props) {
     return (
         <div className={block()}>
             <MetaTable
+                legacyGroupSpacing
                 items={[
                     {
                         key: 'duration',

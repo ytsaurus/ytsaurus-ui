@@ -286,6 +286,7 @@ class Tasks extends React.Component<Props, State> {
         return (
             <div className={block()}>
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         [
                             {
@@ -394,6 +395,7 @@ function TaskInfo(props: ItemTaskInfo) {
 
     return (
         <MetaTable
+            legacyGroupSpacing
             className={block('info-meta')}
             items={[
                 [

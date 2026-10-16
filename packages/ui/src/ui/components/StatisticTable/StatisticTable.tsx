@@ -105,6 +105,7 @@ export function StatisticName({title, info}: {title: React.ReactNode; info?: Sta
             content={
                 emptyInfo ? null : (
                     <MetaTable
+                        legacyGroupSpacing
                         items={[
                             {
                                 key: 'description',

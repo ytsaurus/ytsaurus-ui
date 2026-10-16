@@ -32,6 +32,7 @@ const Meta: React.VFC<Props> = ({
         <ErrorBoundary>
             <div className="elements-heading elements-heading_size_xs">{i18n('title_meta')}</div>
             <MetaTable
+                legacyGroupSpacing
                 className={block()}
                 items={[
                     [

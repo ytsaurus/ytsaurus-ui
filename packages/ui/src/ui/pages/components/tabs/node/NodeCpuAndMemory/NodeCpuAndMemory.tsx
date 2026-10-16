@@ -31,6 +31,7 @@ function NodeCpuAndMemory({node}: {node: NodeCpuAndMemoryProps}): ReturnType<Rea
 
     return (
         <MetaTable
+            legacyGroupSpacing
             items={[
                 {
                     key: 'cpu',

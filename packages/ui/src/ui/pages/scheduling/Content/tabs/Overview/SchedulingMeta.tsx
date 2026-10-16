@@ -112,6 +112,7 @@ export function SchedulingMeta() {
                         <Tooltip
                             content={
                                 <MetaTable
+                                    legacyGroupSpacing
                                     items={[
                                         {
                                             key: 'accumulated_resource_volume',
@@ -199,6 +200,7 @@ function renderProgress(
                     )}
 
                     <MetaTable
+                        legacyGroupSpacing
                         items={[
                             {key: 'usage', label: i18n('meta_usage'), value: formatFn(usage)},
                             {
@@ -264,6 +266,7 @@ function renderOperationsProgress(
             className={block('progress', {operation: true})}
             content={
                 <MetaTable
+                    legacyGroupSpacing
                     items={
                         progressType === 'running'
                             ? [
