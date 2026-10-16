@@ -1,4 +1,5 @@
 import React from 'react';
+import {type QueueRegistrationPath} from '../../../../../../utils/navigation/queue-registration';
 import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 import {createSelector} from 'reselect';
@@ -71,7 +72,7 @@ const getColumns = createSelector(
     ],
 );
 
-function UnregisterConsumer({consumerPath}: {consumerPath: string}) {
+function UnregisterConsumer({consumerPath}: {consumerPath: QueueRegistrationPath}) {
     const dispatch = useDispatch();
     return (
         <Button view={'flat'} onClick={() => dispatch(openUnregisterDialog({consumerPath}))}>
