@@ -4,12 +4,14 @@ import {
     selectCluster,
 } from '../../../store/selectors/global/cluster';
 import {useSelector} from '../../../store/redux-hooks';
-import {type YTEndpointApiArgs} from './types';
+import {type YTApiSetup} from '../../../rum/rum-wrap-api';
 
-export function getEffectiveClusterArgs<T extends YTEndpointApiArgs<unknown>>(
-    args: T,
-    currentCluster: string,
-): T {
+type ClusterArgs = {
+    cluster?: string;
+    setup?: YTApiSetup;
+};
+
+export function getEffectiveClusterArgs<T extends ClusterArgs>(args: T, currentCluster: string): T {
     const {cluster, setup, ...rest} = args;
 
     const effectiveCluster = cluster ?? currentCluster;
@@ -20,7 +22,7 @@ export function getEffectiveClusterArgs<T extends YTEndpointApiArgs<unknown>>(
     return {setup: effectiveSetup, cluster: effectiveCluster, ...rest} as T;
 }
 
-export function useEffectiveClusterArgs<T extends YTEndpointApiArgs<unknown>>(args: T): T {
+export function useEffectiveClusterArgs<T extends ClusterArgs>(args: T): T {
     const currentCluster = useSelector(selectCluster);
 
     return getEffectiveClusterArgs(args, currentCluster);
