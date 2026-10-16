@@ -36,17 +36,18 @@ export function SegmentControl({className, background, groups}: SegmentControlPr
 
 function SegmentGroup({items}: {items: Array<SegmentControlItem>}) {
     return (
-        <MetaTable
-            legacyGroupSpacing
-            className={block('item')}
-            rowGap={4}
-            items={items.map((item) => {
-                return {
-                    key: item.name,
-                    value: <SegmentValue value={item.value} role={item.role} />,
-                };
-            })}
-        />
+        <Flex className={block('item')}>
+            <MetaTable
+                legacyGroupSpacing
+                rowGap={4}
+                items={items.map((item) => {
+                    return {
+                        key: item.name,
+                        value: <SegmentValue value={item.value} role={item.role} />,
+                    };
+                })}
+            />
+        </Flex>
     );
 }
 

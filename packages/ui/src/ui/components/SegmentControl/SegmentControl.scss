@@ -16,19 +16,10 @@
             padding-left: var(--yt-segment-item-padding);
         }
 
-        &:not(:last-child) {
-            &::after {
-                content: '';
-                display: block;
-                position: relative;
-
-                margin-left: var(--yt-segment-item-padding);
-
-                width: 0;
-                height: 100%;
-
-                border-left: 1px solid var(--g-color-line-generic);
-            }
+        &:not(:last-child)::after {
+            content: '';
+            margin-left: var(--yt-segment-item-padding);
+            border-left: 1px solid var(--g-color-line-generic);
         }
     }
 
