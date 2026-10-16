@@ -13,23 +13,23 @@ type LocationAction = UnknownAction & {
     payload?: Pick<History['location'], 'pathname' | 'search'> & {query?: unknown};
 };
 
-function makeReducersWithLocation<S extends object, A extends Action, P>(
+function makeReducersWithLocation<TState extends object, TAction extends Action, TPreloadedState>(
     setupObject: ReturnType<typeof getParamSetup>,
-    locationMapper: MapLocationToStateFn<S>,
-    rootReducer: Reducer<S, A, P>,
-): Reducer<S, A, P> {
+    locationMapper: MapLocationToStateFn<TState>,
+    rootReducer: Reducer<TState, TAction, TPreloadedState>,
+): Reducer<TState, TAction, TPreloadedState> {
     function makeLocationReducer(
         config: ReturnType<typeof getParamSetup>,
-        mapLocation: MapLocationToStateFn<S>,
+        mapLocation: MapLocationToStateFn<TState>,
     ) {
-        return (state: S, action: LocationAction): S => {
+        return (state: TState, action: LocationAction): TState => {
             const {type, payload} = action;
             if (!payload) {
                 return state;
             }
             if (LOCATION_POP === type || LOCATION_PUSH === type) {
                 payload.query = parseQuery(config, payload);
-                return mapLocation(state, payload as Parameters<MapLocationToStateFn<S>>[1]);
+                return mapLocation(state, payload as Parameters<MapLocationToStateFn<TState>>[1]);
             }
             return state;
         };
@@ -38,15 +38,19 @@ function makeReducersWithLocation<S extends object, A extends Action, P>(
 
     return (state, action) => {
         const postReducerState = rootReducer(state, action);
-        const postLocationState = locationReducer(postReducerState, action as A & LocationAction);
+        const postLocationState = locationReducer(
+            postReducerState,
+            action as TAction & LocationAction,
+        );
         return postLocationState;
     };
 }
 
-export default function getLocationMiddleware<S extends object, A extends Action, P>(
-    history: History,
-    rootReducer: Reducer<S, A, P>,
-) {
+export default function getLocationMiddleware<
+    TState extends object,
+    TAction extends Action,
+    TPreloadedState,
+>(history: History, rootReducer: Reducer<TState, TAction, TPreloadedState>) {
     const {locationMiddleware} = createReduxLocationActions(
         getParamSetup(),
         mapLocationToState,
