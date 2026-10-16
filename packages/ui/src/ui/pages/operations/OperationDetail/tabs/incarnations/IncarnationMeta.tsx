@@ -82,7 +82,7 @@ export function IncarnationMeta(props: Props) {
     return (
         <Flex gap={1} direction={'column'} width={'40%'}>
             <Text variant={'subheader-2'}>{i18n('title_trigger-job-info')}</Text>
-            <MetaTable items={tableItems} />
+            <MetaTable legacyGroupSpacing items={tableItems} />
             {!tableItems.some((item) => item.visible) && (
                 <Text variant={'inherit'}> {i18n('alert_no-info-to-display')}</Text>
             )}

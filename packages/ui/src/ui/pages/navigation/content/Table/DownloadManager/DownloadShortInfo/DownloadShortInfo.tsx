@@ -35,6 +35,7 @@ export function DownloadShortInfo({id, filename}: Props) {
 
     return (
         <MetaTable
+            legacyGroupSpacing
             className={block()}
             items={[
                 {

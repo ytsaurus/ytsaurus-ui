@@ -122,6 +122,7 @@ function NavigationTargetPathLabel({decodedTargetPath}: {decodedTargetPath: stri
             content={
                 <Flex direction="column" gap={3} spacing={{p: 3}}>
                     <MetaTable
+                        legacyGroupSpacing
                         alignItems="baseline"
                         items={[
                             {

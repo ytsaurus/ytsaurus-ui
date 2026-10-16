@@ -83,6 +83,7 @@ class Locks extends Component {
     static renderLock(item) {
         return (
             <MetaTable
+                legacyGroupSpacing
                 qa="lock-meta-table"
                 items={[
                     {key: 'id', label: i18n('field_id'), value: item.id, className: block('id')},
@@ -159,6 +160,7 @@ class Locks extends Component {
 
         return (
             <MetaTable
+                legacyGroupSpacing
                 items={[
                     {
                         key: 'id',

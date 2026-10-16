@@ -67,7 +67,7 @@ function JobCoutnersSection({name, items}: {name: string; items: MetaTableProps[
         <div className="elements-section">
             <div className="elements-heading elements-heading_size_s">{name}</div>
 
-            {items.length ? <MetaTable items={items} /> : i18n('alert_no-items')}
+            {items.length ? <MetaTable legacyGroupSpacing items={items} /> : i18n('alert_no-items')}
         </div>
     );
 }

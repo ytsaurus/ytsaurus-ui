@@ -22,6 +22,7 @@ const codeBlock = cn('elements-code');
 const renderMeta = (attributes, mediumList) => {
     return (
         <MetaTable
+            legacyGroupSpacing
             items={[
                 main(attributes),
                 size(attributes, mediumList),

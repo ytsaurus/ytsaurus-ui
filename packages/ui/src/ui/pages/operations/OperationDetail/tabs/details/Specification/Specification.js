@@ -86,6 +86,7 @@ export default class Specification extends Component {
     renderTransferTask({id, url, mode}) {
         return (
             <MetaTable
+                legacyGroupSpacing
                 className={specificationBlock('meta')}
                 items={[
                     {
@@ -109,6 +110,7 @@ export default class Specification extends Component {
                 <div className={headingBlock({size: 's'})}>{i18n('title_remote')}</div>
 
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {key: i18n('field_cluster'), value: cluster},
                         {key: i18n('field_network'), value: network},
@@ -134,7 +136,7 @@ export default class Specification extends Component {
             <div className={specificationBlock('started-by')}>
                 <div className={headingBlock({size: 's'})}>{i18n('title_started-by')}</div>
 
-                <MetaTable items={items} />
+                <MetaTable legacyGroupSpacing items={items} />
             </div>
         );
     }
@@ -161,6 +163,7 @@ export default class Specification extends Component {
                 </div>
 
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {
                             key: i18n('field_cpu-limit'),

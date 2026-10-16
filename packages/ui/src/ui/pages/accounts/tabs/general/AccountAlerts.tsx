@@ -33,6 +33,7 @@ function AccountAlerts({account}: Props) {
         <React.Fragment>
             <div className={block('tooltip-title')}>{i18n('context_violated-resources-title')}</div>
             <MetaTable
+                legacyGroupSpacing
                 items={map_(alerts, (value, path) => {
                     return {
                         key: path,

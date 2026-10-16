@@ -86,7 +86,7 @@ function TableMeta({
 
     return (
         <CollapsibleSection name={i18n('title_metadata')} size={UI_COLLAPSIBLE_SIZE}>
-            <MetaTable className={block()} items={items} />
+            <MetaTable legacyGroupSpacing className={block()} items={items} />
             {remountNeeded && <RemountAlert />}
         </CollapsibleSection>
     );

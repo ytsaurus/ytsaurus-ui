@@ -47,5 +47,11 @@ export function ShowDataButton({label, data}: {label: string; data?: object}) {
 export function FlowPathMeta({items = []}: {items?: Array<MetaTableItem>}) {
     const path = useSelector(selectFlowPipelinePath);
 
-    return <MetaTable className={block()} items={[...getFlowPathMetaItems(path), ...items]} />;
+    return (
+        <MetaTable
+            legacyGroupSpacing
+            className={block()}
+            items={[...getFlowPathMetaItems(path), ...items]}
+        />
+    );
 }

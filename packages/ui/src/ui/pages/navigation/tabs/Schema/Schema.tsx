@@ -285,7 +285,7 @@ class Schema extends Component<SchemaProps> {
                     </div>,
                 )}
 
-                <MetaTable items={meta} />
+                <MetaTable legacyGroupSpacing items={meta} />
 
                 {schema?.length > 0 ? this.renderContent() : this.renderPlaceholder()}
             </div>

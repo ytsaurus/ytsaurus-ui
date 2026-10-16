@@ -94,7 +94,7 @@ function getProgressData({
         });
     });
 
-    const commonTooltip = <MetaTable items={metaItems} />;
+    const commonTooltip = <MetaTable legacyGroupSpacing items={metaItems} />;
 
     return {props, text, commonTooltip};
 }

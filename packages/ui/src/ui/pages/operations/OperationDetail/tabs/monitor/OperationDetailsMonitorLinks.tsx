@@ -44,7 +44,7 @@ function OperationDetailsMonitorLinks(props: OperationMonitoringTabProps) {
 
     return (
         <div className={block()}>
-            <MetaTable items={items} />
+            <MetaTable legacyGroupSpacing items={items} />
         </div>
     );
 }
