@@ -70,6 +70,7 @@ export function FlowPartitionMeta({
     const path = useSelector(selectFlowPipelinePath);
     return (
         <MetaTable
+            legacyGroupSpacing
             items={[
                 [
                     ...getFlowPathMetaItems(path),

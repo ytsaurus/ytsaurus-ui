@@ -68,6 +68,7 @@ export function OperationShortInfo(props: Props) {
     return (
         <div className={block()}>
             <MetaTable
+                legacyGroupSpacing
                 items={[
                     {
                         key: 'id',

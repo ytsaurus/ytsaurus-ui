@@ -131,7 +131,7 @@ export default function StatisticsIO() {
 
     return (
         <div className={block()}>
-            <MetaTable className={block('meta')} items={items} />
+            <MetaTable legacyGroupSpacing className={block('meta')} items={items} />
 
             <div className={headingBlock({size: 'm'}, block('heading'))}>{i18n('title_input')}</div>
             <ElementsTable

@@ -24,6 +24,7 @@ export const PathPopup: FC<Props> = ({tablePath}) => {
 
     return (
         <MetaTable
+            legacyGroupSpacing
             className={b()}
             items={[
                 {

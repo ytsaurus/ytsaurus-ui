@@ -261,5 +261,5 @@ function ChytCliqueMetaTable() {
         ];
     }, [data, cluster]);
 
-    return <MetaTable items={items} />;
+    return <MetaTable legacyGroupSpacing items={items} />;
 }

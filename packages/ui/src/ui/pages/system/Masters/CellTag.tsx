@@ -15,6 +15,7 @@ export function CellTag({cellTag, className}: {cellTag: number; className: strin
             placement={['top', 'bottom']}
             content={
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {
                             key: i18n('field_hexadecimal-cell-tag'),

@@ -91,6 +91,7 @@ export class RuntimeBase extends Component<Props> {
                     </div>
                 </Flex>
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         [
                             {

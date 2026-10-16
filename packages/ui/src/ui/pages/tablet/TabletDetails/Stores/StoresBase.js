@@ -100,6 +100,7 @@ export class StoresBase extends Component {
 
         return (
             <MetaTable
+                legacyGroupSpacing
                 items={[
                     {
                         key: 'lock_count',

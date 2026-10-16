@@ -369,5 +369,5 @@ function FlowWorkerMeta({data}: {data?: FlowWorkerData}) {
                   ];
         return res;
     }, [data]);
-    return data ? <MetaTable items={items} /> : null;
+    return data ? <MetaTable legacyGroupSpacing items={items} /> : null;
 }

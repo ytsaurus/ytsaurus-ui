@@ -112,6 +112,7 @@ class NodeCard extends Component {
         return (
             <div className={block('location')} key={index}>
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {
                             key: 'uuid',
@@ -244,6 +245,7 @@ class NodeCard extends Component {
         return (
             <CollapsibleSection size="s" name={i18n('title_general')} className={block('default')}>
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {
                             key: 'system-tags',

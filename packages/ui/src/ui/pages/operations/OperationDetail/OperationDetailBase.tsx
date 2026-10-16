@@ -331,7 +331,7 @@ export class OperationDetailBase extends React.Component<ReduxProps & RouteProps
         return (
             <div className={detailBlock('overview')}>
                 <div className={detailBlock('general')}>
-                    <MetaTable items={items} />
+                    <MetaTable legacyGroupSpacing items={items} />
                 </div>
 
                 <div className={detailBlock('progress-wrapper')}>

@@ -61,6 +61,7 @@ function Transaction({visible, handleClose, handleShow}) {
     return (
         <div className={block()}>
             <MetaTable
+                legacyGroupSpacing
                 items={[
                     main(attributes),
                     [

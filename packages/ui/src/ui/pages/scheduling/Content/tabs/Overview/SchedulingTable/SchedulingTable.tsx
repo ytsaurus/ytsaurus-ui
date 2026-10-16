@@ -871,6 +871,7 @@ function Duration({start}: {start?: string}) {
             ellipsis
             content={
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {
                             key: 'start-time',

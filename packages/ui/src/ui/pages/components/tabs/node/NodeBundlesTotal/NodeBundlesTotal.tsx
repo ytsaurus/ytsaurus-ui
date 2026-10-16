@@ -37,6 +37,7 @@ function NodeBundlesTotal() {
         <div className={block(null, 'elements-section')}>
             <div className={'elements-heading elements-heading_size_xs'}>{i18n('title_total')}</div>
             <MetaTable
+                legacyGroupSpacing
                 items={[
                     {
                         key: 'Tablet dynamic',

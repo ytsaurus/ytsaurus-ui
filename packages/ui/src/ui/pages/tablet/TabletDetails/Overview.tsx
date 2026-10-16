@@ -242,6 +242,7 @@ function Overview({id, block}: Props) {
             <div className={block('overview')}>
                 <div className={block('meta')}>
                     <MetaTable
+                        legacyGroupSpacing
                         items={[
                             [
                                 {
@@ -384,7 +385,7 @@ function Overview({id, block}: Props) {
                         ]}
                     />
 
-                    <MetaTable items={[performanceMeta, resourcesMeta]} />
+                    <MetaTable legacyGroupSpacing items={[performanceMeta, resourcesMeta]} />
                 </div>
 
                 {!unorderedDynamicTable && (

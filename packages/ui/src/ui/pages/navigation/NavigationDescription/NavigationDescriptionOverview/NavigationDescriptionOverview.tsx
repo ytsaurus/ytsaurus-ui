@@ -64,6 +64,7 @@ function SourcePath({path}: {path: string}) {
         <Tooltip
             content={
                 <MetaTable
+                    legacyGroupSpacing
                     alignItems="baseline"
                     items={[
                         {

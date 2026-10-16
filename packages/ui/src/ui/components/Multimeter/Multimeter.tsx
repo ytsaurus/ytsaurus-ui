@@ -22,6 +22,7 @@ const Multimeter: React.VFC<Props> = ({show, format, ...counters}) => {
     const counterNames = ['1d', '1h', '1m'] as const;
     const content = (
         <MetaTable
+            legacyGroupSpacing
             className={block('tooltip')}
             items={counterNames.map((key) => {
                 return {key, value: formatter(counters[key] ?? 0)};
