@@ -5,6 +5,7 @@
   "pipeline": "Pipeline",
   "graph": "Graph",
   "monitoring": "Monitoring",
+  "logs": "Logs",
   "static-spec": "Static spec",
   "dynamic-spec": "Dynamic spec",
   "leader-controller-address": "Leader controller address",
