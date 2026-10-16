@@ -163,11 +163,11 @@ export class MetaTable extends Component<MetaTableProps> {
             : this.renderGroup(groups, 0);
 
         return (
-            <div className={block()} data-qa={qa}>
+            <div className={block(null, className)} data-qa={qa}>
                 {title && this.renderTitle(title)}
 
                 <Flex
-                    className={block('groups', {'legacy-spacing': legacyGroupSpacing}, className)}
+                    className={block('groups', {'legacy-spacing': legacyGroupSpacing})}
                     wrap="wrap"
                 >
                     {renderedGroups}
