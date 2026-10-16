@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v2.0.0...components-v2.0.1) (2026-10-16)
+
+
+### Bug Fixes
+
+* **MetaTable:** restore className on root element [YTFRONT-6096] ([a11e583](https://github.com/ytsaurus/ytsaurus-ui/commit/a11e583010715455be9447f8c8bb1874f35f732d))
+
 ## [2.0.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v1.6.2...components-v2.0.0) (2026-10-16)
 
 
