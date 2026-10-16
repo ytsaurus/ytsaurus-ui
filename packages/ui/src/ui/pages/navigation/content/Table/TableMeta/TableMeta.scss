@@ -1,5 +1,10 @@
 .navigation-meta-table {
     justify-content: space-between;
+    row-gap: 20px;
+
+    .meta-table__group {
+        margin-bottom: 0;
+    }
 
     &__question {
         color: var(--secondary-text);
