@@ -6,6 +6,7 @@ import {isUserColumnPresetsEnabled} from '../controllers/table-column-preset';
 import {getInterfaceVersion, isProductionEnv} from '../utils';
 import {getAuthWay} from '../utils/authorization';
 import {getOAuthSettings, isOAuthAllowed} from './oauth';
+import ServerFactory from '../ServerFactory';
 
 interface Params {
     name?: string;
@@ -62,6 +63,7 @@ export async function getLayoutConfig(req: Request, params: Params): Promise<App
             `window.YT.environment = window.YT.environment || (${isProduction} ? 'production' : 'development');`,
         ],
         data: {
+            configurationErrors: ServerFactory.getClustersConfigResult().errors,
             userSettingsCluster: userSettingsConfig?.cluster,
             settings,
             ytApiUseCORS,

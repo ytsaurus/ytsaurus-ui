@@ -19,9 +19,7 @@ export function isProductionEnv() {
     return getApp().config.appEnv !== 'development';
 }
 
-export function isLocalModeByEnvironment() {
-    return process.env.APP_ENV === 'local';
-}
+export {isLocalModeByEnvironment} from './local-mode';
 
 export function getInterfaceVersion() {
     if (isProductionEnv()) {

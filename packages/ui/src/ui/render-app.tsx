@@ -13,6 +13,10 @@ import {selectSettingsData} from './store/selectors/settings/settings-base';
 import {createMainEntryStore} from './store/store.main';
 
 import App from './containers/App/App';
+import {getConfigData} from './config/ui-settings';
+import {toaster} from './utils/toaster';
+import {showErrorPopup} from './utils/utils';
+import i18n from './utils/i18n';
 
 import '@gravity-ui/uikit/styles/styles.css';
 
@@ -26,6 +30,20 @@ import {ErrorYsonSettingsProvider} from './containers/ErrorYsonSettingsProvider/
 import UIFactory, {type UIFactory as UIFactoryType, configureUIFactory} from './UIFactory';
 
 function AppWithStore({store, history}: ReturnType<typeof createMainEntryStore>) {
+    React.useEffect(() => {
+        const errors = getConfigData().configurationErrors;
+        if (!errors?.length) return;
+
+        const error = {message: i18n('alert_configuration-error'), inner_errors: errors};
+        toaster.add({
+            name: 'configuration-errors',
+            theme: 'danger',
+            title: error.message,
+            autoHiding: false,
+            actions: [{label: i18n('action_details'), onClick: () => showErrorPopup(error)}],
+        });
+    }, []);
+
     return (
         <Provider store={store}>
             <AppRoot history={history} />
