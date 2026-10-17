@@ -49,6 +49,7 @@ export const NavigationTable: FC = () => {
 
     return (
         <NavigationTableComponent
+            legacyGroupSpacing
             table={table}
             filter={filter}
             onFilterChange={handleFilterChange}

@@ -340,6 +340,7 @@ export class SetupModalBase extends Component {
 
         return (
             <MetaTable
+                legacyGroupSpacing
                 items={[
                     {
                         key: 'physical-host',
@@ -423,6 +424,7 @@ export class SetupModalBase extends Component {
         return (
             <Fragment>
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {
                             key: 'sessions',
@@ -440,6 +442,7 @@ export class SetupModalBase extends Component {
                 <h4 className={block('heading')}>{i18n('title_space')}</h4>
 
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {
                             key: 'used',
@@ -457,6 +460,7 @@ export class SetupModalBase extends Component {
                 <h4 className={block('heading')}>{i18n('title_io-weight')}</h4>
 
                 <MetaTable
+                    legacyGroupSpacing
                     items={map_(mediumList, (medium) => ({
                         key: hammer.format['Readable'](medium),
                         value: this.renderFiltersGroup(
@@ -476,6 +480,7 @@ export class SetupModalBase extends Component {
         return (
             <Fragment>
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {
                             key: 'blob-session',
@@ -523,6 +528,7 @@ export class SetupModalBase extends Component {
                 <h4 className={block('heading')}>{i18n('title_tablet-dynamic')}</h4>
 
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {
                             key: 'used',
@@ -540,6 +546,7 @@ export class SetupModalBase extends Component {
                 <h4 className={block('heading')}>{i18n('title_tablet-static')}</h4>
 
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {
                             key: 'used',
@@ -557,6 +564,7 @@ export class SetupModalBase extends Component {
                 <h4 className={block('heading')}>{i18n('title_user-jobs')}</h4>
 
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {
                             key: 'used',
@@ -582,6 +590,7 @@ export class SetupModalBase extends Component {
                 <h4 className={block('heading')}>{i18n('title_user-slots')}</h4>
 
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {
                             key: 'user-slots-used',
@@ -599,6 +608,7 @@ export class SetupModalBase extends Component {
                 <h4 className={block('heading')}>{i18n('title_seal-slots')}</h4>
 
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {
                             key: 'seal-slots-used',
@@ -616,6 +626,7 @@ export class SetupModalBase extends Component {
                 <h4 className={block('heading')}>{i18n('title_repair-slots')}</h4>
 
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {
                             key: 'repair-slots-used',
@@ -633,6 +644,7 @@ export class SetupModalBase extends Component {
                 <h4 className={block('heading')}>{i18n('title_removal-slots')}</h4>
 
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {
                             key: 'removal-slots-used',
@@ -650,6 +662,7 @@ export class SetupModalBase extends Component {
                 <h4 className={block('heading')}>{i18n('title_replication-slots')}</h4>
 
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {
                             key: 'replication-slots-used',
@@ -683,6 +696,7 @@ export class SetupModalBase extends Component {
                 <h4 className={block('heading')}>{i18n('title_tablet-slots')}</h4>
 
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {
                             key: 'all-states',
@@ -730,6 +744,7 @@ export class SetupModalBase extends Component {
                 <h4 className={block('heading')}>{i18n('title_tablet-memory')}</h4>
 
                 <MetaTable
+                    legacyGroupSpacing
                     items={[
                         {
                             key: 'static-used',
@@ -788,6 +803,7 @@ export class SetupModalBase extends Component {
 
                 <div className={block('template')}>
                     <MetaTable
+                        legacyGroupSpacing
                         items={[
                             {
                                 key: 'save',

@@ -27,7 +27,7 @@ export const Description: FC<Props> = ({description}) => {
             value: <CollapsableText settings={settings} value={value[key]} />,
         }));
 
-        return <MetaTable items={items} />;
+        return <MetaTable legacyGroupSpacing items={items} />;
     }
 
     return <Yson settings={settings} value={description} />;

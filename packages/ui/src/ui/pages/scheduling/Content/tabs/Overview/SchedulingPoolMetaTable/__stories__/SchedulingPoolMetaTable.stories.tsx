@@ -35,6 +35,7 @@ function renderCustomizedPoolMetaTable(props: MetaTableProps) {
 
     return (
         <MetaTable
+            legacyGroupSpacing
             {...props}
             items={[...items, customMetadataItems]}
             subTitles={[...(props.subTitles ?? []), 'Custom metadata']}

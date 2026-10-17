@@ -140,6 +140,7 @@ export default function JobGeneral() {
                 )}
 
                 <MetaTable
+                    legacyGroupSpacing
                     className={block('meta')}
                     items={[
                         [

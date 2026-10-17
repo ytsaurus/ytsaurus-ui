@@ -36,6 +36,7 @@ export function ExternalDescription({type, data, column}: Props) {
                 {i18n('alert_type-mismatch')}
             </Text>
             <MetaTable
+                legacyGroupSpacing
                 className={block('meta')}
                 items={[
                     {

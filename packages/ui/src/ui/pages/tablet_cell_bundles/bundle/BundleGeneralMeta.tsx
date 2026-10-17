@@ -130,6 +130,7 @@ export default function BundleGeneralMeta() {
 
     return (
         <MetaTable
+            legacyGroupSpacing
             className={block()}
             items={[leftGroup, rightGroup]}
             title={i18n('title_general')}

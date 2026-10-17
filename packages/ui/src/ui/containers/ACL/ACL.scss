@@ -10,12 +10,6 @@
         justify-content: center;
     }
 
-    &__meta {
-        & .meta-table__group {
-            margin-bottom: 0px;
-        }
-    }
-
     &__object-permissions {
         #{$acl}__permissions {
             display: flex;

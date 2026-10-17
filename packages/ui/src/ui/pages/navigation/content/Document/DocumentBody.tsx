@@ -57,6 +57,7 @@ function DocumentBody({attributes, settings, onEditClick, document = null, query
     return (
         <Fragment>
             <MetaTable
+                legacyGroupSpacing
                 items={[main(attributes), [{key: 'type', label: i18n('field_type'), value: type}]]}
             />
             {document === null ? (

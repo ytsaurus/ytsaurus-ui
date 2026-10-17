@@ -1,5 +1,7 @@
 .navigation-meta-table {
-    justify-content: space-between;
+    .meta-table__groups {
+        justify-content: space-between;
+    }
 
     &__question {
         color: var(--secondary-text);

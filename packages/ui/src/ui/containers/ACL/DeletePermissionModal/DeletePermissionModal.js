@@ -88,6 +88,7 @@ export default class DeletePermissionModal extends Component {
                 content={
                     <div className={block()}>
                         <MetaTable
+                            legacyGroupSpacing
                             className={block('meta')}
                             items={[
                                 {

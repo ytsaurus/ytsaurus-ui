@@ -40,7 +40,7 @@ export const JobDetails: FC<Props> = ({statistics, type}) => {
     if (!rowCount && !dataSize) return null;
 
     return (
-        <Tooltip content={<MetaTable items={prepareStatistics(statistics)} />}>
+        <Tooltip content={<MetaTable legacyGroupSpacing items={prepareStatistics(statistics)} />}>
             <Flex gap={2} alignItems="center" wrap>
                 <span>{hammer.format['Number'](rowCount)}</span>
                 <span>({hammer.format['Bytes'](dataSize)})</span>

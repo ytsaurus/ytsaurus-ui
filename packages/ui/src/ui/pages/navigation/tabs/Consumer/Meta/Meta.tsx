@@ -44,6 +44,7 @@ const Meta: React.FC<Props> = ({
                 </div>
             </div>
             <MetaTable
+                legacyGroupSpacing
                 className={block()}
                 items={[
                     [
