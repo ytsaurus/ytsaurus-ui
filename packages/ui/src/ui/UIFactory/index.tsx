@@ -568,6 +568,9 @@ export interface UIFactory {
     renderOperationLogsTab: () => React.ReactNode;
 
     renderJobLogsTab: () => React.ReactNode;
+
+    getFlowLogsTab: () =>
+        {title: string; component: React.ComponentType<{pipelinePath: string}>} | undefined;
 }
 
 // All methods comes from `configureUIFactory` method

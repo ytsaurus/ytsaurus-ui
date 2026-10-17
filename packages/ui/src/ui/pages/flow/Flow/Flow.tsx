@@ -68,6 +68,7 @@ export function FlowTabs() {
 
     const tabsProps = React.useMemo(() => {
         const {urlTemplate, component} = UIFactory.getMonitoringComponentForNavigationFlow() ?? {};
+        const logsTab = UIFactory.getFlowLogsTab();
         const showSettings = {
             [FlowTab.GRAPH]: {title: i18n('graph')},
             [FlowTab.COMPUTATIONS]: {title: i18n('computations')},
@@ -78,6 +79,7 @@ export function FlowTabs() {
             },
             [FlowTab.STATIC_SPEC]: {title: i18n('static-spec')},
             [FlowTab.DYNAMIC_SPEC]: {title: i18n('dynamic-spec')},
+            [FlowTab.LOGS]: {show: Boolean(logsTab), title: logsTab?.title},
         };
 
         return makeTabProps(`/${cluster}/${Page.FLOWS}`, FlowTab, showSettings);
@@ -88,6 +90,7 @@ export function FlowTabs() {
 
 function FlowContent() {
     const path = useSelector(selectFlowPipelinePath);
+    const LogsComponent = UIFactory.getFlowLogsTab()?.component;
 
     if (!path) {
         return null;
@@ -119,6 +122,12 @@ function FlowContent() {
                 path={`/:cluster/${Page.FLOWS}/${FlowTab.MONITORING}`}
                 render={() => <FlowMonitoring pipeline_path={path} />}
             />
+            {LogsComponent ? (
+                <Route
+                    path={`/:cluster/${Page.FLOWS}/${FlowTab.LOGS}`}
+                    render={() => <LogsComponent pipelinePath={path} />}
+                />
+            ) : null}
             <Redirect to={`/:cluster/${Page.FLOWS}/${FlowTab.GRAPH}`} />
         </Switch>
     );
