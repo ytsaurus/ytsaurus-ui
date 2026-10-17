@@ -8,6 +8,24 @@
         padding-bottom: 20px;
     }
 
+    &__view-mode {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: 20px;
+        margin-right: 20px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    &_short &__group-summary {
+        display: flex;
+        align-items: center;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        gap: 16px;
+    }
+
     &__expand-btn {
         margin-left: 8px;
         margin-right: 10px;
