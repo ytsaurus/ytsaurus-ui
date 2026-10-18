@@ -100,6 +100,7 @@ interface SystemSettings {
     'global::system::cypressProxiesCollapsed': boolean | undefined;
     'global::system::nodesCollapsed': boolean | undefined;
     'global::system::nodesNodeType': Array<NodeType> | undefined;
+    'global::system::nodesViewMode'?: 'detailed' | 'short';
 }
 
 interface A11YSettings {

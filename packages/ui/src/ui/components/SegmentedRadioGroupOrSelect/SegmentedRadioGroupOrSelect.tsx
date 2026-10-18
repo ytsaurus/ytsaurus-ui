@@ -60,7 +60,8 @@ export function SegmentedRadioGroupOrSelect<T extends string>({
                 const parentWidth = element?.parentElement?.getBoundingClientRect().width ?? 0;
                 const {width = 0} = element?.getBoundingClientRect() ?? {};
 
-                if ((width > 0 && parentWidth < width) || observedWidth < parentWidth) {
+                // ResizeObserver and DOMRect may round fractional widths differently.
+                if ((width > 0 && parentWidth + 1 < width) || observedWidth + 1 < parentWidth) {
                     setMode('select');
                     switchWidthRef.current = observedWidth;
                 } else if (observedWidth > switchWidthRef.current) {
@@ -71,7 +72,7 @@ export function SegmentedRadioGroupOrSelect<T extends string>({
     });
 
     return (
-        <div className={block()} ref={setElement}>
+        <div className={block({mode})} ref={setElement}>
             {mode === 'select' ? (
                 <SelectSingle
                     value={value}
