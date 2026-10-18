@@ -43,15 +43,15 @@ test('StickyToolbar: navigation', async ({page}) => {
     });
 
     await test.step('attributes + toolbar', async () => {
-        const attrsEl = page.getByText('Attributes').first();
-        await attrsEl.scrollIntoViewIfNeeded();
-        await attrsEl.click();
+        await page.getByText('Attributes', {exact: true}).click();
+        await page.mouse.move(200, 200);
         await page.mouse.wheel(0, 720);
-        await page.waitForTimeout(1000); // wait for virtualization to settle
-        await page.waitForSelector(':text("shard_id")');
+        await expect(page.getByText('shard_id', {exact: true})).toBeInViewport();
+        await tablePage(page).waitForFixedBoundingClientRect('.g-ru-table__row_key_shard_id');
+        await page.mouse.move(0, 0);
+        await page.waitForLoadState('networkidle');
         await replaceInnerHtml(page, {'.g-ru-cell__value': '###'});
 
-        await page.waitForLoadState('networkidle');
         await expect(page).toHaveScreenshot();
     });
 
