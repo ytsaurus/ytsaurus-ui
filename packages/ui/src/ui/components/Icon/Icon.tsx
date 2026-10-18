@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useMemo} from 'react';
 import cn from 'bem-cn-lite';
 import {Icon as KitIcon} from '@gravity-ui/uikit';
 import {iconNames as iconNamesYt} from './importIcons';
@@ -55,19 +55,6 @@ export default function Icon({
     color,
     size: propSize,
 }: IconProps) {
-    const inputEl = useRef(null);
-    const [size, setSize] = useState(13);
-
-    useEffect(() => {
-        if (inputEl.current) {
-            const spanStyle = window
-                .getComputedStyle(inputEl.current, null)
-                .getPropertyValue('font-size');
-            const fontSize = parseFloat(spanStyle);
-            if (size !== fontSize) setSize(fontSize);
-        }
-    }, []);
-
     const iconName: string | null = awesome ? awesome : findNameInClass(className);
 
     const icon = useMemo(() => {
@@ -80,10 +67,9 @@ export default function Icon({
 
     const hasIcon: boolean = iconName !== null && iconName in iconNames;
 
-    const iconsSize = propSize ? getNumberSize(propSize) : size;
+    const iconsSize = propSize ? getNumberSize(propSize) : '1em';
     return (
         <span
-            ref={inputEl}
             className={`${block({
                 'not-exist': !hasIcon,
                 spin,
