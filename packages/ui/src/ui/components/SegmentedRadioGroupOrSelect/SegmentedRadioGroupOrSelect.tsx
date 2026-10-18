@@ -36,12 +36,12 @@ export type RadioOrSelectProps<T extends string | undefined = string> = {
  * />
  * ```
  */
-export function SegmentedRadioGroupOrSelect({
+export function SegmentedRadioGroupOrSelect<T extends string>({
     observeWidthBy = 'parent',
     value,
     options,
     onUpdate,
-}: RadioOrSelectProps) {
+}: RadioOrSelectProps<T>) {
     const switchWidthRef = React.useRef<number>(0);
     const [mode, setMode] = React.useState<'radio' | 'select'>('radio');
     const [element, setElement] = React.useState<HTMLElement | null>(null);
@@ -73,7 +73,15 @@ export function SegmentedRadioGroupOrSelect({
     return (
         <div className={block()} ref={setElement}>
             {mode === 'select' ? (
-                <SelectSingle value={value} items={options} onChange={(v) => onUpdate(v!)} />
+                <SelectSingle
+                    value={value}
+                    items={options}
+                    onChange={(v) => {
+                        if (v !== undefined) {
+                            onUpdate(v);
+                        }
+                    }}
+                />
             ) : (
                 <SegmentedRadioGroup
                     value={value}

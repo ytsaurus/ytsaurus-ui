@@ -54,14 +54,14 @@ interface SelectSingleProps<T extends string> extends Omit<
     YTSelectProps<T>,
     'value' | 'onUpdate' | 'onChange'
 > {
-    value?: string;
-    onChange?: (v?: string) => void;
+    value?: T;
+    onChange?: (v?: T) => void;
 }
 
 export function SelectSingle<T extends string = string>(props: SelectSingleProps<T>) {
     const {onChange, value, ...rest} = props;
     const handleChange = React.useCallback(
-        (vals?: Array<string>) => {
+        (vals?: Array<T>) => {
             onChange?.(vals?.[0]);
         },
         [onChange],
@@ -69,7 +69,7 @@ export function SelectSingle<T extends string = string>(props: SelectSingleProps
     return (
         <SelectFacade
             value={value !== undefined ? [value] : undefined}
-            onChange={handleChange}
+            onUpdate={handleChange}
             {...rest}
         />
     );
