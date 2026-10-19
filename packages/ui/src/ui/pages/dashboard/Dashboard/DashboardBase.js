@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import {useSelector} from '../../../store/redux-hooks';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
+import {AccountEditorHost} from '../../accounts/AccountEditorDialog';
+import {accountsIncreaseEditCounter} from '../../../store/actions/accounts/accounts';
 
 import Operations from '../../../pages/operations/Operations/Operations';
 import Links from '../Links/Links';
@@ -35,6 +37,10 @@ function MyRolesLink() {
 }
 
 export function DashboardBase({currentAccount, setActiveAccount}) {
+    const dispatch = useDispatch();
+    const cluster = useSelector(selectCluster);
+    const handleAccountChanged = () => dispatch(accountsIncreaseEditCounter());
+
     React.useEffect(() => {
         if (currentAccount) {
             setActiveAccount('');
@@ -66,7 +72,13 @@ export function DashboardBase({currentAccount, setActiveAccount}) {
                 <div className={'elements-section'}>
                     <div className={headingBlock({size})}>{i18n('title_accounts')}</div>
                     <AccountsUpdater />
-                    <AccountsGeneralTab viewContext={DASHBOARD_VIEW_CONTEXT} />
+                    <AccountEditorHost
+                        key={cluster}
+                        onChanged={handleAccountChanged}
+                        onDeleted={handleAccountChanged}
+                    >
+                        <AccountsGeneralTab viewContext={DASHBOARD_VIEW_CONTEXT} />
+                    </AccountEditorHost>
                 </div>
             </div>
         </div>

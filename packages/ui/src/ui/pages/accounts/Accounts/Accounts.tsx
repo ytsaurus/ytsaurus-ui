@@ -25,6 +25,9 @@ import {selectLastVisitedTabs} from '../../../store/selectors/settings';
 import {type TabSettings, makeTabProps} from '../../../utils';
 
 import AccountsGeneralTab from '../tabs/general/AccountsGeneralTab';
+import {AccountEditorHost} from '../AccountEditorDialog';
+import AccountCreateDialog from '../tabs/general/Editor/AccountCreateDialog';
+import {accountsIncreaseEditCounter} from '../../../store/actions/accounts/accounts';
 import AccountStatisticTab from '../tabs/statistic/AccountStatisticTab';
 import AccountsAclTab from '../tabs/acl/AccountsAclTab';
 import AccountsMonitorTab from '../tabs/monitor/AccountsMonitorTab';
@@ -100,62 +103,69 @@ export class Accounts extends React.Component<
         const tabToRedirect = activeAccount && lastTab ? lastTab : AccountsTab.GENERAL;
 
         return (
-            <div className="elements-page__content">
-                <UpdateAccountsUsageAvailability />
-                <section className={b(null, 'elements-main-section')}>
-                    <div className="elements-section">
-                        <div className={b('heading')}>
-                            <Tabs
-                                {...props}
-                                active={ACCOUNTS_DEFAULT_TAB}
-                                className={b('tabs')}
-                                routed
-                                routedPreserveLocation
-                                size={UI_TAB_SIZE}
-                            />
-                        </div>
-                    </div>
-                    <div className={b('tab-viewer')}>
-                        <Switch>
-                            <Route
-                                path={`${match.path}/${AccountsTab.GENERAL}`}
-                                render={(routeProps) => (
-                                    <>
-                                        <AccountsUpdater />
-                                        <AccountsRumMeasure />
-                                        <AccountsGeneralTab {...routeProps} />
-                                    </>
-                                )}
-                            />
-                            {statsTab.show && (
-                                <Route
-                                    path={`${match.path}/${AccountsTab.STATISTICS}`}
-                                    component={AccountStatisticTab}
+            <AccountEditorHost
+                key={cluster}
+                onChanged={this.props.accountsIncreaseEditCounter}
+                onDeleted={this.props.accountsIncreaseEditCounter}
+            >
+                <AccountCreateDialog />
+                <div className="elements-page__content">
+                    <UpdateAccountsUsageAvailability />
+                    <section className={b(null, 'elements-main-section')}>
+                        <div className="elements-section">
+                            <div className={b('heading')}>
+                                <Tabs
+                                    {...props}
+                                    active={ACCOUNTS_DEFAULT_TAB}
+                                    className={b('tabs')}
+                                    routed
+                                    routedPreserveLocation
+                                    size={UI_TAB_SIZE}
                                 />
-                            )}
-                            {monTab.show && monitoringComponent && (
+                            </div>
+                        </div>
+                        <div className={b('tab-viewer')}>
+                            <Switch>
                                 <Route
-                                    path={`${match.path}/${AccountsTab.MONITOR}`}
-                                    render={() => (
-                                        <AccountsMonitorTab component={monitoringComponent} />
+                                    path={`${match.path}/${AccountsTab.GENERAL}`}
+                                    render={(routeProps) => (
+                                        <>
+                                            <AccountsUpdater />
+                                            <AccountsRumMeasure />
+                                            <AccountsGeneralTab {...routeProps} />
+                                        </>
                                     )}
                                 />
-                            )}
-                            <Route
-                                path={`${match.path}/${AccountsTab.ACL}`}
-                                component={AccountsAclTab}
-                            />
-                            {usageTab.show && (
+                                {statsTab.show && (
+                                    <Route
+                                        path={`${match.path}/${AccountsTab.STATISTICS}`}
+                                        component={AccountStatisticTab}
+                                    />
+                                )}
+                                {monTab.show && monitoringComponent && (
+                                    <Route
+                                        path={`${match.path}/${AccountsTab.MONITOR}`}
+                                        render={() => (
+                                            <AccountsMonitorTab component={monitoringComponent} />
+                                        )}
+                                    />
+                                )}
                                 <Route
-                                    path={`${match.path}/${AccountsTab.USAGE}`}
-                                    component={AccountsUsageTab}
+                                    path={`${match.path}/${AccountsTab.ACL}`}
+                                    component={AccountsAclTab}
                                 />
-                            )}
-                            <Redirect from={match.url} to={`${match.url}/${tabToRedirect}`} />
-                        </Switch>
-                    </div>
-                </section>
-            </div>
+                                {usageTab.show && (
+                                    <Route
+                                        path={`${match.path}/${AccountsTab.USAGE}`}
+                                        component={AccountsUsageTab}
+                                    />
+                                )}
+                                <Redirect from={match.url} to={`${match.url}/${tabToRedirect}`} />
+                            </Switch>
+                        </div>
+                    </section>
+                </div>
+            </AccountEditorHost>
         );
     }
 }
@@ -171,7 +181,7 @@ const mapStateToProps = (state: RootState) => {
     };
 };
 
-const connector = connect(mapStateToProps);
+const connector = connect(mapStateToProps, {accountsIncreaseEditCounter});
 export default connector(Accounts);
 
 function AccountsRumMeasure() {

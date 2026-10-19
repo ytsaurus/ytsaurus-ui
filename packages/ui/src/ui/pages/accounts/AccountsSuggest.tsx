@@ -11,7 +11,6 @@ import {type YTError} from '../../../@types/types';
 import {YTErrorBlock} from '../../containers/Block/Block';
 
 import {ROOT_ACCOUNT_NAME} from '../../constants/accounts/accounts';
-import {selectEditableAccountParentSuggests} from '../../store/selectors/accounts/accounts';
 import {selectAccountNames} from '../../store/selectors/accounts/accounts-ts';
 import {selectCluster} from '../../store/selectors/global';
 import {useSelector} from '../../store/redux-hooks';
@@ -102,15 +101,6 @@ const ASConnector = connect(mapStateToProps);
 const AccountSuggestConnected = ASConnector(AccountSuggestImpl);
 
 export default AccountSuggestConnected;
-
-const mapStateToPropsForParents = (state: RootState) => {
-    return {
-        items: selectEditableAccountParentSuggests(state),
-    };
-};
-
-export const SuggestParentsForEditableAccount =
-    connect(mapStateToPropsForParents)(AccountSuggestImpl);
 
 export function AccountsSuggestWithLoading(
     props: Omit<AccountsSuggestViewProps, 'error' | 'items' | 'loading'>,
