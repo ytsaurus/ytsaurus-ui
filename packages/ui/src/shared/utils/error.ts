@@ -1,6 +1,9 @@
 import forEach_ from 'lodash/forEach';
 
-import {type YTError} from '../../@types/types';
+// @ts-expect-error
+import ypath from '@ytsaurus/interface-helpers/lib/ypath';
+
+import {type YTError, type YTErrorRaw} from '../../@types/types';
 import {type BatchResultsItem} from '../yt-types';
 
 export function createErrorFromData<T extends object>(data: T): Error & T {
@@ -89,4 +92,25 @@ export interface SplitedBatchResults<T> {
     errorIndices: Array<number>;
     resultIndices: Array<number>;
     errorIgnoredIndices: Array<number>;
+}
+
+export function getYtErrorCode(error: YTErrorRaw | unknown): number {
+    return ypath.getNumberBase(error, '/code', NaN);
+}
+
+export function findErrorByCode(error: YTError, code: number): YTError | undefined {
+    const currentCode = getYtErrorCode(error);
+    if (currentCode === code) {
+        return error;
+    }
+
+    if (error?.inner_errors) {
+        for (const inner of error.inner_errors) {
+            const found = findErrorByCode(inner, code);
+            if (found) {
+                return found;
+            }
+        }
+    }
+    return undefined;
 }

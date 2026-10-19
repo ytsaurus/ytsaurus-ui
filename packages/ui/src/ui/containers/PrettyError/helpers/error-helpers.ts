@@ -1,5 +1,5 @@
 import {type YTError} from '../../../../@types/types';
-import {getYtErrorCode} from '../../../utils/errors';
+import {findErrorByCode, getYtErrorCode} from '../../../../shared/utils/error';
 import ypath from '../../../common/thor/ypath';
 import {type UnipikaValue} from '../../../components/Yson/StructuredYson/StructuredYsonTypes';
 
@@ -38,23 +38,6 @@ export function determineErrorCode(error: YTError, errorsInfo: ErrorsInfoMap): n
     for (const code of availableCodes) {
         if (codes.has(code)) {
             return code;
-        }
-    }
-    return undefined;
-}
-
-export function findErrorByCode(error: YTError, code: number): YTError | undefined {
-    const currentCode = getYtErrorCode(error);
-    if (currentCode === code) {
-        return error;
-    }
-
-    if (error?.inner_errors) {
-        for (const inner of error.inner_errors) {
-            const found = findErrorByCode(inner, code);
-            if (found) {
-                return found;
-            }
         }
     }
     return undefined;
