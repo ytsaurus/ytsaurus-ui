@@ -77,7 +77,7 @@ export function AccountGeneralEditor({account, tree, onChanged}: AccountGeneralE
     });
 
     return (
-        <React.Fragment>
+        <>
             {abcControl && (
                 <EditorSection header={contentI18n('field_abc-service')}>
                     {abcControl}
@@ -92,7 +92,7 @@ export function AccountGeneralEditor({account, tree, onChanged}: AccountGeneralE
                     allowRootAccount
                 />
             </EditorSection>
-        </React.Fragment>
+        </>
     );
 }
 

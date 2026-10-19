@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import noop_ from 'lodash/noop';
 
 import {type YTError} from '../../../../@types/types';
@@ -32,7 +32,7 @@ export function AccountEditorHost({
     onDeleted = noop_,
 }: AccountEditorHostProps) {
     const cluster = useSelector(selectCluster);
-    const [editor, setEditor] = React.useState<EditorSession>();
+    const [editor, setEditor] = useState<EditorSession>();
     const accountName = editor?.accountName;
     const {data, error, isFetching} = useAccountEditorData({
         cluster,
@@ -43,18 +43,18 @@ export function AccountEditorHost({
     const openingAccountName = editor && !editor.data ? accountName : undefined;
     const openedAccountName = editor?.data ? accountName : undefined;
 
-    const openAccount = React.useCallback((name: string) => {
+    const openAccount = useCallback((name: string) => {
         if (!name || name === ROOT_ACCOUNT_NAME) {
             return;
         }
         setEditor((current) => current ?? {accountName: name, openedAt: Date.now()});
     }, []);
 
-    const closeAccount = React.useCallback(() => {
+    const closeAccount = useCallback(() => {
         setEditor(undefined);
     }, []);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!accountName || isFetching) {
             return;
         }
@@ -90,11 +90,11 @@ export function AccountEditorHost({
         }
     }, [accountName, data, error, isFetching]);
 
-    const contextValue = React.useMemo(
+    const contextValue = useMemo(
         () => ({openingAccountName, openedAccountName, openAccount, closeAccount}),
         [closeAccount, openAccount, openedAccountName, openingAccountName],
     );
-    const handleDeleted = React.useCallback(
+    const handleDeleted = useCallback(
         (name: string) => {
             closeAccount();
             onDeleted(name);
