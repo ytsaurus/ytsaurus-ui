@@ -300,6 +300,7 @@ export class BasePage extends HasPage {
     async override_window__DATA__(
         uiSettings: ConfigData['uiSettings'],
         userSettings: ConfigData['settings']['data'],
+        overrides: Partial<ConfigData> = {},
     ) {
         await this.page.addInitScript(
             (arg) => {
@@ -310,9 +311,10 @@ export class BasePage extends HasPage {
                         const currentUiSettings =
                             (base.uiSettings as ConfigData['uiSettings']) ?? {};
                         const currentSettings = (base.settings as ConfigData['settings']) ?? {};
-                        const data = (base.settings as ConfigData['settings']).data ?? {};
+                        const data = currentSettings.data ?? {};
                         return {
                             ...base,
+                            ...arg.overrides,
                             uiSettings: {...currentUiSettings, ...arg.uiSettings},
                             settings: {
                                 ...currentSettings,
@@ -325,7 +327,7 @@ export class BasePage extends HasPage {
                     },
                 });
             },
-            {uiSettings, userSettings},
+            {uiSettings, userSettings, overrides},
         );
     }
 
