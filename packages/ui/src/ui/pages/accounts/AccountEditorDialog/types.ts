@@ -1,1 +1,1 @@
-export type AccountEditorChange = {kind: 'abc' | 'parent'};
+export type AccountEditorChange = {kind: 'abc' | 'parent' | 'quota'};

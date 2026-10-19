@@ -13,8 +13,10 @@ import {type AccountNamesArgs, fetchAccountNames} from './names';
 import {
     type UpdateAccountAbcArgs,
     type UpdateAccountParentArgs,
+    type UpdateAccountQuotaArgs,
     updateAccountAbc,
     updateAccountParent,
+    updateAccountQuota,
 } from './mutations';
 import {fetchUsable} from './usable';
 
@@ -47,6 +49,10 @@ export const accountsApi = rootApi
                 queryFn: updateAccountParent,
                 invalidatesTags: (result) => (result ? accountEditorTags : []),
             }),
+            updateAccountQuota: build.mutation<string, UpdateAccountQuotaArgs>({
+                queryFn: updateAccountQuota,
+                invalidatesTags: (result) => (result ? accountEditorTags : []),
+            }),
         }),
     });
 
@@ -56,6 +62,7 @@ const {
     useAccountNamesQuery: useAccountNamesQueryBase,
     useUpdateAccountAbcMutation,
     useUpdateAccountParentMutation,
+    useUpdateAccountQuotaMutation,
     useUsableAccountsQuery,
 } = accountsApi;
 
@@ -83,4 +90,4 @@ export function useAccountNamesQuery(args: AccountNamesArgs, options?: {skip?: b
     return useAccountNamesQueryBase(useEffectiveClusterArgs(args), options);
 }
 
-export {useUpdateAccountAbcMutation, useUpdateAccountParentMutation};
+export {useUpdateAccountAbcMutation, useUpdateAccountParentMutation, useUpdateAccountQuotaMutation};

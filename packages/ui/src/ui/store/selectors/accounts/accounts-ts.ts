@@ -56,7 +56,7 @@ export const selectAccountsEditCounter = (state: RootState) => state.accounts.ac
 export interface AccountSelector {
     name: string;
     alertsCount: number;
-    perMedium: {[key: string]: number};
+    perMedium: Record<string, unknown>;
 
     $value: string;
     $attributes: unknown;
@@ -266,7 +266,7 @@ function getResourceInfo(
     return getInfo(entry.attributes, recursive, mediumType);
 }
 
-function getAccountMasterMemoryMedia(account?: AccountSelector) {
+export function getAccountMasterMemoryMedia(account?: AccountSelector) {
     if (!account) {
         return [];
     }
