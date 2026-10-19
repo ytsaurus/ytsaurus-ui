@@ -5,7 +5,6 @@ import sortBy_ from 'lodash/sortBy';
 
 import i18n from './i18n';
 
-// @ts-expect-error
 import {LOCATION_POP} from 'redux-location-state/lib/constants';
 
 import {YT} from '../../../config/yt-config';
@@ -329,6 +328,7 @@ export type GloablStateAction =
           | typeof UPDATE_CLUSTER.REQUEST
           | typeof UPDATE_CLUSTER.FINAL_SUCCESS
           | typeof MERGE_SCREEN
+          | typeof LOCATION_POP
       >
     | ActionD<typeof INIT_CLUSTER_PARAMS.FAILURE, GlobalState['paramsError']>
     | ActionD<
