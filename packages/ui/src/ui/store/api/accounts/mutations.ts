@@ -1,5 +1,5 @@
 import {type YTError} from '../../../../@types/types';
-import {setAccountAbc, setAccountParent} from '../../../utils/accounts/editor';
+import {deleteAccount, setAccountAbc, setAccountParent} from '../../../utils/accounts/editor';
 import {type AccountQuotaParams, setAccountQuotaImpl} from '../../../utils/accounts/account-quota';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import accountsEditorI18n from '../../actions/accounts/i18n';
@@ -18,6 +18,11 @@ export interface UpdateAccountParentArgs extends AccountMutationArgs {
 }
 
 export type UpdateAccountQuotaArgs = AccountQuotaParams & {cluster: string};
+
+export interface DeleteAccountArgs {
+    accountName: string;
+    cluster: string;
+}
 
 export async function updateAccountAbc({accountName, abc}: UpdateAccountAbcArgs) {
     try {
@@ -44,6 +49,15 @@ export async function updateAccountQuota({cluster: _cluster, ...params}: UpdateA
             successContent: accountsEditorI18n('alert_quota-updated'),
         });
         return {data: params.account};
+    } catch (error) {
+        return {error: error as YTError};
+    }
+}
+
+export async function removeAccount({accountName}: DeleteAccountArgs) {
+    try {
+        await deleteAccount(accountName);
+        return {data: accountName};
     } catch (error) {
         return {error: error as YTError};
     }
