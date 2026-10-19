@@ -5,6 +5,7 @@ process.env.TZ = 'UTC';
 
 module.exports = {
     verbose: true,
+    resetMocks: true,
     testEnvironment: 'node',
     setupFilesAfterEnv: ['jest-extended'],
     testMatch: ['<rootDir>/src/**/*.spec.{js,jsx,ts,tsx}'],

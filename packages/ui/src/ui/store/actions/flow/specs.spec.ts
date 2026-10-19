@@ -18,8 +18,8 @@ jest.mock('../../../rum/rum-wrap-api', () => ({
 }));
 
 jest.mock('../../../store/selectors/flow/specs', () => ({
-    selectFlowDynamicSpecPath: jest.fn(() => '//home/flow'),
-    selectFlowStaticSpecPath: jest.fn(() => '//home/flow'),
+    selectFlowDynamicSpecPath: () => '//home/flow',
+    selectFlowStaticSpecPath: () => '//home/flow',
 }));
 
 const pipelinePath = '//home/flow';
@@ -27,10 +27,6 @@ const version = {$type: 'int64' as const, $value: '1917083822153720177'};
 const spec = {job_manager: {resource_limits: {user_slots: 2}}};
 
 describe('Flow specs actions', () => {
-    beforeEach(() => {
-        jest.clearAllMocks();
-    });
-
     it.each([
         {
             load: loadFlowStaticSpec,
