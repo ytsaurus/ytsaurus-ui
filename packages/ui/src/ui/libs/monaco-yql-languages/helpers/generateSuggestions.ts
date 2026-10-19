@@ -34,6 +34,9 @@ export const SuggestionsWeight: Record<SuggestionType, number> = {
     suggestTableIndexes: 16,
     suggestTableHints: 17,
     suggestEntitySettings: 18,
+    suggestCompressionSettings: 19,
+    suggestEncodingSettings: 20,
+    suggestVariables: 21,
 };
 
 export const generateColumnAliasesSuggestion = (
