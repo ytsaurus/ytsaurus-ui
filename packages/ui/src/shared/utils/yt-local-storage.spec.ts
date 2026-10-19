@@ -4,14 +4,16 @@ describe('ytLocalStorage', () => {
     const originalStorage = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');
     const values = new Map<string, string>();
     const storage = {
-        getItem: jest.fn((key: string) => values.get(key) ?? null),
-        setItem: jest.fn((key: string, value: string) => {
-            values.set(key, value);
-        }),
+        getItem: jest.fn(),
+        setItem: jest.fn(),
     };
 
     beforeEach(() => {
         values.clear();
+        storage.getItem.mockImplementation((key: string) => values.get(key) ?? null);
+        storage.setItem.mockImplementation((key: string, value: string) => {
+            values.set(key, value);
+        });
         Object.defineProperty(globalThis, 'localStorage', {configurable: true, value: storage});
         ytLocalStorage.set('ytCacheDisabledUntil', 0);
         ytLocalStorage.set('loginDialog', {});

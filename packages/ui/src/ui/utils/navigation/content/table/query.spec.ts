@@ -2,14 +2,19 @@ import {Query} from './query';
 
 // Mock unipika to avoid pulling in the heavy rendering dependency
 jest.mock('../../../../common/thor/unipika', () => ({
-    formatFromYSON: jest.fn(() => 'yson-value'),
-    formatFromYQL: jest.fn(() => 'yql-value'),
+    formatFromYSON: jest.fn(),
+    formatFromYQL: jest.fn(),
 }));
 
 import unipika from '../../../../common/thor/unipika';
 
 const unipikaFormatFromYSON = unipika.formatFromYSON as jest.Mock;
 const unipikaFormatFromYQL = unipika.formatFromYQL as jest.Mock;
+
+beforeEach(() => {
+    unipikaFormatFromYSON.mockReturnValue('yson-value');
+    unipikaFormatFromYQL.mockReturnValue('yql-value');
+});
 
 describe('Query.prepareColumns', () => {
     it('returns * when columns array is empty', () => {
@@ -41,11 +46,6 @@ describe('Query.prepareColumnValue', () => {
         asHTML: false,
         treatValAsData: true,
     };
-
-    beforeEach(() => {
-        unipikaFormatFromYSON.mockClear();
-        unipikaFormatFromYQL.mockClear();
-    });
 
     it('falls back to formatFromYSON when yqlTypes is absent', () => {
         Query.prepareColumnValue('raw', undefined);
@@ -82,10 +82,6 @@ describe('Query.prepareColumnValue', () => {
 });
 
 describe('Query.prepareKey', () => {
-    beforeEach(() => {
-        unipikaFormatFromYSON.mockClear();
-    });
-
     it('returns empty string for an empty key', () => {
         expect(Query.prepareKey([], undefined)).toBe('');
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

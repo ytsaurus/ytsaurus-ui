@@ -12,17 +12,15 @@ import {
 import * as types from '../../../../constants/navigation/path-editor';
 
 jest.mock('../../../../utils/navigation/path-editor', () => ({
-    loadSuggestions: jest
-        .fn()
-        .mockImplementation(() => Promise.resolve(['suggestion1', 'suggestion2'])),
-    preparePath: jest.fn().mockImplementation((path) => path),
+    loadSuggestions: jest.fn(),
+    preparePath: jest.fn(),
     pathEditorRequests: {
         removeAllRequests: jest.fn(),
     },
 }));
 
 const path = '//path/to/object/';
-const currentParentPath = preparePath(path);
+const currentParentPath = path;
 
 const Action = {
     REQUEST: {type: types.FETCH_SUGGESTIONS.REQUEST},
@@ -47,6 +45,8 @@ describe('actions/navigation/path-editor', () => {
     let store;
 
     beforeEach(() => {
+        loadSuggestions.mockResolvedValue(['suggestion1', 'suggestion2']);
+        preparePath.mockImplementation((value) => value);
         store = mockStore({
             navigation: {
                 pathEditor: {
@@ -55,10 +55,6 @@ describe('actions/navigation/path-editor', () => {
                 },
             },
         });
-    });
-
-    afterEach(() => {
-        jest.clearAllMocks();
     });
 
     describe('loadSuggestionsList', () => {
