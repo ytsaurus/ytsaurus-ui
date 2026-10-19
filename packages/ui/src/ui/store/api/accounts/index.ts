@@ -9,6 +9,7 @@ import {
     fetchAccountEditorTree,
     fetchAccountPath,
 } from './editor';
+import {type AccountNamesArgs, fetchAccountNames} from './names';
 import {fetchUsable} from './usable';
 
 export const accountEditorTags = [YTApiId.accountPath, YTApiId.accountEditorTree];
@@ -28,12 +29,17 @@ export const accountsApi = rootApi
                 queryFn: fetchAccountEditorTree,
                 providesTags: [YTApiId.accountEditorTree],
             }),
+            accountNames: build.query<string[], AccountNamesArgs>({
+                queryFn: fetchAccountNames,
+                providesTags: [YTApiId.listAccounts],
+            }),
         }),
     });
 
 const {
     useAccountPathQuery: useAccountPathQueryBase,
     useAccountEditorTreeQuery: useAccountEditorTreeQueryBase,
+    useAccountNamesQuery: useAccountNamesQueryBase,
     useUsableAccountsQuery,
 } = accountsApi;
 
@@ -55,4 +61,8 @@ export function useAccountEditorTreeQuery<T>(
         refetchOnMountOrArgChange: true,
     });
     return result as OverrideDataType<typeof result, T>;
+}
+
+export function useAccountNamesQuery(args: AccountNamesArgs, options?: {skip?: boolean}) {
+    return useAccountNamesQueryBase(useEffectiveClusterArgs(args), options);
 }
