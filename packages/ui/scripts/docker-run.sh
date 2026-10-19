@@ -106,6 +106,19 @@ run_command() {
         )
     fi
 
+    extraCaArgs=()
+    if [ -n "${NODE_EXTRA_CA_CERTS:-}" ]; then
+        extraCaFile=$(readlink -f "$NODE_EXTRA_CA_CERTS")
+        if [ ! -f "$extraCaFile" ]; then
+            echo "NODE_EXTRA_CA_CERTS must point to an existing CA file" >&2
+            exit 1
+        fi
+        extraCaArgs=(
+            --mount "type=bind,src=$extraCaFile,dst=/tmp/ytsaurus-ui-ca.pem,readonly"
+            -e NODE_EXTRA_CA_CERTS=/tmp/ytsaurus-ui-ca.pem
+        )
+    fi
+
     $CONTAINER_TOOL run \
         --rm \
         --network host \
@@ -120,6 +133,7 @@ run_command() {
         $useEnvFile \
         "${addHostArgs[@]}" \
         "${snapshotArgs[@]}" \
+        "${extraCaArgs[@]}" \
         "$IMAGE_NAME:$IMAGE_TAG" \
         /bin/bash -c "umask 0000; $toRun"
 }

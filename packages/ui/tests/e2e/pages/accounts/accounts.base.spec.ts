@@ -1,6 +1,19 @@
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 import {expect, test} from '@playwright/test';
-import {E2E_SUFFIX, makeClusterTille, makeClusterUrl} from '../../utils';
+import type {Page} from '@playwright/test';
+import {E2E_SUFFIX, makeClusterTille, makeClusterUrl} from '../../../utils';
+import {ytApi} from '../../../utils/yt-api';
+
+async function openAccountEditor(page: Page, account: string) {
+    await page.getByTestId(`edit-account-${account}`).click();
+    const dialog = page.getByRole('dialog');
+    await expect(dialog).toBeVisible();
+    return dialog;
+}
+
+async function selectAccountEditorPage(page: Page, name: string) {
+    await page.getByRole('dialog').getByText(name, {exact: true}).click();
+}
 
 test('Accounts - General as default page', async ({page}) => {
     await page.goto(makeClusterUrl('accounts'));
@@ -40,8 +53,8 @@ test('Accounts - General open with filter', async ({page}) => {
 test('Accounts - Editor', async ({page}) => {
     await page.goto(makeClusterUrl('accounts/general?account=account-for-e2e'));
 
-    await page.click('[data-qa="edit-account-account-for-e2e"]');
-    await page.click('.accounts-editor__edit-tabs :text("Nodes")');
+    const dialog = await openAccountEditor(page, 'account-for-e2e');
+    await selectAccountEditorPage(page, 'Nodes');
     await page.click('.account-quota__edit');
 
     const limitInput = await page.waitForSelector('[data-qa="quota-editor-new-limit"] input');
@@ -51,9 +64,12 @@ test('Accounts - Editor', async ({page}) => {
     await page.click('[data-qa="quota-editor-save"]');
     await page.click('[data-qa="quota-editor-confirmation-yes"]');
 
-    await page.waitForTimeout(200);
+    await expect
+        .poll(() => ytApi.get({path: '//sys/accounts/account-for-e2e/@resource_limits/node_count'}))
+        .toBe(Number(newValue));
 
-    await page.click('.elements-modal__close button');
+    await page.keyboard.press('Escape');
+    await expect(dialog).toHaveCount(0);
 
     await page.click('[data-qa="accounts-content-mode"]');
     await page.click('[data-qa="select-list"] :text("Nodes")');
@@ -64,6 +80,11 @@ test('Accounts - Editor', async ({page}) => {
     await expect(page).toHaveURL(
         makeClusterUrl('accounts/general?mode=nodes&account=account-for-e2e'),
     );
+
+    await openAccountEditor(page, 'account-for-e2e');
+    await selectAccountEditorPage(page, 'Nodes');
+    await page.locator('.account-quota__edit').click();
+    await expect(page.getByTestId('quota-editor-new-limit').locator('input')).toHaveValue(newValue);
 });
 
 test('Account - Editor: Nodes min limit', async ({page}) => {
@@ -71,8 +92,8 @@ test('Account - Editor: Nodes min limit', async ({page}) => {
 
     await page.goto(makeClusterUrl(`accounts/general?account=${account}`));
 
-    await page.click(`[data-qa="edit-account-${account}"]`);
-    await page.click('.accounts-editor__edit-tabs :text("Nodes")');
+    await openAccountEditor(page, account);
+    await selectAccountEditorPage(page, 'Nodes');
     await page.click('.account-quota__edit');
 
     await page.fill('[data-qa="quota-editor-new-limit"] input', '1');
@@ -85,8 +106,8 @@ test('Account - Editor: Nodes min limit with overcommit', async ({page}) => {
 
     await page.goto(makeClusterUrl(`accounts/general?account=${account}`));
 
-    await page.click(`[data-qa="edit-account-${account}"]`);
-    await page.click('.accounts-editor__edit-tabs :text("Nodes")');
+    await openAccountEditor(page, account);
+    await selectAccountEditorPage(page, 'Nodes');
     await page.click('.account-quota__edit');
 
     await page.fill('[data-qa="quota-editor-new-limit"] input', '1');
