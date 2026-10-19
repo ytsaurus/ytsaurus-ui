@@ -16,6 +16,7 @@
   "private": true,
   "devDependencies": {
     "@playwright/test": "1.53.1",
+    "@ytsaurus/javascript-wrapper": "^0.18.0",
     "lodash": "^4.18.1"
   }
 }
