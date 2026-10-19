@@ -519,6 +519,7 @@ export interface SettingsConfig {
 }
 
 export interface ConfigData {
+    configurationErrors?: Array<YTError<{attributes?: object}>>;
     userSettingsCluster?: string;
     settings: SettingsConfig;
     ytApiUseCORS?: boolean;
