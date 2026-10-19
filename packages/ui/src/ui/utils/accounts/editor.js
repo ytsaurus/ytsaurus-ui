@@ -91,11 +91,9 @@ export function setAccountParent(accountName, parentName) {
 }
 
 export function setAccountAbc(accountName, abcId, abcSlug) {
-    if (!abcId || !abcSlug) {
-        return Promise.resolve();
-    }
+    const abc = abcId && abcSlug ? {id: abcId, slug: abcSlug} : {};
     return yt.v3
-        .set({path: basePath + accountName + '/@abc'}, {id: abcId, slug: abcSlug})
+        .set({path: basePath + accountName + '/@abc'}, abc)
         .then((d) => {
             disableYTCacheTemporarily();
             toaster.add({

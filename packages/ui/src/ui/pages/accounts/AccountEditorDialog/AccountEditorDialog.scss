@@ -1,5 +1,27 @@
 .account-editor-dialog {
+    &__editor {
+        display: flex;
+        height: 70vh;
+    }
+
+    &__sidebar {
+        flex: 0 0 33%;
+        padding: 15px 15px 15px 0;
+        background-color: var(--light-background);
+    }
+
     &__content {
-        min-height: 70vh;
+        flex: 1 1 auto;
+        height: 100%;
+        padding: 15px 30px 15px 15px;
+        overflow-y: auto;
+    }
+
+    &__section + &__section {
+        margin-top: 12px;
+    }
+
+    &__tablet-warning {
+        color: var(--warning-text);
     }
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import noop_ from 'lodash/noop';
 
 import {type YTError} from '../../../../@types/types';
 import {ROOT_ACCOUNT_NAME} from '../../../constants/accounts/accounts';
@@ -10,6 +11,7 @@ import {AccountEditorContext} from './AccountEditorContext';
 import {useAccountEditorData} from './useAccountEditorData';
 import {AccountEditorDialog} from './AccountEditorDialog';
 import {type AccountEditorData} from './prepareAccountEditorData';
+import {type AccountEditorChange} from './types';
 import i18n from './i18n';
 
 interface EditorSession {
@@ -20,9 +22,10 @@ interface EditorSession {
 
 export interface AccountEditorHostProps {
     children: React.ReactNode;
+    onChanged?(change: AccountEditorChange): void;
 }
 
-export function AccountEditorHost({children}: AccountEditorHostProps) {
+export function AccountEditorHost({children, onChanged = noop_}: AccountEditorHostProps) {
     const cluster = useSelector(selectCluster);
     const [editor, setEditor] = React.useState<EditorSession>();
     const accountName = editor?.accountName;
@@ -95,6 +98,7 @@ export function AccountEditorHost({children}: AccountEditorHostProps) {
                     accountName={openedAccountName}
                     data={editor.data}
                     onClose={closeAccount}
+                    onChanged={onChanged}
                 />
             )}
         </AccountEditorContext.Provider>
