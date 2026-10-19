@@ -1,5 +1,4 @@
-import * as React from 'react';
-import {useSelector} from '../../store/redux-hooks';
+import React, {type ReactChild, type ReactNode, useCallback, useMemo, useState} from 'react';
 import cn from 'bem-cn-lite';
 
 import Icon from '../Icon/Icon';
@@ -7,39 +6,25 @@ import format from '../../common/hammer/format';
 import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 import ElementsTableRow from '../ElementsTable/ElementsTable';
 import {ExpandButton} from '../ExpandButton';
-import {selectFontFamilies} from '../../store/selectors/global/fonts';
 import {MetaTable, Secondary, Tooltip} from '@ytsaurus/components';
 
 import i18n from './i18n';
 
 import Toolbar from './Toolbar';
-import {getMinWidth} from './get-min-width';
+import {LEVEL_OFFSET} from './constants';
+import {useNameColumnMinWidth} from './useNameColumnMinWidth';
 import {filterStatisticTree, prepareStatisticTs} from './prepare-statistic.ts';
-import {type Statistic, type StatisticTree, type TreeState} from './types';
+import {type Statistic, type StatisticTree, type TreeItem, type TreeState} from './types';
 
 import {formatByUnit} from './utils';
 import './StatisticTable.scss';
 
 const block = cn('yt-statistics-table');
 
-export const LEVEL_OFFSET = 40;
-
 export type StatisticInfo = {
     description?: string;
     unit?: string;
 };
-
-interface TreeItem {
-    name: string;
-    level: number;
-    attributes: {
-        name: string;
-        path: string;
-        prefix: string;
-        value?: Statistic;
-    };
-    isLeafNode?: boolean;
-}
 
 interface AvgProps {
     item: TreeItem;
@@ -92,12 +77,12 @@ interface MetricProps {
     item: TreeItem;
     itemState: ItemState;
     toggleItemState: Function;
-    renderValue: (item: TreeItem) => React.ReactChild;
+    renderValue: (item: TreeItem) => ReactChild;
     minWidth?: number;
     info?: StatisticInfo;
 }
 
-export function StatisticName({title, info}: {title: React.ReactNode; info?: StatisticInfo}) {
+export function StatisticName({title, info}: {title: ReactNode; info?: StatisticInfo}) {
     const emptyInfo = !info?.description && !info?.unit;
 
     return (
@@ -142,11 +127,11 @@ export function ExpandedCell({
     renderValue,
     info,
 }: MetricProps) {
-    const offsetStyle = React.useMemo(() => {
+    const offsetStyle = useMemo(() => {
         return {minWidth, paddingLeft: (item?.level || 0) * LEVEL_OFFSET};
     }, [item.level, minWidth]);
 
-    const toggleItemAndTreeState = React.useCallback(() => {
+    const toggleItemAndTreeState = useCallback(() => {
         if (!itemState.empty) {
             toggleItemState();
         }
@@ -183,7 +168,7 @@ type StatisticTableTemplate<Item extends Partial<TreeItem>> = {
         colName: string,
         toggleItemState: Function,
         itemState: ItemState,
-    ) => React.ReactChild | null;
+    ) => ReactChild | null;
 };
 
 type ColumnName = 'avg' | 'min' | 'max' | 'sum' | 'count' | 'last';
@@ -227,23 +212,15 @@ const prepareTableProps = ({visibleColumns}: {visibleColumns: VisibleColumns}) =
     };
 };
 
-const useJobStatisticTable = ({
-    statistic,
-    fontFamilies,
-}: {
-    statistic: StatisticTree;
-    fontFamilies: {regular: string; monospace: string};
-}) => {
-    const [filter, setFilter] = React.useState('');
-    const [treeState, setTreeState] = React.useState<TreeState>('expanded');
+const useJobStatisticTable = ({statistic}: {statistic: StatisticTree}) => {
+    const [filter, setFilter] = useState('');
+    const [treeState, setTreeState] = useState<TreeState>('expanded');
 
-    const tree = React.useMemo(() => prepareStatisticTs(statistic), [statistic]);
-    const items = React.useMemo(() => filterStatisticTree(tree, filter), [tree, filter]);
-    const minWidth = React.useMemo(() => getMinWidth(items, fontFamilies), [fontFamilies, items]);
+    const tree = useMemo(() => prepareStatisticTs(statistic), [statistic]);
+    const items = useMemo(() => filterStatisticTree(tree, filter), [tree, filter]);
     const onFilterChange = (value: string) => setFilter(value);
 
     return {
-        minWidth,
         items,
         treeState,
         setTreeState,
@@ -268,13 +245,13 @@ export function StatisticTable({
     visibleColumns: Array<'avg' | 'min' | 'max' | 'sum' | 'count' | 'last'>;
     getStatisticInfo?: (name: string) => StatisticInfo | undefined;
 }) {
-    const fontFamilies = useSelector(selectFontFamilies);
-    const {items, minWidth, treeState, setTreeState, onFilterChange} = useJobStatisticTable({
+    const [rootElement, setRootElement] = useState<HTMLDivElement | null>(null);
+    const {items, treeState, setTreeState, onFilterChange} = useJobStatisticTable({
         statistic,
-        fontFamilies,
     });
+    const minWidth = useNameColumnMinWidth(items, rootElement);
 
-    const templates = React.useMemo(
+    const templates = useMemo(
         () =>
             ({
                 name(item, _, toggleItemState, itemState) {
@@ -307,7 +284,7 @@ export function StatisticTable({
             }) as StatisticTableTemplate<TreeItem>,
         [minWidth, getStatisticInfo],
     );
-    const tableProps = React.useMemo(() => {
+    const tableProps = useMemo(() => {
         return prepareTableProps({
             visibleColumns,
         });
@@ -315,7 +292,7 @@ export function StatisticTable({
 
     return (
         <ErrorBoundary>
-            <div className={block(null, className)}>
+            <div ref={setRootElement} className={block(null, className)}>
                 <Toolbar
                     helpUrl={helpUrl}
                     onFilterChange={onFilterChange}
