@@ -8,14 +8,67 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  verify_files:
-    name: Statoscope
+  build:
+    name: Statoscope ${{ matrix.revision }} build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        revision: [base, current]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Prepare base revision
+        if: matrix.revision == 'base'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          cp packages/ui/Dockerfile "$RUNNER_TEMP/statoscope.Dockerfile"
+          cp packages/ui/.dockerignore "$RUNNER_TEMP/statoscope.dockerignore"
+          git reset --hard "$BASE_SHA"
+          cp "$RUNNER_TEMP/statoscope.Dockerfile" packages/ui/Dockerfile
+          cp "$RUNNER_TEMP/statoscope.dockerignore" packages/ui/.dockerignore
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+      - name: Log in to GitHub Container Registry
+        if: matrix.revision == 'base'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build stats
+        uses: docker/build-push-action@v7
+        with:
+          context: packages/ui
+          target: statoscope-output
+          build-args: ANALYZE_BUNDLE=statoscope
+          outputs: type=local,dest=statoscope-${{ matrix.revision }}
+          cache-from: |
+            type=registry,ref=ghcr.io/ytsaurus/ui-nightly:buildcache-main
+            type=registry,ref=ghcr.io/ytsaurus/ui-nightly:buildcache-statoscope-base
+            ${{ matrix.revision == 'current' && 'type=gha,scope=statoscope-current' || '' }}
+          cache-to: ${{ matrix.revision == 'base' && 'type=registry,ref=ghcr.io/ytsaurus/ui-nightly:buildcache-statoscope-base,mode=max' || 'type=gha,scope=statoscope-current,mode=max' }}
+      - name: Upload stats
+        uses: actions/upload-artifact@v4
+        with:
+          name: statoscope-${{ matrix.revision }}
+          path: statoscope-${{ matrix.revision }}/stats.json
+          if-no-files-found: error
+          retention-days: 7
+
+  verify_files:
+    name: Statoscope validate
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -23,25 +76,19 @@ jobs:
           cache: "npm"
       - name: Install Packages
         run: npm ci
-      - name: Analyze build
-        run: |
-          cd packages/ui
-          npm run build:analyze
-          cp statoscope.config.js statoscope.config.js.bak
-          mv dist/public/build/stats.json ./input.json
-      - name: Analyze previos build
-        run: |
-          cd packages/ui
-          git reset --hard ${{ github.event.pull_request.base.sha }}
-          npm ci
-          npm run build:analyze
-          mv dist/public/build/stats.json ./reference.json
+      - name: Download base stats
+        uses: actions/download-artifact@v4
+        with:
+          name: statoscope-base
+          path: statoscope-base
+      - name: Download current stats
+        uses: actions/download-artifact@v4
+        with:
+          name: statoscope-current
+          path: statoscope-current
       - name: Validate
-        run: |
-          cd packages/ui
-          cp statoscope.config.js.bak statoscope.config.js
-          ls
-          npx statoscope validate -i input.json -r reference.json
+        working-directory: packages/ui
+        run: npx --no-install statoscope validate -i ../../statoscope-current/stats.json -r ../../statoscope-base/stats.json
       - name: Upload statoscope results
         uses: actions/upload-artifact@v4
         if: always()
