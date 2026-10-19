@@ -42,3 +42,15 @@ export interface MetricsList {
 export type StatisticTree = {[Key: string]: StatisticTree | Statistic};
 
 export type TreeState = 'expanded' | 'mixed' | 'collapsed';
+
+export interface TreeItem {
+    name: string;
+    level: number;
+    attributes: {
+        name: string;
+        path: string;
+        prefix: string;
+        value?: Statistic;
+    };
+    isLeafNode?: boolean;
+}
