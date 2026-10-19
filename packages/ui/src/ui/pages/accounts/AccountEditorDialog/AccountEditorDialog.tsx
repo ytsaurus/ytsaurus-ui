@@ -12,6 +12,7 @@ interface AccountEditorDialogProps {
     data: AccountEditorData;
     onClose(): void;
     onChanged(change: AccountEditorChange): void;
+    onDeleted(accountName: string): void;
 }
 
 export function AccountEditorDialog({
@@ -19,13 +20,21 @@ export function AccountEditorDialog({
     data,
     onClose,
     onChanged,
+    onDeleted,
 }: AccountEditorDialogProps) {
     return (
         <Modal
             visible
             borderless
             onCancel={onClose}
-            content={<AccountEditor accountName={accountName} data={data} onChanged={onChanged} />}
+            content={
+                <AccountEditor
+                    accountName={accountName}
+                    data={data}
+                    onChanged={onChanged}
+                    onDeleted={onDeleted}
+                />
+            }
             title={accountName}
             footer={false}
             size="l"

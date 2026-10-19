@@ -23,9 +23,14 @@ interface EditorSession {
 export interface AccountEditorHostProps {
     children: React.ReactNode;
     onChanged?(change: AccountEditorChange): void;
+    onDeleted?(accountName: string): void;
 }
 
-export function AccountEditorHost({children, onChanged = noop_}: AccountEditorHostProps) {
+export function AccountEditorHost({
+    children,
+    onChanged = noop_,
+    onDeleted = noop_,
+}: AccountEditorHostProps) {
     const cluster = useSelector(selectCluster);
     const [editor, setEditor] = React.useState<EditorSession>();
     const accountName = editor?.accountName;
@@ -89,6 +94,13 @@ export function AccountEditorHost({children, onChanged = noop_}: AccountEditorHo
         () => ({openingAccountName, openedAccountName, openAccount, closeAccount}),
         [closeAccount, openAccount, openedAccountName, openingAccountName],
     );
+    const handleDeleted = React.useCallback(
+        (name: string) => {
+            closeAccount();
+            onDeleted(name);
+        },
+        [closeAccount, onDeleted],
+    );
 
     return (
         <AccountEditorContext.Provider value={contextValue}>
@@ -99,6 +111,7 @@ export function AccountEditorHost({children, onChanged = noop_}: AccountEditorHo
                     data={editor.data}
                     onClose={closeAccount}
                     onChanged={onChanged}
+                    onDeleted={handleDeleted}
                 />
             )}
         </AccountEditorContext.Provider>
