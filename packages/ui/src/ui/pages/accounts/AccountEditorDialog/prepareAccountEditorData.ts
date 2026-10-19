@@ -19,3 +19,5 @@ export function prepareAccountEditorData(topLevel: string, response: AccountTree
         tree: prepareAccountsTree(accountsByName),
     };
 }
+
+export type AccountEditorData = ReturnType<typeof prepareAccountEditorData>;
