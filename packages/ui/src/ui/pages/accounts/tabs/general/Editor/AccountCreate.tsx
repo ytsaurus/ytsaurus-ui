@@ -3,7 +3,6 @@ import {Flex, Icon} from '@gravity-ui/uikit';
 import React from 'react';
 import Button from '../../../../../components/Button/Button';
 import {Tooltip} from '@ytsaurus/components';
-import AccountCreateDialog from '../../../../../pages/accounts/tabs/general/Editor/AccountCreateDialog';
 import {openCreateModal} from '../../../../../store/actions/accounts/editor';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {selectActiveAccount} from '../../../../../store/selectors/accounts/accounts-ts';
@@ -46,7 +45,6 @@ function AccountCreate({className}: Props) {
                     {disableCreate && Boolean(disableCreateNotice) && <Icon data={CircleInfo} />}
                 </Flex>
             </Tooltip>
-            <AccountCreateDialog />
         </span>
     );
 }

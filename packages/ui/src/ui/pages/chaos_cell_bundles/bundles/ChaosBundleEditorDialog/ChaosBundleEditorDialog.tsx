@@ -16,7 +16,6 @@ import QuotaEditorWithHide from '../../../../components/QuotaEditor/QuotaEditorW
 import Tabs from '../../../../components/Tabs/Tabs';
 import {Bold} from '@ytsaurus/components';
 import {AccountsSuggestWithLoading} from '../../../../pages/accounts/AccountsSuggest';
-import {WithHeader} from '../../../../pages/accounts/tabs/general/Editor/content/GeneralContent';
 import {
     type BundleResourceType,
     type EditBundleParams,
@@ -31,6 +30,16 @@ import './ChaosBundleEditorDialog.scss';
 import UIFactory from '../../../../UIFactory';
 
 const block = cn('chaos-editor');
+const accountEditorBlock = cn('accounts-editor');
+
+function WithHeader({header, children}: {header: React.ReactNode; children: React.ReactNode}) {
+    return (
+        <div className={accountEditorBlock(null, 'elements-section')}>
+            <div className={accountEditorBlock(null, 'elements-heading_size_s')}>{header}</div>
+            {children}
+        </div>
+    );
+}
 
 const TABS = [
     {
