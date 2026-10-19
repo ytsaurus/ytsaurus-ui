@@ -127,7 +127,7 @@ export function createAccountFromInfo(newAccountInfo: NewAccountInfo): EditorAct
             const {id, slug} = abcService || {};
 
             return Promise.all([
-                setAccountAbc(account, id, slug).catch(() => {}),
+                (id && slug ? setAccountAbc(account, id, slug) : Promise.resolve()).catch(() => {}),
                 createHome ? createAccountHome(account).catch(() => {}) : Promise.resolve(),
                 dispatch(
                     setResponsibleUsers(responsibles, account, parentAccount !== ROOT_ACCOUNT_NAME),
