@@ -73,7 +73,12 @@ COPY deploy ./deploy
 COPY deploy/nginx /etc/nginx
 COPY deploy/supervisor /etc/supervisor
 COPY . .
-RUN npm run build && npm run deps:truncate
+ARG ANALYZE_BUNDLE
+RUN ANALYZE_BUNDLE="$ANALYZE_BUNDLE" npm run build && npm run deps:truncate
+
+FROM scratch AS statoscope-output
+
+COPY --from=builder /opt/app/dist/public/build/stats.json /stats.json
 
 FROM base
 
