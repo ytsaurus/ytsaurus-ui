@@ -1,13 +1,58 @@
 import {rootApi} from '..';
+import {YTApiId} from '../../../rum/rum-wrap-api';
+import {useEffectiveClusterArgs} from '../yt/utils';
+import {type OverrideDataType} from '../yt/types';
 
+import {
+    type AccountEditorTreeArgs,
+    type AccountPathArgs,
+    fetchAccountEditorTree,
+    fetchAccountPath,
+} from './editor';
 import {fetchUsable} from './usable';
 
-export const accountsApi = rootApi.injectEndpoints({
-    endpoints: (build) => ({
-        usableAccounts: build.query<string[] | undefined, {cluster: string}>({
-            queryFn: fetchUsable,
-        }),
-    }),
-});
+export const accountEditorTags = [YTApiId.accountPath, YTApiId.accountEditorTree];
 
-export const {useUsableAccountsQuery} = accountsApi;
+export const accountsApi = rootApi
+    .enhanceEndpoints({addTagTypes: [...accountEditorTags, YTApiId.listAccounts]})
+    .injectEndpoints({
+        endpoints: (build) => ({
+            usableAccounts: build.query<string[] | undefined, {cluster: string}>({
+                queryFn: fetchUsable,
+            }),
+            accountPath: build.query<string, AccountPathArgs>({
+                queryFn: fetchAccountPath,
+                providesTags: [YTApiId.accountPath],
+            }),
+            accountEditorTree: build.query<unknown, AccountEditorTreeArgs>({
+                queryFn: fetchAccountEditorTree,
+                providesTags: [YTApiId.accountEditorTree],
+            }),
+        }),
+    });
+
+const {
+    useAccountPathQuery: useAccountPathQueryBase,
+    useAccountEditorTreeQuery: useAccountEditorTreeQueryBase,
+    useUsableAccountsQuery,
+} = accountsApi;
+
+export {useUsableAccountsQuery};
+
+export function useAccountPathQuery(args: AccountPathArgs, options?: {skip?: boolean}) {
+    return useAccountPathQueryBase(useEffectiveClusterArgs(args), {
+        ...options,
+        refetchOnMountOrArgChange: true,
+    });
+}
+
+export function useAccountEditorTreeQuery<T>(
+    args: AccountEditorTreeArgs,
+    options?: {skip?: boolean},
+) {
+    const result = useAccountEditorTreeQueryBase(useEffectiveClusterArgs(args), {
+        ...options,
+        refetchOnMountOrArgChange: true,
+    });
+    return result as OverrideDataType<typeof result, T>;
+}
