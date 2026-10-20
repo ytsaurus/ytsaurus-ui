@@ -1,3 +1,4 @@
+import {type CancelToken, type CancelTokenSource} from 'axios';
 import {type ThunkAction} from 'redux-thunk';
 
 import {
@@ -11,6 +12,7 @@ import {type ConsumerPartitionsAction} from '../../../../../store/reducers/navig
 import {type YtConsumerPartition} from '../../../../../store/reducers/navigation/tabs/consumer/types';
 import {selectPath, selectTransaction} from '../../../../../store/selectors/navigation';
 import {prepareRequest} from '../../../../../utils/navigation';
+import CancelHelper, {isCancelled} from '../../../../../utils/cancel-helper';
 import ypath from '../../../../../common/thor/ypath';
 import {
     selectConsumerName,
@@ -20,7 +22,7 @@ import {
 
 type ConsumerThunkAction = ThunkAction<void, RootState, unknown, ConsumerPartitionsAction>;
 
-let nextRequestId = 0;
+const requests = new CancelHelper();
 
 export function loadConsumerPartitions(queue: string): ConsumerThunkAction {
     return (dispatch, getState) => {
@@ -31,16 +33,17 @@ export function loadConsumerPartitions(queue: string): ConsumerThunkAction {
 
         const path = selectPath(state);
         const transaction = selectTransaction(state);
-        const name = selectConsumerName(state);
+        const consumerName = selectConsumerName(state);
         const requestKey = selectConsumerPartitionsRequestKey(state);
-        const requestId = ++nextRequestId;
+        let cancelToken: CancelToken | undefined;
         const isCurrent = () =>
-            requestKey === selectConsumerPartitionsRequestKey(getState()) &&
-            requestId === getState().navigation.tabs.consumer.partitions.requestId;
+            !cancelToken?.reason && requestKey === selectConsumerPartitionsRequestKey(getState());
         const consumerPath =
-            name === undefined ? '' : `/consumers/${ypath.YPath.escapeSpecialCharacters(name)}`;
+            consumerName === undefined
+                ? ''
+                : `/consumers/${ypath.YPath.escapeSpecialCharacters(consumerName)}`;
 
-        dispatch({type: CONSUMER_PARTITIONS_LOAD_REQUEST, data: {requestKey, requestId}});
+        dispatch({type: CONSUMER_PARTITIONS_LOAD_REQUEST, data: {requestKey}});
         return ytApiV3Id
             .get(
                 YTApiId.queueConsumerPartitions,
@@ -51,6 +54,10 @@ export function loadConsumerPartitions(queue: string): ConsumerThunkAction {
                         transaction,
                     },
                 ),
+                (source: CancelTokenSource) => {
+                    requests.removeAllAndSave(source);
+                    cancelToken = source.token;
+                },
             )
             .then((data: YtConsumerPartition[]) => {
                 if (!isCurrent()) return;
@@ -60,7 +67,7 @@ export function loadConsumerPartitions(queue: string): ConsumerThunkAction {
                 });
             })
             .catch((error: Error) => {
-                if (!isCurrent()) return;
+                if (isCancelled(error) || !isCurrent()) return;
                 dispatch({
                     type: CONSUMER_PARTITIONS_LOAD_FAILURE,
                     data: error,

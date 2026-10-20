@@ -158,11 +158,12 @@ export function ypath<T>(name: string, getter: (row: T) => QueueRegistrationPath
             if (!consumer) return null;
 
             const {cluster, path, consumerName} = parseQueueRegistrationPath(consumer);
-            const url =
-                genNavigationUrl({cluster, path}) +
-                (consumerName === undefined
-                    ? ''
-                    : `&tab=consumer&cName=${encodeURIComponent(consumerName)}`);
+            const url = genNavigationUrl({
+                cluster,
+                path,
+                queryParams:
+                    consumerName === undefined ? undefined : {tab: 'consumer', cName: consumerName},
+            });
 
             return (
                 <Link url={url} routed>

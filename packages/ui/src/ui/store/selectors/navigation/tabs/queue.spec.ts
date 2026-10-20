@@ -1,7 +1,7 @@
 import {type RootState} from '../../../reducers';
 import {selectConsumers} from './queue';
 
-function state(queueConsumerName: string, registrations: unknown[]) {
+function createState(queueConsumerName: string, registrations: unknown[]) {
     return {
         navigation: {
             tabs: {
@@ -21,7 +21,11 @@ describe('queue consumer selection', () => {
             {consumer: 'markov://home/queues/analytics'},
         ];
 
-        expect(selectConsumers(state('/queues/analytics', registrations))).toHaveLength(1);
+        expect(
+            selectConsumers(createState('/queues/analytics', registrations)).map(
+                ({consumer}) => consumer,
+            ),
+        ).toEqual([registrations[1].consumer]);
     });
 
     it('filters attributed registrations by consumer name', () => {
@@ -41,6 +45,8 @@ describe('queue consumer selection', () => {
             },
         ];
 
-        expect(selectConsumers(state('two', registrations))).toHaveLength(1);
+        expect(
+            selectConsumers(createState('two', registrations)).map(({consumer}) => consumer),
+        ).toEqual([registrations[1].consumer]);
     });
 });

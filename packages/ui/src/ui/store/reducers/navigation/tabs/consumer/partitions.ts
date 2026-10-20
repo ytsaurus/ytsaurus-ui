@@ -9,7 +9,6 @@ import {type YtConsumerPartition} from './types';
 
 export interface ConsumerPartitionsState {
     requestKey?: string;
-    requestId?: number;
     partitionsLoading: boolean;
     partitionsLoaded: boolean;
     partitionsError: YTError | null;
@@ -55,7 +54,7 @@ function reducer(state = initialState, action: ConsumerPartitionsAction): Consum
 }
 
 export type ConsumerPartitionsAction =
-    | ActionD<typeof CONSUMER_PARTITIONS_LOAD_REQUEST, {requestKey: string; requestId: number}>
+    | ActionD<typeof CONSUMER_PARTITIONS_LOAD_REQUEST, {requestKey: string}>
     | ActionD<typeof CONSUMER_PARTITIONS_LOAD_SUCCESS, YtConsumerPartition[]>
     | ActionD<typeof CONSUMER_PARTITIONS_LOAD_FAILURE, YTError>;
 

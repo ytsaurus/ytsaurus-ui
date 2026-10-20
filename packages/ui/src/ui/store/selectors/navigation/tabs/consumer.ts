@@ -19,17 +19,26 @@ export const selectConsumerTimeWindow = (state: RootState) =>
 export const selectConsumerNames = (state: RootState) =>
     state.navigation.tabs.consumer.status.consumerData?.queue_consumer_names;
 
+export const selectIsMultiConsumer = (state: RootState) => selectConsumerNames(state) !== undefined;
+
 export const selectConsumerName = (state: RootState) => {
-    const names = selectConsumerNames(state);
-    const name = state.navigation.tabs.consumer.filters.consumerName;
-    return name !== undefined && names?.includes(name) ? name : names?.[0];
+    const consumerNames = selectConsumerNames(state);
+    const consumerName = state.navigation.tabs.consumer.filters.consumerName;
+
+    return consumerName !== undefined && consumerNames?.includes(consumerName)
+        ? consumerName
+        : consumerNames?.[0];
 };
 
 const selectStatusData = (state: RootState) => {
     const data = state.navigation.tabs.consumer.status.consumerData;
-    const name = selectConsumerName(state);
-    if (data?.queue_consumer_names === undefined) return data;
-    return name === undefined ? undefined : data.consumers?.[name];
+    const consumerName = selectConsumerName(state);
+
+    if (!selectIsMultiConsumer(state)) {
+        return data;
+    }
+
+    return consumerName === undefined ? undefined : data?.consumers?.[consumerName];
 };
 
 export const selectConsumerError = (state: RootState) => selectStatusData(state)?.error;
