@@ -44,9 +44,7 @@ async function register(args: RegisterConsumerArgs, api: BaseQueryApi) {
                                     $value: consumerPath,
                                     $attributes: {
                                         cluster: consumerCluster,
-                                        ...(consumerName === undefined
-                                            ? {}
-                                            : {queue_consumer_name: consumerName}),
+                                        queue_consumer_name: consumerName,
                                     },
                                 },
                             },
