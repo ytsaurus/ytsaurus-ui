@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.2](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v2.0.1...components-v2.0.2) (2026-10-20)
+
+
+### Bug Fixes
+
+* **components:** use regular spaces when copying YSON [YTFRONT-5753] ([e5f07b1](https://github.com/ytsaurus/ytsaurus-ui/commit/e5f07b112e1491029c6c1c1b330217f55c99704b))
+
 ## [2.0.1](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v2.0.0...components-v2.0.1) (2026-10-16)
 
 
