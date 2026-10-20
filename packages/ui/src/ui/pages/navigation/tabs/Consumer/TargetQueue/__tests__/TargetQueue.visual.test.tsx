@@ -20,10 +20,16 @@ test('TargetQueue: shows an error and switches to a healthy consumer', async ({
 }) => {
     await mount(<TargetQueueStories.BrokenNamedConsumer />);
 
-    await expect(page.getByText('Consumer failed', {exact: true})).toBeVisible();
-    await expectScreenshot();
+    await test.step('Show the selected consumer error', async () => {
+        await expect(page.getByText('Consumer failed', {exact: true})).toBeVisible();
+        await expectScreenshot();
+    });
 
-    await page.getByText('broken', {exact: true}).click();
-    await page.getByText('primary', {exact: true}).click();
-    await expect(page.getByText('markov://home/queues/primary', {exact: true})).toBeVisible();
+    await test.step('Switch to a healthy consumer and clear the error', async () => {
+        await page.getByText('broken', {exact: true}).click();
+        await page.getByText('primary', {exact: true}).click();
+        await expect(page.getByText('markov://home/queues/primary', {exact: true})).toBeVisible();
+        await expect(page.getByText('Consumer failed', {exact: true})).not.toBeVisible();
+        await expectScreenshot();
+    });
 });

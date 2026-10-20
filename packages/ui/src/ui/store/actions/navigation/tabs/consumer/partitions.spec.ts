@@ -58,18 +58,26 @@ describe('consumer partition requests', () => {
     it('uses the ordinary endpoint without a consumer name', async () => {
         jest.mocked(ytApiV3Id.get).mockResolvedValue([]);
         await run();
-        expect(ytApiV3Id.get).toHaveBeenCalledWith('partitions', {
-            parameters: {path: '//consumer/@queue_consumer_partitions/markov:\\/\\/queue'},
-        });
+        expect(ytApiV3Id.get).toHaveBeenCalledWith(
+            'partitions',
+            {
+                parameters: {path: '//consumer/@queue_consumer_partitions/markov:\\/\\/queue'},
+            },
+            expect.any(Function),
+        );
     });
 
     it('escapes the consumer name and queue as YPath segments', async () => {
         jest.mocked(ytApiV3Id.get).mockResolvedValue([]);
         await run('a/b@c');
-        expect(ytApiV3Id.get).toHaveBeenCalledWith('partitions', {
-            parameters: {
-                path: '//consumer/@queue_consumer_partitions/consumers/a\\/b\\@c/markov:\\/\\/queue',
+        expect(ytApiV3Id.get).toHaveBeenCalledWith(
+            'partitions',
+            {
+                parameters: {
+                    path: '//consumer/@queue_consumer_partitions/consumers/a\\/b\\@c/markov:\\/\\/queue',
+                },
             },
-        });
+            expect.any(Function),
+        );
     });
 });

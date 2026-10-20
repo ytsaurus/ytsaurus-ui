@@ -1,17 +1,22 @@
+import qs from 'qs';
 import {Page} from '../../constants/index';
 
 export function genNavigationUrl({
     cluster,
     path,
     transaction,
+    queryParams,
 }: {
     cluster: string;
     path: string;
     transaction?: string;
+    queryParams?: Record<string, string | undefined>;
 }) {
+    const query = qs.stringify(queryParams);
+
     return `/${cluster}/${Page.NAVIGATION}?path=${encodeURI(path)}${
         transaction ? '&t=' + encodeURI(transaction) : ''
-    }`;
+    }${query ? '&' + query : ''}`;
 }
 
 export function findCommonPathParent(v1: string, v2: string) {

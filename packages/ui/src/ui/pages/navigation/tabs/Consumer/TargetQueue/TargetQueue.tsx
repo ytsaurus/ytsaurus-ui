@@ -9,6 +9,7 @@ import {
     selectConsumerName,
     selectConsumerNames,
     selectConsumerRegisteredQueues,
+    selectIsMultiConsumer,
     selectTargetQueue,
     selectTargetQueueError,
 } from '../../../../../store/selectors/navigation/tabs/consumer';
@@ -29,8 +30,9 @@ const block = cn('target-queue');
 
 export default function TargetQueue() {
     const dispatch = useDispatch();
-    const names = useSelector(selectConsumerNames);
-    const name = useSelector(selectConsumerName);
+    const consumerNames = useSelector(selectConsumerNames);
+    const isMultiConsumer = useSelector(selectIsMultiConsumer);
+    const consumerName = useSelector(selectConsumerName);
     const consumerError = useSelector(selectConsumerError);
     const {queue} = useSelector(selectTargetQueue) ?? {};
     const error = useSelector(selectTargetQueueError);
@@ -43,16 +45,21 @@ export default function TargetQueue() {
 
     return (
         <div className={block()}>
-            {names !== undefined && (
+            {isMultiConsumer && (
                 <div className={block('consumer')}>
                     <div className="elements-heading elements-heading_size_xs">
                         {i18n('title_consumer-name')}
                     </div>
                     <SelectSingle
-                        value={name}
-                        items={names.map((value) => ({value, text: value}))}
-                        onChange={(consumerName) =>
-                            dispatch(changeConsumerFilters({consumerName, targetQueue: undefined}))
+                        value={consumerName}
+                        items={consumerNames?.map((value) => ({value, text: value})) ?? []}
+                        onChange={(value) =>
+                            dispatch(
+                                changeConsumerFilters({
+                                    consumerName: value,
+                                    targetQueue: undefined,
+                                }),
+                            )
                         }
                         placeholder={i18n('action_select-consumer')}
                         width="auto"
@@ -84,7 +91,7 @@ interface ConsumerQueueSelectorProps {
 export function ConsumerQueueSelector({className, children}: ConsumerQueueSelectorProps) {
     const dispatch = useDispatch();
     const registrations = useSelector(selectConsumerRegisteredQueues);
-    const isMultiConsumer = useSelector(selectConsumerNames) !== undefined;
+    const isMultiConsumer = useSelector(selectIsMultiConsumer);
 
     const handleSelect = (value?: string) => {
         const item = value ? registrations?.find(({queue}) => queue === value) : undefined;
