@@ -1,6 +1,13 @@
 import React from 'react';
+import type {Meta} from '@storybook/react';
 
 import {FlowDeleteStatesDialog} from '../FlowDeleteStatesDialog';
+
+const meta: Meta<typeof FlowDeleteStatesDialog> = {
+    title: 'Pages/Flow/FlowDeleteStatesDialog',
+    component: FlowDeleteStatesDialog,
+};
+export default meta;
 
 const row = {
     section: 'key_state' as const,
