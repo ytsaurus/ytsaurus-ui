@@ -1,4 +1,3 @@
-import {type CancelToken, type CancelTokenSource} from 'axios';
 import {type ThunkAction} from 'redux-thunk';
 
 import {
@@ -12,7 +11,6 @@ import {type ConsumerStatusAction} from '../../../../../store/reducers/navigatio
 import {selectPath, selectTransaction} from '../../../../../store/selectors/navigation';
 import {prepareRequest} from '../../../../../utils/navigation';
 import CancelHelper, {isCancelled} from '../../../../../utils/cancel-helper';
-import {selectCluster} from '../../../../../store/selectors/global';
 
 type ConsumerThunkAction = ThunkAction<void, RootState, unknown, ConsumerStatusAction>;
 
@@ -23,26 +21,15 @@ export function loadConsumerStatus(): ConsumerThunkAction {
         const state = getState();
         const path = selectPath(state);
         const transaction = selectTransaction(state);
-        const cluster = selectCluster(state);
-        let cancelToken: CancelToken | undefined;
-        const isCurrent = () =>
-            !cancelToken?.reason &&
-            path === selectPath(getState()) &&
-            transaction === selectTransaction(getState()) &&
-            cluster === selectCluster(getState());
 
         dispatch({type: CONSUMER_STATUS_LOAD_REQUEST});
         return ytApiV3Id
             .get(
                 YTApiId.queueConsumerStatus,
                 prepareRequest('/@queue_consumer_status', {path, transaction}),
-                (source: CancelTokenSource) => {
-                    requests.removeAllAndSave(source);
-                    cancelToken = source.token;
-                },
+                requests.removeAllAndSave,
             )
             .then((data) => {
-                if (!isCurrent()) return;
                 if (data.error) {
                     throw data.error;
                 }
@@ -52,7 +39,7 @@ export function loadConsumerStatus(): ConsumerThunkAction {
                 });
             })
             .catch((error: Error) => {
-                if (isCancelled(error) || !isCurrent()) return;
+                if (isCancelled(error)) return;
                 dispatch({
                     type: CONSUMER_STATUS_LOAD_FAILURE,
                     data: error,

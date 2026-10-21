@@ -1,4 +1,3 @@
-import {type CancelToken, type CancelTokenSource} from 'axios';
 import {type ThunkAction} from 'redux-thunk';
 
 import {
@@ -35,9 +34,6 @@ export function loadConsumerPartitions(queue: string): ConsumerThunkAction {
         const transaction = selectTransaction(state);
         const consumerName = selectConsumerName(state);
         const requestKey = selectConsumerPartitionsRequestKey(state);
-        let cancelToken: CancelToken | undefined;
-        const isCurrent = () =>
-            !cancelToken?.reason && requestKey === selectConsumerPartitionsRequestKey(getState());
         const consumerPath =
             consumerName === undefined
                 ? ''
@@ -54,20 +50,16 @@ export function loadConsumerPartitions(queue: string): ConsumerThunkAction {
                         transaction,
                     },
                 ),
-                (source: CancelTokenSource) => {
-                    requests.removeAllAndSave(source);
-                    cancelToken = source.token;
-                },
+                requests.removeAllAndSave,
             )
             .then((data: YtConsumerPartition[]) => {
-                if (!isCurrent()) return;
                 dispatch({
                     type: CONSUMER_PARTITIONS_LOAD_SUCCESS,
                     data,
                 });
             })
             .catch((error: Error) => {
-                if (isCancelled(error) || !isCurrent()) return;
+                if (isCancelled(error)) return;
                 dispatch({
                     type: CONSUMER_PARTITIONS_LOAD_FAILURE,
                     data: error,

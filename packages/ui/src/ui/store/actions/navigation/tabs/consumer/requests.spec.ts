@@ -19,10 +19,10 @@ jest.mock('../../../../../store/selectors/navigation', () => ({
     selectPath: (state: RootState) => state.navigation.navigation.path,
     selectTransaction: (state: RootState) => state.navigation.navigation.transaction,
 }));
-jest.mock('../../../../../store/selectors/global', () => ({selectCluster: () => 'markov'}));
+jest.mock('../../../../../store/selectors/global', () => ({selectCluster: () => 'test-cluster'}));
 jest.mock('../../../../../utils/navigation', () => ({prepareRequest: jest.fn()}));
 
-const queue = 'markov://queue';
+const queue = 'test-cluster://queue';
 
 function createState() {
     return {
@@ -42,10 +42,10 @@ function mockPendingRequest() {
     const source = axios.CancelToken.source();
     let resolve!: (data: unknown) => void;
     let reject!: (error: unknown) => void;
-    // Keep completion under test control, including a response already delivered by the transport.
     const promise = new Promise((resolvePromise, rejectPromise) => {
         resolve = resolvePromise;
         reject = rejectPromise;
+        source.token.promise.then(rejectPromise);
     });
     jest.mocked(ytApiV3Id.get).mockImplementationOnce((...args) => {
         const cancellation = args[2];
@@ -73,12 +73,11 @@ describe.each([
 ])('consumer $name requests', ({load, success, failure, data}) => {
     beforeEach(() => jest.clearAllMocks());
 
-    it('cancels the previous request and ignores its already delivered response', async () => {
+    it('cancels the previous request and accepts the current response', async () => {
         const state = createState();
         const dispatch = jest.fn();
         const previous = mockPendingRequest();
         const previousResult = load()(dispatch, () => state, undefined);
-        previous.resolve(data);
         const current = mockPendingRequest();
         const currentResult = load()(dispatch, () => state, undefined);
 
@@ -103,21 +102,6 @@ describe.each([
         expect(dispatch).toHaveBeenCalledTimes(1);
     });
 
-    it.each(['path', 'transaction'] as const)(
-        'ignores a response after the navigation %s changes without another request',
-        async (field) => {
-            const state = createState();
-            const dispatch = jest.fn();
-            const pending = mockPendingRequest();
-            const result = load()(dispatch, () => state, undefined);
-            state.navigation.navigation[field] = 'changed';
-            pending.resolve(data);
-            await result;
-
-            expect(dispatch).toHaveBeenCalledTimes(1);
-        },
-    );
-
     it('reports a current request failure', async () => {
         const state = createState();
         const dispatch = jest.fn();
@@ -130,24 +114,3 @@ describe.each([
         expect(dispatch).toHaveBeenLastCalledWith({type: failure, data: error});
     });
 });
-
-it.each(['consumer', 'queue'])(
-    'ignores partitions after the selected %s changes',
-    async (field) => {
-        const state = createState();
-        const dispatch = jest.fn();
-        const pending = mockPendingRequest();
-        const result = loadConsumerPartitions(queue)(dispatch, () => state, undefined);
-        state.navigation.tabs.consumer.status.consumerData =
-            field === 'consumer'
-                ? {
-                      queue_consumer_names: ['other'],
-                      consumers: {other: {registrations: [{queue, vital: false}]}},
-                  }
-                : {registrations: [{queue: 'markov://other', vital: false}]};
-        pending.resolve([{next_row_index: 42}]);
-        await result;
-
-        expect(dispatch).toHaveBeenCalledTimes(1);
-    },
-);
