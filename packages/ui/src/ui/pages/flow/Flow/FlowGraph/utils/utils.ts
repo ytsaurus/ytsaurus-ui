@@ -140,7 +140,7 @@ export function makeFlowComputationRuntimeData(
 
     function collectStreamsSummary(
         dstSummary: FlowComputationUIStreamsSummary,
-        info: Array<FlowExtendedStreamType>,
+        info: Array<FlowExtendedStreamType> = [],
     ) {
         return info.reduce((acc, item) => {
             dstSummary.drained = dstSummary.drained || item.drained;
