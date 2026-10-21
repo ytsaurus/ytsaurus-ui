@@ -10,8 +10,8 @@ import TargetQueue from '../TargetQueue';
 const namedConsumersData: ConsumerStatusData = {
     queue_consumer_names: ['primary', 'analytics'],
     consumers: {
-        primary: {registrations: [{queue: 'markov://home/queues/primary', vital: false}]},
-        analytics: {registrations: [{queue: 'markov://home/queues/analytics', vital: true}]},
+        primary: {registrations: [{queue: 'test-cluster://home/queues/primary', vital: false}]},
+        analytics: {registrations: [{queue: 'test-cluster://home/queues/analytics', vital: true}]},
     },
 };
 
@@ -19,7 +19,7 @@ const brokenConsumerData: ConsumerStatusData = {
     queue_consumer_names: ['broken', 'primary'],
     consumers: {
         broken: {error: {code: 1, message: 'Consumer failed'}},
-        primary: {registrations: [{queue: 'markov://home/queues/primary', vital: false}]},
+        primary: {registrations: [{queue: 'test-cluster://home/queues/primary', vital: false}]},
     },
 };
 
