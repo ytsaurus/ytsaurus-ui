@@ -25,6 +25,7 @@ import {cleanupQueryForDraft} from '../../../types/query-tracker/query';
 import {type ChytInfo} from '../chyt/list';
 
 export interface QueryState {
+    sessionRevision: number;
     queryItem?: QueryItem;
     draft: DraftQuery;
     params: {
@@ -55,6 +56,7 @@ const initialQueryDraftState: QueryState['draft'] = {
 };
 
 const initState: QueryState = {
+    sessionRevision: 0,
     queryItem: undefined,
     draft: {...initialQueryDraftState},
     params: {},
@@ -65,12 +67,19 @@ const initState: QueryState = {
     state: 'init',
 };
 
+function getSessionRevision(state: QueryState, next?: QueryItem) {
+    return next?.id && next.id === state.queryItem?.id
+        ? state.sessionRevision
+        : (state.sessionRevision ?? 0) + 1;
+}
+
 export function query(state = initState, action: Actions): QueryState {
     switch (action.type) {
         case SET_QUERY: {
             return {
                 ...state,
                 queryItem: action.data.initialQuery,
+                sessionRevision: getSessionRevision(state, action.data.initialQuery),
                 draft: {
                     ...initialQueryDraftState,
                     ...(action.data.initialQuery
