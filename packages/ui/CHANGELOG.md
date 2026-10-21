@@ -1,5 +1,31 @@
 # Changelog
 
+## [3.30.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.29.0...ui-v3.30.0) (2026-10-21)
+
+
+### Features
+
+* **Flow:** add pipeline state viewer [YTFLOW-316] ([4a222bd](https://github.com/ytsaurus/ytsaurus-ui/commit/4a222bd6a94a13a8393a895fc2e35653b2e059d6))
+* **Logs:** support window scrolling integration [YTFRONT-5307] ([6beea23](https://github.com/ytsaurus/ytsaurus-ui/commit/6beea23f7e9682d638684d97edb4e4a2ae42293b))
+* **System/Nodes:** add short view mode [YTFRONT-6104] ([b38525e](https://github.com/ytsaurus/ytsaurus-ui/commit/b38525ededd9eb52f91984b879e5571430ea6192))
+
+
+### Bug Fixes
+
+* **Icon:** inherit size from the current font [YTFRONT-5743] ([2adcebd](https://github.com/ytsaurus/ytsaurus-ui/commit/2adcebdfa62fe5d264e736f21b4ce5c110a06cac))
+* preserve timestamp values in table pagination [YTFRONT-6064] ([bd8abd6](https://github.com/ytsaurus/ytsaurus-ui/commit/bd8abd6976444a513bae12d6cb221aa91531124d))
+* **Queries:** restore CHYT highlighting after block comments [YTFRONT-5843] ([1bcaaab](https://github.com/ytsaurus/ytsaurus-ui/commit/1bcaaab8897c448f0cfd83adce424bec47d8068b))
+* **Queries:** sort numeric result columns correctly [YTFRONT-6099] ([5a9ac89](https://github.com/ytsaurus/ytsaurus-ui/commit/5a9ac8969ec18e2418573594cc4daab2d560dcbb))
+* **QueryTracker:** improve navigation loading and filtering [YTFRONT-5971] ([ee0eeab](https://github.com/ytsaurus/ytsaurus-ui/commit/ee0eeab8e15b565a06b6beb60f2932c5a58fe0d0))
+* **StatisticTable:** measure column width after font loading ([7a8b0c0](https://github.com/ytsaurus/ytsaurus-ui/commit/7a8b0c04f5871bf76c3bb6e2be0982cf4211728c))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @ytsaurus/components bumped from ^2.0.2 to ^2.0.3
+
 ## [3.29.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.28.0...ui-v3.29.0) (2026-10-16)
 
 
