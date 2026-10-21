@@ -17,8 +17,8 @@ function createState(queueConsumerName: string, registrations: unknown[]) {
 describe('queue consumer selection', () => {
     it('filters registrations by path', () => {
         const registrations = [
-            {consumer: 'markov://home/queues/primary'},
-            {consumer: 'markov://home/queues/analytics'},
+            {consumer: 'test-cluster://home/queues/primary'},
+            {consumer: 'test-cluster://home/queues/analytics'},
         ];
 
         expect(
@@ -30,17 +30,17 @@ describe('queue consumer selection', () => {
 
     it('filters attributed registrations by consumer name', () => {
         const registrations = [
-            {consumer: 'markov://legacy'},
+            {consumer: 'test-cluster://legacy'},
             {
                 consumer: {
                     $value: '//multi',
-                    $attributes: {cluster: 'markov', queue_consumer_name: 'two'},
+                    $attributes: {cluster: 'test-cluster', queue_consumer_name: 'two'},
                 },
             },
             {
                 consumer: {
                     $value: '//multi',
-                    $attributes: {cluster: 'markov', queue_consumer_name: 'one'},
+                    $attributes: {cluster: 'test-cluster', queue_consumer_name: 'one'},
                 },
             },
         ];

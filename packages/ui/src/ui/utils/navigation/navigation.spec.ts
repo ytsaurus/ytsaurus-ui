@@ -28,14 +28,14 @@ describe('findCommonPathParent', () => {
 
 describe('genNavigationUrl', () => {
     it('preserves links without additional query parameters', () => {
-        expect(genNavigationUrl({cluster: 'markov', path: '//consumer', transaction: 'tx'})).toBe(
-            '/markov/navigation?path=//consumer&t=tx',
-        );
+        expect(
+            genNavigationUrl({cluster: 'test-cluster', path: '//consumer', transaction: 'tx'}),
+        ).toBe('/test-cluster/navigation?path=//consumer&t=tx');
     });
 
     it('encodes named-consumer query parameters', () => {
         const url = genNavigationUrl({
-            cluster: 'markov',
+            cluster: 'test-cluster',
             path: '//consumer',
             queryParams: {tab: 'consumer', cName: 'a/b&c=# тест', unused: undefined},
         });

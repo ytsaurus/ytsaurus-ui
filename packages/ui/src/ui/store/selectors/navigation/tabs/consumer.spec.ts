@@ -15,9 +15,9 @@ jest.mock('..', () => ({
     selectPath: () => '//consumer',
     selectTransaction: () => undefined,
 }));
-jest.mock('../../global', () => ({selectCluster: () => 'markov'}));
+jest.mock('../../global', () => ({selectCluster: () => 'test-cluster'}));
 
-const queue = 'markov://queue';
+const queue = 'test-cluster://queue';
 const registration = {queue, vital: false};
 const data: ConsumerStatusData = {
     queue_consumer_names: ['one', 'two', 'broken', 'empty'],

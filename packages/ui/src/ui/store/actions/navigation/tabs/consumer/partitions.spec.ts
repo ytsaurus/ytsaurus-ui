@@ -10,7 +10,7 @@ jest.mock('../../../../../store/selectors/navigation', () => ({
     selectPath: () => '//consumer',
     selectTransaction: () => undefined,
 }));
-jest.mock('../../../../../store/selectors/global', () => ({selectCluster: () => 'markov'}));
+jest.mock('../../../../../store/selectors/global', () => ({selectCluster: () => 'test-cluster'}));
 jest.mock('../../../../../utils/navigation', () => ({
     prepareRequest: (suffix: string, {path}: {path: string}) => ({
         parameters: {path: path + suffix},
@@ -18,7 +18,7 @@ jest.mock('../../../../../utils/navigation', () => ({
 }));
 
 describe('consumer partition requests', () => {
-    const queue = 'markov://queue';
+    const queue = 'test-cluster://queue';
     function run(consumerName?: string, requestedQueue = queue, dispatch = jest.fn()) {
         const state = {
             navigation: {
@@ -49,7 +49,7 @@ describe('consumer partition requests', () => {
     it('ignores a request for a queue that is no longer selected', () => {
         const dispatch = jest.fn();
 
-        run(undefined, 'markov://previous-queue', dispatch);
+        run(undefined, 'test-cluster://previous-queue', dispatch);
 
         expect(ytApiV3Id.get).not.toHaveBeenCalled();
         expect(dispatch).not.toHaveBeenCalled();
@@ -61,7 +61,9 @@ describe('consumer partition requests', () => {
         expect(ytApiV3Id.get).toHaveBeenCalledWith(
             'partitions',
             {
-                parameters: {path: '//consumer/@queue_consumer_partitions/markov:\\/\\/queue'},
+                parameters: {
+                    path: '//consumer/@queue_consumer_partitions/test-cluster:\\/\\/queue',
+                },
             },
             expect.any(Function),
         );
@@ -74,7 +76,7 @@ describe('consumer partition requests', () => {
             'partitions',
             {
                 parameters: {
-                    path: '//consumer/@queue_consumer_partitions/consumers/a\\/b\\@c/markov:\\/\\/queue',
+                    path: '//consumer/@queue_consumer_partitions/consumers/a\\/b\\@c/test-cluster:\\/\\/queue',
                 },
             },
             expect.any(Function),
