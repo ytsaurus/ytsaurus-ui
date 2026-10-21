@@ -1,6 +1,6 @@
 {
   "name": "@ytsaurus/ui",
-  "version": "3.30.0",
+  "version": "3.30.1",
   "repository": {
     "type": "github",
     "url": "https://github.com/ytsaurus/ytsaurus-ui/tree/main/packages/ui"
@@ -154,7 +154,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/type-is": "^1.6.3",
     "@vitejs/plugin-react": "^4.6.0",
-    "@ytsaurus/components": "^2.0.2",
+    "@ytsaurus/components": "^2.0.3",
     "bem-cn-lite": "^4.1.0",
     "bignumber.js": "^9.1.2",
     "colord": "^2.9.1",
