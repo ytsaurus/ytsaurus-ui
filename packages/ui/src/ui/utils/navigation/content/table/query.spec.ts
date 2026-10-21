@@ -111,6 +111,20 @@ describe('Query.prepareKey', () => {
     });
 });
 
+describe('Query.prepareKeyFromValues', () => {
+    beforeEach(() => {
+        unipikaFormatFromYSON.mockClear();
+    });
+
+    it('formats values in object property order', () => {
+        const result = Query.prepareKeyFromValues({date: 42, cluster: 'hahn'});
+
+        expect(result).toBe('(yson-value, yson-value)');
+        expect(unipikaFormatFromYSON).toHaveBeenNthCalledWith(1, 42, expect.any(Object));
+        expect(unipikaFormatFromYSON).toHaveBeenNthCalledWith(2, 'hahn', expect.any(Object));
+    });
+});
+
 describe('Query.prepareWhere', () => {
     const offsetKey = '(10, 20)';
 

@@ -88,6 +88,17 @@ export class Query {
         );
     }
 
+    /**
+     * Formats a key from record values in property insertion order.
+     * @param values Key values indexed by column name.
+     * @returns A formatted key tuple.
+     */
+    static prepareKeyFromValues(values: Record<string, unknown>): string {
+        return prepareKeyImpl(
+            Object.values(values).map((value) => Query.prepareColumnValue(value)),
+        );
+    }
+
     static prepareWhere(
         offsetColumns: string[],
         offsetKey: string,
@@ -153,9 +164,7 @@ export class Query {
         limit: number;
     }): string {
         const whereColumns = Object.keys(keyValues);
-        const whereValues = Object.values(keyValues).map((v) => Query.prepareColumnValue(v));
-
-        const key = prepareKeyImpl(whereValues);
+        const key = Query.prepareKeyFromValues(keyValues);
 
         return [
             Query.prepareColumns(columns),
