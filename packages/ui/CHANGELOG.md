@@ -8,12 +8,6 @@
 * fix '@ytsaurus/components' version ([ae1b42b](https://github.com/ytsaurus/ytsaurus-ui/commit/ae1b42b70e845d7bc82384c283d60fb31b3c2e56))
 
 
-### Dependencies
-
-* The following workspace dependencies were updated
-  * devDependencies
-    * @ytsaurus/components bumped from ^2.0.2 to ^2.0.3
-
 ## [3.30.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.29.0...ui-v3.30.0) (2026-10-21)
 
 
