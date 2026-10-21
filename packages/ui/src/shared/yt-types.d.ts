@@ -910,7 +910,7 @@ export type FlowNodeStatusType =
 export type FlowComputationstatus = 'info' | 'warning' | 'error';
 
 export type FlowComputationStreams = Record<FlowComputationStreamType, Array<StreamId>> &
-    Record<FlowComputationExtendedStreamTypes, Array<FlowExtendedStreamType>>;
+    Partial<Record<FlowComputationExtendedStreamTypes, Array<FlowExtendedStreamType>>>;
 
 /**
  * - Elements of sources_streams/timer_streams/output_streams should be groupped with their computation
