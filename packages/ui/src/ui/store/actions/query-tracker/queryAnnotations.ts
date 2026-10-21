@@ -1,3 +1,5 @@
+import isEqual_ from 'lodash/isEqual';
+import {selectQuerySessionRevision} from '../../selectors/query-tracker/querySession';
 import type {ThunkAction} from 'redux-thunk';
 import type {AnyAction} from 'redux';
 
@@ -25,7 +27,10 @@ export function saveQueryAnnotations(
     prepareAnnotations: (query: QueryItem) => QueryItem['annotations'],
 ): ThunkAction<Promise<void>, RootState, unknown, AnyAction> {
     return (dispatch, getState) => {
-        const {stage} = selectQueryTrackerRequestOptions(getState());
+        const initialState = getState();
+        const draftSnapshot = selectQueryDraft(initialState);
+        const sessionRevision = selectQuerySessionRevision(initialState);
+        const {stage} = selectQueryTrackerRequestOptions(initialState);
         const setup = getQTApiSetup();
         const key = JSON.stringify([setup.proxy, stage, queryId]);
         const previous = pendingUpdates.get(key) || Promise.resolve();
@@ -54,8 +59,30 @@ export function saveQueryAnnotations(
                 if (current?.id === queryId) {
                     dispatch({type: UPDATE_QUERY_ITEM, data: {...current, annotations}});
                 }
-                if (selectQueryDraft(state).id === queryId) {
-                    dispatch({type: SET_QUERY_PATCH, data: {annotations}});
+                const draft = selectQueryDraft(state);
+                if (
+                    draft.id === queryId &&
+                    draftSnapshot.id === queryId &&
+                    selectQuerySessionRevision(state) === sessionRevision
+                ) {
+                    const merged: Record<string, unknown> = {...annotations};
+                    const before: Record<string, unknown> = draftSnapshot.annotations || {};
+                    const currentAnnotations: Record<string, unknown> = draft.annotations || {};
+                    for (const annotationKey of new Set([
+                        ...Object.keys(before),
+                        ...Object.keys(currentAnnotations),
+                    ])) {
+                        if (
+                            !isEqual_(before[annotationKey], currentAnnotations[annotationKey]) ||
+                            Object.hasOwn(before, annotationKey) !==
+                                Object.hasOwn(currentAnnotations, annotationKey)
+                        ) {
+                            if (Object.hasOwn(currentAnnotations, annotationKey))
+                                merged[annotationKey] = currentAnnotations[annotationKey];
+                            else delete merged[annotationKey];
+                        }
+                    }
+                    dispatch({type: SET_QUERY_PATCH, data: {annotations: merged}});
                 }
             });
         pendingUpdates.set(key, request);

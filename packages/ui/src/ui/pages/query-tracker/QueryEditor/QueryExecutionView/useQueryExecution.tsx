@@ -79,7 +79,9 @@ export function useQueryExecution({
 
     useEffect(() => {
         if (query?.id && !minimized && activeTab.startsWith('result/')) {
-            dispatch(loadQueryResult(query.id, parseResultTabIndex(activeTab) || 0));
+            dispatch(
+                loadQueryResult(query.id, parseResultTabIndex(activeTab) || 0, {fromStart: true}),
+            );
         }
     }, [dispatch, query?.id, activeTab, minimized]);
 

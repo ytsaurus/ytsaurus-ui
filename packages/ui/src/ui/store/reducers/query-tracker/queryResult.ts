@@ -41,6 +41,15 @@ const initialSettings: QueryResultReadyState['settings'] = {
 };
 
 export function queryResult(state = initialState, action: QueryResultsActions): QueryResultsState {
+    if (
+        (action.type === SET_QUERY_RESULTS ||
+            action.type === SET_QUERY_RESULTS_PAGE ||
+            action.type === SET_QUERY_RESULTS_ERROR) &&
+        action.data.requestId !== undefined &&
+        state[action.data.queryId]?.[action.data.index]?.requestId !== action.data.requestId
+    ) {
+        return state;
+    }
     switch (action.type) {
         case REQUEST_QUERY_RESULTS: {
             const results = state[action.data.queryId] ?? {};
@@ -52,6 +61,8 @@ export function queryResult(state = initialState, action: QueryResultsActions): 
                     [action.data.index]: {
                         ...(results[action.data.index] as QueryResultLoadingState),
                         state: QueryResultState.Loading,
+                        requestId: action.data.requestId,
+                        requestOffset: action.data.rowOffset,
                     },
                 },
             };
@@ -71,8 +82,11 @@ export function queryResult(state = initialState, action: QueryResultsActions): 
                         rawResult: action.data.rawResult,
                         meta: action.data.meta,
                         page: 0,
+                        rowOffset: 0,
+                        requestId: action.data.requestId,
                         settings: {
                             ...initialSettings,
+                            ...results[action.data.index]?.settings,
                         },
                     },
                 },
@@ -128,6 +142,7 @@ export function queryResult(state = initialState, action: QueryResultsActions): 
                         results: action.data.results,
                         rawResult: action.data.rawResult,
                         page: action.data.page,
+                        rowOffset: action.data.rowOffset,
                     },
                 },
             };
@@ -139,6 +154,8 @@ export function queryResult(state = initialState, action: QueryResultsActions): 
                 [action.data.queryId]: {
                     ...results,
                     [action.data.index]: {
+                        settings: results[action.data.index]?.settings,
+                        requestId: action.data.requestId,
                         state: QueryResultState.Error,
                         error: action.data.error,
                     },
@@ -180,6 +197,8 @@ export type RequestQueryResultsAction = ActionD<
     {
         queryId: QueryItem['id'];
         index: number;
+        requestId?: number;
+        rowOffset: number;
     }
 >;
 
@@ -188,6 +207,7 @@ export type SetQueryResultsAction = ActionD<
     {
         queryId: QueryItem['id'];
         index: number;
+        requestId?: number;
         results: QueryResultReadyState['results'];
         rawResult?: QueryResultReadyState['rawResult'];
         columns: QueryResultReadyState['columns'];
@@ -200,9 +220,11 @@ export type SetQueryResultsPageAction = ActionD<
     {
         queryId: QueryItem['id'];
         index: number;
+        requestId?: number;
         results: QueryResultReadyState['results'];
         rawResult?: QueryResultReadyState['rawResult'];
         page: number;
+        rowOffset: number;
     }
 >;
 
@@ -211,6 +233,7 @@ export type SetQueryResultsErrorAction = ActionD<
     {
         queryId: QueryItem['id'];
         index: number;
+        requestId?: number;
         error: Error;
     }
 >;

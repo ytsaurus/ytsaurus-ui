@@ -67,7 +67,7 @@ export const selectQueryResultSettings = (
     index: number,
 ): QueryResultReadyState['settings'] => {
     const result = selectQueryResult(state, queryId, index);
-    if (result?.state === QueryResultState.Ready) {
+    if (result?.settings) {
         return result.settings;
     }
     return selectQueryResultGlobalSettings();

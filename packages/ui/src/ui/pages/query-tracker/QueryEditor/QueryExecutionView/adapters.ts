@@ -4,6 +4,7 @@ import type {
     QueryResultsView,
     QueryStatisticsItem,
 } from '@gravity-ui/querieskit';
+import isEqual_ from 'lodash/isEqual';
 import {type Type, parseV3Type} from '@ytsaurus/components';
 
 import type {QueryError} from '../../../../types/query-tracker/api';
@@ -71,11 +72,23 @@ export function prepareResult(
     result: QueryResultReadyState,
     typeMap: Parameters<typeof parseV3Type>[1],
     view: QueryResultsView,
-): {columns: QueryResultColumn<Record<string, unknown>>[]; rows: Record<string, unknown>[]} {
+): {
+    columns: QueryResultColumn<Record<string, unknown>>[];
+    rows: Record<string, unknown>[];
+    fallbackColumns: string[];
+} {
     const raw = result.rawResult;
+    const fallbackColumns: string[] = [];
     const columns = result.columns.map(({name}) => {
         const cell = raw?.rows.find((row) => row[name])?.[name];
         const type = cell && raw?.yql_type_registry[Number(cell[1])];
+        if (
+            raw?.rows.some((row) => {
+                const entry = row[name];
+                return !entry || !type || !isEqual_(type, raw.yql_type_registry[Number(entry[1])]);
+            })
+        )
+            fallbackColumns.push(name);
         const schema = result.meta.schema?.$value.find((column) => column.name === name);
         // Schema describes the declared column, while Result needs the wire type of its cells.
         const schemaType = () =>
@@ -89,8 +102,14 @@ export function prepareResult(
     });
     return {
         columns,
+        fallbackColumns,
         rows: (raw?.rows || []).map((row) =>
-            Object.fromEntries(Object.entries(row).map(([name, [value]]) => [name, value])),
+            Object.fromEntries(
+                Object.entries(row).map(([name, cell]) => [
+                    name,
+                    fallbackColumns.includes(name) ? cell : cell[0],
+                ]),
+            ),
         ),
     };
 }

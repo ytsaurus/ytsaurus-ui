@@ -1,5 +1,8 @@
 import React, {useMemo} from 'react';
 import {FieldsSelector, type QueryResultsProps} from '@gravity-ui/querieskit';
+import {ColumnCell} from '@ytsaurus/components';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
+import {rumLogError} from '../../../../rum/rum-counter';
 import {Button, Flex, Text} from '@gravity-ui/uikit';
 
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
@@ -7,6 +10,7 @@ import {selectQueryResults} from '../../../../store/selectors/query-tracker/quer
 import {selectPrimitiveTypesMap} from '../../../../store/selectors/global/supported-features';
 import {
     loadNextQueryResult,
+    loadQueryResult,
     patchQueryResultSettings,
 } from '../../../../store/actions/query-tracker/queryResult';
 import {type QueryItem} from '../../../../types/query-tracker/api';
@@ -33,14 +37,25 @@ export function useResultProps(query: QueryItem | undefined, active: boolean, ac
             const index = Number(key);
             const loading =
                 result.state === QueryResultState.Loading || result.state === QueryResultState.Init;
-            if (!result.resultReady) {
+            if (!result.resultReady || result.rowOffset !== 0) {
                 props[index] = {
                     columns: [],
                     rows: [],
                     loading: result.state !== QueryResultState.Error,
                     errorContent:
                         result.state === QueryResultState.Error ? (
-                            <YTErrorBlock error={result.error} />
+                            <Flex direction="column" gap={2}>
+                                <YTErrorBlock error={result.error} />
+                                <Button
+                                    onClick={() =>
+                                        dispatch(
+                                            loadQueryResult(query.id, index, {fromStart: true}),
+                                        )
+                                    }
+                                >
+                                    {executionI18n('action_charts-retry')}
+                                </Button>
+                            </Flex>
                         ) : undefined,
                 };
                 continue;
@@ -49,7 +64,37 @@ export function useResultProps(query: QueryItem | undefined, active: boolean, ac
                 result.settings.viewMode === QueryResultsViewMode.Scheme ? 'schema' : 'result';
             const prepared = prepareResult(result, typeMap, view);
             const visible = result.settings.visibleColumns;
-            const columns = prepared.columns;
+            const columns = prepared.columns.map((column) => ({
+                ...column,
+                render: prepared.fallbackColumns.includes(column.name)
+                    ? ({value, index: rowIndex}: {value: unknown; index: number}) => (
+                          <ColumnCell
+                              value={value as React.ComponentProps<typeof ColumnCell>['value']}
+                              yqlTypes={result.rawResult?.yql_type_registry || null}
+                              useYqlTypes
+                              rowIndex={rowIndex}
+                              columnName={column.name}
+                              ysonSettings={{
+                                  treatValAsData: true,
+                                  escapeWhitespace: false,
+                                  decodeUTF8: false,
+                                  binaryAsHex: true,
+                                  escapeYQLStrings: true,
+                                  omitStructNull: true,
+                                  maxListSize: result.results[rowIndex]?.[column.name]?.$incomplete
+                                      ? 50
+                                      : undefined,
+                                  maxStringSize: undefined,
+                              }}
+                              onShowPreview={(name, row, tag) =>
+                                  onShowPreview(index, name, row, tag)
+                              }
+                              logError={rumLogError}
+                              ErrorBoundaryComponent={ErrorBoundary}
+                          />
+                      )
+                    : undefined,
+            }));
             props[index] = {
                 columns:
                     view === 'schema' || !visible

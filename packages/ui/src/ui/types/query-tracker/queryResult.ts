@@ -44,6 +44,8 @@ export type QueryResultReadyState = {
     rawResult?: RawQueryResult;
     columns: QueryResultColumn[];
     page: number;
+    /** Absolute index of the first cached row. */
+    rowOffset: number;
     settings: {
         transposed?: boolean;
         viewMode?: QueryResultsViewMode;
@@ -61,4 +63,10 @@ export type QueryResultErrorState = {
     error: Error;
     page?: undefined;
 };
-export type QueryResult = QueryResultLoadingState | QueryResultReadyState | QueryResultErrorState;
+export type QueryResult = (
+    QueryResultLoadingState | QueryResultReadyState | QueryResultErrorState
+) & {
+    requestId?: number;
+    requestOffset?: number;
+    settings?: QueryResultReadyState['settings'];
+};

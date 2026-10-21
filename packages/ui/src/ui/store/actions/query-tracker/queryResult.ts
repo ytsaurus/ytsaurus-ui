@@ -110,20 +110,27 @@ async function attachExistenceToFullResult(fullResult: QueryResultMeta['full_res
 }
 
 const QUERY_RESULT_ROWS_LIMIT = 1000;
+let nextResultRequestId = 0;
 
 export function loadQueryResult(
     queryId: QueryItem['id'],
     resultIndex = 0,
+    {fromStart = false}: {fromStart?: boolean} = {},
 ): ThunkAction<any, RootState, any, QueryResultsActions> {
     return async (dispatch, getState) => {
         const state = getState();
-        if (selectHasQueryResult(state, queryId, resultIndex)) {
-            return;
+        const cached = selectQueryResult(state, queryId, resultIndex);
+        if (cached && cached.state !== QueryResultState.Error) {
+            if (!fromStart) return;
+            if (cached.state === QueryResultState.Loading) {
+                if (cached.requestOffset === 0) return;
+            } else if (cached.resultReady && cached.rowOffset === 0) return;
         }
+        const requestId = ++nextResultRequestId;
         try {
             dispatch({
                 type: REQUEST_QUERY_RESULTS,
-                data: {queryId, index: resultIndex},
+                data: {queryId, index: resultIndex, requestId, rowOffset: 0},
             });
             const meta = await dispatch(getQueryResultMeta(queryId, resultIndex));
             if (meta?.error) throw meta.error;
@@ -144,7 +151,7 @@ export function loadQueryResult(
                     };
                 }) || [];
 
-            const settings = selectQueryResultGlobalSettings();
+            const settings = cached?.settings || selectQueryResultGlobalSettings();
             const result = await wrapApiPromiseByToaster(
                 dispatch(
                     readQueryResults({
@@ -181,6 +188,7 @@ export function loadQueryResult(
                 data: {
                     queryId,
                     index: resultIndex,
+                    requestId,
                     results: formattedResult,
                     rawResult: result,
                     columns,
@@ -193,6 +201,7 @@ export function loadQueryResult(
                 data: {
                     queryId,
                     index: resultIndex,
+                    requestId,
                     error: e as Error,
                 },
             });
@@ -206,11 +215,20 @@ export function loadNextQueryResult(
 ): ThunkAction<Promise<void>, RootState, unknown, QueryResultsActions> {
     return async (dispatch, getState) => {
         const previous = selectQueryResult(getState(), queryId, resultIndex);
-        if (previous?.state !== QueryResultState.Ready || !previous.rawResult) return;
+        if (
+            previous?.state !== QueryResultState.Ready ||
+            !previous.rawResult ||
+            previous.rowOffset !== 0
+        )
+            return;
         const start = previous.results.length;
         if (start >= previous.meta.data_statistics.row_count) return;
 
-        dispatch({type: REQUEST_QUERY_RESULTS, data: {queryId, index: resultIndex}});
+        const requestId = ++nextResultRequestId;
+        dispatch({
+            type: REQUEST_QUERY_RESULTS,
+            data: {queryId, index: resultIndex, requestId, rowOffset: 0},
+        });
         try {
             const next = await wrapApiPromiseByToaster(
                 dispatch(
@@ -230,7 +248,8 @@ export function loadNextQueryResult(
             );
             // A cell preview may have completed while the next page was loading.
             const current = selectQueryResult(getState(), queryId, resultIndex);
-            if (!current?.resultReady || !current.rawResult) return;
+            if (!current?.resultReady || !current.rawResult || current.requestId !== requestId)
+                return;
             const rows = next.rows.map((row) =>
                 Object.fromEntries(
                     Object.entries(row).map(([name, [value, type]]) => [
@@ -245,6 +264,8 @@ export function loadNextQueryResult(
                     queryId,
                     index: resultIndex,
                     page: 0,
+                    rowOffset: 0,
+                    requestId,
                     results: [...current.results, ...rows],
                     rawResult: appendQueryResultPage(current.rawResult, next),
                 },
@@ -252,13 +273,15 @@ export function loadNextQueryResult(
         } catch {
             // The toaster reports the failure; keep loaded rows available and allow retry.
             const current = selectQueryResult(getState(), queryId, resultIndex);
-            if (!current?.resultReady) return;
+            if (!current?.resultReady || current.requestId !== requestId) return;
             dispatch({
                 type: SET_QUERY_RESULTS_PAGE,
                 data: {
                     queryId,
                     index: resultIndex,
                     page: current.page,
+                    rowOffset: current.rowOffset,
+                    requestId,
                     results: current.results,
                     rawResult: current.rawResult,
                 },
@@ -310,11 +333,12 @@ export function updateQueryResult(
     page: number,
 ): ThunkAction<any, RootState, any, QueryResultsActions> {
     return async (dispatch, getState) => {
+        const requestId = ++nextResultRequestId;
         try {
             const settings = selectQueryResultSettings(getState(), queryId, resultIndex);
             dispatch({
                 type: REQUEST_QUERY_RESULTS,
-                data: {queryId, index: resultIndex},
+                data: {queryId, index: resultIndex, requestId, rowOffset: page * settings.pageSize},
             });
 
             const startPage = page * settings.pageSize;
@@ -353,7 +377,7 @@ export function updateQueryResult(
                 );
             });
 
-            if (Array.isArray(rows) && rows.length) {
+            if (Array.isArray(rows)) {
                 dispatch({
                     type: SET_QUERY_RESULTS_PAGE,
                     data: {
@@ -361,8 +385,9 @@ export function updateQueryResult(
                         index: resultIndex,
                         results: formattedResult,
                         rawResult: result,
-                        settings,
                         page,
+                        rowOffset: startPage,
+                        requestId,
                     },
                 });
             }
@@ -372,6 +397,7 @@ export function updateQueryResult(
                 data: {
                     queryId,
                     index: resultIndex,
+                    requestId,
                     error: e as Error,
                 },
             });

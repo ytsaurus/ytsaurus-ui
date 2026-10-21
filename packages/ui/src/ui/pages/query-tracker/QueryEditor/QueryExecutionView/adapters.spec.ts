@@ -27,6 +27,7 @@ function makeResult(
         columns: [{name: 'value', displayName: 'value', type: {name: 'Int64'}}],
         results: [],
         page: 0,
+        rowOffset: 0,
         settings: {pageSize: 100, cellSize: 100},
         meta: {
             schema: {$value: [{name: 'value', type_v3: type}]},
@@ -60,6 +61,7 @@ describe('prepareResult', () => {
         expect(prepareResult(result, typeMap, view)).toEqual({
             columns: [{name: 'value', type: ['OptionalType', ['DataType', 'Int64']]}],
             rows: [],
+            fallbackColumns: [],
         });
     });
 
@@ -115,4 +117,36 @@ describe('prepareResult', () => {
             expect(JSON.stringify(result)).toBe(original);
         },
     );
+});
+
+describe('mixed result cell types', () => {
+    it('retains each wire type instead of formatting all rows as null', () => {
+        const result = makeResult();
+        result.rawResult.yql_type_registry = [['NullType'], ['DataType', 'Int64']];
+        result.rawResult.rows = [{value: [null, '0']}, {value: ['42', '1']}];
+        const prepared = prepareResult(result, typeMap, 'result');
+        expect(prepared.fallbackColumns).toEqual(['value']);
+        expect(prepared.rows).toEqual(result.rawResult.rows);
+        expect(prepareResult(result, typeMap, 'schema').columns[0].type).toEqual([
+            'OptionalType',
+            ['DataType', 'Int64'],
+        ]);
+    });
+    it('compares type descriptions after registry concatenation or cell preview', () => {
+        const result = makeResult();
+        result.rawResult.yql_type_registry.push(['DataType', 'Int64']);
+        result.rawResult.rows.push({value: ['43', '1']});
+        expect(prepareResult(result, typeMap, 'result').fallbackColumns).toEqual([]);
+        expect(prepareResult(result, typeMap, 'result').rows).toEqual([
+            {value: '42'},
+            {value: '43'},
+        ]);
+        result.rawResult.yql_type_registry[1] = ['DataType', 'String'];
+        expect(prepareResult(result, typeMap, 'result').fallbackColumns).toEqual(['value']);
+    });
+    it('handles missing cells without discarding valid wire types', () => {
+        const result = makeResult();
+        result.rawResult.rows.unshift({});
+        expect(prepareResult(result, typeMap, 'result').rows).toEqual([{}, {value: ['42', '0']}]);
+    });
 });

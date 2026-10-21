@@ -47,7 +47,7 @@ export function QueryDashboardCharts({
     const edited = useRef(false);
     const revision = useRef(0);
     const [saveState, setSaveState] = useState<'saved' | 'saving' | 'error'>('saved');
-    const rows = result?.resultReady ? result.results : emptyRows;
+    const rows = result?.resultReady && result.rowOffset === 0 ? result.results : emptyRows;
     const prepared = useMemo(() => prepareChartFields(rows), [rows]);
     const items = useMemo(
         () => restoreDashboardItems(config.charts, prepared),
@@ -63,7 +63,7 @@ export function QueryDashboardCharts({
     );
 
     useEffect(() => {
-        dispatch(loadQueryResult(query.id, resultIndex));
+        dispatch(loadQueryResult(query.id, resultIndex, {fromStart: true}));
     }, [dispatch, query.id, resultIndex]);
 
     useEffect(() => {
@@ -104,8 +104,20 @@ export function QueryDashboardCharts({
         save(next);
     };
 
-    if (result?.state === QueryResultState.Error) return <YTErrorBlock error={result.error} />;
-    if (!result?.resultReady) return <Loader />;
+    if (result?.state === QueryResultState.Error)
+        return (
+            <Flex direction="column" gap={2}>
+                <YTErrorBlock error={result.error} />
+                <Button
+                    onClick={() =>
+                        dispatch(loadQueryResult(query.id, resultIndex, {fromStart: true}))
+                    }
+                >
+                    {i18n('action_charts-retry')}
+                </Button>
+            </Flex>
+        );
+    if (!result?.resultReady || result.rowOffset !== 0) return <Loader />;
 
     return (
         <Flex direction="column" gap={2} height="100%" style={{minHeight: 0}}>
