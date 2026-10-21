@@ -23,10 +23,11 @@ export type Props = {
     node: Pick<NavigationNode, 'path' | 'type' | 'dynamic'>;
     engine: QueryEngine;
     open: boolean;
+    disabled?: boolean;
     onOpenToggle: () => void;
 };
 
-export const PathActionsMenu: FC<Props> = ({node, engine, open, onOpenToggle}) => {
+export const PathActionsMenu: FC<Props> = ({node, engine, open, onOpenToggle, disabled}) => {
     const dispatch = useDispatch();
     const dirtyQuery = useSelector(selectIsQueryDraftEditted);
     const clusterConfig = useSelector(selectNavigationClusterConfig);
@@ -100,10 +101,16 @@ export const PathActionsMenu: FC<Props> = ({node, engine, open, onOpenToggle}) =
     return (
         <>
             <DropdownMenu
-                open={open}
+                disabled={disabled}
+                open={open && !disabled}
                 onOpenToggle={onOpenToggle}
                 renderSwitcher={(props) => (
-                    <Button view="flat" {...props}>
+                    <Button
+                        view="flat"
+                        {...props}
+                        disabled={disabled}
+                        aria-label={i18n('action_insert-into-editor')}
+                    >
                         <Icon data={TextIndentIcon} size={16} />
                     </Button>
                 )}
