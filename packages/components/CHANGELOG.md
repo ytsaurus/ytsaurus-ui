@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.3](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v2.0.2...components-v2.0.3) (2026-10-21)
+
+
+### Bug Fixes
+
+* **QueryTracker:** improve navigation loading and filtering [YTFRONT-5971] ([ee0eeab](https://github.com/ytsaurus/ytsaurus-ui/commit/ee0eeab8e15b565a06b6beb60f2932c5a58fe0d0))
+
 ## [2.0.2](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v2.0.1...components-v2.0.2) (2026-10-20)
 
 
