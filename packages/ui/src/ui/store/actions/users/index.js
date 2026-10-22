@@ -1,3 +1,4 @@
+import {disableYTCacheTemporarily} from '../../../../shared/constants/yt-api';
 import difference_ from 'lodash/difference';
 import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
@@ -134,7 +135,12 @@ export function closeUserEditorModal() {
 function removeUserFromGroups(cluster, username, groups) {
     return Promise.all(
         map_(groups, (groupname) => {
-            return UIFactory.getAclApi().removeUserFromGroup({cluster, username, groupname});
+            return UIFactory.getAclApi()
+                .removeUserFromGroup({cluster, username, groupname})
+                .then((result) => {
+                    disableYTCacheTemporarily();
+                    return result;
+                });
         }),
     );
 }
@@ -142,19 +148,29 @@ function removeUserFromGroups(cluster, username, groups) {
 function addUserToGroups(cluster, username, groups, comment) {
     return Promise.all(
         map_(groups, (groupname) => {
-            return UIFactory.getAclApi().addUserToGroup({cluster, username, groupname, comment});
+            return UIFactory.getAclApi()
+                .addUserToGroup({cluster, username, groupname, comment})
+                .then((result) => {
+                    disableYTCacheTemporarily();
+                    return result;
+                });
         }),
     );
 }
 
 function changeUserPassword({username, sha256Password}) {
     if (sha256Password) {
-        return ytApiV4Id.setUserPassword(YTApiId.setUserPassword, {
-            parameters: {
-                user: username,
-                new_password_sha256: sha256Password,
-            },
-        });
+        return ytApiV4Id
+            .setUserPassword(YTApiId.setUserPassword, {
+                parameters: {
+                    user: username,
+                    new_password_sha256: sha256Password,
+                },
+            })
+            .then((result) => {
+                disableYTCacheTemporarily();
+                return result;
+            });
     }
 
     return Promise.resolve();
@@ -211,7 +227,13 @@ export function saveUserData({
                     addUserToGroups(cluster, username, groupsToAdd, comment),
                     removeUserFromGroups(cluster, username, groupsToRemove),
                     changeUserPassword({username, sha256Password}),
-                    requests.length && ytApiV3Id.executeBatch(YTApiId.usersSaveData, {requests}),
+                    requests.length &&
+                        ytApiV3Id.executeBatch(YTApiId.usersSaveData, {requests}).then((result) => {
+                            if (result.some(({error}) => !error)) {
+                                disableYTCacheTemporarily();
+                            }
+                            return result;
+                        }),
                 ].filter(Boolean),
             )
                 // eslint-disable-next-line no-unused-vars

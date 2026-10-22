@@ -76,7 +76,7 @@ export function getNodes({
                 parameters: {
                     path: `//sys/${type}`,
                     attributes: preparedAttrs,
-                    ...USE_CACHE,
+                    ...USE_CACHE(),
                     ...USE_MAX_SIZE,
                 },
             };
@@ -223,7 +223,7 @@ export function getComponentsNodesFilterOptions(): NodesThunkAction {
             ytApiV3Id.list(YTApiId.componentsClusterNodes, {
                 path: '//sys/cluster_nodes',
                 attributes,
-                ...USE_CACHE,
+                ...USE_CACHE(),
                 ...USE_MAX_SIZE,
             }),
             {

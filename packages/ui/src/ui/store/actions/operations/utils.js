@@ -42,6 +42,6 @@ export function getListRequestParameters(state) {
         include_archive: state.operations.list.dataMode === OPERATIONS_DATA_MODE.ARCHIVE,
         // TODO: make limit configurable by using settings, 20 | 50 | 100
         limit: 20,
-        ...USE_CACHE,
+        ...USE_CACHE(),
     };
 }

@@ -6,7 +6,6 @@ import {closeUserDeleteModal, deleteUser} from '../../../store/actions/users-typ
 import {fetchUsers} from '../../../store/actions/users/index';
 import {YTDFDialog, makeErrorFields} from '../../../containers/Dialog';
 import {type YTError} from '../../../types';
-import {disableUsersCache} from '../../../utils/users-groups';
 import i18n from './i18n';
 
 export const DeleteUserModal: React.FC = () => {
@@ -27,8 +26,6 @@ export const DeleteUserModal: React.FC = () => {
             await deleteUser({username: usernameToDelete});
 
             onClose();
-
-            disableUsersCache();
             // we don't need to wait for the end of the action
             dispatch(fetchUsers());
         } catch (cause) {

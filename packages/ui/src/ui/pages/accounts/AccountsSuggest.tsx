@@ -117,7 +117,7 @@ export function AccountsSuggestWithLoading(
     }>({items: []});
     React.useEffect(() => {
         let isMounted = true;
-        fetchFullList1M(YTApiId.listAccounts, {path: '//sys/accounts', ...USE_CACHE})
+        fetchFullList1M(YTApiId.listAccounts, {path: '//sys/accounts', ...USE_CACHE()})
             .then((loadedItems: Array<string>) => {
                 if (isMounted) {
                     setState({items: loadedItems});

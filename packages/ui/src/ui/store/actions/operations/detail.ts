@@ -221,7 +221,7 @@ export function loadOperationPoolTreeConfigs({
                 command: 'get',
                 parameters: {
                     path: `//sys/pool_trees/${item}/@config/main_resource`,
-                    ...USE_CACHE,
+                    ...USE_CACHE(),
                 },
             })),
         });
@@ -232,7 +232,7 @@ export function loadOperationPoolTreeConfigs({
                     command: 'get',
                     parameters: {
                         path: `//sys/scheduler/orchid/scheduler/pool_trees/${item}/pools/<Root>/resource_limits`,
-                        ...USE_CACHE,
+                        ...USE_CACHE(),
                     },
                 })),
             }),
@@ -248,7 +248,7 @@ export function loadOperationPoolTreeConfigs({
             ytApiV3Id.executeBatch(YTApiId.operationTreeConfigs, {
                 requests: treeNames.map((item) => ({
                     command: 'get',
-                    parameters: {path: `//sys/pool_trees/${item}/@config`, ...USE_CACHE},
+                    parameters: {path: `//sys/pool_trees/${item}/@config`, ...USE_CACHE()},
                 })),
             }),
             {

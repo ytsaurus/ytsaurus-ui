@@ -50,8 +50,6 @@ export const selectAccountsMasterMemoryContentMode = (state: RootState) =>
 export const selectEditableAccount = (state: RootState) =>
     state.accounts.accounts.editableAccount as AccountSelector;
 
-export const selectAccountsDisabledCacheForNextFetch = (state: RootState) =>
-    state.accounts.accounts.disableCacheForNextFetch;
 export const selectAccountsEditCounter = (state: RootState) => state.accounts.accounts.editCounter;
 
 export interface AccountSelector {

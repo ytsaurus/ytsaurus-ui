@@ -1,3 +1,4 @@
+import {disableYTCacheTemporarily} from '../../../shared/constants/yt-api';
 import concat_ from 'lodash/concat';
 import filter_ from 'lodash/filter';
 import forEach_ from 'lodash/forEach';
@@ -149,16 +150,26 @@ export function closeGroupEditorModal() {
 }
 
 export function createGroup({groupName}: {groupName: string}) {
-    return ytApiV3.create({
-        type: 'group',
-        attributes: {name: groupName},
-    });
+    return ytApiV3
+        .create({
+            type: 'group',
+            attributes: {name: groupName},
+        })
+        .then((result) => {
+            disableYTCacheTemporarily();
+            return result;
+        });
 }
 
 export function deleteGroup({groupName}: {groupName: string}) {
-    return ytApiV3.remove({
-        path: '//sys/groups/' + groupName,
-    });
+    return ytApiV3
+        .remove({
+            path: '//sys/groups/' + groupName,
+        })
+        .then((result) => {
+            disableYTCacheTemporarily();
+            return result;
+        });
 }
 
 type SaveGroupDataPayload = {
@@ -219,6 +230,9 @@ export function saveGroupData({
                     responsible: newResponsibles,
                 },
                 comment,
+            }).then((result) => {
+                disableYTCacheTemporarily();
+                return result;
             });
         }
 
@@ -272,7 +286,12 @@ type RenameGroupPayload = {
 };
 
 function renameGroup({oldGroupname, newGroupName}: RenameGroupPayload) {
-    return ytApiV3.set({path: `//sys/groups/${oldGroupname}/@name`}, newGroupName);
+    return ytApiV3
+        .set({path: `//sys/groups/${oldGroupname}/@name`}, newGroupName)
+        .then((result) => {
+            disableYTCacheTemporarily();
+            return result;
+        });
 }
 
 type ChangeGroupMembersPayload = {
@@ -304,7 +323,14 @@ function changeGroupMembers({groupName, membersToAdd, membersToRemove}: ChangeGr
 
     const requests = [...requestsToAdd, ...requestsToRemove];
 
-    return ytApiV3.executeBatch({
-        requests,
-    });
+    return ytApiV3
+        .executeBatch({
+            requests,
+        })
+        .then((result) => {
+            if (result.some(({error}) => !error)) {
+                disableYTCacheTemporarily();
+            }
+            return result;
+        });
 }

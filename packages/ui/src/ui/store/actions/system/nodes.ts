@@ -78,7 +78,7 @@ export function loadSystemNodes(
                         ],
                         suppress_transaction_coordinator_sync: true,
                         suppress_upstream_sync: true,
-                        ...USE_CACHE,
+                        ...USE_CACHE(),
                         ...USE_MAX_SIZE,
                     },
                 };

@@ -12,7 +12,6 @@ import i18n from './i18n';
 import {type ResponsibleType, type RoleConverted, type Subject} from '../../../utils/acl/acl-types';
 import {type PreparedRole} from '../../../utils/acl';
 import UIFactory from '../../../UIFactory';
-import {disableGroupsCache} from '../../../utils/users-groups';
 
 const block = cn('group-editor-dialog');
 
@@ -92,7 +91,6 @@ export class GroupEditorDialogBase extends React.Component<GroupEditorDialogProp
                 comment,
             })
             .then(() => {
-                disableGroupsCache();
                 return this.props.fetchGroups();
             })
             .then(() => {});

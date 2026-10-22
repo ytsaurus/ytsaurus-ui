@@ -37,7 +37,7 @@ export function AccountsMultiple(props: Props) {
                     parameters: {
                         path: `//sys/accounts`,
                         ...USE_MAX_SIZE,
-                        ...USE_CACHE,
+                        ...USE_CACHE(),
                     },
                 },
             ],

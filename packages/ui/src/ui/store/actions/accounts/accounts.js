@@ -28,10 +28,7 @@ import {
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../constants/accounts';
 import {USE_CACHE, USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
 import {selectCluster, selectCurrentUserName} from '../../../store/selectors/global';
-import {
-    selectAccountsDisabledCacheForNextFetch,
-    selectAccountsEditCounter,
-} from '../../../store/selectors/accounts/accounts-ts';
+import {selectAccountsEditCounter} from '../../../store/selectors/accounts/accounts-ts';
 import {RumWrapper, YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {parseAccountsData, parseAccountsListData} from './accounts-ts';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
@@ -67,10 +64,6 @@ function isLatestRequest(scope, generation) {
     return requestGenerations.get(scope) === generation;
 }
 
-function getCacheParams(state) {
-    return selectAccountsDisabledCacheForNextFetch(state) ? {} : USE_CACHE;
-}
-
 function parseAccounts(rumId, accounts, parseData = parseAccountsData) {
     const items = filter_(
         ypath.getValue(accounts),
@@ -85,17 +78,6 @@ function isCurrentRequest(getState, cluster, editCounter) {
         selectCluster(state) === cluster &&
         (editCounter === undefined || selectAccountsEditCounter(state) === editCounter)
     );
-}
-
-export function resetAccountsCacheIfCurrent(editCounter) {
-    return (dispatch, getState) => {
-        if (selectAccountsEditCounter(getState()) === editCounter) {
-            dispatch({
-                type: ACCOUNTS_DATA_FIELDS_ACTION,
-                data: {disableCacheForNextFetch: false},
-            });
-        }
-    };
 }
 
 export function fetchAccountsList() {
@@ -116,7 +98,7 @@ export function fetchAccountsList() {
                     path: '//sys/accounts/',
                     attributes: listAttributesToLoad,
                     ...USE_MAX_SIZE,
-                    ...getCacheParams(state),
+                    ...USE_CACHE(),
                 }),
             )
             .then((accounts) => parseAccounts(rumId, accounts, parseAccountsListData))
@@ -164,7 +146,7 @@ export function fetchAccountsMetadata() {
                     path: '//sys/accounts/',
                     attributes: attributesToLoad,
                     ...USE_MAX_SIZE,
-                    ...getCacheParams(state),
+                    ...USE_CACHE(),
                 }),
             )
             .then((accounts) => parseAccounts(rumId, accounts))
@@ -255,20 +237,13 @@ export function fetchAccountsDetails() {
 
 // Also used outside the page updater by editor and account hierarchy actions.
 export function fetchAccounts() {
-    return (dispatch, getState) => {
-        const editCounter = selectAccountsEditCounter(getState());
+    return (dispatch) => {
         return dispatch(fetchAccountsList())
             .then((accounts) => {
                 if (!accounts) {
                     return undefined;
                 }
                 return dispatch(fetchAccountsDetails()).then(() => accounts);
-            })
-            .then((accounts) => {
-                if (accounts) {
-                    dispatch(resetAccountsCacheIfCurrent(editCounter));
-                }
-                return accounts;
             })
             .catch(() => undefined);
     };
@@ -281,7 +256,6 @@ export function accountsIncreaseEditCounter() {
             type: ACCOUNTS_DATA_FIELDS_ACTION,
             data: {
                 editCounter: editCounter + 1,
-                disableCacheForNextFetch: true,
                 fullAccountsLoaded: false,
             },
         });

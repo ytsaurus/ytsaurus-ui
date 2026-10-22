@@ -4,7 +4,6 @@ import {Text} from '@gravity-ui/uikit';
 import {deleteGroup, fetchGroups} from '../../../store/actions/groups';
 import {YTDFDialog, makeErrorFields} from '../../../containers/Dialog';
 import {type YTError} from '../../../types';
-import {disableGroupsCache} from '../../../utils/users-groups';
 import i18n from './i18n';
 
 type DeleteGroupModalProps = {
@@ -23,8 +22,6 @@ export const DeleteGroupModal: React.FC<DeleteGroupModalProps> = ({group, onClos
             await deleteGroup({groupName: group});
 
             onClose();
-
-            disableGroupsCache();
             // we don't need to wait for the end of the action
             dispatch(fetchGroups());
         } catch (cause) {

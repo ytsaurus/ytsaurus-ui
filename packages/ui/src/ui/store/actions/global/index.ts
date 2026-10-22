@@ -138,7 +138,7 @@ export function loadAccountsIfNotLoaded(): ThunkAction<Promise<void>, RootState,
         accountsInProgress = true;
 
         return ytApiV3Id
-            .list(YTApiId.listAccounts, {path: '//sys/accounts', ...USE_MAX_SIZE, ...USE_CACHE})
+            .list(YTApiId.listAccounts, {path: '//sys/accounts', ...USE_MAX_SIZE, ...USE_CACHE()})
             .then((data: Array<any>) => {
                 dispatch({
                     type: GLOBAL_PARTIAL,
@@ -179,7 +179,7 @@ export function loadBundlesIfNotLoaded(): ThunkAction<any, RootState, any, any> 
                 path: '//sys/tablet_cell_bundles',
                 attributes: ['nodes'],
                 ...USE_MAX_SIZE,
-                ...USE_CACHE,
+                ...USE_CACHE(),
             })
             .then((data: unknown) => {
                 dispatch({
