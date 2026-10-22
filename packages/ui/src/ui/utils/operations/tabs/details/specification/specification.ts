@@ -198,7 +198,7 @@ function groupTables<T extends {path: string; transaction?: string; cluster?: st
         transaction?: string;
         cluster?: string;
     }> = [];
-    let currentGroup: string;
+    let currentGroup: string | undefined;
 
     forEach_(tables, (table) => {
         try {
@@ -222,6 +222,8 @@ function groupTables<T extends {path: string; transaction?: string; cluster?: st
         } catch (err) {
             // eslint-disable-next-line no-console
             console.error('groupTables error', err);
+            group.push(table);
+            currentGroup = undefined;
         }
     });
 
@@ -259,9 +261,15 @@ function prepareInput(operation: DetailedOperationSelector, userTransactionAlive
         case 'map_reduce':
         case 'sort':
         case 'join_reduce': {
-            const typedTables = ypath.get(operation.$typedAttributes, '/spec/input_table_paths');
+            const typedTables = ypath.get(
+                operation.typedResultingSpec ?? operation.typedSpec,
+                '/input_table_paths',
+            );
 
-            tables = ypath.get(operation, '/@spec/input_table_paths');
+            tables = ypath.get(
+                operation.resultingSpec ?? ypath.getValue(operation, '/@spec'),
+                '/input_table_paths',
+            );
             tables = map_(tables, (table, index) =>
                 prepareTable(operation, TYPE, table, typedTables[index], userTransactionAlive),
             );
