@@ -75,7 +75,7 @@ export function loadSchedulingData(): SchedulingThunkAction {
                         makeList('//sys/scheduler/orchid/scheduler/pool_trees'),
                         makeGet('//sys/scheduler/orchid/scheduler/default_pool_tree'),
                     ],
-                    ...USE_CACHE,
+                    ...USE_CACHE(),
                 }),
             )
             .then((data) => {
@@ -130,7 +130,7 @@ export function loadSchedulingData(): SchedulingThunkAction {
                         YTApiId.schedulingLoadTree,
                         ytApiV4Id.executeBatch(YTApiId.schedulingLoadTree, {
                             requests: treeRequests,
-                            ...USE_CACHE,
+                            ...USE_CACHE(),
                         }),
                     )
                     .then((treeData) => {
@@ -349,7 +349,7 @@ export function schedulingLoadFilterAttributes(
             ytApiV3Id.get(YTApiId.schedulingFilterAttributes, {
                 path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools`,
                 fields: ['parent', 'abc'],
-                ...USE_CACHE,
+                ...USE_CACHE(),
             }),
             {
                 skipSuccessToast: true,

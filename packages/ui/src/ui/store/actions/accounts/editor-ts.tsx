@@ -1,3 +1,5 @@
+import {disableYTCacheTemporarily} from '../../../../shared/constants/yt-api';
+
 import update_ from 'lodash/update';
 import {type ThunkAction} from 'redux-thunk';
 import {type RootState} from '../../../store/reducers';
@@ -39,21 +41,31 @@ function setAccountQuotaImpl(params: AccountQuotaParams): Promise<void> {
     if (!distributeAccount) {
         return setAccountLimit(limit, account, RESOURCES_LIMITS_PREFIX + resourcePath);
     } else if (limitDiff > 0) {
-        return yt.v4.transferAccountResources({
-            parameters: {
-                source_account: distributeAccount,
-                destination_account: account,
-                resource_delta: update_({}, dotPath, () => limitDiff),
-            },
-        });
+        return yt.v4
+            .transferAccountResources({
+                parameters: {
+                    source_account: distributeAccount,
+                    destination_account: account,
+                    resource_delta: update_({}, dotPath, () => limitDiff),
+                },
+            })
+            .then((result: void) => {
+                disableYTCacheTemporarily();
+                return result;
+            });
     } else {
-        return yt.v4.transferAccountResources({
-            parameters: {
-                source_account: account,
-                destination_account: distributeAccount,
-                resource_delta: update_({}, dotPath, () => -limitDiff),
-            },
-        });
+        return yt.v4
+            .transferAccountResources({
+                parameters: {
+                    source_account: account,
+                    destination_account: distributeAccount,
+                    resource_delta: update_({}, dotPath, () => -limitDiff),
+                },
+            })
+            .then((result: void) => {
+                disableYTCacheTemporarily();
+                return result;
+            });
     }
 }
 

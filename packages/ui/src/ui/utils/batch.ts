@@ -10,7 +10,7 @@ export function makeGet(
         parameters: {
             path,
             ...parameters,
-            ...USE_CACHE,
+            ...USE_CACHE(),
         },
     };
 }
@@ -24,7 +24,7 @@ export function makeList(
         parameters: {
             path,
             ...parameters,
-            ...USE_CACHE,
+            ...USE_CACHE(),
             ...USE_MAX_SIZE,
         },
     };

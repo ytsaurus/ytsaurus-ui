@@ -17,7 +17,7 @@ export function usePools(trees: string[]) {
             parameters: {
                 path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools`,
                 ...USE_MAX_SIZE,
-                ...USE_CACHE,
+                ...USE_CACHE(),
             },
         }));
     }, [trees]);
