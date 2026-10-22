@@ -387,7 +387,7 @@ export function requestQueries(
                 requests,
                 output_format: 'json',
             },
-            setup: getQTApiSetup(),
+            setup: {...getQTApiSetup(), JSONSerializer},
         })) as unknown as {results: BatchResultsItem<QueryItem>[]};
 
         const extracted = extractBatchV4Values(resp, requests);

@@ -3,6 +3,7 @@ import {type RootState} from '../../reducers';
 import {type ManageTokensListAction} from '../../reducers/manage-tokens/tokens';
 import {YTApiId, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import {getQueryTrackerCluster} from '../../../config';
+import {JSONSerializer} from '../../../common/yt-api';
 import {getClusterConfigByName, getClusterProxy} from '../../selectors/global';
 import {
     MANAGE_TOKENS_LIST,
@@ -41,7 +42,7 @@ export const manageTokensGetList = (
                     ...credentials,
                     with_metadata: true,
                 },
-                setup: getQTApiSetup(),
+                setup: {...getQTApiSetup(), JSONSerializer},
             })
             .then((data) => {
                 dispatch({type: MANAGE_TOKENS_LIST.SUCCESS, data: {data}});
