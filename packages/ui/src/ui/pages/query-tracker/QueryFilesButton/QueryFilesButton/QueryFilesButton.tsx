@@ -29,9 +29,10 @@ const b = cn('query-files-popup');
 
 type Props = {
     popupClassName?: string;
+    inline?: boolean;
 };
 
-export const QueryFilesButton: FC<Props> = ({popupClassName}) => {
+export const QueryFilesButton: FC<Props> = ({popupClassName, inline}) => {
     const dispatch = useDispatch();
     const {files, deletedFiles, addFormOpen, addFormType, showTabs} = useSelector(
         selectQueryFilesButtonConfig,
@@ -105,6 +106,32 @@ export const QueryFilesButton: FC<Props> = ({popupClassName}) => {
         [filesMap],
     );
 
+    const content = (
+        <>
+            {showTabs && (
+                <FilesTabs
+                    className={b('body')}
+                    files={files}
+                    deletedFiles={deletedFiles}
+                    deletedFilesCounter={deletedFiles.length}
+                    validator={validator}
+                    onDeleteFile={handleDeleteFile}
+                    onChangeFile={handleChangeFile}
+                    onRestoreFile={handleRestoreFile}
+                    onEditFile={handleEditFile}
+                />
+            )}
+            <ActionsWithAddForm
+                validator={validator}
+                addFormOpen={addFormOpen}
+                addFormType={addFormType}
+                onAddFile={handleAddFile}
+                onFormToggle={handleToggleAddForm}
+            />
+        </>
+    );
+    if (inline) return content;
+
     return (
         <>
             <Button
@@ -126,26 +153,7 @@ export const QueryFilesButton: FC<Props> = ({popupClassName}) => {
                 <div className={b('header')}>
                     <Text variant="subheader-3">{i18n('title_attachments')}</Text>
                 </div>
-                {showTabs && (
-                    <FilesTabs
-                        className={b('body')}
-                        files={files}
-                        deletedFiles={deletedFiles}
-                        deletedFilesCounter={deletedFiles.length}
-                        validator={validator}
-                        onDeleteFile={handleDeleteFile}
-                        onChangeFile={handleChangeFile}
-                        onRestoreFile={handleRestoreFile}
-                        onEditFile={handleEditFile}
-                    />
-                )}
-                <ActionsWithAddForm
-                    validator={validator}
-                    addFormOpen={addFormOpen}
-                    addFormType={addFormType}
-                    onAddFile={handleAddFile}
-                    onFormToggle={handleToggleAddForm}
-                />
+                {content}
             </PopupWithCloseButton>
         </>
     );

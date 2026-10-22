@@ -1,6 +1,6 @@
 import {type SortOrder} from '@gravity-ui/react-data-table';
 
-import {type QueryResultMeta} from './api';
+import {type QueryResultMeta, type QueryResult as RawQueryResult} from './api';
 import {type DataType} from '@ytsaurus/components';
 
 export enum QueryResultState {
@@ -32,14 +32,20 @@ export type Result = {
     $rawValue: string;
     $type: string;
     $value: unknown;
+    $incomplete?: boolean;
+    $tagValue?: string;
 };
 
 export type QueryResultReadyState = {
     state: QueryResultState.Ready;
     resultReady: true;
     results: Record<string, Result>[];
+    /** Original YQL values and type registry, before unipika conversion. */
+    rawResult?: RawQueryResult;
     columns: QueryResultColumn[];
     page: number;
+    /** Absolute index of the first cached row. */
+    rowOffset: number;
     settings: {
         transposed?: boolean;
         viewMode?: QueryResultsViewMode;
@@ -57,4 +63,10 @@ export type QueryResultErrorState = {
     error: Error;
     page?: undefined;
 };
-export type QueryResult = QueryResultLoadingState | QueryResultReadyState | QueryResultErrorState;
+export type QueryResult = (
+    QueryResultLoadingState | QueryResultReadyState | QueryResultErrorState
+) & {
+    requestId?: number;
+    requestOffset?: number;
+    settings?: QueryResultReadyState['settings'];
+};

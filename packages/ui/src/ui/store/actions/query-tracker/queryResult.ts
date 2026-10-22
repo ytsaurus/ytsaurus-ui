@@ -12,6 +12,7 @@ import {
 import {type Type, getSchemaDateType, parseV3Type} from '@ytsaurus/components';
 import {
     selectHasQueryResult,
+    selectQueryResult,
     selectQueryResultGlobalSettings,
     selectQueryResultSettings,
 } from '../../selectors/query-tracker/queryResult';
@@ -39,6 +40,8 @@ import {
     SET_QUERY_RESULTS_SETTINGS,
 } from '../../reducers/query-tracker/query-tracker-contants';
 import {ytApiV3} from '../../../rum/rum-wrap-api';
+import executionI18n from '../../../pages/query-tracker/QueryEditor/QueryExecutionView/i18n';
+import {appendQueryResultPage} from '../../../utils/query-tracker/queryResultPages';
 
 export function applySettings(
     queryId: QueryItem['id'],
@@ -107,20 +110,27 @@ async function attachExistenceToFullResult(fullResult: QueryResultMeta['full_res
 }
 
 const QUERY_RESULT_ROWS_LIMIT = 1000;
+let nextResultRequestId = 0;
 
 export function loadQueryResult(
     queryId: QueryItem['id'],
     resultIndex = 0,
+    {fromStart = false}: {fromStart?: boolean} = {},
 ): ThunkAction<any, RootState, any, QueryResultsActions> {
     return async (dispatch, getState) => {
         const state = getState();
-        if (selectHasQueryResult(state, queryId, resultIndex)) {
-            return;
+        const cached = selectQueryResult(state, queryId, resultIndex);
+        if (cached && cached.state !== QueryResultState.Error) {
+            if (!fromStart) return;
+            if (cached.state === QueryResultState.Loading) {
+                if (cached.requestOffset === 0) return;
+            } else if (cached.resultReady && cached.rowOffset === 0) return;
         }
+        const requestId = ++nextResultRequestId;
         try {
             dispatch({
                 type: REQUEST_QUERY_RESULTS,
-                data: {queryId, index: resultIndex},
+                data: {queryId, index: resultIndex, requestId, rowOffset: 0},
             });
             const meta = await dispatch(getQueryResultMeta(queryId, resultIndex));
             if (meta?.error) throw meta.error;
@@ -141,7 +151,7 @@ export function loadQueryResult(
                     };
                 }) || [];
 
-            const settings = selectQueryResultGlobalSettings();
+            const settings = cached?.settings || selectQueryResultGlobalSettings();
             const result = await wrapApiPromiseByToaster(
                 dispatch(
                     readQueryResults({
@@ -178,7 +188,9 @@ export function loadQueryResult(
                 data: {
                     queryId,
                     index: resultIndex,
+                    requestId,
                     results: formattedResult,
+                    rawResult: result,
                     columns,
                     meta,
                 },
@@ -189,7 +201,89 @@ export function loadQueryResult(
                 data: {
                     queryId,
                     index: resultIndex,
+                    requestId,
                     error: e as Error,
+                },
+            });
+        }
+    };
+}
+
+export function loadNextQueryResult(
+    queryId: string,
+    resultIndex: number,
+): ThunkAction<Promise<void>, RootState, unknown, QueryResultsActions> {
+    return async (dispatch, getState) => {
+        const previous = selectQueryResult(getState(), queryId, resultIndex);
+        if (
+            previous?.state !== QueryResultState.Ready ||
+            !previous.rawResult ||
+            previous.rowOffset !== 0
+        )
+            return;
+        const start = previous.results.length;
+        if (start >= previous.meta.data_statistics.row_count) return;
+
+        const requestId = ++nextResultRequestId;
+        dispatch({
+            type: REQUEST_QUERY_RESULTS,
+            data: {queryId, index: resultIndex, requestId, rowOffset: 0},
+        });
+        try {
+            const next = await wrapApiPromiseByToaster(
+                dispatch(
+                    readQueryResults({
+                        query_id: queryId,
+                        result_index: resultIndex,
+                        cursor: {start, end: start + QUERY_RESULT_ROWS_LIMIT},
+                        columns: previous.columns.map(({name}) => name),
+                        settings: {cellsSize: previous.settings.cellSize},
+                    }),
+                ),
+                {
+                    toasterName: `load_result_page_${queryId}_${resultIndex}`,
+                    skipSuccessToast: true,
+                    errorTitle: executionI18n('alert_load-result-error'),
+                },
+            );
+            // A cell preview may have completed while the next page was loading.
+            const current = selectQueryResult(getState(), queryId, resultIndex);
+            if (!current?.resultReady || !current.rawResult || current.requestId !== requestId)
+                return;
+            const rows = next.rows.map((row) =>
+                Object.fromEntries(
+                    Object.entries(row).map(([name, [value, type]]) => [
+                        name,
+                        prepareFormattedValue(value, next.yql_type_registry[Number(type)]),
+                    ]),
+                ),
+            );
+            dispatch({
+                type: SET_QUERY_RESULTS_PAGE,
+                data: {
+                    queryId,
+                    index: resultIndex,
+                    page: 0,
+                    rowOffset: 0,
+                    requestId,
+                    results: [...current.results, ...rows],
+                    rawResult: appendQueryResultPage(current.rawResult, next),
+                },
+            });
+        } catch {
+            // The toaster reports the failure; keep loaded rows available and allow retry.
+            const current = selectQueryResult(getState(), queryId, resultIndex);
+            if (!current?.resultReady || current.requestId !== requestId) return;
+            dispatch({
+                type: SET_QUERY_RESULTS_PAGE,
+                data: {
+                    queryId,
+                    index: resultIndex,
+                    page: current.page,
+                    rowOffset: current.rowOffset,
+                    requestId,
+                    results: current.results,
+                    rawResult: current.rawResult,
                 },
             });
         }
@@ -227,6 +321,7 @@ export function injectQueryResults({
                 rowIndex,
                 columnName,
                 cellData,
+                rawCell: {value, type: types[Number(typeIndex)]},
             },
         });
     };
@@ -238,11 +333,12 @@ export function updateQueryResult(
     page: number,
 ): ThunkAction<any, RootState, any, QueryResultsActions> {
     return async (dispatch, getState) => {
+        const requestId = ++nextResultRequestId;
         try {
             const settings = selectQueryResultSettings(getState(), queryId, resultIndex);
             dispatch({
                 type: REQUEST_QUERY_RESULTS,
-                data: {queryId, index: resultIndex},
+                data: {queryId, index: resultIndex, requestId, rowOffset: page * settings.pageSize},
             });
 
             const startPage = page * settings.pageSize;
@@ -281,15 +377,17 @@ export function updateQueryResult(
                 );
             });
 
-            if (Array.isArray(rows) && rows.length) {
+            if (Array.isArray(rows)) {
                 dispatch({
                     type: SET_QUERY_RESULTS_PAGE,
                     data: {
                         queryId,
                         index: resultIndex,
                         results: formattedResult,
-                        settings,
+                        rawResult: result,
                         page,
+                        rowOffset: startPage,
+                        requestId,
                     },
                 });
             }
@@ -299,6 +397,7 @@ export function updateQueryResult(
                 data: {
                     queryId,
                     index: resultIndex,
+                    requestId,
                     error: e as Error,
                 },
             });
