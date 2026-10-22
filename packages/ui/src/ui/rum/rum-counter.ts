@@ -2,10 +2,15 @@ import axios, {type AxiosError} from 'axios';
 import {type YTErrorRaw} from '../../@types/types';
 import {isYTError} from '../../shared/utils';
 import {UIBatchError} from '../../shared/utils/error';
+import ytLocalStorage from '../../shared/utils/yt-local-storage';
 import {YTErrors} from './constants';
 import {getYtErrorCode} from '../utils/errors';
 
 const RUM = getRumInstance();
+
+ytLocalStorage.onError = (method, key, error) => {
+    rumLogError({message: 'YT localStorage error', method, additional: {key}}, error as Error);
+};
 
 function getRumInstance(): RumCounter {
     const res = (window as any).Ya?.Rum as RumCounter;
