@@ -9,6 +9,11 @@ import {
 } from '../../../../../utils/parse-serialize';
 
 export const navigationAccessLogParams = {
+    alRecursive: {
+        stateKey: 'navigation.tabs.accessLog.accessLogFilters.recursive',
+        initialState: initialState.recursive,
+        type: 'bool',
+    },
     alPage: {
         stateKey: 'navigation.tabs.accessLog.accessLogFilters.pagination.index',
         initialState: initialState.pagination.index,
@@ -81,6 +86,7 @@ export function getNavigationAccessLogPreparedState(state: RootState, {query}: L
             },
         } = query;
 
+        updateIfChanged(accessLogFilters, 'recursive', queryFilters.recursive);
         updateIfChanged(accessLogFilters.pagination, 'index', queryFilters.pagination.index);
         updateIfChanged(accessLogFilters, 'path_regex', queryFilters.path_regex);
         updateIfChanged(accessLogFilters, 'user_regex', queryFilters.user_regex);
