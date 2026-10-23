@@ -16,7 +16,7 @@ import WarningIcon from '../../../../../components/WarningIcon/WarningIcon';
 import {type TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
 import {Host} from '../../../../../containers/Host/Host';
 import {type YTError} from '../../../../../types';
-import {genNavigationUrl} from '../../../../../utils/navigation/navigation';
+import {genConsumerNavigationUrl} from '../../../../../utils/navigation/navigation';
 import {ClickableText} from '../../../../../components/ClickableText/ClickableText';
 import {showErrorPopup} from '../../../../../utils/utils';
 import {formatDateForTableSort} from '../../../../../utils/format-date-for-table-sort';
@@ -158,11 +158,10 @@ export function ypath<T>(name: string, getter: (row: T) => QueueRegistrationPath
             if (!consumer) return null;
 
             const {cluster, path, consumerName} = parseQueueRegistrationPath(consumer);
-            const url = genNavigationUrl({
+            const url = genConsumerNavigationUrl({
                 cluster,
                 path,
-                queryParams:
-                    consumerName === undefined ? undefined : {tab: 'consumer', cName: consumerName},
+                consumerName,
             });
 
             return (

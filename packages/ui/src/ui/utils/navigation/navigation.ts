@@ -5,18 +5,32 @@ export function genNavigationUrl({
     cluster,
     path,
     transaction,
-    queryParams,
 }: {
     cluster: string;
     path: string;
     transaction?: string;
-    queryParams?: Record<string, string | undefined>;
 }) {
-    const query = qs.stringify(queryParams);
-
     return `/${cluster}/${Page.NAVIGATION}?path=${encodeURI(path)}${
         transaction ? '&t=' + encodeURI(transaction) : ''
-    }${query ? '&' + query : ''}`;
+    }`;
+}
+
+export function genConsumerNavigationUrl({
+    consumerName,
+    ...params
+}: {
+    cluster: string;
+    path: string;
+    transaction?: string;
+    consumerName?: string;
+}) {
+    const url = genNavigationUrl(params);
+
+    if (consumerName === undefined) {
+        return url;
+    }
+
+    return `${url}&${qs.stringify({tab: 'consumer', cName: consumerName})}`;
 }
 
 export function findCommonPathParent(v1: string, v2: string) {
