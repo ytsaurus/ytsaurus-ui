@@ -1,0 +1,17 @@
+{
+  "action_new-chat": "New chat",
+  "action_close-chat": "Close chat",
+  "title_greeting": "Hi, I'm Ai chat!",
+  "context_help-offer": "How can I help you today?",
+  "title_attach-files": "Attach files",
+  "context_text-files-only": "You can attach text files in any format (source code, configs, etc.). Maximum size is 0.5 MB",
+  "alert_file-too-large": "File is too large. Maximum size is 0.5 MB",
+  "alert_binary-data": "File contains binary data",
+  "alert_invalid-text-file": "File is not a valid text file",
+  "title_chat": "AI assistant",
+  "alert_response-failed": "The model failed to generate a response.",
+  "alert_response-incomplete": "The model returned an incomplete response.",
+  "alert_response-interrupted": "The response stream was interrupted. Please try again.",
+  "action_apply": "Apply",
+  "action_cancel": "Cancel"
+}

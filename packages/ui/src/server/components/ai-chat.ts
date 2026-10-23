@@ -1,261 +1,146 @@
-import axios from 'axios';
-import {type AIChatConfig, type GetConversationItemsResponse} from '../../shared/ai-chat';
-import {type CreateConversationRequest, type SendMessageRequest} from '../types/ai-chat';
-import serverFactory from '../ServerFactory';
-import {type Request} from '@gravity-ui/expresskit';
-
-const TITLE_CONTEXT_ITEMS_COUNT = 5;
+import {
+    BASE_PROMPT_FOR_SUMMARIZATION,
+    OpenAIService,
+    ResponseStream,
+} from '@gravity-ui/aikit/server/openai';
+import {type AIChatConfig, type Conversation, type ConversationPage} from '../../shared/ai-chat';
+import {type SendMessageRequest} from '../types/ai-chat';
 
 export class AiChat {
     private config: AIChatConfig;
+    private readonly authHeaders?: Record<string, string | undefined>;
 
-    constructor(config: AIChatConfig) {
+    constructor(config: AIChatConfig, authHeaders?: Record<string, string | undefined>) {
         this.config = config;
+        this.authHeaders = authHeaders;
     }
 
-    async createConversation(data: CreateConversationRequest, req: Request) {
-        return await axios.request({
-            url: '/v1/conversations',
-            baseURL: this.config.baseUrl,
-            method: 'POST',
-            data: {
-                model: this.config.model,
-                metadata: data.metadata,
-            },
-            headers: this.getRequestHeaders(req),
-            responseType: 'stream',
+    createConversation(metadata: Record<string, string>) {
+        return this.getClient().conversations.create({metadata});
+    }
+
+    getConversations(after?: string) {
+        // Listing conversations is an extension of the configured chat backend.
+        return this.getClient().get<ConversationPage<Conversation>>('/conversations', {
+            query: {limit: 20, ...(after ? {after} : {})},
         });
     }
 
-    async getConversations(limit: number | undefined, after: string | undefined, req: Request) {
-        const params = new URLSearchParams();
-        if (limit) params.append('limit', limit.toString());
-        if (after) params.append('after', after);
-
-        return await axios.request({
-            url: `/v1/conversations?${params.toString()}`,
-            baseURL: this.config.baseUrl,
-            method: 'GET',
-            headers: this.getRequestHeaders(req),
-            responseType: 'stream',
+    getConversationItems(conversationId: string, after?: string) {
+        return this.getClient().conversations.items.list(conversationId, {
+            order: 'desc',
+            limit: 50,
+            after,
         });
     }
 
-    async getConversationItems(
-        conversationId: string,
-        limit: number | undefined,
-        after: string | undefined,
-        order: 'asc' | 'desc' | undefined,
-        req: Request,
-        useStream = true,
-    ) {
-        const params = new URLSearchParams();
-        if (limit) params.append('limit', limit.toString());
-        if (after) params.append('after', after);
-        if (order) params.append('order', order);
-
-        return await axios.request<GetConversationItemsResponse>({
-            url: `/v1/conversations/${conversationId}/items?${params.toString()}`,
-            baseURL: this.config.baseUrl,
-            method: 'GET',
-            headers: this.getRequestHeaders(req),
-            responseType: useStream ? 'stream' : 'json',
-        });
+    deleteConversation(conversationId: string) {
+        return this.getClient().conversations.delete(conversationId);
     }
 
-    async sendMessage(request: SendMessageRequest, req: Request) {
-        const headers = this.getRequestHeaders(req);
-        const inputMessages = [];
-
-        if (request.contextMessages && request.contextMessages.length > 0) {
-            request.contextMessages.forEach((contextMessage, index) => {
-                inputMessages.push({
-                    content: [
-                        {
-                            text: contextMessage,
-                            type: 'input_text',
-                        },
-                    ],
-                    id: `msg_context_${Date.now()}_${index}`,
-                    role: 'user',
-                    status: 'completed',
-                    type: 'message',
-                });
-            });
-        }
-
-        const messageContent: any[] = [
+    async sendMessage(request: SendMessageRequest, signal?: AbortSignal) {
+        // AIKit 2.25 createResponseStream does not accept request options yet.
+        // Keep the signal on the SDK request to cancel before response headers arrive.
+        const stream = await this.getClient().responses.create(
             {
-                text: request.message,
-                type: 'input_text',
-            },
-        ];
-
-        if (request.files && request.files.length > 0) {
-            request.files.forEach((file) => {
-                messageContent.push({
-                    text: `File: ${file.name}\n\`\`\`\n${file.content}\n\`\`\``,
-                    type: 'input_text',
-                });
-            });
-        }
-
-        inputMessages.push({
-            content: messageContent,
-            id: `msg_${Date.now()}`,
-            role: 'user',
-            status: 'completed',
-            type: 'message',
-        });
-
-        const response = await axios.request({
-            url: '/v1/responses',
-            baseURL: this.config.baseUrl,
-            method: 'POST',
-            data: {
-                stream: true,
                 model: this.config.model,
-                metadata: request.metadata,
-                conversation: request.conversationId,
-                input: inputMessages,
+                stream: true,
+                conversation: request.conversation,
+                input: request.input,
+                metadata: {...this.config.metadata, ...request.metadata},
             },
-            headers,
-            responseType: 'stream',
-        });
-
-        return response.data;
-    }
-
-    async deleteConversation(conversationId: string, req: Request) {
-        return await axios.request({
-            url: `/v1/conversations/${conversationId}`,
-            baseURL: this.config.baseUrl,
-            method: 'DELETE',
-            headers: this.getRequestHeaders(req),
-            responseType: 'stream',
-        });
-    }
-
-    async summarizeConversationTitle(conversationId: string, req: Request): Promise<string> {
-        const {
-            data: {data},
-        } = await this.getConversationItems(
-            conversationId,
-            TITLE_CONTEXT_ITEMS_COUNT,
-            undefined,
-            'asc',
-            req,
-            false,
+            {signal},
         );
+        return new ResponseStream(stream);
+    }
 
-        if (!data.length) {
-            throw new Error('Conversation is empty');
-        }
-
-        const conversationContext = data
-            .filter((item) => 'role' in item)
-            .map((item) => {
-                const textContent = item.content
-                    .filter((c) => !c.text.startsWith('<rag_context>'))
-                    .map((c) => c.text)
-                    .join(' ');
-                return `${item.role}: ${textContent}`;
+    async summarizeConversationTitle(conversationId: string, metadata?: Record<string, string>) {
+        const client = this.getClient();
+        const {data} = await client.conversations.items.list(conversationId, {
+            limit: 5,
+            order: 'asc',
+        });
+        const context = data
+            .flatMap((item) => {
+                if (item.type !== 'message') return [];
+                const text = item.content
+                    .flatMap((part) => ('text' in part ? [part.text] : []))
+                    .join('\n');
+                return text ? [`${item.role}: ${text}`] : [];
             })
             .join('\n');
-
-        if (!conversationContext.trim()) {
-            throw new Error('Conversation is empty');
-        }
-
-        const systemPrompt = `You are a helpful assistant that creates concise, descriptive titles for conversations.
-Your task is to analyze the conversation and generate a short title (3-7 words) that captures the main topic or question.
-Rules:
-- Be specific and descriptive
-- Use the language of the conversation (Russian or English)
-- Focus on the main topic or question
-- Keep it concise (3-7 words)
-- Don't use quotes or special formatting
-- Don't add prefixes like "Question about", "Problem with", "How to"
-- Just return the title, nothing else
-
-Examples:
-user: How do I create a new table in YTsaurus?
-assistant: Creating tables in YTsaurus
-
-user: Почему операция зависла?
-assistant: Зависшая операция
-
-user: What's the difference between static and dynamic tables?
-assistant: Static vs Dynamic tables`;
-
-        const userPrompt = `Create a short title for this conversation:\n\n${conversationContext}`;
-
-        const response = await axios.request({
-            url: '/v1/responses',
-            baseURL: this.config.baseUrl,
-            method: 'POST',
-            data: {
-                model: this.config.model,
-                metadata: {
-                    agent: 'qt',
+        // AIKit 2.25 summarizeConvTitle only reads output[0].content[0], which may
+        // be reasoning or a tool call. The SDK collects text across the response.
+        const response = await client.responses.create({
+            model: this.config.model,
+            metadata: {...this.config.metadata, ...metadata},
+            input: [
+                {
+                    role: 'user',
+                    content: [{type: 'input_text', text: BASE_PROMPT_FOR_SUMMARIZATION}],
                 },
-                input: [
-                    {
-                        content: [
-                            {
-                                text: systemPrompt,
-                                type: 'input_text',
-                            },
-                        ],
-                        id: `msg_system_${Date.now()}`,
-                        role: 'user',
-                        status: 'completed',
-                        type: 'message',
-                    },
-                    {
-                        content: [
-                            {
-                                text: userPrompt,
-                                type: 'input_text',
-                            },
-                        ],
-                        id: `msg_user_${Date.now()}`,
-                        role: 'user',
-                        status: 'completed',
-                        type: 'message',
-                    },
-                ],
-            },
-            headers: this.getRequestHeaders(req),
-        });
-
-        const generatedTitle = response.data.output?.[0]?.content?.[0]?.text?.trim();
-
-        if (!generatedTitle) {
-            throw new Error('Failed to generate title. Empty response');
-        }
-
-        await axios.request({
-            url: `/v1/conversations/${conversationId}`,
-            baseURL: this.config.baseUrl,
-            method: 'POST',
-            data: {
-                metadata: {
-                    topic: generatedTitle,
+                {
+                    role: 'user',
+                    content: [
+                        {
+                            type: 'input_text',
+                            text: `Create a short title for this conversation:\n\n${context}`,
+                        },
+                    ],
                 },
-            },
-            headers: this.getRequestHeaders(req),
-            responseType: 'stream',
+            ],
         });
-
-        return generatedTitle;
+        const title = response.output_text.trim();
+        if (!title) throw new Error('Failed to generate conversation title');
+        const conversation = await this.getConversation(conversationId);
+        const conversationMetadata = conversation.metadata;
+        await client.conversations.update(conversationId, {
+            metadata: {
+                ...(conversationMetadata &&
+                typeof conversationMetadata === 'object' &&
+                !Array.isArray(conversationMetadata)
+                    ? conversationMetadata
+                    : {}),
+                topic: title,
+            },
+        });
+        return title;
     }
 
-    private getRequestHeaders(req: Request): Record<string, string> {
-        const authHeaders = serverFactory.getAuthHeaders('aiChat', req) || {};
-        return {
-            ...authHeaders,
-            'Content-Type': 'application/json',
-        };
+    private async getConversation(conversationId: string) {
+        if (this.config.conversationLookup !== 'list') {
+            return this.getClient().conversations.retrieve(conversationId);
+        }
+        let after: string | undefined;
+        const seenCursors = new Set<string>();
+        for (;;) {
+            const page = await this.getConversations(after);
+            const found = page.data.find(({id}) => id === conversationId);
+            if (found) return found;
+            if (!page.has_more || !page.last_id || seenCursors.has(page.last_id)) {
+                throw new Error('Cannot find conversation metadata to update its title');
+            }
+            after = page.last_id;
+            seenCursors.add(after);
+        }
+    }
+
+    private getClient() {
+        const apiKey = process.env.YTFRONT_AI_CHAT_API_KEY;
+        const client = new OpenAIService({
+            model: this.config.model,
+            baseURL: this.config.baseUrl.replace(/\/+$/, ''),
+            apiKey: apiKey || '',
+            organization: null,
+            defaultHeaders: {
+                ...(apiKey ? {} : {Authorization: null}),
+                ...this.authHeaders,
+            },
+            maxRetries: 0,
+            logLevel: 'off',
+        });
+        // AIKit narrows the constructor's project option to string, unlike the SDK.
+        client.project = null;
+        return client;
     }
 }
