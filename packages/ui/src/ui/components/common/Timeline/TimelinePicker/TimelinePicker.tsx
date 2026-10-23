@@ -242,8 +242,10 @@ export class TimelinePicker extends React.Component<TimelinePickerProps, State> 
     }
 
     renderCustomShortcut() {
-        const {from, to, shortcut} = this.props;
-        const isShortcutCustom = shortcut === SHORTCUT_CUSTOM;
+        const {from, to, shortcut, topShortcuts = []} = this.props;
+        const isShortcutCustom =
+            Boolean(shortcut) &&
+            (shortcut === SHORTCUT_CUSTOM || !topShortcuts.some(({time}) => time === shortcut));
         const {customInput} = this.state;
 
         return (
