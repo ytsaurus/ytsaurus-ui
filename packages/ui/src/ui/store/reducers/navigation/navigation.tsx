@@ -103,6 +103,7 @@ const reducer = (state = initialState, action: NavigationAction): NavigationStat
 
             return {
                 ...state,
+                ...(path !== state.path ? {...nodeInitialState, ...requestInitialState} : {}),
                 path,
                 mode: shouldUpdateContentMode ? Tab.CONTENT : state.mode,
             };
