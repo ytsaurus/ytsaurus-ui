@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.31.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.30.1...ui-v3.31.0) (2026-10-23)
+
+
+### Features
+
+* **Accounts:** switch to independent account editor dialog [YTFRONT-6021] ([0564d7e](https://github.com/ytsaurus/ytsaurus-ui/commit/0564d7ea8b874bee7eadadcfc0265d10431d4dbd))
+* **Consumer:** support named consumers in navigation [YTFRONT-5808] ([a84e4b8](https://github.com/ytsaurus/ytsaurus-ui/commit/a84e4b8192745f9c590c9b1b4d4ebb771723324e))
+* show application configuration errors [YTFRONT-5969] ([6ef3bb0](https://github.com/ytsaurus/ytsaurus-ui/commit/6ef3bb00404dec882d9f0c6aefbcf7eafdc28ddf))
+
+
+### Bug Fixes
+
+* **cache:** bypass YT cache temporarily after writes [YTFRONT-6110] ([8c25244](https://github.com/ytsaurus/ytsaurus-ui/commit/8c2524475899de3f8e6d85013e822ee863e4c324))
+* **Queries:** decode query titles and token descriptions [YTFRONT-6113] ([43f4490](https://github.com/ytsaurus/ytsaurus-ui/commit/43f44900f599805be841a574c16926880698d8de))
+
 ## [3.30.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.30.0...ui-v3.30.1) (2026-10-21)
 
 
