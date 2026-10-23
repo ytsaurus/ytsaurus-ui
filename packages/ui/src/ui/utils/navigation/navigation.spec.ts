@@ -1,4 +1,4 @@
-import {findCommonPathParent, genNavigationUrl} from './navigation';
+import {findCommonPathParent, genConsumerNavigationUrl, genNavigationUrl} from './navigation';
 
 describe('findCommonPathParent', () => {
     test('test 0', () => {
@@ -32,17 +32,37 @@ describe('genNavigationUrl', () => {
             genNavigationUrl({cluster: 'test-cluster', path: '//consumer', transaction: 'tx'}),
         ).toBe('/test-cluster/navigation?path=//consumer&t=tx');
     });
+});
 
-    it('encodes named-consumer query parameters', () => {
-        const url = genNavigationUrl({
-            cluster: 'test-cluster',
-            path: '//consumer',
-            queryParams: {tab: 'consumer', cName: 'a/b&c=# тест', unused: undefined},
-        });
-        const params = new URL(url, 'https://example.test').searchParams;
-
-        expect(params.get('tab')).toBe('consumer');
-        expect(params.get('cName')).toBe('a/b&c=# тест');
-        expect(params.has('unused')).toBe(false);
+describe('genConsumerNavigationUrl', () => {
+    it('preserves links without a consumer name', () => {
+        expect(
+            genConsumerNavigationUrl({
+                cluster: 'test-cluster',
+                path: '//consumer',
+                transaction: 'tx',
+            }),
+        ).toBe('/test-cluster/navigation?path=//consumer&t=tx');
     });
+
+    it.each(['a/b&c=# тест', ''])(
+        'encodes consumer name %j and preserves navigation parameters',
+        (consumerName) => {
+            const url = genConsumerNavigationUrl({
+                cluster: 'test-cluster',
+                path: '//consumer',
+                transaction: 'tx',
+                consumerName,
+            });
+            const parsedUrl = new URL(url, 'https://example.test');
+
+            expect(parsedUrl.pathname).toBe('/test-cluster/navigation');
+            expect(Object.fromEntries(parsedUrl.searchParams)).toEqual({
+                path: '//consumer',
+                t: 'tx',
+                tab: 'consumer',
+                cName: consumerName,
+            });
+        },
+    );
 });
