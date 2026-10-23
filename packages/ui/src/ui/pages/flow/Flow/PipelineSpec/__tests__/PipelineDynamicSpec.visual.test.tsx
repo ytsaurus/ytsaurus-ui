@@ -17,6 +17,7 @@ import {
     RAW_UNICODE_KEY,
     demoMap,
     dynamicSpecHandler,
+    dynamicSpecResponse,
     dynamicSpecSnapshot,
     failedDynamicSpecHandler,
     legacyDynamicSpecHandler,
@@ -381,7 +382,7 @@ function snapshotWithDemo(
                         ui_demo: {
                             operation: 'map',
                             version: {$type: 'int64', $value: MAP_VERSION},
-                            value: {},
+                            value: demoMap,
                             children: {
                                 limit: {
                                     operation: 'set',
@@ -440,8 +441,9 @@ test('PipelineDynamicSpec: grouped map edits only its raw intent without normali
     const mutations: unknown[] = [];
     await router.use(
         http.put('*/api/v4/flow_execute', async ({request}) => {
-            if (requestParameters(request).flow_command === 'get-pipeline-dynamic-spec-state') {
-                return Response.json(dynamicSpecSnapshot);
+            const read = await dynamicSpecResponse(dynamicSpecSnapshot, request);
+            if (read) {
+                return read;
             }
             mutations.push(await request.json());
             return Response.json({version: exactVersion});
@@ -487,8 +489,8 @@ test('PipelineDynamicSpec: grouped map edits only its raw intent without normali
         .poll(() => mutations)
         .toEqual([
             {
-                path: '/throttlers/ui_demo',
-                spec: {...demoMap, period: 1500},
+                set_path: '/throttlers/ui_demo',
+                set_value: {...demoMap, period: 1500},
                 expected_version: exactVersion,
                 comment: Buffer.from('Период map 😊', 'utf8').toString('latin1'),
             },
@@ -505,8 +507,9 @@ test('PipelineDynamicSpec: mixed map keeps separate child attribution and preser
     const mutations: unknown[] = [];
     await router.use(
         http.put('*/api/v4/flow_execute', async ({request}) => {
-            if (requestParameters(request).flow_command === 'get-pipeline-dynamic-spec-state') {
-                return Response.json(state);
+            const read = await dynamicSpecResponse(state, request);
+            if (read) {
+                return read;
             }
             mutations.push(await request.json());
             return Response.json({version: exactVersion});
@@ -517,7 +520,8 @@ test('PipelineDynamicSpec: mixed map keeps separate child attribution and preser
     await expect(page.locator('tbody tr').filter({hasText: '/throttlers/ui_demo'})).toHaveCount(2);
     const parent = page.locator('tbody tr').filter({hasText: /^\/throttlers\/ui_demoReplace map/});
     await expect(parent.locator('td').nth(2)).toContainText('period');
-    await expect(parent.locator('td').nth(2)).not.toContainText('limit');
+    await expect(parent.locator('td').nth(2)).toContainText('limit');
+    await expect(parent.locator('td').nth(2)).toContainText('1000');
     await expect(parent.locator('[data-owner-version]')).toHaveAttribute(
         'data-owner-version',
         MAP_VERSION,
@@ -541,8 +545,8 @@ test('PipelineDynamicSpec: mixed map keeps separate child attribution and preser
         .poll(() => mutations)
         .toEqual([
             {
-                path: '/throttlers/ui_demo',
-                spec: {limit: 2000, period: 1500},
+                set_path: '/throttlers/ui_demo',
+                set_value: {limit: 2000, period: 1500},
                 expected_version: exactVersion,
                 comment: 'Update value',
             },
@@ -569,8 +573,9 @@ test('PipelineDynamicSpec: inherited map fields stay out of the draft and warn b
     const mutations: unknown[] = [];
     await router.use(
         http.put('*/api/v4/flow_execute', async ({request}) => {
-            if (requestParameters(request).flow_command === 'get-pipeline-dynamic-spec-state') {
-                return Response.json(state);
+            const read = await dynamicSpecResponse(state, request);
+            if (read) {
+                return read;
             }
             mutations.push(await request.json());
             return Response.json({version: exactVersion});
@@ -613,8 +618,8 @@ test('PipelineDynamicSpec: inherited map fields stay out of the draft and warn b
         .poll(() => mutations)
         .toEqual([
             {
-                path: '/throttlers/ui_demo',
-                spec: {...demoMap, period: 1500},
+                set_path: '/throttlers/ui_demo',
+                set_value: {...demoMap, period: 1500},
                 expected_version: exactVersion,
                 comment: 'Update value',
             },
@@ -631,7 +636,14 @@ test('PipelineDynamicSpec: removed scalar starts from the displayed effective de
         ...(state.effective_spec as Record<string, unknown>),
         throttlers: {ui_demo: {...demoMap, period: 10000}},
     };
-    await router.use(http.put('*/api/v4/flow_execute', () => Response.json(state)));
+    await router.use(
+        http.put(
+            '*/api/v4/flow_execute',
+            async ({request}) =>
+                (await dynamicSpecResponse(state, request)) ??
+                Response.json({version: state.version}),
+        ),
+    );
     await mount(<PipelineDynamicSpecStories.Overrides />);
     const value = page.getByRole('button', {
         name: 'Edit /throttlers/ui_demo/period',
@@ -667,8 +679,9 @@ test('PipelineDynamicSpec: a map mask preserves a newer child in the replacement
     const mutations: unknown[] = [];
     await router.use(
         http.put('*/api/v4/flow_execute', async ({request}) => {
-            if (requestParameters(request).flow_command === 'get-pipeline-dynamic-spec-state') {
-                return Response.json(state);
+            const read = await dynamicSpecResponse(state, request);
+            if (read) {
+                return read;
             }
             mutations.push(await request.json());
             return Response.json({version: exactVersion});
@@ -696,8 +709,8 @@ test('PipelineDynamicSpec: a map mask preserves a newer child in the replacement
         .poll(() => mutations)
         .toEqual([
             {
-                path: '/throttlers/ui_demo',
-                spec: {limit: 2000, period: 1500},
+                set_path: '/throttlers/ui_demo',
+                set_value: {limit: 2000, period: 1500},
                 expected_version: exactVersion,
                 comment: 'Update value',
             },
@@ -719,8 +732,9 @@ test('PipelineDynamicSpec: clicking an effective value edits one backoff and sup
         }),
         http.put('*/api/v4/flow_execute', async ({request}) => {
             const parameters = requestParameters(request);
-            if (parameters.flow_command === 'get-pipeline-dynamic-spec-state') {
-                return Response.json(dynamicSpecSnapshot);
+            const read = await dynamicSpecResponse(dynamicSpecSnapshot, request);
+            if (read) {
+                return read;
             }
             mutations.push({parameters, body: await request.json()});
             return Response.json({version: exactVersion});
@@ -741,10 +755,10 @@ test('PipelineDynamicSpec: clicking an effective value edits one backoff and sup
         .poll(() => mutations)
         .toEqual([
             {
-                parameters: expect.objectContaining({flow_command: 'set-pipeline-dynamic-spec'}),
+                parameters: expect.objectContaining({flow_command: 'patch-pipeline-dynamic-spec'}),
                 body: {
-                    path,
-                    spec: 280,
+                    set_path: path,
+                    set_value: 280,
                     expected_version: exactVersion,
                     comment: Buffer.from('Проверка патча 😊', 'utf8').toString('latin1'),
                 },
@@ -825,15 +839,20 @@ test('PipelineDynamicSpec: clicking full-text controls preserves the original st
     test.slow();
     const text = 'Full string '.repeat(20);
     await router.use(
-        http.put('*/api/v4/flow_execute', () =>
-            Response.json({
-                ...dynamicSpecSnapshot,
-                effective_spec: {
-                    ...(dynamicSpecSnapshot.effective_spec as Record<string, unknown>),
-                    long_label: text,
-                    empty_label: '',
-                },
-            }),
+        http.put(
+            '*/api/v4/flow_execute',
+            async ({request}) =>
+                (await dynamicSpecResponse(
+                    {
+                        ...dynamicSpecSnapshot,
+                        effective_spec: {
+                            ...(dynamicSpecSnapshot.effective_spec as Record<string, unknown>),
+                            long_label: text,
+                            empty_label: '',
+                        },
+                    },
+                    request,
+                )) ?? Response.json({version: exactVersion}),
         ),
     );
     await mount(<PipelineDynamicSpecStories.Overrides />);
@@ -944,8 +963,9 @@ test('PipelineDynamicSpec: editing one backoff sends one leaf with original CAS 
         }),
         http.put('*/api/v4/flow_execute', async ({request}) => {
             const parameters = requestParameters(request);
-            if (parameters.flow_command === 'get-pipeline-dynamic-spec-state') {
-                return Response.json(dynamicSpecSnapshot);
+            const read = await dynamicSpecResponse(dynamicSpecSnapshot, request);
+            if (read) {
+                return read;
             }
             mutations.push({parameters, body: await request.json()});
             return Response.json({version: exactVersion});
@@ -972,12 +992,12 @@ test('PipelineDynamicSpec: editing one backoff sends one leaf with original CAS 
         .toEqual([
             {
                 parameters: expect.objectContaining({
-                    flow_command: 'set-pipeline-dynamic-spec',
+                    flow_command: 'patch-pipeline-dynamic-spec',
                     input_format: {$value: 'json', $attributes: {encode_utf8: true}},
                 }),
                 body: {
-                    path: '/computations/noop/empty_batch_backoff',
-                    spec: 280,
+                    set_path: '/computations/noop/empty_batch_backoff',
+                    set_value: 280,
                     expected_version: exactVersion,
                     comment: Buffer.from('Проверка патча 😊', 'utf8').toString('latin1'),
                 },
@@ -994,10 +1014,10 @@ test('PipelineDynamicSpec: unchanged draft sends no mutation and multiple edits 
     const mutations: unknown[] = [];
     await router.use(
         http.put('*/api/v4/flow_execute', async ({request}) => {
-            if (requestParameters(request).flow_command !== 'get-pipeline-dynamic-spec-state') {
-                mutations.push(await request.json());
-            }
-            return Response.json(dynamicSpecSnapshot);
+            const read = await dynamicSpecResponse(dynamicSpecSnapshot, request);
+            if (read) return read;
+            mutations.push(await request.json());
+            return Response.json({version: exactVersion});
         }),
     );
     await mount(<PipelineDynamicSpecStories.Overrides />);
@@ -1026,7 +1046,6 @@ test('PipelineDynamicSpec: open editor keeps its original snapshot during backgr
     router,
 }) => {
     test.slow();
-    let loads = 0;
     const mutations: unknown[] = [];
     const later = {
         ...dynamicSpecSnapshot,
@@ -1034,8 +1053,9 @@ test('PipelineDynamicSpec: open editor keeps its original snapshot during backgr
     };
     await router.use(
         http.put('*/api/v4/flow_execute', async ({request}) => {
-            if (requestParameters(request).flow_command === 'get-pipeline-dynamic-spec-state') {
-                return Response.json(++loads === 1 ? dynamicSpecSnapshot : later);
+            const read = await dynamicSpecResponse(dynamicSpecSnapshot, request);
+            if (read) {
+                return read;
             }
             mutations.push(await request.json());
             return Response.json(
@@ -1068,7 +1088,12 @@ test('PipelineDynamicSpec: open editor keeps its original snapshot during backgr
         dialog.getByText('Dynamic spec version mismatch', {exact: false}).first(),
     ).toBeVisible();
     expect(mutations).toEqual([
-        {path: '/fresh', spec: true, expected_version: exactVersion, comment: 'Update value'},
+        {
+            set_path: '/fresh',
+            set_value: true,
+            expected_version: exactVersion,
+            comment: 'Update value',
+        },
     ]);
 });
 
@@ -1082,8 +1107,9 @@ test('PipelineDynamicSpec: override actions use displayed owner and model CAS', 
     await router.use(
         http.put('*/api/v4/flow_execute', async ({request}) => {
             const command = requestParameters(request).flow_command;
-            if (command === 'get-pipeline-dynamic-spec-state') {
-                return Response.json(dynamicSpecSnapshot);
+            const read = await dynamicSpecResponse(dynamicSpecSnapshot, request);
+            if (read) {
+                return read;
             }
             mutations.push({command, body: await request.json()});
             return Response.json({version: exactVersion});
@@ -1112,24 +1138,24 @@ test('PipelineDynamicSpec: override actions use displayed owner and model CAS', 
         .toEqual([
             {
                 command: 'cancel-pipeline-dynamic-spec-patch',
-                body: {version: exactVersion, expected_version: exactVersion},
+                body: {patch: exactVersion, expected_version: exactVersion},
             },
             {
                 command: 'cancel-pipeline-dynamic-spec-patch',
                 body: {
-                    version: {$type: 'int64', $value: OWNER_VERSION},
+                    patch: {$type: 'int64', $value: OWNER_VERSION},
                     expected_version: exactVersion,
                 },
             },
             {
                 command: 'cancel-pipeline-dynamic-spec-patch',
                 body: {
-                    version: {$type: 'int64', $value: MAP_VERSION},
+                    patch: {$type: 'int64', $value: MAP_VERSION},
                     expected_version: exactVersion,
                 },
             },
             {
-                command: 'reset-pipeline-dynamic-spec-override',
+                command: 'reset-pipeline-dynamic-spec',
                 body: {expected_version: exactVersion},
             },
         ]);
@@ -1149,9 +1175,13 @@ test('PipelineDynamicSpec: row patch actions preserve no-audit owners pending st
     await router.use(
         http.put('*/api/v4/flow_execute', async ({request}) => {
             const command = requestParameters(request).flow_command;
-            if (command === 'get-pipeline-dynamic-spec-state') {
-                ++reads;
-                return Response.json({...dynamicSpecSnapshot, audit: []});
+            const read = await dynamicSpecResponse({...dynamicSpecSnapshot, audit: []}, request);
+            if (read) {
+                if (command === 'get-pipeline-dynamic-spec') {
+                    const args = (await request.clone().json()) as {blame?: boolean};
+                    if (args.blame) ++reads;
+                }
+                return read;
             }
             mutations.push({command, body: await request.json()});
             await gate;
@@ -1192,7 +1222,7 @@ test('PipelineDynamicSpec: row patch actions preserve no-audit owners pending st
         {
             command: 'cancel-pipeline-dynamic-spec-patch',
             body: {
-                version: {$type: 'int64', $value: OWNER_VERSION},
+                patch: {$type: 'int64', $value: OWNER_VERSION},
                 expected_version: exactVersion,
             },
         },
@@ -1208,8 +1238,9 @@ test('PipelineDynamicSpec: subtree editing preserves raw Unicode and binary sibl
     const mutations: unknown[] = [];
     await router.use(
         http.put('*/api/v4/flow_execute', async ({request}) => {
-            if (requestParameters(request).flow_command === 'get-pipeline-dynamic-spec-state') {
-                return Response.json(dynamicSpecSnapshot);
+            const read = await dynamicSpecResponse(dynamicSpecSnapshot, request);
+            if (read) {
+                return read;
             }
             mutations.push(await request.json());
             return Response.json({version: exactVersion});
@@ -1237,8 +1268,8 @@ test('PipelineDynamicSpec: subtree editing preserves raw Unicode and binary sibl
         .poll(() => mutations)
         .toEqual([
             {
-                path: '/unicode_group',
-                spec: {...unicodeGroup, changed: 2},
+                set_path: '/unicode_group',
+                set_value: {...unicodeGroup, changed: 2},
                 expected_version: exactVersion,
                 comment: 'Update value',
             },
@@ -1252,14 +1283,14 @@ test('PipelineDynamicSpec: subtree editing preserves raw Unicode and binary sibl
         .poll(() => mutations)
         .toEqual([
             {
-                path: '/unicode_group',
-                spec: {...unicodeGroup, changed: 2},
+                set_path: '/unicode_group',
+                set_value: {...unicodeGroup, changed: 2},
                 expected_version: exactVersion,
                 comment: 'Update value',
             },
             {
-                path: '/unicode_group/' + RAW_UNICODE_KEY,
-                spec: 4,
+                set_path: '/unicode_group/' + RAW_UNICODE_KEY,
+                set_value: 4,
                 expected_version: exactVersion,
                 comment: 'Update value',
             },
@@ -1290,7 +1321,8 @@ for (const kind of ['scalar', 'map'] as const) {
         await router.use(
             http.put('*/api/v4/flow_execute', async ({request}) => {
                 const command = requestParameters(request).flow_command;
-                if (command === 'get-pipeline-dynamic-spec-state') return Response.json(state);
+                const read = await dynamicSpecResponse(state, request);
+                if (read) return read;
                 mutations.push({command, body: await request.json()});
                 return Response.json({version: exactVersion});
             }),
@@ -1341,10 +1373,10 @@ for (const kind of ['scalar', 'map'] as const) {
             .poll(() => mutations)
             .toEqual([
                 {
-                    command: 'set-pipeline-dynamic-spec',
+                    command: 'patch-pipeline-dynamic-spec',
                     body: {
-                        path,
-                        spec: changed,
+                        set_path: path,
+                        set_value: changed,
                         expected_version: exactVersion,
                         comment:
                             '\u00d0\u009f\u00d1\u0080\u00d0\u00b8\u00d1\u0087\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00b8\u00d0\u00b7\u00d0\u00bc\u00d0\u00b5\u00d0\u00bd\u00d0\u00b5\u00d0\u00bd\u00d0\u00b8\u00d1\u008f \u00f0\u009f\u0098\u008a',
@@ -1372,12 +1404,12 @@ for (const reject of [false, true]) {
             }),
             http.put('*/api/v4/flow_execute', async ({request}) => {
                 const command = requestParameters(request).flow_command;
-                if (command === 'get-pipeline-dynamic-spec-state')
+                if (command === 'get-pipeline-dynamic-spec-patches')
                     return Response.json(
                         {
                             code: 1,
                             message:
-                                'No such command: get-pipeline-dynamic-spec-state. Possible commands: []',
+                                'No such command: get-pipeline-dynamic-spec-patches. Possible commands: []',
                         },
                         {status: 500},
                     );

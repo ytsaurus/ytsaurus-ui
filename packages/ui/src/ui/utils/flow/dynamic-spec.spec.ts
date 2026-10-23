@@ -83,6 +83,29 @@ describe('dynamic spec provenance', () => {
             UnsafeDynamicSpecVersionError,
         );
     });
+
+    it('exposes an explicit patch ID for cancellation without inferring it from a version', () => {
+        const owned = {
+            ...snapshot,
+            override_spec: {
+                ...snapshot.override_spec,
+                children: {
+                    ...snapshot.override_spec.children,
+                    list: {operation: 'set' as const, version, patch_id: newer, value: [1, 3]},
+                },
+            },
+        };
+        expect(dynamicSpecSource(owned, ['list'])).toMatchObject({
+            source: 'override',
+            version: version.$value,
+            patchId: newer.$value,
+        });
+        expect(dynamicSpecSource(snapshot, ['list'])).toMatchObject({
+            source: 'override',
+            version: version.$value,
+            patchId: undefined,
+        });
+    });
     it('attributes omitted base keys to the replacing map', () => {
         expect(dynamicSpecSource(snapshot, ['group', 'removed'])).toMatchObject({
             source: 'override',
@@ -273,6 +296,7 @@ describe('grouped raw map overrides', () => {
                 children: {
                     demo: {
                         ...map,
+                        value: {limit: map.children.limit.value, period: map.children.period.value},
                         children: {
                             ...map.children,
                             limit: {operation: 'set' as const, version: newer, value: 2000},
@@ -284,7 +308,7 @@ describe('grouped raw map overrides', () => {
         const rows = dynamicSpecOverrideRows(mixed);
         expect(rows).toHaveLength(2);
         expect(rows[0]).toMatchObject({
-            value: {period: 1000},
+            value: {limit: map.children.limit.value, period: 1000},
             editorValue: {limit: 2000, period: 1000},
             hasInheritedFields: false,
             source: {version: version.$value},

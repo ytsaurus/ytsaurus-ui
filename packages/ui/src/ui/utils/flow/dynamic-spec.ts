@@ -11,7 +11,7 @@ import {
 
 export type DynamicSpecSource =
     | {source: 'base' | 'default' | 'runtime'}
-    | {source: 'override'; version: string; audit?: FlowDynamicSpecAudit};
+    | {source: 'override'; version: string; patchId?: string; audit?: FlowDynamicSpecAudit};
 
 export type DynamicSpecOverrideRow = {
     path: Array<string>;
@@ -156,6 +156,9 @@ export function validateDynamicSpecVersions(state: FlowDynamicSpecSnapshot) {
         if (node.version !== undefined && node.version !== null) {
             dynamicSpecVersion(node.version);
         }
+        if (node.patch_id !== undefined) {
+            dynamicSpecVersion(node.patch_id);
+        }
         Object.values(node.children ?? {}).forEach(visit);
     };
     visit(state.override_spec);
@@ -178,12 +181,20 @@ function baseValue(state: FlowDynamicSpecSnapshot, path: Array<string>): unknown
     }, state.base_spec);
 }
 
-function ownedSource(state: FlowDynamicSpecSnapshot, version: Int64): DynamicSpecSource {
-    const id = dynamicSpecVersion(version);
+function ownedSource(
+    state: FlowDynamicSpecSnapshot,
+    ownerVersion: Int64,
+    ownerPatchId?: Int64,
+): DynamicSpecSource {
+    const version = dynamicSpecVersion(ownerVersion);
+    const patchId = ownerPatchId === undefined ? undefined : dynamicSpecVersion(ownerPatchId);
     return {
         source: 'override',
-        version: id,
-        audit: state.audit.find((record) => dynamicSpecVersion(record.version) === id),
+        version,
+        patchId,
+        audit: state.audit.find(
+            (record) => dynamicSpecVersion(record.version) === (patchId ?? version),
+        ),
     };
 }
 
@@ -206,14 +217,14 @@ export function dynamicSpecSource(
         const version = node.version;
         const owned = version !== undefined && version !== null;
         if (node.operation !== 'map' || depth === path.length) {
-            return owned ? ownedSource(state, version) : {source: 'base'};
+            return owned ? ownedSource(state, version, node.patch_id) : {source: 'base'};
         }
         const children: Record<string, FlowDynamicSpecOverride> = node.children ?? {};
         const child: FlowDynamicSpecOverride | undefined = Object.hasOwn(children, path[depth])
             ? children[path[depth]]
             : undefined;
         if (!child && owned) {
-            return ownedSource(state, version);
+            return ownedSource(state, version, node.patch_id);
         }
         node = child;
     }
@@ -277,6 +288,14 @@ function overrideLiteral(
     const entries = new Map(Object.entries(seed ?? {}));
     let hasInheritedFields = false;
     for (const [key, child] of Object.entries(node.children ?? {})) {
+        if (
+            owner !== undefined &&
+            child.version !== undefined &&
+            child.version !== null &&
+            dynamicSpecVersion(child.version) !== owner
+        ) {
+            continue;
+        }
         const literal = overrideLiteral(child, owner);
         hasInheritedFields ||= literal.hasInheritedFields;
         if (literal.present) {
@@ -343,7 +362,7 @@ export function dynamicSpecOverrideRows(state: FlowDynamicSpecSnapshot) {
                 path,
                 operation: node.value === undefined || node.value === null ? 'mask' : 'map',
                 value: compact ? overrideLiteral(node, owner).value : (node.value ?? undefined),
-                source: ownedSource(state, version),
+                source: ownedSource(state, version, node.patch_id),
                 editorValue: editor.present ? editor.value : undefined,
                 hasInheritedFields: editor.hasInheritedFields,
             });

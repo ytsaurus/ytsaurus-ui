@@ -214,7 +214,6 @@ export type DynamicSpecProps = {
     renderEffective: (renderRowExtraTools?: RenderRowExtraTools) => React.ReactNode;
     pipelinePath: string;
     onSet: (path: Array<string>, value: unknown, version: Int64, comment?: string) => Promise<void>;
-    onCancelPath: (path: Array<string>, version: Int64) => Promise<void>;
     onCancelOwner: (owner: Int64, version: Int64) => Promise<void>;
     onReset: (version: Int64) => Promise<void>;
 };
@@ -419,6 +418,10 @@ export function DynamicSpec({
                                                 row.source.source === 'override'
                                                     ? row.source.version
                                                     : undefined;
+                                            const patchId =
+                                                row.source.source === 'override'
+                                                    ? row.source.patchId
+                                                    : undefined;
                                             const map =
                                                 row.operation === 'map' || row.operation === 'mask';
                                             const editRow = () =>
@@ -485,7 +488,7 @@ export function DynamicSpec({
                                                         )}
                                                     </td>
                                                     <td>
-                                                        {owner === undefined ? (
+                                                        {patchId === undefined ? (
                                                             '—'
                                                         ) : (
                                                             <Button
@@ -497,7 +500,7 @@ export function DynamicSpec({
                                                                 onClick={() =>
                                                                     run(() =>
                                                                         onCancelOwner(
-                                                                            owner,
+                                                                            patchId,
                                                                             snapshot.version,
                                                                         ),
                                                                     )

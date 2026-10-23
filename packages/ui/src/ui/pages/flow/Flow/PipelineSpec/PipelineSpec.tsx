@@ -389,22 +389,13 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
                     dispatch(
                         mutateFlowDynamicSpec({
                             path,
-                            command: 'set-pipeline-dynamic-spec',
+                            command: 'patch-pipeline-dynamic-spec',
                             body: {
-                                path: dynamicSpecPath(specPath),
-                                spec,
+                                set_path: dynamicSpecPath(specPath),
+                                set_value: spec,
                                 expected_version,
-                                comment,
+                                comment: comment ?? '',
                             },
-                        }),
-                    )
-                }
-                onCancelPath={(specPath, expected_version) =>
-                    dispatch(
-                        mutateFlowDynamicSpec({
-                            path,
-                            command: 'cancel-pipeline-dynamic-spec-override',
-                            body: {path: dynamicSpecPath(specPath), expected_version},
                         }),
                     )
                 }
@@ -413,7 +404,7 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
                         mutateFlowDynamicSpec({
                             path,
                             command: 'cancel-pipeline-dynamic-spec-patch',
-                            body: {version, expected_version},
+                            body: {patch: version, expected_version},
                         }),
                     )
                 }
@@ -421,7 +412,7 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
                     dispatch(
                         mutateFlowDynamicSpec({
                             path,
-                            command: 'reset-pipeline-dynamic-spec-override',
+                            command: 'reset-pipeline-dynamic-spec',
                             body: {expected_version},
                         }),
                     )

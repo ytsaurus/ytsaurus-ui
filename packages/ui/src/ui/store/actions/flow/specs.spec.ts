@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-import {type FlowDynamicSpecSnapshot} from '../../../../shared/yt-types';
+import {type FlowExecuteTypes} from '../../../../shared/yt-types';
 import {ytApiV4} from '../../../rum/rum-wrap-api';
 import {dynamicSpecActions, staticSpecActions} from '../../../store/reducers/flow/specs';
 
@@ -68,7 +66,7 @@ describe('Flow specs actions', () => {
         expect(dispatch).toHaveBeenNthCalledWith(2, actions.onSuccess({data: {spec, version}}));
     });
 
-    it('loads the atomic snapshot without rounding owner or model versions', async () => {
+    it('loads matching effective, base, blame and patches without rounding versions', async () => {
         const snapshot = {
             version,
             base_spec: {},
@@ -76,16 +74,46 @@ describe('Flow specs actions', () => {
             override_spec: {operation: 'set' as const, value: spec, version},
             audit: [{version, timestamp: '2026-10-04T10:00:00.000000Z'}],
         };
-        jest.mocked(ytApiV4.flowExecute).mockResolvedValue(snapshot);
+        jest.mocked(ytApiV4.flowExecute)
+            .mockResolvedValueOnce({
+                version,
+                patches: [
+                    {
+                        patch_id: version,
+                        timestamp: snapshot.audit[0].timestamp,
+                        changes: snapshot.override_spec,
+                    },
+                ],
+            })
+            .mockResolvedValueOnce({spec, version, blame: snapshot.override_spec})
+            .mockResolvedValueOnce({spec: {}, version});
         const dispatch = jest.fn();
         await loadFlowDynamicSpec(pipelinePath)(dispatch, jest.fn(), undefined);
-        expect(ytApiV4.flowExecute).toHaveBeenCalledWith({
+        expect(ytApiV4.flowExecute).toHaveBeenNthCalledWith(1, {
             parameters: {
                 pipeline_path: pipelinePath,
-                flow_command: 'get-pipeline-dynamic-spec-state',
+                flow_command: 'get-pipeline-dynamic-spec-patches',
                 output_format: 'web_json',
             },
             data: {},
+            cancellation: expect.any(Function),
+        });
+        expect(ytApiV4.flowExecute).toHaveBeenNthCalledWith(2, {
+            parameters: {
+                pipeline_path: pipelinePath,
+                flow_command: 'get-pipeline-dynamic-spec',
+                output_format: 'web_json',
+            },
+            data: {view: 'effective', blame: true},
+            cancellation: expect.any(Function),
+        });
+        expect(ytApiV4.flowExecute).toHaveBeenNthCalledWith(3, {
+            parameters: {
+                pipeline_path: pipelinePath,
+                flow_command: 'get-pipeline-dynamic-spec',
+                output_format: 'web_json',
+            },
+            data: {view: 'base'},
             cancellation: expect.any(Function),
         });
         expect(dispatch).toHaveBeenLastCalledWith(
@@ -96,23 +124,90 @@ describe('Flow specs actions', () => {
         expect(ytApiV4.getPipelineDynamicSpec).not.toHaveBeenCalled();
     });
 
+    it('retries when sequential reads observe different DynamicSpec versions', async () => {
+        const nextVersion = {$type: 'int64' as const, $value: '1917083822153720178'};
+        const patches = (revision: typeof version) => ({version: revision, patches: []});
+        const effective = (revision: typeof version) => ({
+            spec,
+            version: revision,
+            blame: {operation: 'inherit' as const},
+        });
+        jest.mocked(ytApiV4.flowExecute)
+            .mockResolvedValueOnce(patches(nextVersion))
+            .mockResolvedValueOnce(effective(version))
+            .mockResolvedValueOnce({spec: {}, version})
+            .mockResolvedValueOnce(patches(nextVersion))
+            .mockResolvedValueOnce(effective(nextVersion))
+            .mockResolvedValueOnce({spec: {}, version: nextVersion});
+        const dispatch = jest.fn();
+
+        await loadFlowDynamicSpec(pipelinePath)(dispatch, jest.fn(), undefined);
+
+        expect(ytApiV4.flowExecute).toHaveBeenCalledTimes(6);
+        expect(dispatch).toHaveBeenLastCalledWith(
+            dynamicSpecActions.onSuccess({
+                data: {
+                    spec,
+                    version: nextVersion,
+                    dynamic_spec_state: {
+                        version: nextVersion,
+                        effective_spec: spec,
+                        base_spec: {},
+                        override_spec: {operation: 'inherit'},
+                        runtime_target_state: undefined,
+                        audit: [],
+                    },
+                },
+            }),
+        );
+    });
+
+    it('ignores an obsolete patch list response after reloading the pipeline', async () => {
+        let complete!: (
+            value: FlowExecuteTypes['get-pipeline-dynamic-spec-patches']['ResponseType'],
+        ) => void;
+        const pending = new Promise<
+            FlowExecuteTypes['get-pipeline-dynamic-spec-patches']['ResponseType']
+        >((resolve) => {
+            complete = resolve;
+        });
+        jest.mocked(ytApiV4.flowExecute)
+            .mockReturnValueOnce(pending)
+            .mockResolvedValueOnce({version, patches: []})
+            .mockResolvedValueOnce({spec, version, blame: {operation: 'inherit'}})
+            .mockResolvedValueOnce({spec: {}, version});
+        const dispatch = jest.fn();
+
+        const obsolete = loadFlowDynamicSpec(pipelinePath)(dispatch, jest.fn(), undefined);
+        await loadFlowDynamicSpec(pipelinePath)(dispatch, jest.fn(), undefined);
+        complete({version, patches: []});
+        await obsolete;
+
+        expect(ytApiV4.flowExecute).toHaveBeenCalledTimes(4);
+        expect(dispatch.mock.calls.map(([action]) => action.type)).toEqual([
+            dynamicSpecActions.onRequest.type,
+            dynamicSpecActions.onRequest.type,
+            dynamicSpecActions.onSuccess.type,
+        ]);
+    });
+
     it.each([
         {
             message: 'Request failed',
             inner_errors: [
                 {
                     message:
-                        'No such command: get-pipeline-dynamic-spec-state. Possible commands: []',
+                        'No such command: get-pipeline-dynamic-spec-patches. Possible commands: []',
                 },
             ],
         },
         {
             message: {
                 $type: 'string',
-                $value: 'No such command: get-pipeline-dynamic-spec-state. Possible commands: []',
+                $value: 'No such command: get-pipeline-dynamic-spec-patches. Possible commands: []',
             },
         },
-    ])('falls back only when the snapshot command is unsupported (%#)', async (error) => {
+    ])('falls back only when the patch API is unsupported (%#)', async (error) => {
         jest.mocked(ytApiV4.flowExecute).mockRejectedValue(error);
         jest.mocked(ytApiV4.getPipelineDynamicSpec).mockResolvedValue({spec, version});
         const dispatch = jest.fn();
@@ -136,214 +231,11 @@ describe('Flow specs actions', () => {
         },
     );
 
-    describe('current dynamic spec request', () => {
-        const snapshot: FlowDynamicSpecSnapshot = {
-            version,
-            base_spec: {},
-            effective_spec: spec,
-            override_spec: {operation: 'inherit'},
-            audit: [],
-        };
-        const unsupported = {
-            message: 'No such command: get-pipeline-dynamic-spec-state. Possible commands: []',
-        };
-        const error = {message: 'Access denied'};
-
-        it.each([pipelinePath, '//home/other'])(
-            'does not let a settled unsupported request cancel the current load of %s',
-            async (currentPath) => {
-                const token = axios.CancelToken.source();
-                const cancel = jest.spyOn(token, 'cancel');
-                let complete = (_value: FlowDynamicSpecSnapshot) => {};
-                const pending = new Promise<FlowDynamicSpecSnapshot>((resolve, reject) => {
-                    complete = resolve;
-                    token.token.promise.then(() => reject({code: 'cancelled'}));
-                });
-                jest.mocked(ytApiV4.flowExecute)
-                    .mockRejectedValueOnce(unsupported)
-                    .mockImplementationOnce((...args) => {
-                        const request = args[0];
-                        if ('cancellation' in request) {
-                            request.cancellation?.(token);
-                        }
-                        return pending;
-                    });
-                jest.mocked(ytApiV4.getPipelineDynamicSpec).mockImplementationOnce((...args) => {
-                    const request = args[0];
-                    if ('cancellation' in request) {
-                        request.cancellation?.(axios.CancelToken.source());
-                    }
-                    return Promise.resolve({spec, version});
-                });
-                const dispatch = jest.fn();
-                const old = loadFlowDynamicSpec(pipelinePath)(dispatch, jest.fn(), undefined);
-                const current = loadFlowDynamicSpec(currentPath)(dispatch, jest.fn(), undefined);
-                await old;
-                complete(snapshot);
-                await current;
-
-                expect(ytApiV4.getPipelineDynamicSpec).not.toHaveBeenCalled();
-                expect(cancel).not.toHaveBeenCalled();
-                expect(dispatch).toHaveBeenLastCalledWith(
-                    dynamicSpecActions.onSuccess({
-                        data: {spec, version, dynamic_spec_state: snapshot},
-                    }),
-                );
-            },
-        );
-
-        it.each([pipelinePath, '//home/other'])(
-            'does not let a settled unsupported dynamic request cancel the static load of %s',
-            async (currentPath) => {
-                const token = axios.CancelToken.source();
-                const cancel = jest.spyOn(token, 'cancel');
-                let complete = (_value: {spec: typeof spec; version: typeof version}) => {};
-                const pending = new Promise<{spec: typeof spec; version: typeof version}>(
-                    (resolve, reject) => {
-                        complete = resolve;
-                        token.token.promise.then(() => reject({code: 'cancelled'}));
-                    },
-                );
-                jest.mocked(ytApiV4.flowExecute).mockRejectedValueOnce(unsupported);
-                jest.mocked(ytApiV4.getPipelineSpec).mockImplementationOnce((...args) => {
-                    const request = args[0];
-                    if ('cancellation' in request) {
-                        request.cancellation?.(token);
-                    }
-                    return pending;
-                });
-                jest.mocked(ytApiV4.getPipelineDynamicSpec).mockImplementationOnce((...args) => {
-                    const request = args[0];
-                    if ('cancellation' in request) {
-                        request.cancellation?.(axios.CancelToken.source());
-                    }
-                    return Promise.resolve({spec, version});
-                });
-                const dispatch = jest.fn();
-                const old = loadFlowDynamicSpec(pipelinePath)(dispatch, jest.fn(), undefined);
-                const current = loadFlowStaticSpec(currentPath)(dispatch, jest.fn(), undefined);
-                await old;
-                complete({spec, version});
-                await current;
-
-                expect(ytApiV4.getPipelineDynamicSpec).not.toHaveBeenCalled();
-                expect(cancel).not.toHaveBeenCalled();
-                expect(dispatch.mock.calls.map(([action]) => action.type)).toEqual([
-                    dynamicSpecActions.onRequest.type,
-                    staticSpecActions.onRequest.type,
-                    staticSpecActions.onSuccess.type,
-                ]);
-            },
-        );
-
-        it.each(['success', 'error'])(
-            'ignores an obsolete static %s after switching to dynamic spec',
-            async (result) => {
-                let complete = () => {};
-                const pending = new Promise<{spec: typeof spec; version: typeof version}>(
-                    (resolve, reject) => {
-                        complete = () =>
-                            result === 'success' ? resolve({spec, version}) : reject(error);
-                    },
-                );
-                jest.mocked(ytApiV4.getPipelineSpec).mockReturnValueOnce(pending);
-                jest.mocked(ytApiV4.flowExecute).mockResolvedValueOnce(snapshot);
-                const dispatch = jest.fn();
-                const old = loadFlowStaticSpec(pipelinePath)(dispatch, jest.fn(), undefined);
-                await loadFlowDynamicSpec(pipelinePath)(dispatch, jest.fn(), undefined);
-                complete();
-                await old;
-
-                expect(dispatch.mock.calls.map(([action]) => action.type)).toEqual([
-                    staticSpecActions.onRequest.type,
-                    dynamicSpecActions.onRequest.type,
-                    dynamicSpecActions.onSuccess.type,
-                ]);
-            },
-        );
-
-        it.each(['success', 'error'])(
-            'ignores an obsolete dynamic %s after switching to static spec',
-            async (result) => {
-                let complete = () => {};
-                const pending = new Promise<FlowDynamicSpecSnapshot>((resolve, reject) => {
-                    complete = () => (result === 'success' ? resolve(snapshot) : reject(error));
-                });
-                jest.mocked(ytApiV4.flowExecute).mockReturnValueOnce(pending);
-                jest.mocked(ytApiV4.getPipelineSpec).mockResolvedValueOnce({spec, version});
-                const dispatch = jest.fn();
-                const old = loadFlowDynamicSpec(pipelinePath)(dispatch, jest.fn(), undefined);
-                await loadFlowStaticSpec(pipelinePath)(dispatch, jest.fn(), undefined);
-                complete();
-                await old;
-
-                expect(dispatch.mock.calls.map(([action]) => action.type)).toEqual([
-                    dynamicSpecActions.onRequest.type,
-                    staticSpecActions.onRequest.type,
-                    staticSpecActions.onSuccess.type,
-                ]);
-            },
-        );
-
-        it.each(['success', 'error'])(
-            'ignores an obsolete snapshot %s after reloading the same path',
-            async (result) => {
-                let complete = () => {};
-                const pending = new Promise<FlowDynamicSpecSnapshot>((resolve, reject) => {
-                    complete = () => (result === 'success' ? resolve(snapshot) : reject(error));
-                });
-                jest.mocked(ytApiV4.flowExecute)
-                    .mockReturnValueOnce(pending)
-                    .mockResolvedValueOnce(snapshot);
-                const dispatch = jest.fn();
-                const old = loadFlowDynamicSpec(pipelinePath)(dispatch, jest.fn(), undefined);
-                await loadFlowDynamicSpec(pipelinePath)(dispatch, jest.fn(), undefined);
-                complete();
-                await old;
-
-                expect(dispatch.mock.calls.map(([action]) => action.type)).toEqual([
-                    dynamicSpecActions.onRequest.type,
-                    dynamicSpecActions.onRequest.type,
-                    dynamicSpecActions.onSuccess.type,
-                ]);
-            },
-        );
-
-        it.each(['success', 'error'])('ignores an obsolete legacy fallback %s', async (result) => {
-            let complete = () => {};
-            const pending = new Promise<{spec: typeof spec; version: typeof version}>(
-                (resolve, reject) => {
-                    complete = () =>
-                        result === 'success' ? resolve({spec, version}) : reject(error);
-                },
-            );
-            jest.mocked(ytApiV4.flowExecute)
-                .mockRejectedValueOnce(unsupported)
-                .mockResolvedValueOnce(snapshot);
-            jest.mocked(ytApiV4.getPipelineDynamicSpec).mockReturnValueOnce(pending);
-            const dispatch = jest.fn();
-            const old = loadFlowDynamicSpec(pipelinePath)(dispatch, jest.fn(), undefined);
-            await Promise.resolve();
-            expect(ytApiV4.getPipelineDynamicSpec).toHaveBeenCalledTimes(1);
-            await loadFlowDynamicSpec('//home/other')(dispatch, jest.fn(), undefined);
-            complete();
-            await old;
-
-            expect(dispatch.mock.calls.map(([action]) => action.type)).toEqual([
-                dynamicSpecActions.onRequest.type,
-                dynamicSpecActions.onRequest.type,
-                dynamicSpecActions.onSuccess.type,
-            ]);
-        });
-    });
-
-    it('rejects a rounded snapshot revision', async () => {
+    it('rejects a rounded DynamicSpec revision', async () => {
         jest.mocked(ytApiV4.flowExecute).mockResolvedValue({
             version: Number(version.$value),
-            base_spec: {},
-            effective_spec: spec,
-            override_spec: {operation: 'inherit'},
-            audit: [],
+            spec,
+            blame: {operation: 'inherit'},
         });
         const dispatch = jest.fn();
         await loadFlowDynamicSpec(pipelinePath)(dispatch, jest.fn(), undefined);
@@ -418,10 +310,10 @@ describe('sparse DynamicSpec mutations', () => {
         expect(ytApiV4.flowExecute).toHaveBeenCalledTimes(1);
         expect(ytApiV4.flowExecute).toHaveBeenCalledWith(
             expect.objectContaining({
-                parameters: expect.objectContaining({flow_command: 'set-pipeline-dynamic-spec'}),
+                parameters: expect.objectContaining({flow_command: 'patch-pipeline-dynamic-spec'}),
                 data: {
-                    path: '/computations/noop/empty_batch_backoff',
-                    spec: 280,
+                    set_path: '/computations/noop/empty_batch_backoff',
+                    set_value: 280,
                     expected_version: version,
                     comment: Buffer.from('Проверка патча', 'utf8').toString('latin1'),
                 },
@@ -459,16 +351,11 @@ describe('sparse DynamicSpec mutations', () => {
         {
             path: pipelinePath,
             command: 'cancel-pipeline-dynamic-spec-patch' as const,
-            body: {version, expected_version: version},
+            body: {patch: version, expected_version: version},
         },
         {
             path: pipelinePath,
-            command: 'cancel-pipeline-dynamic-spec-override' as const,
-            body: {path: '/computations/noop/max_rows_per_batch', expected_version: version},
-        },
-        {
-            path: pipelinePath,
-            command: 'reset-pipeline-dynamic-spec-override' as const,
+            command: 'reset-pipeline-dynamic-spec' as const,
             body: {expected_version: version},
         },
     ] satisfies DynamicSpecMutation[])(

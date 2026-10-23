@@ -1,6 +1,10 @@
 import {type ThunkAction} from 'redux-thunk';
 
-import {type FlowExecuteTypes, type Int64} from '../../../../shared/yt-types';
+import {
+    type FlowDynamicSpecSnapshot,
+    type FlowExecuteTypes,
+    type Int64,
+} from '../../../../shared/yt-types';
 
 import {type YTError, type YTErrorRaw} from '../../../../@types/types';
 
@@ -89,30 +93,89 @@ export function loadFlowDynamicSpec(pipeline_path: string): AsyncAction {
         const requestId = ++specRequestId;
         const isCurrentRequest = () => requestId === specRequestId;
         dispatch(dynamicSpecActions.onRequest({pipeline_path}));
+        let unavailable = false;
         try {
-            const response = await ytApiV4.flowExecute<'get-pipeline-dynamic-spec-state'>({
-                parameters: {
-                    pipeline_path,
-                    flow_command: 'get-pipeline-dynamic-spec-state',
-                    output_format: 'web_json',
-                },
-                data: {},
-                cancellation: cancelHelper.removeAllAndSave,
-            });
-            if (!isCurrentRequest()) {
+            for (let attempt = 0; attempt < 3; ++attempt) {
+                const patches = await ytApiV4.flowExecute<'get-pipeline-dynamic-spec-patches'>({
+                    parameters: {
+                        pipeline_path,
+                        flow_command: 'get-pipeline-dynamic-spec-patches',
+                        output_format: 'web_json',
+                    },
+                    data: {},
+                    cancellation: cancelHelper.removeAllAndSave,
+                });
+                if (!isCurrentRequest()) {
+                    return;
+                }
+                const effective = await ytApiV4.flowExecute<'get-pipeline-dynamic-spec'>({
+                    parameters: {
+                        pipeline_path,
+                        flow_command: 'get-pipeline-dynamic-spec',
+                        output_format: 'web_json',
+                    },
+                    data: {view: 'effective', blame: true},
+                    cancellation: cancelHelper.removeAllAndSave,
+                });
+                if (!isCurrentRequest()) {
+                    return;
+                }
+                if (!effective.blame) {
+                    unavailable = true;
+                    break;
+                }
+                const base = await ytApiV4.flowExecute<'get-pipeline-dynamic-spec'>({
+                    parameters: {
+                        pipeline_path,
+                        flow_command: 'get-pipeline-dynamic-spec',
+                        output_format: 'web_json',
+                    },
+                    data: {view: 'base'},
+                    cancellation: cancelHelper.removeAllAndSave,
+                });
+                if (!isCurrentRequest()) {
+                    return;
+                }
+                const version = dynamicSpecVersion(effective.version);
+                if (
+                    version !== dynamicSpecVersion(base.version) ||
+                    version !== dynamicSpecVersion(patches.version)
+                ) {
+                    continue;
+                }
+                const state: FlowDynamicSpecSnapshot = decodeDynamicSpecAudit({
+                    version: effective.version,
+                    effective_spec: effective.spec,
+                    base_spec: base.spec,
+                    override_spec: effective.blame,
+                    runtime_target_state:
+                        effective.spec !== null &&
+                        typeof effective.spec === 'object' &&
+                        'target_state' in effective.spec &&
+                        typeof effective.spec.target_state === 'string'
+                            ? effective.spec.target_state
+                            : undefined,
+                    audit: patches.patches.map(({patch_id, comment, timestamp}) => ({
+                        version: patch_id,
+                        comment,
+                        timestamp,
+                    })),
+                });
+                validateDynamicSpecVersions(state);
+                dispatch(
+                    dynamicSpecActions.onSuccess({
+                        data: {
+                            spec: state.effective_spec,
+                            version: state.version,
+                            dynamic_spec_state: state,
+                        },
+                    }),
+                );
                 return;
             }
-            const state = decodeDynamicSpecAudit(response);
-            validateDynamicSpecVersions(state);
-            dispatch(
-                dynamicSpecActions.onSuccess({
-                    data: {
-                        spec: state.effective_spec,
-                        version: state.version,
-                        dynamic_spec_state: state,
-                    },
-                }),
-            );
+            if (!unavailable) {
+                throw new Error(i18n('error_inconsistent-version'));
+            }
         } catch (error: unknown) {
             if (!isCurrentRequest() || isCancelled(error)) {
                 return;
@@ -125,13 +188,13 @@ export function loadFlowDynamicSpec(pipeline_path: string): AsyncAction {
                 );
                 return;
             }
-            let unavailable = false;
             forEachYTError([error as YTErrorRaw], (inner) => {
                 const message =
                     typeof inner.message === 'string' ? inner.message : inner.message?.$value;
                 if (
                     typeof message === 'string' &&
-                    message.startsWith('No such command: get-pipeline-dynamic-spec-state.')
+                    (message.startsWith('No such command: get-pipeline-dynamic-spec.') ||
+                        message.startsWith('No such command: get-pipeline-dynamic-spec-patches.'))
                 ) {
                     unavailable = true;
                 }
@@ -140,29 +203,26 @@ export function loadFlowDynamicSpec(pipeline_path: string): AsyncAction {
                 dispatch(dynamicSpecActions.onError({error: error as YTError}));
                 return;
             }
+        }
+        try {
+            const data: FlowSpecState['data'] = await ytApiV4.getPipelineDynamicSpec({
+                parameters: {pipeline_path, output_format: 'web_json'},
+                cancellation: cancelHelper.removeAllAndSave,
+            });
             if (!isCurrentRequest()) {
                 return;
             }
-            try {
-                const data: FlowSpecState['data'] = await ytApiV4.getPipelineDynamicSpec({
-                    parameters: {pipeline_path, output_format: 'web_json'},
-                    cancellation: cancelHelper.removeAllAndSave,
-                });
-                if (!isCurrentRequest()) {
-                    return;
-                }
-                if (data) {
-                    dynamicSpecVersion(data.version);
-                }
-                dispatch(
-                    dynamicSpecActions.onSuccess({
-                        data: data && {...data, dynamic_spec_state_unavailable: true},
-                    }),
-                );
-            } catch (fallbackError: unknown) {
-                if (isCurrentRequest() && !isCancelled(fallbackError)) {
-                    dispatch(dynamicSpecActions.onError({error: fallbackError as YTError}));
-                }
+            if (data) {
+                dynamicSpecVersion(data.version);
+            }
+            dispatch(
+                dynamicSpecActions.onSuccess({
+                    data: data && {...data, dynamic_spec_state_unavailable: true},
+                }),
+            );
+        } catch (fallbackError: unknown) {
+            if (isCurrentRequest() && !isCancelled(fallbackError)) {
+                dispatch(dynamicSpecActions.onError({error: fallbackError as YTError}));
             }
         }
     };
@@ -198,11 +258,11 @@ export function updateFlowDynamicSpec({
             return dispatch(
                 mutateFlowDynamicSpec({
                     path,
-                    command: 'set-pipeline-dynamic-spec',
+                    command: 'patch-pipeline-dynamic-spec',
                     body: {
-                        path: dynamicSpecPath(edits[0].path),
-                        spec: edits[0].value,
-                        comment,
+                        set_path: dynamicSpecPath(edits[0].path),
+                        set_value: edits[0].value,
+                        comment: comment ?? '',
                         expected_version: data.version,
                     },
                 }),
@@ -225,9 +285,9 @@ export function updateFlowDynamicSpec({
 
 export type DynamicSpecMutationCommand =
     | 'set-pipeline-dynamic-spec'
+    | 'patch-pipeline-dynamic-spec'
     | 'cancel-pipeline-dynamic-spec-patch'
-    | 'cancel-pipeline-dynamic-spec-override'
-    | 'reset-pipeline-dynamic-spec-override';
+    | 'reset-pipeline-dynamic-spec';
 
 export type DynamicSpecMutation = {
     [Command in DynamicSpecMutationCommand]: {
@@ -244,8 +304,8 @@ export function mutateFlowDynamicSpec({
 }: DynamicSpecMutation): AsyncAction<Promise<void>> {
     return async (dispatch, getState) => {
         dynamicSpecVersion(body.expected_version);
-        if ('version' in body) {
-            dynamicSpecVersion(body.version as Int64);
+        if ('patch' in body) {
+            dynamicSpecVersion(body.patch as Int64);
         }
         try {
             await ytApiV4.flowExecute<DynamicSpecMutationCommand>({
@@ -264,8 +324,8 @@ export function mutateFlowDynamicSpec({
                         $type: 'int64',
                         $value: dynamicSpecVersion(body.expected_version),
                     },
-                    ...('version' in body
-                        ? {version: {$type: 'int64', $value: dynamicSpecVersion(body.version)}}
+                    ...('patch' in body
+                        ? {patch: {$type: 'int64', $value: dynamicSpecVersion(body.patch)}}
                         : {}),
                 },
             });
