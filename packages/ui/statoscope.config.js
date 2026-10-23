@@ -26,6 +26,8 @@ module.exports = {
                         'react-is',
                         'redux',
                         'screenfull',
+                        // AIKit requires react-window 2, UIKit still requires react-window 1.
+                        'react-window',
                     ],
                 },
             ],
