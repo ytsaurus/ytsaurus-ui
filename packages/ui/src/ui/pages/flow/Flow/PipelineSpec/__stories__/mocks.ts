@@ -1,6 +1,9 @@
 import {http} from 'msw';
 
-import {type FlowDynamicSpecSnapshot} from '../../../../../../shared/yt-types';
+import {
+    type FlowDynamicSpecOverride,
+    type FlowDynamicSpecSnapshot,
+} from '../../../../../../shared/yt-types';
 
 export const PIPELINE_PATH = '//home/test/flow';
 export const OWNER_VERSION = '1923189626042933625';
@@ -114,8 +117,66 @@ export const dynamicSpecSnapshot: FlowDynamicSpecSnapshot = {
     runtime_target_state: 'completed',
 };
 
-export const dynamicSpecHandler = http.put('*/api/v4/flow_execute', () =>
-    Response.json(dynamicSpecSnapshot),
+function annotatePatchIds(node: FlowDynamicSpecOverride): FlowDynamicSpecOverride {
+    return {
+        ...node,
+        ...(node.version === undefined || node.version === null ? {} : {patch_id: node.version}),
+        ...(node.children
+            ? {
+                  children: Object.fromEntries(
+                      Object.entries(node.children).map(([key, child]) => [
+                          key,
+                          annotatePatchIds(child),
+                      ]),
+                  ),
+              }
+            : {}),
+    };
+}
+
+export async function dynamicSpecResponse(
+    snapshot: FlowDynamicSpecSnapshot,
+    request: Request,
+): Promise<Response | undefined> {
+    const parameters = requestParameters(request);
+    if (parameters.flow_command === 'get-pipeline-dynamic-spec') {
+        const {view, blame} = await request.clone().json();
+        return Response.json({
+            spec: view === 'base' ? snapshot.base_spec : snapshot.effective_spec,
+            version: snapshot.version,
+            ...(blame ? {blame: annotatePatchIds(snapshot.override_spec)} : {}),
+        });
+    }
+    if (parameters.flow_command === 'get-pipeline-dynamic-spec-patches') {
+        return Response.json({
+            version: snapshot.version,
+            patches: snapshot.audit.map(({version: patchVersion, comment, timestamp}) => ({
+                patch_id: patchVersion,
+                comment,
+                timestamp,
+                changes: snapshot.override_spec,
+            })),
+        });
+    }
+    return undefined;
+}
+
+function requestParameters(request: Request) {
+    const encoded = [...request.headers.entries()]
+        .filter(([name]) => name.startsWith('x-yt-parameters-'))
+        .sort(([left], [right]) => left.localeCompare(right))
+        .map(([, value]) => value)
+        .join('');
+    return JSON.parse(
+        request.headers.get('x-yt-parameters') ?? Buffer.from(encoded, 'base64').toString('utf8'),
+    );
+}
+
+export const dynamicSpecHandler = http.put(
+    '*/api/v4/flow_execute',
+    async ({request}) =>
+        (await dynamicSpecResponse(dynamicSpecSnapshot, request)) ??
+        Response.json({version: dynamicSpecSnapshot.version}),
 );
 
 export const legacyDynamicSpecHandler = http.get('*/api/v4/get_pipeline_dynamic_spec', () =>
@@ -126,7 +187,7 @@ export const unavailableDynamicSpecHandler = http.put('*/api/v4/flow_execute', (
     Response.json(
         {
             code: 1,
-            message: 'No such command: get-pipeline-dynamic-spec-state. Possible commands: []',
+            message: 'No such command: get-pipeline-dynamic-spec-patches. Possible commands: []',
         },
         {status: 500},
     ),

@@ -37,5 +37,6 @@
   "context_map-inherited-fields": "This map currently inherits some fields from the base. Replacing the whole map stops inheriting those fields. Include them explicitly to keep their current values.",
   "field_time": "Time",
   "context_comment-required": "Add a comment explaining the change.",
-  "context_value-change-required": "Change the specification to save an update."
+  "context_value-change-required": "Change the specification to save an update.",
+  "error_inconsistent-version": "The dynamic specification changed while loading. Refresh to try again."
 }
