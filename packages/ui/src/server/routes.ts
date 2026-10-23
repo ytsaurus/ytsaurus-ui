@@ -106,11 +106,11 @@ const routes: AppRoutes = {
 
     'POST /api/tablet-errors/:ytAuthCluster/:action': {handler: ytTabletErrorsApi},
 
-    'POST /api/code-assistant/create-conversation': {handler: createConversation},
-    'POST /api/code-assistant/send-message': {handler: sendMessage},
     'GET /api/code-assistant/conversations': {handler: getConversations},
+    'POST /api/code-assistant/create-conversation': {handler: createConversation},
     'GET /api/code-assistant/conversations/:conversationId/items': {handler: getConversationItems},
     'DELETE /api/code-assistant/conversations/:conversationId': {handler: deleteConversation},
+    'POST /api/code-assistant/send-message': {handler: sendMessage},
     'POST /api/code-assistant/conversations/:conversationId/summarize-title': {
         handler: summarizeConversationTitle,
     },
