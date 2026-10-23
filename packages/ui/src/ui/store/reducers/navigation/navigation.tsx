@@ -16,59 +16,66 @@ import {
     UPDATE_VIEW,
 } from '../../../constants/navigation';
 
-export type NavigationState = {
-    path: string;
-    mode: ValueOf<typeof Tab>;
-
-    loadState: LoadingStatus;
-    transaction: string | undefined;
-
-    error: {message: string; details: YTError} | undefined;
-
+type NavigationNodeState = {
     attributesWithTypes: unknown;
     attributes: unknown;
-    isIdmSupported: boolean;
-
-    remoteDestinationsConfig: unknown;
-    remoteDestinationsState: LoadingStatus;
-    remoteDestinationsError: YTError | undefined;
-
     isWriteable: boolean | undefined;
     isAccountUsable: boolean | undefined;
     checkPermissionsError: YTError | undefined;
-
-    sidePanelMode: 'qt' | 'yqlkit' | undefined;
-
     originatingQueuePath: string | undefined;
-
-    is_access_log_available: boolean;
 };
 
-const persistedState: Pick<NavigationState, 'path' | 'mode'> = {
+type NavigationRequestState = {
+    loadState: LoadingStatus;
+    error: {message: string; details: YTError} | undefined;
+};
+
+type NavigationPersistedState = {
+    path: string;
+    mode: ValueOf<typeof Tab>;
+};
+
+type NavigationEphemeralState = NavigationNodeState &
+    NavigationRequestState & {
+        transaction: string | undefined;
+        isIdmSupported: boolean;
+        remoteDestinationsConfig: unknown;
+        remoteDestinationsState: LoadingStatus;
+        remoteDestinationsError: YTError | undefined;
+        sidePanelMode: 'qt' | 'yqlkit' | undefined;
+        is_access_log_available: boolean;
+    };
+
+export type NavigationState = NavigationPersistedState & NavigationEphemeralState;
+
+const nodeInitialState: NavigationNodeState = {
+    attributes: {},
+    attributesWithTypes: {},
+    isWriteable: false,
+    isAccountUsable: false,
+    checkPermissionsError: undefined,
+    originatingQueuePath: undefined,
+};
+
+const requestInitialState: NavigationRequestState = {
+    loadState: LOADING_STATUS.UNINITIALIZED,
+    error: undefined,
+};
+
+const persistedState: NavigationPersistedState = {
     path: '',
-    /** @type {typeof Tab[keyof typeof Tab]} */
     mode: Tab.AUTO,
 };
 
-const ephemeralState: Omit<NavigationState, keyof typeof persistedState> = {
-    /** @type {LOADING_STATUS[keyof LOADING_STATUS]} */
-    loadState: LOADING_STATUS.UNINITIALIZED,
+const ephemeralState: NavigationEphemeralState = {
+    ...nodeInitialState,
+    ...requestInitialState,
     transaction: undefined,
-    error: undefined,
-    attributes: {},
-    attributesWithTypes: {},
     isIdmSupported: false,
     remoteDestinationsConfig: undefined,
     remoteDestinationsState: LOADING_STATUS.UNINITIALIZED,
     remoteDestinationsError: undefined,
-
-    isWriteable: false,
-    isAccountUsable: false,
-    checkPermissionsError: undefined,
-
     sidePanelMode: undefined,
-
-    originatingQueuePath: undefined,
     is_access_log_available: false,
 };
 
@@ -160,18 +167,7 @@ export type NavigationAction =
           typeof UPDATE_VIEW.FAILURE,
           NavigationState['error'] & Pick<NavigationState, 'isIdmSupported'>
       >
-    | ActionD<
-          typeof UPDATE_VIEW.SUCCESS,
-          Pick<
-              Partial<NavigationState>,
-              | 'attributes'
-              | 'attributesWithTypes'
-              | 'isWriteable'
-              | 'isAccountUsable'
-              | 'checkPermissionsError'
-              | 'originatingQueuePath'
-          >
-      >
+    | ActionD<typeof UPDATE_VIEW.SUCCESS, Partial<NavigationNodeState>>
     | ActionD<typeof NAVIGATION_PARTIAL, Partial<NavigationState>>;
 
 export default mergeStateOnClusterChange(ephemeralState, persistedState, reducer);
