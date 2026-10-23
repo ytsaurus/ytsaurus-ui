@@ -78,6 +78,8 @@ const config: PlaywrightTestConfig = {
                             '../..',
                         ),
                     },
+                    {find: /^path$/, replacement: require.resolve('path-browserify')},
+                    {find: /^url$/, replacement: require.resolve('url/')},
                     {find: /^~(.*)$/, replacement: '$1'},
                 ],
             },

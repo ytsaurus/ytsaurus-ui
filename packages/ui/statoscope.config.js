@@ -26,6 +26,15 @@ module.exports = {
                         'react-is',
                         'redux',
                         'screenfull',
+                        // AIKit's browser-side Diplodoc renderer brings incompatible parser majors:
+                        // markdown-it: entities 3; htmlparser2 8: entities 4;
+                        // parse5: entities 6; cheerio/htmlparser2 10: entities 7.
+                        'entities',
+                        'htmlparser2',
+                        // The browser URL polyfill requires punycode 1, other consumers use 2.
+                        'punycode',
+                        // AIKit requires react-window 2, UIKit still requires react-window 1.
+                        'react-window',
                     ],
                 },
             ],
