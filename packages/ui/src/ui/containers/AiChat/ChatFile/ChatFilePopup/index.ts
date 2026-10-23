@@ -1,1 +1,0 @@
-export {ChatFilePopup} from './ChatFilePopup';

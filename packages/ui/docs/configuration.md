@@ -180,3 +180,33 @@ Example of usage:
   },
 };
 ```
+
+## AI chat
+
+To connect a model that supports streaming OpenAI Responses API requests, configure
+`uiSettings.aiChatConfig`:
+
+```json
+{
+  "baseUrl": "https://your-llm.example/v1",
+  "model": "your-model"
+}
+```
+
+`baseUrl` is the complete API root: the server appends `/responses`, without adding
+`/v1`. Set `YTFRONT_AI_CHAT_API_KEY` in the server environment if the provider
+requires a Bearer API key. Do not put credentials in `uiSettings`, which is exposed
+to the browser.
+
+The chat uses Responses API with `conversation` and the Conversations API for
+creating, reading and deleting conversations. Each request sends only the new
+user turn, page context and attachments; previous turns are retained by the backend.
+Closing the panel or starting a new chat does not delete saved conversations.
+The AIKit history menu lets users reopen and delete previous chats.
+
+The configured backend must also support `GET /conversations?limit=20&after=...`
+returning `{data, has_more, last_id}`. This listing endpoint is a backend extension,
+not part of the standard OpenAI Conversations API. Use a backend implementing this
+extension to provide the history list.
+
+Chat requests use the application's standard JSON body parser and request size limit.

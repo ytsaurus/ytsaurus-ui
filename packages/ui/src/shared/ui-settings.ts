@@ -220,12 +220,13 @@ export interface UISettings {
 
     /**
      * Configuration for AI chat assistant integration.
-     * baseUrl - Base URL of the AI chat API endpoint
+     * baseUrl - Full API root (including /v1 when required by the provider)
      * model - Name of the AI model to use
+     * Set YTFRONT_AI_CHAT_API_KEY on the server; never put credentials in uiSettings.
      * @example
      * aiChatConfig: {
      *   baseUrl: 'https://api.openai.com/v1',
-     *   model: 'gpt-4'
+     *   model: 'your-model'
      * }
      */
     aiChatConfig?: AIChatConfig;

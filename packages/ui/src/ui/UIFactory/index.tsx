@@ -30,7 +30,6 @@ import {type YTError} from '../types';
 
 import {type AnalyticsService} from '../common/utils/metrics';
 import {type DetailedOperationSelector} from '../pages/operations/selectors';
-import {type ChatMessage} from '../types/ai-chat';
 import {type JobItem} from '../store/reducers/operations/jobs/jobs-monitor';
 import {type PoolTreeNode} from '../utils/scheduling/pool-child';
 
@@ -205,7 +204,7 @@ export type FlowWorkerMonitorProps = {
 };
 
 export type AiPageContext = {
-    meta: {agent: string};
+    meta: Record<string, string>;
     contextMessages: string[];
 };
 
@@ -220,6 +219,8 @@ export type AiChatProps = {
 };
 
 export type AiChatIntegration = {
+    /** Mounted outside the side panel so requests survive closing the chat. */
+    Provider?: React.ComponentType<{children?: React.ReactNode}>;
     Chat: React.ComponentType<AiChatProps>;
     AskAiButton?: React.ComponentType<AskAiButtonProps>;
 };
@@ -558,11 +559,6 @@ export interface UIFactory {
     getAnalyticsService(): AnalyticsService[];
 
     renderIncarnationsTab(params: {cluster: string; operationId: string}): React.ReactNode;
-
-    getAiChatMessageComponent(
-        message: ChatMessage,
-        className?: string,
-    ): React.ReactElement | undefined;
 
     getAiChat(): AiChatIntegration;
 
