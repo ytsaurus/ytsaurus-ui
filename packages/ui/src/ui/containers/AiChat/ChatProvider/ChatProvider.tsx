@@ -24,6 +24,7 @@ import {responseEvents} from '../stream';
 type ChatController = {
     messages: TChatMessage[];
     status: ChatStatus;
+    onCancel: () => Promise<void>;
     onSend: (data: TSubmitData) => Promise<void | false>;
 };
 const Context = createContext<ChatController | undefined>(undefined);
@@ -69,6 +70,7 @@ export default function ChatProvider({children}: ChatProviderProps) {
         () => () => {
             if (request.current) {
                 request.current.abort();
+                request.current = undefined;
                 dispatch(setSending(false));
             }
         },
@@ -111,10 +113,11 @@ export default function ChatProvider({children}: ChatProviderProps) {
                 request.current = undefined;
                 return false;
             }
-            if (controller.signal.aborted) return false;
-            setStream({source: responseEvents(response), id: uuidv4()});
+            if (request.current !== controller) return false;
+            controller.signal.throwIfAborted();
+            setStream({source: responseEvents(response, controller), id: uuidv4()});
         } catch (error) {
-            if (controller.signal.aborted) return false;
+            if (request.current !== controller) return false;
             dispatch(
                 addConversationItem({
                     id: uuidv4(),
@@ -130,8 +133,12 @@ export default function ChatProvider({children}: ChatProviderProps) {
         }
     };
 
+    const onCancel = async () => {
+        request.current?.abort(new Error(i18n('alert_response-interrupted')));
+    };
+
     let status: ChatStatus = 'ready';
-    if (sending) status = stream ? adapter.status : 'submitted';
+    if (sending) status = stream ? adapter.status : 'streaming_loading';
 
     // Redux can publish the completed response before the stream state is cleared.
     // The adapter also retains its previous messages until the next stream starts.
@@ -146,6 +153,7 @@ export default function ChatProvider({children}: ChatProviderProps) {
                 messages,
                 status,
                 onSend,
+                onCancel,
             }}
         >
             {children}

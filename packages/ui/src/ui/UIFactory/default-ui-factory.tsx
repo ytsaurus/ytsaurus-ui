@@ -34,7 +34,7 @@ import {NavigationFlowMonitoringPrometheus} from '../pages/navigation/tabs/Flow/
 
 import {defaultAclApi} from '../utils/acl/external-acl-api';
 
-import {ChatLazy} from '../containers/AiChat/lazy';
+import {ChatLazy, ChatProviderLazy} from '../containers/AiChat/lazy';
 
 import {type UIFactory} from './index';
 
@@ -401,10 +401,7 @@ export const defaultUIFactory: UIFactory = {
     renderJobLogsTab() {
         return undefined;
     },
-    getAiChatMessageComponent() {
-        return undefined;
-    },
     getAiChat() {
-        return {Chat: ChatLazy};
+        return {Chat: ChatLazy, Provider: ChatProviderLazy};
     },
 };
