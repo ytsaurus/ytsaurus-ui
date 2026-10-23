@@ -1,47 +1,39 @@
 import {type ThunkAction} from 'redux-thunk';
 import {type Action} from 'redux';
+import axios from 'axios';
+import i18n from '../../../containers/AiChat/i18n';
 import {v4 as uuidv4} from 'uuid';
 import {type RootState} from '../../reducers';
 import {
-    selectAiChatModel,
     selectAttachedFiles,
-    selectChatMode,
     selectChatOpen,
-    selectChatQuestion,
+    selectChatSending,
     selectConversation,
-    selectConversationId,
     selectConversations,
     selectPageContext,
 } from '../../selectors/ai/chat';
 import {
     addAttachedFile,
     addConversationItem,
-    clearAttachedFiles,
-    clearCurrentAnswer,
     resetChat,
     setConversation,
-    setConversationId,
     setConversations,
-    setCurrentAnswer,
-    setError,
+    setInitialTitlePending,
     setIsOpen,
-    setLoading,
-    setMode,
-    setQuestion,
     setSending,
+    setTitleGenerating,
 } from '../../reducers/ai/chatSlice';
-import {type ChatError} from '../../../types/ai-chat';
-import axios from 'axios';
-import {type Conversation, type GetConversationItemsResponse} from '../../../../shared/ai-chat';
 import {
-    createMcpItem,
-    createMessageItem,
-    getTextDelta,
-    parseConversationItems,
-    parseStreamLine,
-} from './helpers';
+    type Conversation,
+    type ConversationItem,
+    type ConversationPage,
+    createResponseInput,
+} from '../../../../shared/ai-chat';
+import {parseConversationItems} from './helpers';
 
 const BASE_PATH = '/api/code-assistant';
+const TITLE_GENERATION_FREQUENCY = 5;
+const REQUEST_TIMEOUT = 120_000;
 
 type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
 
@@ -61,412 +53,113 @@ const readFileAsText = (file: File): Promise<string> => {
     });
 };
 
-const ERROR_MESSAGE = {
-    HTTP_ERROR: 'HTTP error! status:',
-    RESPONSE_NOT_READABLE: 'Response body is not readable',
-};
-
-let currentAbortController: AbortController | null = null;
-
-async function* streamAsyncIterator(
-    reader: ReadableStreamDefaultReader<Uint8Array>,
-): AsyncGenerator<Uint8Array, void, unknown> {
-    try {
-        while (true) {
-            const {done, value} = await reader.read();
-            if (done) return;
-            yield value;
-        }
-    } finally {
-        reader.releaseLock();
-    }
-}
-
-export const summarizeConversationTitle =
-    (conversationId: string): AsyncAction =>
-    async (dispatch, getState) => {
-        const state = getState();
-        const conversations = selectConversations(state);
-
-        try {
-            const response = await axios.post<{title: string}>(
-                `${BASE_PATH}/conversations/${conversationId}/summarize-title`,
-            );
-            const newConversations = conversations.items.map((conversation) => {
-                if (conversation.id === conversationId) {
-                    return {
-                        ...conversation,
-                        metadata: {
-                            ...conversation.metadata,
-                            topic: response.data.title,
-                        },
-                    };
-                }
-                return conversation;
-            });
-
-            dispatch(setConversations({items: newConversations}));
-        } catch (e) {}
-    };
-
-const TITLE_GENERATION_FREQUENCY = 5;
-const DEFAULT_CONVERSATION_TITLE = 'новый чат';
-
+// Request orchestration only; AIKit consumes the response and prepares messages.
 export const sendQuestion =
-    (promptId?: string): AsyncAction =>
+    ({
+        message: question,
+        signal,
+    }: {
+        message: string;
+        signal: AbortSignal;
+    }): ThunkAction<Promise<Response | undefined>, RootState, undefined, Action> =>
     async (dispatch, getState) => {
-        const processStreamLine = (line: string, fullText: string): string => {
-            const event = parseStreamLine(line);
-            if (!event) return fullText;
-
-            const delta = getTextDelta(event);
-            if (delta) {
-                const newFullText = fullText + delta;
-                dispatch(setCurrentAnswer(newFullText));
-                return newFullText;
-            }
-
-            if ('type' in event && event.type === 'response.output_item.done' && event.item) {
-                const messageItem = createMessageItem(event.item, fullText);
-
-                if (messageItem) {
-                    dispatch(addConversationItem(messageItem));
-                    dispatch(clearCurrentAnswer());
-                    return '';
-                }
-
-                const mcpItem = createMcpItem(event.item);
-                if (mcpItem) {
-                    dispatch(addConversationItem(mcpItem));
-                }
-            }
-
-            return fullText;
-        };
-
         const state = getState();
-        const question = selectChatQuestion(state) || '';
-        const conversationId = selectConversationId(state);
-        const {items, hasMore, lastId} = selectConversations(state);
+        const conversation = selectConversation(state);
+        if (
+            selectChatSending(state) ||
+            conversation.loading ||
+            conversation.error ||
+            selectConversations(state).deleting ||
+            !question.trim()
+        )
+            return undefined;
+
         const attachedFiles = selectAttachedFiles(state);
-        const model = selectAiChatModel();
-        let summarize = false;
-
-        if (!question && !promptId) return;
-
-        const {meta, contextMessages} = selectPageContext(state);
-
-        dispatch(setMode('chat'));
-        if (question) {
-            dispatch(
-                addConversationItem({
-                    id: uuidv4(),
-                    type: 'question',
-                    value: question,
-                }),
-            );
-        }
-        dispatch(setQuestion(undefined));
+        const {contextMessages, meta} = selectPageContext(state);
+        dispatch(addConversationItem({id: uuidv4(), role: 'user', content: question}));
         dispatch(setSending(true));
-
-        let reader: ReadableStreamDefaultReader<Uint8Array> | undefined;
-        try {
-            let currentConversationId = conversationId;
-            if (!currentConversationId) {
-                const {data} = await axios.post<Conversation>(`${BASE_PATH}/create-conversation`, {
-                    model,
-                    metadata: {...meta, topic: DEFAULT_CONVERSATION_TITLE},
-                });
-                currentConversationId = data.id;
-                dispatch(
-                    setConversations({items: [data, ...items], hasMore, lastId, loading: false}),
-                );
-                summarize = true;
-            }
-
-            const files = await Promise.all(
-                attachedFiles.map(async (file) => ({
-                    name: file.name,
-                    type: file.type,
-                    content: await readFileAsText(file),
-                })),
-            );
-
-            if (currentAbortController) {
-                currentAbortController.abort();
-            }
-            currentAbortController = new AbortController();
-            const response = await fetch(`${BASE_PATH}/send-message`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+        const files = await Promise.all(
+            attachedFiles.map(async (file) => ({
+                name: file.name,
+                content: await readFileAsText(file),
+            })),
+        );
+        signal.throwIfAborted();
+        let conversationId = conversation.id;
+        if (!conversationId) {
+            const {data} = await axios.post<Conversation>(
+                `${BASE_PATH}/create-conversation`,
+                {
+                    topic: question.trim().slice(0, 100),
                 },
-                body: JSON.stringify({
-                    message: question,
-                    model,
-                    metadata: meta,
-                    conversationId: currentConversationId,
-                    promptId,
-                    contextMessages: contextMessages.length > 0 ? contextMessages : undefined,
-                    files: files.length > 0 ? files : undefined,
-                }),
-                signal: currentAbortController.signal,
-            });
-
-            if (!response.ok) {
-                throw new Error(`${ERROR_MESSAGE.HTTP_ERROR} ${response.status}`);
-            }
-
-            reader = response.body?.getReader();
-            const decoder = new TextDecoder();
-
-            if (!reader) {
-                throw new Error(ERROR_MESSAGE.RESPONSE_NOT_READABLE);
-            }
-
-            let buffer = '';
-            let fullText = '';
-
-            for await (const chunk of streamAsyncIterator(reader)) {
-                const decodedChunk = decoder.decode(chunk, {stream: true});
-                buffer += decodedChunk;
-                const lines = buffer.split('\n');
-
-                for (let i = 0; i < lines.length - 1; i++) {
-                    const line = lines[i].trim();
-                    fullText = processStreamLine(line, fullText);
-                }
-
-                buffer = lines[lines.length - 1];
-            }
-
-            const itemsCount = selectConversation(getState()).items.length;
-            if (itemsCount > 0 && !(itemsCount % TITLE_GENERATION_FREQUENCY)) {
-                summarize = true;
-            }
-
-            dispatch(setConversationId(currentConversationId));
-            if (summarize) {
-                dispatch(summarizeConversationTitle(currentConversationId));
-            }
-
-            dispatch(clearAttachedFiles());
-        } catch (e) {
-            if (e instanceof Error && e.name === 'AbortError') {
-                dispatch(setSending(false));
-                dispatch(clearCurrentAnswer());
-                dispatch(setError(undefined));
-                return;
-            }
-
-            const error: ChatError = {
-                type: 'error',
-                error: e as Error,
-            };
-            dispatch(addConversationItem(error));
-        } finally {
-            dispatch(setSending(false));
-            currentAbortController = null;
-        }
-    };
-
-export const createConversationWithPrompt =
-    (promptId: string): AsyncAction =>
-    (dispatch) => {
-        dispatch(resetChat());
-        dispatch(setIsOpen(true));
-        dispatch(sendQuestion(promptId));
-    };
-
-const CONVERSATIONS_LIMIT = 20;
-
-export const getConversations = (): AsyncAction => async (dispatch) => {
-    dispatch(setLoading(true));
-    try {
-        const response = await axios.get(`${BASE_PATH}/conversations`, {
-            params: {
-                limit: CONVERSATIONS_LIMIT,
-            },
-        });
-
-        dispatch(
-            setConversations({
-                items: response.data.data,
-                hasMore: response.data.has_more,
-                lastId: response.data.last_id,
-                loading: false,
-            }),
-        );
-    } catch (e) {
-        dispatch(setError(e as Error));
-    } finally {
-        dispatch(setLoading(false));
-    }
-};
-
-export const loadMoreConversations = (): AsyncAction => async (dispatch, getState) => {
-    const state = getState();
-    const conversations = selectConversations(state);
-    const {items, hasMore, loading, lastId} = conversations;
-
-    if (!hasMore || loading) {
-        return;
-    }
-
-    dispatch(setConversations({loading: true}));
-    try {
-        const response = await axios.get(`${BASE_PATH}/conversations`, {
-            params: {
-                limit: CONVERSATIONS_LIMIT,
-                after: lastId,
-            },
-        });
-
-        dispatch(
-            setConversations({
-                items: [...items, ...response.data.data],
-                hasMore: response.data.has_more,
-                lastId: response.data.last_id,
-                loading: false,
-            }),
-        );
-    } catch (e) {
-        dispatch(setConversations({loading: false}));
-        dispatch(setError(e as Error));
-    }
-};
-
-export const toggleChatHistory = (): AsyncAction => async (dispatch, getState) => {
-    const state = getState();
-    const currentMode = selectChatMode(state);
-    const nextMode = currentMode === 'chat' ? 'history' : 'chat';
-
-    if (nextMode === 'history') {
-        dispatch(getConversations());
-    }
-    dispatch(setMode(nextMode));
-};
-
-export const deleteConversation =
-    (conversationId: string): AsyncAction =>
-    async (dispatch, getState) => {
-        try {
-            const state = getState();
-            const {items, hasMore, lastId, loading} = selectConversations(state);
-            await axios.delete(`${BASE_PATH}/conversations/${conversationId}`);
-
-            const filteredConversations = items.filter(
-                (conversation) => conversation.id !== conversationId,
+                {signal, timeout: REQUEST_TIMEOUT},
             );
-
-            const newLastId =
-                lastId === conversationId
-                    ? filteredConversations[filteredConversations.length - 1]?.id || undefined
-                    : lastId;
-
+            signal.throwIfAborted();
+            conversationId = data.id;
+            dispatch(setConversation({id: conversationId}));
+            dispatch(setInitialTitlePending({id: conversationId, pending: true}));
+            const history = selectConversations(getState());
             dispatch(
                 setConversations({
-                    items: filteredConversations,
-                    hasMore,
-                    lastId: newLastId,
-                    loading,
+                    items: [data, ...history.items.filter(({id}) => id !== data.id)],
                 }),
             );
-        } catch (e) {
-            dispatch(setError(e as Error));
         }
-    };
-
-const ITEMS_PER_PAGE = 50;
-
-export const loadConversation =
-    (conversationId: string): AsyncAction =>
-    async (dispatch, getState) => {
-        const currentConversationId = selectConversationId(getState());
-
-        if (currentConversationId === conversationId) {
-            dispatch(setMode('chat'));
-            return;
-        }
-
-        dispatch(setConversationId(conversationId));
-        dispatch(
-            setConversation({
-                items: [],
-            }),
-        );
-        dispatch(setLoading(true));
-        dispatch(setMode('chat'));
-
+        const timeoutController = new AbortController();
+        const timeout = setTimeout(() => {
+            timeoutController.abort(new Error(i18n('alert_response-interrupted')));
+        }, REQUEST_TIMEOUT);
         try {
-            const response = await axios.get<GetConversationItemsResponse>(
-                `${BASE_PATH}/conversations/${conversationId}/items`,
-                {
-                    params: {
-                        order: 'desc',
-                        limit: ITEMS_PER_PAGE,
-                    },
-                },
-            );
-
-            // API returns items in desc order (newest first), but we want to display oldest first
-            const items = parseConversationItems(response.data.data).reverse();
-            dispatch(
-                setConversation({
-                    items,
-                    hasMore: response.data.has_more,
-                    lastId: response.data.last_id,
+            return await fetch(`${BASE_PATH}/send-message`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    input: createResponseInput({message: question, contextMessages, files}),
+                    conversation: conversationId,
+                    metadata: meta,
                 }),
-            );
-        } catch (e) {
-            dispatch(setError(e as Error));
+                signal: AbortSignal.any([signal, timeoutController.signal]),
+            });
         } finally {
-            dispatch(setLoading(false));
+            // Once headers arrive, allow streaming responses to run without this deadline.
+            clearTimeout(timeout);
         }
     };
 
-export const loadMoreConversationItems = (): AsyncAction => async (dispatch, getState) => {
-    const state = getState();
-    const conversationId = selectConversationId(state);
-    const {items, lastId, hasMore, loading} = selectConversation(state);
-
-    if (!conversationId) {
+export const summarizeConversationTitle = (): AsyncAction => async (dispatch, getState) => {
+    const conversation = selectConversation(getState());
+    const titleState = selectConversations(getState());
+    if (
+        !conversation.id ||
+        titleState.titleGenerating[conversation.id] ||
+        (!titleState.initialTitlePending[conversation.id] &&
+            (!conversation.items.length ||
+                conversation.items.length % TITLE_GENERATION_FREQUENCY !== 0))
+    )
         return;
-    }
-
-    if (!hasMore || loading || !lastId) {
-        return;
-    }
-
-    dispatch(setConversation({loading: true}));
-    dispatch(setError(undefined));
-
+    const conversationId = conversation.id;
+    dispatch(setTitleGenerating({id: conversationId, generating: true}));
     try {
-        const response = await axios.get<GetConversationItemsResponse>(
-            `${BASE_PATH}/conversations/${conversationId}/items`,
-            {
-                params: {
-                    order: 'desc',
-                    limit: ITEMS_PER_PAGE,
-                    after: lastId,
-                },
-            },
+        const {data} = await axios.post<{title: string}>(
+            `${BASE_PATH}/conversations/${encodeURIComponent(conversationId)}/summarize-title`,
+            {metadata: selectPageContext(getState()).meta},
         );
-
-        // API returns items in desc order (newest first), but we want to display oldest first
-        const newItems = parseConversationItems(response.data.data).reverse();
-
+        const history = selectConversations(getState());
         dispatch(
-            setConversation({
-                items: [...newItems, ...items],
-                hasMore: response.data.has_more,
-                lastId: response.data.last_id,
+            setConversations({
+                items: history.items.map((item) =>
+                    item.id === conversationId
+                        ? {...item, metadata: {...item.metadata, topic: data.title}}
+                        : item,
+                ),
             }),
         );
-    } catch (e) {
-        dispatch(setError(e as Error));
+    } catch (error) {
+        // Keep the answer and fallback title usable if summarization fails.
+        dispatch(setConversations({error: error as Error}));
     } finally {
-        dispatch(setConversation({loading: false}));
+        dispatch(setInitialTitlePending({id: conversationId, pending: false}));
+        dispatch(setTitleGenerating({id: conversationId, generating: false}));
     }
 };
 
@@ -478,7 +171,8 @@ export const toggleChatSidePanel = (): AsyncAction => (dispatch, getState) => {
 export const attachFiles =
     (files: File[]): AsyncAction =>
     async (dispatch, getState) => {
-        const currentFiles = selectAttachedFiles(getState());
+        if (selectChatSending(getState())) return;
+        const currentFiles = [...selectAttachedFiles(getState())];
 
         for (const file of files) {
             if (currentFiles.some((f) => f.name === file.name && f.size === file.size)) {
@@ -486,5 +180,140 @@ export const attachFiles =
             }
 
             dispatch(addAttachedFile(file));
+            currentFiles.push(file);
+        }
+    };
+
+export const getConversations =
+    (loadMore = false): AsyncAction =>
+    async (dispatch, getState) => {
+        const history = selectConversations(getState());
+        if (history.loading || (loadMore && !history.hasMore)) return;
+        dispatch(setConversations({loading: true, error: undefined}));
+        try {
+            const {data} = await axios.get<ConversationPage<Conversation>>(
+                `${BASE_PATH}/conversations`,
+                {
+                    params: {limit: 20, after: loadMore ? history.lastId : undefined},
+                },
+            );
+            const current = selectConversations(getState());
+            const activeId = selectConversation(getState()).id;
+            const retained = loadMore
+                ? current.items
+                : current.items.filter(({id}) => id === activeId);
+            const items = [
+                ...retained,
+                ...data.data.filter(({id}) => !retained.some((item) => item.id === id)),
+            ];
+            dispatch(
+                setConversations({
+                    items,
+                    hasMore: data.has_more,
+                    lastId: data.last_id || undefined,
+                }),
+            );
+        } catch (error) {
+            dispatch(setConversations({error: error as Error}));
+        } finally {
+            dispatch(setConversations({loading: false}));
+        }
+    };
+
+export const loadConversation =
+    (conversationId: string): AsyncAction =>
+    async (dispatch, getState) => {
+        if (selectChatSending(getState())) return;
+        if (selectConversations(getState()).deleting) return;
+        const requestId = uuidv4();
+        dispatch(resetChat());
+        dispatch(setConversation({id: conversationId, requestId, loading: true}));
+        const isCurrent = () => selectConversation(getState()).requestId === requestId;
+        try {
+            const {data} = await axios.get<ConversationPage<ConversationItem>>(
+                `${BASE_PATH}/conversations/${encodeURIComponent(conversationId)}/items`,
+            );
+            if (!isCurrent()) return;
+            if (data.has_more && !data.last_id) throw new Error(i18n('alert_response-incomplete'));
+            dispatch(
+                setConversation({
+                    items: parseConversationItems(data.data).reverse(),
+                    hasMore: data.has_more,
+                    lastId: data.last_id || undefined,
+                }),
+            );
+        } catch (error) {
+            if (isCurrent()) dispatch(setConversation({error: error as Error}));
+        } finally {
+            if (isCurrent()) dispatch(setConversation({loading: false}));
+        }
+    };
+
+export const loadMoreConversationItems = (): AsyncAction => async (dispatch, getState) => {
+    const conversation = selectConversation(getState());
+    if (
+        !conversation.id ||
+        !conversation.hasMore ||
+        !conversation.lastId ||
+        conversation.loading ||
+        conversation.loadingMore ||
+        selectConversations(getState()).deleting
+    )
+        return;
+    const isCurrent = () =>
+        selectConversation(getState()).requestId === conversation.requestId &&
+        selectConversation(getState()).id === conversation.id;
+    dispatch(setConversation({loadingMore: true, loadMoreError: undefined}));
+    try {
+        const {data} = await axios.get<ConversationPage<ConversationItem>>(
+            `${BASE_PATH}/conversations/${encodeURIComponent(conversation.id)}/items`,
+            {params: {after: conversation.lastId}},
+        );
+        if (!isCurrent()) return;
+        if (data.has_more && (!data.last_id || data.last_id === conversation.lastId))
+            throw new Error(i18n('alert_response-incomplete'));
+        const current = selectConversation(getState());
+        const previousItems = parseConversationItems(data.data)
+            .reverse()
+            .filter(({id}) => !current.items.some((item) => item.id === id));
+        dispatch(
+            setConversation({
+                items: [...previousItems, ...current.items],
+                hasMore: data.has_more,
+                lastId: data.last_id || undefined,
+            }),
+        );
+    } catch (error) {
+        if (isCurrent()) dispatch(setConversation({loadMoreError: error as Error}));
+    } finally {
+        if (isCurrent()) dispatch(setConversation({loadingMore: false}));
+    }
+};
+
+export const deleteConversation =
+    (conversationId: string): AsyncAction =>
+    async (dispatch, getState) => {
+        if (selectChatSending(getState()) || selectConversations(getState()).loading) {
+            throw new Error('Cannot delete a conversation while a chat request is in progress');
+        }
+        dispatch(setConversations({loading: true, deleting: true, error: undefined}));
+        try {
+            await axios.delete(`${BASE_PATH}/conversations/${encodeURIComponent(conversationId)}`);
+            const history = selectConversations(getState());
+            const items = history.items.filter(({id}) => id !== conversationId);
+            dispatch(
+                setConversations({
+                    items,
+                    lastId: history.lastId === conversationId ? items.at(-1)?.id : history.lastId,
+                }),
+            );
+            dispatch(setInitialTitlePending({id: conversationId, pending: false}));
+            if (selectConversation(getState()).id === conversationId) dispatch(resetChat());
+        } catch (error) {
+            dispatch(setConversations({error: error as Error}));
+            // AIKit removes the row locally only when this promise resolves.
+            throw error;
+        } finally {
+            dispatch(setConversations({loading: false, deleting: false}));
         }
     };
