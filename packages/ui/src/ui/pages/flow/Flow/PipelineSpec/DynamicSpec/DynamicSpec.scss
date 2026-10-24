@@ -117,6 +117,11 @@
         margin-bottom: 16px;
     }
 
+    &__patch-actions {
+        display: flex;
+        gap: 8px;
+    }
+
     &__version,
     &__path {
         font-family: var(--g-font-family-monospace);

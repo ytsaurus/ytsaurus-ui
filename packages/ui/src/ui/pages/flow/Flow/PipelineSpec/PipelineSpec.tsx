@@ -1,7 +1,6 @@
 import React from 'react';
-import cn from 'bem-cn-lite';
 
-import {Alert, Button, Link} from '@gravity-ui/uikit';
+import {Button} from '@gravity-ui/uikit';
 import {type RenderRowExtraTools} from '@gravity-ui/react-unipika';
 
 import {type YTError} from '../../../../../@types/types';
@@ -30,26 +29,17 @@ import {type FlowSpecState} from '../../../../store/reducers/flow/specs';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
 import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 import Icon from '../../../../components/Icon/Icon';
-import {YTDFDialog, makeErrorFields} from '../../../../containers/Dialog';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
 import Loader from '../../../../components/Loader/Loader';
-import {type UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
-import UIFactory from '../../../../UIFactory';
 import {DynamicSpec} from './DynamicSpec/DynamicSpec';
-import {
-    decodeDynamicSpecValue,
-    dynamicSpecEdits,
-    dynamicSpecHasComment,
-    dynamicSpecPath,
-} from '../../../../utils/flow/dynamic-spec';
+import {EditSpecDialog, type SpecEditOptions} from './EditSpecDialog';
+import {decodeDynamicSpecValue, dynamicSpecPath} from '../../../../utils/flow/dynamic-spec';
 import {type Int64} from '../../../../../shared/yt-types';
 
 import {pathToFileName} from '../../../navigation/helpers/pathToFileName';
 
 import './PipelineSpec.scss';
 import i18n from './i18n';
-
-const block = cn('yt-pipeline-spec');
 
 type PipelineSpecProps = {
     path: string;
@@ -137,190 +127,6 @@ function PipelineSpec({
     );
 }
 
-type FormValues = {
-    text: {value?: string};
-    path: string;
-    force?: boolean;
-    comment?: string;
-};
-
-type SpecEditOptions = {force?: boolean; originalSpec?: unknown; comment?: string};
-
-export function EditSpecDialog({
-    path,
-    visible,
-    spec,
-    onClose,
-    onSpecApply,
-    name,
-    settings,
-    allowForce,
-    withComment,
-    requireComment,
-    help,
-    specPath,
-}: Pick<PipelineSpecProps, 'name' | 'path'> & {
-    spec?: unknown;
-    visible: boolean;
-    onClose: () => void;
-    settings: UnipikaSettings;
-    onSpecApply: (spec: unknown, options: SpecEditOptions) => Promise<void>;
-    allowForce?: boolean;
-    withComment?: boolean;
-    requireComment?: boolean;
-    help?: string;
-    specPath?: string;
-}) {
-    const [error, setError] = React.useState<YTError | undefined>();
-
-    const text = React.useMemo(() => {
-        return {value: JSON.stringify(spec, null, 4)};
-    }, [spec]);
-
-    const forceHelpUrl = UIFactory.docsUrls['flow:update_static_spec:force'];
-    const updateError = (value: unknown, comment?: string) => {
-        if (!requireComment) {
-            return undefined;
-        }
-        if (!dynamicSpecHasComment(comment)) {
-            return i18n('context_comment-required');
-        }
-        if (!dynamicSpecEdits(spec ?? null, value).length) {
-            return i18n('context_value-change-required');
-        }
-        return undefined;
-    };
-
-    return (
-        visible && (
-            <YTDFDialog<FormValues>
-                visible
-                size="l"
-                onClose={onClose}
-                initialValues={{text, path, ...(requireComment ? {comment: ''} : {})}}
-                validate={
-                    requireComment
-                        ? (values) => {
-                              try {
-                                  const message = updateError(
-                                      JSON.parse(values.text.value ?? ''),
-                                      values.comment,
-                                  );
-                                  return message ? {comment: message} : undefined;
-                              } catch {
-                                  return undefined;
-                              }
-                          }
-                        : undefined
-                }
-                headerProps={{
-                    title: `Edit ${name}`,
-                }}
-                onAdd={async (f) => {
-                    setError(undefined);
-                    const {text: textData, force, comment} = f.getState().values;
-                    if (textData.value) {
-                        try {
-                            const value = JSON.parse(textData.value);
-                            if (updateError(value, comment)) {
-                                return Promise.resolve();
-                            }
-                            return await onSpecApply(value, {force, comment});
-                        } catch (e: any) {
-                            setError(e);
-                            return Promise.reject(e);
-                        }
-                    } else {
-                        return Promise.resolve();
-                    }
-                }}
-                fields={[
-                    {
-                        caption: i18n('pipeline-path'),
-                        name: 'path',
-                        type: 'plain',
-                    },
-                    ...(specPath !== undefined
-                        ? [
-                              {
-                                  name: 'specPath',
-                                  caption: i18n('field_path'),
-                                  type: 'block' as const,
-                                  extras: {children: specPath || '/'},
-                              },
-                          ]
-                        : []),
-                    ...(help
-                        ? [
-                              {
-                                  name: 'help',
-                                  type: 'block' as const,
-                                  extras: {children: <Alert theme="info" message={help} />},
-                              },
-                          ]
-                        : []),
-                    {
-                        name: 'text',
-                        caption: i18n('specification'),
-                        type: 'json',
-                        validateFields: requireComment ? ['comment'] : undefined,
-                        fullWidth: true,
-                        extras: {
-                            className: block('editor'),
-                            initialShowPreview: false,
-                            unipikaSettings: settings,
-                        },
-                    },
-                    ...(withComment
-                        ? [{name: 'comment', caption: i18n('field_comment'), type: 'text' as const}]
-                        : []),
-                    ...(allowForce
-                        ? [
-                              {
-                                  name: 'force',
-                                  caption: i18n('force'),
-                                  type: 'tumbler' as const,
-                              },
-                          ]
-                        : []),
-                    {
-                        name: 'forceWarningn',
-                        caption: '',
-                        type: 'block',
-                        visibilityCondition: {when: 'force', isActive: (v) => v},
-                        extras: {
-                            children: (
-                                <Alert
-                                    style={{marginTop: -16}}
-                                    theme="warning"
-                                    message={
-                                        <div>
-                                            {i18n('alert_force-mode-unrecoverable')}{' '}
-                                            {Boolean(forceHelpUrl) && (
-                                                <>
-                                                    {i18n('for-more-details-1')}{' '}
-                                                    <Link
-                                                        href={forceHelpUrl}
-                                                        target="_blank"
-                                                        style={{display: 'inline'}}
-                                                    >
-                                                        {i18n('for-more-details-2')}.
-                                                    </Link>
-                                                </>
-                                            )}
-                                        </div>
-                                    }
-                                />
-                            ),
-                        },
-                    },
-                    ...makeErrorFields([error]),
-                ]}
-            />
-        )
-    );
-}
-
 export function FlowStaticSpec({pipeline_path: path}: {pipeline_path: string}) {
     const dispatch = useDispatch();
 
@@ -405,6 +211,15 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
                             path,
                             command: 'cancel-pipeline-dynamic-spec-patch',
                             body: {patch: version, expected_version},
+                        }),
+                    )
+                }
+                onUpdateComment={(patch: Int64, comment, expected_version) =>
+                    dispatch(
+                        mutateFlowDynamicSpec({
+                            path,
+                            command: 'patch-pipeline-dynamic-spec',
+                            body: {patch, comment, expected_version},
                         }),
                     )
                 }

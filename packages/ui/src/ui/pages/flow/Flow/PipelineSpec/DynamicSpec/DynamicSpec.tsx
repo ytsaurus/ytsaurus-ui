@@ -7,7 +7,8 @@ import {type RenderRowExtraTools} from '@gravity-ui/react-unipika';
 import {type FlowDynamicSpecSnapshot, type Int64} from '../../../../../../shared/yt-types';
 import {type YTError} from '../../../../../../@types/types';
 import {YTErrorBlock} from '../../../../../containers/Block/Block';
-import {EditSpecDialog} from '../PipelineSpec';
+import {YTDFDialog, makeErrorFields} from '../../../../../containers/Dialog';
+import {EditSpecDialog} from '../EditSpecDialog';
 import {Yson} from '../../../../../components/Yson/Yson';
 import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
 import {type UnipikaSettings} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
@@ -17,6 +18,7 @@ import {
     decodeDynamicSpecValue,
     dynamicSpecEdits,
     dynamicSpecEffectiveSource,
+    dynamicSpecHasComment,
     dynamicSpecOverrideEditor,
     dynamicSpecOverrideRows,
     dynamicSpecPath,
@@ -215,6 +217,7 @@ export type DynamicSpecProps = {
     pipelinePath: string;
     onSet: (path: Array<string>, value: unknown, version: Int64, comment?: string) => Promise<void>;
     onCancelOwner: (owner: Int64, version: Int64) => Promise<void>;
+    onUpdateComment: (patch: Int64, comment: string, version: Int64) => Promise<void>;
     onReset: (version: Int64) => Promise<void>;
 };
 
@@ -235,7 +238,7 @@ function renderSource(source: DynamicSpecSource, compact = false) {
                     </time>
                 </>
             )}
-            {!source.audit && i18n('value_override')}
+            {!source.audit && i18n('value_source-override')}
         </span>
     ) : (
         <span className={block('attribution', {source: source.source})}>
@@ -252,6 +255,7 @@ export function DynamicSpec({
     pipelinePath,
     onSet,
     onCancelOwner,
+    onUpdateComment,
     onReset,
 }: DynamicSpecProps) {
     const [view, setView] = React.useState<SpecView>('effective');
@@ -267,6 +271,12 @@ export function DynamicSpec({
     );
     const [pending, setPending] = React.useState(false);
     const [error, setError] = React.useState<YTError>();
+    const [updateComment, setUpdateComment] = React.useState<{
+        patch: string;
+        comment: string;
+        version: Int64;
+    }>();
+    const [commentError, setCommentError] = React.useState<YTError>();
     const run = async (action: () => Promise<void>) => {
         setError(undefined);
         setPending(true);
@@ -433,7 +443,7 @@ export function DynamicSpec({
                                                     ? row.source.audit
                                                     : undefined;
                                             return (
-                                                <tr key={JSON.stringify(row.path)}>
+                                                <tr key={JSON.stringify([row.path, patchId])}>
                                                     <td className={block('path')}>
                                                         {decodeDynamicSpecText(
                                                             dynamicSpecPath(row.path),
@@ -491,23 +501,47 @@ export function DynamicSpec({
                                                         {patchId === undefined ? (
                                                             '—'
                                                         ) : (
-                                                            <Button
-                                                                size="s"
-                                                                view="flat"
-                                                                disabled={pending}
-                                                                data-owner-version={owner}
-                                                                title={`${i18n('context_cancel-patch')}\n${i18n('field_version')}: ${owner}`}
-                                                                onClick={() =>
-                                                                    run(() =>
-                                                                        onCancelOwner(
-                                                                            patchId,
-                                                                            snapshot.version,
-                                                                        ),
-                                                                    )
-                                                                }
-                                                            >
-                                                                {i18n('action_cancel-patch')}
-                                                            </Button>
+                                                            <div className={block('patch-actions')}>
+                                                                <Button
+                                                                    size="s"
+                                                                    view="flat"
+                                                                    disabled={pending}
+                                                                    data-owner-version={owner}
+                                                                    title={i18n(
+                                                                        'context_update-patch',
+                                                                    )}
+                                                                    onClick={() => {
+                                                                        setCommentError(undefined);
+                                                                        setUpdateComment({
+                                                                            patch: patchId,
+                                                                            comment:
+                                                                                audit?.comment ??
+                                                                                '',
+                                                                            version:
+                                                                                snapshot.version,
+                                                                        });
+                                                                    }}
+                                                                >
+                                                                    {i18n('action_update-patch')}
+                                                                </Button>
+                                                                <Button
+                                                                    size="s"
+                                                                    view="flat"
+                                                                    disabled={pending}
+                                                                    data-owner-version={owner}
+                                                                    title={`${i18n('context_cancel-patch')}\n${i18n('field_version')}: ${owner}`}
+                                                                    onClick={() =>
+                                                                        run(() =>
+                                                                            onCancelOwner(
+                                                                                patchId,
+                                                                                snapshot.version,
+                                                                            ),
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    {i18n('action_cancel-patch')}
+                                                                </Button>
+                                                            </div>
                                                         )}
                                                     </td>
                                                 </tr>
@@ -548,6 +582,41 @@ export function DynamicSpec({
                               )
                             : Promise.resolve()
                     }
+                />
+            )}
+            {updateComment && (
+                <YTDFDialog<{comment: string}>
+                    visible
+                    onClose={() => setUpdateComment(undefined)}
+                    initialValues={{comment: updateComment.comment}}
+                    headerProps={{title: i18n('title_update-patch')}}
+                    validate={({comment}) =>
+                        dynamicSpecHasComment(comment)
+                            ? undefined
+                            : {comment: i18n('context_comment-required')}
+                    }
+                    onAdd={async (form) => {
+                        setCommentError(undefined);
+                        const {comment} = form.getState().values;
+                        if (!dynamicSpecHasComment(comment)) {
+                            return;
+                        }
+                        try {
+                            await onUpdateComment(
+                                updateComment.patch,
+                                comment,
+                                updateComment.version,
+                            );
+                            setUpdateComment(undefined);
+                        } catch (e) {
+                            setCommentError(e as YTError);
+                            throw e;
+                        }
+                    }}
+                    fields={[
+                        {name: 'comment', caption: i18n('field_comment'), type: 'text' as const},
+                        ...makeErrorFields([commentError]),
+                    ]}
                 />
             )}
         </div>
