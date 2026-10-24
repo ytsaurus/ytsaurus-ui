@@ -159,6 +159,9 @@ export function validateDynamicSpecVersions(state: FlowDynamicSpecSnapshot) {
         if (node.patch_id !== undefined) {
             dynamicSpecVersion(node.patch_id);
         }
+        if (node.shadowed) {
+            visit(node.shadowed);
+        }
         Object.values(node.children ?? {}).forEach(visit);
     };
     visit(state.override_spec);
@@ -338,6 +341,9 @@ export function dynamicSpecOverrideRows(state: FlowDynamicSpecSnapshot) {
         base: unknown,
         hiddenOwner?: string,
     ) => {
+        if (node.shadowed) {
+            visit(node.shadowed, path, base, hiddenOwner);
+        }
         const version = node.version;
         const owned = version !== undefined && version !== null;
         const owner = owned ? dynamicSpecVersion(version) : undefined;
@@ -350,7 +356,9 @@ export function dynamicSpecOverrideRows(state: FlowDynamicSpecSnapshot) {
                     path,
                     operation: node.operation,
                     value: node.operation === 'inherit' ? base : node.value,
-                    source: dynamicSpecSource(state, path),
+                    source: owned
+                        ? ownedSource(state, version, node.patch_id)
+                        : dynamicSpecSource(state, path),
                 });
             }
             return;

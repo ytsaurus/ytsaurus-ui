@@ -319,6 +319,38 @@ describe('grouped raw map overrides', () => {
             source: {version: newer.$value},
         });
     });
+    it('keeps an older child patch visible beneath a newer map patch', () => {
+        const layered: FlowDynamicSpecSnapshot = {
+            ...state,
+            override_spec: {
+                operation: 'map',
+                children: {
+                    demo: {
+                        ...map,
+                        version: newer,
+                        value: {limit: 2000, period: 1000},
+                        children: {
+                            limit: {operation: 'set', version: newer, value: 2000},
+                            period: {operation: 'set', version: newer, value: 1000},
+                        },
+                        shadowed: {
+                            operation: 'map',
+                            children: {
+                                limit: {operation: 'set', version, value: 1001},
+                            },
+                        },
+                    },
+                },
+            },
+        };
+        expect(dynamicSpecOverrideRows(layered)).toMatchObject([
+            {path: ['demo', 'limit'], value: 1001, source: {version: version.$value}},
+            {path: ['demo'], value: {limit: 2000, period: 1000}, source: {version: newer.$value}},
+        ]);
+        expect(dynamicSpecSource(layered, ['demo', 'limit'])).toMatchObject({
+            version: newer.$value,
+        });
+    });
     it('detects recursive inheritance and keeps the hole visible without pinning its base value', () => {
         const holes = {
             ...state,
