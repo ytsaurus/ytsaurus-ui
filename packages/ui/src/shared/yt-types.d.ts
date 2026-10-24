@@ -555,6 +555,7 @@ export type FlowDynamicSpecOverride = {
     timestamp?: string;
     value?: unknown;
     children?: Record<string, FlowDynamicSpecOverride>;
+    shadowed?: FlowDynamicSpecOverride;
 };
 
 export type FlowDynamicSpecAudit = {
