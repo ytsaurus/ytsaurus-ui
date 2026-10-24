@@ -691,7 +691,9 @@ export type FlowExecuteTypes = {
             output_format?: 'web_json';
         };
         BodyType: {
-            body: {set_path: string; set_value: unknown; comment: string; expected_version: Int64};
+            body:
+                | {set_path: string; set_value: unknown; comment: string; expected_version: Int64}
+                | {patch: Int64; comment: string; expected_version: Int64};
         };
         ResponseType: {version: Int64; patch_id: Int64};
     };
