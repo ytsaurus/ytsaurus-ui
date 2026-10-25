@@ -552,6 +552,7 @@ export type FlowDynamicSpecOverride = {
     version?: Int64 | null;
     patch_id?: Int64;
     comment?: string | null;
+    author?: string | null;
     timestamp?: string;
     value?: unknown;
     children?: Record<string, FlowDynamicSpecOverride>;
@@ -562,6 +563,7 @@ export type FlowDynamicSpecAudit = {
     version: Int64;
     timestamp: string;
     comment?: string | null;
+    author?: string | null;
 };
 
 export type FlowDynamicSpecSnapshot = {
@@ -692,7 +694,13 @@ export type FlowExecuteTypes = {
         };
         BodyType: {
             body:
-                | {set_path: string; set_value: unknown; comment: string; expected_version: Int64}
+                | {
+                      set_path: string;
+                      set_value: unknown;
+                      comment: string;
+                      patch?: Int64;
+                      expected_version: Int64;
+                  }
                 | {patch: Int64; comment: string; expected_version: Int64};
         };
         ResponseType: {version: Int64; patch_id: Int64};
@@ -728,6 +736,7 @@ export type FlowExecuteTypes = {
             patches: Array<{
                 patch_id: Int64;
                 comment?: string | null;
+                author?: string | null;
                 timestamp: string;
                 changes: FlowDynamicSpecOverride;
             }>;

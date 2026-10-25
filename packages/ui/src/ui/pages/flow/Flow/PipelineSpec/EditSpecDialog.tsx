@@ -33,6 +33,9 @@ export function EditSpecDialog({
     allowForce,
     withComment,
     requireComment,
+    allowCommentOnly,
+    initialComment,
+    title,
     help,
     specPath,
 }: {
@@ -46,6 +49,9 @@ export function EditSpecDialog({
     allowForce?: boolean;
     withComment?: boolean;
     requireComment?: boolean;
+    allowCommentOnly?: boolean;
+    initialComment?: string;
+    title?: string;
     help?: string;
     specPath?: string;
 }) {
@@ -63,8 +69,15 @@ export function EditSpecDialog({
         if (!dynamicSpecHasComment(comment)) {
             return i18n('context_comment-required');
         }
-        if (!dynamicSpecEdits(spec ?? null, value).length) {
-            return i18n('context_value-change-required');
+        if (
+            !dynamicSpecEdits(spec ?? null, value).length &&
+            (!allowCommentOnly || comment === initialComment)
+        ) {
+            return i18n(
+                allowCommentOnly
+                    ? 'context_patch-change-required'
+                    : 'context_value-change-required',
+            );
         }
         return undefined;
     };
@@ -75,7 +88,11 @@ export function EditSpecDialog({
                 visible
                 size="l"
                 onClose={onClose}
-                initialValues={{text, path, ...(requireComment ? {comment: ''} : {})}}
+                initialValues={{
+                    text,
+                    path,
+                    ...(requireComment ? {comment: initialComment ?? ''} : {}),
+                }}
                 validate={
                     requireComment
                         ? (values) => {
@@ -92,7 +109,7 @@ export function EditSpecDialog({
                         : undefined
                 }
                 headerProps={{
-                    title: `Edit ${name}`,
+                    title: title ?? `Edit ${name}`,
                 }}
                 onAdd={async (f) => {
                     setError(undefined);

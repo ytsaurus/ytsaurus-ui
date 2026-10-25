@@ -28,12 +28,13 @@
   "error_unsafe-version": "Cannot read the dynamic specification: the controller returned a version that cannot be represented exactly.",
   "field_patch": "Patch",
   "field_comment": "Comment",
+  "field_author": "Author",
   "action_edit": "Edit",
   "action_cancel-patch": "Cancel",
   "action_update-patch": "Update",
   "context_cancel-patch": "Cancel all remaining changes from this patch",
-  "context_update-patch": "Update the comment for this patch",
-  "title_update-patch": "Update patch comment",
+  "context_update-patch": "Update the value or comment of this patch",
+  "title_update-patch": "Update patch",
   "action_reset-overrides": "Reset all overrides",
   "context_sparse-edit": "Change one parameter at a time. Only that parameter will be overridden. Click a map in Patches to replace a map; use Cancel to cancel its changes.",
   "context_replace-map": "This action replaces the selected map in the effective specification. Earlier nested patches remain in history and take effect again if this map patch is canceled. Omitted base keys are hidden while it is active.",
@@ -42,5 +43,6 @@
   "field_time": "Time",
   "context_comment-required": "Add a comment explaining the change.",
   "context_value-change-required": "Change the specification to save an update.",
+  "context_patch-change-required": "Change the value or comment to save an update.",
   "error_inconsistent-version": "The dynamic specification changed while loading. Refresh to try again."
 }

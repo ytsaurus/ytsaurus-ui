@@ -1,10 +1,6 @@
 import {type ThunkAction} from 'redux-thunk';
 
-import {
-    type FlowDynamicSpecSnapshot,
-    type FlowExecuteTypes,
-    type Int64,
-} from '../../../../shared/yt-types';
+import {type FlowDynamicSpecSnapshot, type FlowExecuteTypes} from '../../../../shared/yt-types';
 
 import {type YTError, type YTErrorRaw} from '../../../../@types/types';
 
@@ -304,8 +300,8 @@ export function mutateFlowDynamicSpec({
 }: DynamicSpecMutation): AsyncAction<Promise<void>> {
     return async (dispatch, getState) => {
         dynamicSpecVersion(body.expected_version);
-        if ('patch' in body) {
-            dynamicSpecVersion(body.patch as Int64);
+        if ('patch' in body && body.patch !== undefined) {
+            dynamicSpecVersion(body.patch);
         }
         try {
             await ytApiV4.flowExecute<DynamicSpecMutationCommand>({
@@ -324,7 +320,7 @@ export function mutateFlowDynamicSpec({
                         $type: 'int64',
                         $value: dynamicSpecVersion(body.expected_version),
                     },
-                    ...('patch' in body
+                    ...('patch' in body && body.patch !== undefined
                         ? {patch: {$type: 'int64', $value: dynamicSpecVersion(body.patch)}}
                         : {}),
                 },

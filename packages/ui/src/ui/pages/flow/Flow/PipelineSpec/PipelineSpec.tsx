@@ -223,6 +223,21 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
                         }),
                     )
                 }
+                onUpdatePatch={(patch, specPath, spec, comment, expected_version) =>
+                    dispatch(
+                        mutateFlowDynamicSpec({
+                            path,
+                            command: 'patch-pipeline-dynamic-spec',
+                            body: {
+                                patch,
+                                set_path: dynamicSpecPath(specPath),
+                                set_value: spec,
+                                comment,
+                                expected_version,
+                            },
+                        }),
+                    )
+                }
                 onReset={(expected_version) =>
                     dispatch(
                         mutateFlowDynamicSpec({
