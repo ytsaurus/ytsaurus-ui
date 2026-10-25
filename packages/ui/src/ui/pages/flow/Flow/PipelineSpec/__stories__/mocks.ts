@@ -150,9 +150,10 @@ export async function dynamicSpecResponse(
     if (parameters.flow_command === 'get-pipeline-dynamic-spec-patches') {
         return Response.json({
             version: snapshot.version,
-            patches: snapshot.audit.map(({version: patchVersion, comment, timestamp}) => ({
+            patches: snapshot.audit.map(({version: patchVersion, comment, author, timestamp}) => ({
                 patch_id: patchVersion,
                 comment,
+                author,
                 timestamp,
                 changes: snapshot.override_spec,
             })),

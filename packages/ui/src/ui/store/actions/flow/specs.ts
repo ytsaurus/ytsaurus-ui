@@ -151,9 +151,10 @@ export function loadFlowDynamicSpec(pipeline_path: string): AsyncAction {
                         typeof effective.spec.target_state === 'string'
                             ? effective.spec.target_state
                             : undefined,
-                    audit: patches.patches.map(({patch_id, comment, timestamp}) => ({
+                    audit: patches.patches.map(({patch_id, comment, author, timestamp}) => ({
                         version: patch_id,
                         comment,
+                        author,
                         timestamp,
                     })),
                 });
