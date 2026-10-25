@@ -7,7 +7,6 @@ import {type RenderRowExtraTools} from '@gravity-ui/react-unipika';
 import {type FlowDynamicSpecSnapshot, type Int64} from '../../../../../../shared/yt-types';
 import {type YTError} from '../../../../../../@types/types';
 import {YTErrorBlock} from '../../../../../containers/Block/Block';
-import {YTDFDialog, makeErrorFields} from '../../../../../containers/Dialog';
 import {EditSpecDialog} from '../EditSpecDialog';
 import {Yson} from '../../../../../components/Yson/Yson';
 import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
@@ -18,7 +17,6 @@ import {
     decodeDynamicSpecValue,
     dynamicSpecEdits,
     dynamicSpecEffectiveSource,
-    dynamicSpecHasComment,
     dynamicSpecOverrideEditor,
     dynamicSpecOverrideRows,
     dynamicSpecPath,
@@ -218,18 +216,41 @@ export type DynamicSpecProps = {
     onSet: (path: Array<string>, value: unknown, version: Int64, comment?: string) => Promise<void>;
     onCancelOwner: (owner: Int64, version: Int64) => Promise<void>;
     onUpdateComment: (patch: Int64, comment: string, version: Int64) => Promise<void>;
+    onUpdatePatch: (
+        patch: Int64,
+        path: Array<string>,
+        value: unknown,
+        comment: string,
+        version: Int64,
+    ) => Promise<void>;
     onReset: (version: Int64) => Promise<void>;
 };
 
 function renderSource(source: DynamicSpecSource, compact = false) {
+    const title =
+        source.source === 'override'
+            ? [
+                  `${i18n('field_version')}: ${source.version}`,
+                  source.audit?.timestamp,
+                  source.audit?.author && `${i18n('field_author')}: ${source.audit.author}`,
+                  source.audit?.comment,
+              ]
+                  .filter(Boolean)
+                  .join('\n')
+            : undefined;
     return source.source === 'override' ? (
         <span
             className={block('attribution', {compact, override: compact})}
             data-owner-version={source.version}
-            title={`${i18n('field_version')}: ${source.version}${source.audit ? '\n' + source.audit.timestamp + (source.audit.comment ? '\n' + source.audit.comment : '') : ''}`}
+            title={title}
         >
             {source.audit && (
                 <>
+                    {source.audit.author && (
+                        <span>
+                            {i18n('field_author')}: {source.audit.author}
+                        </span>
+                    )}
                     {source.audit.comment && (
                         <span className={block('comment')}>{source.audit.comment}</span>
                     )}
@@ -256,6 +277,7 @@ export function DynamicSpec({
     onSet,
     onCancelOwner,
     onUpdateComment,
+    onUpdatePatch,
     onReset,
 }: DynamicSpecProps) {
     const [view, setView] = React.useState<SpecView>('effective');
@@ -264,6 +286,8 @@ export function DynamicSpec({
         value: unknown;
         version: Int64;
         hasInheritedFields?: boolean;
+        patch?: string;
+        comment?: string;
     }>();
     const editorValue = React.useMemo(
         () => decodeDynamicSpecValue(edit?.value ?? null),
@@ -271,12 +295,6 @@ export function DynamicSpec({
     );
     const [pending, setPending] = React.useState(false);
     const [error, setError] = React.useState<YTError>();
-    const [updateComment, setUpdateComment] = React.useState<{
-        patch: string;
-        comment: string;
-        version: Int64;
-    }>();
-    const [commentError, setCommentError] = React.useState<YTError>();
     const run = async (action: () => Promise<void>) => {
         setError(undefined);
         setPending(true);
@@ -480,6 +498,9 @@ export function DynamicSpec({
                                                         </div>
                                                     </td>
                                                     <td className={block('comment')}>
+                                                        {audit?.author && (
+                                                            <div>{`${i18n('field_author')}: ${audit.author}`}</div>
+                                                        )}
                                                         {audit?.comment || '—'}
                                                     </td>
                                                     <td className={block('time')}>
@@ -511,14 +532,17 @@ export function DynamicSpec({
                                                                         'context_update-patch',
                                                                     )}
                                                                     onClick={() => {
-                                                                        setCommentError(undefined);
-                                                                        setUpdateComment({
+                                                                        setEdit({
+                                                                            path: row.path,
+                                                                            value: row.value,
                                                                             patch: patchId,
                                                                             comment:
                                                                                 audit?.comment ??
                                                                                 '',
                                                                             version:
                                                                                 snapshot.version,
+                                                                            hasInheritedFields:
+                                                                                row.hasInheritedFields,
                                                                         });
                                                                     }}
                                                                 >
@@ -558,7 +582,7 @@ export function DynamicSpec({
             )}
             {edit && (
                 <EditSpecDialog
-                    key={JSON.stringify([edit.path, dynamicSpecVersion(edit.version)])}
+                    key={JSON.stringify([edit.path, dynamicSpecVersion(edit.version), edit.patch])}
                     path={pipelinePath}
                     specPath={decodeDynamicSpecText(dynamicSpecPath(edit.path))}
                     name="dynamic specification"
@@ -567,56 +591,29 @@ export function DynamicSpec({
                     settings={settings}
                     withComment
                     requireComment
+                    allowCommentOnly={edit.patch !== undefined}
+                    initialComment={edit.comment}
+                    title={edit.patch === undefined ? undefined : i18n('title_update-patch')}
                     help={editHelp}
                     onClose={() => setEdit(undefined)}
-                    onSpecApply={(value, {comment}) =>
-                        dynamicSpecEdits(
-                            edit.value ?? null,
-                            encodeDynamicSpecValue(value, edit.value ?? null),
-                        ).length
-                            ? onSet(
-                                  edit.path,
-                                  encodeDynamicSpecValue(value, edit.value ?? null),
-                                  edit.version,
-                                  comment,
-                              )
-                            : Promise.resolve()
-                    }
-                />
-            )}
-            {updateComment && (
-                <YTDFDialog<{comment: string}>
-                    visible
-                    onClose={() => setUpdateComment(undefined)}
-                    initialValues={{comment: updateComment.comment}}
-                    headerProps={{title: i18n('title_update-patch')}}
-                    validate={({comment}) =>
-                        dynamicSpecHasComment(comment)
-                            ? undefined
-                            : {comment: i18n('context_comment-required')}
-                    }
-                    onAdd={async (form) => {
-                        setCommentError(undefined);
-                        const {comment} = form.getState().values;
-                        if (!dynamicSpecHasComment(comment)) {
-                            return;
+                    onSpecApply={(value, {comment}) => {
+                        const encoded = encodeDynamicSpecValue(value, edit.value ?? null);
+                        const changed = dynamicSpecEdits(edit.value ?? null, encoded).length > 0;
+                        if (edit.patch !== undefined) {
+                            return changed
+                                ? onUpdatePatch(
+                                      edit.patch,
+                                      edit.path,
+                                      encoded,
+                                      comment ?? '',
+                                      edit.version,
+                                  )
+                                : onUpdateComment(edit.patch, comment ?? '', edit.version);
                         }
-                        try {
-                            await onUpdateComment(
-                                updateComment.patch,
-                                comment,
-                                updateComment.version,
-                            );
-                            setUpdateComment(undefined);
-                        } catch (e) {
-                            setCommentError(e as YTError);
-                            throw e;
-                        }
+                        return changed
+                            ? onSet(edit.path, encoded, edit.version, comment)
+                            : Promise.resolve();
                     }}
-                    fields={[
-                        {name: 'comment', caption: i18n('field_comment'), type: 'text' as const},
-                        ...makeErrorFields([commentError]),
-                    ]}
                 />
             )}
         </div>

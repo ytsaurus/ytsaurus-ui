@@ -171,6 +171,7 @@ test('PipelineDynamicSpec: base effective and override provenance', async ({
     await expect(inherited.getByRole('button', {name: /^Cancel$/})).toHaveCount(0);
     await expect(inherited.locator('td').nth(5)).toHaveText('—');
     const cpu = page.getByRole('row').filter({hasText: '/job_manager/resource_limits/cpu'});
+    await expect(cpu).toContainText('alice');
     await expect(cpu.locator('[data-owner-version]')).toHaveAttribute(
         'title',
         new RegExp(NEWER_VERSION),
@@ -534,6 +535,9 @@ test('PipelineDynamicSpec: mixed map keeps separate child attribution and preser
         'data-owner-version',
         NEWER_VERSION,
     );
+    await parent.getByRole('button', {name: 'Update', exact: true}).click();
+    await expect.poll(() => editorJSON(page)).toEqual({limit: 1000, period: 1000});
+    await page.getByRole('dialog').getByRole('button', {name: 'Cancel', exact: true}).click();
     await parent
         .getByRole('button', {name: 'Edit /throttlers/ui_demo', exact: true})
         .locator('.number, .int64')
@@ -1164,16 +1168,24 @@ test('PipelineDynamicSpec: override actions use displayed owner and model CAS', 
         ]);
 });
 
-test('PipelineDynamicSpec: Update changes a patch comment with its patch ID and model CAS', async ({
+test('PipelineDynamicSpec: Update changes a patch comment or value with its patch ID and model CAS', async ({
     mount,
     page,
     router,
 }) => {
     const mutations: Array<{command: unknown; body: unknown}> = [];
+    const snapshotWithAuthor = {
+        ...dynamicSpecSnapshot,
+        audit: dynamicSpecSnapshot.audit.map((record) =>
+            typeof record.version === 'object' && record.version.$value === NEWER_VERSION
+                ? {...record, author: 'alice'}
+                : record,
+        ),
+    };
     await router.use(
         http.put('*/api/v4/flow_execute', async ({request}) => {
             const command = requestParameters(request).flow_command;
-            const read = await dynamicSpecResponse(dynamicSpecSnapshot, request);
+            const read = await dynamicSpecResponse(snapshotWithAuthor, request);
             if (read) {
                 return read;
             }
@@ -1182,10 +1194,15 @@ test('PipelineDynamicSpec: Update changes a patch comment with its patch ID and 
         }),
     );
     await mount(<PipelineDynamicSpecStories.Overrides />);
+    await expect(page.locator(`[data-owner-version="${NEWER_VERSION}"]`).first()).toContainText(
+        'Author: alice',
+    );
     await page.getByRole('radio', {name: 'Patches', exact: true}).check();
     const cpu = page.getByRole('row').filter({hasText: '/job_manager/resource_limits/cpu'});
     await cpu.getByRole('button', {name: 'Update', exact: true}).click();
     const dialog = page.getByRole('dialog');
+    await expect(dialog).toContainText('Update patch');
+    await expect.poll(() => editorJSON(page)).toBe(2);
     const comment = dialog.getByRole('textbox', {name: 'Comment', exact: true});
     await expect(comment).toHaveValue('Новая CPU квота');
     await comment.fill(' ');
@@ -1202,6 +1219,32 @@ test('PipelineDynamicSpec: Update changes a patch comment with its patch ID and 
                 body: {
                     patch: exactVersion,
                     comment: Buffer.from('Обновлённый комментарий 😊', 'utf8').toString('latin1'),
+                    expected_version: exactVersion,
+                },
+            },
+        ]);
+    await expect(dialog).toHaveCount(0);
+    await cpu.getByRole('button', {name: 'Update', exact: true}).click();
+    await replaceEditorContent(page, '3', true);
+    await dialog.getByRole('button', {name: 'Confirm', exact: true}).click();
+    await expect
+        .poll(() => mutations)
+        .toEqual([
+            {
+                command: 'patch-pipeline-dynamic-spec',
+                body: {
+                    patch: exactVersion,
+                    comment: Buffer.from('Обновлённый комментарий 😊', 'utf8').toString('latin1'),
+                    expected_version: exactVersion,
+                },
+            },
+            {
+                command: 'patch-pipeline-dynamic-spec',
+                body: {
+                    patch: exactVersion,
+                    set_path: '/job_manager/resource_limits/cpu',
+                    set_value: 3,
+                    comment: Buffer.from('Новая CPU квота', 'utf8').toString('latin1'),
                     expected_version: exactVersion,
                 },
             },
