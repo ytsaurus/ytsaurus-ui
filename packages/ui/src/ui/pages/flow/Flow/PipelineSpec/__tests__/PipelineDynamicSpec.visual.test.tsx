@@ -1168,6 +1168,36 @@ test('PipelineDynamicSpec: override actions use displayed owner and model CAS', 
         ]);
 });
 
+test('PipelineDynamicSpec: patch author from the API appears in Effective and Patches', async ({
+    mount,
+    page,
+    router,
+}) => {
+    const snapshotWithAuthor = {
+        ...dynamicSpecSnapshot,
+        audit: dynamicSpecSnapshot.audit.map((record) =>
+            typeof record.version === 'object' && record.version.$value === NEWER_VERSION
+                ? {...record, author: 'alice'}
+                : record,
+        ),
+    };
+    await router.use(
+        http.put(
+            '*/api/v4/flow_execute',
+            async ({request}) =>
+                (await dynamicSpecResponse(snapshotWithAuthor, request)) ??
+                Response.json({version: exactVersion}),
+        ),
+    );
+    await mount(<PipelineDynamicSpecStories.Overrides />);
+    await expect(page.locator(`[data-owner-version="${NEWER_VERSION}"]`).first()).toContainText(
+        'Author: alice',
+    );
+    await page.getByRole('radio', {name: 'Patches', exact: true}).check();
+    const cpu = page.getByRole('row').filter({hasText: '/job_manager/resource_limits/cpu'});
+    await expect(cpu).toContainText('Author: alice');
+});
+
 test('PipelineDynamicSpec: Update changes a patch comment or value with its patch ID and model CAS', async ({
     mount,
     page,
