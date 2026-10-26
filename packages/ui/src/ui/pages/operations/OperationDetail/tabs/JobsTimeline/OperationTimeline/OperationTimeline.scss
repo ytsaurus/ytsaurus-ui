@@ -1,6 +1,18 @@
+// Each pane accounts for half of the default 10px split.js gutter.
+$split-pane-half-gutter: 5px;
+
 .yt-operation-timeline {
     display: grid;
     grid-template-columns: 280px 1fr;
+
+    &__main-pane {
+        min-width: calc(50% - #{$split-pane-half-gutter});
+    }
+
+    &__details-pane {
+        flex-grow: 0;
+        max-width: min(800px, calc(50% - #{$split-pane-half-gutter}));
+    }
 
     &__wrap {
         margin-top: 10px;

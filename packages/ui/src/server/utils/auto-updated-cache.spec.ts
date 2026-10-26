@@ -1,14 +1,5 @@
+import {createDeferred} from '../../shared/utils/toolkit';
 import {createAutoUpdatedCache} from './auto-updated-cache';
-
-function defer<T>() {
-    let resolve!: (value: T) => void;
-    let reject!: (reason?: any) => void;
-    const promise = new Promise<T>((res, rej) => {
-        resolve = res;
-        reject = rej;
-    });
-    return {promise, resolve, reject};
-}
 
 const CACHE_TIME = 2 * 0.5 * 1000;
 
@@ -25,7 +16,7 @@ describe('createAutoUpdatedCache', () => {
      * Cache is empty. Three requests are done within one microtask.
      */
     it('should return single cached result if requested simultaneously', async () => {
-        const deferred = defer<string>();
+        const deferred = createDeferred<string>();
         const getter = jest.fn().mockReturnValueOnce(deferred.promise);
 
         const getPreloadedValue = createAutoUpdatedCache(getter, CACHE_TIME);
@@ -47,7 +38,7 @@ describe('createAutoUpdatedCache', () => {
      * Cache is empty. Each request is done within its own microtask.
      */
     it('should return single cached result if following requested before first resolved', async () => {
-        const deferred = defer<string>();
+        const deferred = createDeferred<string>();
         const getter = jest.fn().mockReturnValueOnce(deferred.promise);
 
         const getPreloadedValue = createAutoUpdatedCache(getter, CACHE_TIME);
@@ -75,7 +66,7 @@ describe('createAutoUpdatedCache', () => {
      * done before getter resolves.
      */
     it('should return single cached result if following requested after first resolved', async () => {
-        const deferred = defer<string>();
+        const deferred = createDeferred<string>();
         const getter = jest.fn().mockReturnValueOnce(deferred.promise);
 
         const getPreloadedValue = createAutoUpdatedCache(getter, CACHE_TIME);
@@ -103,8 +94,8 @@ describe('createAutoUpdatedCache', () => {
      * The task calls getter every CACHE_TIME ms and updates cache.
      */
     it('should update cache when cache time is over', async () => {
-        const deferred1 = defer<string>();
-        const deferred2 = defer<string>();
+        const deferred1 = createDeferred<string>();
+        const deferred2 = createDeferred<string>();
         const getter = jest
             .fn()
             .mockReturnValueOnce(deferred1.promise)
@@ -143,8 +134,8 @@ describe('createAutoUpdatedCache', () => {
      * Existing cached value is to be returned.
      */
     it('should return cached result while timer based update is still awaiting response', async () => {
-        const deferred1 = defer<string>();
-        const deferred2 = defer<string>();
+        const deferred1 = createDeferred<string>();
+        const deferred2 = createDeferred<string>();
         const getter = jest
             .fn()
             .mockReturnValueOnce(deferred1.promise)
@@ -177,8 +168,8 @@ describe('createAutoUpdatedCache', () => {
      * Second request triggers the second getter call immediately.
      */
     it('should not keep faulty response', async () => {
-        const deferred1 = defer<string>();
-        const deferred2 = defer<string>();
+        const deferred1 = createDeferred<string>();
+        const deferred2 = createDeferred<string>();
         const getter = jest
             .fn()
             .mockReturnValueOnce(deferred1.promise)
@@ -214,9 +205,9 @@ describe('createAutoUpdatedCache', () => {
      * throws an error. Cache is cleared.
      */
     it('should clear cache if time based update fails', async () => {
-        const deferred1 = defer<string>();
-        const deferred2 = defer<string>();
-        const deferred3 = defer<string>();
+        const deferred1 = createDeferred<string>();
+        const deferred2 = createDeferred<string>();
+        const deferred3 = createDeferred<string>();
         const getter = jest
             .fn()
             .mockReturnValueOnce(deferred1.promise)
@@ -260,8 +251,8 @@ describe('createAutoUpdatedCache', () => {
      * First getter call throws an error. Recurring updates are not started.
      */
     it('should not start recurring updates if first response is faulty', async () => {
-        const deferred1 = defer<string>();
-        const deferred2 = defer<string>();
+        const deferred1 = createDeferred<string>();
+        const deferred2 = createDeferred<string>();
         const getter = jest
             .fn()
             .mockReturnValueOnce(deferred1.promise)
@@ -288,9 +279,9 @@ describe('createAutoUpdatedCache', () => {
      * throws an error. Recurring updates are stopped.
      */
     it('should stop recurring updates if time based update fails', async () => {
-        const deferred1 = defer<string>();
-        const deferred2 = defer<string>();
-        const deferred3 = defer<string>();
+        const deferred1 = createDeferred<string>();
+        const deferred2 = createDeferred<string>();
+        const deferred3 = createDeferred<string>();
         const getter = jest
             .fn()
             .mockReturnValueOnce(deferred1.promise)

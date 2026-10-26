@@ -1,7 +1,18 @@
 .yt-events-side-panel {
     width: 100%;
-    min-width: 200px;
+    min-width: 0;
+    box-sizing: border-box;
     padding: 20px;
+    overflow: auto;
+
+    &__job-id {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    &__actions {
+        flex-shrink: 0;
+    }
 
     &__meta {
         margin-top: 20px;

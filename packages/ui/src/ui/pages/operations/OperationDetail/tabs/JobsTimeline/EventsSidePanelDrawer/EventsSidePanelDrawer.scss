@@ -1,0 +1,4 @@
+.yt-events-side-panel-drawer {
+    bottom: var(--app-footer-height, 0px);
+    z-index: calc(var(--app-header-z-index) + 1);
+}

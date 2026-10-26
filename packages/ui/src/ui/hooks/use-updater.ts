@@ -71,7 +71,7 @@ export function useUpdaterWithMemoizedParams<ArgsT extends Array<unknown>>(
     const params = useMemoizedIfEqual(...args);
 
     const updateFn = React.useCallback(() => {
-        fn?.(...params);
+        return fn?.(...params);
     }, [fn, params]);
 
     useUpdater(updateFn, options);

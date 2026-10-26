@@ -3,5 +3,9 @@
   "field_job-id": "Job id",
   "field_state-phase": "State: Phase",
   "field_duration": "Duration",
-  "field_start-time": "Start time"
+  "field_start-time": "Start time",
+  "title_job-details": "Job details",
+  "action_pin": "Pin panel",
+  "action_unpin": "Unpin panel",
+  "action_close": "Close panel"
 }
