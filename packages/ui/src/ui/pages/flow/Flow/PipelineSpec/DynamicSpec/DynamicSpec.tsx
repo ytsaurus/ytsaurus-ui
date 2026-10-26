@@ -41,6 +41,16 @@ function hasSelectedText(element: HTMLElement) {
     );
 }
 
+function isMultilineValue(map: boolean, value: unknown): boolean {
+    return (
+        map ||
+        (value !== null &&
+            typeof value === 'object' &&
+            !Array.isArray(value) &&
+            !('$type' in value))
+    );
+}
+
 function EditableValue({
     label,
     disabled,
@@ -446,6 +456,7 @@ export function DynamicSpec({
                                                     : undefined;
                                             const map =
                                                 row.operation === 'map' || row.operation === 'mask';
+                                            const multiline = isMultilineValue(map, row.value);
                                             const editRow = () =>
                                                 openEdit(row.path, {
                                                     value: map ? row.editorValue : row.value,
@@ -477,7 +488,7 @@ export function DynamicSpec({
                                                                     <Yson
                                                                         value={row.value}
                                                                         settings={
-                                                                            map
+                                                                            multiline
                                                                                 ? {
                                                                                       ...settings,
                                                                                       compact: false,
@@ -485,7 +496,7 @@ export function DynamicSpec({
                                                                                   }
                                                                                 : settings
                                                                         }
-                                                                        inline={!map}
+                                                                        inline={!multiline}
                                                                     />
                                                                 )}
                                                             </EditableValue>
