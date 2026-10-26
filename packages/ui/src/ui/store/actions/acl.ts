@@ -20,6 +20,7 @@ import {
 } from '../../utils/acl/acl-api';
 import {convertFromUIPermissions, prepareAclSubject} from '../../utils/acl';
 import UIFactory from '../../UIFactory';
+import {type RequestPermissionParams} from '../../utils/acl/external-acl-api';
 import {type AclAction, type HasIdmKind} from '../../store/reducers/acl/acl';
 import {isCancelled} from '../../utils/cancel-helper';
 import {type RootState} from '../../store/reducers';
@@ -29,6 +30,7 @@ import {
     type PreparedAclSubject,
     type ResponsibleType,
     type Role,
+    type UpdateResponse,
 } from '../../utils/acl/acl-types';
 import {type CheckPermissionResult} from '../../../shared/utils/check-permission';
 import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
@@ -228,24 +230,51 @@ export type PermissionToRequest = {
     read_row_access_predicate?: string;
 };
 
-export type RequestPermissionsParams = {values: PermissionToRequest} & HasIdmKind;
+export type RequestPermissionsParams = {values: PermissionToRequest} & HasIdmKind &
+    Pick<RequestPermissionParams, 'simulate' | 'cancelToken'>;
 
 export function requestPermissions(
-    {values, idmKind}: RequestPermissionsParams,
+    {values, idmKind, simulate, cancelToken}: RequestPermissionsParams,
     {normalizedPoolTree}: HasNormPoolTree = {},
-): ThunkAclAction {
+): ThunkAclAction<Promise<UpdateResponse | undefined>> {
     return async (dispatch, getState) => {
         const state = getState();
         const {
             global: {cluster = ''},
         } = state;
 
-        dispatch({
-            type: REQUEST_PERMISSION.REQUEST,
-            idmKind,
-        });
+        const api = UIFactory.getAclApi();
+        if (simulate && !api.isAllowed) {
+            return undefined;
+        }
 
-        const {requestPermissionsFlags = {}} = UIFactory.getAclApi();
+        const {onRequest, onSuccess, onError} = simulate
+            ? {}
+            : {
+                  onRequest: () => {
+                      dispatch({type: REQUEST_PERMISSION.REQUEST, idmKind});
+                  },
+                  onSuccess: (response: UpdateResponse) => {
+                      dispatch({type: REQUEST_PERMISSION.SUCCESS, idmKind});
+                      return response;
+                  },
+                  onError: (error: any) => {
+                      if (isCancelled(error)) {
+                          dispatch({type: REQUEST_PERMISSION.CANCELLED, idmKind});
+                          return undefined;
+                      }
+                      dispatch({
+                          type: REQUEST_PERMISSION.FAILURE,
+                          data: error,
+                          idmKind,
+                      });
+                      return Promise.reject(error);
+                  },
+              };
+
+        onRequest?.();
+
+        const {requestPermissionsFlags = {}} = api;
 
         const daysAfter = dateToDaysAfterNow(values.duration);
         const roles: Array<Role> = [];
@@ -322,8 +351,7 @@ export function requestPermissions(
             poolTree,
         );
 
-        //cluster, path, roles, comment, columns
-        return UIFactory.getAclApi()
+        return api
             .requestPermissions({
                 cluster,
                 path: values.path,
@@ -333,26 +361,10 @@ export function requestPermissions(
                 comment: values.comment ?? '',
                 kind: idmKind,
                 poolTree,
+                simulate,
+                cancelToken,
             })
-            .then(() => {
-                dispatch({
-                    type: REQUEST_PERMISSION.SUCCESS,
-                    idmKind,
-                });
-            })
-            .catch((error: any) => {
-                if (isCancelled(error)) {
-                    dispatch({type: REQUEST_PERMISSION.CANCELLED, idmKind});
-                    return undefined;
-                } else {
-                    dispatch({
-                        type: REQUEST_PERMISSION.FAILURE,
-                        data: error,
-                        idmKind,
-                    });
-                    return Promise.reject(error);
-                }
-            });
+            .then(onSuccess, onError);
     };
 }
 

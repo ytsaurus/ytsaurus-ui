@@ -16,14 +16,22 @@ export function DialogError(props: FIX_MY_TYPE) {
 }
 
 export function makeErrorFields(errors: Array<YTError | Error | undefined>) {
+    return makeMessageFields(errors, 'error');
+}
+
+export function makeWarningFields(warnings: Array<YTError | undefined>) {
+    return makeMessageFields(warnings, 'alert');
+}
+
+function makeMessageFields(errors: Array<YTError | Error | undefined>, type: 'error' | 'alert') {
     return compact_(
         map_(errors, (error, index) => {
             return error
                 ? {
-                      name: `error_${index}`,
+                      name: `${type}_${index}`,
                       type: 'block' as const,
                       extras: {
-                          children: <DialogError error={error} />,
+                          children: <DialogError error={error} type={type} />,
                       },
                   }
                 : undefined;
