@@ -9,11 +9,14 @@ import {
     ISOLATED_STREAM_NAME,
     MESSAGE_TEXT,
     MULTIPLE_SOURCES,
+    REVISION_TEXT,
+    REVISION_URL,
     SOURCE_NAME,
     backpressuredFlowGraphHandler,
     drainedFlowGraphHandler,
     emptyFlowGraphHandler,
     inputOnlyStreamFlowGraphHandler,
+    linkedRevisionFlowGraphHandler,
     messagesFlowGraphHandler,
     mixedFlowGraphHandler,
     multipleSourcesFlowGraphHandler,
@@ -119,6 +122,32 @@ test('FlowGraph: messages dialog', async ({mount, expectScreenshot, page, router
     );
     await messagesAnchor.click();
     await expect(page.getByText(MESSAGE_TEXT, {exact: true})).toBeVisible();
+    await expectScreenshot();
+});
+
+test('FlowGraph: linked revision message occupies one line', async ({
+    mount,
+    expectScreenshot,
+    page,
+    router,
+}) => {
+    await router.use(linkedRevisionFlowGraphHandler);
+    await mount(<FlowGraphStories.LinkedRevisionMessage />);
+
+    const messagesAnchor = page.locator(
+        `.${summary}:not(.${summary}_drained):not(.${summary}_backpressured)`,
+    );
+    await messagesAnchor.click();
+
+    const message = page
+        .locator('.yt-flow-graph-renderer__message')
+        .filter({hasText: REVISION_TEXT});
+    await expect(message).toHaveText(REVISION_TEXT);
+    await expect(message.getByRole('link', {name: 'r21794789'})).toHaveAttribute(
+        'href',
+        REVISION_URL,
+    );
+    await expect(message.locator('button')).toHaveCount(0);
     await expectScreenshot();
 });
 

@@ -980,7 +980,7 @@ export type FlowNodeBase = {
     messages?: Array<FlowMessageType>;
 };
 
-export type FlowMessageType = {level: FlowNodeStatusType} & (
+export type FlowMessageType = {level: FlowNodeStatusType; link_text?: string; link_url?: string} & (
     | {text?: string; yson?: unknown; error?: never; markdown_text?: never}
     | {text?: string; yson?: never; error?: YTError; markdown_text?: never}
     | {text?: string; yson?: never; error?: never; markdown_text?: string}

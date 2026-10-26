@@ -11,6 +11,8 @@ export const INPUT_ONLY_STREAM_NAME = 'Input-only stream';
 export const INPUT_ONLY_SINK_NAME = 'Input-only sink';
 export const ISOLATED_STREAM_NAME = 'Isolated stream';
 export const MESSAGE_TEXT = 'The stream has diagnostic messages';
+export const REVISION_TEXT = 'Flow core revision: r21794789';
+export const REVISION_URL = 'https://a.yandex-team.ru/arcadia?rev=r21794789';
 
 const SOURCE_STREAM_ID = 'source-stream';
 const INPUT_ONLY_STREAM_ID = 'input-only-stream';
@@ -125,6 +127,21 @@ export const mixedFlowGraphHandler = makeFlowGraphHandler(
 
 export const messagesFlowGraphHandler = makeFlowGraphHandler(
     makeFlowGraphResponse(makeExtendedStream({messages: [{level: 'info', text: MESSAGE_TEXT}]})),
+);
+
+export const linkedRevisionFlowGraphHandler = makeFlowGraphHandler(
+    makeFlowGraphResponse(
+        makeExtendedStream({
+            messages: [
+                {
+                    level: 'info',
+                    text: REVISION_TEXT,
+                    link_text: 'r21794789',
+                    link_url: REVISION_URL,
+                },
+            ],
+        }),
+    ),
 );
 
 export const emptyFlowGraphHandler = makeFlowGraphHandler(makeFlowGraphResponse());

@@ -11,6 +11,7 @@ import {
     drainedFlowGraphHandler,
     emptyFlowGraphHandler,
     inputOnlyStreamFlowGraphHandler,
+    linkedRevisionFlowGraphHandler,
     messagesFlowGraphHandler,
     mixedFlowGraphHandler,
     multipleSourcesFlowGraphHandler,
@@ -54,6 +55,11 @@ export const DrainedAndBackpressured: Story = {
 export const MessagesOnly: Story = {
     render: renderGraph,
     parameters: {msw: {handlers: [messagesFlowGraphHandler]}},
+};
+
+export const LinkedRevisionMessage: Story = {
+    render: renderGraph,
+    parameters: {msw: {handlers: [linkedRevisionFlowGraphHandler]}},
 };
 
 export const WithoutDetails: Story = {

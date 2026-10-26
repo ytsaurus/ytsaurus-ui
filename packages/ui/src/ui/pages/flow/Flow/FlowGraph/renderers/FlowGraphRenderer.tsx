@@ -107,21 +107,29 @@ function FlowMessageItem({
     item: FlowMessageType;
     initialExpanded: boolean;
 }) {
-    const {level, yson, error, markdown_text} = item;
+    const {level, yson, error, markdown_text, link_text, link_url} = item;
     const theme = STATUS_TO_BG_THEME[level];
-    return (
-        <div className={block('message', {theme})}>
-            {!error && !yson && !markdown_text ? (
-                item.text
+    let content;
+    if (!error && !yson && !markdown_text) {
+        content =
+            item.text && link_text && link_url && item.text.endsWith(link_text) ? (
+                <>
+                    {item.text.slice(0, -link_text.length)}
+                    <a href={link_url}>{link_text}</a>
+                </>
             ) : (
-                <FlowMessageItemExpandable
-                    item={item}
-                    initialExpanded={initialExpanded}
-                    errorType={theme === 'warning' ? 'alert' : undefined}
-                />
-            )}
-        </div>
-    );
+                item.text
+            );
+    } else {
+        content = (
+            <FlowMessageItemExpandable
+                item={item}
+                initialExpanded={initialExpanded}
+                errorType={theme === 'warning' ? 'alert' : undefined}
+            />
+        );
+    }
+    return <div className={block('message', {theme})}>{content}</div>;
 }
 
 function FlowMessageItemExpandable({
