@@ -1,6 +1,12 @@
 import {type ThunkAction} from 'redux-thunk';
 
-import {type FlowDynamicSpecSnapshot, type FlowExecuteTypes} from '../../../../shared/yt-types';
+import {
+    type FlowDynamicSpecBlame,
+    type FlowDynamicSpecOverride,
+    type FlowDynamicSpecPatch,
+    type FlowDynamicSpecSnapshot,
+    type FlowExecuteTypes,
+} from '../../../../shared/yt-types';
 
 import {type YTError, type YTErrorRaw} from '../../../../@types/types';
 
@@ -139,11 +145,23 @@ export function loadFlowDynamicSpec(pipeline_path: string): AsyncAction {
                 ) {
                     continue;
                 }
+                const legacyBlame =
+                    'operation' in effective.blame && typeof effective.blame.operation === 'string'
+                        ? (effective.blame as FlowDynamicSpecOverride)
+                        : undefined;
                 const state: FlowDynamicSpecSnapshot = decodeDynamicSpecAudit({
                     version: effective.version,
                     effective_spec: effective.spec,
                     base_spec: base.spec,
-                    override_spec: effective.blame,
+                    override_spec: legacyBlame ?? {operation: 'inherit'},
+                    ...(legacyBlame
+                        ? {}
+                        : {
+                              blame: effective.blame as FlowDynamicSpecBlame,
+                              patches: patches.patches.filter(
+                                  (patch): patch is FlowDynamicSpecPatch => 'path' in patch,
+                              ),
+                          }),
                     runtime_target_state:
                         effective.spec !== null &&
                         typeof effective.spec === 'object' &&

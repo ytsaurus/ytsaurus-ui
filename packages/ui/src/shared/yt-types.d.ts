@@ -566,11 +566,25 @@ export type FlowDynamicSpecAudit = {
     author?: string | null;
 };
 
+export type FlowDynamicSpecPatch = {
+    patch_id: Int64;
+    path: string;
+    operation: 'set' | 'remove';
+    value?: unknown;
+    comment?: string | null;
+    author?: string | null;
+    timestamp: string;
+};
+
+export type FlowDynamicSpecBlame = Record<string, Omit<FlowDynamicSpecPatch, 'path' | 'value'>>;
+
 export type FlowDynamicSpecSnapshot = {
     version: Int64;
     base_spec: unknown;
     effective_spec: unknown;
     override_spec: FlowDynamicSpecOverride;
+    patches?: Array<FlowDynamicSpecPatch>;
+    blame?: FlowDynamicSpecBlame;
     audit: Array<FlowDynamicSpecAudit>;
     runtime_target_state?: string | null;
 };
@@ -722,7 +736,11 @@ export type FlowExecuteTypes = {
             output_format?: 'web_json';
         };
         BodyType: {body: {view?: 'effective' | 'base' | 'override'; blame?: boolean}};
-        ResponseType: {spec: unknown; version: Int64; blame?: FlowDynamicSpecOverride};
+        ResponseType: {
+            spec: unknown;
+            version: Int64;
+            blame?: FlowDynamicSpecOverride | FlowDynamicSpecBlame;
+        };
     };
     'get-pipeline-dynamic-spec-patches': {
         ParamsType: {
@@ -733,13 +751,16 @@ export type FlowExecuteTypes = {
         BodyType: {body?: undefined};
         ResponseType: {
             version: Int64;
-            patches: Array<{
-                patch_id: Int64;
-                comment?: string | null;
-                author?: string | null;
-                timestamp: string;
-                changes: FlowDynamicSpecOverride;
-            }>;
+            patches: Array<
+                | FlowDynamicSpecPatch
+                | {
+                      patch_id: Int64;
+                      comment?: string | null;
+                      author?: string | null;
+                      timestamp: string;
+                      changes: FlowDynamicSpecOverride;
+                  }
+            >;
         };
     };
     'describe-computation': {

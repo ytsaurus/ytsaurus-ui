@@ -9,10 +9,12 @@ import {
     dynamicSpecOverrideEditor,
     dynamicSpecOverrideRows,
     dynamicSpecPath,
+    dynamicSpecPathParts,
     dynamicSpecSource,
     dynamicSpecValue,
     dynamicSpecVersion,
     encodeDynamicSpecValue,
+    validateDynamicSpecVersions,
 } from './dynamic-spec';
 
 const version = {$type: 'int64' as const, $value: '1923189626042933625'};
@@ -529,5 +531,80 @@ describe('DynamicSpec editor and web-json audit', () => {
                 audit: [{version, timestamp: '', comment: 'Новая квота 😊'}],
             }).audit[0].comment,
         ).toBe('Новая квота 😊');
+    });
+});
+
+describe('flat dynamic spec patches', () => {
+    const parent = {
+        patch_id: version,
+        operation: 'set' as const,
+        author: 'alice',
+        comment: 'Parent',
+        timestamp: '2026-10-05T08:00:00Z',
+    };
+    const child = {...parent, patch_id: newer, author: 'bob', comment: 'Child'};
+    const flat: FlowDynamicSpecSnapshot = {
+        ...snapshot,
+        patches: [
+            {...parent, path: '/group', value: {pin: 1}},
+            {...child, path: '/group/pin', value: 4},
+        ],
+        blame: {'/group': parent, '/group/pin': child},
+    };
+
+    it('preserves application order and original parent values, including shadowed patches', () => {
+        expect(dynamicSpecOverrideRows(flat).map(({path, value}) => ({path, value}))).toEqual([
+            {path: ['group'], value: {pin: 1}},
+            {path: ['group', 'pin'], value: 4},
+        ]);
+        const reordered = {
+            ...flat,
+            patches: [...(flat.patches ?? [])].reverse(),
+            blame: {'/group': parent},
+        };
+        expect(dynamicSpecOverrideRows(reordered)[0].path).toEqual(['group', 'pin']);
+        expect(dynamicSpecEffectiveSource(reordered, ['group', 'pin'])).toMatchObject({
+            audit: {author: 'alice'},
+        });
+        expect(dynamicSpecOverrideEditor(flat, ['group'])).toBeUndefined();
+    });
+
+    it('uses the nearest visible ancestor and leaves base fields without attribution', () => {
+        expect(dynamicSpecEffectiveSource(flat, ['group', 'pin'])).toMatchObject({
+            patchId: newer.$value,
+            audit: {author: 'bob'},
+        });
+        expect(dynamicSpecEffectiveSource(flat, ['group', 'other'])).toMatchObject({
+            patchId: version.$value,
+            audit: {author: 'alice'},
+        });
+        expect(dynamicSpecEffectiveSource(flat, ['list'])).toEqual({source: 'base'});
+        expect(
+            dynamicSpecEffectiveSource({...flat, blame: {'': parent}}, ['group', 'pin']),
+        ).toMatchObject({patchId: version.$value});
+    });
+
+    it('decodes escaped YPath segments and normalizes hex escapes in blame', () => {
+        const path = ['a/b', 'c\\d', '@key', '\x01'];
+        expect(dynamicSpecPathParts(dynamicSpecPath(path))).toEqual(path);
+        const state = decodeDynamicSpecAudit({...flat, blame: {'/a\\x2fb': child}});
+        expect(dynamicSpecEffectiveSource(state, ['a/b'])).toMatchObject({patchId: newer.$value});
+        expect(dynamicSpecEffectiveSource(state, ['a', 'b'])).toEqual({source: 'default'});
+    });
+
+    it('retains remove operations and rejects lossy patch IDs in either response', () => {
+        expect(
+            dynamicSpecOverrideRows({
+                ...flat,
+                patches: [{...parent, path: '/group', operation: 'remove'}],
+            })[0],
+        ).toMatchObject({operation: 'remove', value: undefined});
+        const invalid = {...parent, patch_id: Number(version.$value)};
+        expect(() =>
+            validateDynamicSpecVersions({...flat, patches: [{...invalid, path: ''}]}),
+        ).toThrow(UnsafeDynamicSpecVersionError);
+        expect(() => validateDynamicSpecVersions({...flat, blame: {'': invalid}})).toThrow(
+            UnsafeDynamicSpecVersionError,
+        );
     });
 });

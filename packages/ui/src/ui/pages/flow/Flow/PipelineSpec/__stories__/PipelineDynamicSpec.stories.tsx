@@ -9,6 +9,7 @@ import {
     PIPELINE_PATH,
     dynamicSpecHandler,
     failedDynamicSpecHandler,
+    flatDynamicSpecHandler,
     legacyDynamicSpecHandler,
     unavailableDynamicSpecHandler,
 } from './mocks';
@@ -45,4 +46,9 @@ export const RequestError: Story = {
 
 export const StaticSpecification: Story = {
     render: (args) => <FlowStaticSpec {...args} />,
+};
+
+export const FlatPatches: Story = {
+    ...Overrides,
+    parameters: {msw: {handlers: [flatDynamicSpecHandler]}},
 };
