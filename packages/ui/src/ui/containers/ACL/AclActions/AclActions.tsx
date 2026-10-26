@@ -54,8 +54,11 @@ type Props = Pick<
 export class AclActions extends Component<Props> {
     requestPermissions = async (params: RequestPermissionsParams) => {
         const {requestPermissions, loadAclData, path, idmKind} = this.props;
-        await requestPermissions(params);
-        await loadAclData({path, idmKind});
+        const response = await requestPermissions(params);
+        if (!params.simulate) {
+            await loadAclData({path, idmKind});
+        }
+        return response;
     };
 
     updateAcl = async (...args: Parameters<ACLReduxProps['userPermissionsUpdateAcl']>) => {
