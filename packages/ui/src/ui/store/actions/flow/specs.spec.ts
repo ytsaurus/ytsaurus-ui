@@ -128,6 +128,7 @@ describe('Flow specs actions', () => {
         const source = {
             patch_id: version,
             operation: 'set' as const,
+            author: 'alice',
             comment: 'Reason',
             timestamp: '2026-10-05T08:00:00Z',
         };
@@ -153,6 +154,7 @@ describe('Flow specs actions', () => {
                         audit: [
                             {
                                 version,
+                                author: 'alice',
                                 comment: 'Reason',
                                 timestamp: patch.timestamp,
                             },

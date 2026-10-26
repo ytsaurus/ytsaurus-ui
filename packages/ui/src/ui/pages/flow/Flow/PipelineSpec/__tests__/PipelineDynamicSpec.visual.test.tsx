@@ -189,6 +189,7 @@ test('PipelineDynamicSpec: base effective and override provenance', async ({
     await expect(inherited.getByRole('button', {name: /^Cancel$/})).toHaveCount(0);
     await expect(inherited.locator('td').nth(5)).toHaveText('—');
     const cpu = page.getByRole('row').filter({hasText: '/job_manager/resource_limits/cpu'});
+    await expect(cpu).toContainText('alice');
     await expect(cpu.getByRole('button', {name: 'Cancel', exact: true})).toHaveAttribute(
         'title',
         new RegExp(NEWER_VERSION),
@@ -1185,16 +1186,54 @@ test('PipelineDynamicSpec: override actions use displayed owner and model CAS', 
         ]);
 });
 
+test('PipelineDynamicSpec: patch author from the API appears in Effective and Patches', async ({
+    mount,
+    page,
+    router,
+}) => {
+    const snapshotWithAuthor = {
+        ...dynamicSpecSnapshot,
+        audit: dynamicSpecSnapshot.audit.map((record) =>
+            typeof record.version === 'object' && record.version.$value === NEWER_VERSION
+                ? {...record, author: 'alice'}
+                : record,
+        ),
+    };
+    await router.use(
+        http.put(
+            '*/api/v4/flow_execute',
+            async ({request}) =>
+                (await dynamicSpecResponse(snapshotWithAuthor, request)) ??
+                Response.json({version: exactVersion}),
+        ),
+    );
+    await mount(<PipelineDynamicSpecStories.Overrides />);
+    await expect(page.locator(`[data-owner-version="${NEWER_VERSION}"]`).first()).toContainText(
+        'Author: alice',
+    );
+    await page.getByRole('radio', {name: 'Patches', exact: true}).check();
+    const cpu = page.getByRole('row').filter({hasText: '/job_manager/resource_limits/cpu'});
+    await expect(cpu).toContainText('Author: alice');
+});
+
 test('PipelineDynamicSpec: Update changes a patch comment or value with its patch ID and model CAS', async ({
     mount,
     page,
     router,
 }) => {
     const mutations: Array<{command: unknown; body: unknown}> = [];
+    const snapshotWithAuthor = {
+        ...dynamicSpecSnapshot,
+        audit: dynamicSpecSnapshot.audit.map((record) =>
+            typeof record.version === 'object' && record.version.$value === NEWER_VERSION
+                ? {...record, author: 'alice'}
+                : record,
+        ),
+    };
     await router.use(
         http.put('*/api/v4/flow_execute', async ({request}) => {
             const command = requestParameters(request).flow_command;
-            const read = await dynamicSpecResponse(dynamicSpecSnapshot, request);
+            const read = await dynamicSpecResponse(snapshotWithAuthor, request);
             if (read) {
                 return read;
             }
@@ -1204,7 +1243,7 @@ test('PipelineDynamicSpec: Update changes a patch comment or value with its patc
     );
     await mount(<PipelineDynamicSpecStories.Overrides />);
     await expect(page.locator(`[data-owner-version="${NEWER_VERSION}"]`).first()).toContainText(
-        'Новая CPU квота',
+        'Author: alice',
     );
     await page.getByRole('radio', {name: 'Patches', exact: true}).check();
     const cpu = page.getByRole('row').filter({hasText: '/job_manager/resource_limits/cpu'});
@@ -1659,10 +1698,10 @@ test('PipelineDynamicSpec: flat patches preserve order values and explicit patch
     );
     await mount(<PipelineDynamicSpecStories.FlatPatches />);
     const keep = page.getByRole('button', {name: 'Edit /group/keep', exact: true});
-    await expect(keep.locator('..').locator('[data-owner-version]')).toContainText('Adjust keep');
+    await expect(keep.locator('..').locator('[data-owner-version]')).toContainText('Author: bob');
     const added = page.getByRole('button', {name: 'Edit /group/added', exact: true});
     await expect(added.locator('..').locator('[data-owner-version]')).toContainText(
-        'Replace group',
+        'Author: alice',
     );
     await expect(
         page.getByRole('button', {name: 'Edit /baseline', exact: true}),
@@ -1672,7 +1711,7 @@ test('PipelineDynamicSpec: flat patches preserve order values and explicit patch
     await expect(rows).toHaveCount(3);
     await expect(rows.nth(0).locator('td').first()).toHaveText('/group');
     await expect(rows.nth(1).locator('td').first()).toHaveText('/group/keep');
-    await expect(rows.nth(0)).toContainText('Replace group');
+    await expect(rows.nth(0)).toContainText('Author: alice');
     await expectDynamicSpecScreenshot(page);
     await rows.nth(0).getByRole('button', {name: 'Update', exact: true}).click();
     await expect.poll(() => editorJSON(page)).toEqual({keep: 2, added: 4});

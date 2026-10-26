@@ -538,10 +538,11 @@ describe('flat dynamic spec patches', () => {
     const parent = {
         patch_id: version,
         operation: 'set' as const,
+        author: 'alice',
         comment: 'Parent',
         timestamp: '2026-10-05T08:00:00Z',
     };
-    const child = {...parent, patch_id: newer, comment: 'Child'};
+    const child = {...parent, patch_id: newer, author: 'bob', comment: 'Child'};
     const flat: FlowDynamicSpecSnapshot = {
         ...snapshot,
         patches: [
@@ -563,7 +564,7 @@ describe('flat dynamic spec patches', () => {
         };
         expect(dynamicSpecOverrideRows(reordered)[0].path).toEqual(['group', 'pin']);
         expect(dynamicSpecEffectiveSource(reordered, ['group', 'pin'])).toMatchObject({
-            audit: {comment: 'Parent'},
+            audit: {author: 'alice'},
         });
         expect(dynamicSpecOverrideEditor(flat, ['group'])).toBeUndefined();
     });
@@ -571,11 +572,11 @@ describe('flat dynamic spec patches', () => {
     it('uses the nearest visible ancestor and leaves base fields without attribution', () => {
         expect(dynamicSpecEffectiveSource(flat, ['group', 'pin'])).toMatchObject({
             patchId: newer.$value,
-            audit: {comment: 'Child'},
+            audit: {author: 'bob'},
         });
         expect(dynamicSpecEffectiveSource(flat, ['group', 'other'])).toMatchObject({
             patchId: version.$value,
-            audit: {comment: 'Parent'},
+            audit: {author: 'alice'},
         });
         expect(dynamicSpecEffectiveSource(flat, ['list'])).toEqual({source: 'base'});
         expect(

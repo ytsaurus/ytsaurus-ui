@@ -116,6 +116,7 @@ export const dynamicSpecSnapshot: FlowDynamicSpecSnapshot = {
             version: newer,
             timestamp: '2026-10-04T10:01:00.000001Z',
             comment: 'Новая CPU квота',
+            author: 'alice',
         },
     ],
     runtime_target_state: 'completed',
@@ -161,9 +162,10 @@ export async function dynamicSpecResponse(
             version: snapshot.version,
             patches:
                 snapshot.patches ??
-                snapshot.audit.map(({version: patchVersion, comment, timestamp}) => ({
+                snapshot.audit.map(({version: patchVersion, comment, author, timestamp}) => ({
                     patch_id: patchVersion,
                     comment,
+                    author,
                     timestamp,
                     changes: snapshot.override_spec,
                 })),
@@ -220,6 +222,7 @@ export const flatDynamicSpecSnapshot: FlowDynamicSpecSnapshot = {
             path: '/group',
             operation: 'set',
             value: {keep: 2, added: 4},
+            author: 'alice',
             comment: 'Replace group',
             timestamp: '2026-10-05T08:00:00Z',
         },
@@ -228,6 +231,7 @@ export const flatDynamicSpecSnapshot: FlowDynamicSpecSnapshot = {
             path: '/group/keep',
             operation: 'set',
             value: 3,
+            author: 'bob',
             comment: 'Adjust keep',
             timestamp: '2026-10-05T09:00:00Z',
         },
@@ -236,6 +240,7 @@ export const flatDynamicSpecSnapshot: FlowDynamicSpecSnapshot = {
             path: '/a\\/b/c\\\\d',
             operation: 'set',
             value: 5,
+            author: 'carol',
             comment: 'Escaped path',
             timestamp: '2026-10-05T10:00:00Z',
         },
@@ -244,18 +249,21 @@ export const flatDynamicSpecSnapshot: FlowDynamicSpecSnapshot = {
         '/group': {
             patch_id: version,
             operation: 'set',
+            author: 'alice',
             comment: 'Replace group',
             timestamp: '2026-10-05T08:00:00Z',
         },
         '/group/keep': {
             patch_id: mapVersion,
             operation: 'set',
+            author: 'bob',
             comment: 'Adjust keep',
             timestamp: '2026-10-05T09:00:00Z',
         },
         '/a\\/b/c\\\\d': {
             patch_id: newer,
             operation: 'set',
+            author: 'carol',
             comment: 'Escaped path',
             timestamp: '2026-10-05T10:00:00Z',
         },
