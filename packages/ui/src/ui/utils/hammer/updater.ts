@@ -63,7 +63,9 @@ export class Updater {
         } finally {
             this.inProgress = false;
             this.lastCallTime = Date.now();
-            this.timerId = window.setTimeout(this.repeat, this.timeout);
+            if (this.callback) {
+                this.timerId = window.setTimeout(this.repeat, this.timeout);
+            }
         }
     };
 }

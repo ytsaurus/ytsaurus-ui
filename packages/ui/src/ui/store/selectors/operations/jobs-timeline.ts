@@ -1,5 +1,9 @@
 import {type RootState} from '../../reducers';
 import {createSelector} from 'reselect';
+import {selectSettingsData} from '../settings/settings-base';
+
+export const selectJobsTimelinePanelPinned = (state: RootState) =>
+    selectSettingsData(state)['global::operations::jobsTimelinePanelPinned'] ?? false;
 
 export const selectJobs = (state: RootState) => state.operations.jobsTimeline.jobs;
 export const selectLoading = (state: RootState) => state.operations.jobsTimeline.isLoading;

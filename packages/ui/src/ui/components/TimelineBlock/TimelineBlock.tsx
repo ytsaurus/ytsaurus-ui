@@ -27,7 +27,7 @@ type Props<TEvent extends TimelineEvent, TMarker extends TimelineMarker> = {
     className?: string;
     timeline: Timeline<TEvent, TMarker>;
     selectedJob: string;
-    tooltip: (event?: TEvent) => React.ReactNode;
+    tooltip?: (event?: TEvent) => React.ReactNode;
     onTimelineClick: (events: SelectEvent<TEvent>) => void;
     onMarkerClick: (markers: MarkerSelectEvent<TMarker>) => void;
     onCameraChange: (interval: Interval) => void;
@@ -100,7 +100,7 @@ export const TimelineBlock = <TEvent extends TimelineEvent, TMarker extends Time
                 />
                 <div ref={timelineWrapRef} className={block('timeline')}>
                     <TimelineCanvas timeline={timeline} />
-                    <EventPopup timeline={timeline} content={tooltip} />
+                    {tooltip && <EventPopup timeline={timeline} content={tooltip} />}
                 </div>
             </Flex>
         </Wrap>

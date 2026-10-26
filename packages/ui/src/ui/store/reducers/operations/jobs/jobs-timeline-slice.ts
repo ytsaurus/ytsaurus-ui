@@ -80,6 +80,7 @@ const jobsTimelineSlice = createSlice({
             return {
                 ...state,
                 ...action.payload,
+                selectedJob: action.payload.jobs.find(({id}) => id === state.selectedJob)?.id ?? '',
             };
         },
         setFilter(state, action: PayloadAction<JobsTimelineState['filter']>) {

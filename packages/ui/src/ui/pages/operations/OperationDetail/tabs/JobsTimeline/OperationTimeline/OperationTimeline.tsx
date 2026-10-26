@@ -1,5 +1,6 @@
-import React, {type FC, useCallback, useEffect, useMemo} from 'react';
+import React, {type FC, useCallback, useEffect, useMemo, useState} from 'react';
 import cn from 'bem-cn-lite';
+import {useLayer} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
 import {type MarkerSelectEvent, type SelectEvent, Timeline} from '@gravity-ui/timeline';
 import {
@@ -7,6 +8,8 @@ import {
     selectActiveJob,
     selectFilter,
     selectInterval,
+    selectJobsTimelinePanelPinned,
+    selectSelectedJob,
     selectSortedJobs,
 } from '../../../../../../store/selectors/operations/jobs-timeline';
 import {
@@ -15,20 +18,21 @@ import {
     setSelectedIncarnation,
     setSelectedJob,
 } from '../../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
-import {splitScreen} from '../../../../../../store/actions/global';
+import {mergeScreen, splitScreen} from '../../../../../../store/actions/global';
 import {EventsSidePanel} from '../EventsSidePanel';
 import {
     type JobLineEvent,
     JobLineRenderer,
 } from '../../../../../../components/TimelineBlock/renderer/JobLineRenderer';
 import {type AllocationLineEvent} from '../../../../../../components/TimelineBlock/renderer/AllocationLineRenderer';
-import {EventTimelineTooltipContent} from '../EventsTimeline/EventTimelineTooltipContent';
 import {ROW_HEIGHT} from '../constants';
 import {TimelineBlock} from '../../../../../../components/TimelineBlock/TimelineBlock';
 import {prepareAxis} from '../helpers/prepareAxes';
 import {prepareMarkers} from '../helpers/prepareMarkers';
 import {prepareJobEvents} from '../helpers/prepareJobEvents';
 import withSplit from '../../../../../../hocs/withSplit';
+import {EventsSidePanelDrawer} from '../EventsSidePanelDrawer/EventsSidePanelDrawer';
+import {setSettingByKey} from '../../../../../../store/actions/settings';
 import './OperationTimeline.scss';
 import {createTimelineConfig} from './createTimelineConfig';
 import {type IncarnationMarker} from '../../../../../../components/TimelineBlock/renderer/IncarnationMarkerRenderer';
@@ -44,6 +48,28 @@ export const OperationTimeline: FC = () => {
     const jobs = useSelector(selectSortedJobs);
     const interval = useSelector(selectInterval);
     const selectedJobId = useSelector(selectActiveJob);
+    const selectedJob = useSelector(selectSelectedJob);
+    const pinned = useSelector(selectJobsTimelinePanelPinned);
+    const [savingPin, setSavingPin] = useState(false);
+    const isPanelOpen = Boolean(selectedJob);
+
+    const handleClose = () => {
+        dispatch(setSelectedJob(''));
+    };
+
+    useLayer({open: isPanelOpen && pinned, disableOutsideClick: true, onClose: handleClose});
+
+    const handleTogglePin = async () => {
+        if (savingPin) return;
+        setSavingPin(true);
+        try {
+            await dispatch(setSettingByKey('global::operations::jobsTimelinePanelPinned', !pinned));
+        } catch {
+            // The settings action restores the previous value and shows the error.
+        } finally {
+            setSavingPin(false);
+        }
+    };
     const selectedIncarnation = useSelector(selectActiveIncarnation);
     const filter = useSelector(selectFilter);
 
@@ -65,14 +91,14 @@ export const OperationTimeline: FC = () => {
     const handleTimeLineClick = useCallback(
         ({events}: SelectEvent) => {
             if (!events.length) {
-                dispatch(setSelectedJob(''));
+                timeline.api.setSelectedEvents(selectedJobId ? [selectedJobId] : []);
                 return;
             }
             const job = events.find((event) => event.renderer instanceof JobLineRenderer);
             if (!job) return;
             dispatch(setSelectedJob(job.id));
         },
-        [dispatch],
+        [dispatch, selectedJobId, timeline],
     );
 
     const handleMarkerClick = useCallback(
@@ -94,17 +120,17 @@ export const OperationTimeline: FC = () => {
         [dispatch],
     );
 
-    const handleMakeTimelineContent = useCallback(
-        (event: JobLineEvent | AllocationLineEvent | undefined) => {
-            if (!event || !('jobId' in event)) return null;
-            return <EventTimelineTooltipContent event={event} />;
-        },
-        [],
-    );
-
     useEffect(() => {
-        dispatch(splitScreen('JobsTimeline'));
-    }, [dispatch]);
+        if (!isPanelOpen || !pinned) return undefined;
+        dispatch(splitScreen('JobsTimeline', [block('main-pane'), block('details-pane')]));
+        return () => {
+            dispatch((dispatchAction, getState) => {
+                if (getState().global.splitScreen.type === 'JobsTimeline') {
+                    dispatchAction(mergeScreen());
+                }
+            });
+        };
+    }, [dispatch, isPanelOpen, pinned]);
 
     useEffect(() => {
         if (!timeline.api) return;
@@ -124,6 +150,7 @@ export const OperationTimeline: FC = () => {
                 selectedJob: selectedJobId ? [selectedJobId] : [],
             }),
         );
+        timeline.api.setSelectedEvents(selectedJobId ? [selectedJobId] : []);
     }, [jobs, filter, selectedJobId, selectedIncarnation, timeline]);
 
     useEffect(() => {
@@ -132,9 +159,18 @@ export const OperationTimeline: FC = () => {
         timeline.api.setRange(interval.from || 0, interval.to || 0);
     }, [interval, timeline]);
 
+    const panel = isPanelOpen ? (
+        <EventsSidePanel
+            pinned={pinned}
+            savingPin={savingPin}
+            onTogglePin={handleTogglePin}
+            onClose={handleClose}
+        />
+    ) : null;
+
     return (
         <>
-            <div className={block('wrap')}>
+            <div data-qa="jobs-timeline" className={block('wrap')}>
                 <TimelineBlock<JobLineEvent | AllocationLineEvent, IncarnationMarker>
                     className={block('block')}
                     timeline={timeline}
@@ -142,15 +178,15 @@ export const OperationTimeline: FC = () => {
                     selectedJob={selectedJobId}
                     rowHeight={ROW_HEIGHT}
                     topPadding={15}
-                    tooltip={handleMakeTimelineContent}
                     onCameraChange={handleBoundsChanged}
                     onTimelineClick={handleTimeLineClick}
                     onMarkerClick={handleMarkerClick}
                 />
             </div>
-            <SidePanelPortal>
-                <EventsSidePanel />
-            </SidePanelPortal>
+            {isPanelOpen && pinned && <SidePanelPortal>{panel}</SidePanelPortal>}
+            <EventsSidePanelDrawer open={isPanelOpen && !pinned} onClose={handleClose}>
+                {panel}
+            </EventsSidePanelDrawer>
         </>
     );
 };

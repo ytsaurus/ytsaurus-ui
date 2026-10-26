@@ -1,9 +1,11 @@
+import {type CancelToken} from 'axios';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {type ThunkAction} from 'redux-thunk';
 import {type RootState} from '../../reducers';
 import {type Action} from 'redux';
 
 import format from '../../../common/hammer/format';
+import {selectCluster} from '../../selectors/global';
 import {selectOperationId} from '../../selectors/operations/operation';
 import {type RawJob} from '../../../types/operations/job';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
@@ -24,6 +26,10 @@ import {
 import {MAX_JOBS_COUNT} from '../../../pages/operations/OperationDetail/tabs/JobsTimeline/constants';
 
 const cancelHelper = new CancelHelper();
+
+export const cancelJobsTimelineRequest = () => {
+    cancelHelper.removeAllRequests();
+};
 
 type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
 
@@ -47,6 +53,17 @@ export const getJobsWithEvents =
     async (dispatch, getState) => {
         const state = getState();
         const operationId = selectOperationId(state);
+        const cluster = selectCluster(state);
+        cancelHelper.removeAllRequests();
+        let cancelToken: CancelToken | undefined;
+        const isCurrentRequest = () => {
+            const currentState = getState();
+            return (
+                !cancelToken?.reason &&
+                operationId === selectOperationId(currentState) &&
+                cluster === selectCluster(currentState)
+            );
+        };
         const sameIntervals = selectIntervalsIsSame(state);
 
         if (firstRequest) {
@@ -55,21 +72,29 @@ export const getJobsWithEvents =
         try {
             dispatch(setError(undefined));
             const listResponse = await ytApiV3Id.listJobs(YTApiId.operationGetJobs, {
-                operation_id: operationId,
-                cancellation: cancelHelper.removeAllAndSave,
-                limit: MAX_JOBS_COUNT,
-                attributes: [
-                    'events',
-                    'state',
-                    'job_cookie',
-                    'task_name',
-                    'start_time',
-                    'finish_time',
-                    'address',
-                    'allocation_id',
-                    'operation_incarnation',
-                ],
+                parameters: {
+                    operation_id: operationId,
+                    limit: MAX_JOBS_COUNT,
+                    attributes: [
+                        'events',
+                        'state',
+                        'job_cookie',
+                        'task_name',
+                        'start_time',
+                        'finish_time',
+                        'address',
+                        'allocation_id',
+                        'operation_incarnation',
+                    ],
+                },
+                cancellation: (source) => {
+                    cancelToken = source.token;
+                    cancelHelper.saveCancelToken(source);
+                },
             });
+
+            cancelToken?.throwIfRequested();
+            if (!isCurrentRequest()) return;
 
             const jobs = listResponse.jobs as unknown as OperationJob[];
             dispatch(setJobsCountError(jobs.length >= MAX_JOBS_COUNT));
@@ -189,13 +214,13 @@ export const getJobsWithEvents =
         } catch (e) {
             const error = e as Error;
 
-            if (isCancelled(error)) {
+            if (!isCurrentRequest() || isCancelled(error)) {
                 return;
             }
 
             dispatch(setError(error));
         } finally {
-            if (firstRequest) {
+            if (isCurrentRequest()) {
                 dispatch(setLoading(false));
             }
         }
