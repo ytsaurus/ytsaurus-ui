@@ -21,7 +21,7 @@ import i18n from './i18n';
 import i18nPermissionValues from '../i18n-permission-values';
 import HelpLink from '../../../components/HelpLink/HelpLink';
 import {docsUrl} from '../../../config';
-import {type PermissionToRequest} from '../../../store/actions/acl';
+import {type RequestPermissionsParams} from '../../../store/actions/acl';
 import {type YTPermissionTypeUI} from '../../../utils/acl/acl-api';
 import {
     type AclColumnGroup,
@@ -59,10 +59,7 @@ export interface Props extends WithVisibleProps {
     normalizedPoolTree?: string;
     path: string;
     idmKind: IdmKindType;
-    requestPermissions: (params: {
-        values: PermissionToRequest;
-        idmKind: IdmKindType;
-    }) => Promise<void>;
+    requestPermissions: (params: RequestPermissionsParams) => Promise<void>;
     cancelRequestPermissions: (params: {idmKind: IdmKindType}) => unknown;
     error?: YTError;
     onSuccess?: () => void;
@@ -124,9 +121,9 @@ function RequestPermissions(props: Props) {
         buttonsTitle,
     } = UIFactory.getAclApi();
 
-    const onAdd = useCallback(
-        (form: FormApi<FormValues, Partial<FormValues>>) => {
-            const values = {...form.getState().values};
+    const prepareValues = useCallback(
+        (formValues: FormValues) => {
+            const values = {...formValues};
             const permissionFlags: Record<string, boolean> = {};
             Object.keys(requestPermissionsFlags).forEach((k) => {
                 const key = `${FLAG_NAME_PREFIX}${k}` as keyof typeof values;
@@ -134,12 +131,19 @@ function RequestPermissions(props: Props) {
 
                 delete values[key];
             });
+            return {...values, permissionFlags};
+        },
+        [requestPermissionsFlags],
+    );
+
+    const onAdd = useCallback(
+        (form: FormApi<FormValues, Partial<FormValues>>) => {
             return requestPermissions({
-                values: {...values, permissionFlags},
+                values: prepareValues(form.getState().values),
                 idmKind,
             });
         },
-        [requestPermissions, idmKind],
+        [requestPermissions, idmKind, prepareValues],
     );
 
     const currentCaption = i18n(`field_current_${idmKind}`);
@@ -361,21 +365,7 @@ function RequestPermissions(props: Props) {
                         cluster,
                         inheritance_mode: INHERITANCE_MODE_TYPES.OBJECT_AND_DESCENDANTS,
                     }}
-                    validate={(values) => {
-                        const subjects = values.subjects;
-                        const validationError: Record<
-                            keyof Pick<FormValues, 'subjects'>,
-                            string | undefined
-                        > = {
-                            subjects: undefined,
-                        };
-
-                        if (!subjects.length) {
-                            validationError.subjects = i18n('alert_subjects-required');
-                        }
-
-                        return validationError;
-                    }}
+                    validate={validateFormValues}
                     fields={[...dialogFields, ...makeErrorFields([error])]}
                 />
             </div>
@@ -386,6 +376,12 @@ function RequestPermissions(props: Props) {
 export default compose(withVisible)(RequestPermissions) as unknown as React.ComponentType<
     Omit<Props, keyof WithVisibleProps>
 >;
+
+function validateFormValues(values: FormValues) {
+    return {
+        subjects: values.subjects.length ? undefined : i18n('alert_subjects-required'),
+    };
+}
 
 function valueWithCheckedFirstChoice(choices: string | any[]) {
     if (!choices || choices.length < 1) {

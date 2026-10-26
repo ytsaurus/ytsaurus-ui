@@ -1,4 +1,5 @@
 import cn from 'bem-cn-lite';
+import {type RequestPermissionsParams} from '../../../store/actions/acl';
 import React, {Component} from 'react';
 
 import {Flex} from '@gravity-ui/uikit';
@@ -51,9 +52,9 @@ type Props = Pick<
 };
 
 export class AclActions extends Component<Props> {
-    requestPermissions = async (...args: Parameters<ACLReduxProps['userPermissionsRequestFn']>) => {
+    requestPermissions = async (params: RequestPermissionsParams) => {
         const {requestPermissions, loadAclData, path, idmKind} = this.props;
-        await requestPermissions(...args);
+        await requestPermissions(params);
         await loadAclData({path, idmKind});
     };
 
