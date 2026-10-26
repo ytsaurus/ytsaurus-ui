@@ -124,6 +124,48 @@ describe('Flow specs actions', () => {
         expect(ytApiV4.getPipelineDynamicSpec).not.toHaveBeenCalled();
     });
 
+    it('loads flat patches and visible blame without requiring changes.children', async () => {
+        const source = {
+            patch_id: version,
+            operation: 'set' as const,
+            author: 'alice',
+            comment: 'Reason',
+            timestamp: '2026-10-05T08:00:00Z',
+        };
+        const patch = {...source, path: '/group', value: {a: 1}};
+        jest.mocked(ytApiV4.flowExecute)
+            .mockResolvedValueOnce({version, patches: [patch]})
+            .mockResolvedValueOnce({spec, version, blame: {'/group': source}})
+            .mockResolvedValueOnce({spec: {}, version});
+        const dispatch = jest.fn();
+        await loadFlowDynamicSpec(pipelinePath)(dispatch, jest.fn(), undefined);
+        expect(dispatch).toHaveBeenLastCalledWith(
+            dynamicSpecActions.onSuccess({
+                data: {
+                    spec,
+                    version,
+                    dynamic_spec_state: {
+                        version,
+                        effective_spec: spec,
+                        base_spec: {},
+                        override_spec: {operation: 'inherit'},
+                        patches: [patch],
+                        blame: {'/group': source},
+                        audit: [
+                            {
+                                version,
+                                author: 'alice',
+                                comment: 'Reason',
+                                timestamp: patch.timestamp,
+                            },
+                        ],
+                        runtime_target_state: undefined,
+                    },
+                },
+            }),
+        );
+    });
+
     it('retries when sequential reads observe different DynamicSpec versions', async () => {
         const nextVersion = {$type: 'int64' as const, $value: '1917083822153720178'};
         const patches = (revision: typeof version) => ({version: revision, patches: []});

@@ -1,5 +1,5 @@
 import React from 'react';
-import {type Page} from '@playwright/test';
+import {type Locator, type Page} from '@playwright/test';
 import {http} from 'msw';
 
 import {
@@ -20,16 +20,34 @@ import {
     dynamicSpecResponse,
     dynamicSpecSnapshot,
     failedDynamicSpecHandler,
+    flatDynamicSpecSnapshot,
     legacyDynamicSpecHandler,
     unavailableDynamicSpecHandler,
     unicodeGroup,
 } from '../__stories__/mocks';
 
+async function expectDynamicSpecScreenshot(
+    page: Page,
+    suffix = '',
+    component: Locator = page.locator('.playwright-wrapper-test'),
+) {
+    for (const theme of ['light', 'dark'] as const) {
+        await page.evaluate((nextTheme) => {
+            document.body.classList.remove('theme-light', 'theme-dark');
+            document.body.classList.add(`theme-${nextTheme}`);
+        }, theme);
+        await page.emulateMedia({colorScheme: theme});
+        await expect(component).toHaveScreenshot(`${test.info().title}${suffix} ${theme}.png`, {
+            animations: 'disabled',
+            scale: 'device',
+        });
+    }
+}
+
 test('PipelineDynamicSpec: base effective and override provenance', async ({
     mount,
     page,
     router,
-    expectScreenshot,
 }) => {
     test.slow();
     await router.use(dynamicSpecHandler);
@@ -155,7 +173,7 @@ test('PipelineDynamicSpec: base effective and override provenance', async ({
     await expect(
         page.getByRole('row').filter({hasText: '/job_manager/resource_limits/memory'}),
     ).toHaveCount(0);
-    await expect(removed.locator('[data-owner-version]')).toHaveAttribute(
+    await expect(removed.getByRole('button', {name: 'Cancel', exact: true})).toHaveAttribute(
         'title',
         new RegExp(OWNER_VERSION),
     );
@@ -172,7 +190,7 @@ test('PipelineDynamicSpec: base effective and override provenance', async ({
     await expect(inherited.locator('td').nth(5)).toHaveText('—');
     const cpu = page.getByRole('row').filter({hasText: '/job_manager/resource_limits/cpu'});
     await expect(cpu).toContainText('alice');
-    await expect(cpu.locator('[data-owner-version]')).toHaveAttribute(
+    await expect(cpu.getByRole('button', {name: 'Cancel', exact: true})).toHaveAttribute(
         'title',
         new RegExp(NEWER_VERSION),
     );
@@ -255,14 +273,14 @@ test('PipelineDynamicSpec: base effective and override provenance', async ({
     );
     for (const [name, suffix] of [
         ['Effective', 'effective'],
-        ['Base', 'base'],
-        ['Patches', 'overrides'],
+        ['Base', 'base-2'],
+        ['Patches', 'overrides-3'],
     ]) {
         await page.getByRole('radio', {name, exact: true}).check();
         if (name === 'Effective') {
             await expectOverrideColors();
         }
-        await expectScreenshot({nameSuffix: suffix});
+        await expectDynamicSpecScreenshot(page, ` ${suffix}`);
     }
 });
 
@@ -457,7 +475,7 @@ test('PipelineDynamicSpec: grouped map edits only its raw intent without normali
     await page.getByRole('radio', {name: 'Patches', exact: true}).check();
     const rows = page.locator('tbody tr').filter({hasText: '/throttlers/ui_demo'});
     await expect(rows).toHaveCount(1);
-    await expect(rows.locator('[data-owner-version]')).toHaveAttribute(
+    await expect(rows.getByRole('button', {name: 'Cancel', exact: true})).toHaveAttribute(
         'data-owner-version',
         MAP_VERSION,
     );
@@ -526,17 +544,17 @@ test('PipelineDynamicSpec: mixed map keeps separate child attribution and preser
     await expect(parent.locator('td').nth(2)).toContainText('period');
     await expect(parent.locator('td').nth(2)).toContainText('limit');
     await expect(parent.locator('td').nth(2)).toContainText('1000');
-    await expect(parent.locator('[data-owner-version]')).toHaveAttribute(
+    await expect(parent.getByRole('button', {name: 'Cancel', exact: true})).toHaveAttribute(
         'data-owner-version',
         MAP_VERSION,
     );
     const child = page.locator('tbody tr').filter({hasText: /^\/throttlers\/ui_demo\/limit/});
-    await expect(child.locator('[data-owner-version]')).toHaveAttribute(
+    await expect(child.getByRole('button', {name: 'Cancel', exact: true})).toHaveAttribute(
         'data-owner-version',
         NEWER_VERSION,
     );
     await parent.getByRole('button', {name: 'Update', exact: true}).click();
-    await expect.poll(() => editorJSON(page)).toEqual({limit: 1000, period: 1000});
+    await expect.poll(() => editorJSON(page)).toEqual(demoMap);
     await page.getByRole('dialog').getByRole('button', {name: 'Cancel', exact: true}).click();
     await parent
         .getByRole('button', {name: 'Edit /throttlers/ui_demo', exact: true})
@@ -706,7 +724,7 @@ test('PipelineDynamicSpec: a map mask preserves a newer child in the replacement
         page
             .locator('tbody tr')
             .filter({hasText: /^\/throttlers\/ui_demo\/limit/})
-            .locator('[data-owner-version]'),
+            .getByRole('button', {name: 'Cancel', exact: true}),
     ).toHaveAttribute('data-owner-version', NEWER_VERSION);
     await parent.getByRole('button', {name: 'Edit /throttlers/ui_demo', exact: true}).click();
     await expect.poll(() => editorJSON(page)).toEqual({limit: 2000});
@@ -1232,11 +1250,11 @@ test('PipelineDynamicSpec: Update changes a patch comment or value with its patc
     await cpu.getByRole('button', {name: 'Update', exact: true}).click();
     const dialog = page.getByRole('dialog');
     await expect(dialog).toContainText('Update patch');
-    await expect.poll(() => editorJSON(page)).toBe(2);
+    await expect.poll(() => editorJSON(page)).toEqual({$type: 'int64', $value: '2'});
     const comment = dialog.getByRole('textbox', {name: 'Comment', exact: true});
     await expect(comment).toHaveValue('Новая CPU квота');
     await comment.fill(' ');
-    await dialog.getByRole('button', {name: 'Confirm', exact: true}).click();
+    await expect(dialog.getByRole('button', {name: 'Confirm', exact: true})).toBeDisabled();
     await expect(dialog).toContainText('Add a comment explaining the change.');
     expect(mutations).toHaveLength(0);
     await comment.fill('Обновлённый комментарий 😊');
@@ -1373,7 +1391,7 @@ test('PipelineDynamicSpec: subtree editing preserves raw Unicode and binary sibl
         .click();
     let dialog = page.getByRole('dialog');
     await expect(
-        dialog.getByText('This action replaces the selected map and its nested overrides.', {
+        dialog.getByText('This action replaces the selected map in the effective specification.', {
             exact: false,
         }),
     ).toBeVisible();
@@ -1420,7 +1438,6 @@ for (const kind of ['scalar', 'map'] as const) {
         mount,
         page,
         router,
-        expectScreenshot,
     }) => {
         test.slow();
         const initial = kind === 'scalar' ? 250 : {limit: 2000, period: 1000};
@@ -1482,7 +1499,8 @@ for (const kind of ['scalar', 'map'] as const) {
         await expect(confirm).toBeDisabled();
         if (kind === 'map') {
             await comment.focus();
-            await expectScreenshot();
+            await page.evaluate(() => window.scrollTo(0, 0));
+            await expectDynamicSpecScreenshot(page, '', dialog);
         }
         await comment.fill('Причина изменения 😊');
         await expect(confirm).toBeEnabled();
@@ -1658,4 +1676,80 @@ test('PipelineDynamicSpec: static specification keeps comment-free editing', asy
                 body: {a: 2},
             },
         ]);
+});
+
+test('PipelineDynamicSpec: flat patches preserve order values authors and explicit patch actions', async ({
+    mount,
+    page,
+    router,
+}) => {
+    test.slow();
+    const mutations: unknown[] = [];
+    await router.use(
+        http.put('*/api/v4/flow_execute', async ({request}) => {
+            const read = await dynamicSpecResponse(flatDynamicSpecSnapshot, request);
+            if (read) return read;
+            mutations.push({
+                command: requestParameters(request).flow_command,
+                body: await request.json(),
+            });
+            return Response.json({version: exactVersion});
+        }),
+    );
+    await mount(<PipelineDynamicSpecStories.FlatPatches />);
+    const keep = page.getByRole('button', {name: 'Edit /group/keep', exact: true});
+    await expect(keep.locator('..').locator('[data-owner-version]')).toContainText('Author: bob');
+    const added = page.getByRole('button', {name: 'Edit /group/added', exact: true});
+    await expect(added.locator('..').locator('[data-owner-version]')).toContainText(
+        'Author: alice',
+    );
+    await expect(
+        page.getByRole('button', {name: 'Edit /baseline', exact: true}),
+    ).not.toHaveAttribute('data-dynamic-spec-override');
+    await page.getByRole('radio', {name: 'Patches', exact: true}).check();
+    const rows = page.locator('.yt-flow-dynamic-spec__table tbody tr');
+    await expect(rows).toHaveCount(3);
+    await expect(rows.nth(0).locator('td').first()).toHaveText('/group');
+    await expect(rows.nth(1).locator('td').first()).toHaveText('/group/keep');
+    await expect(rows.nth(0)).toContainText('Author: alice');
+    await expectDynamicSpecScreenshot(page);
+    await rows.nth(0).getByRole('button', {name: 'Update', exact: true}).click();
+    await expect.poll(() => editorJSON(page)).toEqual({keep: 2, added: 4});
+    await page
+        .getByRole('dialog')
+        .getByRole('textbox', {name: 'Comment', exact: true})
+        .fill('Parent reason');
+    await page.getByRole('dialog').getByRole('button', {name: 'Confirm', exact: true}).click();
+    await expect
+        .poll(() => mutations)
+        .toEqual([
+            {
+                command: 'patch-pipeline-dynamic-spec',
+                body: {
+                    patch: {$type: 'int64', $value: OWNER_VERSION},
+                    comment: 'Parent reason',
+                    expected_version: exactVersion,
+                },
+            },
+        ]);
+    await rows.nth(2).getByRole('button', {name: 'Update', exact: true}).click();
+    await replaceEditorContent(page, '6', true);
+    await page.getByRole('dialog').getByRole('button', {name: 'Confirm', exact: true}).click();
+    await expect.poll(() => mutations.length).toBe(2);
+    expect(mutations[1]).toEqual({
+        command: 'patch-pipeline-dynamic-spec',
+        body: {
+            patch: exactVersion,
+            set_path: '/a\\/b/c\\\\d',
+            set_value: 6,
+            comment: 'Escaped path',
+            expected_version: exactVersion,
+        },
+    });
+    await rows.nth(1).getByRole('button', {name: 'Cancel', exact: true}).click();
+    await expect.poll(() => mutations.length).toBe(3);
+    expect(mutations[2]).toEqual({
+        command: 'cancel-pipeline-dynamic-spec-patch',
+        body: {patch: {$type: 'int64', $value: MAP_VERSION}, expected_version: exactVersion},
+    });
 });

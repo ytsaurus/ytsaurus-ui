@@ -5,6 +5,7 @@ import ypath from '../../common/thor/ypath';
 import {
     type FlowDynamicSpecAudit,
     type FlowDynamicSpecOverride,
+    type FlowDynamicSpecPatch,
     type FlowDynamicSpecSnapshot,
     type Int64,
 } from '../../../shared/yt-types';
@@ -95,6 +96,29 @@ export function encodeDynamicSpecValue(value: unknown, original: unknown): unkno
 export function decodeDynamicSpecAudit(state: FlowDynamicSpecSnapshot): FlowDynamicSpecSnapshot {
     return {
         ...state,
+        ...(state.patches && {
+            patches: state.patches.map((patch) => ({
+                ...patch,
+                comment:
+                    typeof patch.comment === 'string'
+                        ? decodeDynamicSpecText(patch.comment)
+                        : patch.comment,
+            })),
+        }),
+        ...(state.blame && {
+            blame: Object.fromEntries(
+                Object.entries(state.blame).map(([path, source]) => [
+                    dynamicSpecPath(dynamicSpecPathParts(path)),
+                    {
+                        ...source,
+                        comment:
+                            typeof source.comment === 'string'
+                                ? decodeDynamicSpecText(source.comment)
+                                : source.comment,
+                    },
+                ]),
+            ),
+        }),
         audit: state.audit.map((record) => {
             return typeof record.comment === 'string'
                 ? {...record, comment: decodeDynamicSpecText(record.comment)}
@@ -107,6 +131,12 @@ export function dynamicSpecPath(path: Array<string>): string {
     return path.length
         ? '/' + path.map((key) => ypath.YPath.escapeSpecialCharacters(key)).join('/')
         : '';
+}
+
+export function dynamicSpecPathParts(path: string): Array<string> {
+    return ypath.YPath.parseRelative(path).map(({name}: {name: string}) =>
+        ypath.YPath.fragmentToYSON(name),
+    );
 }
 
 export function dynamicSpecValue(spec: unknown, path: Array<string>): unknown {
@@ -165,6 +195,8 @@ export function validateDynamicSpecVersions(state: FlowDynamicSpecSnapshot) {
         Object.values(node.children ?? {}).forEach(visit);
     };
     visit(state.override_spec);
+    state.patches?.forEach(({patch_id}) => dynamicSpecVersion(patch_id));
+    Object.values(state.blame ?? {}).forEach(({patch_id}) => dynamicSpecVersion(patch_id));
 }
 
 function mapValue(value: unknown): Record<string, unknown> | undefined {
@@ -201,6 +233,20 @@ function ownedSource(
     };
 }
 
+function patchSource(patch: Omit<FlowDynamicSpecPatch, 'path' | 'value'>): DynamicSpecSource {
+    return {
+        source: 'override',
+        version: dynamicSpecVersion(patch.patch_id),
+        patchId: dynamicSpecVersion(patch.patch_id),
+        audit: {
+            version: patch.patch_id,
+            comment: patch.comment,
+            author: patch.author,
+            timestamp: patch.timestamp,
+        },
+    };
+}
+
 export function dynamicSpecSource(
     state: FlowDynamicSpecSnapshot,
     path: Array<string>,
@@ -211,6 +257,15 @@ export function dynamicSpecSource(
         state.runtime_target_state !== null
     ) {
         return {source: 'runtime'};
+    }
+    if (state.blame) {
+        for (let depth = path.length; depth >= 0; --depth) {
+            const key = dynamicSpecPath(path.slice(0, depth));
+            if (Object.hasOwn(state.blame, key)) {
+                return patchSource(state.blame[key]);
+            }
+        }
+        return {source: baseValue(state, path) === undefined ? 'default' : 'base'};
     }
     let node: FlowDynamicSpecOverride | undefined = state.override_spec;
     for (let depth = 0; node; ++depth) {
@@ -239,7 +294,7 @@ export function dynamicSpecEffectiveSource(
     path: Array<string>,
 ): DynamicSpecSource {
     const source = dynamicSpecSource(state, path);
-    if (source.source !== 'override') {
+    if (state.blame || source.source !== 'override') {
         return source;
     }
     let node: FlowDynamicSpecOverride | undefined = state.override_spec;
@@ -315,6 +370,9 @@ function overrideLiteral(
 }
 
 export function dynamicSpecOverrideEditor(state: FlowDynamicSpecSnapshot, path: Array<string>) {
+    if (state.patches) {
+        return undefined;
+    }
     let node = state.override_spec;
     for (const key of path) {
         const children = node.children ?? {};
@@ -334,6 +392,14 @@ export function dynamicSpecOverrideEditor(state: FlowDynamicSpecSnapshot, path: 
 }
 
 export function dynamicSpecOverrideRows(state: FlowDynamicSpecSnapshot) {
+    if (state.patches) {
+        return state.patches.map((patch): DynamicSpecOverrideRow => ({
+            path: dynamicSpecPathParts(patch.path),
+            operation: patch.operation,
+            value: patch.value,
+            source: patchSource(patch),
+        }));
+    }
     const rows: Array<DynamicSpecOverrideRow> = [];
     const visit = (
         node: FlowDynamicSpecOverride,

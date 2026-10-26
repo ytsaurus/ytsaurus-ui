@@ -112,7 +112,12 @@ export const dynamicSpecSnapshot: FlowDynamicSpecSnapshot = {
             comment:
                 '\u00d0\u0094\u00d0\u00b5\u00d0\u00bc\u00d0\u00be override \u00d0\u00b4\u00d0\u00bb\u00d1\u008f \u00d0\u00bf\u00d1\u0080\u00d0\u00be\u00d0\u00b2\u00d0\u00b5\u00d1\u0080\u00d0\u00ba\u00d0\u00b8 \u00d0\u00b2\u00d0\u00ba\u00d0\u00bb\u00d0\u00b0\u00d0\u00b4\u00d0\u00ba\u00d0\u00b8 Dynamic Spec.',
         },
-        {version: newer, timestamp: '2026-10-04T10:01:00.000001Z', comment: 'Новая CPU квота'},
+        {
+            version: newer,
+            timestamp: '2026-10-04T10:01:00.000001Z',
+            comment: 'Новая CPU квота',
+            author: 'alice',
+        },
     ],
     runtime_target_state: 'completed',
 };
@@ -142,21 +147,28 @@ export async function dynamicSpecResponse(
     if (parameters.flow_command === 'get-pipeline-dynamic-spec') {
         const {view, blame} = await request.clone().json();
         return Response.json({
-            spec: view === 'base' ? snapshot.base_spec : snapshot.effective_spec,
+            spec:
+                {
+                    base: snapshot.base_spec,
+                    override: snapshot.patches ?? snapshot.override_spec,
+                    effective: snapshot.effective_spec,
+                }[view as 'base' | 'override' | 'effective'] ?? snapshot.effective_spec,
             version: snapshot.version,
-            ...(blame ? {blame: annotatePatchIds(snapshot.override_spec)} : {}),
+            ...(blame ? {blame: snapshot.blame ?? annotatePatchIds(snapshot.override_spec)} : {}),
         });
     }
     if (parameters.flow_command === 'get-pipeline-dynamic-spec-patches') {
         return Response.json({
             version: snapshot.version,
-            patches: snapshot.audit.map(({version: patchVersion, comment, author, timestamp}) => ({
-                patch_id: patchVersion,
-                comment,
-                author,
-                timestamp,
-                changes: snapshot.override_spec,
-            })),
+            patches:
+                snapshot.patches ??
+                snapshot.audit.map(({version: patchVersion, comment, author, timestamp}) => ({
+                    patch_id: patchVersion,
+                    comment,
+                    author,
+                    timestamp,
+                    changes: snapshot.override_spec,
+                })),
         });
     }
     return undefined;
@@ -196,4 +208,71 @@ export const unavailableDynamicSpecHandler = http.put('*/api/v4/flow_execute', (
 
 export const failedDynamicSpecHandler = http.put('*/api/v4/flow_execute', () =>
     Response.json({code: 1, message: 'Access denied'}, {status: 500}),
+);
+
+export const flatDynamicSpecSnapshot: FlowDynamicSpecSnapshot = {
+    version: newer,
+    base_spec: {group: {keep: 1, removed: 2}, baseline: 7},
+    effective_spec: {group: {keep: 3, added: 4}, baseline: 7, 'a/b': {'c\\d': 5}},
+    override_spec: {operation: 'inherit'},
+    audit: [],
+    patches: [
+        {
+            patch_id: version,
+            path: '/group',
+            operation: 'set',
+            value: {keep: 2, added: 4},
+            author: 'alice',
+            comment: 'Replace group',
+            timestamp: '2026-10-05T08:00:00Z',
+        },
+        {
+            patch_id: mapVersion,
+            path: '/group/keep',
+            operation: 'set',
+            value: 3,
+            author: 'bob',
+            comment: 'Adjust keep',
+            timestamp: '2026-10-05T09:00:00Z',
+        },
+        {
+            patch_id: newer,
+            path: '/a\\/b/c\\\\d',
+            operation: 'set',
+            value: 5,
+            author: 'carol',
+            comment: 'Escaped path',
+            timestamp: '2026-10-05T10:00:00Z',
+        },
+    ],
+    blame: {
+        '/group': {
+            patch_id: version,
+            operation: 'set',
+            author: 'alice',
+            comment: 'Replace group',
+            timestamp: '2026-10-05T08:00:00Z',
+        },
+        '/group/keep': {
+            patch_id: mapVersion,
+            operation: 'set',
+            author: 'bob',
+            comment: 'Adjust keep',
+            timestamp: '2026-10-05T09:00:00Z',
+        },
+        '/a\\/b/c\\\\d': {
+            patch_id: newer,
+            operation: 'set',
+            author: 'carol',
+            comment: 'Escaped path',
+            timestamp: '2026-10-05T10:00:00Z',
+        },
+    },
+};
+
+export const flatDynamicSpecHandler = http.put(
+    '*/api/v4/flow_execute',
+    async ({request}) =>
+        (await dynamicSpecResponse(flatDynamicSpecSnapshot, request)) ??
+        Response.json({version: flatDynamicSpecSnapshot.version}),
 );
