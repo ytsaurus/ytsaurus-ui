@@ -228,8 +228,10 @@ export type PermissionToRequest = {
     read_row_access_predicate?: string;
 };
 
+export type RequestPermissionsParams = {values: PermissionToRequest} & HasIdmKind;
+
 export function requestPermissions(
-    {values, idmKind}: {values: PermissionToRequest} & HasIdmKind,
+    {values, idmKind}: RequestPermissionsParams,
     {normalizedPoolTree}: HasNormPoolTree = {},
 ): ThunkAclAction {
     return async (dispatch, getState) => {

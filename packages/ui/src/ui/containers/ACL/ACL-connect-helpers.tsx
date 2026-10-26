@@ -1,4 +1,5 @@
-import {type ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, type ResolveThunks, connect} from 'react-redux';
+import {type Dispatch, bindActionCreators} from 'redux';
 
 import {
     selectAllAccessColumnsNames,
@@ -29,6 +30,7 @@ import {
 } from '../../store/selectors/acl/acl-filters';
 
 import {
+    type RequestPermissionsParams,
     cancelRequestPermissions,
     cancelUpdateAcl,
     deletePermissions,
@@ -154,7 +156,7 @@ const makeAclMapDispatchToProps = () => ({
 });
 
 type StateProps = ReturnType<ReturnType<typeof makeAclMapStateToProps>>;
-type DispatchProps = ReturnType<typeof makeAclMapDispatchToProps>;
+type DispatchProps = ResolveThunks<ReturnType<typeof makeAclMapDispatchToProps>>;
 
 function mergeProps(stateProps: StateProps, dispatchProps: DispatchProps, ownProps: ACLOwnProps) {
     const {normalizedPoolTree, aclRequestOptions} = stateProps;
@@ -175,7 +177,7 @@ function mergeProps(stateProps: StateProps, dispatchProps: DispatchProps, ownPro
         deletePermissionsFn: (params: Parameters<typeof deletePermissionsFn>[0]) => {
             return deletePermissionsFn(params, {normalizedPoolTree});
         },
-        userPermissionsRequestFn: (params: Parameters<typeof userPermissionsRequestFn>[0]) => {
+        userPermissionsRequestFn: (params: RequestPermissionsParams) => {
             return userPermissionsRequestFn(params, {normalizedPoolTree});
         },
         userPermissionsUpdateAcl: (params: Parameters<typeof userPermissionsUpdateAcl>[0]) => {
@@ -186,7 +188,11 @@ function mergeProps(stateProps: StateProps, dispatchProps: DispatchProps, ownPro
 
 function createACLConnector(idmKind: IdmKindType) {
     const mapStateToProps = makeAclMapStateToProps(idmKind);
-    const mapDispatchToProps = makeAclMapDispatchToProps();
+    const mapDispatchToProps = (dispatch: Dispatch) =>
+        bindActionCreators<ReturnType<typeof makeAclMapDispatchToProps>, DispatchProps>(
+            makeAclMapDispatchToProps(),
+            dispatch,
+        );
     return connect(mapStateToProps, mapDispatchToProps, mergeProps);
 }
 
