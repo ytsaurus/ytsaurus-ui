@@ -232,6 +232,7 @@ function renderSource(source: DynamicSpecSource, compact = false) {
             ? [
                   `${i18n('field_version')}: ${source.version}`,
                   source.audit?.timestamp,
+                  source.audit?.author && `${i18n('field_author')}: ${source.audit.author}`,
                   source.audit?.comment,
               ]
                   .filter(Boolean)
@@ -245,6 +246,11 @@ function renderSource(source: DynamicSpecSource, compact = false) {
         >
             {source.audit && (
                 <>
+                    {source.audit.author && (
+                        <span>
+                            {i18n('field_author')}: {source.audit.author}
+                        </span>
+                    )}
                     {source.audit.comment && (
                         <span className={block('comment')}>{source.audit.comment}</span>
                     )}
@@ -492,6 +498,9 @@ export function DynamicSpec({
                                                         </div>
                                                     </td>
                                                     <td className={block('comment')}>
+                                                        {audit?.author && (
+                                                            <div>{`${i18n('field_author')}: ${audit.author}`}</div>
+                                                        )}
                                                         {audit?.comment || '—'}
                                                     </td>
                                                     <td className={block('time')}>
