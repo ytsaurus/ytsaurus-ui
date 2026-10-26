@@ -41,7 +41,7 @@ import {type UIFactory} from './index';
 const experimentalPages: string[] = [];
 
 export const defaultUIFactory: UIFactory = {
-    isAccountCreateDisabled() {
+    getAccountCreateUrl() {
         return undefined;
     },
     getClusterAppearance(cluster) {

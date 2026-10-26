@@ -3,6 +3,7 @@ import {getDocsBaseUrl} from '../config';
 const baseUrl = getDocsBaseUrl() || '';
 
 export const docsUrls = {
+    'accounts:create-root': '',
     'acl:permissions': `${baseUrl}/user-guide/storage/access-control#authorization`,
     'acl:row-level-security': `${baseUrl}/user-guide/storage/row-level-security`,
     'api:cli': `${baseUrl}/api/cli/cli`,

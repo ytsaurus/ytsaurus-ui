@@ -225,16 +225,11 @@ export type AiChatIntegration = {
 };
 
 export interface UIFactory {
-    isAccountCreateDisabled(params: {
+    getAccountCreateUrl(params: {
         currentAccount: string;
         clusterConfig: ClusterConfig;
         isDeveloper: boolean;
-    }):
-        | undefined
-        | {
-              disableCreate?: boolean;
-              disableCreateNotice?: React.ReactNode;
-          };
+    }): string | undefined;
 
     getClusterAppearance(cluster?: string): undefined | ClusterAppearance;
 
