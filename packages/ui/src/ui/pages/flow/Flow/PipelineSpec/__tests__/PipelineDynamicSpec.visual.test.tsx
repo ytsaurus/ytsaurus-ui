@@ -1673,6 +1673,8 @@ test('PipelineDynamicSpec: flat patches preserve order values and explicit patch
     await expect(rows.nth(0).locator('td').first()).toHaveText('/group');
     await expect(rows.nth(1).locator('td').first()).toHaveText('/group/keep');
     await expect(rows.nth(0)).toContainText('Replace group');
+    const mapValue = rows.nth(0).getByRole('button', {name: 'Edit /group', exact: true});
+    expect(await mapValue.locator('pre').innerText()).toMatch(/\n\s*"added"/);
     await expectDynamicSpecScreenshot(page);
     await rows.nth(0).getByRole('button', {name: 'Update', exact: true}).click();
     await expect.poll(() => editorJSON(page)).toEqual({keep: 2, added: 4});
