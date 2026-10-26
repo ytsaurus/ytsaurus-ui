@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {useSelector} from 'react-redux';
 
 import {SegmentedRadioGroup} from '@gravity-ui/uikit';
@@ -19,6 +19,7 @@ const SYSTEM_DASHBOARDS = [
     'cluster-resources',
     'master-global',
     'master-local',
+    'data-nodes-common',
 ] as const satisfies Array<PrometheusDashboardType>;
 
 export function SystemMonitoringPrometheus() {
@@ -61,9 +62,15 @@ function useSystemDashboardParameters() {
         }
     }, [defaultTree, setParams]);
 
-    const {effectiveParams} = React.useMemo(() => {
-        return {effectiveParams: {cluster, ...params}};
-    }, [params, cluster]);
+    const {effectiveParams} = useMemo(() => {
+        return {
+            effectiveParams: {
+                cluster,
+                ...(type === 'data-nodes-common' ? {host: '.*'} : {}),
+                ...params,
+            },
+        };
+    }, [params, cluster, type]);
 
     return {
         type,

@@ -16,6 +16,7 @@ export const PROMETHEUS_DASHBOARD_TYPES = [
 
     // system
     'cluster-resources',
+    'data-nodes-common',
     'master-global',
     'master-local',
     'scheduler-internal',

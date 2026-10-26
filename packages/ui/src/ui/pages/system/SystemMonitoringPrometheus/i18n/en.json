@@ -4,5 +4,6 @@
   "value_scheduler-internal": "Scheduler internal",
   "value_cluster-resources": "Cluster resources",
   "value_master-global": "Master global",
-  "value_master-local": "Master local"
+  "value_master-local": "Master local",
+  "value_data-nodes-common": "Data nodes common"
 }
