@@ -1,22 +1,9 @@
 import React from 'react';
-import {combineReducers, configureStore} from '@reduxjs/toolkit';
-import {type MemoryHistory, createMemoryHistory} from 'history';
 import {Provider, useStore} from 'react-redux';
 import {Router, useLocation} from 'react-router';
 import type {Store} from 'redux';
-import {listenForHistoryChange} from 'redux-location-state/lib/listenForHistoryChange';
 
-import {Page} from '../../../constants/index';
-import getLocationMiddleware from '../../../state-url-mapping';
-import {rootApi} from '../../../store/api';
-import {
-    type PathParameters,
-    getParamSetup,
-    registerLocationParameters,
-} from '../../../store/location';
-import {flowParams, flowStateLocations} from '../../../store/reducers/flow/url-mapping';
-import {appReducers} from '../../../store/reducers/index.main';
-import {setWindowStoreAndHistory} from '../../../store/window-store';
+import {type FlowStoryRouting, startFlowStoryRouting} from '../../../store/flow-story-routing';
 
 export type FlowRoutedStoryHarnessProps = {
     children: React.ReactNode;
@@ -24,59 +11,34 @@ export type FlowRoutedStoryHarnessProps = {
     urlSync?: boolean;
 };
 
-function registerFlowStoryLocations() {
-    const registered = getParamSetup();
-    const locations: Array<[string, PathParameters]> = [
-        ...flowStateLocations,
-        [`/*/${Page.FLOWS}/*`, [flowParams]],
-    ];
-    locations.forEach(([path, params]) => {
-        if (!(path in registered)) {
-            registerLocationParameters(path, params);
-        }
-    });
-}
-
-function createUrlSyncedStore(history: MemoryHistory): Store {
-    registerFlowStoryLocations();
-    const rootReducer = combineReducers(appReducers);
-    const {locationMiddleware, reducersWithLocation} = getLocationMiddleware(history, rootReducer);
-    const store = configureStore({
-        reducer: reducersWithLocation as typeof rootReducer,
-        middleware: (getDefaultMiddleware) =>
-            getDefaultMiddleware({serializableCheck: false, immutableCheck: false})
-                .concat(locationMiddleware)
-                .concat(rootApi.middleware),
-    });
-    listenForHistoryChange(store, history);
-    return store;
-}
-
 export function FlowRoutedStoryHarness({
     children,
     initialEntries,
     urlSync = false,
 }: FlowRoutedStoryHarnessProps) {
     const outerStore = useStore() as Store;
-    const [{history, store}] = React.useState(() => {
-        const memoryHistory = createMemoryHistory({initialEntries});
-        return {
-            history: memoryHistory,
-            store: urlSync ? createUrlSyncedStore(memoryHistory) : outerStore,
-        };
-    });
-    const [ready, setReady] = React.useState(false);
+    const [mountInitialEntries] = React.useState(initialEntries);
+    const [routing, setRouting] = React.useState<FlowStoryRouting>();
 
     React.useEffect(() => {
-        setWindowStoreAndHistory(store, history);
-        setReady(true);
-    }, [history, store]);
+        const {routing: startedRouting, stop} = startFlowStoryRouting({
+            initialEntries: mountInitialEntries,
+            outerStore,
+            urlSync,
+        });
+        setRouting(startedRouting);
+        return stop;
+    }, [mountInitialEntries, outerStore, urlSync]);
 
-    if (!ready) {
+    if (!routing) {
         return null;
     }
-    const routed = <Router history={history}>{children}</Router>;
-    return store === outerStore ? routed : <Provider store={store}>{routed}</Provider>;
+    const routed = <Router history={routing.history}>{children}</Router>;
+    return routing.store === outerStore ? (
+        routed
+    ) : (
+        <Provider store={routing.store}>{routed}</Provider>
+    );
 }
 
 export function FlowRoutedLocationProbe() {
