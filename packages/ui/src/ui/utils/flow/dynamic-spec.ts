@@ -241,7 +241,6 @@ function patchSource(patch: Omit<FlowDynamicSpecPatch, 'path' | 'value'>): Dynam
         audit: {
             version: patch.patch_id,
             comment: patch.comment,
-            author: patch.author,
             timestamp: patch.timestamp,
         },
     };

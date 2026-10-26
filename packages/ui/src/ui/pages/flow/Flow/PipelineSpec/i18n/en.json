@@ -28,7 +28,6 @@
   "error_unsafe-version": "Cannot read the dynamic specification: the controller returned a version that cannot be represented exactly.",
   "field_patch": "Patch",
   "field_comment": "Comment",
-  "field_author": "Author",
   "action_edit": "Edit",
   "action_cancel-patch": "Cancel",
   "action_update-patch": "Update",
