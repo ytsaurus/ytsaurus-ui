@@ -30,6 +30,14 @@ describe('utils/utils.tsx', () => {
         it('Escape &', () => {
             expect(customEncodeURIComponent('&')).toEqual('%26');
         });
+        it('Escape delimiters next to supplementary characters', () => {
+            expect(customEncodeURIComponent('😀&x=#y+ z%')).toEqual(
+                '%F0%9F%98%80%26x%3D%23y%2B%20z%25',
+            );
+        });
+        it('Encode supplementary characters without delimiters as encodeURI does', () => {
+            expect(customEncodeURIComponent('["😀"]')).toEqual(encodeURI('["😀"]'));
+        });
     });
 
     describe('parseSortStateArray', () => {

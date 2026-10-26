@@ -2,7 +2,16 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import {ArrowUpRightFromSquare, CircleInfo, Database, TrashBin} from '@gravity-ui/icons';
-import {Button, Flex, HelpMark, Icon, Loader, Text, Tooltip} from '@gravity-ui/uikit';
+import {
+    Button,
+    Flex,
+    HelpMark,
+    Icon,
+    type IconData,
+    Loader,
+    Text,
+    Tooltip,
+} from '@gravity-ui/uikit';
 import {ClipboardButton} from '@ytsaurus/components';
 
 import ClickableAttributesButton from '../../../../../components/AttributesButton/ClickableAttributesButton';
@@ -141,14 +150,32 @@ function FilterCellValue({
     const update = handlers.getRowFilterUpdate(row, field);
     if (update) {
         return (
-            <Text ellipsis>
+            <Text ellipsis className={block('entity-label')}>
                 <ClickableText color="info" onClick={() => handlers.onFiltersChange(update)}>
                     {label}
                 </ClickableText>
             </Text>
         );
     }
-    return <Text ellipsis>{label}</Text>;
+    return (
+        <Text ellipsis className={block('entity-label')}>
+            {label}
+        </Text>
+    );
+}
+
+function RowNavigationLink({href, label, icon}: {href: string; label: string; icon: IconData}) {
+    return (
+        <RoutedLink
+            aria-label={label}
+            className={`${block('row-link')} ${block('hover-action')}`}
+            href={href}
+            title={label}
+            view="secondary"
+        >
+            <Icon data={icon} size={14} />
+        </RoutedLink>
+    );
 }
 
 function SortableColumnHeader({
@@ -246,6 +273,13 @@ function useResultColumns({
                             label={original.computationId ?? ''}
                             handlers={handlers}
                         />
+                        {original.computationId && (
+                            <RowNavigationLink
+                                href={handlers.resolveComputationLink(original.computationId)}
+                                label={i18n('link_open-computation-page')}
+                                icon={ArrowUpRightFromSquare}
+                            />
+                        )}
                     </TableCell>
                 ),
             },
@@ -287,16 +321,29 @@ function useResultColumns({
                 size: 170,
                 enableSorting: true,
                 accessorFn: (row) => row.stateName,
-                cell: ({row: {original}}) => (
-                    <TableCell>
-                        <FilterCellValue
-                            row={original}
-                            field="stateName"
-                            label={original.stateName}
-                            handlers={handlers}
-                        />
-                    </TableCell>
-                ),
+                cell: ({row: {original}}) => {
+                    const location = handlers.resolveStoragePath(original);
+                    return (
+                        <TableCell>
+                            <FilterCellValue
+                                row={original}
+                                field="stateName"
+                                label={original.stateName}
+                                handlers={handlers}
+                            />
+                            {location && (
+                                <RowNavigationLink
+                                    href={genNavigationUrl({
+                                        cluster: location.cluster ?? cluster,
+                                        path: location.path,
+                                    })}
+                                    label={i18n('link_open-backing-storage')}
+                                    icon={Database}
+                                />
+                            )}
+                        </TableCell>
+                    );
+                },
             },
             {
                 id: 'partition',
@@ -387,10 +434,9 @@ function useResultColumns({
         columns.push({
             id: 'actions',
             header: () => null,
-            size: 128,
+            size: 96,
             enableSorting: false,
             cell: ({row: {original}}) => {
-                const location = handlers.resolveStoragePath(original);
                 const expandable =
                     typeof original.value === 'object' &&
                     original.value !== null &&
@@ -398,31 +444,6 @@ function useResultColumns({
                 return (
                     <TableCell justifyContent="flex-end">
                         <Flex gap={1} alignItems="center" wrap="nowrap">
-                            {original.computationId && (
-                                <RoutedLink
-                                    aria-label={i18n('link_open-computation-page')}
-                                    className={`${block('row-link')} ${block('hover-action')}`}
-                                    href={handlers.resolveComputationLink(original.computationId)}
-                                    title={i18n('link_open-computation-page')}
-                                    view="secondary"
-                                >
-                                    <Icon data={ArrowUpRightFromSquare} size={14} />
-                                </RoutedLink>
-                            )}
-                            {location && (
-                                <RoutedLink
-                                    aria-label={i18n('link_open-backing-storage')}
-                                    className={`${block('row-link')} ${block('hover-action')}`}
-                                    href={genNavigationUrl({
-                                        cluster: location.cluster ?? cluster,
-                                        path: location.path,
-                                    })}
-                                    title={i18n('link_open-backing-storage')}
-                                    view="secondary"
-                                >
-                                    <Icon data={Database} size={14} />
-                                </RoutedLink>
-                            )}
                             {expandable && (
                                 <span className={block('hover-action')}>
                                     <ClickableAttributesButton

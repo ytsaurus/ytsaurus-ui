@@ -1,4 +1,7 @@
+import {createSelector} from 'reselect';
+
 import {type RootState} from '../../../store/reducers';
+import {type FlowStateViewerUrlState} from '../../reducers/flow/filters';
 
 export const selectFlowPipelinePath = (state: RootState) => state.flow.filters.pipelinePath;
 export const selectFlowComputationsNameFilter = (state: RootState) =>
@@ -18,3 +21,24 @@ export const selectFlowPartitionsStateFilter = (state: RootState) =>
     state.flow.filters.partitionsStateFilter;
 
 export const selectFlowZoomToNode = (state: RootState) => state.flow.filters.zoomToNode;
+
+const selectFlowFilters = (state: RootState) => state.flow.filters;
+
+export const selectFlowStateViewerUrlState = createSelector(
+    [selectFlowFilters],
+    ({
+        stateViewerComputation,
+        stateViewerPartition,
+        stateViewerTarget,
+        stateViewerName,
+        stateViewerKeyText,
+        stateViewerHeavyHitterSeed,
+    }): FlowStateViewerUrlState => ({
+        stateViewerComputation,
+        stateViewerPartition,
+        stateViewerTarget,
+        stateViewerName,
+        stateViewerKeyText,
+        stateViewerHeavyHitterSeed,
+    }),
+);

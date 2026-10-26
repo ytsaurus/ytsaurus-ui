@@ -1,6 +1,7 @@
-import {type LocationParameters} from '../../../store/location';
+import {type LocationParameters, type PathParameters} from '../../../store/location';
+import {Page} from '../../../constants/index';
 import {prometheusDashboardParams} from '../../../store/reducers/prometheusDashboard/url-mapping';
-import {initialState as filtersInitialState} from './filters';
+import {FlowTab, initialState as filtersInitialState} from './filters';
 
 export const flowParams: LocationParameters = {
     path: {
@@ -73,3 +74,66 @@ export const flowWorkerMonitorParams: typeof flowParams = {
     ...flowParams,
     ...prometheusDashboardParams,
 };
+
+const flowStateViewerFilters: LocationParameters = {
+    statePartition: {
+        stateKey: 'flow.filters.stateViewerPartition',
+        initialState: filtersInitialState.stateViewerPartition,
+    },
+    stateKind: {
+        stateKey: 'flow.filters.stateViewerTarget',
+        initialState: filtersInitialState.stateViewerTarget,
+    },
+    stateName: {
+        stateKey: 'flow.filters.stateViewerName',
+        initialState: filtersInitialState.stateViewerName,
+    },
+    stateKey: {
+        stateKey: 'flow.filters.stateViewerKeyText',
+        initialState: filtersInitialState.stateViewerKeyText,
+    },
+};
+
+export const flowPipelineStateParams: typeof flowParams = {
+    ...flowParams,
+    stateComputation: {
+        stateKey: 'flow.filters.stateViewerComputation',
+        initialState: filtersInitialState.stateViewerComputation,
+    },
+    ...flowStateViewerFilters,
+};
+
+export const flowComputationStateParams: typeof flowParams = {
+    ...flowComputationParams,
+    ...flowStateViewerFilters,
+    heavyHitterSeed: {
+        stateKey: 'flow.filters.stateViewerHeavyHitterSeed',
+        initialState: filtersInitialState.stateViewerHeavyHitterSeed,
+    },
+};
+
+export const FLOW_PIPELINE_STATE_PATH = `/*/${Page.FLOWS}/state`;
+export const FLOW_COMPUTATION_STATE_PATH = `/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*/state`;
+
+export const flowStateLocations: Array<[string, PathParameters]> = [
+    [FLOW_COMPUTATION_STATE_PATH, [flowComputationStateParams]],
+    [FLOW_PIPELINE_STATE_PATH, [flowPipelineStateParams]],
+];
+
+export type FlowStateRoute = 'pipeline' | 'computation';
+
+export function isFlowStatePathname(pathname: string): FlowStateRoute | undefined {
+    const segments = pathname.split('/');
+    if (segments.length === 4 && segments[2] === Page.FLOWS && segments[3] === 'state') {
+        return 'pipeline';
+    }
+    if (
+        segments.length === 6 &&
+        segments[2] === Page.FLOWS &&
+        segments[3] === FlowTab.COMPUTATIONS &&
+        segments[5] === 'state'
+    ) {
+        return 'computation';
+    }
+    return undefined;
+}

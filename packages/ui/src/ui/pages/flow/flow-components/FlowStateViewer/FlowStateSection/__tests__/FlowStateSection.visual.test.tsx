@@ -3,11 +3,13 @@ import type {
     FlowDeleteStatesBody,
     FlowReadStatesBody,
     FlowReadStatesResponse,
+    FlowStaticSpec,
 } from '../../../../../../../shared/yt-types';
 import {TYPED_INPUT_FORMAT, TYPED_OUTPUT_FORMAT} from '../../../../../../constants';
 import {expect, test} from '../../../../../../playwright-components/core';
 import {FlowStateSectionStories} from '../__stories__';
 import {createStateReadHandlers, stateResponse} from '../__stories__/mocks';
+import type {FlowStatePersistedFilters} from '../../types';
 
 test('FlowStateSection: debounces filters and ignores a late response', async ({
     mount,
@@ -221,4 +223,150 @@ test('FlowStateSection: deletion refreshes every active read for the pipeline', 
     await expect(archive.getByRole('table')).not.toContainText('/before');
     await page.mouse.move(0, 0);
     await expectScreenshot({component: checkout});
+});
+
+test('FlowStateSection: an invalid key draft blocks reads until it parses again', async ({
+    mount,
+    page,
+    router,
+}) => {
+    const requests: Array<FlowReadStatesBody> = [];
+    await router.use(
+        ...createStateReadHandlers(
+            async (body) => {
+                requests.push(body);
+                return stateResponse(body.name ?? '/initial');
+            },
+            {
+                spec: {
+                    computations: {
+                        checkout: {
+                            group_by_schema: [
+                                {name: 'id', type: 'uint64'},
+                                {name: 'label', type: 'string'},
+                            ],
+                        },
+                    },
+                },
+            },
+        ),
+    );
+    await mount(<FlowStateSectionStories.Default fixedComputationId="checkout" />);
+    const table = page.getByRole('table');
+    await expect(table.getByText('/initial', {exact: true})).toBeVisible();
+    const key = page.getByRole('textbox', {name: 'Key', exact: true});
+    const name = page.getByRole('textbox', {name: 'State', exact: true});
+    const clockTime = new Date('2026-01-01T00:00:00Z');
+    await page.clock.install({time: clockTime});
+    await page.clock.pauseAt(new Date(clockTime.getTime() + 1000));
+    await key.fill('[7u; "alice"]');
+    await page.clock.runFor(500);
+    await expect
+        .poll(() => requests.at(-1)?.key)
+        .toEqual({id: {$type: 'uint64', $value: '7'}, label: 'alice'});
+    await key.fill('[7u; "alice"');
+    await page.clock.runFor(500);
+    await expect(key).toHaveValue('[7u; "alice"');
+    await expect(page.getByText('Enter a flat YSON list in brackets')).toBeVisible();
+    await name.fill('/renamed');
+    await page.clock.runFor(500);
+    await key.fill('[8u; "bob"]');
+    await page.clock.runFor(500);
+    await expect
+        .poll(() => requests.at(-1)?.key)
+        .toEqual({
+            id: {$type: 'uint64', $value: '8'},
+            label: 'bob',
+        });
+    expect(requests).toEqual([
+        {computation_id: 'checkout', limit: 10, target: 'key_state'},
+        {
+            computation_id: 'checkout',
+            limit: 10,
+            target: 'key_state',
+            key: {id: {$type: 'uint64', $value: '7'}, label: 'alice'},
+        },
+        {
+            computation_id: 'checkout',
+            limit: 10,
+            target: 'key_state',
+            name: '/renamed',
+            key: {id: {$type: 'uint64', $value: '8'}, label: 'bob'},
+        },
+    ]);
+});
+
+test('FlowStateSection: a malformed url state blocks reads until a filter changes', async ({
+    mount,
+    page,
+    router,
+}) => {
+    const requests: Array<FlowReadStatesBody> = [];
+    await router.use(
+        ...createStateReadHandlers(async (body) => {
+            requests.push(body);
+            return stateResponse(body.name ?? '/initial');
+        }),
+    );
+    const clockTime = new Date('2026-01-01T00:00:00Z');
+    await page.clock.install({time: clockTime});
+    await page.clock.pauseAt(new Date(clockTime.getTime() + 1000));
+    await mount(
+        <FlowStateSectionStories.Default fixedComputationId="checkout" restoredUrlMalformed />,
+    );
+    const message = page.getByText(
+        'The link carries unsupported filters; change a filter or reset the filters to load states',
+    );
+    await expect(message).toBeVisible();
+    await page.clock.runFor(1000);
+    expect(requests).toHaveLength(0);
+    await page.getByRole('textbox', {name: 'State', exact: true}).fill('/renamed');
+    await page.clock.runFor(500);
+    await expect
+        .poll(() => requests)
+        .toEqual([{computation_id: 'checkout', limit: 10, target: 'key_state', name: '/renamed'}]);
+    await expect(message).toHaveCount(0);
+});
+
+test('FlowStateSection: defers mirroring a seeded key until a delayed spec can serialize it', async ({
+    mount,
+    page,
+    router,
+}) => {
+    const persisted: Array<FlowStatePersistedFilters> = [];
+    let releaseSpec!: (value: FlowStaticSpec) => void;
+    const delayedSpec = new Promise<FlowStaticSpec>((resolve) => {
+        releaseSpec = resolve;
+    });
+    await router.use(...createStateReadHandlers(undefined, {loadSpec: () => delayedSpec}));
+    await mount(
+        <FlowStateSectionStories.Default
+            fixedComputationId="checkout"
+            initialFilters={{target: 'key_state', keyValues: {id: '7', label: 'alice'}}}
+            onFiltersChange={(next) => {
+                persisted.push(next);
+            }}
+        />,
+    );
+    await page.getByRole('textbox', {name: 'State', exact: true}).fill('/renamed');
+    releaseSpec({
+        computations: {
+            checkout: {
+                group_by_schema: [
+                    {name: 'id', type: 'uint64'},
+                    {name: 'label', type: 'string'},
+                ],
+            },
+        },
+    });
+    await expect
+        .poll(() => persisted.at(-1))
+        .toEqual({
+            computationId: 'checkout',
+            partitionId: undefined,
+            target: 'key_state',
+            stateName: '/renamed',
+            keyText: '[7u;"alice"]',
+        });
+    expect(persisted.filter(({keyText}) => !keyText)).toEqual([]);
 });

@@ -1,24 +1,23 @@
 import React from 'react';
-import {useLocation} from 'react-router';
 
 import {type FlowComputationMonitorProps} from '../../../../UIFactory';
 
 import {FlowStateSection} from './FlowStateSection/FlowStateSection';
-import {parseHeavyHitterStateSeed} from './heavy-hitters';
+import {useFlowStateUrlFilters} from './use-flow-state-url-filters';
 
 export function FlowComputationStateTab({path, computation}: FlowComputationMonitorProps) {
-    const {search} = useLocation();
-    const initialFilters = React.useMemo(
-        () => parseHeavyHitterStateSeed(new URLSearchParams(search).get('heavyHitterSeed')),
-        [search],
-    );
+    const {restoredFilters, restoredUrlMalformed, heavyHitterSeed, restoreEpoch, onFiltersChange} =
+        useFlowStateUrlFilters({fixedComputationId: computation});
 
     return (
         <FlowStateSection
-            key={`${path}:${computation}:${search}`}
+            key={`${path}:${computation}:${restoreEpoch}`}
             pipeline_path={path}
             fixedComputationId={computation}
-            initialFilters={initialFilters}
+            initialFilters={heavyHitterSeed}
+            restoredFilters={restoredFilters}
+            restoredUrlMalformed={restoredUrlMalformed}
+            onFiltersChange={onFiltersChange}
         />
     );
 }

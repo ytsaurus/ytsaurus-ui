@@ -15,11 +15,18 @@ import {FlowStateFilters} from '../FlowStateFilters/FlowStateFilters';
 import {FlowStateResults, FlowStateResultsActions} from '../FlowStateResults/FlowStateResults';
 import {flattenReadStatesResponse} from '../state-requests';
 import {seedStateFilters} from '../state-filter-options';
+import {resolveKeySchema} from '../state-schema';
+import {toPersistedStateFilters} from '../state-url-filters';
 import {isDeleteCommitted, isWriteDeniedByPermission} from '../state-delete';
 import {useFlowStateCellHandlers} from './use-flow-state-cell-handlers';
 import {useFlowStateRead} from './use-flow-state-read';
 import i18n from './i18n';
-import type {FlowRowDeleteOutcome, FlowStateFiltersValue, FlowStateResultRow} from '../types';
+import type {
+    FlowRowDeleteOutcome,
+    FlowStateFiltersValue,
+    FlowStatePersistedFilters,
+    FlowStateResultRow,
+} from '../types';
 
 import './FlowStateSection.scss';
 
@@ -29,12 +36,18 @@ export type FlowStateSectionProps = {
     pipeline_path: string;
     fixedComputationId?: string;
     initialFilters?: Partial<FlowStateFiltersValue>;
+    restoredFilters?: Partial<FlowStateFiltersValue>;
+    restoredUrlMalformed?: boolean;
+    onFiltersChange?: (persisted: FlowStatePersistedFilters) => void;
 };
 
 export function FlowStateSection({
     pipeline_path,
     fixedComputationId,
     initialFilters,
+    restoredFilters,
+    restoredUrlMalformed,
+    onFiltersChange,
 }: FlowStateSectionProps) {
     const [rowSelection, setRowSelection] = React.useState<tanstack.RowSelectionState>({});
     const [deleteRows, setDeleteRows] = React.useState<Array<FlowStateResultRow>>();
@@ -45,6 +58,7 @@ export function FlowStateSection({
         filters,
         setFilters,
         staticSpec,
+        staticSpecResolved,
         hasScope,
         validationError,
         response,
@@ -53,7 +67,13 @@ export function FlowStateSection({
         readSucceeded,
         error,
         refetch,
-    } = useFlowStateRead({pipeline_path, fixedComputationId, initialFilters});
+    } = useFlowStateRead({
+        pipeline_path,
+        fixedComputationId,
+        initialFilters,
+        restoredFilters,
+        restoredUrlMalformed,
+    });
 
     const permissionResult = useCheckPermissionQuery({
         id: YTApiId.checkPermissions,
@@ -71,13 +91,42 @@ export function FlowStateSection({
         [filters.computationId, response],
     );
 
+    const [mirrorDeferred, setMirrorDeferred] = React.useState(false);
+    const mirrorFilters = React.useCallback(
+        (next: FlowStateFiltersValue) => {
+            onFiltersChange?.(
+                toPersistedStateFilters(
+                    next,
+                    resolveKeySchema(staticSpec, next.computationId, next.stateName, next.target)
+                        .keyColumns,
+                ),
+            );
+        },
+        [onFiltersChange, staticSpec],
+    );
+
     const handleFiltersChange = React.useCallback(
         (next: FlowStateFiltersValue) => {
             setFilters(next);
             setRowSelection({});
+            const keySerializationNeedsSchema =
+                next.keyText === undefined && Object.keys(next.keyValues).length > 0;
+            if (keySerializationNeedsSchema && !staticSpecResolved) {
+                setMirrorDeferred(true);
+                return;
+            }
+            setMirrorDeferred(false);
+            mirrorFilters(next);
         },
-        [setFilters],
+        [mirrorFilters, setFilters, staticSpecResolved],
     );
+
+    React.useEffect(() => {
+        if (mirrorDeferred && staticSpecResolved) {
+            setMirrorDeferred(false);
+            mirrorFilters(filters);
+        }
+    }, [filters, mirrorDeferred, mirrorFilters, staticSpecResolved]);
 
     const handleReset = () => {
         handleFiltersChange(seedStateFilters(fixedComputationId, initialFilters));

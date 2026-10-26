@@ -16,6 +16,15 @@ import type {
 } from '../types';
 import type {FlowStaticSpec} from '../../../../../../shared/yt-types';
 
+function syncKeyText(
+    filters: FlowStateFiltersValue,
+    update: FlowStateFiltersValue,
+): FlowStateFiltersValue {
+    return update.keyValues === filters.keyValues && update.rawKey === filters.rawKey
+        ? update
+        : {...update, keyText: undefined};
+}
+
 export function useFlowStateCellHandlers({
     pipeline_path,
     filters,
@@ -32,8 +41,8 @@ export function useFlowStateCellHandlers({
     const cluster = useSelector(selectCluster);
 
     const getRowFilterUpdate = React.useCallback(
-        (row: FlowStateResultRow, field: FlowStateRowFilterField) =>
-            buildRowFilterUpdate(filters, row, field, {
+        (row: FlowStateResultRow, field: FlowStateRowFilterField) => {
+            const update = buildRowFilterUpdate(filters, row, field, {
                 ...resolveRowKeySchema(staticSpec, row),
                 stateNames: getComputationStateNames(
                     staticSpec,
@@ -41,7 +50,9 @@ export function useFlowStateCellHandlers({
                     row.section === 'joined_external_key_state' ? 'all' : row.section,
                 ),
                 fixedComputationId,
-            }),
+            });
+            return update && syncKeyText(filters, update);
+        },
         [filters, staticSpec, fixedComputationId],
     );
 

@@ -15,6 +15,7 @@ import {
     reconcileStateTarget,
 } from '../state-filter-options';
 import {getComputationStateNames, resolveKeySchema} from '../state-schema';
+import {resolveEffectiveKey} from '../state-key';
 import i18n from './i18n';
 import i18nApiValues from '../i18n-api-values';
 import type {FlowStateFiltersValue} from '../types';
@@ -121,6 +122,15 @@ export function FlowStateFilters({
             : stateNames;
     const stateNameDisabled =
         !hasScope || (stateNameInputMode === 'declared-only' && !stateNameItems.length);
+    const effectiveKey = resolveEffectiveKey(value, keyColumns);
+    const keyBuilderVisible = Boolean(
+        value.computationId &&
+        !value.partitionId &&
+        (keyColumns.length > 0 ||
+            rawKeyAvailable ||
+            effectiveKey.rawKey !== undefined ||
+            value.keyText),
+    );
 
     const handleComputation = (computationId?: string) => {
         onChange({
@@ -129,6 +139,7 @@ export function FlowStateFilters({
             partitionId: undefined,
             keyValues: {},
             rawKey: undefined,
+            keyText: undefined,
             stateName: undefined,
             target: reconcileStateTarget(staticSpec, computationId, value.target),
         });
@@ -174,6 +185,7 @@ export function FlowStateFilters({
                             target,
                             keyValues: target === 'partition_state' ? {} : value.keyValues,
                             rawKey: target === 'partition_state' ? undefined : value.rawKey,
+                            keyText: target === 'partition_state' ? undefined : value.keyText,
                             stateName: reconcileStateName(
                                 value.stateName,
                                 target,
@@ -232,33 +244,32 @@ export function FlowStateFilters({
                 )}
             </Flex>
             <Flex className={block('row', {secondary: true})} gap={2} wrap alignItems="flex-end">
-                {value.computationId &&
-                    !value.partitionId &&
-                    (keyColumns.length > 0 || rawKeyAvailable || value.rawKey !== undefined) && (
-                        <FlowStateKeyBuilder
-                            columns={keyColumns}
-                            values={value.keyValues}
-                            rawKey={value.rawKey}
-                            onChange={(keyValues) =>
-                                onChange({
-                                    ...value,
-                                    keyValues,
-                                    rawKey: undefined,
-                                    target:
-                                        value.target === 'partition_state' ? 'all' : value.target,
-                                })
-                            }
-                            onRawKeyChange={(rawKey) =>
-                                onChange({
-                                    ...value,
-                                    keyValues: {},
-                                    rawKey,
-                                    target:
-                                        value.target === 'partition_state' ? 'all' : value.target,
-                                })
-                            }
-                        />
-                    )}
+                {keyBuilderVisible && (
+                    <FlowStateKeyBuilder
+                        columns={keyColumns}
+                        values={effectiveKey.keyValues ?? {}}
+                        rawKey={effectiveKey.rawKey}
+                        keyText={value.keyText}
+                        onChange={(keyValues) =>
+                            onChange({
+                                ...value,
+                                keyValues,
+                                rawKey: undefined,
+                                keyText: undefined,
+                                target: value.target === 'partition_state' ? 'all' : value.target,
+                            })
+                        }
+                        onKeyTextChange={(keyText) =>
+                            onChange({
+                                ...value,
+                                keyValues: {},
+                                rawKey: undefined,
+                                keyText,
+                                target: value.target === 'partition_state' ? 'all' : value.target,
+                            })
+                        }
+                    />
+                )}
                 <Button view="outlined" onClick={onReset}>
                     {i18n('action_reset-filters')}
                 </Button>

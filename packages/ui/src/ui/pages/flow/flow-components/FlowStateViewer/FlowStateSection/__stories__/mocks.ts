@@ -19,19 +19,28 @@ export function createStateReadHandlers(
     ) => Promise<FlowReadStatesResponse> = async (body) => stateResponse(body.name ?? '/initial'),
     options: {
         spec?: FlowStaticSpec;
+        loadSpec?: () => Promise<FlowStaticSpec>;
+        partitions?: Array<string>;
         onDelete?: (body: FlowDeleteStatesBody, parameters: Record<string, unknown>) => void;
     } = {},
 ) {
     return [
-        http.all('*/api/v4/get_pipeline_spec', () =>
-            Response.json({
-                spec: options.spec ?? {
-                    computations: {
-                        checkout: {group_by_schema: [{name: 'account', type: 'string'}]},
+        http.all('*/api/v4/get_pipeline_spec', async () => {
+            if (!options.loadSpec) {
+                return Response.json({
+                    spec: options.spec ?? {
+                        computations: {
+                            checkout: {group_by_schema: [{name: 'account', type: 'string'}]},
+                        },
                     },
-                },
-            }),
-        ),
+                });
+            }
+            try {
+                return Response.json({spec: await options.loadSpec()});
+            } catch (error) {
+                return Response.json({code: 1, message: String(error)}, {status: 500});
+            }
+        }),
         http.all('*/api/v4/get_pipeline_state', () => Response.json('Stopped')),
         http.all('*/api/v3/check_permission', () => Response.json({action: 'allow'})),
         http.put('*/api/v4/flow_execute', async ({request}) => {
@@ -43,7 +52,9 @@ export function createStateReadHandlers(
                 return Response.json({computations: {checkout: {}}});
             }
             if (parameters.flow_command === 'describe-computation') {
-                return Response.json({partitions: []});
+                return Response.json({
+                    partitions: (options.partitions ?? []).map((partition_id) => ({partition_id})),
+                });
             }
             if (parameters.flow_command === 'read-states') {
                 return Response.json(

@@ -1,4 +1,4 @@
-import {castKeyValue, formatRawKeyDraft, parseRawKeyDraft} from './state-key';
+import {castKeyValue, formatRawKeyDraft, parseRawKeyDraft, resolveEffectiveKey} from './state-key';
 import type {FlowKeyColumn} from '../../../../../shared/yt-types';
 
 describe('raw key drafts', () => {
@@ -219,5 +219,48 @@ describe('formatRawKeyDraft', () => {
         };
         expect(castKeyValue(column, 'value')).toEqual({error});
         expect(parseRawKeyDraft('["value"]', [column])).toEqual({error});
+    });
+});
+
+describe('resolveEffectiveKey', () => {
+    const columns: Array<FlowKeyColumn> = [
+        {name: 'id', type: 'uint64'},
+        {name: 'label', type: 'string'},
+    ];
+    it('passes committed values through when no text draft exists', () => {
+        expect(resolveEffectiveKey({keyValues: {id: '1', label: 'a'}}, columns)).toEqual({
+            keyValues: {id: '1', label: 'a'},
+            rawKey: undefined,
+        });
+        expect(resolveEffectiveKey({keyValues: {}, rawKey: ['x']}, [])).toEqual({
+            keyValues: {},
+            rawKey: ['x'],
+        });
+    });
+    it('treats blank text as no key', () => {
+        expect(
+            resolveEffectiveKey({keyValues: {id: '1', label: 'a'}, keyText: '  '}, columns),
+        ).toEqual({keyValues: {}, rawKey: undefined});
+    });
+    it('derives schema-backed values from valid text', () => {
+        expect(
+            resolveEffectiveKey({keyValues: {}, keyText: '[9007199254740993u; "Веник"]'}, columns),
+        ).toEqual({keyValues: {id: '9007199254740993', label: 'Веник'}, rawKey: undefined});
+    });
+    it('reports a syntax error for partial schema-backed text', () => {
+        expect(resolveEffectiveKey({keyValues: {}, keyText: '[9007199254740993'}, columns)).toEqual(
+            {error: {errorKey: 'validation_invalid-key-syntax'}},
+        );
+    });
+    it('derives a runtime key from valid JSON text without a schema', () => {
+        expect(resolveEffectiveKey({keyValues: {}, keyText: '["alice", 7]'}, [])).toEqual({
+            keyValues: {},
+            rawKey: ['alice', 7],
+        });
+    });
+    it('reports a syntax error for invalid JSON text without a schema', () => {
+        expect(resolveEffectiveKey({keyValues: {}, keyText: '["alice"'}, [])).toEqual({
+            error: {errorKey: 'validation_invalid-key-syntax'},
+        });
     });
 });

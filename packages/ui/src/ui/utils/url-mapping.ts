@@ -21,8 +21,7 @@ const TO_ENCODE_WITH_DASH = {
 export function customEncodeURIComponent(value: string, toEncode = TO_ENCODE) {
     let res = '';
     try {
-        for (let i = 0; i < value.length; ++i) {
-            const c = value[i];
+        for (const c of value) {
             const encoded = toEncode[c];
             if (encoded) {
                 res += encoded;
@@ -35,6 +34,30 @@ export function customEncodeURIComponent(value: string, toEncode = TO_ENCODE) {
         return encodeURI(value);
     }
     return res;
+}
+
+export const MALFORMED_URL_PARAM_PREFIX = '\u0000';
+
+export function safeDecodeURIComponent(value: string): string {
+    try {
+        return decodeURIComponent(value);
+    } catch {
+        return `${MALFORMED_URL_PARAM_PREFIX}${value}`;
+    }
+}
+
+export function isMalformedUrlParam(value: string): boolean {
+    return value.startsWith(MALFORMED_URL_PARAM_PREFIX);
+}
+
+const LEGACY_PLUS_AS_SPACE_PARAMS: ReadonlyArray<string> = ['heavyHitterSeed'];
+
+export function splitQueryParam(queryParam: string): Array<string> {
+    const split = queryParam.split('=');
+    if (LEGACY_PLUS_AS_SPACE_PARAMS.includes(split[0]) && split[1] !== undefined) {
+        split[1] = split[1].replace(/\+/g, '%20');
+    }
+    return split;
 }
 
 export function parseSortStateArray(s: string) {

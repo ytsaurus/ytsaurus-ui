@@ -17,31 +17,29 @@ const block = cn('yt-flow-state-key-builder');
 export type FlowStateKeyBuilderProps = {
     columns: Array<FlowKeyColumn>;
     values: Record<string, string>;
-    onChange: (values: Record<string, string>) => void;
     rawKey?: unknown;
-    onRawKeyChange?: (value: unknown) => void;
+    keyText?: string;
+    onChange: (values: Record<string, string>) => void;
+    onKeyTextChange: (keyText: string) => void;
 };
 
 export function FlowStateKeyBuilder({
     columns,
     values,
-    onChange,
     rawKey,
-    onRawKeyChange,
+    keyText,
+    onChange,
+    onKeyTextChange,
 }: FlowStateKeyBuilderProps) {
     const schemaBacked = columns.length > 0;
     const formattedValues = schemaBacked
         ? formatRawKeyDraft(columns, values)
         : serializeRawStateValue(rawKey);
-    const [rawDraft, setRawDraft] = React.useState(formattedValues);
+    const rawDraft = keyText ?? formattedValues;
     const [dialogVisible, setDialogVisible] = React.useState(false);
     const parsedDraft = React.useMemo(() => {
         return schemaBacked ? parseRawKeyDraft(rawDraft, columns) : parseRuntimeKeyDraft(rawDraft);
     }, [columns, rawDraft, schemaBacked]);
-
-    React.useEffect(() => {
-        setRawDraft(formattedValues);
-    }, [formattedValues]);
 
     const validationError = parsedDraft.error
         ? i18n(parsedDraft.error.errorKey, parsedDraft.error.params)
@@ -76,20 +74,7 @@ export function FlowStateKeyBuilder({
                     }
                     validationState={validationError ? 'invalid' : undefined}
                     errorMessage={validationError}
-                    onUpdate={(next) => {
-                        setRawDraft(next);
-                        if (schemaBacked) {
-                            const parsed = parseRawKeyDraft(next, columns);
-                            if (parsed.values) {
-                                onChange(parsed.values);
-                            }
-                        } else {
-                            const parsed = parseRuntimeKeyDraft(next);
-                            if (!parsed.error) {
-                                onRawKeyChange?.(parsed.value);
-                            }
-                        }
-                    }}
+                    onUpdate={onKeyTextChange}
                 />
             </div>
             {schemaBacked && (
