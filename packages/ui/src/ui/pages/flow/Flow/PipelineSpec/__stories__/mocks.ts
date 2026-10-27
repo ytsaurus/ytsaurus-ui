@@ -96,8 +96,6 @@ export const dynamicSpecSnapshot: FlowDynamicSpecSnapshot = {
             labels: {operation: 'set', version, value: ['release', 'pinned']},
             owned_counter: {operation: 'set', version: newer, value: ownedCounter},
             empty: {operation: 'map', version, value: {}},
-            mask: {operation: 'map', version},
-            missing: {operation: 'remove', version},
         },
     },
     audit: [
@@ -218,7 +216,6 @@ export const flatDynamicSpecSnapshot: FlowDynamicSpecSnapshot = {
         {
             patch_id: version,
             path: '/group',
-            operation: 'set',
             value: {keep: 2, added: 4},
             comment: 'Replace group',
             timestamp: '2026-10-05T08:00:00Z',
@@ -226,7 +223,6 @@ export const flatDynamicSpecSnapshot: FlowDynamicSpecSnapshot = {
         {
             patch_id: mapVersion,
             path: '/group/keep',
-            operation: 'set',
             value: 3,
             comment: 'Adjust keep',
             timestamp: '2026-10-05T09:00:00Z',
@@ -234,7 +230,6 @@ export const flatDynamicSpecSnapshot: FlowDynamicSpecSnapshot = {
         {
             patch_id: newer,
             path: '/a\\/b/c\\\\d',
-            operation: 'set',
             value: 5,
             comment: 'Escaped path',
             timestamp: '2026-10-05T10:00:00Z',
@@ -243,19 +238,16 @@ export const flatDynamicSpecSnapshot: FlowDynamicSpecSnapshot = {
     blame: {
         '/group': {
             patch_id: version,
-            operation: 'set',
             comment: 'Replace group',
             timestamp: '2026-10-05T08:00:00Z',
         },
         '/group/keep': {
             patch_id: mapVersion,
-            operation: 'set',
             comment: 'Adjust keep',
             timestamp: '2026-10-05T09:00:00Z',
         },
         '/a\\/b/c\\\\d': {
             patch_id: newer,
-            operation: 'set',
             comment: 'Escaped path',
             timestamp: '2026-10-05T10:00:00Z',
         },

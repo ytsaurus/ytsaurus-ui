@@ -548,7 +548,7 @@ export type TableParams = {
 export type Int64 = string | number | {$type: 'int64'; $value: string};
 
 export type FlowDynamicSpecOverride = {
-    operation: 'inherit' | 'set' | 'remove' | 'map';
+    operation: 'inherit' | 'set' | 'map';
     version?: Int64 | null;
     patch_id?: Int64;
     comment?: string | null;
@@ -567,8 +567,7 @@ export type FlowDynamicSpecAudit = {
 export type FlowDynamicSpecPatch = {
     patch_id: Int64;
     path: string;
-    operation: 'set' | 'remove';
-    value?: unknown;
+    value: unknown;
     comment?: string | null;
     timestamp: string;
 };

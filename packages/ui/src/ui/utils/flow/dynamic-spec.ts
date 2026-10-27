@@ -330,11 +330,10 @@ function overrideLiteral(
         return {present: false, hasInheritedFields: true};
     }
     if (
-        node.operation === 'remove' ||
-        (owner !== undefined &&
-            node.version !== undefined &&
-            node.version !== null &&
-            dynamicSpecVersion(node.version) !== owner)
+        owner !== undefined &&
+        node.version !== undefined &&
+        node.version !== null &&
+        dynamicSpecVersion(node.version) !== owner
     ) {
         return {present: false, hasInheritedFields: false};
     }
@@ -394,7 +393,7 @@ export function dynamicSpecOverrideRows(state: FlowDynamicSpecSnapshot) {
     if (state.patches) {
         return state.patches.map((patch): DynamicSpecOverrideRow => ({
             path: dynamicSpecPathParts(patch.path),
-            operation: patch.operation,
+            operation: 'set',
             value: patch.value,
             source: patchSource(patch),
         }));
