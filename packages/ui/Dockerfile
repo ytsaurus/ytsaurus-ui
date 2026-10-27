@@ -76,6 +76,7 @@ COPY . .
 ARG ANALYZE_BUNDLE
 RUN ANALYZE_BUNDLE="$ANALYZE_BUNDLE" npm run build && npm run deps:truncate
 
+# Export only bundle stats for Statoscope CI via --target statoscope-output.
 FROM scratch AS statoscope-output
 
 COPY --from=builder /opt/app/dist/public/build/stats.json /stats.json
