@@ -437,7 +437,6 @@ export function DynamicSpec({
                                     <thead>
                                         <tr>
                                             <th>{i18n('field_path')}</th>
-                                            <th>{i18n('field_operation')}</th>
                                             <th>{i18n('field_value')}</th>
                                             <th>{i18n('field_comment')}</th>
                                             <th>{i18n('field_time')}</th>
@@ -471,9 +470,6 @@ export function DynamicSpec({
                                                         {decodeDynamicSpecText(
                                                             dynamicSpecPath(row.path),
                                                         ) || '/'}
-                                                    </td>
-                                                    <td>
-                                                        {i18n(`value_operation-${row.operation}`)}
                                                     </td>
                                                     <td>
                                                         <div className={block('value')}>

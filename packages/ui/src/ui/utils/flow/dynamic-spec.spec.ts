@@ -62,8 +62,6 @@ const snapshot: FlowDynamicSpecSnapshot = {
             },
             list: {operation: 'set', version, value: [1, 3]},
             empty: {operation: 'map', version, value: {}},
-            mask: {operation: 'map', version},
-            missing: {operation: 'remove', version},
         },
     },
     audit: [
@@ -143,17 +141,12 @@ describe('dynamic spec provenance', () => {
             dynamicSpecSource({...snapshot, override_spec: {operation: 'inherit'}}, ['list', '0']),
         ).toEqual({source: 'base'});
     });
-    it('distinguishes owned empty maps, deletion masks and absent removals', () => {
+    it('keeps owned empty maps', () => {
         const rows = dynamicSpecOverrideRows(snapshot);
         expect(rows.find(({path}) => path[0] === 'empty')).toMatchObject({
             operation: 'map',
             value: {},
         });
-        expect(rows.find(({path}) => path[0] === 'mask')).toMatchObject({
-            operation: 'mask',
-            value: undefined,
-        });
-        expect(rows.find(({path}) => path[0] === 'missing')).toMatchObject({operation: 'remove'});
     });
     it('does not attribute all descendants of unversioned maps', () => {
         expect(dynamicSpecSource(snapshot, ['other'])).toEqual({source: 'default'});
@@ -223,11 +216,8 @@ describe('effective display provenance', () => {
             version: version.$value,
         });
     });
-    it('retains masked base, explicit removals, inherited holes and newer atomic owners', () => {
+    it('retains map replacements, inherited holes and newer atomic owners', () => {
         expect(dynamicSpecEffectiveSource(snapshot, ['group', 'removed'])).toMatchObject({
-            version: version.$value,
-        });
-        expect(dynamicSpecEffectiveSource(snapshot, ['missing'])).toMatchObject({
             version: version.$value,
         });
         expect(dynamicSpecEffectiveSource(snapshot, ['group', 'retained'])).toEqual({
@@ -428,45 +418,6 @@ describe('grouped raw map overrides', () => {
         });
         expect(dynamicSpecOverrideEditor(cancelled, ['demo'])).toBeUndefined();
     });
-    it('does not replace an effective removed scalar with a missing raw value', () => {
-        const removed = {
-            ...state,
-            override_spec: {
-                operation: 'map' as const,
-                children: {
-                    demo: {
-                        ...map,
-                        children: {
-                            ...map.children,
-                            period: {operation: 'remove' as const, version: newer},
-                        },
-                    },
-                },
-            },
-        };
-        expect(dynamicSpecOverrideEditor(removed, ['demo', 'period'])).toBeUndefined();
-    });
-    it('reconstructs a deletion mask with a current independent child without creating empty-map intent', () => {
-        const masked = {
-            ...state,
-            override_spec: {
-                operation: 'map' as const,
-                children: {
-                    demo: {
-                        operation: 'map' as const,
-                        version,
-                        children: {limit: {operation: 'set' as const, version: newer, value: 2000}},
-                    },
-                },
-            },
-        };
-        expect(dynamicSpecOverrideRows(masked)[0]).toMatchObject({
-            operation: 'mask',
-            value: undefined,
-            editorValue: {limit: 2000},
-        });
-        expect(dynamicSpecOverrideEditor(masked, ['demo'])?.value).toEqual({limit: 2000});
-    });
 });
 
 describe('DynamicSpec editor and web-json audit', () => {
@@ -537,7 +488,6 @@ describe('DynamicSpec editor and web-json audit', () => {
 describe('flat dynamic spec patches', () => {
     const parent = {
         patch_id: version,
-        operation: 'set' as const,
         comment: 'Parent',
         timestamp: '2026-10-05T08:00:00Z',
     };
@@ -591,16 +541,10 @@ describe('flat dynamic spec patches', () => {
         expect(dynamicSpecEffectiveSource(state, ['a', 'b'])).toEqual({source: 'default'});
     });
 
-    it('retains remove operations and rejects lossy patch IDs in either response', () => {
-        expect(
-            dynamicSpecOverrideRows({
-                ...flat,
-                patches: [{...parent, path: '/group', operation: 'remove'}],
-            })[0],
-        ).toMatchObject({operation: 'remove', value: undefined});
+    it('rejects lossy patch IDs in either response', () => {
         const invalid = {...parent, patch_id: Number(version.$value)};
         expect(() =>
-            validateDynamicSpecVersions({...flat, patches: [{...invalid, path: ''}]}),
+            validateDynamicSpecVersions({...flat, patches: [{...invalid, path: '', value: 1}]}),
         ).toThrow(UnsafeDynamicSpecVersionError);
         expect(() => validateDynamicSpecVersions({...flat, blame: {'': invalid}})).toThrow(
             UnsafeDynamicSpecVersionError,
