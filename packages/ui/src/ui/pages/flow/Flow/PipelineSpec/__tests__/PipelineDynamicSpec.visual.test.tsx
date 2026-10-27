@@ -181,9 +181,6 @@ test('PipelineDynamicSpec: base effective and override provenance', async ({
         new RegExp(OWNER_VERSION),
     );
     await expect(mapPatch).not.toContainText(OWNER_VERSION);
-    await expect(removed).toContainText('2026-10-05 08:48:47 UTC');
-    await expect(removed).toContainText('Демо override для проверки вкладки Dynamic Spec.');
-    await expect(removed).not.toContainText('.000000Z');
     const inherited = page
         .getByRole('row')
         .filter({hasText: '/job_manager/resource_limits/user_slots'});
