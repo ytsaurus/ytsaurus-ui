@@ -7,6 +7,7 @@ import {
     type FormApi,
     YTDFDialog,
     makeErrorFields,
+    makeWarningFields,
 } from '../../../containers/Dialog';
 import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import PermissionsControl from '../RequestPermissions/PermissionsControl/PermissionsControl';
@@ -20,17 +21,21 @@ import hammer from '../../../common/hammer';
 import i18n from './i18n';
 import i18nPermissionValues from '../i18n-permission-values';
 import HelpLink from '../../../components/HelpLink/HelpLink';
-import {docsUrl} from '../../../config';
-import {type PermissionToRequest} from '../../../store/actions/acl';
+import {docsUrl, isIdmAclAvailable} from '../../../config';
+import {type RequestPermissionsParams} from '../../../store/actions/acl';
 import {type YTPermissionTypeUI} from '../../../utils/acl/acl-api';
 import {
     type AclColumnGroup,
     type AclRowGroup,
     type IdmKindType,
     type InheritanceModeType,
+    type UpdateResponse,
 } from '../../../utils/acl/acl-types';
 import {makeLink} from '../../../utils/utils';
 import {useAvailablePermissions} from '../hooks/use-available-permissions';
+
+import {validateFormValues} from './validate-permissions';
+import {usePermissionsValidation} from './use-permissions-validation';
 
 const block = cn('acl-request-permissions');
 
@@ -59,10 +64,7 @@ export interface Props extends WithVisibleProps {
     normalizedPoolTree?: string;
     path: string;
     idmKind: IdmKindType;
-    requestPermissions: (params: {
-        values: PermissionToRequest;
-        idmKind: IdmKindType;
-    }) => Promise<void>;
+    requestPermissions: (params: RequestPermissionsParams) => Promise<UpdateResponse | undefined>;
     cancelRequestPermissions: (params: {idmKind: IdmKindType}) => unknown;
     error?: YTError;
     onSuccess?: () => void;
@@ -71,7 +73,7 @@ export interface Props extends WithVisibleProps {
     aclMode?: AclMode;
 }
 
-type FormValues = {
+export type FormValues = {
     path: string;
     cluster: string;
     permissions: {[x: string]: Array<YTPermissionTypeUI>} | null;
@@ -113,20 +115,15 @@ function RequestPermissions(props: Props) {
         /*denyColumns,*/
     } = props;
 
-    const onClose = useCallback(() => {
-        handleClose();
-        cancelRequestPermissions({idmKind});
-    }, [handleClose, cancelRequestPermissions, idmKind]);
-
     const {
         requestPermissionsFields,
         requestPermissionsFlags = {},
         buttonsTitle,
     } = UIFactory.getAclApi();
 
-    const onAdd = useCallback(
-        (form: FormApi<FormValues, Partial<FormValues>>) => {
-            const values = {...form.getState().values};
+    const prepareValues = useCallback(
+        (formValues: FormValues) => {
+            const values = {...formValues};
             const permissionFlags: Record<string, boolean> = {};
             Object.keys(requestPermissionsFlags).forEach((k) => {
                 const key = `${FLAG_NAME_PREFIX}${k}` as keyof typeof values;
@@ -134,13 +131,33 @@ function RequestPermissions(props: Props) {
 
                 delete values[key];
             });
-            return requestPermissions({
-                values: {...values, permissionFlags},
+            return {...values, permissionFlags};
+        },
+        [requestPermissionsFlags],
+    );
+
+    const onAdd = useCallback(
+        async (form: FormApi<FormValues, Partial<FormValues>>) => {
+            await requestPermissions({
+                values: prepareValues(form.getState().values),
                 idmKind,
             });
         },
-        [requestPermissions, idmKind],
+        [requestPermissions, idmKind, prepareValues],
     );
+
+    const {validate, loading, warnings, validationError, cancel} = usePermissionsValidation({
+        idmKind,
+        prepareValues,
+        requestPermissions,
+        visible,
+    });
+
+    const onClose = useCallback(() => {
+        cancel();
+        handleClose();
+        cancelRequestPermissions({idmKind});
+    }, [cancel, handleClose, cancelRequestPermissions, idmKind]);
 
     const currentCaption = i18n(`field_current_${idmKind}`);
 
@@ -355,28 +372,21 @@ function RequestPermissions(props: Props) {
                     headerProps={{
                         title,
                     }}
+                    footerProps={{
+                        propsButtonApply: loading ? {loading: true, disabled: true} : undefined,
+                    }}
                     initialValues={{
                         path,
                         permissions,
                         cluster,
                         inheritance_mode: INHERITANCE_MODE_TYPES.OBJECT_AND_DESCENDANTS,
                     }}
-                    validate={(values) => {
-                        const subjects = values.subjects;
-                        const validationError: Record<
-                            keyof Pick<FormValues, 'subjects'>,
-                            string | undefined
-                        > = {
-                            subjects: undefined,
-                        };
-
-                        if (!subjects.length) {
-                            validationError.subjects = i18n('alert_subjects-required');
-                        }
-
-                        return validationError;
-                    }}
-                    fields={[...dialogFields, ...makeErrorFields([error])]}
+                    validate={isIdmAclAvailable() ? validate : validateFormValues}
+                    fields={[
+                        ...dialogFields,
+                        ...makeErrorFields([error, validationError]),
+                        ...makeWarningFields(warnings ?? []),
+                    ]}
                 />
             </div>
         </ErrorBoundary>
