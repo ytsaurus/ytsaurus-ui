@@ -20,6 +20,8 @@ import i18n from './i18n';
 
 export type CreateConsumerFormValues = {
     consumerPath: string;
+    multiConsumer?: boolean;
+    consumerName?: string;
 } & (
     | {
           register?: false | undefined;
@@ -55,6 +57,12 @@ export function CreateConsumerDialog() {
                 },
                 {
                     type: 'tumbler' as const,
+                    name: 'multiConsumer',
+                    caption: i18n('field_multi-consumer'),
+                    initialValue: false,
+                },
+                {
+                    type: 'tumbler' as const,
                     name: 'register',
                     caption: i18n('action_register-consumer'),
                 },
@@ -75,6 +83,18 @@ export function CreateConsumerDialog() {
                     visibilityCondition: {
                         when: 'register',
                         isActive: (v) => Boolean(v),
+                    },
+                },
+                {
+                    type: 'text' as const,
+                    name: 'consumerName',
+                    caption: i18n('field_consumer-name'),
+                    extras: {
+                        placeholder: i18n('context_consumer-name-placeholder'),
+                    },
+                    visibilityCondition: {
+                        when: ['multiConsumer', 'register'],
+                        isActive: (multiConsumer, register) => Boolean(multiConsumer && register),
                     },
                 },
                 ...makeErrorFields([error as YTError]),

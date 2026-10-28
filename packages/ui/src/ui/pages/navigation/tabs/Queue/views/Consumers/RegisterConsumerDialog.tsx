@@ -21,6 +21,7 @@ import {type YTError} from '../../../../../../../@types/types';
 
 type FormValues = {
     consumerPath: string;
+    consumerName?: string;
     consumerCluster: string[];
     vital: boolean;
 };
@@ -63,6 +64,14 @@ export function RegisterConsumerDialog() {
                     required: true,
                     extras: {
                         placeholder: i18n('context_consumer-path-placeholder'),
+                    },
+                },
+                {
+                    type: 'text' as const,
+                    name: 'consumerName',
+                    caption: i18n('field_consumer-name'),
+                    extras: {
+                        placeholder: i18n('context_consumer-name-placeholder'),
                     },
                 },
                 {

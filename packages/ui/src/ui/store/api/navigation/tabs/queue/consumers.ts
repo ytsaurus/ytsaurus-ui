@@ -11,6 +11,8 @@ import {type BatchResultsItem} from '../../../../../../shared/yt-types';
 
 type CreateConsumersMutationArgs = {
     consumerPath: string;
+    multiConsumer?: boolean;
+    consumerName?: string;
 } & (
     | {
           register?: false | undefined;
@@ -24,14 +26,14 @@ type CreateConsumersMutationArgs = {
 
 export async function createConsumer(args: CreateConsumersMutationArgs, api: BaseQueryApi) {
     try {
-        const {vital, register, consumerPath} = args;
+        const {vital, register, consumerPath, multiConsumer, consumerName} = args;
 
         const state = api.getState() as RootState;
         const queuePath = selectPath(state);
 
         await ytApiV3.create({
             parameters: {
-                type: 'queue_consumer',
+                type: multiConsumer ? 'queue_multi_consumer' : 'queue_consumer',
                 path: consumerPath,
             },
         });
@@ -49,7 +51,15 @@ export async function createConsumer(args: CreateConsumersMutationArgs, api: Bas
                                 parameters: {
                                     vital,
                                     queue_path: queuePath,
-                                    consumer_path: consumerPath,
+                                    consumer_path:
+                                        multiConsumer && consumerName
+                                            ? {
+                                                  $value: consumerPath,
+                                                  $attributes: {
+                                                      queue_consumer_name: consumerName,
+                                                  },
+                                              }
+                                            : consumerPath,
                                 },
                             },
                         ],
@@ -77,13 +87,14 @@ export async function createConsumer(args: CreateConsumersMutationArgs, api: Bas
 
 type RegisterConsumersMutationArgs = {
     consumerPath: string;
+    consumerName?: string;
     consumerCluster: string;
     vital: boolean;
 };
 
 export async function registerConsumer(args: RegisterConsumersMutationArgs, api: BaseQueryApi) {
     try {
-        const {vital, consumerPath, consumerCluster} = args;
+        const {vital, consumerPath, consumerCluster, consumerName} = args;
 
         const state = api.getState() as RootState;
         const queuePath = selectPath(state);
@@ -110,6 +121,9 @@ export async function registerConsumer(args: RegisterConsumersMutationArgs, api:
                                     $value: consumerPath,
                                     $attributes: {
                                         cluster: consumerCluster,
+                                        ...(consumerName
+                                            ? {queue_consumer_name: consumerName}
+                                            : {}),
                                     },
                                 },
                             },
