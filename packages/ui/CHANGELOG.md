@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.31.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.30.1...ui-v3.31.0) (2026-10-28)
+
+
+### Features
+
+* **Accounts:** support a documentation link for account creation [YTFRONT-4921] ([027b903](https://github.com/ytsaurus/ytsaurus-ui/commit/027b9037a401aa8d258ac07b145ce8250924963b))
+* **Accounts:** switch to independent account editor dialog [YTFRONT-6021] ([0564d7e](https://github.com/ytsaurus/ytsaurus-ui/commit/0564d7ea8b874bee7eadadcfc0265d10431d4dbd))
+* **Consumer:** support named consumers in navigation [YTFRONT-5808] ([a84e4b8](https://github.com/ytsaurus/ytsaurus-ui/commit/a84e4b8192745f9c590c9b1b4d4ebb771723324e))
+* show application configuration errors [YTFRONT-5969] ([6ef3bb0](https://github.com/ytsaurus/ytsaurus-ui/commit/6ef3bb00404dec882d9f0c6aefbcf7eafdc28ddf))
+
+
+### Bug Fixes
+
+* **cache:** bypass YT cache temporarily after writes [YTFRONT-6110] ([8c25244](https://github.com/ytsaurus/ytsaurus-ui/commit/8c2524475899de3f8e6d85013e822ee863e4c324))
+* **Monitoring:** custom shortcut value should be displayed [YTFRONT-6023] ([1a4bdeb](https://github.com/ytsaurus/ytsaurus-ui/commit/1a4bdebe0d0440ea98ff93835b01caa5f013e438))
+* **Navigation:** persist access log recursive filter in URL [YTFRONT-6075] ([01897ee](https://github.com/ytsaurus/ytsaurus-ui/commit/01897ee5e8fb566ad8ca2bd3456e550b2c41dbfb))
+* **Operation/Details:** rich ypath inputs should be displayed [YTFRONT-6080] ([62ab59f](https://github.com/ytsaurus/ytsaurus-ui/commit/62ab59f1072ad2b5adbd6b19ac41a18e0cb1b9db))
+* **Queries:** decode query titles and token descriptions [YTFRONT-6113] ([43f4490](https://github.com/ytsaurus/ytsaurus-ui/commit/43f44900f599805be841a574c16926880698d8de))
+
 ## [3.30.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.30.0...ui-v3.30.1) (2026-10-21)
 
 
