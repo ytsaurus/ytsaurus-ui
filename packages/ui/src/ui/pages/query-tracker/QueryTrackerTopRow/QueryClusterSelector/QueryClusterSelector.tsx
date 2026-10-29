@@ -2,16 +2,14 @@ import React, {type FC, type ReactElement} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {Select} from '@gravity-ui/uikit';
 
-import {type ClusterConfig} from '../../../../../shared/yt-types';
-import {selectQueryTrackerInfoClusters} from '../../../../store/selectors/query-tracker/queryAco';
 import {QuerySelector} from '../QuerySelector';
 import {QueryClusterItem, type Props as QueryClusterItemProps} from './QueryClusterItem';
-import {YT, isMultiClusterInstallation} from '../../../../config/yt-config';
+import {isMultiClusterInstallation} from '../../../../config/yt-config';
 import {
     selectClusterLoading,
     selectQueryDraft,
 } from '../../../../store/selectors/query-tracker/query';
-import {selectClusterList} from '../../../../store/selectors/slideoutMenu';
+import {selectQueryClusters} from '../../../../store/selectors/query-tracker/querySettings';
 import {setQueryCluster} from '../../../../store/actions/query-tracker/query';
 
 type Props = {
@@ -20,34 +18,14 @@ type Props = {
 
 export const QueryClusterSelector: FC<Props> = ({className}) => {
     const dispatch = useDispatch();
-    const infoClusters = useSelector(selectQueryTrackerInfoClusters);
     const loading = useSelector(selectClusterLoading);
-    const clusters = useSelector(selectClusterList);
+    const values = useSelector(selectQueryClusters);
     const {settings} = useSelector(selectQueryDraft);
     const isMultiCluster = isMultiClusterInstallation();
 
     const handleOnChange = (clusterId: string) => {
         dispatch(setQueryCluster(clusterId));
     };
-
-    const values = React.useMemo((): Array<Pick<ClusterConfig, 'id' | 'name' | 'environment'>> => {
-        if (!infoClusters?.length) {
-            return clusters;
-        }
-
-        if (YT.isLocalCluster) {
-            return (
-                infoClusters?.map((id) => {
-                    return {id, name: id, environment: 'localmode'};
-                }) ?? []
-            );
-        }
-
-        const knownClusters = new Set(infoClusters);
-        return clusters.filter((item) => {
-            return knownClusters.has(item.id);
-        });
-    }, [clusters, infoClusters]);
 
     if (!isMultiCluster) {
         return null;
