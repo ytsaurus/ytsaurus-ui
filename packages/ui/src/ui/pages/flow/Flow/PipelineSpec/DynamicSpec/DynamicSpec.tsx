@@ -615,7 +615,19 @@ export function DynamicSpec({
                     ]}
                     onClose={() => setSelectingPath(false)}
                     onAdd={async (form) => {
-                        const path = dynamicSpecPathParts(form.getState().values.specPath);
+                        const specPath = form.getState().values.specPath;
+                        if (!specPath.startsWith('/')) {
+                            return;
+                        }
+                        let path: Array<string>;
+                        try {
+                            path = dynamicSpecPathParts(specPath);
+                        } catch {
+                            return;
+                        }
+                        if (path.length === 0) {
+                            return;
+                        }
                         setSelectingPath(false);
                         openEdit(path);
                     }}
