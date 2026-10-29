@@ -968,7 +968,19 @@ export type FlowDescribePipelineData = {
     // A sources has outgouing connection to a computation or to a computation.input_streams
     sources: Record<SourceId, FlowSink>;
 
+    // Edges that are not implied by the pipeline topology
+    edges?: Array<FlowGraphEdge>;
+
     messages?: Array<FlowMessageType>;
+};
+
+export type FlowGraphEdge = {
+    from: string;
+    to: string;
+    // 'data_channel': the sink `from` writes and the source `to` reads the same external channel (e.g. a queue)
+    kind: 'data_channel' | (string & {});
+    // e.g. "yt:primary://home/queue"
+    label?: string;
 };
 
 export type FlowNodeBase = {

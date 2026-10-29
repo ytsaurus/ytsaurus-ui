@@ -173,7 +173,7 @@ export function addFlowConnection(
         ...restOptions
     }: Pick<
         FlowGraphConnection,
-        'flowStreamStatus' | 'styles' | 'sourceAnchorId' | 'targetAnchorId'
+        'flowStreamStatus' | 'styles' | 'sourceAnchorId' | 'targetAnchorId' | 'dashed'
     > = {},
 ) {
     const c: FlowGraphConnection = {

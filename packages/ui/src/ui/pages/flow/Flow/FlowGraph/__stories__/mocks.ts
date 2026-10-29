@@ -211,3 +211,62 @@ function makeMultipleSourcesFlowGraphResponse(): FlowDescribePipelineData {
 export const multipleSourcesFlowGraphHandler = makeFlowGraphHandler(
     makeMultipleSourcesFlowGraphResponse(),
 );
+
+const DATA_CHANNEL_ID = 'yt:primary://home/flow/audit_queue';
+
+// A sink of one computation writes a queue that a source of another computation reads.
+function makeDataChannelFlowGraphResponse(): FlowDescribePipelineData {
+    const {streams, sources} = makeFlowGraphResponse();
+    const writer = makeComputation();
+    const reader = {
+        ...makeComputation(undefined, ['audit-source-stream']),
+        id: 'reader',
+        name: 'Reader',
+        output_streams: ['reader-output-stream'],
+    };
+    return {
+        computations: {computation: writer, reader},
+        streams: {
+            ...streams,
+            'audit-source-stream': {
+                ...streams[SOURCE_STREAM_ID],
+                id: 'audit-source-stream',
+                name: 'Audit source stream',
+            },
+            'reader-output-stream': {
+                ...streams[OUTPUT_STREAM_ID],
+                id: 'reader-output-stream',
+                name: 'Reader output stream',
+            },
+        },
+        sources: {
+            ...sources,
+            'audit-source': {
+                id: 'audit-source',
+                name: 'Audit source',
+                status: 'info',
+                stream_id: 'audit-source-stream',
+            },
+        },
+        sinks: {
+            'audit-sink': {
+                id: 'audit-sink',
+                name: 'Audit sink',
+                status: 'info',
+                stream_id: OUTPUT_STREAM_ID,
+            },
+        },
+        edges: [
+            {from: 'audit-sink', to: 'audit-source', kind: 'data_channel', label: DATA_CHANNEL_ID},
+            {
+                from: 'missing-sink',
+                to: 'audit-source',
+                kind: 'data_channel',
+                label: 'yt:primary://home/flow/missing',
+            },
+            {from: 'audit-sink', to: 'source', kind: 'unknown_kind', label: 'ignored'},
+        ],
+    };
+}
+
+export const dataChannelFlowGraphHandler = makeFlowGraphHandler(makeDataChannelFlowGraphResponse());

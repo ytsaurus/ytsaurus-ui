@@ -8,6 +8,7 @@ import {FlowGraph} from '../FlowGraph';
 import {FlowMessagesDialogContext} from '../renderers/FlowMessagesDialogContext/FlowMessagesDialogContext';
 import {
     backpressuredFlowGraphHandler,
+    dataChannelFlowGraphHandler,
     drainedFlowGraphHandler,
     emptyFlowGraphHandler,
     inputOnlyStreamFlowGraphHandler,
@@ -69,4 +70,9 @@ export const InputOnlyStream: Story = {
 export const MultipleSources: Story = {
     render: renderGraph,
     parameters: {msw: {handlers: [multipleSourcesFlowGraphHandler]}},
+};
+
+export const DataChannel: Story = {
+    render: renderGraph,
+    parameters: {msw: {handlers: [dataChannelFlowGraphHandler]}},
 };
