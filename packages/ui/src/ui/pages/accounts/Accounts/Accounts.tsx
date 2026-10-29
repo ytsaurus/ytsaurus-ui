@@ -128,11 +128,11 @@ export class Accounts extends React.Component<
                             <Switch>
                                 <Route
                                     path={`${match.path}/${AccountsTab.GENERAL}`}
-                                    render={(routeProps) => (
+                                    render={() => (
                                         <>
                                             <AccountsUpdater />
                                             <AccountsRumMeasure />
-                                            <AccountsGeneralTab {...routeProps} />
+                                            <AccountsGeneralTab />
                                         </>
                                     )}
                                 />

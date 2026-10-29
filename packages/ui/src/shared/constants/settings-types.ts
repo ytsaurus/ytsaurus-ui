@@ -133,8 +133,7 @@ export type OperationsListPreset = {
 };
 
 interface AccountsSettings {
-    'global::accounts::dashboardVisibilityMode': undefined | 'all' | 'usable' | 'favourites';
-    'global::accounts::accountsVisibilityMode': undefined | 'all' | 'usable' | 'favourites';
+    'global::accounts::visibilityMode': undefined | 'all' | 'usable' | 'favourites';
     'global::accounts::expandStaticConfiguration': boolean;
 
     'global::accounts::accountUsageViewType':

@@ -283,18 +283,10 @@ export function setAccountsTreeState(treeState) {
     };
 }
 
-export function setAccountsVisibilityModeOfDashboard(value) {
-    return (dispatch) => {
-        return dispatch(
-            setSetting(SettingName.ACCOUNTS.DASHBOARD_VISIBILITY_MODE, NAMESPACES.ACCOUNTS, value),
-        );
-    };
-}
-
 export function setAccountsVisibilityMode(value) {
     return (dispatch) => {
         return dispatch(
-            setSetting(SettingName.ACCOUNTS.ACCOUNTS_VISIBILITY_MODE, NAMESPACES.ACCOUNTS, value),
+            setSetting(SettingName.ACCOUNTS.VISIBILITY_MODE, NAMESPACES.ACCOUNTS, value),
         );
     };
 }
