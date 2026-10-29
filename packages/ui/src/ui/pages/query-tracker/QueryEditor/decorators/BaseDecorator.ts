@@ -9,6 +9,10 @@ export abstract class BaseDecorator {
         this.collection = this.editor.createDecorationsCollection([]);
     }
 
+    dispose(): void {
+        this.collection.clear();
+    }
+
     protected clearDecorations(): void {
         this.collection.clear();
     }
