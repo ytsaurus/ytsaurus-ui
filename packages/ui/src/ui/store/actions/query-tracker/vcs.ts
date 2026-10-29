@@ -1,4 +1,4 @@
-import {type ThunkAction} from 'redux-thunk';
+import {type ThunkAction, type ThunkDispatch} from 'redux-thunk';
 import {type RootState} from '../../reducers';
 import axios from 'axios';
 import {type Action} from 'redux';
@@ -8,21 +8,27 @@ import {
     type DirectoryItem,
     type FileItem,
     type Repositories,
+    type VcsFileContext,
+    type VcsState,
     setBranch,
     setBranches,
+    setFileActionRequestId,
     setList,
     setListError,
     setListFilter,
+    setNavigationId,
     setPath,
     setPreview,
+    setPreviewRequestId,
     setRepositories,
     setRepository,
     setVcs,
     setVcsConfig,
+    setVcsRequest,
     setVcsTokensAvailability,
 } from '../../reducers/query-tracker/vcsSlice';
 import {selectVcs, selectVcsConfig} from '../../selectors/query-tracker/vcs';
-import {selectQueryFiles} from '../../selectors/query-tracker/query';
+import {addQueryFile} from './queryFilesForm';
 import {updateQueryDraft} from './query';
 import {selectFileEditor} from '../../selectors/query-tracker/queryFilesForm';
 import {setFileEditor} from '../../reducers/query-tracker/queryFilesFormSlice';
@@ -34,8 +40,10 @@ import {
     selectVcsType,
 } from '../../selectors/settings/settings-vcs';
 import {setSettingByKey} from '../settings';
+import {selectQuerySessionRevision} from '../../selectors/query-tracker/querySession';
+import {createVcsFileContext, joinVcsPath, normalizeVcsPath} from './vcsHelpers';
 
-type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
+type AsyncAction = ThunkAction<Promise<void>, RootState, undefined, Action>;
 
 const TOKEN_API_URL = '/api/vcs/token';
 
@@ -49,7 +57,7 @@ const makePureRepositoryData = (repository: VcsRepository) => {
 };
 
 const updateVcsSettings = async (
-    dispatch: any,
+    dispatch: ThunkDispatch<RootState, undefined, Action>,
     settings: {
         type?: string;
         repository?: string;
@@ -72,18 +80,20 @@ const updateVcsSettings = async (
     if ('path' in settings) {
         updates.push(dispatch(setSettingByKey('global::vcs:path', settings.path || '')));
     }
-    await Promise.all(updates);
+    await Promise.allSettled(updates);
 };
 
 export const getVcsTokensAvailability = (): AsyncAction => async (dispatch) => {
-    const {data} = await wrapApiPromiseByToaster(
-        axios.get<{ids: string[]}>('/api/vcs/tokens-availability'),
-        {
-            skipSuccessToast: true,
-            toasterName: 'get-vcs-tokens-availability',
-        },
-    );
-    dispatch(setVcsTokensAvailability(data.ids));
+    try {
+        const {data} = await wrapApiPromiseByToaster(
+            axios.get<{ids: string[]}>('/api/vcs/tokens-availability'),
+            {
+                skipSuccessToast: true,
+                toasterName: 'get-vcs-tokens-availability',
+            },
+        );
+        dispatch(setVcsTokensAvailability(data.ids));
+    } catch {}
 };
 
 export const removeToken =
@@ -118,242 +128,311 @@ export const saveToken =
         dispatch(setVcsConfig(newConfig));
     };
 
+const isCurrent = (getState: () => RootState, id: string) =>
+    selectVcs(getState()).navigationId === id;
+
 export const getRepositoryBranches =
-    (repositoryName: string): AsyncAction =>
+    (repositoryName: string, navigationId = uuidv4()): AsyncAction =>
     async (dispatch, getState) => {
-        const {repositories} = selectVcs(getState());
-
-        const {data} = await wrapApiPromiseByToaster<{data: string[]}>(
-            axios.get('/api/vcs/branches', {
-                params: {repository: makePureRepositoryData(repositories[repositoryName])},
-            }),
-            {skipSuccessToast: true, toasterName: 'get-repository-branches'},
+        dispatch(setNavigationId(navigationId));
+        const repository = selectVcs(getState()).repositories[repositoryName];
+        if (!repository) return;
+        dispatch(
+            setVcsRequest({kind: 'branches', state: {loading: true, error: false, loaded: false}}),
         );
-
-        dispatch(setBranches(data));
+        try {
+            const {data} = await wrapApiPromiseByToaster(
+                axios.get<VcsState['branches']>('/api/vcs/branches', {
+                    params: {repository: makePureRepositoryData(repository)},
+                }),
+                {skipSuccessToast: true, toasterName: 'get-repository-branches'},
+            );
+            if (!isCurrent(getState, navigationId)) return;
+            dispatch(setBranches(data));
+            dispatch(setVcsRequest({kind: 'branches', state: {loading: false, loaded: true}}));
+        } catch {
+            if (isCurrent(getState, navigationId)) {
+                dispatch(setVcsRequest({kind: 'branches', state: {loading: false, error: true}}));
+            }
+        }
     };
 
 export const getRepositoryContent =
-    (path: string): AsyncAction =>
+    (rawPath: string, navigationId = uuidv4()): AsyncAction =>
     async (dispatch, getState) => {
+        dispatch(setNavigationId(navigationId));
         const {repositories, repository, branch} = selectVcs(getState());
-
-        if (!repository) return;
-
+        if (!repository || !repositories[repository] || !branch) return;
+        const path = normalizeVcsPath(rawPath);
+        dispatch(setPreview({name: '', content: ''}));
+        dispatch(setPath(path));
+        dispatch(setList({}));
+        dispatch(setListFilter(''));
+        dispatch(setListError(false));
+        dispatch(
+            setVcsRequest({kind: 'list', state: {loading: true, loaded: false, error: false}}),
+        );
         try {
-            const response: {
-                data: {name: string; type: string; url: string}[];
-            } = await axios.get('/api/vcs', {
-                params: {
-                    repository: makePureRepositoryData(repositories[repository]),
-                    branch,
-                    path,
+            const {data} = await axios.get<{name: string; type: string; url: string}[]>(
+                '/api/vcs',
+                {
+                    params: {
+                        repository: makePureRepositoryData(repositories[repository]),
+                        branch,
+                        path,
+                    },
                 },
-            });
-
-            const result = response.data.reduce<Record<string, DirectoryItem | FileItem>>(
-                (acc, item) => {
-                    acc[item.name] = {
-                        name: item.name,
-                        type: item.type !== 'tree' && item.type !== 'dir' ? 'file' : 'directory',
-                        url: item.url,
-                    };
-                    return acc;
-                },
-                {},
             );
-
-            dispatch(setListFilter(''));
-            dispatch(setListError(false));
+            if (!isCurrent(getState, navigationId)) return;
+            const result = data.reduce<Record<string, DirectoryItem | FileItem>>((acc, item) => {
+                acc[item.name] = {
+                    name: item.name,
+                    type: item.type === 'tree' || item.type === 'dir' ? 'directory' : 'file',
+                    url: item.url,
+                };
+                return acc;
+            }, {});
             dispatch(setList(result));
-        } catch (e) {
-            dispatch(setListError(true));
-        } finally {
-            dispatch(setPath(path));
+            dispatch(setVcsRequest({kind: 'list', state: {loading: false, loaded: true}}));
             await updateVcsSettings(dispatch, {path});
+        } catch {
+            if (isCurrent(getState, navigationId)) {
+                dispatch(setListError(true));
+                dispatch(setVcsRequest({kind: 'list', state: {loading: false, error: true}}));
+            }
         }
     };
 
-const getObjectPath = (path: string, name: string) => (path ? path + '/' + name : name);
-
-const loadFile = async (params: {path: string; repository: VcsRepository; branch: string}) => {
-    const file = await wrapApiPromiseByToaster<{data: {file: string}}>(
-        axios.get('/api/vcs/file', {params, responseType: 'json'}),
-        {
-            skipSuccessToast: true,
-            toasterName: 'load-file',
-        },
-    );
-
-    return file.data.file;
+const loadFile = async (context: VcsFileContext) => {
+    const {data} = await axios.get<{file: string}>('/api/vcs/file', {
+        params: {path: context.path, repository: context.repository, branch: context.branch},
+        responseType: 'json',
+    });
+    return data.file;
 };
 
-export const getContentByPath =
-    (path: string): AsyncAction =>
+const resolveFile = (state: RootState, file: string | VcsFileContext) => {
+    if (typeof file !== 'string') return file;
+    const vcs = selectVcs(state);
+    if (vcs.preview.name === file && vcs.preview.context) return vcs.preview.context;
+    if (vcs.list[file]?.type !== 'file') return undefined;
+    return createVcsFileContext(vcs, joinVcsPath(vcs.path, file));
+};
+
+export const openFilePreview =
+    (file: string | VcsFileContext): AsyncAction =>
     async (dispatch, getState) => {
-        const {repositories, repository, branch} = selectVcs(getState());
-        if (!repository || !branch) return;
-
-        const name = path.includes('/') ? path.split('/').pop()! : path;
-
+        const context = resolveFile(getState(), file);
+        if (!context) return;
+        const navigationId = selectVcs(getState()).navigationId;
+        const requestId = uuidv4();
+        dispatch(setPreview({name: context.name, content: '', context}));
+        dispatch(setPreviewRequestId(requestId));
+        dispatch(setVcsRequest({kind: 'preview', state: {loading: true}}));
+        const current = () =>
+            isCurrent(getState, navigationId) &&
+            selectVcs(getState()).previewRequestId === requestId;
         try {
-            const response = await axios.get('/api/vcs/file', {
-                params: {
-                    path,
-                    repository: repositories[repository],
-                    branch,
-                },
-                responseType: 'text',
-            });
-
-            dispatch(
-                setPreview({
-                    name,
-                    content: response.data,
-                }),
-            );
-        } catch (e) {
-            await dispatch(getRepositoryContent(path));
+            const content = await loadFile(context);
+            if (!current()) return;
+            dispatch(setPreview({name: context.name, content, context}));
+            dispatch(setVcsRequest({kind: 'preview', state: {loaded: true}}));
+        } catch {
+            if (current())
+                dispatch(setVcsRequest({kind: 'preview', state: {loading: false, error: true}}));
         }
     };
 
-export const openFilePreview =
-    (name: string): AsyncAction =>
+export const getContentByPath =
+    (rawPath: string, navigationId = uuidv4()): AsyncAction =>
     async (dispatch, getState) => {
-        const {path, repository, repositories, branch, list} = selectVcs(getState());
-        const item = list[name];
-
-        if (item.type !== 'file' || !repository || !branch) return;
-
+        dispatch(setNavigationId(navigationId));
+        const path = normalizeVcsPath(rawPath);
+        if (!path) return dispatch(getRepositoryContent('', navigationId));
+        const context = createVcsFileContext(selectVcs(getState()), path);
+        if (!context) return;
         dispatch(
-            setPreview({
-                name,
-                content: await loadFile({
-                    path: getObjectPath(path, name),
-                    repository: repositories[repository],
-                    branch,
-                }),
-            }),
+            setVcsRequest({kind: 'list', state: {loading: true, loaded: false, error: false}}),
         );
+        let content: string;
+        try {
+            content = await loadFile(context);
+        } catch {
+            if (isCurrent(getState, navigationId))
+                await dispatch(getRepositoryContent(path, navigationId));
+            return;
+        }
+        if (!isCurrent(getState, navigationId)) return;
+        await dispatch(getRepositoryContent(context.directory, navigationId));
+        if (!isCurrent(getState, navigationId) || selectVcs(getState()).listError) return;
+        const resolved = createVcsFileContext(selectVcs(getState()), path) || context;
+        dispatch(setPreview({name: resolved.name, content, context: resolved}));
+        dispatch(setVcsRequest({kind: 'preview', state: {loaded: true}}));
+        await updateVcsSettings(dispatch, {path});
     };
 
 export const addFileToQuery =
-    (name: string): AsyncAction =>
+    (file: string | VcsFileContext): AsyncAction =>
     async (dispatch, getState) => {
-        const state = getState();
-        const {path, list, branch, repository, repositories} = selectVcs(state);
-        const item = list[name];
-
-        if (item.type !== 'file' || !repository || !branch) return;
-
-        const editor = selectFileEditor(state);
-        const files = selectQueryFiles(state);
-        const id = uuidv4();
-        dispatch(
-            updateQueryDraft({
-                files: [
-                    ...files,
-                    {
-                        id,
-                        name,
-                        content: await loadFile({
-                            path: getObjectPath(path, name),
-                            repository: repositories[repository],
-                            branch,
-                        }),
-                        type: 'raw_inline_data',
-                    },
-                ],
-            }),
-        );
-        dispatch(setFileEditor({...editor, isOpen: true, fileId: id}));
+        const context = resolveFile(getState(), file);
+        if (!context || selectVcs(getState()).fileActionRequestId) return;
+        const requestId = uuidv4();
+        dispatch(setFileActionRequestId(requestId));
+        const revision = selectQuerySessionRevision(getState());
+        try {
+            const content = await wrapApiPromiseByToaster(loadFile(context), {
+                skipSuccessToast: true,
+                toasterName: 'load-file',
+            });
+            if (selectQuerySessionRevision(getState()) !== revision) return;
+            const state = getState();
+            const id = uuidv4();
+            const added = dispatch(
+                addQueryFile({id, name: context.name, content, type: 'raw_inline_data'}),
+            );
+            if (!added) return;
+            dispatch(setFileEditor({...selectFileEditor(state), isOpen: true, fileId: id}));
+            dispatch(setPreview({name: '', content: ''}));
+        } catch {
+        } finally {
+            if (selectVcs(getState()).fileActionRequestId === requestId) {
+                dispatch(setFileActionRequestId(''));
+            }
+        }
     };
 
 export const insertFileToQuery =
-    (name: string): AsyncAction =>
+    (file: string | VcsFileContext): AsyncAction =>
     async (dispatch, getState) => {
-        const state = getState();
-        const {path, list, branch, repository, repositories} = selectVcs(state);
-        const item = list[name];
-
-        if (item.type !== 'file' || !repository || !branch) return;
-
-        dispatch(
-            updateQueryDraft({
-                query: await loadFile({
-                    path: getObjectPath(path, name),
-                    repository: repositories[repository],
-                    branch,
-                }),
-            }),
-        );
+        const context = resolveFile(getState(), file);
+        if (!context || selectVcs(getState()).fileActionRequestId) return;
+        const requestId = uuidv4();
+        dispatch(setFileActionRequestId(requestId));
+        const revision = selectQuerySessionRevision(getState());
+        try {
+            const content = await wrapApiPromiseByToaster(loadFile(context), {
+                skipSuccessToast: true,
+                toasterName: 'load-file',
+            });
+            if (selectQuerySessionRevision(getState()) === revision) {
+                dispatch(updateQueryDraft({query: content}));
+            }
+        } catch {
+        } finally {
+            if (selectVcs(getState()).fileActionRequestId === requestId) {
+                dispatch(setFileActionRequestId(''));
+            }
+        }
     };
 
 export const getFolderContent =
     (name: string): AsyncAction =>
     async (dispatch, getState) => {
         const {list, path} = selectVcs(getState());
-        const item = list[name];
-
-        if (item.type === 'file') return;
-
-        dispatch(getRepositoryContent(getObjectPath(path, name)));
+        if (list[name]?.type !== 'directory') return;
+        await dispatch(getRepositoryContent(joinVcsPath(path, name)));
     };
 
+type RepositorySelection = {branch?: string; path?: string};
 export const changeCurrentRepository =
-    (repositoryName: string): AsyncAction =>
-    async (dispatch) => {
+    (
+        repositoryName: string,
+        navigationId = uuidv4(),
+        saved: RepositorySelection = {},
+    ): AsyncAction =>
+    async (dispatch, getState) => {
+        dispatch(setNavigationId(navigationId));
+        const repository = selectVcs(getState()).repositories[repositoryName];
+        if (!repository) return;
         dispatch(setRepository(repositoryName));
         await updateVcsSettings(dispatch, {repository: repositoryName, branch: '', path: ''});
-        dispatch(getRepositoryBranches(repositoryName));
-        dispatch(getRepositoryContent(''));
+        if (!isCurrent(getState, navigationId)) return;
+        await dispatch(getRepositoryBranches(repositoryName, navigationId));
+        if (!isCurrent(getState, navigationId)) return;
+        const {branches, requests} = selectVcs(getState());
+        if (requests.branches.error) return;
+        const values = branches.map((item) => (typeof item === 'string' ? item : item.value));
+        let branch = values.includes(repository.defaultBranch)
+            ? repository.defaultBranch
+            : undefined;
+        if (saved.branch && values.includes(saved.branch)) branch = saved.branch;
+        dispatch(setBranch(branch));
+        await updateVcsSettings(dispatch, {branch});
+        if (!branch || !isCurrent(getState, navigationId)) return;
+        if (saved.path && saved.branch === branch) {
+            await dispatch(getContentByPath(saved.path, navigationId));
+        } else {
+            await dispatch(getRepositoryContent('', navigationId));
+        }
     };
 
 export const getVcsRepositories =
-    (vcsId?: string): AsyncAction =>
-    async (dispatch) => {
+    (
+        vcsId?: string,
+        navigationId = uuidv4(),
+        saved?: RepositorySelection & {repository: string},
+    ): AsyncAction =>
+    async (dispatch, getState) => {
+        dispatch(setNavigationId(navigationId));
         dispatch(setVcs(vcsId));
+        if (!vcsId) return;
+        dispatch(setVcsRequest({kind: 'repositories', state: {loading: true}}));
         await updateVcsSettings(dispatch, {type: vcsId, repository: '', branch: '', path: ''});
-
-        const {data} = await wrapApiPromiseByToaster<{
-            data: Repositories;
-        }>(axios.get('/api/vcs/repositories', {params: {vcsId}}), {
-            skipSuccessToast: true,
-            toasterName: 'get-vcs-repositories',
-        });
-
-        dispatch(setRepositories(data));
-        const keys = Object.keys(data);
-        if (keys.length === 1) {
-            dispatch(changeCurrentRepository(data[keys[0]].vcsId));
+        if (!isCurrent(getState, navigationId)) return;
+        try {
+            const {data} = await wrapApiPromiseByToaster(
+                axios.get<Repositories>('/api/vcs/repositories', {params: {vcsId}}),
+                {skipSuccessToast: true, toasterName: 'get-vcs-repositories'},
+            );
+            if (!isCurrent(getState, navigationId)) return;
+            dispatch(setRepositories(data));
+            dispatch(setVcsRequest({kind: 'repositories', state: {loading: false, loaded: true}}));
+            const keys = Object.keys(data);
+            let key = keys.length === 1 ? keys[0] : undefined;
+            if (saved?.repository && data[saved.repository]) key = saved.repository;
+            if (key) {
+                await dispatch(
+                    changeCurrentRepository(
+                        key,
+                        navigationId,
+                        key === saved?.repository ? saved : undefined,
+                    ),
+                );
+            }
+        } catch {
+            if (isCurrent(getState, navigationId)) {
+                dispatch(
+                    setVcsRequest({kind: 'repositories', state: {loading: false, error: true}}),
+                );
+            }
         }
     };
 
 export const changeCurrentBranch =
     (branch: string): AsyncAction =>
     async (dispatch, getState) => {
-        const {path} = selectVcs(getState());
+        const navigationId = uuidv4();
+        dispatch(setNavigationId(navigationId));
         dispatch(setBranch(branch));
+        dispatch(setList({}));
+        dispatch(setPath(''));
+        dispatch(
+            setVcsRequest({kind: 'list', state: {loading: false, loaded: false, error: false}}),
+        );
         await updateVcsSettings(dispatch, {branch, path: ''});
-        dispatch(getRepositoryContent(path));
+        if (isCurrent(getState, navigationId))
+            await dispatch(getRepositoryContent('', navigationId));
     };
 
 export const setLastVcs = (): AsyncAction => async (dispatch, getState) => {
     const state = getState();
     const type = selectVcsType(state);
-    const repository = selectVcsRepository(state);
-    const branch = selectVcsBranch(state);
-    const path = selectVcsPath(state);
-
-    if (!type) return;
-    await dispatch(getVcsRepositories(type));
-
-    if (!repository) return;
-    await dispatch(changeCurrentRepository(repository));
-
-    if (!branch) return;
-    await dispatch(changeCurrentBranch(branch));
-
-    if (!path) return;
-    await dispatch(getContentByPath(path));
+    if (!type || !selectVcsConfig(state).some((item) => item.id === type)) return;
+    await dispatch(
+        getVcsRepositories(type, uuidv4(), {
+            repository: selectVcsRepository(state),
+            branch: selectVcsBranch(state),
+            path: selectVcsPath(state),
+        }),
+    );
 };
