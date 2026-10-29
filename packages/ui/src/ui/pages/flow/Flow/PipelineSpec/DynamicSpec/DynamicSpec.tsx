@@ -34,6 +34,18 @@ import './DynamicSpec.scss';
 const block = cn('yt-flow-dynamic-spec');
 type SpecView = 'effective' | 'base' | 'override';
 
+function editablePath(specPath: string): Array<string> | undefined {
+    if (!specPath.startsWith('/')) {
+        return undefined;
+    }
+    try {
+        const path = dynamicSpecPathParts(specPath);
+        return path.length > 0 && path.every(Boolean) ? path : undefined;
+    } catch {
+        return undefined;
+    }
+}
+
 function hasSelectedText(element: HTMLElement) {
     const selection = window.getSelection();
     return (
@@ -594,16 +606,11 @@ export function DynamicSpec({
                     size="s"
                     headerProps={{title: 'Edit dynamic specification'}}
                     initialValues={{specPath: ''}}
-                    validate={({specPath}) => {
-                        try {
-                            if (specPath.startsWith('/') && dynamicSpecPathParts(specPath).length) {
-                                return undefined;
-                            }
-                        } catch {
-                            // Invalid paths are reported in the form.
-                        }
-                        return {specPath: i18n('error_parameter-path')};
-                    }}
+                    validate={({specPath}) =>
+                        editablePath(specPath)
+                            ? undefined
+                            : {specPath: i18n('error_parameter-path')}
+                    }
                     fields={[
                         {
                             name: 'specPath',
@@ -615,17 +622,8 @@ export function DynamicSpec({
                     ]}
                     onClose={() => setSelectingPath(false)}
                     onAdd={async (form) => {
-                        const specPath = form.getState().values.specPath;
-                        if (!specPath.startsWith('/')) {
-                            return;
-                        }
-                        let path: Array<string>;
-                        try {
-                            path = dynamicSpecPathParts(specPath);
-                        } catch {
-                            return;
-                        }
-                        if (path.length === 0) {
+                        const path = editablePath(form.getState().values.specPath);
+                        if (!path) {
                             return;
                         }
                         setSelectingPath(false);
