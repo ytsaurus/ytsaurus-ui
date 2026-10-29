@@ -3,7 +3,7 @@ import {useSelector} from '../../../store/redux-hooks';
 import {Icon} from '@gravity-ui/uikit';
 import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
-import {selectIsQueryDraftEditted} from '../../../store/selectors/query-tracker/query';
+import {selectDirtySinceLastSubmit} from '../../../store/selectors/query-tracker/query';
 import FilePlusIcon from '@gravity-ui/icons/svgs/file-plus.svg';
 import {Page} from '../../../../shared/constants/settings';
 import {selectCluster} from '../../../store/selectors/global';
@@ -31,7 +31,7 @@ type Props = {
 };
 
 export const NewQueryButton: FC<Props> = ({onClick, hideText}) => {
-    const dirtyQuery = useSelector(selectIsQueryDraftEditted);
+    const dirtyQuery = useSelector(selectDirtySinceLastSubmit);
     const [visible, setVisible] = useState(false);
     const cluster = useSelector(selectCluster);
 
