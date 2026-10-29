@@ -6,10 +6,10 @@ import {type QueryItem, type QueryItemId} from '../../../types/query-tracker/api
 import {
     type QueryResult,
     type QueryResultErrorState,
-    type QueryResultLoadingState,
-    type QueryResultReadyState,
+    type SourceQueryResultReadyState as QueryResultReadyState,
     QueryResultState,
     QueryResultsViewMode,
+    type SourceCell,
 } from '../../../types/query-tracker/queryResult';
 import {
     REQUEST_QUERY_RESULTS,
@@ -21,7 +21,7 @@ import {
     SET_QUERY_RESULTS_SETTINGS,
 } from './query-tracker-contants';
 
-export type QueryResultsState = Record<QueryItemId, QueryResult[]>;
+export type QueryResultsState = Record<QueryItemId, Record<number, QueryResult>>;
 
 const initialState: QueryResultsState = {};
 
@@ -39,6 +39,15 @@ const initialSettings: QueryResultReadyState['settings'] = {
 };
 
 export function queryResult(state = initialState, action: QueryResultsActions): QueryResultsState {
+    if (
+        (action.type === SET_QUERY_RESULTS ||
+            action.type === SET_QUERY_RESULTS_PAGE ||
+            action.type === SET_QUERY_RESULTS_ERROR) &&
+        action.data.requestId !== undefined &&
+        state[action.data.queryId]?.[action.data.index]?.requestId !== action.data.requestId
+    ) {
+        return state;
+    }
     switch (action.type) {
         case REQUEST_QUERY_RESULTS: {
             const results = state[action.data.queryId] ?? {};
@@ -48,8 +57,10 @@ export function queryResult(state = initialState, action: QueryResultsActions): 
                 [action.data.queryId]: {
                     ...results,
                     [action.data.index]: {
-                        ...(results[action.data.index] as QueryResultLoadingState),
+                        ...results[action.data.index],
                         state: QueryResultState.Loading,
+                        requestId: action.data.requestId,
+                        requestOffset: action.data.rowOffset,
                     },
                 },
             };
@@ -68,15 +79,19 @@ export function queryResult(state = initialState, action: QueryResultsActions): 
                         results: action.data.results,
                         meta: action.data.meta,
                         page: 0,
+                        rowOffset: 0,
+                        requestId: action.data.requestId,
                         settings: {
                             ...initialSettings,
+                            ...results[action.data.index]?.settings,
                         },
                     },
                 },
             };
         }
         case SET_QUERY_RESULTS_CELL_DATA: {
-            const {queryId, resultIndex, rowIndex, columnName, cellData} = action.data;
+            const {queryId, resultIndex, rowIndex, columnName, cellData, expectedCell} =
+                action.data;
             const queryResults = {...state[queryId]};
             const queryResultsTab = {...queryResults[resultIndex]};
             queryResults[resultIndex] = queryResultsTab;
@@ -85,11 +100,17 @@ export function queryResult(state = initialState, action: QueryResultsActions): 
                 return state;
             }
 
+            const index = queryResultsTab.results.findIndex((row) => row.sourceIndex === rowIndex);
+            if (
+                index < 0 ||
+                (expectedCell && queryResultsTab.results[index].cells[columnName] !== expectedCell)
+            ) {
+                return state;
+            }
             const rows = [...queryResultsTab.results];
             queryResultsTab.results = rows;
 
-            const rowData = {...rows[rowIndex], [columnName]: cellData};
-            rows[rowIndex] = rowData;
+            rows[index] = {...rows[index], cells: {...rows[index].cells, [columnName]: cellData}};
 
             return {
                 ...state,
@@ -98,16 +119,19 @@ export function queryResult(state = initialState, action: QueryResultsActions): 
         }
         case SET_QUERY_RESULTS_PAGE: {
             const results = state[action.data.queryId] ?? {};
+            const current = results[action.data.index];
+            if (!current?.resultReady) return state;
 
             return {
                 ...state,
                 [action.data.queryId]: {
                     ...results,
                     [action.data.index]: {
-                        ...(results[action.data.index] as QueryResultReadyState),
+                        ...current,
                         state: QueryResultState.Ready,
                         results: action.data.results,
                         page: action.data.page,
+                        rowOffset: action.data.rowOffset,
                     },
                 },
             };
@@ -119,6 +143,8 @@ export function queryResult(state = initialState, action: QueryResultsActions): 
                 [action.data.queryId]: {
                     ...results,
                     [action.data.index]: {
+                        settings: results[action.data.index]?.settings,
+                        requestId: action.data.requestId,
                         state: QueryResultState.Error,
                         error: action.data.error,
                     },
@@ -142,9 +168,10 @@ export function queryResult(state = initialState, action: QueryResultsActions): 
                 [action.data.queryId]: {
                     ...results,
                     [action.data.index]: {
-                        ...(results[action.data.index] as QueryResultReadyState),
+                        ...(results[action.data.index] ?? {state: QueryResultState.Init}),
                         settings: {
-                            ...(results[action.data.index] as QueryResultReadyState).settings,
+                            ...initialSettings,
+                            ...results[action.data.index]?.settings,
                             ...action.data.settings,
                         },
                     },
@@ -160,6 +187,8 @@ export type RequestQueryResultsAction = ActionD<
     {
         queryId: QueryItem['id'];
         index: number;
+        requestId?: number;
+        rowOffset: number;
     }
 >;
 
@@ -168,6 +197,7 @@ export type SetQueryResultsAction = ActionD<
     {
         queryId: QueryItem['id'];
         index: number;
+        requestId?: number;
         results: QueryResultReadyState['results'];
         columns: QueryResultReadyState['columns'];
         meta: QueryResultReadyState['meta'];
@@ -179,8 +209,10 @@ export type SetQueryResultsPageAction = ActionD<
     {
         queryId: QueryItem['id'];
         index: number;
+        requestId?: number;
         results: QueryResultReadyState['results'];
         page: number;
+        rowOffset: number;
     }
 >;
 
@@ -189,6 +221,7 @@ export type SetQueryResultsErrorAction = ActionD<
     {
         queryId: QueryItem['id'];
         index: number;
+        requestId?: number;
         error: Error;
     }
 >;
@@ -221,6 +254,7 @@ export type QueryResultsActions =
               resultIndex: number;
               rowIndex: number;
               columnName: string;
-              cellData: QueryResultReadyState['results'][number][string];
+              cellData: SourceCell;
+              expectedCell?: SourceCell;
           }
       >;
