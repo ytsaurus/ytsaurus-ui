@@ -323,69 +323,8 @@ describe('Flow specs actions', () => {
     });
 });
 
-describe('sparse DynamicSpec mutations', () => {
+describe('DynamicSpec patch mutations', () => {
     beforeEach(() => jest.clearAllMocks());
-
-    it('writes only the edited leaf and original CAS, including a Unicode comment', async () => {
-        jest.mocked(ytApiV4.flowExecute).mockResolvedValue({version});
-        const originalSpec = {
-            computations: {noop: {empty_batch_backoff: 250, max_rows_per_batch: 1001}},
-            target_state: 'completed',
-        };
-        const edited = {
-            computations: {noop: {empty_batch_backoff: 280, max_rows_per_batch: 1001}},
-            target_state: 'completed',
-        };
-        await updateFlowDynamicSpec({
-            path: pipelinePath,
-            data: {spec: edited, version},
-            originalSpec,
-            comment: 'Проверка патча',
-        })(
-            jest.fn((action) => action(jest.fn(), jest.fn(), undefined)),
-            jest.fn(),
-            undefined,
-        );
-        expect(ytApiV4.setPipelineDynamicSpec).not.toHaveBeenCalled();
-        expect(ytApiV4.flowExecute).toHaveBeenCalledTimes(1);
-        expect(ytApiV4.flowExecute).toHaveBeenCalledWith(
-            expect.objectContaining({
-                parameters: expect.objectContaining({flow_command: 'patch-pipeline-dynamic-spec'}),
-                data: {
-                    set_path: '/computations/noop/empty_batch_backoff',
-                    set_value: 280,
-                    expected_version: version,
-                    comment: Buffer.from('Проверка патча', 'utf8').toString('latin1'),
-                },
-            }),
-        );
-        expect(originalSpec.computations.noop.empty_batch_backoff).toBe(250);
-    });
-
-    it('submits no mutation for an unchanged draft', async () => {
-        await updateFlowDynamicSpec({
-            path: pipelinePath,
-            data: {spec, version},
-            originalSpec: structuredClone(spec),
-        })(jest.fn(), jest.fn(), undefined);
-        expect(ytApiV4.flowExecute).not.toHaveBeenCalled();
-        expect(ytApiV4.setPipelineDynamicSpec).not.toHaveBeenCalled();
-    });
-
-    it.each([{a: 2, b: 3}, {a: 1}, {}])(
-        'rejects ambiguous or deleted fields before any write (%j)',
-        async (edited) => {
-            await expect(
-                updateFlowDynamicSpec({
-                    path: pipelinePath,
-                    data: {spec: edited, version},
-                    originalSpec: {a: 1, b: 2},
-                })(jest.fn(), jest.fn(), undefined),
-            ).rejects.toMatchObject({message: expect.stringContaining('No changes were saved')});
-            expect(ytApiV4.flowExecute).not.toHaveBeenCalled();
-            expect(ytApiV4.setPipelineDynamicSpec).not.toHaveBeenCalled();
-        },
-    );
 
     it.each([
         {

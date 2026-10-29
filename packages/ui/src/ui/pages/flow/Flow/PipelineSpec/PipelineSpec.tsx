@@ -33,13 +33,12 @@ import {YTErrorBlock} from '../../../../containers/Block/Block';
 import Loader from '../../../../components/Loader/Loader';
 import {DynamicSpec} from './DynamicSpec/DynamicSpec';
 import {EditSpecDialog, type SpecEditOptions} from './EditSpecDialog';
-import {decodeDynamicSpecValue, dynamicSpecPath} from '../../../../utils/flow/dynamic-spec';
+import {dynamicSpecPath} from '../../../../utils/flow/dynamic-spec';
 import {type Int64} from '../../../../../shared/yt-types';
 
 import {pathToFileName} from '../../../navigation/helpers/pathToFileName';
 
 import './PipelineSpec.scss';
-import i18n from './i18n';
 
 type PipelineSpecProps = {
     path: string;
@@ -48,9 +47,9 @@ type PipelineSpecProps = {
     name: string;
     onSave: (data: PipelineSpecProps['data'], options: SpecEditOptions) => Promise<void>;
     allowForce?: boolean;
-    sparse?: boolean;
     requireComment?: boolean;
     renderRowExtraTools?: RenderRowExtraTools;
+    onOpenEdit?: () => void;
 };
 
 function PipelineSpec({
@@ -60,17 +59,13 @@ function PipelineSpec({
     name,
     onSave,
     allowForce,
-    sparse,
     requireComment,
     renderRowExtraTools,
+    onOpenEdit,
 }: PipelineSpecProps) {
     const [showEdit, setShowEdit] = React.useState(false);
     const [editData, setEditData] = React.useState(data);
-    const specToEdit = sparse || requireComment ? editData?.spec : data?.spec;
-    const editorSpec = React.useMemo(
-        () => (sparse ? decodeDynamicSpecValue(specToEdit) : specToEdit),
-        [sparse, specToEdit],
-    );
+    const editorSpec = requireComment ? editData?.spec : data?.spec;
 
     const settings = useSelector(selectFlowSpecYsonSettings);
 
@@ -92,8 +87,12 @@ function PipelineSpec({
                             view="outlined"
                             disabled={!data}
                             onClick={() => {
-                                setEditData(data);
-                                setShowEdit(true);
+                                if (onOpenEdit) {
+                                    onOpenEdit();
+                                } else {
+                                    setEditData(data);
+                                    setShowEdit(true);
+                                }
                             }}
                         >
                             <Icon awesome="pencil" />
@@ -107,21 +106,14 @@ function PipelineSpec({
                 name={name}
                 visible={showEdit}
                 onSpecApply={(spec, options) =>
-                    onSave(
-                        {...(sparse || requireComment ? editData : data)!, spec},
-                        {
-                            ...options,
-                            ...(sparse ? {originalSpec: editData?.spec} : {}),
-                        },
-                    )
+                    onSave({...(requireComment ? editData : data)!, spec}, options)
                 }
                 onClose={() => setShowEdit(false)}
                 spec={editorSpec}
                 settings={settings}
                 allowForce={allowForce}
-                withComment={sparse || requireComment}
+                withComment={requireComment}
                 requireComment={requireComment}
-                help={sparse ? i18n('context_sparse-edit') : undefined}
             />
         </React.Fragment>
     );
@@ -174,8 +166,8 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
     useUpdater(updateFn);
 
     const onEdit = React.useCallback(
-        (newData: typeof data, {originalSpec, comment}: SpecEditOptions) => {
-            return dispatch(updateFlowDynamicSpec({path, data: newData, originalSpec, comment}));
+        (newData: typeof data, {comment}: SpecEditOptions) => {
+            return dispatch(updateFlowDynamicSpec({path, data: newData, comment}));
         },
         [path, dispatch],
     );
@@ -247,7 +239,7 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
                         }),
                     )
                 }
-                renderEffective={(renderRowExtraTools) => (
+                renderEffective={(renderRowExtraTools, onOpenEdit) => (
                     <PipelineSpec
                         key={path}
                         path={path}
@@ -255,9 +247,9 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
                         error={undefined}
                         name="dynamic specification"
                         onSave={onEdit}
-                        sparse={Boolean(data?.dynamic_spec_state)}
                         requireComment
                         renderRowExtraTools={renderRowExtraTools}
+                        onOpenEdit={onOpenEdit}
                     />
                 )}
             />

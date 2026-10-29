@@ -314,13 +314,6 @@ function requestParameters(request: Request) {
 
 const exactVersion = {$type: 'int64', $value: NEWER_VERSION} as const;
 
-const humanEffectiveSpec = {
-    ...(dynamicSpecSnapshot.effective_spec as {
-        computations: {noop: {empty_batch_backoff: number}};
-    }),
-    unicode_group: {changed: 1, label: 'Квота 😊', binary: '\xff', Квота: 3},
-};
-
 async function replaceEditorContent(page: Page, text: string, verifyDraft = false) {
     const dialog = page.getByRole('dialog');
     await dialog
@@ -342,6 +335,14 @@ async function applyEditor(page: Page, comment = 'Update value') {
     const dialog = page.getByRole('dialog');
     await dialog.getByRole('textbox', {name: 'Comment', exact: true}).fill(comment);
     await dialog.getByRole('button', {name: 'Confirm', exact: true}).click();
+}
+
+async function openParameterEditor(page: Page, path: string) {
+    await page.getByRole('button', {name: 'Edit dynamic specification', exact: true}).click();
+    const picker = page.getByRole('dialog');
+    await picker.getByRole('textbox', {name: 'Path', exact: true}).fill(path);
+    await picker.getByRole('button', {name: 'Confirm', exact: true}).click();
+    await expect(page.getByRole('dialog').getByText(path, {exact: true})).toBeVisible();
 }
 
 async function editorText(page: Page) {
@@ -906,17 +907,11 @@ test('PipelineDynamicSpec: editing one backoff sends one leaf with original CAS 
         }),
     );
     await mount(<PipelineDynamicSpecStories.Overrides />);
-    await page.getByRole('button', {name: 'Edit dynamic specification'}).click();
+    await openParameterEditor(page, '/computations/noop/empty_batch_backoff');
     const dialog = page.getByRole('dialog');
     await expect(dialog).toBeVisible();
-    await dialog.getByRole('textbox', {name: 'Editor content'}).focus();
-    const modifier = await page.evaluate(() =>
-        navigator.userAgent.includes('Macintosh') ? 'Meta' : 'Control',
-    );
-    await page.keyboard.press(`${modifier}+f`);
-    await dialog.getByRole('textbox', {name: 'Find', exact: true}).fill('250');
-    await page.keyboard.press('Escape');
-    await page.keyboard.insertText('280');
+    await expect.poll(() => editorJSON(page)).toBe(250);
+    await replaceEditorContent(page, '280', true);
 
     await dialog.getByRole('textbox', {name: 'Comment', exact: true}).fill('Проверка патча 😊');
     await dialog.getByRole('button', {name: 'Confirm', exact: true}).click();
@@ -939,7 +934,7 @@ test('PipelineDynamicSpec: editing one backoff sends one leaf with original CAS 
         ]);
 });
 
-test('PipelineDynamicSpec: unchanged draft sends no mutation and multiple edits fail before writing', async ({
+test('PipelineDynamicSpec: Edit selects a parameter and replaces a whole map', async ({
     mount,
     page,
     router,
@@ -956,6 +951,18 @@ test('PipelineDynamicSpec: unchanged draft sends no mutation and multiple edits 
     );
     await mount(<PipelineDynamicSpecStories.Overrides />);
     await page.getByRole('button', {name: 'Edit dynamic specification'}).click();
+    const picker = page.getByRole('dialog');
+    await expect(picker.getByRole('button', {name: 'Confirm', exact: true})).toBeDisabled();
+    await picker.getByRole('textbox', {name: 'Path', exact: true}).fill('/');
+    await expect(picker.getByRole('button', {name: 'Confirm', exact: true})).toBeDisabled();
+    await picker.getByRole('textbox', {name: 'Path', exact: true}).fill('/computations/noop');
+    await picker.getByRole('button', {name: 'Confirm', exact: true}).click();
+    await expect
+        .poll(() => editorJSON(page))
+        .toEqual({
+            empty_batch_backoff: 250,
+            max_rows_per_batch: 1001,
+        });
     await page
         .getByRole('dialog')
         .getByRole('textbox', {name: 'Comment', exact: true})
@@ -966,12 +973,19 @@ test('PipelineDynamicSpec: unchanged draft sends no mutation and multiple edits 
     await page.getByRole('dialog').getByRole('button', {name: 'Cancel', exact: true}).click();
     await expect(page.getByRole('dialog')).toHaveCount(0);
     expect(mutations).toEqual([]);
-    await page.getByRole('button', {name: 'Edit dynamic specification'}).click();
-    const dialog = page.getByRole('dialog');
-    await replaceEditorContent(page, '{"a": 1, "b": 2}');
+    await openParameterEditor(page, '/computations/noop');
+    await replaceEditorContent(page, '{"empty_batch_backoff": 280, "max_rows_per_batch": 1002}');
     await applyEditor(page);
-    await expect(dialog.getByText('No changes were saved.', {exact: false})).toBeVisible();
-    expect(mutations).toEqual([]);
+    await expect
+        .poll(() => mutations)
+        .toEqual([
+            {
+                set_path: '/computations/noop',
+                set_value: {empty_batch_backoff: 280, max_rows_per_batch: 1002},
+                expected_version: exactVersion,
+                comment: 'Update value',
+            },
+        ]);
 });
 
 test('PipelineDynamicSpec: open editor keeps its original snapshot during background refresh', async ({
@@ -999,8 +1013,8 @@ test('PipelineDynamicSpec: open editor keeps its original snapshot during backgr
         }),
     );
     await mount(<PipelineDynamicSpecStories.Overrides />);
-    await page.getByRole('button', {name: 'Edit dynamic specification'}).click();
-    await replaceEditorContent(page, JSON.stringify({...humanEffectiveSpec, fresh: true}));
+    await openParameterEditor(page, '/computations/noop/empty_batch_backoff');
+    await replaceEditorContent(page, '280');
     await page.evaluate((snapshot) => {
         (
             window as typeof window & {store: {dispatch: (action: unknown) => unknown}}
@@ -1023,8 +1037,8 @@ test('PipelineDynamicSpec: open editor keeps its original snapshot during backgr
     ).toBeVisible();
     expect(mutations).toEqual([
         {
-            set_path: '/fresh',
-            set_value: true,
+            set_path: '/computations/noop/empty_batch_backoff',
+            set_value: 280,
             expected_version: exactVersion,
             comment: 'Update value',
         },

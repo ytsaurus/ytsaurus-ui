@@ -18,10 +18,7 @@ import {forEachYTError} from '../../../utils/errors';
 import {
     UnsafeDynamicSpecVersionError,
     decodeDynamicSpecAudit,
-    dynamicSpecEdits,
-    dynamicSpecPath,
     dynamicSpecVersion,
-    encodeDynamicSpecValue,
     validateDynamicSpecVersions,
 } from '../../../utils/flow/dynamic-spec';
 import i18n from '../../../pages/flow/Flow/PipelineSpec/i18n';
@@ -245,12 +242,10 @@ export function loadFlowDynamicSpec(pipeline_path: string): AsyncAction {
 export function updateFlowDynamicSpec({
     data,
     path,
-    originalSpec,
     comment,
 }: {
     data: FlowSpecState['data'];
     path: string;
-    originalSpec?: unknown;
     comment?: string;
 }): AsyncAction<Promise<void>> {
     return async (dispatch) => {
@@ -258,30 +253,6 @@ export function updateFlowDynamicSpec({
             return;
         }
         dynamicSpecVersion(data.version);
-        if (originalSpec !== undefined) {
-            const edits = dynamicSpecEdits(
-                originalSpec,
-                encodeDynamicSpecValue(data.spec, originalSpec),
-            );
-            if (!edits.length) {
-                return;
-            }
-            if (edits.length !== 1 || edits[0].value === undefined || !edits[0].path.length) {
-                throw new Error(i18n('error_sparse-edit'));
-            }
-            return dispatch(
-                mutateFlowDynamicSpec({
-                    path,
-                    command: 'patch-pipeline-dynamic-spec',
-                    body: {
-                        set_path: dynamicSpecPath(edits[0].path),
-                        set_value: edits[0].value,
-                        comment: comment ?? '',
-                        expected_version: data.version,
-                    },
-                }),
-            );
-        }
         return dispatch(
             mutateFlowDynamicSpec({
                 path,

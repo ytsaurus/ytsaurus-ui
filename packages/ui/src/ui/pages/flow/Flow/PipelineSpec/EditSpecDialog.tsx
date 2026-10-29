@@ -20,7 +20,7 @@ type FormValues = {
     comment?: string;
 };
 
-export type SpecEditOptions = {force?: boolean; originalSpec?: unknown; comment?: string};
+export type SpecEditOptions = {force?: boolean; comment?: string};
 
 export function EditSpecDialog({
     path,
