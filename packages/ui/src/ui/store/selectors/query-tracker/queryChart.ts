@@ -2,7 +2,7 @@ import {createSelector} from 'reselect';
 import {type RootState} from '../../reducers';
 import {selectQueryResultsState} from './queryResult';
 import {selectQueryDraft} from './query';
-import {type QueryResultReadyState} from '../../../types/query-tracker/queryResult';
+import {prepareLegacyRows} from '../../../utils/query-tracker/resultRows';
 import {NumberTypes} from '../../../types/query-tracker/yqlTypes';
 
 export const selectChartVisualization = (state: RootState) =>
@@ -32,7 +32,8 @@ export const selectQueryResult = createSelector(
     (results, index) => {
         if (!(index in results)) return [];
 
-        return (results[index] as QueryResultReadyState).results;
+        const result = results[index];
+        return result?.resultReady ? prepareLegacyRows(result.results) : [];
     },
 );
 

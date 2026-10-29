@@ -1,0 +1,25 @@
+.yt-query-result-cell {
+    font-family: var(--g-font-family-monospace);
+    font-size: var(--g-text-code-2-font-size);
+    line-height: var(--g-text-code-2-line-height);
+
+    .unipika {
+        display: inline-block;
+        max-width: var(--qt-result-table-cell-max-width, 700px);
+        white-space: pre;
+
+        video {
+            max-width: var(--qt-result-table-cell-max-width, 700px);
+        }
+    }
+
+    &__cell-content {
+        padding-right: 30px;
+    }
+
+    &__cell-action {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+    }
+}

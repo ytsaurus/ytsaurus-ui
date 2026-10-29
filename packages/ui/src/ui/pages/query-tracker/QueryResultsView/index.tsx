@@ -4,7 +4,7 @@ import {useSelector} from '../../../store/redux-hooks';
 import block from 'bem-cn-lite';
 
 import {type RootState} from '../../../store/reducers';
-import {selectQueryResult} from '../../../store/selectors/query-tracker/queryResult';
+import {selectLegacyQueryResult} from '../../../store/selectors/query-tracker/queryResult';
 import {YTErrorBlock} from '../../../containers/Block/Block';
 import {ResultsTable} from './ResultsTable';
 import {type QueryItem} from '../../../types/query-tracker/api';
@@ -76,7 +76,9 @@ function QueryReadyResultView({
 
 export const QueryResultsView = React.memo(
     function QueryResultsView({query, index}: {query: QueryItem; index: number}) {
-        const result = useSelector((state: RootState) => selectQueryResult(state, query.id, index));
+        const result = useSelector((state: RootState) =>
+            selectLegacyQueryResult(state, query.id, index),
+        );
         const engine = useSelector(selectQueryEngine);
 
         const {onShowPreview} = useShowPreviewHandler({

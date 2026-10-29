@@ -8,7 +8,7 @@ import transposeIcon from '../../../../assets/img/svg/transpose.svg';
 import {SET_QUERY_RESULTS_SETTINGS} from '../../../../store/reducers/query-tracker/query-tracker-contants';
 import {type QueryItem} from '../../../../types/query-tracker/api';
 import {
-    type QueryResultReadyState,
+    type SourceQueryResultReadyState as QueryResultReadyState,
     QueryResultsViewMode,
 } from '../../../../types/query-tracker/queryResult';
 import {TableColumnsSelector} from './TableColumnsSelector';

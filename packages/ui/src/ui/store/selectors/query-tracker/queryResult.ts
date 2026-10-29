@@ -1,9 +1,11 @@
+import {createSelector} from 'reselect';
+import {prepareLegacyRows} from '../../../utils/query-tracker/resultRows';
 import {TABLE_DEFAULTS} from '../../../constants/settings/table';
 import {type RootState} from '../../reducers';
 import {getSettingsInitialData} from '../../reducers/settings';
 import {
     type QueryResult,
-    type QueryResultReadyState,
+    type SourceQueryResultReadyState as QueryResultReadyState,
     QueryResultState,
 } from '../../../types/query-tracker/queryResult';
 
@@ -67,8 +69,26 @@ export const selectQueryResultSettings = (
     index: number,
 ): QueryResultReadyState['settings'] => {
     const result = selectQueryResult(state, queryId, index);
-    if (result?.state === QueryResultState.Ready) {
+    if (result?.settings) {
         return result.settings;
     }
     return selectQueryResultGlobalSettings();
 };
+
+const selectLegacyRows = createSelector(
+    [
+        (state: RootState, queryId: string, index: number) => {
+            const result = selectQueryResult(state, queryId, index);
+            return result?.resultReady ? result.results : undefined;
+        },
+    ],
+    (rows) => (rows ? prepareLegacyRows(rows) : []),
+);
+
+export const selectLegacyQueryResult = createSelector(
+    [selectQueryResult, selectLegacyRows],
+    (result, rows) => {
+        if (!result?.resultReady) return result;
+        return {...result, results: rows};
+    },
+);
