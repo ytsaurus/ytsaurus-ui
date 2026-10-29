@@ -1,10 +1,13 @@
 import omit_ from 'lodash/omit';
 import {type QueryItem, isSingleProgress} from './api';
 
+export const cleanupQueryAnnotations = (annotations: QueryItem['annotations']) =>
+    omit_(annotations, 'is_tutorial');
+
 export const cleanupQueryForDraft = (query: QueryItem): QueryItem => {
     return {
         ...query,
-        annotations: omit_(query.annotations, 'is_tutorial'),
+        annotations: cleanupQueryAnnotations(query.annotations),
     };
 };
 
