@@ -27,6 +27,9 @@ export const savedConversation = {
     metadata: {topic: 'Saved conversation'},
 };
 export const chatHistoryHandlers = [
+    http.get('*/api/code-assistant/models', () =>
+        HttpResponse.json({data: [{id: 'model-a'}, {id: 'model-b'}]}),
+    ),
     http.post('*/api/code-assistant/create-conversation', () =>
         HttpResponse.json({
             id: 'conv_new',

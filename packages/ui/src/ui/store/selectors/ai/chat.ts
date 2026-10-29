@@ -11,6 +11,17 @@ export const selectChatSending = (state: RootState) => state.aiChat.sending;
 export const selectChatOpen = (state: RootState) => state.aiChat.isOpen;
 export const selectConversation = (state: RootState) => state.aiChat.conversation;
 
+export const selectChatModels = (state: RootState) => state.aiChat.models;
+export const selectChatModel = (state: RootState) =>
+    state.aiChat.models.selected ?? uiSettings.aiChatConfig?.model;
+export const selectChatModelOptions = createSelector([selectChatModels], ({items}) => {
+    const defaultModel = uiSettings.aiChatConfig?.model;
+    return [...new Set([...(defaultModel ? [defaultModel] : []), ...items])].map((id) => ({
+        value: id,
+        content: id,
+    }));
+});
+
 export const selectAttachedFiles = (state: RootState) => state.aiChat.attachedFiles;
 
 const selectQueryPageContext = createSelector([selectQueryDraft], (draft) => {

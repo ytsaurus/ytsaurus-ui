@@ -39,6 +39,7 @@ import {
     deleteConversation,
     getConversationItems,
     getConversations,
+    getModels,
     sendMessage,
     summarizeConversationTitle,
 } from './controllers/ai-chat';
@@ -106,6 +107,7 @@ const routes: AppRoutes = {
 
     'POST /api/tablet-errors/:ytAuthCluster/:action': {handler: ytTabletErrorsApi},
 
+    'GET /api/code-assistant/models': {handler: getModels},
     'GET /api/code-assistant/conversations': {handler: getConversations},
     'POST /api/code-assistant/create-conversation': {handler: createConversation},
     'GET /api/code-assistant/conversations/:conversationId/items': {handler: getConversationItems},

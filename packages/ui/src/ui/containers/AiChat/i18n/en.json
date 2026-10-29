@@ -13,5 +13,8 @@
   "alert_response-incomplete": "The model returned an incomplete response.",
   "alert_response-interrupted": "The response stream was interrupted. Please try again.",
   "action_apply": "Apply",
-  "action_cancel": "Cancel"
+  "action_cancel": "Cancel",
+  "field_model": "Model",
+  "alert_models-load-failed": "Failed to load models",
+  "action_retry-models": "Retry"
 }

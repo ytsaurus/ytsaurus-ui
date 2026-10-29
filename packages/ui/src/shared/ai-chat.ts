@@ -3,6 +3,7 @@ import {type ResponseInput} from 'openai/resources/responses/responses';
 export interface AIChatConfig {
     baseUrl: string;
     model: string;
+    modelsQuery?: Record<string, string>;
     metadata?: Record<string, string>;
     conversationLookup?: 'retrieve' | 'list';
 }
@@ -30,6 +31,10 @@ export function createResponseInput({
             ],
         },
     ];
+}
+
+export interface AIChatModels {
+    data: {id: string}[];
 }
 
 export interface Conversation {

@@ -25,6 +25,13 @@ type AiChatState = {
         lastId?: string;
         error?: Error;
     };
+    models: {
+        items: string[];
+        selected?: string;
+        loading: boolean;
+        loaded: boolean;
+        error?: Error;
+    };
     sending: boolean;
     isOpen: boolean;
     attachedFiles: File[];
@@ -39,6 +46,7 @@ const initialState: AiChatState = {
         initialTitlePending: {},
         titleGenerating: {},
     },
+    models: {items: [], loading: false, loaded: false},
     sending: false,
     isOpen: false,
     attachedFiles: [],
@@ -48,6 +56,12 @@ const chatSlice = createSlice({
     initialState,
     name: 'aiChat',
     reducers: {
+        setModels: (state, {payload}: PayloadAction<Partial<AiChatState['models']>>) => {
+            Object.assign(state.models, payload);
+        },
+        setSelectedModel: (state, {payload}: PayloadAction<string>) => {
+            if (!state.sending) state.models.selected = payload;
+        },
         setConversation: (
             state,
             {payload}: PayloadAction<Partial<AiChatState['conversation']>>,
@@ -87,7 +101,12 @@ const chatSlice = createSlice({
             state.conversation.items.push(...castDraft(payload));
         },
         resetChat: (state) => {
-            return {...initialState, isOpen: state.isOpen, conversations: state.conversations};
+            return {
+                ...initialState,
+                isOpen: state.isOpen,
+                conversations: state.conversations,
+                models: state.models,
+            };
         },
         addAttachedFile: (state, {payload}: PayloadAction<File>) => {
             state.attachedFiles.push(payload);
@@ -102,6 +121,8 @@ const chatSlice = createSlice({
 });
 
 export const {
+    setModels,
+    setSelectedModel,
     setConversation,
     setConversations,
     setSending,

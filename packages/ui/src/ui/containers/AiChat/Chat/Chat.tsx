@@ -1,5 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
+import {Flex} from '@gravity-ui/uikit';
+import {ChatModelSelect} from '../ChatModelSelect/ChatModelSelect';
 import {ChatContainer} from '@gravity-ui/aikit/ChatContainer';
 import copy from 'copy-to-clipboard';
 import type {TAssistantMessage} from '@gravity-ui/aikit';
@@ -92,7 +94,9 @@ export default function Chat({onClose}: AiChatProps) {
                     else if (conversation.id) dispatch(loadConversation(conversation.id));
                 }}
                 status={displayStatus}
-                onSendMessage={onSend}
+                onSendMessage={async (data) => {
+                    await onSend(data);
+                }}
                 onCancel={onCancel}
                 shouldParseIncompleteMarkdown
                 openMarkdownLinksInNewTab
@@ -116,7 +120,14 @@ export default function Chat({onClose}: AiChatProps) {
                     disabled:
                         conversation.loading || Boolean(history.deleting || conversation.error),
                     bodyProps: {disabledInput: sending},
-                    footerProps: {attachmentContent: <ChatAttachments />},
+                    footerProps: {
+                        bottomContent: (
+                            <Flex gap={2} alignItems="center" className={block('input-controls')}>
+                                <ChatAttachments />
+                                <ChatModelSelect />
+                            </Flex>
+                        ),
+                    },
                 }}
                 welcomeConfig={{
                     title: i18n('title_greeting'),

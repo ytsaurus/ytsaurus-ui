@@ -6,6 +6,8 @@ import {v4 as uuidv4} from 'uuid';
 import {type RootState} from '../../reducers';
 import {
     selectAttachedFiles,
+    selectChatModel,
+    selectChatModels,
     selectChatOpen,
     selectChatSending,
     selectConversation,
@@ -20,10 +22,12 @@ import {
     setConversations,
     setInitialTitlePending,
     setIsOpen,
+    setModels,
     setSending,
     setTitleGenerating,
 } from '../../reducers/ai/chatSlice';
 import {
+    type AIChatModels,
     type Conversation,
     type ConversationItem,
     type ConversationPage,
@@ -36,6 +40,24 @@ const TITLE_GENERATION_FREQUENCY = 5;
 const REQUEST_TIMEOUT = 120_000;
 
 type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
+
+export const getModels =
+    (retry = false): AsyncAction =>
+    async (dispatch, getState) => {
+        const models = selectChatModels(getState());
+        if (models.loading || (!retry && (models.loaded || models.error))) return;
+        dispatch(setModels({loading: true, error: undefined}));
+        try {
+            const {data} = await axios.get<AIChatModels>(`${BASE_PATH}/models`, {
+                timeout: REQUEST_TIMEOUT,
+            });
+            dispatch(setModels({items: data.data.map(({id}) => id), loaded: true}));
+        } catch (error) {
+            dispatch(setModels({error: error as Error}));
+        } finally {
+            dispatch(setModels({loading: false}));
+        }
+    };
 
 const readFileAsText = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -74,6 +96,7 @@ export const sendQuestion =
         )
             return undefined;
 
+        const model = selectChatModel(state);
         const attachedFiles = selectAttachedFiles(state);
         const {contextMessages, meta} = selectPageContext(state);
         dispatch(addConversationItem({id: uuidv4(), role: 'user', content: question}));
@@ -117,6 +140,7 @@ export const sendQuestion =
                     input: createResponseInput({message: question, contextMessages, files}),
                     conversation: conversationId,
                     metadata: meta,
+                    model,
                 }),
                 signal: AbortSignal.any([signal, timeoutController.signal]),
             });
