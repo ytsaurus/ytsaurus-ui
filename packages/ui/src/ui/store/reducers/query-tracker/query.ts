@@ -1,4 +1,5 @@
 import {type Action} from 'redux';
+import isEqual_ from 'lodash/isEqual';
 
 import {type ActionD} from '../../../types';
 
@@ -6,6 +7,7 @@ import {type DraftQuery, type QueryItem} from '../../../types/query-tracker/api'
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {
     REQUEST_QUERY,
+    RESTORE_QUERY_DIRTY_AFTER_SUBMIT,
     SET_DIRTY_SUBMIT,
     SET_QUERY,
     SET_QUERY_CLIQUE_LOADING,
@@ -15,6 +17,7 @@ import {
     SET_QUERY_PARAMS,
     SET_QUERY_PATCH,
     SET_QUERY_READY,
+    SET_QUERY_SUBMITTING,
     SET_SUPPORTED_ENGINE,
     UPDATE_ACO_QUERY,
     UPDATE_DRAFT,
@@ -25,6 +28,8 @@ import {cleanupQueryForDraft} from '../../../types/query-tracker/query';
 import {type ChytInfo} from '../chyt/list';
 
 export interface QueryState {
+    sessionRevision: number;
+    submittingRevision?: number;
     queryItem?: QueryItem;
     draft: DraftQuery;
     params: {
@@ -34,6 +39,7 @@ export interface QueryState {
         useDraft?: boolean;
     };
     dirtySinceLastSubmit: boolean;
+    dirtyNonAnnotationFields: boolean;
     cliqueLoading: boolean;
     clusterLoading: boolean;
     cliqueMap: Record<string, Record<string, ChytInfo[]>>;
@@ -55,22 +61,55 @@ const initialQueryDraftState: QueryState['draft'] = {
 };
 
 const initState: QueryState = {
+    sessionRevision: 0,
     queryItem: undefined,
     draft: {...initialQueryDraftState},
     params: {},
     dirtySinceLastSubmit: false,
+    dirtyNonAnnotationFields: false,
     cliqueMap: {},
     cliqueLoading: false,
     clusterLoading: false,
     state: 'init',
 };
 
+const draftFields: (keyof DraftQuery)[] = [
+    'query',
+    'engine',
+    'files',
+    'settings',
+    'secrets',
+    'access_control_object',
+    'access_control_objects',
+];
+
+function hasUserDraftChanges(draft: DraftQuery, action: SetQueryPatchAction) {
+    return (
+        action.meta?.source !== 'system' &&
+        draftFields.some(
+            (key) => Object.hasOwn(action.data, key) && !isEqual_(draft[key], action.data[key]),
+        )
+    );
+}
+
+function getSessionRevision(state: QueryState, next?: QueryItem) {
+    return next?.id && next.id === state.queryItem?.id
+        ? state.sessionRevision
+        : (state.sessionRevision ?? 0) + 1;
+}
+
 export function query(state = initState, action: Actions): QueryState {
     switch (action.type) {
+        case SET_QUERY_SUBMITTING: {
+            if (action.data.pending) return {...state, submittingRevision: action.data.revision};
+            if (state.submittingRevision !== action.data.revision) return state;
+            return {...state, submittingRevision: undefined};
+        }
         case SET_QUERY: {
             return {
                 ...state,
                 queryItem: action.data.initialQuery,
+                sessionRevision: getSessionRevision(state, action.data.initialQuery),
                 draft: {
                     ...initialQueryDraftState,
                     ...(action.data.initialQuery
@@ -80,6 +119,7 @@ export function query(state = initState, action: Actions): QueryState {
                         : {}),
                 },
                 dirtySinceLastSubmit: false,
+                dirtyNonAnnotationFields: false,
                 state: 'ready',
             };
         }
@@ -107,12 +147,32 @@ export function query(state = initState, action: Actions): QueryState {
             return {
                 ...state,
                 dirtySinceLastSubmit: action.data,
+                dirtyNonAnnotationFields: action.data,
+            };
+        }
+        case RESTORE_QUERY_DIRTY_AFTER_SUBMIT: {
+            if (state.sessionRevision !== action.data.revision) return state;
+            const dirtyNonAnnotationFields =
+                state.dirtyNonAnnotationFields || action.data.dirtyNonAnnotationFields;
+            const savedAnnotations = state.queryItem
+                ? cleanupQueryForDraft(state.queryItem).annotations
+                : undefined;
+            return {
+                ...state,
+                dirtyNonAnnotationFields,
+                dirtySinceLastSubmit:
+                    dirtyNonAnnotationFields ||
+                    !isEqual_(state.draft.annotations || {}, savedAnnotations || {}),
             };
         }
         case UPDATE_QUERY_ITEM: {
             return {
                 ...state,
                 queryItem: action.data,
+                dirtySinceLastSubmit:
+                    state.dirtyNonAnnotationFields ||
+                    (state.dirtySinceLastSubmit &&
+                        !isEqual_(state.draft.annotations, action.data.annotations)),
             };
         }
         case REQUEST_QUERY: {
@@ -134,15 +194,19 @@ export function query(state = initState, action: Actions): QueryState {
             };
         }
         case SET_QUERY_PATCH: {
-            const hasQuery = Boolean(action?.data?.query);
-
+            const dirtyNonAnnotationFields =
+                state.dirtyNonAnnotationFields || hasUserDraftChanges(state.draft, action);
+            const dirtyAnnotations = Object.hasOwn(action.data, 'annotations')
+                ? !isEqual_(action.data.annotations, state.queryItem?.annotations)
+                : state.dirtySinceLastSubmit;
             return {
                 ...state,
                 draft: {
                     ...state.draft,
                     ...action.data,
                 },
-                dirtySinceLastSubmit: hasQuery,
+                dirtyNonAnnotationFields,
+                dirtySinceLastSubmit: dirtyNonAnnotationFields || dirtyAnnotations,
             };
         }
         case SET_QUERY_PARAMS: {
@@ -193,7 +257,14 @@ export function query(state = initState, action: Actions): QueryState {
     return state;
 }
 
+export type SetQuerySubmitting = ActionD<
+    typeof SET_QUERY_SUBMITTING,
+    {revision: number; pending: boolean}
+>;
+
 type Actions =
+    | RestoreQueryDirtyAfterSubmit
+    | SetQuerySubmitting
     | SetQueryAction
     | RequestQueryAction
     | SetQueryErrorLoadAction
@@ -229,7 +300,9 @@ export type SetDirtySubmit = ActionD<typeof SET_DIRTY_SUBMIT, boolean>;
 
 export type SetQueryErrorLoadAction = ActionD<typeof SET_QUERY_LOAD_ERROR, Error | string>;
 
-export type SetQueryPatchAction = ActionD<typeof SET_QUERY_PATCH, QueryState['draft']>;
+export type SetQueryPatchAction = ActionD<typeof SET_QUERY_PATCH, Partial<DraftQuery>> & {
+    meta?: {source: 'user' | 'system'};
+};
 
 export type SetQueryParamsAction = ActionD<
     typeof SET_QUERY_PARAMS,
@@ -256,4 +329,9 @@ export type UpdateACOQueryAction = ActionD<
 export type SetSupportedEngines = ActionD<
     typeof SET_SUPPORTED_ENGINE,
     QueryState['draft']['supportedEngines']
+>;
+
+export type RestoreQueryDirtyAfterSubmit = ActionD<
+    typeof RESTORE_QUERY_DIRTY_AFTER_SUBMIT,
+    {revision: number; dirtyNonAnnotationFields: boolean}
 >;

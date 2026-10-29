@@ -4,7 +4,7 @@ import Link from '../../../containers/Link/Link';
 import Icon from '../../../components/Icon/Icon';
 import {createNewQueryUrl, createQueryUrl} from '../utils/navigation';
 import {
-    selectIsQueryDraftEditted,
+    selectDirtySinceLastSubmit,
     selectQuery,
     selectQueryEngine,
 } from '../../../store/selectors/query-tracker/query';
@@ -19,7 +19,7 @@ interface Props {
 
 export function QueryTrackerOpenButton({className, cluster, path}: Props) {
     const engine = useSelector(selectQueryEngine);
-    const isEdited = useSelector(selectIsQueryDraftEditted);
+    const isEdited = useSelector(selectDirtySinceLastSubmit);
     const queryId = useSelector(selectQuery)?.id;
     let url = '';
     let buttonView: ButtonProps['view'];
