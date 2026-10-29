@@ -1,0 +1,9 @@
+{
+  "action_insert-select": "Insert SELECT into editor",
+  "action_add-favorite": "Add to favourites",
+  "action_remove-favorite": "Remove from favourites",
+  "action_node-actions": "Node actions",
+  "action_copy-query-path": "Copy path for query",
+  "action_insert-path": "Insert path into editor",
+  "action_create-query": "Create {{engine}} query"
+}

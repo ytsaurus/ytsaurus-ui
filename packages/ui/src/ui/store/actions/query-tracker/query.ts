@@ -1,3 +1,4 @@
+import {selectQuerySubmitting} from '../../selectors/query-tracker/querySubmitting';
 import {createQueryUrl} from '../../../pages/query-tracker/utils/navigation';
 import {type AnyAction} from 'redux';
 import {type ThunkAction} from 'redux-thunk';
@@ -15,7 +16,7 @@ import {
     startQuery,
     updateACOQuery,
 } from './api';
-import {requestQueriesList} from './queriesList';
+import {refreshQueriesList} from './queriesList';
 import {
     SHARED_QUERY_ACO,
     selectCurrentDraftQueryACO,
@@ -29,6 +30,7 @@ import {getAppBrowserHistory} from '../../window-store';
 import {
     type QueryState,
     type RequestQueryAction,
+    type RestoreQueryDirtyAfterSubmit,
     type SetDirtySubmit,
     type SetQueryAction,
     type SetQueryCliqueLoading,
@@ -37,6 +39,7 @@ import {
     type SetQueryErrorLoadAction,
     type SetQueryPatchAction,
     type SetQueryReadyAction,
+    type SetQuerySubmitting,
     type UpdateDraftAction,
 } from '../../reducers/query-tracker/query';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
@@ -52,6 +55,7 @@ import UIFactory from '../../../UIFactory';
 
 import {
     REQUEST_QUERY,
+    RESTORE_QUERY_DIRTY_AFTER_SUBMIT,
     SET_DIRTY_SUBMIT,
     SET_QUERY,
     SET_QUERY_CLIQUE_LOADING,
@@ -59,6 +63,7 @@ import {
     SET_QUERY_CLUSTER_LOADING,
     SET_QUERY_PATCH,
     SET_QUERY_READY,
+    SET_QUERY_SUBMITTING,
     SET_SUPPORTED_ENGINE,
     UPDATE_ACO_QUERY,
     UPDATE_DRAFT,
@@ -100,7 +105,7 @@ const checkCliqueControllerIsSupported =
             (engine === QueryEngine.SPYT && !supportedControllers.spyt) ||
             (engine === QueryEngine.CHYT && !supportedControllers.chyt)
         ) {
-            dispatch(updateQueryDraft({engine: QueryEngine.YQL}));
+            dispatch(updateQueryDraft({engine: QueryEngine.YQL}, 'system'));
         }
 
         dispatch({
@@ -117,7 +122,7 @@ export const setCurrentClusterToQuery = (): AsyncAction => async (dispatch, getS
     if (settings && 'cluster' in settings) return;
 
     dispatch(checkCliqueControllerIsSupported(cluster, engine));
-    dispatch(updateQueryDraft({settings: {...settings, cluster}}));
+    dispatch(updateQueryDraft({settings: {...settings, cluster}}, 'system'));
 };
 
 export const setUserLastChoice =
@@ -163,7 +168,7 @@ export const setUserLastChoice =
             }
         }
 
-        dispatch(updateQueryDraft({settings: newSettings}));
+        dispatch(updateQueryDraft({settings: newSettings}, 'system'));
     };
 
 async function getCliqueControllerSupportByCluster(
@@ -382,8 +387,11 @@ export function loadQuery(
     };
 }
 
-export function updateQueryDraft(data: Partial<QueryState['draft']>) {
-    return {type: SET_QUERY_PATCH, data};
+export function updateQueryDraft(
+    data: Partial<QueryState['draft']>,
+    source: 'user' | 'system' = 'user',
+): SetQueryPatchAction {
+    return {type: SET_QUERY_PATCH, data, meta: {source}};
 }
 
 export const mergeSpytDefaultSettingsIntoDraft = (): AsyncAction => (dispatch, getState) => {
@@ -405,9 +413,12 @@ export const mergeSpytDefaultSettingsIntoDraft = (): AsyncAction => (dispatch, g
 
     const settings = selectQueryDraftSettings(state) ?? {};
     dispatch(
-        updateQueryDraft({
-            settings: {...spytDefaultSettings, ...settings},
-        }),
+        updateQueryDraft(
+            {
+                settings: {...spytDefaultSettings, ...settings},
+            },
+            'system',
+        ),
     );
 };
 
@@ -507,38 +518,63 @@ export function createEmptyQuery(
 export function runQuery(
     afterCreate?: (query_id: string) => boolean | void,
     options?: {execution_mode: 'validate' | 'optimize'},
-): ThunkAction<any, RootState, any, SetQueryAction | SetDirtySubmit> {
+): ThunkAction<
+    any,
+    RootState,
+    any,
+    SetQueryAction | SetDirtySubmit | SetQuerySubmitting | RestoreQueryDirtyAfterSubmit
+> {
     return async (dispatch, getState) => {
         const state = getState();
-        const query = selectQueryDraft(state);
-        const isMultipleAco = selectIsMultipleAco(state);
-        const effectiveACO = selectCurrentDraftQueryACO(state).filter(
-            (i) => i !== SHARED_QUERY_ACO,
-        );
+        if (selectQuerySubmitting(state)) return;
+        const revision = state.queryTracker.query.sessionRevision;
+        dispatch({type: SET_QUERY_SUBMITTING, data: {revision, pending: true}});
+        try {
+            const query = selectQueryDraft(state);
+            const isMultipleAco = selectIsMultipleAco(state);
+            const effectiveACO = selectCurrentDraftQueryACO(state).filter(
+                (i) => i !== SHARED_QUERY_ACO,
+            );
 
-        const newQuery = {...query};
-        if (isMultipleAco) {
-            newQuery.access_control_objects = effectiveACO;
-        } else {
-            newQuery.access_control_object = effectiveACO[0];
+            const newQuery = {...query};
+            if (isMultipleAco) {
+                newQuery.access_control_objects = effectiveACO;
+            } else {
+                newQuery.access_control_object = effectiveACO[0];
+            }
+
+            dispatch({
+                type: SET_DIRTY_SUBMIT,
+                data: false,
+            });
+
+            const {query_id} = await wrapApiPromiseByToaster(
+                dispatch(startQuery(newQuery, options)),
+                {
+                    toasterName: 'start_query',
+                    skipSuccessToast: true,
+                    errorTitle: 'Failed to start query',
+                },
+            );
+            if (getState().queryTracker.query.sessionRevision !== revision) return;
+            const handled = afterCreate?.(query_id);
+            if (!handled) {
+                dispatch(loadQuery(query_id));
+            }
+
+            dispatch(refreshQueriesList());
+        } catch (error) {
+            dispatch({
+                type: RESTORE_QUERY_DIRTY_AFTER_SUBMIT,
+                data: {
+                    revision,
+                    dirtyNonAnnotationFields: state.queryTracker.query.dirtyNonAnnotationFields,
+                },
+            });
+            throw error;
+        } finally {
+            dispatch({type: SET_QUERY_SUBMITTING, data: {revision, pending: false}});
         }
-
-        dispatch({
-            type: SET_DIRTY_SUBMIT,
-            data: false,
-        });
-
-        const {query_id} = await wrapApiPromiseByToaster(dispatch(startQuery(newQuery, options)), {
-            toasterName: 'start_query',
-            skipSuccessToast: true,
-            errorTitle: 'Failed to start query',
-        });
-        const handled = afterCreate?.(query_id);
-        if (!handled) {
-            dispatch(loadQuery(query_id));
-        }
-
-        dispatch(requestQueriesList(true));
     };
 }
 
@@ -553,7 +589,7 @@ export function abortCurrentQuery(): ThunkAction<any, RootState, any, SetQueryAc
                 errorTitle: 'Failed to abort query',
             });
             dispatch(loadQuery(currentQuery?.id, {dontReplaceQueryText: true}));
-            dispatch(requestQueriesList(true));
+            dispatch(refreshQueriesList());
         }
     };
 }
@@ -640,5 +676,5 @@ export const toggleShareQuery =
             type: UPDATE_ACO_QUERY,
             data: {access_control_objects: aco},
         });
-        dispatch(requestQueriesList(true));
+        dispatch(refreshQueriesList());
     };

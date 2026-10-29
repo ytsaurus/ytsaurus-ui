@@ -16,6 +16,7 @@ export const onCellPreviewQueryResults = (
     queryIndex: number,
     opts: {columnName: string; rowIndex: number},
     dataHandler?: CellDataHandlerQueries,
+    saveCancellation?: CellDataHandlerQueries['saveCancellation'],
 ): CellPreviewActionType => {
     return async (dispatch) => {
         const {columnName, rowIndex} = opts;
@@ -47,7 +48,10 @@ export const onCellPreviewQueryResults = (
                         cellsSize: PREVIEW_LIMIT,
                         stringLimit: Math.round(PREVIEW_LIMIT / 10),
                     },
-                    cancellation,
+                    cancellation: (token) => {
+                        cancellation(token);
+                        saveCancellation?.(token);
+                    },
                 }),
             );
 
