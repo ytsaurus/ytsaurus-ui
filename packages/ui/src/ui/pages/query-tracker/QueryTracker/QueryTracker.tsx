@@ -14,7 +14,7 @@ import {
 import {usePreventUnload} from '../../../hooks/use-prevent-unload';
 import {useQueriesListSidebarToggle} from '../hooks/QueriesList';
 import {
-    selectDirtySinceLastSubmit,
+    selectIsQueryTextDirty,
     selectQueryGetParams,
 } from '../../../store/selectors/query-tracker/query';
 import {LazyQueriesList} from '../QueriesList/lazy';
@@ -111,7 +111,7 @@ function QueryPage(props: Props) {
 export default function QueryTracker({match}: Props) {
     const {isQueriesListSidebarVisible, toggleQueriesListSideBarToggle} =
         useQueriesListSidebarToggle();
-    const isQueryStateDirty = useSelector(selectDirtySinceLastSubmit);
+    const isQueryStateDirty = useSelector(selectIsQueryTextDirty);
     const fileEditor = useSelector(selectFileEditor);
     usePreventUnload({shouldListen: isQueryStateDirty});
     const [sizes, setSize] = useState(initialSizes);

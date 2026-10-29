@@ -24,11 +24,14 @@ import {
     selectQueryDraft,
     selectQueryDraftSettings,
     selectQueryEngine,
+    selectQuerySessionRevision,
+    selectQuerySubmitting,
 } from '../../selectors/query-tracker/query';
 import {getAppBrowserHistory} from '../../window-store';
 import {
     type QueryState,
     type RequestQueryAction,
+    type RestoreQueryDirtyAfterSubmit,
     type SetDirtySubmit,
     type SetQueryAction,
     type SetQueryCliqueLoading,
@@ -37,6 +40,7 @@ import {
     type SetQueryErrorLoadAction,
     type SetQueryPatchAction,
     type SetQueryReadyAction,
+    type SetQuerySubmitting,
     type UpdateDraftAction,
 } from '../../reducers/query-tracker/query';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
@@ -52,6 +56,7 @@ import UIFactory from '../../../UIFactory';
 
 import {
     REQUEST_QUERY,
+    RESTORE_QUERY_DIRTY_AFTER_SUBMIT,
     SET_DIRTY_SUBMIT,
     SET_QUERY,
     SET_QUERY_CLIQUE_LOADING,
@@ -59,6 +64,7 @@ import {
     SET_QUERY_CLUSTER_LOADING,
     SET_QUERY_PATCH,
     SET_QUERY_READY,
+    SET_QUERY_SUBMITTING,
     SET_SUPPORTED_ENGINE,
     UPDATE_ACO_QUERY,
     UPDATE_DRAFT,
@@ -382,7 +388,7 @@ export function loadQuery(
     };
 }
 
-export function updateQueryDraft(data: Partial<QueryState['draft']>) {
+export function updateQueryDraft(data: Partial<QueryState['draft']>): SetQueryPatchAction {
     return {type: SET_QUERY_PATCH, data};
 }
 
@@ -507,38 +513,62 @@ export function createEmptyQuery(
 export function runQuery(
     afterCreate?: (query_id: string) => boolean | void,
     options?: {execution_mode: 'validate' | 'optimize'},
-): ThunkAction<any, RootState, any, SetQueryAction | SetDirtySubmit> {
+): ThunkAction<
+    any,
+    RootState,
+    any,
+    SetQueryAction | SetDirtySubmit | SetQuerySubmitting | RestoreQueryDirtyAfterSubmit
+> {
     return async (dispatch, getState) => {
         const state = getState();
-        const query = selectQueryDraft(state);
-        const isMultipleAco = selectIsMultipleAco(state);
-        const effectiveACO = selectCurrentDraftQueryACO(state).filter(
-            (i) => i !== SHARED_QUERY_ACO,
-        );
+        if (selectQuerySubmitting(state)) return;
+        const revision = selectQuerySessionRevision(state);
+        dispatch({type: SET_QUERY_SUBMITTING, data: {revision, pending: true}});
+        try {
+            const query = selectQueryDraft(state);
+            const isMultipleAco = selectIsMultipleAco(state);
+            const effectiveACO = selectCurrentDraftQueryACO(state).filter(
+                (i) => i !== SHARED_QUERY_ACO,
+            );
 
-        const newQuery = {...query};
-        if (isMultipleAco) {
-            newQuery.access_control_objects = effectiveACO;
-        } else {
-            newQuery.access_control_object = effectiveACO[0];
+            const newQuery = {...query};
+            if (isMultipleAco) {
+                newQuery.access_control_objects = effectiveACO;
+            } else {
+                newQuery.access_control_object = effectiveACO[0];
+            }
+
+            dispatch({
+                type: SET_DIRTY_SUBMIT,
+                data: false,
+            });
+
+            const {query_id} = await wrapApiPromiseByToaster(
+                dispatch(startQuery(newQuery, options)),
+                {
+                    toasterName: 'start_query',
+                    skipSuccessToast: true,
+                    errorTitle: 'Failed to start query',
+                },
+            );
+            if (selectQuerySessionRevision(getState()) !== revision) return;
+            const handled = afterCreate?.(query_id);
+            if (!handled) {
+                dispatch(loadQuery(query_id));
+            }
+
+            dispatch(requestQueriesList(true));
+        } catch (error) {
+            dispatch({
+                type: RESTORE_QUERY_DIRTY_AFTER_SUBMIT,
+                data: {
+                    revision,
+                },
+            });
+            throw error;
+        } finally {
+            dispatch({type: SET_QUERY_SUBMITTING, data: {revision, pending: false}});
         }
-
-        dispatch({
-            type: SET_DIRTY_SUBMIT,
-            data: false,
-        });
-
-        const {query_id} = await wrapApiPromiseByToaster(dispatch(startQuery(newQuery, options)), {
-            toasterName: 'start_query',
-            skipSuccessToast: true,
-            errorTitle: 'Failed to start query',
-        });
-        const handled = afterCreate?.(query_id);
-        if (!handled) {
-            dispatch(loadQuery(query_id));
-        }
-
-        dispatch(requestQueriesList(true));
     };
 }
 
