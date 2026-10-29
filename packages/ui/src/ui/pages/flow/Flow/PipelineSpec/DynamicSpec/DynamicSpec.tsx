@@ -7,6 +7,7 @@ import {type RenderRowExtraTools} from '@gravity-ui/react-unipika';
 import {type FlowDynamicSpecSnapshot, type Int64} from '../../../../../../shared/yt-types';
 import {type YTError} from '../../../../../../@types/types';
 import {YTErrorBlock} from '../../../../../containers/Block/Block';
+import {YTDFDialog} from '../../../../../containers/Dialog';
 import {EditSpecDialog} from '../EditSpecDialog';
 import {Yson} from '../../../../../components/Yson/Yson';
 import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
@@ -20,6 +21,7 @@ import {
     dynamicSpecOverrideEditor,
     dynamicSpecOverrideRows,
     dynamicSpecPath,
+    dynamicSpecPathParts,
     dynamicSpecValue,
     dynamicSpecVersion,
     encodeDynamicSpecValue,
@@ -221,7 +223,10 @@ export type DynamicSpecProps = {
     snapshot?: FlowDynamicSpecSnapshot;
     unavailable?: boolean;
     settings: UnipikaSettings;
-    renderEffective: (renderRowExtraTools?: RenderRowExtraTools) => React.ReactNode;
+    renderEffective: (
+        renderRowExtraTools?: RenderRowExtraTools,
+        onOpenEdit?: () => void,
+    ) => React.ReactNode;
     pipelinePath: string;
     onSet: (path: Array<string>, value: unknown, version: Int64, comment?: string) => Promise<void>;
     onCancelOwner: (owner: Int64, version: Int64) => Promise<void>;
@@ -285,6 +290,7 @@ export function DynamicSpec({
     onReset,
 }: DynamicSpecProps) {
     const [view, setView] = React.useState<SpecView>('effective');
+    const [selectingPath, setSelectingPath] = React.useState(false);
     const [edit, setEdit] = React.useState<{
         path: Array<string>;
         value: unknown;
@@ -400,7 +406,11 @@ export function DynamicSpec({
                     </Text>
                 </div>
             )}
-            {selectedView === 'effective' && renderEffective(renderRowExtraTools)}
+            {selectedView === 'effective' &&
+                renderEffective(
+                    renderRowExtraTools,
+                    snapshot ? () => setSelectingPath(true) : undefined,
+                )}
             {selectedView === 'base' && snapshot && (
                 <YsonWithScroll
                     value={{version: snapshot.version, spec: snapshot.base_spec}}
@@ -577,6 +587,39 @@ export function DynamicSpec({
                         <Text as="p">{i18n('context_no-overrides')}</Text>
                     )}
                 </>
+            )}
+            {selectingPath && snapshot && (
+                <YTDFDialog<{specPath: string}>
+                    visible
+                    size="s"
+                    headerProps={{title: 'Edit dynamic specification'}}
+                    initialValues={{specPath: ''}}
+                    validate={({specPath}) => {
+                        try {
+                            if (specPath.startsWith('/') && dynamicSpecPathParts(specPath).length) {
+                                return undefined;
+                            }
+                        } catch {
+                            // Invalid paths are reported in the form.
+                        }
+                        return {specPath: i18n('error_parameter-path')};
+                    }}
+                    fields={[
+                        {
+                            name: 'specPath',
+                            caption: i18n('field_path'),
+                            type: 'text',
+                            fullWidth: true,
+                            validateFields: ['specPath'],
+                        },
+                    ]}
+                    onClose={() => setSelectingPath(false)}
+                    onAdd={async (form) => {
+                        const path = dynamicSpecPathParts(form.getState().values.specPath);
+                        setSelectingPath(false);
+                        openEdit(path);
+                    }}
+                />
             )}
             {edit && (
                 <EditSpecDialog
