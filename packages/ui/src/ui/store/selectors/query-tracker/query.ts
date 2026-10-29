@@ -29,6 +29,16 @@ const selectQueryState = (state: RootState) => state.queryTracker.query;
 export const DEFAULT_QUERY_ACO = 'nobody';
 export const SHARED_QUERY_ACO = 'everyone-share';
 
+export const selectQuerySessionRevision = (state: RootState) =>
+    selectQueryState(state).sessionRevision;
+
+export const selectQuerySubmitting = (state: RootState) => {
+    const query = selectQueryState(state);
+    return (
+        query.submittingRevision !== undefined && query.submittingRevision === query.sessionRevision
+    );
+};
+
 export const selectQuery = (state: RootState) => selectQueryState(state).queryItem;
 export const selectQueryId = (state: RootState) => selectQueryState(state).queryItem?.id;
 export const selectQueryAnnotations = (state: RootState) =>
@@ -184,7 +194,7 @@ export const selectQueryEditorErrors = (state: RootState): QTEditorError[] => {
     return res;
 };
 
-export const selectDirtySinceLastSubmit = (state: RootState) =>
+export const selectIsQueryTextDirty = (state: RootState) =>
     state.queryTracker.query.dirtySinceLastSubmit;
 
 export const selectEffectiveApiStage = (state: RootState) => {
