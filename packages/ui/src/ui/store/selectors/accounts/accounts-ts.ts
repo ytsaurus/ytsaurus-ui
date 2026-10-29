@@ -43,7 +43,6 @@ export const selectAccountsContentMode = (state: RootState) =>
     state.accounts.accounts.activeContentModeFilter;
 export const selectAccountsMasterMemoryContentMode = (state: RootState) =>
     state.accounts.accounts.masterMemoryContentMode;
-export const selectAccountsEditCounter = (state: RootState) => state.accounts.accounts.editCounter;
 
 export interface AccountSelector {
     name: string;

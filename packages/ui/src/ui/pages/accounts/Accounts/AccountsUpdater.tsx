@@ -1,20 +1,17 @@
-import React from 'react';
+import {useCallback} from 'react';
+import isEqual_ from 'lodash/isEqual';
+import {selectAccountsRequestParams} from '../../../store/selectors/accounts/request-params';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
 import {fetchAccounts} from '../../../store/actions/accounts/accounts';
-import {selectAccountsEditCounter} from '../../../store/selectors/accounts/accounts-ts';
 import {useUpdater} from '../../../hooks/use-updater';
 
 export default function AccountsUpdater() {
     const dispatch = useDispatch();
 
-    const editCounter = useSelector(selectAccountsEditCounter);
+    const params = useSelector(selectAccountsRequestParams, isEqual_);
 
-    const update = React.useCallback(() => {
-        return dispatch(fetchAccounts());
-        // editCounter restarts the updater after account mutations.
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, editCounter]);
+    const update = useCallback(() => dispatch(fetchAccounts(params)), [dispatch, params]);
 
     useUpdater(update);
 
