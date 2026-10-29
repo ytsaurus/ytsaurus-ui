@@ -28,8 +28,11 @@ import {selectCurrentUserName} from '../../../store/selectors/global';
 import {RumWrapper, YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {parseAccountsData, parseAccountsListData} from './accounts-ts';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
+import {getBatchError} from '../../../../shared/utils/error';
+import {selectAccountsRequestedNames} from '../../../store/selectors/accounts/visibility';
 import {selectAccountsRequestParams} from '../../../store/selectors/accounts/request-params';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
+import i18n from '../../../pages/accounts/i18n';
 
 const attributesToLoad = [
     'abc',
@@ -121,18 +124,53 @@ async function fetchAllAccountsData(rumId) {
     return {data, error: undefined};
 }
 
-function fetchAccountsMetadata({params, isCurrentRequest}) {
+async function fetchSelectedAccountsData(rumId, accountNames) {
+    const names = [...accountNames];
+    const response = names.length
+        ? await rumId.fetch(
+              YTApiId.accountsSelectedMetadata,
+              ytApiV3Id.executeBatch(YTApiId.accountsSelectedMetadata, {
+                  parameters: {
+                      requests: names.map((name) => ({
+                          command: 'get',
+                          parameters: {
+                              path: `//sys/accounts/${ypath.YPath.escapeSpecialCharacters(name)}`,
+                              attributes: ['name', ...attributesToLoad],
+                              ...USE_CACHE(),
+                          },
+                      })),
+                  },
+                  cancellation: cancelHelper.saveCancelToken,
+              }),
+          )
+        : [];
+    const error = getBatchError(response, i18n('alert_failed-to-load-account-details'));
+    const data = response.flatMap(({output, error: itemError}, index) =>
+        itemError || !output
+            ? []
+            : [{$value: names[index], $attributes: ypath.getAttributes(output)}],
+    );
+    return {data, error};
+}
+
+function fetchAccountsMetadata({params, isCurrentRequest}, accountNames) {
     return async (dispatch) => {
         const rumId = new RumWrapper(params.cluster, RumMeasureTypes.ACCOUNTS);
-        dispatch({type: FETCH_ACCOUNTS_METADATA.REQUEST});
+        const loadAllAccounts = accountNames === undefined;
+        dispatch({
+            type: FETCH_ACCOUNTS_METADATA.REQUEST,
+            data: {accountNames: loadAllAccounts ? undefined : accountNames},
+        });
 
         try {
-            const {data} = await fetchAllAccountsData(rumId);
+            const {data, error} = loadAllAccounts
+                ? await fetchAllAccountsData(rumId)
+                : await fetchSelectedAccountsData(rumId, accountNames);
             const accounts = await parseAccounts(rumId, data);
             if (isCurrentRequest()) {
                 dispatch({
                     type: FETCH_ACCOUNTS_METADATA.SUCCESS,
-                    data: {accounts},
+                    data: {accounts, error, allAccounts: loadAllAccounts},
                 });
             }
         } catch (error) {
@@ -197,12 +235,36 @@ function fetchAccountsResource({isCurrentRequest}, apiId, actionType, path, attr
 }
 
 function fetchAccountsDetails(request) {
-    return (dispatch) => {
+    const {params, isCurrentRequest} = request;
+    return (dispatch, getState) => {
+        const usable = dispatch(fetchUsableAccounts(request));
+        const metadata =
+            params.mode === 'usable'
+                ? usable.then((accounts) => {
+                      if (!isCurrentRequest()) {
+                          return undefined;
+                      }
+                      return dispatch(
+                          fetchAccountsMetadata(
+                              request,
+                              accounts === undefined
+                                  ? new Set()
+                                  : selectAccountsRequestedNames(getState(), params),
+                          ),
+                      );
+                  })
+                : dispatch(
+                      fetchAccountsMetadata(
+                          request,
+                          selectAccountsRequestedNames(getState(), params),
+                      ),
+                  );
+
         return Promise.all([
-            dispatch(fetchUsableAccounts(request)),
-            dispatch(fetchAccountsMetadata(request)),
+            metadata,
             dispatch(fetchAccountsTotals(request)),
             dispatch(fetchAccountsNodes(request)),
+            usable,
         ]);
     };
 }

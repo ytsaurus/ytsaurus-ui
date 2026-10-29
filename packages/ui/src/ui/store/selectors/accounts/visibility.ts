@@ -1,23 +1,21 @@
 import {createSelector} from 'reselect';
 
 import {type RootState} from '../../reducers';
-import {selectFavouriteAccounts} from '../favourites';
-import {selectAccountsVisibilityMode} from '../settings';
-import {selectActiveAccount} from './accounts-ts';
+import {selectAccountsList} from './accounts-ts';
+import {selectUsableAccounts} from './accounts';
+import {selectAccountsRequestParams} from './request-params';
 import {getAccountNamesWithParents} from '../../../utils/accounts/accounts-visibility';
 
 export const selectAccountsRequestedNames = createSelector(
     [
-        (state: RootState) => state.accounts.accounts.accountList,
-        (state: RootState) => state.accounts.accounts.usableAccounts,
-        selectAccountsVisibilityMode,
-        selectFavouriteAccounts,
-        selectActiveAccount,
+        selectAccountsList,
+        selectUsableAccounts,
+        (state: RootState, params = selectAccountsRequestParams(state)) => params,
     ],
-    (accounts, usableAccounts, mode, favourites, activeAccount) => {
+    (accounts, usableAccounts, {mode, favourites, activeAccount}) => {
         if (mode !== 'usable' && mode !== 'favourites') return undefined;
 
-        const selected = mode === 'usable' ? usableAccounts : favourites.map(({path}) => path);
+        const selected = mode === 'usable' ? usableAccounts : (favourites ?? []);
         return getAccountNamesWithParents(
             accounts,
             activeAccount ? [...selected, activeAccount] : selected,

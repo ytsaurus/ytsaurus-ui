@@ -1,3 +1,4 @@
+import Account from '../../../../pages/accounts/selector';
 import {getResponsibleUsers} from '../../../../utils/accounts/index';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../../constants/accounts';
 import {initialState as tableSortState} from '../../tables';
@@ -66,7 +67,17 @@ function mergeAccountsWithLoadedDetails(accounts, previousAccounts) {
     const previousAccountsByName = new Map(
         previousAccounts.map((account) => [account.name, account]),
     );
-    return accounts.map((account) => previousAccountsByName.get(account.name) ?? account);
+    return accounts.map((account) => {
+        const details = previousAccountsByName.get(account.name);
+        if (!details) return account;
+
+        return new Account({
+            ...details,
+            parent: account.parent,
+            abc: account.abc,
+            $attributes: {...details.$attributes, ...account.$attributes},
+        });
+    });
 }
 
 // eslint-disable-next-line complexity
@@ -95,22 +106,31 @@ const reducer = (state = initialState, action) => {
             };
 
         case FETCH_ACCOUNTS_RESOURCE.REQUEST:
-            return {...state, fetching: true};
+            return {...state, fetching: true, metadataFetching: false, metadataError: undefined};
 
         case FETCH_ACCOUNTS_METADATA.REQUEST:
             return {
                 ...state,
+                accounts: mergeAccountsWithLoadedDetails(
+                    state.accountList,
+                    action.data.accountNames === undefined
+                        ? state.accounts
+                        : state.accounts.filter(({name}) => action.data.accountNames.has(name)),
+                ),
                 metadataFetching: true,
                 metadataError: undefined,
             };
 
         case FETCH_ACCOUNTS_METADATA.SUCCESS: {
-            const accounts = action.data.accounts;
+            const accounts = action.data.allAccounts
+                ? action.data.accounts
+                : mergeAccountsWithLoadedDetails(state.accountList, action.data.accounts);
             return {
                 ...state,
                 accounts,
                 responsibleUsers: getResponsibleUsers(accounts),
                 metadataFetching: false,
+                metadataError: action.data.error,
             };
         }
 
@@ -141,11 +161,14 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 usableAccounts: action.data,
+                usableError: undefined,
+                usableErrorMessage: undefined,
             };
 
         case FETCH_ACCOUNTS_USABLE.FAILURE:
             return {
                 ...state,
+                usableAccounts: [],
                 usableError: action.data.error,
                 usableErrorMessage: i18n('alert_usable-accounts-load-error'),
             };

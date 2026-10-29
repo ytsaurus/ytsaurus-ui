@@ -36,6 +36,8 @@ export const selectAccountsIsFinalLoadingStatus = createSelector(
     },
 );
 
+export const selectAccountsList = (state: RootState) => state.accounts.accounts.accountList;
+
 export const selectActiveAccount = (state: RootState) => state.accounts.accounts.activeAccount;
 export const selectActiveMediumFilter = (state: RootState) =>
     state.accounts.accounts.activeMediumFilter;
