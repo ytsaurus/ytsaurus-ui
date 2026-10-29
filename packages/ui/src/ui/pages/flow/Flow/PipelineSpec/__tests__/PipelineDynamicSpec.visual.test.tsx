@@ -953,8 +953,7 @@ test('PipelineDynamicSpec: Edit selects a parameter and replaces a whole map', a
     await page.getByRole('button', {name: 'Edit dynamic specification'}).click();
     const picker = page.getByRole('dialog');
     await picker.getByRole('textbox', {name: 'Path', exact: true}).fill('/');
-    await picker.getByRole('button', {name: 'Confirm', exact: true}).click();
-    await expect(picker.getByText('Enter a parameter path beginning with /.')).toBeVisible();
+    await expect(picker.getByRole('button', {name: 'Confirm', exact: true})).toBeDisabled();
     await picker.getByRole('textbox', {name: 'Path', exact: true}).fill('/computations/noop');
     await picker.getByRole('button', {name: 'Confirm', exact: true}).click();
     await expect
