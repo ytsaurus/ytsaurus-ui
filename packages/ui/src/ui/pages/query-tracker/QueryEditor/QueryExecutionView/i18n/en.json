@@ -1,0 +1,13 @@
+{
+  "action_restore": "Restore results",
+  "action_copy-error": "Copy error",
+  "context_charts-author-only": "Chart changes are available for this session. Only the query author can save them.",
+  "context_charts-truncated": "Charts use only the loaded rows, not the full query result.",
+  "context_charts-saving": "Saving charts…",
+  "context_charts-save-error": "Failed to save charts. Your changes are still available in this session.",
+  "action_charts-retry": "Retry",
+  "context_charts-empty": "No charts yet",
+  "context_charts-add": "Add a chart and select its source columns.",
+  "context_charts-no-data": "No plottable data. Charts require result rows with a numeric column.",
+  "alert_load-result-error": "Failed to load query result"
+}
