@@ -1,7 +1,7 @@
 import React from 'react';
-import cn from 'bem-cn-lite';
 
-import {Alert, Button, Link} from '@gravity-ui/uikit';
+import {Button} from '@gravity-ui/uikit';
+import {type RenderRowExtraTools} from '@gravity-ui/react-unipika';
 
 import {type YTError} from '../../../../../@types/types';
 
@@ -11,6 +11,7 @@ import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
     loadFlowDynamicSpec,
     loadFlowStaticSpec,
+    mutateFlowDynamicSpec,
     updateFlowDynamicSpec,
     updateFlowStaticSpec,
 } from '../../../../store/actions/flow/specs';
@@ -28,30 +29,43 @@ import {type FlowSpecState} from '../../../../store/reducers/flow/specs';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
 import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 import Icon from '../../../../components/Icon/Icon';
-import {YTDFDialog, makeErrorFields} from '../../../../containers/Dialog';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
 import Loader from '../../../../components/Loader/Loader';
-import {type UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
-import UIFactory from '../../../../UIFactory';
+import {DynamicSpec} from './DynamicSpec/DynamicSpec';
+import {EditSpecDialog, type SpecEditOptions} from './EditSpecDialog';
+import {dynamicSpecPath} from '../../../../utils/flow/dynamic-spec';
+import {type Int64} from '../../../../../shared/yt-types';
 
 import {pathToFileName} from '../../../navigation/helpers/pathToFileName';
 
 import './PipelineSpec.scss';
-import i18n from './i18n';
-
-const block = cn('yt-pipeline-spec');
 
 type PipelineSpecProps = {
     path: string;
     error: YTError | undefined;
     data: FlowSpecState['data'];
     name: string;
-    onSave: (data: PipelineSpecProps['data'], options: {force?: boolean}) => Promise<void>;
+    onSave: (data: PipelineSpecProps['data'], options: SpecEditOptions) => Promise<void>;
     allowForce?: boolean;
+    requireComment?: boolean;
+    renderRowExtraTools?: RenderRowExtraTools;
+    onOpenEdit?: () => void;
 };
 
-function PipelineSpec({path, data, error, name, onSave, allowForce}: PipelineSpecProps) {
+function PipelineSpec({
+    path,
+    data,
+    error,
+    name,
+    onSave,
+    allowForce,
+    requireComment,
+    renderRowExtraTools,
+    onOpenEdit,
+}: PipelineSpecProps) {
     const [showEdit, setShowEdit] = React.useState(false);
+    const [editData, setEditData] = React.useState(data);
+    const editorSpec = requireComment ? editData?.spec : data?.spec;
 
     const settings = useSelector(selectFlowSpecYsonSettings);
 
@@ -61,6 +75,7 @@ function PipelineSpec({path, data, error, name, onSave, allowForce}: PipelineSpe
             <YsonWithScroll
                 value={data}
                 settings={settings}
+                renderRowExtraTools={renderRowExtraTools}
                 extraTools={
                     <React.Fragment>
                         <YsonDownloadButton
@@ -68,7 +83,18 @@ function PipelineSpec({path, data, error, name, onSave, allowForce}: PipelineSpe
                             settings={settings}
                             name={`pipeline_spec_${pathToFileName(path)}`}
                         />
-                        <Button view="outlined" onClick={() => setShowEdit(true)}>
+                        <Button
+                            view="outlined"
+                            disabled={!data}
+                            onClick={() => {
+                                if (onOpenEdit) {
+                                    onOpenEdit();
+                                } else {
+                                    setEditData(data);
+                                    setShowEdit(true);
+                                }
+                            }}
+                        >
                             <Icon awesome="pencil" />
                             Edit {name}
                         </Button>
@@ -79,132 +105,17 @@ function PipelineSpec({path, data, error, name, onSave, allowForce}: PipelineSpe
                 path={path}
                 name={name}
                 visible={showEdit}
-                onSpecApply={(spec, options) => onSave({...data!, spec}, options)}
+                onSpecApply={(spec, options) =>
+                    onSave({...(requireComment ? editData : data)!, spec}, options)
+                }
                 onClose={() => setShowEdit(false)}
-                spec={data?.spec}
+                spec={editorSpec}
                 settings={settings}
                 allowForce={allowForce}
+                withComment={requireComment}
+                requireComment={requireComment}
             />
         </React.Fragment>
-    );
-}
-
-type FormValues = {
-    text: {value?: string};
-    path: string;
-    force?: boolean;
-};
-
-function EditSpecDialog({
-    path,
-    visible,
-    spec,
-    onClose,
-    onSpecApply,
-    name,
-    settings,
-    allowForce,
-}: Pick<PipelineSpecProps, 'name' | 'path'> & {
-    spec?: unknown;
-    visible: boolean;
-    onClose: () => void;
-    settings: UnipikaSettings;
-    onSpecApply: (spec: unknown, options: {force?: boolean}) => Promise<void>;
-    allowForce?: boolean;
-}) {
-    const [error, setError] = React.useState<YTError | undefined>();
-
-    const text = React.useMemo(() => {
-        return {value: JSON.stringify(spec, null, 4)};
-    }, [spec]);
-
-    const forceHelpUrl = UIFactory.docsUrls['flow:update_static_spec:force'];
-
-    return (
-        visible && (
-            <YTDFDialog<FormValues>
-                visible
-                size="l"
-                onClose={onClose}
-                initialValues={{text, path}}
-                headerProps={{
-                    title: `Edit ${name}`,
-                }}
-                onAdd={async (f) => {
-                    setError(undefined);
-                    const {text: textData, force} = f.getState().values;
-                    if (textData.value) {
-                        try {
-                            return await onSpecApply(JSON.parse(textData.value), {force});
-                        } catch (e: any) {
-                            setError(e);
-                            return Promise.reject(e);
-                        }
-                    } else {
-                        return Promise.resolve();
-                    }
-                }}
-                fields={[
-                    {
-                        caption: i18n('pipeline-path'),
-                        name: 'path',
-                        type: 'plain',
-                    },
-                    {
-                        name: 'text',
-                        caption: i18n('specification'),
-                        type: 'json',
-                        fullWidth: true,
-                        extras: {
-                            className: block('editor'),
-                            initialShowPreview: false,
-                            unipikaSettings: settings,
-                        },
-                    },
-                    ...(allowForce
-                        ? [
-                              {
-                                  name: 'force',
-                                  caption: i18n('force'),
-                                  type: 'tumbler' as const,
-                              },
-                          ]
-                        : []),
-                    {
-                        name: 'forceWarningn',
-                        caption: '',
-                        type: 'block',
-                        visibilityCondition: {when: 'force', isActive: (v) => v},
-                        extras: {
-                            children: (
-                                <Alert
-                                    style={{marginTop: -16}}
-                                    theme="warning"
-                                    message={
-                                        <div>
-                                            {i18n('alert_force-mode-unrecoverable')}{' '}
-                                            {Boolean(forceHelpUrl) && (
-                                                <>
-                                                    {i18n('for-more-details-1')}{' '}
-                                                    <Link
-                                                        href={forceHelpUrl}
-                                                        target="_blank"
-                                                        style={{display: 'inline'}}
-                                                    >
-                                                        {i18n('for-more-details-2')}.
-                                                    </Link>
-                                                </>
-                                            )}
-                                        </div>
-                                    }
-                                />
-                            ),
-                        },
-                    },
-                    ...makeErrorFields([error]),
-                ]}
-            />
-        )
     );
 }
 
@@ -247,6 +158,7 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
     const data = useSelector(selectFlowDynamicSpecData);
     const error = useSelector(selectFlowDynamicSpecError);
     const firstLoading = useSelector(selectFlowDynamicSpecFirstLoading);
+    const settings = useSelector(selectFlowSpecYsonSettings);
 
     const updateFn = React.useCallback(() => {
         dispatch(loadFlowDynamicSpec(path));
@@ -254,8 +166,8 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
     useUpdater(updateFn);
 
     const onEdit = React.useCallback(
-        (newData: typeof data) => {
-            return dispatch(updateFlowDynamicSpec({path, data: newData}));
+        (newData: typeof data, {comment}: SpecEditOptions) => {
+            return dispatch(updateFlowDynamicSpec({path, data: newData, comment}));
         },
         [path, dispatch],
     );
@@ -263,12 +175,84 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
     return firstLoading ? (
         <Loader />
     ) : (
-        <PipelineSpec
-            path={path}
-            data={data}
-            error={error}
-            name="dynamic specification"
-            onSave={onEdit}
-        />
+        <>
+            {Boolean(error) && <YTErrorBlock error={error} />}
+            <DynamicSpec
+                key={path}
+                snapshot={data?.dynamic_spec_state}
+                unavailable={data?.dynamic_spec_state_unavailable}
+                settings={settings}
+                pipelinePath={path}
+                onSet={(specPath, spec, expected_version, comment) =>
+                    dispatch(
+                        mutateFlowDynamicSpec({
+                            path,
+                            command: 'patch-pipeline-dynamic-spec',
+                            body: {
+                                set_path: dynamicSpecPath(specPath),
+                                set_value: spec,
+                                expected_version,
+                                comment: comment ?? '',
+                            },
+                        }),
+                    )
+                }
+                onCancelOwner={(version: Int64, expected_version) =>
+                    dispatch(
+                        mutateFlowDynamicSpec({
+                            path,
+                            command: 'cancel-pipeline-dynamic-spec-patch',
+                            body: {patch: version, expected_version},
+                        }),
+                    )
+                }
+                onUpdateComment={(patch: Int64, comment, expected_version) =>
+                    dispatch(
+                        mutateFlowDynamicSpec({
+                            path,
+                            command: 'patch-pipeline-dynamic-spec',
+                            body: {patch, comment, expected_version},
+                        }),
+                    )
+                }
+                onUpdatePatch={(patch, specPath, spec, comment, expected_version) =>
+                    dispatch(
+                        mutateFlowDynamicSpec({
+                            path,
+                            command: 'patch-pipeline-dynamic-spec',
+                            body: {
+                                patch,
+                                set_path: dynamicSpecPath(specPath),
+                                set_value: spec,
+                                comment,
+                                expected_version,
+                            },
+                        }),
+                    )
+                }
+                onReset={(expected_version) =>
+                    dispatch(
+                        mutateFlowDynamicSpec({
+                            path,
+                            command: 'reset-pipeline-dynamic-spec',
+                            body: {expected_version},
+                        }),
+                    )
+                }
+                renderEffective={(renderRowExtraTools, onOpenEdit) => (
+                    <PipelineSpec
+                        key={path}
+                        path={path}
+                        data={data && {spec: data.spec, version: data.version}}
+                        error={undefined}
+                        name="dynamic specification"
+                        onSave={onEdit}
+                        requireComment
+                        renderRowExtraTools={renderRowExtraTools}
+                        onOpenEdit={onOpenEdit}
+                    />
+                )}
+            />
+        </>
     );
 }
