@@ -3,7 +3,8 @@ import block from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 import {compose} from 'redux';
 
-import {Select} from '@gravity-ui/uikit';
+import {CircleInfo} from '@gravity-ui/icons';
+import {Select, Icon as UIKitIcon} from '@gravity-ui/uikit';
 
 import WithStickyToolbar, {
     STICKY_TOOLBAR_BOTTOM,
@@ -24,7 +25,7 @@ import Icon from '../../../../../components/Icon/Icon';
 import CustomRadioButton from '../../../../../components/RadioButton/RadioButton';
 import ElementsTable from '../../../../../components/ElementsTable/ElementsTable';
 import AccountAlerts from '../AccountAlerts';
-import {Tooltip, Warning} from '@ytsaurus/components';
+import {Tooltip} from '@ytsaurus/components';
 import getTableProps from '../../../../../utils/accounts/tables';
 import {
     genRadioButtonVisibleAccounts,
@@ -91,18 +92,6 @@ function renderNumber(value, isAggregation = false) {
             {hammer.format['Number'](value)}
         </div>
     );
-}
-
-function VisibilityNotice({mode}) {
-    let message = null;
-    if (mode === 'usable') {
-        message = i18n('context_usable-accounts');
-    }
-    if (mode === 'favourites') {
-        message = i18n('context_favourite-accounts');
-    }
-
-    return !message ? null : <Warning>{message}</Warning>;
 }
 
 export class AccountsGeneralTabBase extends Component {
@@ -218,6 +207,17 @@ export class AccountsGeneralTabBase extends Component {
                         {...ACCOUNTS_VISIBILITY_MODE_PROPS}
                         value={accountsVisibilityMode}
                     />
+                    {(accountsVisibilityMode === 'usable' ||
+                        accountsVisibilityMode === 'favourites') && (
+                        <Tooltip
+                            className={b('visibility-hint')}
+                            content={i18n('context_account-branches')}
+                        >
+                            <span tabIndex={0} aria-label={i18n('context_account-branches')}>
+                                <UIKitIcon data={CircleInfo} size={16} />
+                            </span>
+                        </Tooltip>
+                    )}
                 </div>
                 <div className={b('name-filter', 'elements-toolbar__component')}>
                     <Filter
@@ -669,7 +669,6 @@ export class AccountsGeneralTabBase extends Component {
         return (
             <div className={b('content', 'elements-section')}>
                 {!allowTable && <TabletAccountingNotice className={b('tcb-resource-notice')} />}
-                {allowTable && <VisibilityNotice mode={accountsVisibilityMode} />}
                 {allowTable && (
                     <ElementsTableWithHeaderAndFooter
                         {...tableProps}

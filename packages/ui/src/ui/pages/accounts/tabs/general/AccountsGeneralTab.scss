@@ -81,6 +81,16 @@ $elements-table: '.elements-table';
         }
     }
 
+    &__dashboard-visibility-mode {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    &__visibility-hint {
+        color: var(--g-color-text-secondary);
+    }
+
     &__name-filter {
         flex: 1 1 135px;
     }
