@@ -1,0 +1,1 @@
+export {QueriesHistory} from './QueriesHistory';
