@@ -1,0 +1,104 @@
+import isEqual_ from 'lodash/isEqual';
+import {selectQuerySessionRevision} from '../../selectors/query-tracker/querySession';
+import type {ThunkAction} from 'redux-thunk';
+import type {AnyAction} from 'redux';
+
+import type {RootState} from '../../reducers';
+import type {QueryItem} from '../../../types/query-tracker/api';
+import {cleanupQueryForDraft} from '../../../types/query-tracker/query';
+import {YTApiId, ytApiV4Id} from '../../../rum/rum-wrap-api';
+import {JSONSerializer} from '../../../common/yt-api';
+import {
+    selectQueryDraft,
+    selectQueryItem,
+    selectQueryTrackerRequestOptions,
+} from '../../selectors/query-tracker/query';
+import {
+    SET_QUERY_PATCH,
+    UPDATE_QUERY_ITEM,
+} from '../../reducers/query-tracker/query-tracker-contants';
+import {getQTApiSetup} from './api';
+import {updateQueryInList} from './queriesList';
+
+const pendingUpdates = new Map<string, Promise<void>>();
+
+export function saveQueryAnnotations(
+    queryId: string,
+    prepareAnnotations: (query: QueryItem) => QueryItem['annotations'],
+): ThunkAction<Promise<void>, RootState, unknown, AnyAction> {
+    return (dispatch, getState) => {
+        const initialState = getState();
+        const draftSnapshot = selectQueryDraft(initialState);
+        const sessionRevision = selectQuerySessionRevision(initialState);
+        const {stage} = selectQueryTrackerRequestOptions(initialState);
+        const setup = getQTApiSetup();
+        const key = JSON.stringify([setup.proxy, stage, queryId]);
+        const previous = pendingUpdates.get(key) || Promise.resolve();
+        const request = previous
+            .catch(() => undefined)
+            .then(async () => {
+                const query: QueryItem = await ytApiV4Id.getQuery(YTApiId.getQuery, {
+                    parameters: {stage, query_id: queryId, output_format: 'json'},
+                    setup: {...setup, JSONSerializer},
+                });
+                const annotations = prepareAnnotations(query);
+                await ytApiV4Id.alterQuery(YTApiId.alterQuery, {
+                    parameters: {stage, query_id: queryId, annotations},
+                    setup,
+                });
+                const state = getState();
+                if (
+                    selectQueryTrackerRequestOptions(state).stage !== stage ||
+                    getQTApiSetup().proxy !== setup.proxy
+                )
+                    return;
+
+                dispatch(updateQueryInList(queryId, {annotations}));
+                const current = selectQueryItem(state);
+                if (current?.id === queryId) {
+                    dispatch({type: UPDATE_QUERY_ITEM, data: {...current, annotations}});
+                }
+                const draft = selectQueryDraft(state);
+                if (
+                    draft.id === queryId &&
+                    draftSnapshot.id === queryId &&
+                    selectQuerySessionRevision(state) === sessionRevision
+                ) {
+                    const merged: Record<string, unknown> = {
+                        ...cleanupQueryForDraft({...query, annotations}).annotations,
+                    };
+                    const before: Record<string, unknown> = draftSnapshot.annotations || {};
+                    const currentAnnotations: Record<string, unknown> = draft.annotations || {};
+                    for (const annotationKey of new Set([
+                        ...Object.keys(before),
+                        ...Object.keys(currentAnnotations),
+                    ])) {
+                        if (
+                            !isEqual_(before[annotationKey], currentAnnotations[annotationKey]) ||
+                            Object.hasOwn(before, annotationKey) !==
+                                Object.hasOwn(currentAnnotations, annotationKey)
+                        ) {
+                            if (Object.hasOwn(currentAnnotations, annotationKey))
+                                merged[annotationKey] = currentAnnotations[annotationKey];
+                            else delete merged[annotationKey];
+                        }
+                    }
+                    dispatch({
+                        type: SET_QUERY_PATCH,
+                        data: {annotations: merged},
+                        meta: {source: 'system'},
+                    });
+                }
+            });
+        pendingUpdates.set(key, request);
+        const cleanup = () => {
+            if (pendingUpdates.get(key) === request) pendingUpdates.delete(key);
+        };
+        request.then(cleanup, cleanup);
+        return request;
+    };
+}
+
+export function setQueryName(queryId: string, title: string | undefined) {
+    return saveQueryAnnotations(queryId, (query) => ({...query.annotations, title}));
+}

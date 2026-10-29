@@ -3,12 +3,7 @@ import {type RootState} from '../../reducers';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {type ThunkAction} from 'redux-thunk';
 import {type Action} from 'redux';
-import {
-    selectCurrentQueryACO,
-    selectQueryAnnotations,
-    selectQueryDraft,
-    selectQueryItem,
-} from '../../selectors/query-tracker/query';
+import {selectQueryDraft, selectQueryItem} from '../../selectors/query-tracker/query';
 import {selectCurrentUserName} from '../../selectors/global/username';
 import {
     type Config,
@@ -34,7 +29,7 @@ import {getPointValue} from '../../../pages/query-tracker/QueryResultsVisualizat
 import {type ChartAxisType} from '@gravity-ui/chartkit/gravity-charts';
 import cloneDeep_ from 'lodash/cloneDeep';
 import {loadQueryResult} from './queryResult';
-import {alterQueryChartConfig} from './api';
+import {saveQueryAnnotations} from './queryAnnotations';
 import {type AppDispatch} from '../../store.main';
 
 const DELAY = 2 * 1000;
@@ -54,19 +49,10 @@ const saveChartConfig = (dispatch: AppDispatch, getState: () => RootState) => {
 
     dispatch(setSaved(false));
 
-    const annotations = selectQueryAnnotations(state);
-    const aco = selectCurrentQueryACO(state);
     const chartConfig = selectChartVisualization(state);
 
     wrapApiPromiseByToaster(
-        dispatch(
-            alterQueryChartConfig({
-                query_id: id,
-                aco,
-                annotations,
-                chartConfig,
-            }),
-        ),
+        dispatch(saveQueryAnnotations(id, (query) => ({...query.annotations, chartConfig}))),
         {
             toasterName: 'saveQueryChartConfig',
             skipSuccessToast: true,
