@@ -141,6 +141,7 @@ export class AccountsGeneralTabBase extends Component {
         activeAccountAggregation: PropTypes.object,
         accountsVisibilityMode: PropTypes.string,
         favouriteAccountsSet: PropTypes.object.isRequired,
+        usableAccountsSet: PropTypes.object.isRequired,
 
         changeNameFilter: PropTypes.func.isRequired,
         changeContentFilter: PropTypes.func.isRequired,
@@ -281,6 +282,8 @@ export class AccountsGeneralTabBase extends Component {
             activeAccount,
             activeMediumFilter: mediumType,
             favouriteAccountsSet,
+            usableAccountsSet,
+            accountsVisibilityMode,
             accountsToggleFavourite,
             columnFields,
             cluster,
@@ -319,9 +322,22 @@ export class AccountsGeneralTabBase extends Component {
                     </div>
                 );
 
+                const isContextParent =
+                    accountsVisibilityMode === 'usable' && !usableAccountsSet.has(item.name);
                 const nameElement = (
-                    <div className={b('item-name')}>
+                    <div className={b('item-name', {context: isContextParent})}>
                         <AccountLink account={item.name} cluster={cluster} />
+                        {isContextParent && (
+                            <Tooltip content={i18n('context_account-without-use')}>
+                                <span
+                                    className={b('parent-hint')}
+                                    tabIndex={0}
+                                    aria-label={i18n('context_account-without-use')}
+                                >
+                                    <Icon awesome="question-circle" size={13} />
+                                </span>
+                            </Tooltip>
+                        )}
                     </div>
                 );
 
@@ -664,7 +680,11 @@ export class AccountsGeneralTabBase extends Component {
                         templates={this.templates}
                         selectedIndex={selectedIndex}
                         header={false}
-                        footer={this.props.activeAccountAggregation}
+                        footer={
+                            accountsVisibilityMode === 'all'
+                                ? this.props.activeAccountAggregation
+                                : null
+                        }
                         top={STICKY_TOOLBAR_BOTTOM}
                         treeStateExpanded={!activeAccount ? [] : [items && items[0]?.key]}
                     />

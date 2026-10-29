@@ -17,5 +17,6 @@
   "field_account-name": "Account name",
   "field_usage": "Usage",
   "field_limit": "Limit",
-  "field_total": "Total"
+  "field_total": "Total",
+  "context_account-without-use": "No Use permission; shown to preserve the account hierarchy"
 }

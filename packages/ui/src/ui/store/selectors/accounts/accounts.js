@@ -13,6 +13,7 @@ import {
     selectAccountsTree,
 } from './accounts-ts';
 import {concatByAnd} from '../../../common/hammer/predicate';
+import {filterAccountBranches} from '../../../utils/accounts/accounts-visibility';
 import {accountMemoryMediumToFieldName} from '../../../utils/accounts/accounts-selector';
 
 export const selectActiveAccount = (state) => state.accounts.accounts.activeAccount;
@@ -54,7 +55,13 @@ export function getAccountName(treeItem) {
     return account && account.name;
 }
 
-function prepareAccountsFlattenTreeImpl(treeList, activeAccount, nameFilter = '', {slug} = {}) {
+export function prepareAccountsFlattenTreeImpl(
+    treeList,
+    activeAccount,
+    nameFilter = '',
+    {slug} = {},
+    visibleNames,
+) {
     let root = treeList['<Root>'];
     if (root === undefined) {
         return [];
@@ -64,11 +71,11 @@ function prepareAccountsFlattenTreeImpl(treeList, activeAccount, nameFilter = ''
         root = {...root, children: [treeList[activeAccount]]};
     }
 
-    let filteredRoot = root;
+    let filteredRoot = filterAccountBranches(root, visibleNames);
 
     const isRoot = (treeNode) => {
         const {attributes: account} = treeNode;
-        return treeNode === root || account.name === activeAccount;
+        return treeNode.name === root.name || account.name === activeAccount;
     };
 
     const predicates = [];
@@ -88,13 +95,13 @@ function prepareAccountsFlattenTreeImpl(treeList, activeAccount, nameFilter = ''
     }
 
     if (predicates.length) {
-        filteredRoot = hammer.treeList.filterTree(root, concatByAnd(...predicates));
+        filteredRoot = hammer.treeList.filterTree(filteredRoot, concatByAnd(...predicates));
     }
 
     return filteredRoot;
 }
 
-function sortFlattenTree(sortInfo, flattenTree = [], columnFields) {
+export function sortFlattenTree(sortInfo, flattenTree = [], columnFields) {
     if (sortInfo) {
         hammer.treeList.sortTree(flattenTree, sortInfo, columnFields);
     }

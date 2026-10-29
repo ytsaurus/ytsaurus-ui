@@ -40,6 +40,7 @@ const ephemeralState = {
     errorData: {},
 
     accounts: [],
+    accountList: [],
     accountsTreeState: 'collapsed',
     responsibleUsers: [],
     usableAccounts: [],
@@ -78,7 +79,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 accounts,
                 responsibleUsers,
-                filteredAccounts: accounts,
+                accountList: action.data.accounts,
                 fetching: false,
                 error: false,
                 wasLoaded: true,
