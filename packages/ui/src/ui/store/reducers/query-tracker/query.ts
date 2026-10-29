@@ -13,6 +13,7 @@ import {
     SET_QUERY_CLIQUE_LOADING,
     SET_QUERY_CLUSTER_CLIQUE,
     SET_QUERY_CLUSTER_LOADING,
+    SET_QUERY_FILES,
     SET_QUERY_LOAD_ERROR,
     SET_QUERY_PARAMS,
     SET_QUERY_PATCH,
@@ -25,6 +26,7 @@ import {
     UPDATE_QUERY_ITEM,
 } from './query-tracker-contants';
 import {cleanupQueryForDraft} from '../../../types/query-tracker/query';
+import type {SetQueryFilesAction} from './queryFilesFormSlice';
 import {type ChytInfo} from '../chyt/list';
 
 export interface QueryState {
@@ -193,6 +195,17 @@ export function query(state = initState, action: Actions): QueryState {
                 state: 'ready',
             };
         }
+        case SET_QUERY_FILES: {
+            return {
+                ...state,
+                draft: {...state.draft, files: action.data.files},
+                dirtyNonAnnotationFields:
+                    state.dirtyNonAnnotationFields ||
+                    !isEqual_(state.draft.files, action.data.files),
+                dirtySinceLastSubmit:
+                    state.dirtySinceLastSubmit || !isEqual_(state.draft.files, action.data.files),
+            };
+        }
         case SET_QUERY_PATCH: {
             const dirtyNonAnnotationFields =
                 state.dirtyNonAnnotationFields || hasUserDraftChanges(state.draft, action);
@@ -264,6 +277,7 @@ export type SetQuerySubmitting = ActionD<
 
 type Actions =
     | RestoreQueryDirtyAfterSubmit
+    | SetQueryFilesAction
     | SetQuerySubmitting
     | SetQueryAction
     | RequestQueryAction
