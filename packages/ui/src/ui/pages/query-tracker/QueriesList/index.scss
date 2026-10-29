@@ -6,6 +6,23 @@
     display: flex;
     flex-direction: column;
 
+    &_new {
+        min-height: 0;
+        min-width: 0;
+    }
+
+    &__sidebar {
+        flex: 1;
+    }
+
+    &__sidebar-content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+        min-width: 0;
+    }
+
     &__tabs {
         padding: 0 12px;
     }
@@ -24,5 +41,15 @@
 
     &__list-content {
         flex: 1;
+    }
+
+    &__new-history {
+        flex: 1;
+        min-height: 0;
+    }
+
+    &__new-tutorials {
+        flex: 1;
+        min-height: 0;
     }
 }
