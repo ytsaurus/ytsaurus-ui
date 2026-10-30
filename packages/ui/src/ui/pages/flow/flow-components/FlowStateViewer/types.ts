@@ -1,27 +1,19 @@
-import type React from 'react';
+import type {FlowStateFiltersValue} from '../../../../store/reducers/flow/filters';
 
 import type {
     FlowDeleteStatesResponse,
     FlowKeyColumn,
     FlowReadStatesResponse,
-    FlowStateTarget,
     FlowStaticSpec,
 } from '../../../../../shared/yt-types';
 
 export type FlowStateNameInputMode = 'declared-only' | 'suggested' | 'free-form';
 
-export type FlowStateFiltersValue = {
-    computationId?: string;
-    partitionId?: string;
-    keyValues: Record<string, string>;
-    rawKey?: unknown;
-    stateName?: string;
-    target: FlowStateTarget;
-};
+export type {FlowStateFiltersValue} from '../../../../store/reducers/flow/filters';
 
 export type FlowStateReadResult = {
     filters: FlowStateFiltersValue;
-    setFilters: React.Dispatch<React.SetStateAction<FlowStateFiltersValue>>;
+    setFilters: (next: FlowStateFiltersValue) => void;
     staticSpec: FlowStaticSpec | undefined;
     hasScope: boolean;
     validationError: string | undefined;
