@@ -357,6 +357,7 @@ export class AccountsGeneralTabBase extends Component {
                             className={b('item-favorite-star', {
                                 active: isInFavourites,
                             })}
+                            data-qa={`account-favourite-${item.name}`}
                             onClick={onFavouriteClick}
                         >
                             <Icon awesome={isInFavourites ? 'star-alt' : 'star'} size={13} />
