@@ -19,7 +19,6 @@ import {
     FETCH_ACCOUNTS_USABLE,
     FILTER_USABLE_ACCOUNTS,
     ROOT_ACCOUNT_NAME,
-    SET_ACCOUNTS_TREE_STATE,
     SET_ACTIVE_ACCOUNT,
 } from '../../../constants/accounts/accounts';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../constants/accounts';
@@ -337,13 +336,6 @@ export function filterUsableAccounts() {
             type: FILTER_USABLE_ACCOUNTS,
             data: {sortState},
         });
-    };
-}
-
-export function setAccountsTreeState(treeState) {
-    return {
-        type: SET_ACCOUNTS_TREE_STATE,
-        data: {treeState},
     };
 }
 

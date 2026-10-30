@@ -16,7 +16,6 @@ import {
     changeNameFilter,
     filterUsableAccounts,
     setAccountsAbcServiceFilter,
-    setAccountsTreeState,
     setAccountsVisibilityMode,
     setActiveAccount,
 } from '../../../../../store/actions/accounts/accounts';
@@ -86,7 +85,6 @@ const mapDispatchToProps = {
     changeMediumFilter,
     filterUsableAccounts,
     loadUsers,
-    setAccountsTreeState,
     setActiveAccount,
     accountsToggleFavourite,
     setAccountsVisibilityMode,

@@ -15,7 +15,6 @@ import {
     FETCH_ACCOUNTS_TOTAL_USAGE,
     FETCH_ACCOUNTS_USABLE,
     FILTER_USABLE_ACCOUNTS,
-    SET_ACCOUNTS_TREE_STATE,
     SET_ACTIVE_ACCOUNT,
 } from '../../../../constants/accounts/accounts';
 import {mergeStateOnClusterChange} from '../../../../store/reducers/utils';
@@ -42,7 +41,6 @@ const ephemeralState = {
 
     accounts: [],
     accountList: [],
-    accountsTreeState: 'collapsed',
     responsibleUsers: [],
     usableAccounts: [],
 
@@ -193,10 +191,6 @@ const reducer = (state = initialState, action) => {
 
         case FILTER_USABLE_ACCOUNTS: {
             return {...state, activeUsableFilter: true};
-        }
-
-        case SET_ACCOUNTS_TREE_STATE: {
-            return {...state, accountsTreeState: action.data.treeState};
         }
 
         case SET_ACTIVE_ACCOUNT: {

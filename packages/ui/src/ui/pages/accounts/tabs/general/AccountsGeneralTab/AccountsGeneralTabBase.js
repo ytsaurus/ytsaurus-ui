@@ -119,7 +119,6 @@ export class AccountsGeneralTabBase extends Component {
         wasLoaded: PropTypes.bool,
         fetching: PropTypes.bool,
         activeAccount: PropTypes.string,
-        accountsTreeState: PropTypes.string,
         activeAccountBreadcrumbs: PropTypes.arrayOf(
             PropTypes.shape({
                 text: PropTypes.string.isRequired,
@@ -137,7 +136,6 @@ export class AccountsGeneralTabBase extends Component {
         changeMediumFilter: PropTypes.func.isRequired,
         filterUsableAccounts: PropTypes.func.isRequired,
         loadUsers: PropTypes.func.isRequired,
-        setAccountsTreeState: PropTypes.func.isRequired,
         setActiveAccount: PropTypes.func.isRequired,
         setAccountsVisibilityMode: PropTypes.func.isRequired,
         accountsToggleFavourite: PropTypes.func.isRequired,
@@ -316,6 +314,7 @@ export class AccountsGeneralTabBase extends Component {
                 const toggler = (
                     <div
                         className={b('item-toggler', {hidden: !hasChildren})}
+                        data-qa={`account-tree-toggle-${item.name}`}
                         onClick={toggleStateFn}
                     >
                         <Icon awesome={itemState.collapsed ? 'angle-down' : 'angle-up'} size={13} />
@@ -649,7 +648,6 @@ export class AccountsGeneralTabBase extends Component {
             activeContentModeFilter,
             fetching,
             wasLoaded,
-            accountsTreeState,
             enable_per_account_tablet_accounting,
             accountsVisibilityMode,
             metadataFetching,
@@ -670,6 +668,7 @@ export class AccountsGeneralTabBase extends Component {
         const allowTable = !isTCBRelative || enable_per_account_tablet_accounting;
 
         const items = contextViewTree || [];
+        const isAllMode = accountsVisibilityMode === 'all';
 
         return (
             <div className={b('content', 'elements-section')}>
@@ -678,17 +677,13 @@ export class AccountsGeneralTabBase extends Component {
                     <ElementsTableWithHeaderAndFooter
                         {...tableProps}
                         isLoading={isLoading}
-                        treeState={accountsTreeState}
+                        key={isAllMode ? 'all' : 'filtered'}
+                        treeState={isAllMode ? 'collapsed' : 'expanded'}
                         items={items}
-                        onItemToggleState={this.onItemToggleState}
                         templates={this.templates}
                         selectedIndex={selectedIndex}
                         header={false}
-                        footer={
-                            accountsVisibilityMode === 'all'
-                                ? this.props.activeAccountAggregation
-                                : null
-                        }
+                        footer={isAllMode ? this.props.activeAccountAggregation : null}
                         top={STICKY_TOOLBAR_BOTTOM}
                         treeStateExpanded={!activeAccount ? [] : [items && items[0]?.key]}
                     />
@@ -696,10 +691,6 @@ export class AccountsGeneralTabBase extends Component {
             </div>
         );
     }
-
-    onItemToggleState = () => {
-        this.props.setAccountsTreeState('mixed');
-    };
 
     render() {
         const {error, metadataError, usableError, wasLoaded, viewContext, fetching} = this.props;
