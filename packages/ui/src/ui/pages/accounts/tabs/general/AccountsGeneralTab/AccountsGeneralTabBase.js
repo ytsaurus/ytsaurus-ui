@@ -3,7 +3,8 @@ import block from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 import {compose} from 'redux';
 
-import {Select} from '@gravity-ui/uikit';
+import {CircleInfo} from '@gravity-ui/icons';
+import {Select, Icon as UIKitIcon} from '@gravity-ui/uikit';
 
 import WithStickyToolbar, {
     STICKY_TOOLBAR_BOTTOM,
@@ -24,7 +25,7 @@ import Icon from '../../../../../components/Icon/Icon';
 import CustomRadioButton from '../../../../../components/RadioButton/RadioButton';
 import ElementsTable from '../../../../../components/ElementsTable/ElementsTable';
 import AccountAlerts from '../AccountAlerts';
-import {Tooltip, Warning} from '@ytsaurus/components';
+import {Tooltip} from '@ytsaurus/components';
 import getTableProps from '../../../../../utils/accounts/tables';
 import {
     genRadioButtonVisibleAccounts,
@@ -68,7 +69,6 @@ function Bytes({bytes, isAggregation}) {
     );
 }
 
-const DB_VISIBILITY_MODE_PROPS = genRadioButtonVisibleAccounts();
 const ACCOUNTS_VISIBILITY_MODE_PROPS = genRadioButtonVisibleAccounts(true);
 
 const ElementsTableWithHeaderAndFooter = compose(withStickyHead, withStickyFooter)(ElementsTable);
@@ -92,18 +92,6 @@ function renderNumber(value, isAggregation = false) {
             {hammer.format['Number'](value)}
         </div>
     );
-}
-
-function VisibilityNotice({mode}) {
-    let message = null;
-    if (mode === 'usable') {
-        message = i18n('context_usable-accounts');
-    }
-    if (mode === 'favourites') {
-        message = i18n('context_favourite-accounts');
-    }
-
-    return !message ? null : <Warning>{message}</Warning>;
 }
 
 export class AccountsGeneralTabBase extends Component {
@@ -131,7 +119,6 @@ export class AccountsGeneralTabBase extends Component {
         wasLoaded: PropTypes.bool,
         fetching: PropTypes.bool,
         activeAccount: PropTypes.string,
-        accountsTreeState: PropTypes.string,
         activeAccountBreadcrumbs: PropTypes.arrayOf(
             PropTypes.shape({
                 text: PropTypes.string.isRequired,
@@ -140,17 +127,17 @@ export class AccountsGeneralTabBase extends Component {
             }),
         ),
         activeAccountAggregation: PropTypes.object,
-        dashboardVisibilityMode: PropTypes.string,
+        accountsVisibilityMode: PropTypes.string,
         favouriteAccountsSet: PropTypes.object.isRequired,
+        usableAccountsSet: PropTypes.object.isRequired,
 
         changeNameFilter: PropTypes.func.isRequired,
         changeContentFilter: PropTypes.func.isRequired,
         changeMediumFilter: PropTypes.func.isRequired,
         filterUsableAccounts: PropTypes.func.isRequired,
         loadUsers: PropTypes.func.isRequired,
-        setAccountsTreeState: PropTypes.func.isRequired,
         setActiveAccount: PropTypes.func.isRequired,
-        setAccountsVisibilityModeOfDashboard: PropTypes.func.isRequired,
+        setAccountsVisibilityMode: PropTypes.func.isRequired,
         accountsToggleFavourite: PropTypes.func.isRequired,
         setAccountsAbcServiceFilter: PropTypes.func.isRequired,
 
@@ -202,25 +189,33 @@ export class AccountsGeneralTabBase extends Component {
             activeNameFilter,
             activeMediumFilter,
             activeContentModeFilter,
-            dashboardVisibilityMode,
+            accountsVisibilityMode,
             abcServiceFilter: {slug, id} = {},
-            contextView,
         } = this.props;
 
         const showMediumType =
             mediumList &&
             (activeContentModeFilter === 'default' || activeContentModeFilter === 'disk_space');
 
-        const isDashboard = contextView === DASHBOARD_VIEW_CONTEXT;
-        const radioProps = isDashboard ? DB_VISIBILITY_MODE_PROPS : ACCOUNTS_VISIBILITY_MODE_PROPS;
         return (
             <div className={b('toolbar', 'elements-section')}>
                 <div className={b('dashboard-visibility-mode', 'elements-toolbar__component')}>
                     <CustomRadioButton
-                        onChange={this.onDashboardVisibilityModeChange}
-                        {...radioProps}
-                        value={dashboardVisibilityMode}
+                        onChange={this.onAccountsVisibilityModeChange}
+                        {...ACCOUNTS_VISIBILITY_MODE_PROPS}
+                        value={accountsVisibilityMode}
                     />
+                    {(accountsVisibilityMode === 'usable' ||
+                        accountsVisibilityMode === 'favourites') && (
+                        <Tooltip
+                            className={b('visibility-hint')}
+                            content={i18n('context_account-branches')}
+                        >
+                            <span tabIndex={0} aria-label={i18n('context_account-branches')}>
+                                <UIKitIcon data={CircleInfo} size={16} />
+                            </span>
+                        </Tooltip>
+                    )}
                 </div>
                 <div className={b('name-filter', 'elements-toolbar__component')}>
                     <Filter
@@ -270,13 +265,8 @@ export class AccountsGeneralTabBase extends Component {
         setAccountsAbcServiceFilter(id, slug);
     };
 
-    onDashboardVisibilityModeChange = (event) => {
-        const {viewContext} = this.props;
-        if (viewContext === DASHBOARD_VIEW_CONTEXT) {
-            this.props.setAccountsVisibilityModeOfDashboard(event.target.value);
-        } else {
-            this.props.setAccountsVisibilityMode(event.target.value);
-        }
+    onAccountsVisibilityModeChange = (event) => {
+        this.props.setAccountsVisibilityMode(event.target.value);
     };
 
     renderUsableError() {
@@ -290,6 +280,8 @@ export class AccountsGeneralTabBase extends Component {
             activeAccount,
             activeMediumFilter: mediumType,
             favouriteAccountsSet,
+            usableAccountsSet,
+            accountsVisibilityMode,
             accountsToggleFavourite,
             columnFields,
             cluster,
@@ -322,19 +314,38 @@ export class AccountsGeneralTabBase extends Component {
                 const toggler = (
                     <div
                         className={b('item-toggler', {hidden: !hasChildren})}
+                        data-qa={`account-tree-toggle-${item.name}`}
                         onClick={toggleStateFn}
                     >
                         <Icon awesome={itemState.collapsed ? 'angle-down' : 'angle-up'} size={13} />
                     </div>
                 );
 
+                const isInFavourites = favouriteAccountsSet.has(item.name);
+                const isContextParent =
+                    (accountsVisibilityMode === 'usable' && !usableAccountsSet.has(item.name)) ||
+                    (accountsVisibilityMode === 'favourites' && !isInFavourites);
+                const parentHint =
+                    accountsVisibilityMode === 'favourites'
+                        ? i18n('context_account-not-in-favourites')
+                        : i18n('context_account-without-use');
                 const nameElement = (
-                    <div className={b('item-name')}>
+                    <div className={b('item-name', {context: isContextParent})}>
                         <AccountLink account={item.name} cluster={cluster} />
+                        {isContextParent && (
+                            <Tooltip content={parentHint}>
+                                <span
+                                    className={b('parent-hint')}
+                                    tabIndex={0}
+                                    aria-label={parentHint}
+                                >
+                                    <Icon awesome="question-circle" size={13} />
+                                </span>
+                            </Tooltip>
+                        )}
                     </div>
                 );
 
-                const isInFavourites = favouriteAccountsSet.has(item.name);
                 const onFavouriteClick = () => {
                     accountsToggleFavourite(item.name);
                 };
@@ -346,6 +357,7 @@ export class AccountsGeneralTabBase extends Component {
                             className={b('item-favorite-star', {
                                 active: isInFavourites,
                             })}
+                            data-qa={`account-favourite-${item.name}`}
                             onClick={onFavouriteClick}
                         >
                             <Icon awesome={isInFavourites ? 'star-alt' : 'star'} size={13} />
@@ -637,9 +649,8 @@ export class AccountsGeneralTabBase extends Component {
             activeContentModeFilter,
             fetching,
             wasLoaded,
-            accountsTreeState,
             enable_per_account_tablet_accounting,
-            dashboardVisibilityMode,
+            accountsVisibilityMode,
             metadataFetching,
         } = this.props;
 
@@ -658,22 +669,22 @@ export class AccountsGeneralTabBase extends Component {
         const allowTable = !isTCBRelative || enable_per_account_tablet_accounting;
 
         const items = contextViewTree || [];
+        const isAllMode = accountsVisibilityMode === 'all';
 
         return (
             <div className={b('content', 'elements-section')}>
                 {!allowTable && <TabletAccountingNotice className={b('tcb-resource-notice')} />}
-                {allowTable && <VisibilityNotice mode={dashboardVisibilityMode} />}
                 {allowTable && (
                     <ElementsTableWithHeaderAndFooter
                         {...tableProps}
                         isLoading={isLoading}
-                        treeState={accountsTreeState}
+                        key={isAllMode ? 'all' : 'filtered'}
+                        treeState={isAllMode ? 'collapsed' : 'expanded'}
                         items={items}
-                        onItemToggleState={this.onItemToggleState}
                         templates={this.templates}
                         selectedIndex={selectedIndex}
                         header={false}
-                        footer={this.props.activeAccountAggregation}
+                        footer={isAllMode ? this.props.activeAccountAggregation : null}
                         top={STICKY_TOOLBAR_BOTTOM}
                         treeStateExpanded={!activeAccount ? [] : [items && items[0]?.key]}
                     />
@@ -681,10 +692,6 @@ export class AccountsGeneralTabBase extends Component {
             </div>
         );
     }
-
-    onItemToggleState = () => {
-        this.props.setAccountsTreeState('mixed');
-    };
 
     render() {
         const {error, metadataError, usableError, wasLoaded, viewContext, fetching} = this.props;

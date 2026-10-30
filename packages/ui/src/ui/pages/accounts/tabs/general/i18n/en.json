@@ -7,8 +7,6 @@
   "context_used-limit": "used/limit",
   "value_overcommitted": "Overcommitted",
   "context_violated-resources-title": "Limits of the following resources are violated by the account or its children:",
-  "context_usable-accounts": "Currently only the accounts for which you have the \"Use\" permission are displayed",
-  "context_favourite-accounts": "Currently only the accounts that marked as favourite are displayed.",
   "title_media": "Media",
   "field_account-filter": "Account...",
   "field_mode": "Mode:",
@@ -17,5 +15,8 @@
   "field_account-name": "Account name",
   "field_usage": "Usage",
   "field_limit": "Limit",
-  "field_total": "Total"
+  "field_total": "Total",
+  "context_account-without-use": "No \"Use\" permission. Shown as a parent of an account with this permission.",
+  "context_account-not-in-favourites": "Not in Favourites. Shown as a parent of a favourite account.",
+  "context_account-branches": "Parent accounts are shown for context. Their totals include all descendants, not just those shown in the tree."
 }

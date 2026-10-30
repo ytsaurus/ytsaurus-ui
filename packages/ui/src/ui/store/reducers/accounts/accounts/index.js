@@ -1,3 +1,4 @@
+import Account from '../../../../pages/accounts/selector';
 import {getResponsibleUsers} from '../../../../utils/accounts/index';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../../constants/accounts';
 import {initialState as tableSortState} from '../../tables';
@@ -14,7 +15,6 @@ import {
     FETCH_ACCOUNTS_TOTAL_USAGE,
     FETCH_ACCOUNTS_USABLE,
     FILTER_USABLE_ACCOUNTS,
-    SET_ACCOUNTS_TREE_STATE,
     SET_ACTIVE_ACCOUNT,
 } from '../../../../constants/accounts/accounts';
 import {mergeStateOnClusterChange} from '../../../../store/reducers/utils';
@@ -34,14 +34,13 @@ const ephemeralState = {
     wasLoaded: false,
     metadataFetching: false,
     metadataError: undefined,
-    fullAccountsLoaded: false,
     loadTotals: false,
     loadNodes: false,
     error: false,
     errorData: {},
 
     accounts: [],
-    accountsTreeState: 'collapsed',
+    accountList: [],
     responsibleUsers: [],
     usableAccounts: [],
 
@@ -53,7 +52,6 @@ const ephemeralState = {
      * It should be increased after editing of any account to reload data.
      * see YTFRONT-3920
      */
-    editCounter: 0,
 
     is_accounts_usage_available: false,
 };
@@ -67,7 +65,17 @@ function mergeAccountsWithLoadedDetails(accounts, previousAccounts) {
     const previousAccountsByName = new Map(
         previousAccounts.map((account) => [account.name, account]),
     );
-    return accounts.map((account) => previousAccountsByName.get(account.name) ?? account);
+    return accounts.map((account) => {
+        const details = previousAccountsByName.get(account.name);
+        if (!details) return account;
+
+        return new Account({
+            ...details,
+            parent: account.parent,
+            abc: account.abc,
+            $attributes: {...details.$attributes, ...account.$attributes},
+        });
+    });
 }
 
 // eslint-disable-next-line complexity
@@ -80,7 +88,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 accounts,
                 responsibleUsers,
-                filteredAccounts: accounts,
+                accountList: action.data.accounts,
                 fetching: false,
                 error: false,
                 wasLoaded: true,
@@ -96,24 +104,31 @@ const reducer = (state = initialState, action) => {
             };
 
         case FETCH_ACCOUNTS_RESOURCE.REQUEST:
-            return {...state, fetching: true};
+            return {...state, fetching: true, metadataFetching: false, metadataError: undefined};
 
         case FETCH_ACCOUNTS_METADATA.REQUEST:
             return {
                 ...state,
+                accounts: mergeAccountsWithLoadedDetails(
+                    state.accountList,
+                    action.data.accountNames === undefined
+                        ? state.accounts
+                        : state.accounts.filter(({name}) => action.data.accountNames.has(name)),
+                ),
                 metadataFetching: true,
                 metadataError: undefined,
-                fullAccountsLoaded: false,
             };
 
         case FETCH_ACCOUNTS_METADATA.SUCCESS: {
-            const accounts = action.data.accounts;
+            const accounts = action.data.allAccounts
+                ? action.data.accounts
+                : mergeAccountsWithLoadedDetails(state.accountList, action.data.accounts);
             return {
                 ...state,
                 accounts,
                 responsibleUsers: getResponsibleUsers(accounts),
                 metadataFetching: false,
-                fullAccountsLoaded: true,
+                metadataError: action.data.error,
             };
         }
 
@@ -144,11 +159,14 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 usableAccounts: action.data,
+                usableError: undefined,
+                usableErrorMessage: undefined,
             };
 
         case FETCH_ACCOUNTS_USABLE.FAILURE:
             return {
                 ...state,
+                usableAccounts: [],
                 usableError: action.data.error,
                 usableErrorMessage: i18n('alert_usable-accounts-load-error'),
             };
@@ -173,10 +191,6 @@ const reducer = (state = initialState, action) => {
 
         case FILTER_USABLE_ACCOUNTS: {
             return {...state, activeUsableFilter: true};
-        }
-
-        case SET_ACCOUNTS_TREE_STATE: {
-            return {...state, accountsTreeState: action.data.treeState};
         }
 
         case SET_ACTIVE_ACCOUNT: {

@@ -7,7 +7,7 @@ import {IdmObjectType} from '../../../constants/acl';
 import {updateAcl} from '../../../store/actions/acl';
 import UIFactory from '../../../UIFactory';
 import {type ResponsibleType} from '../../../utils/acl/acl-types';
-import {accountsIncreaseEditCounter} from './accounts';
+import {reloadAccounts} from './accounts';
 import {accountEditorTags, accountsApi} from '../../../store/api/accounts';
 import {YTApiId} from '../../../rum/rum-wrap-api';
 
@@ -79,7 +79,7 @@ export function createAccountFromInfo(newAccountInfo: NewAccountInfo): EditorAct
                 dispatch(
                     accountsApi.util.invalidateTags([YTApiId.listAccounts, ...accountEditorTags]),
                 );
-                dispatch(accountsIncreaseEditCounter());
+                dispatch(reloadAccounts());
             });
     };
 }

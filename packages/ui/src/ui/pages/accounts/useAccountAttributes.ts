@@ -9,7 +9,7 @@ export type CurrentAccountAttributes = {
 export function useAccountAttributes(account: string) {
     const query = useGetQuery<CurrentAccountAttributes>(
         {
-            id: YTApiId.accountsData,
+            id: YTApiId.accountAttributes,
             parameters: {
                 path: `//sys/accounts/${account}/@`,
                 attributes: ['path', 'abc'],
