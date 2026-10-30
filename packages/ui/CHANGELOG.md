@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.32.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.31.0...ui-v3.32.0) (2026-10-30)
+
+
+### Features
+
+* **Operations:** add pinnable job timeline details panel [YTFRONT-6116] ([f853e65](https://github.com/ytsaurus/ytsaurus-ui/commit/f853e654ff1c23a957301e4a8ee8f9385acf8f30))
+
 ## [3.31.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.30.1...ui-v3.31.0) (2026-10-28)
 
 
