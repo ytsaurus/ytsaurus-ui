@@ -8,7 +8,7 @@ export function useAccountMonitoringAttribute(
 ) {
     const query = useGetQuery<Record<string, number>>(
         {
-            id: YTApiId.accountsData,
+            id: YTApiId.accountMonitoringAttribute,
             cluster,
             parameters: {path: `//sys/accounts/${account}/@${attributePath}`},
         },
