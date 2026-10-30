@@ -79,6 +79,7 @@
   },
   "dependencies": {
     "@diplodoc/transform": "^4.72.0",
+    "@gravity-ui/aikit": "2.25.0",
     "@gravity-ui/app-layout": "^1.8.0",
     "@gravity-ui/expresskit": "^2.11.1",
     "@gravity-ui/i18n": "^1.8.0",
@@ -88,11 +89,12 @@
     "axios": "^1.8.4",
     "cacheable-lookup": "^6.1.0",
     "cookie-parser": "1.4.6",
-    "dayjs": "^1.11.10",
+    "dayjs": "^1.11.19",
     "highlight.js": "^11.10.0",
     "js-cookie": "^3.0.8",
     "lodash": "^4.17.23",
     "object-hash": "^3.0.0",
+    "openai": "6.35.0",
     "opentracing": "^0.14.7",
     "qs": "^6.15.2",
     "source-map-support": "0.5.21",
@@ -186,6 +188,7 @@
     "monaco-vim": "^0.4.2",
     "msw": "^2.10.3",
     "msw-storybook-addon": "^2.0.5",
+    "path-browserify": "^1.0.1",
     "postcss": "^8.4.29",
     "postcss-scss": "^4.0.7",
     "prettier": "^3.9.6",
@@ -217,6 +220,7 @@
     "split.js": "^1.6.5",
     "storybook": "^9.0.16",
     "typescript": "^5.2.2",
+    "url": "^0.11.4",
     "vis-data": "^8.0.4",
     "vis-network": "^10.0.3",
     "vite-plugin-commonjs": "^0.10.4",
@@ -230,6 +234,9 @@
   "gitHead": "aba657f50f894370eaef7f27d5083386e218afe8",
   "overrides": {
     "axios": "$axios",
+    "@gravity-ui/aikit": {
+      "uuid": "$uuid"
+    },
     "react-split-pane": {
       "react": "$react",
       "react-dom": "$react-dom"
@@ -247,6 +254,9 @@
     "@gravity-ui/timeline": {
       "dayjs": "$dayjs",
       "rbush": "$rbush"
+    },
+    "@gravity-ui/date-utils": {
+      "dayjs": "$dayjs"
     }
   },
   "msw": {

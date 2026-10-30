@@ -154,6 +154,7 @@ interface YTRequestFields {
     uid?: string;
     login?: string;
     ytApiAuthHeaders?: Record<string, string>;
+    aiChatAuthHeaders?: Record<string, string | undefined>;
     tabletErrorApiAuthHeaders?: Record<string, string>;
     tabletErrorTestingApiAuthHeaders?: Record<string, string>;
 }

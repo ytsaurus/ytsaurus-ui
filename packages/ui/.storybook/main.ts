@@ -34,6 +34,7 @@ const config: StorybookConfig = {
                 fallback: {
                     path: require.resolve('path-browserify'),
                     fs: false,
+                    url: require.resolve('url/'),
                 },
             },
             [

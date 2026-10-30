@@ -1,1 +1,0 @@
-export {EmptyChat} from './EmptyChat';

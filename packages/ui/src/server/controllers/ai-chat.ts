@@ -1,21 +1,21 @@
 import {type Request, type Response} from '@gravity-ui/expresskit';
 import {AiChat} from '../components/ai-chat';
-import {type LLMStreamEvent} from '../../shared/ai-chat';
-import {type CreateConversationRequest, type SendMessageRequest} from '../types/ai-chat';
-import {ErrorWithCode, pipeAxiosResponse} from '../utils';
+import serverFactory from '../ServerFactory';
+import {type SendMessageRequest} from '../types/ai-chat';
+import {ErrorWithCode} from '../utils';
 import {sendApiError} from '../utils/sendApiError';
 import {type YTCoreConfig} from '../../@types/core';
 
 const ERROR_MESSAGE = {
     CONFIG_NOT_SET: 'AI Chat configuration is not set in UI settings',
     CONFIG_INVALID: 'AI Chat configuration is invalid: missing required fields',
+    FAILED_GET_MODELS: 'Failed to get models',
     FAILED_CREATE_CONVERSATION: 'Failed to create conversation',
     FAILED_GET_CONVERSATIONS: 'Failed to get conversations',
     FAILED_GET_CONVERSATION_ITEMS: 'Failed to get conversation items',
-    STREAM_ERROR: 'Stream error:',
-    FAILED_SEND_MESSAGE: 'Failed to send message',
     FAILED_DELETE_CONVERSATION: 'Failed to delete conversation',
     FAILED_UPDATE_CONVERSATION_TITLE: 'Failed to update conversation title',
+    FAILED_SEND_MESSAGE: 'Failed to send message',
 };
 
 const getAiChatConfiguration = (req: Request) => {
@@ -35,216 +35,135 @@ const getAiChatConfiguration = (req: Request) => {
 
 const getAiChatInstance = (req: Request) => {
     const config = getAiChatConfiguration(req);
-    return new AiChat(config);
-};
-
-export const createConversation = async (req: Request, res: Response) => {
-    try {
-        const aiChat = getAiChatInstance(req);
-        const requestData = req.body as CreateConversationRequest;
-        const response = await aiChat.createConversation(requestData, req);
-        await pipeAxiosResponse(req.ctx, res, response);
-    } catch (e) {
-        req.ctx.logError(ERROR_MESSAGE.FAILED_CREATE_CONVERSATION, e);
-        sendApiError(res, e);
-    }
-};
-
-export const getConversations = async (req: Request, res: Response) => {
-    try {
-        const aiChat = getAiChatInstance(req);
-        const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : undefined;
-        const after = req.query.after as string | undefined;
-
-        const response = await aiChat.getConversations(limit, after, req);
-        await pipeAxiosResponse(req.ctx, res, response);
-    } catch (e) {
-        req.ctx.logError(ERROR_MESSAGE.FAILED_GET_CONVERSATIONS, e);
-        sendApiError(res, e);
-    }
-};
-
-export const getConversationItems = async (req: Request, res: Response) => {
-    try {
-        const aiChat = getAiChatInstance(req);
-        const {conversationId} = req.params;
-        const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : undefined;
-        const after = req.query.after as string | undefined;
-        const order = (req.query.order as 'asc' | 'desc') || 'desc';
-
-        const response = await aiChat.getConversationItems(
-            conversationId,
-            limit,
-            after,
-            order,
-            req,
-        );
-        await pipeAxiosResponse(req.ctx, res, response);
-    } catch (e) {
-        req.ctx.logError(ERROR_MESSAGE.FAILED_GET_CONVERSATION_ITEMS, e);
-        sendApiError(res, e);
-    }
+    return new AiChat(config, serverFactory.getAuthHeaders('aiChat', req));
 };
 
 export const sendMessage = async (req: Request, res: Response) => {
-    let streamClosed = false;
-    let headersAlreadySent = false;
-
-    const closeStream = () => {
-        if (!streamClosed) {
-            streamClosed = true;
-            if (!res.writableEnded) {
-                res.end();
-            }
-        }
-    };
+    const controller = new AbortController();
+    let responseFinished = false;
+    const onClose = () => controller.abort();
+    res.on('close', onClose);
 
     try {
         const aiChat = getAiChatInstance(req);
-        const {message, promptId, metadata, model, conversationId, contextMessages, files} =
-            req.body as {
-                model: string;
-                message: string;
-                conversationId: string;
-                promptId?: string;
-                metadata?: Record<string, unknown>;
-                contextMessages?: string[];
-                files?: {name: string; content: string; type: string}[];
-            };
-
-        const requestData: SendMessageRequest = {
-            model,
-            prompt: promptId ? {id: promptId} : undefined,
-            conversationId,
-            message,
-            metadata,
-            contextMessages,
-            files,
-        };
-
+        const {input, conversation, metadata, model} = req.body as SendMessageRequest;
+        if (typeof conversation !== 'string' || !conversation) {
+            throw new ErrorWithCode(400, 'Conversation ID is required');
+        }
+        if (model !== undefined && (typeof model !== 'string' || !model.trim())) {
+            throw new ErrorWithCode(400, 'Model must be a non-empty string');
+        }
         res.setHeader('Content-Type', 'text/event-stream');
         res.setHeader('Cache-Control', 'no-cache');
         res.setHeader('Connection', 'keep-alive');
         res.setHeader('X-Accel-Buffering', 'no');
         res.flushHeaders();
-        headersAlreadySent = true;
 
-        const response = await aiChat.sendMessage(requestData, req);
+        const response = await aiChat.sendMessage(
+            {input, conversation, metadata, model},
+            controller.signal,
+        );
 
-        let lastTail = '';
+        if (controller.signal.aborted) return;
 
-        response.on('data', (chunk: Buffer) => {
-            if (streamClosed) {
-                return;
-            }
-
-            const chunkString = lastTail + chunk.toString();
-            const lines = chunkString.split('\n');
-            lastTail = lines.pop() || '';
-
-            for (const line of lines) {
-                const trimmedLine = line.trim();
-
-                if (!trimmedLine) {
-                    continue;
-                }
-
-                if (trimmedLine.startsWith('data: ')) {
-                    const dataContent = trimmedLine.substring(6);
-
-                    if (dataContent === '[DONE]') {
-                        continue;
-                    }
-
-                    try {
-                        const data: LLMStreamEvent = JSON.parse(dataContent);
-
-                        if (data.type === 'response.output_text.delta' && data.delta) {
-                            res.write(`data: ${JSON.stringify({text: data.delta})}\n\n`);
-                        } else {
-                            if (data.type === 'response.output_text.done') continue;
-                            res.write(`data: ${JSON.stringify(data)}\n\n`);
-                        }
-
-                        if (data.type === 'response.done' || data.type === 'response.failed') {
-                            res.write('data: [DONE]\n\n');
-                            closeStream();
-                            return;
-                        }
-                    } catch (e) {
-                        req.ctx.logError('Failed to parse SSE data:', e);
-                    }
-                }
+        let forwardChunk = false;
+        response.onEventChunk((event) => {
+            forwardChunk = !controller.signal.aborted && event.type !== 'response.output_text.done';
+            if (
+                ['response.completed', 'response.failed', 'response.incomplete'].includes(
+                    event.type,
+                )
+            ) {
+                responseFinished = true;
+                response.abort();
             }
         });
-
-        response.on('end', () => {
-            if (!streamClosed) {
-                res.write('data: [DONE]\n\n');
-            }
-            closeStream();
+        response.onBufferChunk((chunk) => {
+            if (forwardChunk) res.write(chunk);
         });
-
-        response.on('error', (e: Error) => {
-            if (!streamClosed) {
-                req.ctx.logError(ERROR_MESSAGE.STREAM_ERROR, e);
-
-                try {
-                    res.write(`data: ${JSON.stringify({type: 'error', error: e.message})}\n\n`);
-                    res.write('data: [DONE]\n\n');
-                } catch (writeError) {
-                    req.ctx.logError('Failed to write error to stream:', writeError);
-                }
-            }
-            closeStream();
-        });
-
-        req.on('close', () => {
-            if (!streamClosed) {
-                req.ctx.logError('Client disconnected');
-                response.destroy();
-                closeStream();
-            }
-        });
+        // Await start so stream errors reach the SSE error handler and cleanup below.
+        await response.start();
     } catch (e) {
+        if (controller.signal.aborted || responseFinished) return;
         req.ctx.logError(ERROR_MESSAGE.FAILED_SEND_MESSAGE, e);
 
-        if (headersAlreadySent && !streamClosed) {
-            try {
-                res.write(
-                    `data: ${JSON.stringify({type: 'error', error: (e as Error).message})}\n\n`,
-                );
-                res.write('data: [DONE]\n\n');
-            } catch (writeError) {
-                req.ctx.logError('Failed to write error to stream:', writeError);
-            }
-            closeStream();
-        } else if (!headersAlreadySent) {
+        if (res.headersSent) {
+            res.write(`data: ${JSON.stringify({type: 'error', error: (e as Error).message})}\n\n`);
+        } else {
             sendApiError(res, e);
         }
+    } finally {
+        res.off('close', onClose);
+        controller.abort();
+        if (!res.destroyed && !res.writableEnded) {
+            if (res.headersSent) res.write('data: [DONE]\n\n');
+            res.end();
+        }
+    }
+};
+
+export const getModels = async (req: Request, res: Response) => {
+    try {
+        const {data} = await getAiChatInstance(req).getModels();
+        res.json({data: data.map(({id}) => ({id}))});
+    } catch (error) {
+        req.ctx.logError(ERROR_MESSAGE.FAILED_GET_MODELS, error);
+        sendApiError(res, error);
+    }
+};
+
+export const createConversation = async (req: Request, res: Response) => {
+    try {
+        const topic = typeof req.body?.topic === 'string' ? req.body.topic.slice(0, 100) : '';
+        res.json(await getAiChatInstance(req).createConversation({topic}));
+    } catch (error) {
+        req.ctx.logError(ERROR_MESSAGE.FAILED_CREATE_CONVERSATION, error);
+        sendApiError(res, error);
+    }
+};
+
+export const getConversationItems = async (req: Request, res: Response) => {
+    try {
+        const after = typeof req.query.after === 'string' ? req.query.after : undefined;
+        const page = await getAiChatInstance(req).getConversationItems(
+            req.params.conversationId,
+            after,
+        );
+        res.json({data: page.data, has_more: page.has_more, last_id: page.last_id});
+    } catch (error) {
+        req.ctx.logError(ERROR_MESSAGE.FAILED_GET_CONVERSATION_ITEMS, error);
+        sendApiError(res, error);
     }
 };
 
 export const deleteConversation = async (req: Request, res: Response) => {
     try {
-        const aiChat = getAiChatInstance(req);
-        const {conversationId} = req.params;
-        const response = await aiChat.deleteConversation(conversationId, req);
-        await pipeAxiosResponse(req.ctx, res, response);
-    } catch (e) {
-        req.ctx.logError(ERROR_MESSAGE.FAILED_DELETE_CONVERSATION, e);
-        sendApiError(res, e);
+        res.json(await getAiChatInstance(req).deleteConversation(req.params.conversationId));
+    } catch (error) {
+        req.ctx.logError(ERROR_MESSAGE.FAILED_DELETE_CONVERSATION, error);
+        sendApiError(res, error);
     }
 };
 
 export const summarizeConversationTitle = async (req: Request, res: Response) => {
     try {
-        const aiChat = getAiChatInstance(req);
-        const {conversationId} = req.params;
-        const title = await aiChat.summarizeConversationTitle(conversationId, req);
-        res.status(200).json({success: true, title});
-    } catch (e) {
-        req.ctx.logError(ERROR_MESSAGE.FAILED_UPDATE_CONVERSATION_TITLE, e);
-        sendApiError(res, e);
+        const title = await getAiChatInstance(req).summarizeConversationTitle(
+            req.params.conversationId,
+            req.body?.metadata,
+        );
+        res.json({title});
+    } catch (error) {
+        req.ctx.logError(ERROR_MESSAGE.FAILED_UPDATE_CONVERSATION_TITLE, error);
+        sendApiError(res, error);
+    }
+};
+
+export const getConversations = async (req: Request, res: Response) => {
+    try {
+        const after = typeof req.query.after === 'string' ? req.query.after : undefined;
+        res.json(await getAiChatInstance(req).getConversations(after));
+    } catch (error) {
+        req.ctx.logError(ERROR_MESSAGE.FAILED_GET_CONVERSATIONS, error);
+        sendApiError(res, error);
     }
 };

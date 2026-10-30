@@ -1,5 +1,4 @@
-import {type Request, type Response} from 'express';
-import {type ExpressKit} from '@gravity-ui/expresskit';
+import {type ExpressKit, type Request, type Response} from '@gravity-ui/expresskit';
 import forEach_ from 'lodash/forEach';
 import {YT_LOCAL_CLUSTER_ID} from './constants';
 import {type ConfigData, type YTConfig} from '../shared/yt-types';
@@ -71,7 +70,7 @@ const serverFactory: ServerFactory = {
     getAuthHeaders(type, req) {
         switch (type) {
             case 'aiChat':
-                return undefined;
+                return req.yt?.aiChatAuthHeaders;
             case 'accountsUsageTest':
             case 'accountsUsageProd':
             case 'accessLogTest':

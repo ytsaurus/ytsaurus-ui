@@ -180,3 +180,121 @@ Example of usage:
   },
 };
 ```
+
+## AI chat
+
+### Backend requirements
+
+The UI server connects to a backend that implements OpenAI Responses and Conversations
+APIs, plus a conversation listing endpoint. Streaming Responses support alone is not enough.
+The backend must retain conversation items between requests.
+
+Paths below are relative to `baseUrl`:
+
+| Method and path                 | Used for                                                                                              |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `POST /responses`               | Streaming chat replies and non-streaming title generation                                             |
+| `POST /conversations`           | Creating a conversation with metadata                                                                 |
+| `GET /conversations`            | Listing saved conversations; backend extension described below                                        |
+| `GET /conversations/{id}/items` | Loading messages, with `order=desc&limit=50` for history and `order=asc&limit=5` for title generation |
+| `GET /conversations/{id}`       | Reading metadata before updating a title; optional with `conversationLookup: "list"`                  |
+| `POST /conversations/{id}`      | Updating metadata to save the title in `topic`                                                        |
+| `DELETE /conversations/{id}`    | Deleting a saved conversation                                                                         |
+
+### Configuration
+
+Add `aiChatConfig` to `uiSettings` in your installation's server configuration
+(see [Configuration](#configuration)), then restart the UI server:
+
+```json
+{
+  "uiSettings": {
+    "aiChatConfig": {
+      "baseUrl": "https://your-llm.example/v1",
+      "model": "your-model"
+    }
+  }
+}
+```
+
+| Option               | Description                                                                                                                                                                              |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `baseUrl`            | Required. Complete API root: `https://your-llm.example/v1` produces `https://your-llm.example/v1/responses`. `/v1` is not added automatically.                                           |
+| `model`              | Required. Model used for replies and title generation.                                                                                                                                   |
+| `metadata`           | Optional string-to-string map sent with reply and title generation requests. Page-specific metadata overrides matching keys.                                                             |
+| `conversationLookup` | Optional: `"retrieve"` (default) reads a conversation by ID before updating its title. Use `"list"` if the backend only supports listing; the server searches the list for its metadata. |
+
+`uiSettings` is exposed to the browser. Keep credentials in server-side configuration
+or secret storage, not in `aiChatConfig` or its `metadata`.
+
+### Authentication
+
+All backend requests use `serverFactory.getAuthHeaders('aiChat', req)`. Its default
+implementation reads `req.yt.aiChatAuthHeaders`, which your authentication middleware
+can populate. No default `Authorization` header is sent.
+
+For a custom installation, you can instead register an override in
+[`src/server/index.ts`](../../custom-ytsaurus-ui.example/src/server/index.ts), before
+creating `ExpressKit`. This example assumes that the backend accepts a service token
+and a trusted user login in `X-User-Id`, and that application authentication populates
+`req.yt.login`:
+
+```ts
+import serverFactory, {configureServerFactory} from '../ytsaurus-ui.server/ServerFactory';
+
+const defaultGetAuthHeaders = serverFactory.getAuthHeaders;
+configureServerFactory({
+  getAuthHeaders(type, req) {
+    if (type !== 'aiChat') return defaultGetAuthHeaders(type, req);
+    const token = process.env.AI_CHAT_API_TOKEN;
+    const login = req.yt?.login;
+    if (!token || !login) throw new Error('AI chat credentials or user identity missing');
+    return {Authorization: `Bearer ${token}`, 'X-User-Id': login};
+  },
+});
+```
+
+`AI_CHAT_API_TOKEN` is an environment variable introduced by this example, not a
+built-in UI setting. Adapt the headers to your backend's authentication contract.
+The backend must validate the credentials and trusted identity, scope conversation
+listing to that user, and check ownership on reads, replies, title updates and deletion.
+The UI server does not maintain a separate ownership registry.
+
+### Conversation listing contract
+
+`GET /conversations?limit=20&after=...` is a backend extension, not a standard
+OpenAI Conversations endpoint. The first request omits `after`. Return
+[`ConversationPage<Conversation>`](../src/shared/ai-chat.ts):
+
+```json
+{
+  "data": [
+    {
+      "id": "conv_123",
+      "created_at": 1735689600,
+      "metadata": {"topic": "Query optimization"}
+    }
+  ],
+  "has_more": false,
+  "last_id": "conv_123"
+}
+```
+
+- `created_at` is a Unix timestamp in **seconds**; optional `metadata.topic` is the chat title.
+- When `has_more` is `true`, return a non-empty `last_id`; the next request passes it as `after`.
+- For an empty list, return `{"data": [], "has_more": false, "last_id": null}`.
+
+The items endpoint uses standard Conversations API items and the same `data`,
+`has_more`, and `last_id` pagination fields.
+
+### Verify the integration
+
+1. Open Query Tracker on a configured cluster and click **Ask AI**. The chat panel
+   is unavailable in local mode.
+2. Send a message. Check that the reply streams and the conversation receives a title.
+3. Close and reopen the panel, then start a new chat. Open history and select the
+   previous conversation: its messages should still be available.
+4. Delete that conversation and reopen history to confirm that it is gone.
+
+If replies work but titles fail, check non-streaming `POST /responses`, ascending
+item retrieval, conversation lookup and metadata updates from the requirements above.

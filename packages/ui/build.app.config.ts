@@ -17,6 +17,8 @@ const port = Number(process.env.LOCAL_DEV_PORT);
 
 const client: ServiceConfig['client'] = {
     bundler: 'rspack',
+    // AIKit renders Diplodoc markdown in the browser; its link transformer uses Node's URL API.
+    fallback: {url: require.resolve('url/'), path: require.resolve('path-browserify'), fs: false},
     javaScriptLoader: 'swc',
     cache: true,
     watchOptions: {
