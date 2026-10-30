@@ -116,12 +116,14 @@ test('FlowStateResults: row navigation and deletion remain operable', async ({mo
     );
     const row = page.locator('.yt-gravity-table__row').first();
     const actions = row.locator('.gt-table__cell_id_actions');
+    const computation = row.locator('.gt-table__cell_id_computation');
+    const stateName = row.locator('.gt-table__cell_id_state-name');
 
-    await expect(actions.getByRole('link', {name: 'Open computation page'})).toHaveAttribute(
+    await expect(computation.getByRole('link', {name: 'Open computation page'})).toHaveAttribute(
         'href',
         '/hahn/flows/computations/state/state',
     );
-    await expect(actions.getByRole('link', {name: 'Open backing storage'})).toHaveAttribute(
+    await expect(stateName.getByRole('link', {name: 'Open backing storage'})).toHaveAttribute(
         'href',
         /home\/flow\/pipeline\/state/,
     );
@@ -146,12 +148,12 @@ test('FlowStateResults: read-only rows omit selection and delete controls', asyn
 
     await expect(page.getByRole('checkbox')).toHaveCount(0);
     await expect(page.getByRole('button', {name: 'Delete state row'})).toHaveCount(0);
-    const actions = page.locator('.gt-table__cell_id_actions').first();
+    const row = page.locator('.yt-gravity-table__row').first();
     const showValue = page
         .locator('.gt-table__cell_id_actions')
         .nth(1)
         .getByRole('button', {name: 'Show value'});
-    await expect(actions.getByRole('link')).toHaveCount(2);
+    await expect(row.getByRole('link')).toHaveCount(2);
     await expect(showValue).toBeAttached();
 });
 

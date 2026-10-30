@@ -2,7 +2,17 @@ import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {
     type FlowPartitionJobStateType,
     type FlowPartitionStateType,
+    type FlowStateTarget,
 } from '../../../../shared/yt-types';
+
+export type FlowStateFiltersValue = {
+    computationId?: string;
+    partitionId?: string;
+    keyValues: Record<string, string>;
+    rawKey?: unknown;
+    stateName?: string;
+    target: FlowStateTarget;
+};
 
 export type FlowFiltersState = {
     pipelinePath: string;
@@ -21,6 +31,8 @@ export type FlowFiltersState = {
     partitionsStateFilter: Array<FlowPartitionStateType>;
 
     zoomToNode: string;
+
+    stateViewer: FlowStateFiltersValue;
 };
 
 export const initialState: FlowFiltersState = {
@@ -40,6 +52,8 @@ export const initialState: FlowFiltersState = {
     partitionsStateFilter: [],
 
     zoomToNode: '',
+
+    stateViewer: {keyValues: {}, target: 'all'},
 };
 
 export const FlowTab = {

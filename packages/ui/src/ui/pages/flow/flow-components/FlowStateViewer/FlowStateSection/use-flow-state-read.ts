@@ -1,6 +1,9 @@
-import React from 'react';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 
 import {skipToken} from '@reduxjs/toolkit/query';
+
+import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
+import {filtersSlice} from '../../../../../store/reducers/flow/filters';
 
 import {useDebouncedValue} from '../../../../../hooks/useDebouncedValue';
 import {useFlowReadStatesQuery, useFlowStaticSpecQuery} from '../../../../../store/api/yt/flow';
@@ -21,45 +24,71 @@ export function useFlowStateRead({
     fixedComputationId?: string;
     initialFilters?: Partial<FlowStateFiltersValue>;
 }): FlowStateReadResult {
-    const [filters, setFiltersState] = React.useState<FlowStateFiltersValue>(() =>
-        seedStateFilters(fixedComputationId, initialFilters),
+    const dispatch = useDispatch();
+    const stateViewer = useSelector((state) => state.flow.filters.stateViewer);
+    const filters = useMemo(
+        () =>
+            fixedComputationId ? {...stateViewer, computationId: fixedComputationId} : stateViewer,
+        [fixedComputationId, stateViewer],
     );
-    const userModifiedRef = React.useRef(false);
-    const setFilters = React.useCallback<
-        React.Dispatch<React.SetStateAction<FlowStateFiltersValue>>
-    >((next) => {
-        userModifiedRef.current = true;
-        setFiltersState(next);
-    }, []);
+    const [initialized, setInitialized] = useState(false);
+    const userModifiedRef = useRef(false);
+    const setFilters = useCallback(
+        (next: FlowStateFiltersValue) => {
+            userModifiedRef.current = true;
+            dispatch(filtersSlice.actions.updateFlowFilters({stateViewer: next}));
+        },
+        [dispatch],
+    );
     const {data: staticSpec} = useFlowStaticSpecQuery({parameters: {pipeline_path}});
 
-    React.useEffect(() => {
-        setFiltersState((current) =>
-            selectFirstComputation(current, {
-                staticSpec,
-                fixedComputationId,
-                initialFilters,
-                userModified: userModifiedRef.current,
+    useEffect(() => {
+        if (initialized) {
+            return;
+        }
+        dispatch(
+            filtersSlice.actions.updateFlowFilters({
+                stateViewer: seedStateFilters(fixedComputationId, initialFilters),
             }),
         );
-    }, [fixedComputationId, initialFilters, staticSpec]);
+        setInitialized(true);
+    }, [dispatch, fixedComputationId, initialFilters, initialized]);
 
-    const debouncedFilters = useDebouncedValue(filters, AUTO_LOAD_DEBOUNCE_MS);
+    useEffect(() => {
+        if (!initialized) {
+            return;
+        }
+        const next = selectFirstComputation(filters, {
+            staticSpec,
+            fixedComputationId,
+            initialFilters,
+            userModified: userModifiedRef.current,
+        });
+        if (next !== filters) {
+            dispatch(filtersSlice.actions.updateFlowFilters({stateViewer: next}));
+        }
+    }, [dispatch, filters, fixedComputationId, initialFilters, initialized, staticSpec]);
+
+    const debouncedFilters = useDebouncedValue(
+        initialized ? filters : undefined,
+        AUTO_LOAD_DEBOUNCE_MS,
+    );
     const debouncePending = filters !== debouncedFilters;
     const hasDebouncedScope = Boolean(
-        debouncedFilters.computationId || debouncedFilters.partitionId,
+        debouncedFilters?.computationId || debouncedFilters?.partitionId,
     );
-    const built = hasDebouncedScope
-        ? buildStateReadBody(
-              debouncedFilters,
-              resolveKeySchema(
-                  staticSpec,
-                  debouncedFilters.computationId,
-                  debouncedFilters.stateName,
-                  debouncedFilters.target,
-              ),
-          )
-        : undefined;
+    const built =
+        hasDebouncedScope && debouncedFilters
+            ? buildStateReadBody(
+                  debouncedFilters,
+                  resolveKeySchema(
+                      staticSpec,
+                      debouncedFilters.computationId,
+                      debouncedFilters.stateName,
+                      debouncedFilters.target,
+                  ),
+              )
+            : undefined;
     const validationError =
         built && 'error' in built ? i18n(built.error.errorKey, built.error.params) : undefined;
     const {data, error, isFetching, isSuccess, refetch} = useFlowReadStatesQuery(
