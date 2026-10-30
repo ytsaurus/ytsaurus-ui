@@ -58,13 +58,15 @@ export function RegisterConsumerDialog() {
                     },
                 },
                 {
-                    type: 'text' as const,
+                    type: 'path' as const,
                     name: 'consumerPath',
                     caption: i18n('field_path'),
                     required: true,
-                    extras: {
+                    extras: (values?: FormValues) => ({
                         placeholder: i18n('context_consumer-path-placeholder'),
-                    },
+                        cluster: values?.consumerCluster?.[0],
+                        disabled: !values?.consumerCluster?.[0],
+                    }),
                 },
                 {
                     type: 'text' as const,
