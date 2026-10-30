@@ -16,6 +16,7 @@
   "field_usage": "Usage",
   "field_limit": "Limit",
   "field_total": "Total",
-  "context_account-without-use": "No Use permission; shown to preserve the account hierarchy",
+  "context_account-without-use": "No \"Use\" permission. Shown as a parent of an account with this permission.",
+  "context_account-not-in-favourites": "Not in Favourites. Shown as a parent of a favourite account.",
   "context_account-branches": "Parent accounts are shown for context. Their totals include all descendants, not just those shown in the tree."
 }

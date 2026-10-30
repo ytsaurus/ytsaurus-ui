@@ -322,17 +322,23 @@ export class AccountsGeneralTabBase extends Component {
                     </div>
                 );
 
+                const isInFavourites = favouriteAccountsSet.has(item.name);
                 const isContextParent =
-                    accountsVisibilityMode === 'usable' && !usableAccountsSet.has(item.name);
+                    (accountsVisibilityMode === 'usable' && !usableAccountsSet.has(item.name)) ||
+                    (accountsVisibilityMode === 'favourites' && !isInFavourites);
+                const parentHint =
+                    accountsVisibilityMode === 'favourites'
+                        ? i18n('context_account-not-in-favourites')
+                        : i18n('context_account-without-use');
                 const nameElement = (
                     <div className={b('item-name', {context: isContextParent})}>
                         <AccountLink account={item.name} cluster={cluster} />
                         {isContextParent && (
-                            <Tooltip content={i18n('context_account-without-use')}>
+                            <Tooltip content={parentHint}>
                                 <span
                                     className={b('parent-hint')}
                                     tabIndex={0}
-                                    aria-label={i18n('context_account-without-use')}
+                                    aria-label={parentHint}
                                 >
                                     <Icon awesome="question-circle" size={13} />
                                 </span>
@@ -341,7 +347,6 @@ export class AccountsGeneralTabBase extends Component {
                     </div>
                 );
 
-                const isInFavourites = favouriteAccountsSet.has(item.name);
                 const onFavouriteClick = () => {
                     accountsToggleFavourite(item.name);
                 };
