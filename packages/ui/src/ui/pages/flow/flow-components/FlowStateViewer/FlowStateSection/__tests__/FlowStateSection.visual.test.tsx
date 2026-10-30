@@ -65,6 +65,21 @@ test('FlowStateSection: debounces filters and ignores a late response', async ({
     await expect(page.getByRole('status')).toHaveCount(0);
     expect(requests.map(({name: state}) => state)).toEqual([undefined, '/slow', '/latest']);
     await expectScreenshot({nameSuffix: 'latest'});
+
+    await test.step('changing the key preserves the state name in the request', async () => {
+        await page.getByPlaceholder('[account]').fill('["alice"]');
+        await page.clock.runFor(500);
+
+        await expect
+            .poll(() => requests.at(-1))
+            .toEqual({
+                computation_id: 'checkout',
+                target: 'key_state',
+                name: '/latest',
+                key: {account: 'alice'},
+                limit: 10,
+            });
+    });
 });
 
 test('FlowStateSection: sends typed formats and renders normalized annotated values', async ({
