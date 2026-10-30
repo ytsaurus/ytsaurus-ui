@@ -74,6 +74,7 @@ All application files in a resulting docker-image will be placed in /opt/app, so
 
 - `YT_AUTH_ALLOW_INSECURE` - if defined allows insecure (over http) authentication, do not use it for production
 - `ALLOW_PASSWORD_AUTH` - If defined, the app requires a password for cluster access
+- `YT_UI_HIDDEN_CLUSTERS_JSON` - JSON array of cluster IDs to exclude from the browser's `YT.clusters`. For example: `YT_UI_HIDDEN_CLUSTERS_JSON='["cluster-a","cluster-b"]'`. The value populates `YTCoreConfig.hiddenClusters`; an explicit application config value takes precedence. When unset or set to `[]`, no clusters are excluded.
 - `AUTH_COOKIE_DOMAIN` - specifies `Domain` attribute for `Set-Cookie` auth headers for password and OAuth authentication (the value is forwarded to `YTCoreConfig.authCookieDomain`)
 - `PROMETHEUS_BASE_URL` - If defined enables monitoring dashboards with prometheus data, see `Prometheus dashboards` below (the value is forwarded to `YTCoreConfig.prometheusBaseUrl`). To use authorized requests to your prometheus instance provide `prometheusAuthHeaders` field in `secrets/yt-interface-secret.json`, like:
 

@@ -22,6 +22,8 @@ export interface YTCoreConfig {
      */
     clustersConfigPath: string;
 
+    hiddenClusters?: string[];
+
     /**
      * Enable direct requests to YT-api requests for all requests.
      * If disabled then only some heavy requests like write_table, read_table(for Download) are sent directly.
