@@ -17,5 +17,7 @@
   "value_data-weight": "Data weight",
   "action_create-consumer": "Create consumer",
   "action_docs": "Docs",
-  "action_register-consumer": "Register consumer"
+  "action_register-consumer": "Register consumer",
+  "field_multi-consumer": "Multi consumer",
+  "field_consumer-name": "Consumer name"
 }
