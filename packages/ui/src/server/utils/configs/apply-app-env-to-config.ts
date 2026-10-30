@@ -22,6 +22,7 @@ function applyEnvToUISettings(config: Partial<YTCoreConfig>) {
 function applyEnvToConfig(config: Partial<YTCoreConfig>) {
     const tmp: Partial<typeof config> = {
         prometheusBaseUrl: process.env.PROMETHEUS_BASE_URL,
+        hiddenClusters: JSON.parse(process.env.YT_UI_HIDDEN_CLUSTERS_JSON ?? '[]'),
     };
 
     applyMissingFields(config, tmp);

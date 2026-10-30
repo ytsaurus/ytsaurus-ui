@@ -1,4 +1,5 @@
 import {type Request} from 'express';
+import omitBy_ from 'lodash/omitBy';
 import {type YTCoreConfig} from '../../@types/core';
 import {type ConfigData, type YTConfig} from '../../shared/yt-types';
 import {type AppLayoutConfig} from '../render-layout';
@@ -29,9 +30,13 @@ export async function getLayoutConfig(req: Request, params: Params): Promise<App
         userSettingsConfig,
         tabletErrorsBaseUrl,
         appLangs,
+        hiddenClusters = [],
     } = req.ctx.config as YTCoreConfig;
 
-    const YT = ytConfig;
+    const YT = {
+        ...ytConfig,
+        clusters: omitBy_(ytConfig.clusters, (_cluster, id) => hiddenClusters.includes(id)),
+    };
     const uiVersion = getInterfaceVersion();
 
     const parameters = {
