@@ -68,8 +68,12 @@ class OperationProgress extends Component<OperationProgressProps & ReduxProps> {
                 </span>
                 <span className={valueClassName}>
                     {hammer.format['Number'](count)}
-                    &nbsp; / &nbsp;
-                    {hammer.format['Number'](total)}
+                    {typeof total !== 'undefined' && (
+                        <>
+                            &nbsp; / &nbsp;
+                            {hammer.format['Number'](total)}
+                        </>
+                    )}
                 </span>
             </div>
         );
@@ -92,7 +96,8 @@ class OperationProgress extends Component<OperationProgressProps & ReduxProps> {
 
     renderJobCounters() {
         const {operation} = this.props;
-        const {state, totalJobs, failedJobs, completedJobs, runningJobs} = operation;
+        const {state, totalJobs, failedJobs, totalFailedJobs, completedJobs, runningJobs} =
+            operation;
 
         const className = 'operation-progress__counters';
 
@@ -102,7 +107,8 @@ class OperationProgress extends Component<OperationProgressProps & ReduxProps> {
                   <div className={className}>
                       {operation.inIntermediateState() &&
                           this.renderCounter('running', runningJobs, totalJobs)}
-                      {state === 'failed' && this.renderCounter('failed', failedJobs, totalJobs)}
+                      {state === 'failed' &&
+                          this.renderCounter('failed', failedJobs, totalFailedJobs)}
                       {this.renderCounter('completed', completedJobs, totalJobs)}
                   </div>
               );
