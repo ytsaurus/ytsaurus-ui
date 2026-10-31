@@ -95,6 +95,17 @@ describe('buildHeavyHitterStateLink', () => {
             buildHeavyHitterStateLink('hahn', '//pipeline', 'a/b', {partitionId: 'p'}),
         ).toContain('/computations/a%2Fb/state');
     });
+    it('percent-encodes spaces and plus signs so the registered location decoder round-trips them', () => {
+        const url = buildHeavyHitterStateLink('hahn', '//pipeline', 'state', {
+            keyValues: {name: 'a b+c'},
+        });
+        expect(url).toContain('a%20b%2Bc');
+        expect(
+            parseHeavyHitterStateSeed(decodeURIComponent(url.split('heavyHitterSeed=')[1])),
+        ).toEqual({
+            keyValues: {name: 'a b+c'},
+        });
+    });
 });
 
 describe('parseHeavyHitterStateSeed', () => {

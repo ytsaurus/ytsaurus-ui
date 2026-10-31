@@ -21,6 +21,13 @@ export type FlowFiltersState = {
     partitionsStateFilter: Array<FlowPartitionStateType>;
 
     zoomToNode: string;
+
+    stateViewerComputation: string;
+    stateViewerPartition: string;
+    stateViewerTarget: string;
+    stateViewerName: string;
+    stateViewerKeyText: string;
+    stateViewerHeavyHitterSeed: string;
 };
 
 export const initialState: FlowFiltersState = {
@@ -40,7 +47,24 @@ export const initialState: FlowFiltersState = {
     partitionsStateFilter: [],
 
     zoomToNode: '',
+
+    stateViewerComputation: '',
+    stateViewerPartition: '',
+    stateViewerTarget: '',
+    stateViewerName: '',
+    stateViewerKeyText: '',
+    stateViewerHeavyHitterSeed: '',
 };
+
+export type FlowStateViewerUrlState = Pick<
+    FlowFiltersState,
+    | 'stateViewerComputation'
+    | 'stateViewerPartition'
+    | 'stateViewerTarget'
+    | 'stateViewerName'
+    | 'stateViewerKeyText'
+    | 'stateViewerHeavyHitterSeed'
+>;
 
 export const FlowTab = {
     GRAPH: 'graph',

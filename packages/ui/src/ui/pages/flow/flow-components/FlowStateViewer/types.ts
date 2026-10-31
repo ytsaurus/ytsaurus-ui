@@ -15,6 +15,7 @@ export type FlowStateFiltersValue = {
     partitionId?: string;
     keyValues: Record<string, string>;
     rawKey?: unknown;
+    keyText?: string;
     stateName?: string;
     target: FlowStateTarget;
 };
@@ -23,6 +24,7 @@ export type FlowStateReadResult = {
     filters: FlowStateFiltersValue;
     setFilters: React.Dispatch<React.SetStateAction<FlowStateFiltersValue>>;
     staticSpec: FlowStaticSpec | undefined;
+    staticSpecResolved: boolean;
     hasScope: boolean;
     validationError: string | undefined;
     response: FlowReadStatesResponse | undefined;
@@ -51,6 +53,18 @@ export type FlowStateValidationError = {
     errorKey: FlowStateValidationErrorKey;
     params?: Record<string, string>;
 };
+
+export type FlowStatePersistedFilters = {
+    computationId?: string;
+    partitionId?: string;
+    target: FlowStateTarget;
+    stateName?: string;
+    keyText: string;
+};
+
+export type FlowStateEffectiveKey =
+    | {keyValues: Record<string, string>; rawKey: unknown; error?: undefined}
+    | {keyValues?: undefined; rawKey?: undefined; error: FlowStateValidationError};
 
 export type FlowStateAccessValidationError = Omit<FlowStateValidationError, 'errorKey'> & {
     errorKey: Exclude<

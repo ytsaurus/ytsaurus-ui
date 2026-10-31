@@ -115,16 +115,18 @@ test('FlowStateResults: row navigation and deletion remain operable', async ({mo
         />,
     );
     const row = page.locator('.yt-gravity-table__row').first();
+    const computationCell = row.locator('.gt-table__cell_id_computation');
+    const stateCell = row.locator('.gt-table__cell_id_state-name');
     const actions = row.locator('.gt-table__cell_id_actions');
 
-    await expect(actions.getByRole('link', {name: 'Open computation page'})).toHaveAttribute(
-        'href',
-        '/hahn/flows/computations/state/state',
-    );
-    await expect(actions.getByRole('link', {name: 'Open backing storage'})).toHaveAttribute(
+    await expect(
+        computationCell.getByRole('link', {name: 'Open computation page'}),
+    ).toHaveAttribute('href', '/hahn/flows/computations/state/state');
+    await expect(stateCell.getByRole('link', {name: 'Open backing storage'})).toHaveAttribute(
         'href',
         /home\/flow\/pipeline\/state/,
     );
+    await expect(actions.getByRole('link')).toHaveCount(0);
     await expect(
         page
             .locator('.yt-gravity-table__row')
@@ -146,13 +148,37 @@ test('FlowStateResults: read-only rows omit selection and delete controls', asyn
 
     await expect(page.getByRole('checkbox')).toHaveCount(0);
     await expect(page.getByRole('button', {name: 'Delete state row'})).toHaveCount(0);
-    const actions = page.locator('.gt-table__cell_id_actions').first();
-    const showValue = page
-        .locator('.gt-table__cell_id_actions')
-        .nth(1)
-        .getByRole('button', {name: 'Show value'});
-    await expect(actions.getByRole('link')).toHaveCount(2);
-    await expect(showValue).toBeAttached();
+    await expect(page.locator('.gt-table__cell_id_actions').first().getByRole('link')).toHaveCount(
+        0,
+    );
+    await expect(page.getByRole('link', {name: 'Open computation page'})).toHaveCount(2);
+    await expect(page.getByRole('link', {name: 'Open backing storage'})).toHaveCount(2);
+    await expect(
+        page.locator('.gt-table__cell_id_actions').nth(1).getByRole('button', {name: 'Show value'}),
+    ).toBeAttached();
+});
+
+test('FlowStateResults: relocated navigation links are keyboard reachable inside their cells', async ({
+    mount,
+    page,
+}) => {
+    await mount(<FlowStateResultsStories.NarrowLongContent />, {width: 480});
+    const row = page.locator('.yt-gravity-table__row').first();
+    const computationLink = row
+        .locator('.gt-table__cell_id_computation')
+        .getByRole('link', {name: 'Open computation page'});
+    const storageLink = row
+        .locator('.gt-table__cell_id_state-name')
+        .getByRole('link', {name: 'Open backing storage'});
+    for (const link of [computationLink, storageLink]) {
+        for (let i = 0; i < 20; i++) {
+            await page.keyboard.press('Tab');
+            if (await link.evaluate((node) => node === document.activeElement)) {
+                break;
+            }
+        }
+        await expect(link).toBeFocused();
+    }
 });
 
 test('FlowStateResults: result actions are disabled while refreshing', async ({mount, page}) => {

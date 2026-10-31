@@ -1,4 +1,9 @@
-import type {FlowStateAccessValidationError, FlowStateValidationError} from './types';
+import type {
+    FlowStateAccessValidationError,
+    FlowStateEffectiveKey,
+    FlowStateFiltersValue,
+    FlowStateValidationError,
+} from './types';
 
 import type {FlowAnnotatedInteger, FlowKeyColumn} from '../../../../../shared/yt-types';
 import {
@@ -112,6 +117,30 @@ export function parseRuntimeKeyDraft(raw: string): RuntimeKeyParseResult {
     } catch {
         return {error: {errorKey: 'validation_invalid-key-syntax'}};
     }
+}
+
+export function resolveEffectiveKey(
+    filters: Pick<FlowStateFiltersValue, 'keyValues' | 'rawKey' | 'keyText'>,
+    columns: Array<FlowKeyColumn>,
+): FlowStateEffectiveKey {
+    if (filters.keyText === undefined) {
+        return {keyValues: filters.keyValues, rawKey: filters.rawKey};
+    }
+    if (!filters.keyText.trim()) {
+        return {keyValues: {}, rawKey: undefined};
+    }
+    if (columns.length > 0) {
+        const parsed = parseRawKeyDraft(filters.keyText, columns);
+        if (parsed.error) {
+            return {error: parsed.error};
+        }
+        return {keyValues: parsed.values, rawKey: undefined};
+    }
+    const parsed = parseRuntimeKeyDraft(filters.keyText);
+    if (parsed.error) {
+        return {error: parsed.error};
+    }
+    return {keyValues: {}, rawKey: parsed.value};
 }
 
 function splitFlatYsonList(raw: string): Array<string> | undefined {

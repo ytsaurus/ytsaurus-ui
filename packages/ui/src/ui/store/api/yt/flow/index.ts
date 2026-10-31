@@ -111,8 +111,8 @@ export function useFlowReadStatesQuery(args: FlowReadStatesArgs | SkipToken) {
     return flowApi.useFlowReadStatesQuery(queryArgs);
 }
 
-export function useFlowStaticSpecQuery(args: FlowPipelineArgs) {
-    return flowApi.useFlowStaticSpecQuery(useEffectiveClusterArgs(args));
+export function useFlowStaticSpecQuery(args: FlowPipelineArgs, options?: {skip?: boolean}) {
+    return flowApi.useFlowStaticSpecQuery(useEffectiveClusterArgs(args), options);
 }
 
 export function useFlowPipelineStateQuery(

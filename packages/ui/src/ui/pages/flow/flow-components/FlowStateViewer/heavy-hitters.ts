@@ -162,12 +162,8 @@ export function buildHeavyHitterStateLink(
     computationId: string,
     seed: FlowHeavyHitterStateSeed,
 ): string {
-    const params = new URLSearchParams({
-        path: pipelinePath,
-        heavyHitterSeed: JSON.stringify(seed),
-    });
     const link = makeFlowComputationTabLink({cluster, computation: computationId, tab: 'state'});
-    return `${link}?${params}`;
+    return `${link}?path=${encodeURIComponent(pipelinePath)}&heavyHitterSeed=${encodeURIComponent(JSON.stringify(seed))}`;
 }
 
 export function parseHeavyHitterStateSeed(

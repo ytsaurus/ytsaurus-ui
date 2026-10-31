@@ -8,5 +8,6 @@
   "validation_fill-all-keys": "Fill every key column or none",
   "validation_key-target-mismatch": "A key only addresses key states; change State kind",
   "validation_no-scope": "Select a computation or a partition first",
-  "validation_unsupported-key-type": "Unsupported key type \"{{type}}\" for \"{{name}}\""
+  "validation_unsupported-key-type": "Unsupported key type \"{{type}}\" for \"{{name}}\"",
+  "validation_unsupported-url-filters": "The link carries unsupported filters; change a filter or reset the filters to load states"
 }

@@ -10,6 +10,10 @@
         flex: 0 1 auto;
     }
 
+    &__entity-label {
+        min-width: 0;
+    }
+
     &__hover-action {
         display: inline-flex;
         align-items: center;
@@ -19,6 +23,7 @@
 
     &__row-link {
         display: inline-flex;
+        flex-shrink: 0;
         width: 24px;
         height: 24px;
         align-items: center;
@@ -27,6 +32,10 @@
 
         &:hover {
             background-color: var(--g-color-base-simple-hover);
+        }
+
+        .g-icon {
+            color: var(--g-color-text-secondary);
         }
     }
 
@@ -46,7 +55,6 @@
     }
 
     .gt-table__cell_id_actions {
-        .yt-flow-state-results__row-link .g-icon,
         button:not(:disabled) .g-icon {
             color: var(--g-color-text-secondary);
         }

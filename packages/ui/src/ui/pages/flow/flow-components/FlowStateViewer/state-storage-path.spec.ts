@@ -1,4 +1,5 @@
-import {resolveStateStoragePath} from './state-storage-path';
+import {genNavigationUrl} from '../../../../utils/navigation/navigation';
+import {parseRichStoragePath, resolveStateStoragePath} from './state-storage-path';
 import type {FlowStaticSpec} from '../../../../../shared/yt-types';
 
 describe('resolveStateStoragePath', () => {
@@ -163,5 +164,122 @@ describe('resolveStateStoragePath', () => {
                 {computations} as FlowStaticSpec,
             ),
         ).toEqual({path: '//home/special', cluster: 'seneca'});
+    });
+    function managerSpec(path: unknown): FlowStaticSpec {
+        return {
+            computations: {c: {external_state_managers: {'/profile': {parameters: {path}}}}},
+        } as FlowStaticSpec;
+    }
+    const externalRow = {...baseRow, section: 'external_key_state', key: [1]} as const;
+    it('moves an embedded explicit cluster into the route and keeps a clean cypress path', () => {
+        expect(
+            resolveStateStoragePath(
+                externalRow,
+                pipelinePath,
+                managerSpec('<cluster=markov>//home/blrt/stable/profiles/Combination'),
+            ),
+        ).toEqual({path: '//home/blrt/stable/profiles/Combination', cluster: 'markov'});
+    });
+    it('reads a quoted cluster among other attributes', () => {
+        expect(
+            resolveStateStoragePath(
+                externalRow,
+                pipelinePath,
+                managerSpec('<cluster="seneca-vla";append=%true>//home/profiles'),
+            ),
+        ).toEqual({path: '//home/profiles', cluster: 'seneca-vla'});
+    });
+    it('keeps the current cluster when the attributes carry no cluster', () => {
+        expect(
+            resolveStateStoragePath(
+                externalRow,
+                pipelinePath,
+                managerSpec('<append=%true>//home/x'),
+            ),
+        ).toEqual({path: '//home/x', cluster: undefined});
+    });
+    it('omits the link for malformed rich paths', () => {
+        expect(
+            resolveStateStoragePath(
+                externalRow,
+                pipelinePath,
+                managerSpec('<cluster=markov//home/x'),
+            ),
+        ).toBeUndefined();
+        expect(
+            resolveStateStoragePath(externalRow, pipelinePath, managerSpec('<cluster=markov>')),
+        ).toBeUndefined();
+    });
+    it('prefers the embedded cluster over an annotated one', () => {
+        expect(
+            resolveStateStoragePath(
+                externalRow,
+                pipelinePath,
+                managerSpec({$attributes: {cluster: 'seneca'}, $value: '<cluster=markov>//home/x'}),
+            ),
+        ).toEqual({path: '//home/x', cluster: 'markov'});
+    });
+    it.each([
+        ['external_key_state', 'external_state_managers'],
+        ['joined_external_key_state', 'external_state_joiners'],
+    ] as const)(
+        'routes a %s link to a cluster named by a quoted attribute key',
+        (section, declarationsField) => {
+            for (const path of [
+                '<"cluster"="markov";>//home/profiles',
+                '<"cluster"=markov>  //home/profiles',
+                '<cluster="markov"> //home/profiles',
+                '<append=%true; "cluster" = "markov">//home/profiles',
+            ]) {
+                const spec = {
+                    computations: {
+                        c: {
+                            [declarationsField]: {
+                                '/profile': {
+                                    parameters: {
+                                        path: {$attributes: {cluster: 'seneca'}, $value: path},
+                                    },
+                                },
+                            },
+                        },
+                    },
+                } as FlowStaticSpec;
+                const location = resolveStateStoragePath(
+                    {...baseRow, section, key: [1]},
+                    pipelinePath,
+                    spec,
+                );
+                expect(location).toEqual({path: '//home/profiles', cluster: 'markov'});
+                expect(
+                    location &&
+                        genNavigationUrl({
+                            cluster: location.cluster ?? 'hahn',
+                            path: location.path,
+                        }),
+                ).toBe('/markov/navigation?path=//home/profiles');
+            }
+        },
+    );
+    it('ignores attribute keys that only resemble cluster', () => {
+        expect(parseRichStoragePath('<"cluster "="markov">//home/x')).toEqual({
+            path: '//home/x',
+            cluster: undefined,
+        });
+        expect(parseRichStoragePath('<"Cluster"="markov">//home/x')).toEqual({
+            path: '//home/x',
+            cluster: undefined,
+        });
+        expect(parseRichStoragePath('<cluster=markov>   ')).toBeUndefined();
+    });
+    it('parses quoted attribute values containing closing brackets and leaves plain paths alone', () => {
+        expect(parseRichStoragePath('<cluster="a>b">//home/x')).toEqual({
+            path: '//home/x',
+            cluster: 'a>b',
+        });
+        expect(parseRichStoragePath('//home/x')).toEqual({path: '//home/x', cluster: undefined});
+        expect(parseRichStoragePath('<cluster=%true>//home/x')).toEqual({
+            path: '//home/x',
+            cluster: undefined,
+        });
     });
 });
