@@ -34,7 +34,6 @@ const ephemeralState = {
     wasLoaded: false,
     metadataFetching: false,
     metadataError: undefined,
-    fullAccountsLoaded: false,
     loadTotals: false,
     loadNodes: false,
     error: false,
@@ -53,7 +52,6 @@ const ephemeralState = {
      * It should be increased after editing of any account to reload data.
      * see YTFRONT-3920
      */
-    editCounter: 0,
 
     is_accounts_usage_available: false,
 };
@@ -103,7 +101,6 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 metadataFetching: true,
                 metadataError: undefined,
-                fullAccountsLoaded: false,
             };
 
         case FETCH_ACCOUNTS_METADATA.SUCCESS: {
@@ -113,7 +110,6 @@ const reducer = (state = initialState, action) => {
                 accounts,
                 responsibleUsers: getResponsibleUsers(accounts),
                 metadataFetching: false,
-                fullAccountsLoaded: true,
             };
         }
 

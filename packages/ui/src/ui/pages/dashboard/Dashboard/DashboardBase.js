@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {AccountEditorHost} from '../../accounts/AccountEditorDialog';
-import {accountsIncreaseEditCounter} from '../../../store/actions/accounts/accounts';
+import {reloadAccounts} from '../../../store/actions/accounts/accounts';
 
 import Operations from '../../../pages/operations/Operations/Operations';
 import Links from '../Links/Links';
@@ -39,7 +39,7 @@ function MyRolesLink() {
 export function DashboardBase({currentAccount, setActiveAccount}) {
     const dispatch = useDispatch();
     const cluster = useSelector(selectCluster);
-    const handleAccountChanged = () => dispatch(accountsIncreaseEditCounter());
+    const handleAccountChanged = () => dispatch(reloadAccounts());
 
     React.useEffect(() => {
         if (currentAccount) {
