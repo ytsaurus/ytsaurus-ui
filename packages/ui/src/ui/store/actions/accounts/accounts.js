@@ -52,6 +52,7 @@ const attributesToLoad = [
 ];
 
 const listAttributesToLoad = ['parent_name', 'abc'];
+const MAX_SELECTED_ACCOUNTS_BATCH_SIZE = 300;
 
 const cancelHelper = new CancelHelper();
 
@@ -156,7 +157,8 @@ async function fetchSelectedAccountsData(rumId, accountNames) {
 function fetchAccountsMetadata({params, isCurrentRequest}, accountNames) {
     return async (dispatch) => {
         const rumId = new RumWrapper(params.cluster, RumMeasureTypes.ACCOUNTS);
-        const loadAllAccounts = accountNames === undefined;
+        const loadAllAccounts =
+            accountNames === undefined || accountNames.size > MAX_SELECTED_ACCOUNTS_BATCH_SIZE;
         dispatch({
             type: FETCH_ACCOUNTS_METADATA.REQUEST,
             data: {accountNames: loadAllAccounts ? undefined : accountNames},
