@@ -1,13 +1,16 @@
 import map_ from 'lodash/map';
 import {createSelector} from 'reselect';
 import {
-    selectAccountsFlattenTree,
+    prepareAccountsFlattenTreeImpl,
+    selectAccountsAbcServiceIdSlugFilter,
+    selectAccountsNameFilter,
+    selectAccountsSortInfo,
     selectUsableAccounts,
+    sortFlattenTree,
 } from '../../../store/selectors/accounts/accounts';
 import {selectFavouriteAccounts} from '../../../store/selectors/favourites';
-import {selectAccountsVisibilityMode} from '../../../store/selectors/settings';
-import {filterFlattenTreeByViewContext} from '../../../utils/accounts';
-import {selectActiveAccount} from './accounts-ts';
+import {selectAccountsRequestedNames} from './visibility';
+import {selectAccountsColumnFields, selectAccountsTree, selectActiveAccount} from './accounts-ts';
 
 export const selectUsableAccountsSet = createSelector([selectUsableAccounts], (items) => {
     return new Set(items);
@@ -21,13 +24,18 @@ export const selectFavouriteAccountsSet = createSelector([selectFavouriteAccount
     return new Set(map_(items, 'path'));
 });
 
-export const selectFilteredAccounts = createSelector(
+const selectVisibleAccountsTree = createSelector(
     [
-        selectAccountsFlattenTree,
-        selectUsableAccountsSet,
-        selectAccountsVisibilityMode,
-        selectFavouriteAccountsSet,
+        selectAccountsTree,
         selectActiveAccount,
+        selectAccountsNameFilter,
+        selectAccountsAbcServiceIdSlugFilter,
+        selectAccountsRequestedNames,
     ],
-    filterFlattenTreeByViewContext,
+    prepareAccountsFlattenTreeImpl,
+);
+
+export const selectFilteredAccounts = createSelector(
+    [selectAccountsSortInfo, selectVisibleAccountsTree, selectAccountsColumnFields],
+    sortFlattenTree,
 );
