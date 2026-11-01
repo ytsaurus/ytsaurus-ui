@@ -1,5 +1,6 @@
 {
   "alert_no-selected-accounts": "You don't have any selected accounts",
   "alert_failed-to-load-usable-accounts": "Failed to load usable accounts",
-  "action_details": "Details"
+  "action_details": "Details",
+  "alert_failed-to-load-account-details": "Failed to load account resources"
 }
