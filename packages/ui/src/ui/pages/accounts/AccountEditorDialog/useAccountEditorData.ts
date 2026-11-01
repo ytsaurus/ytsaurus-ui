@@ -1,7 +1,8 @@
 import {useMemo} from 'react';
 
 import {useAccountEditorTreeQuery, useAccountPathQuery} from '../../../store/api/accounts';
-import {type AccountTreeYsonNode, accountPathToTopLevel} from './accountTreeYsonToList';
+import {type AccountTreeYsonNode} from '../../../utils/accounts/accountTreeYsonToList';
+import {accountPathToTopLevel} from './accountPathToTopLevel';
 import {prepareAccountEditorData} from './prepareAccountEditorData';
 
 export function useAccountEditorData({
