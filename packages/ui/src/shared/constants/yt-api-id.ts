@@ -38,6 +38,7 @@ export const enum YTApiId {
     accountsTotals = 'accountsTotals',
     accountsNodes = 'accountsNodes',
     accountsSelectedMetadata = 'accountsSelectedMetadata',
+    accountsSubtreeMetadata = 'accountsSubtreeMetadata',
     accountAttributes = 'accountAttributes',
     accountMonitoringAttribute = 'accountMonitoringAttribute',
     accountSubtree = 'accountSubtree',
