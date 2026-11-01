@@ -42,6 +42,7 @@ import AccountStaticConfiguration from '../AccountStaticConfiguration/AccountSta
 import MasterMemoryTableMode from '../MasterMemoryTableMode';
 import UIFactory from '../../../../../UIFactory';
 import {AccountEditButton} from '../../../AccountEditorDialog';
+import {AccountsAggregationLabel} from './AccountsAggregationLabel/AccountsAggregationLabel';
 
 const b = block('accounts');
 const progressTooltipClassname = b('progress-tooltip');
@@ -292,7 +293,7 @@ export class AccountsGeneralTabBase extends Component {
                                     aggregation: true,
                                 })}
                             >
-                                {i18n('value_aggregation')}
+                                <AccountsAggregationLabel />
                             </div>
                         </div>
                     );
