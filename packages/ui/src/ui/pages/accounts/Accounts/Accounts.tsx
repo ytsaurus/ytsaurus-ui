@@ -27,7 +27,7 @@ import {type TabSettings, makeTabProps} from '../../../utils';
 import AccountsGeneralTab from '../tabs/general/AccountsGeneralTab';
 import {AccountEditorHost} from '../AccountEditorDialog';
 import AccountCreateDialog from '../tabs/general/Editor/AccountCreateDialog';
-import {accountsIncreaseEditCounter} from '../../../store/actions/accounts/accounts';
+import {reloadAccounts} from '../../../store/actions/accounts/accounts';
 import AccountStatisticTab from '../tabs/statistic/AccountStatisticTab';
 import AccountsAclTab from '../tabs/acl/AccountsAclTab';
 import AccountsMonitorTab from '../tabs/monitor/AccountsMonitorTab';
@@ -105,8 +105,8 @@ export class Accounts extends React.Component<
         return (
             <AccountEditorHost
                 key={cluster}
-                onChanged={this.props.accountsIncreaseEditCounter}
-                onDeleted={this.props.accountsIncreaseEditCounter}
+                onChanged={this.props.reloadAccounts}
+                onDeleted={this.props.reloadAccounts}
             >
                 <AccountCreateDialog />
                 <div className="elements-page__content">
@@ -181,7 +181,7 @@ const mapStateToProps = (state: RootState) => {
     };
 };
 
-const connector = connect(mapStateToProps, {accountsIncreaseEditCounter});
+const connector = connect(mapStateToProps, {reloadAccounts});
 export default connector(Accounts);
 
 function AccountsRumMeasure() {

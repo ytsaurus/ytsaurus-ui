@@ -31,7 +31,7 @@ function collectAccountNames(account: string, tree?: AccountTree): Array<string>
 function useAccountSubtreeNames(account: string, accountPath?: string) {
     const {currentData: tree, error} = useGetQuery<AccountTree>(
         {
-            id: YTApiId.accountsData,
+            id: YTApiId.accountSubtree,
             parameters: {path: accountPath || ''},
         },
         {skip: !account || !accountPath},

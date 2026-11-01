@@ -34,6 +34,12 @@ export const enum YTApiId {
 
     // Page-specific requests
     accountsData = 'accountsData',
+    accountsListData = 'accountsListData',
+    accountsTotals = 'accountsTotals',
+    accountsNodes = 'accountsNodes',
+    accountAttributes = 'accountAttributes',
+    accountMonitoringAttribute = 'accountMonitoringAttribute',
+    accountSubtree = 'accountSubtree',
     accountPath = 'accountPath',
     accountEditorTree = 'accountEditorTree',
 
