@@ -289,6 +289,11 @@ $elements-table: '.elements-table';
         }
     }
 
+    &__parent-hint {
+        margin-left: 4px;
+        color: var(--g-color-text-secondary);
+    }
+
     &__item-bytes {
         color: var(--secondary-text);
         font-size: 11px;

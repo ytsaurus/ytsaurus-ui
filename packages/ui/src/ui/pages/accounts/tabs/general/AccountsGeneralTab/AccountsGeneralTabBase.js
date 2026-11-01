@@ -3,7 +3,7 @@ import block from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 import {compose} from 'redux';
 
-import {Select} from '@gravity-ui/uikit';
+import {Flex, Select} from '@gravity-ui/uikit';
 
 import WithStickyToolbar, {
     STICKY_TOOLBAR_BOTTOM,
@@ -24,7 +24,7 @@ import Icon from '../../../../../components/Icon/Icon';
 import CustomRadioButton from '../../../../../components/RadioButton/RadioButton';
 import ElementsTable from '../../../../../components/ElementsTable/ElementsTable';
 import AccountAlerts from '../AccountAlerts';
-import {Tooltip, Warning} from '@ytsaurus/components';
+import {Tooltip} from '@ytsaurus/components';
 import getTableProps from '../../../../../utils/accounts/tables';
 import {
     genRadioButtonVisibleAccounts,
@@ -93,18 +93,6 @@ function renderNumber(value, isAggregation = false) {
     );
 }
 
-function VisibilityNotice({mode}) {
-    let message = null;
-    if (mode === 'usable') {
-        message = i18n('context_usable-accounts');
-    }
-    if (mode === 'favourites') {
-        message = i18n('context_favourite-accounts');
-    }
-
-    return !message ? null : <Warning>{message}</Warning>;
-}
-
 export class AccountsGeneralTabBase extends Component {
     static propTypes = {
         accounts: PropTypes.array.isRequired,
@@ -141,6 +129,7 @@ export class AccountsGeneralTabBase extends Component {
         activeAccountAggregation: PropTypes.object,
         accountsVisibilityMode: PropTypes.string,
         favouriteAccountsSet: PropTypes.object.isRequired,
+        usableAccountsSet: PropTypes.object.isRequired,
 
         changeNameFilter: PropTypes.func.isRequired,
         changeContentFilter: PropTypes.func.isRequired,
@@ -211,13 +200,13 @@ export class AccountsGeneralTabBase extends Component {
 
         return (
             <div className={b('toolbar', 'elements-section')}>
-                <div className={b('dashboard-visibility-mode', 'elements-toolbar__component')}>
+                <Flex className="elements-toolbar__component" alignItems="center" gap={2}>
                     <CustomRadioButton
                         onChange={this.onAccountsVisibilityModeChange}
                         {...ACCOUNTS_VISIBILITY_MODE_PROPS}
                         value={accountsVisibilityMode}
                     />
-                </div>
+                </Flex>
                 <div className={b('name-filter', 'elements-toolbar__component')}>
                     <Filter
                         hasClear
@@ -281,6 +270,8 @@ export class AccountsGeneralTabBase extends Component {
             activeAccount,
             activeMediumFilter: mediumType,
             favouriteAccountsSet,
+            usableAccountsSet,
+            accountsVisibilityMode,
             accountsToggleFavourite,
             columnFields,
             cluster,
@@ -319,13 +310,37 @@ export class AccountsGeneralTabBase extends Component {
                     </div>
                 );
 
+                const isInFavourites = favouriteAccountsSet.has(item.name);
+                const isContextParent =
+                    (accountsVisibilityMode === 'usable' && !usableAccountsSet.has(item.name)) ||
+                    (accountsVisibilityMode === 'favourites' && !isInFavourites);
+                const parentHint =
+                    accountsVisibilityMode === 'favourites'
+                        ? i18n('context_account-not-in-favourites')
+                        : i18n('context_account-without-use');
+                const hint = [
+                    isContextParent ? parentHint : '',
+                    treeItem.hasHiddenChildren ? i18n('context_account-hidden-children') : '',
+                ]
+                    .filter(Boolean)
+                    .join(' ');
                 const nameElement = (
                     <div className={b('item-name')}>
-                        <AccountLink account={item.name} cluster={cluster} />
+                        <AccountLink
+                            account={item.name}
+                            cluster={cluster}
+                            view={isContextParent ? 'secondary' : 'primary'}
+                        />
+                        {hint && (
+                            <Tooltip content={hint}>
+                                <span className={b('parent-hint')} tabIndex={0} aria-label={hint}>
+                                    <Icon awesome="question-circle" size={13} />
+                                </span>
+                            </Tooltip>
+                        )}
                     </div>
                 );
 
-                const isInFavourites = favouriteAccountsSet.has(item.name);
                 const onFavouriteClick = () => {
                     accountsToggleFavourite(item.name);
                 };
@@ -653,7 +668,6 @@ export class AccountsGeneralTabBase extends Component {
         return (
             <div className={b('content', 'elements-section')}>
                 {!allowTable && <TabletAccountingNotice className={b('tcb-resource-notice')} />}
-                {allowTable && <VisibilityNotice mode={accountsVisibilityMode} />}
                 {allowTable && (
                     <ElementsTableWithHeaderAndFooter
                         {...tableProps}
@@ -664,7 +678,11 @@ export class AccountsGeneralTabBase extends Component {
                         templates={this.templates}
                         selectedIndex={selectedIndex}
                         header={false}
-                        footer={this.props.activeAccountAggregation}
+                        footer={
+                            accountsVisibilityMode === 'all'
+                                ? this.props.activeAccountAggregation
+                                : null
+                        }
                         top={STICKY_TOOLBAR_BOTTOM}
                         treeStateExpanded={!activeAccount ? [] : [items && items[0]?.key]}
                     />

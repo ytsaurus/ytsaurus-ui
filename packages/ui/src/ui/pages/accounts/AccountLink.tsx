@@ -1,4 +1,5 @@
 import React from 'react';
+import {type LinkProps} from '@gravity-ui/uikit';
 import Link from '../../containers/Link/Link';
 import {AccountsTab} from '../../constants/accounts/accounts';
 import {Page} from '../../constants';
@@ -13,6 +14,7 @@ interface Props {
     cluster?: string;
 
     inline?: boolean;
+    view?: LinkProps['view'];
 }
 
 export function genAccountsUrl(cluster: string, account: string) {
@@ -20,7 +22,7 @@ export function genAccountsUrl(cluster: string, account: string) {
 }
 
 export default function AccountLink(props: Props) {
-    const {cluster: propsCluster, account, className, inline} = props;
+    const {cluster: propsCluster, account, className, inline, view = 'primary'} = props;
     const currentCluster = useSelector(selectCluster);
     const cluster = propsCluster || currentCluster;
 
@@ -37,7 +39,7 @@ export default function AccountLink(props: Props) {
             }
         >
             {account ? (
-                <Link theme={'primary'} routed url={genAccountsUrl(cluster, account)}>
+                <Link theme={view} routed url={genAccountsUrl(cluster, account)}>
                     {account}
                 </Link>
             ) : (
