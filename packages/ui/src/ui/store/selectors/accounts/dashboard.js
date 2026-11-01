@@ -5,10 +5,7 @@ import {
     selectUsableAccounts,
 } from '../../../store/selectors/accounts/accounts';
 import {selectFavouriteAccounts} from '../../../store/selectors/favourites';
-import {
-    selectAccountsVisibilityMode,
-    selectAccountsVisibilityModeOfDashboard,
-} from '../../../store/selectors/settings';
+import {selectAccountsVisibilityMode} from '../../../store/selectors/settings';
 import {filterFlattenTreeByViewContext} from '../../../utils/accounts';
 import {selectActiveAccount} from './accounts-ts';
 
@@ -23,16 +20,6 @@ export const selectUsableAccountsSet = createSelector([selectUsableAccounts], (i
 export const selectFavouriteAccountsSet = createSelector([selectFavouriteAccounts], (items) => {
     return new Set(map_(items, 'path'));
 });
-
-export const selectFilteredAccountsOfDashboard = createSelector(
-    [
-        selectAccountsFlattenTree,
-        selectUsableAccountsSet,
-        selectAccountsVisibilityModeOfDashboard,
-        selectFavouriteAccountsSet,
-    ],
-    filterFlattenTreeByViewContext,
-);
 
 export const selectFilteredAccounts = createSelector(
     [

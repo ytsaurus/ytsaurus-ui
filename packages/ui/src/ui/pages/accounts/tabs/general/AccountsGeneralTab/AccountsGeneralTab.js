@@ -2,13 +2,9 @@ import {connect} from 'react-redux';
 import {
     selectFavouriteAccountsSet,
     selectFilteredAccounts,
-    selectFilteredAccountsOfDashboard,
 } from '../../../../../store/selectors/accounts/dashboard';
 
-import {
-    selectAccountsVisibilityMode,
-    selectAccountsVisibilityModeOfDashboard,
-} from '../../../../../store/selectors/settings';
+import {selectAccountsVisibilityMode} from '../../../../../store/selectors/settings';
 
 import {loadUsers} from '../../../../../store/actions/accounts/editor';
 import {accountsToggleFavourite} from '../../../../../store/actions/favourites';
@@ -21,14 +17,12 @@ import {
     setAccountsAbcServiceFilter,
     setAccountsTreeState,
     setAccountsVisibilityMode,
-    setAccountsVisibilityModeOfDashboard,
     setActiveAccount,
 } from '../../../../../store/actions/accounts/accounts';
 import {
     selectAccountsAbcServiceIdSlugFilter,
     selectActiveAccountAggregationRow,
 } from '../../../../../store/selectors/accounts/accounts';
-import {DASHBOARD_VIEW_CONTEXT} from '../../../../../constants/index';
 
 import '../AccountsGeneralTab.scss';
 import {
@@ -47,20 +41,13 @@ import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
 import {AccountsGeneralTabBase} from './AccountsGeneralTabBase';
 
 const makeMapStateToProps = () => {
-    return (state, ownProps) => {
+    return (/** @type {import('../../../../../store/reducers').RootState} */ state) => {
         const nameToAccountMap = selectAccountsMapByName(state);
         const favouriteAccountsSet = selectFavouriteAccountsSet(state);
 
         const {
             accounts: {accounts},
         } = state;
-
-        const {viewContext} = ownProps;
-        const isDashboard = viewContext === DASHBOARD_VIEW_CONTEXT;
-
-        const contextViewTree = isDashboard
-            ? selectFilteredAccountsOfDashboard(state)
-            : selectFilteredAccounts(state);
 
         return {
             ...accounts,
@@ -70,16 +57,14 @@ const makeMapStateToProps = () => {
 
             mediumList: selectMediumList(state),
             accounts: accounts.accounts,
-            contextViewTree,
+            contextViewTree: selectFilteredAccounts(state),
             nameToAccountMap,
 
             cluster: selectCluster(state),
 
             activeAccountAggregation: selectActiveAccountAggregationRow(state),
             favouriteAccountsSet,
-            dashboardVisibilityMode: isDashboard
-                ? selectAccountsVisibilityModeOfDashboard(state)
-                : selectAccountsVisibilityMode(state),
+            accountsVisibilityMode: selectAccountsVisibilityMode(state),
             abcServiceFilter: selectAccountsAbcServiceIdSlugFilter(state),
             columnFields: selectAccountsColumnFields(state),
 
@@ -102,7 +87,6 @@ const mapDispatchToProps = {
     setAccountsTreeState,
     setActiveAccount,
     accountsToggleFavourite,
-    setAccountsVisibilityModeOfDashboard,
     setAccountsVisibilityMode,
     setAccountsAbcServiceFilter,
 };
