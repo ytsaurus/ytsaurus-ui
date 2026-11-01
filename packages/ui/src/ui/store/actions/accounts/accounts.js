@@ -30,6 +30,7 @@ import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import {getBatchError} from '../../../../shared/utils/error';
 import {selectAccountsRequestedNames} from '../../../store/selectors/accounts/visibility';
 import {selectAccountsRequestParams} from '../../../store/selectors/accounts/request-params';
+import {accountTreeYsonToList} from '../../../utils/accounts/accountTreeYsonToList';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import i18n from '../../../pages/accounts/i18n';
 
@@ -153,20 +154,58 @@ async function fetchSelectedAccountsData(rumId, accountNames) {
     return {data, error};
 }
 
-function fetchAccountsMetadata({params, isCurrentRequest}, accountNames) {
+async function fetchAccountSubtreeData({params, isCurrentRequest}, rumId) {
+    const path = await ytApiV3Id.get(
+        YTApiId.accountPath,
+        {path: `//sys/accounts/${params.activeAccount}/@path`},
+        cancelHelper.saveCancelToken,
+    );
+    if (!isCurrentRequest()) {
+        return undefined;
+    }
+
+    const response = await rumId.fetch(
+        YTApiId.accountsSubtreeMetadata,
+        ytApiV3Id.get(
+            YTApiId.accountsSubtreeMetadata,
+            {path, attributes: attributesToLoad, ...USE_MAX_SIZE, ...USE_CACHE()},
+            cancelHelper.saveCancelToken,
+        ),
+    );
+    const data = accountTreeYsonToList(params.activeAccount, response);
+    if (data.some(({$attributes}) => $attributes.incomplete || !$attributes.resource_usage)) {
+        throw new Error(i18n('alert_incomplete-account-subtree'));
+    }
+    return {data, error: undefined};
+}
+
+function fetchAccountsMetadata(request, accountNames) {
+    const {params, isCurrentRequest} = request;
     return async (dispatch) => {
         const rumId = new RumWrapper(params.cluster, RumMeasureTypes.ACCOUNTS);
+        const loadSubtree = params.mode !== 'all' && Boolean(params.activeAccount);
         const loadAllAccounts =
-            accountNames === undefined || accountNames.size > MAX_SELECTED_ACCOUNTS_BATCH_SIZE;
+            !loadSubtree &&
+            (accountNames === undefined || accountNames.size > MAX_SELECTED_ACCOUNTS_BATCH_SIZE);
         dispatch({
             type: FETCH_ACCOUNTS_METADATA.REQUEST,
             data: {accountNames: loadAllAccounts ? undefined : accountNames},
         });
 
         try {
-            const {data, error} = loadAllAccounts
-                ? await fetchAllAccountsData(rumId)
-                : await fetchSelectedAccountsData(rumId, accountNames);
+            let result;
+            if (loadSubtree) {
+                result = await fetchAccountSubtreeData(request, rumId);
+            } else if (loadAllAccounts) {
+                result = await fetchAllAccountsData(rumId);
+            } else {
+                result = await fetchSelectedAccountsData(rumId, accountNames);
+            }
+            if (!isCurrentRequest()) {
+                return;
+            }
+
+            const {data, error} = result;
             const accounts = await parseAccounts(rumId, data);
             if (isCurrentRequest()) {
                 dispatch({
@@ -240,7 +279,7 @@ function fetchAccountsDetails(request) {
     return (dispatch, getState) => {
         const usable = dispatch(fetchUsableAccounts(request));
         const metadata =
-            params.mode === 'usable'
+            params.mode === 'usable' && !params.activeAccount
                 ? usable.then((accounts) => {
                       if (!isCurrentRequest()) {
                           return undefined;
