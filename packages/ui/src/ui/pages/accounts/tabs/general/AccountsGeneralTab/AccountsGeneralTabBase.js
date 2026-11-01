@@ -313,10 +313,16 @@ export class AccountsGeneralTabBase extends Component {
                 const isContextParent =
                     (accountsVisibilityMode === 'usable' && !usableAccountsSet.has(item.name)) ||
                     (accountsVisibilityMode === 'favourites' && !isInFavourites);
-                const parentHint =
+                let parentHint =
                     accountsVisibilityMode === 'favourites'
                         ? i18n('context_account-not-in-favourites')
                         : i18n('context_account-without-use');
+                if (activeAccount) {
+                    parentHint =
+                        accountsVisibilityMode === 'favourites'
+                            ? i18n('context_account-outside-favourites')
+                            : i18n('context_account-no-use');
+                }
                 const hint = [
                     isContextParent ? parentHint : '',
                     treeItem.hasHiddenChildren ? i18n('context_account-hidden-children') : '',
@@ -663,6 +669,7 @@ export class AccountsGeneralTabBase extends Component {
 
         const items = contextViewTree || [];
         const isAllMode = accountsVisibilityMode === 'all';
+        const isExpanded = Boolean(activeAccount) || !isAllMode;
 
         return (
             <div className={b('content', 'elements-section')}>
@@ -671,15 +678,16 @@ export class AccountsGeneralTabBase extends Component {
                     <ElementsTableWithHeaderAndFooter
                         {...tableProps}
                         isLoading={isLoading}
-                        key={isAllMode ? 'all' : 'filtered'}
-                        treeState={isAllMode ? 'collapsed' : 'expanded'}
+                        key={`${isAllMode}:${activeAccount}`}
+                        treeState={isExpanded ? 'expanded' : 'collapsed'}
                         items={items}
                         templates={this.templates}
                         selectedIndex={selectedIndex}
                         header={false}
-                        footer={isAllMode ? this.props.activeAccountAggregation : null}
+                        footer={
+                            isAllMode || activeAccount ? this.props.activeAccountAggregation : null
+                        }
                         top={STICKY_TOOLBAR_BOTTOM}
-                        treeStateExpanded={!activeAccount ? [] : [items && items[0]?.key]}
                     />
                 )}
             </div>

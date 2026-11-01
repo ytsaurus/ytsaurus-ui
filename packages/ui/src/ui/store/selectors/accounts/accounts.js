@@ -62,20 +62,16 @@ export function prepareAccountsFlattenTreeImpl(
     {slug} = {},
     visibleNames,
 ) {
-    let root = treeList['<Root>'];
+    const root = treeList['<Root>'];
     if (root === undefined) {
         return [];
     }
 
-    if (activeAccount && treeList[activeAccount]) {
-        root = {...root, children: [treeList[activeAccount]]};
-    }
-
-    let filteredRoot = filterAccountBranches(root, visibleNames);
+    const subtree = (activeAccount && treeList[activeAccount]) || root;
+    let filteredRoot = filterAccountBranches(subtree, visibleNames);
 
     const isRoot = (treeNode) => {
-        const {attributes: account} = treeNode;
-        return treeNode.name === root.name || account.name === activeAccount;
+        return treeNode.name === subtree.name;
     };
 
     const predicates = [];
@@ -104,7 +100,11 @@ export function prepareAccountsFlattenTreeImpl(
         children: node.children.map(withHiddenChildren),
     });
 
-    return withHiddenChildren(filteredRoot);
+    const filteredSubtree = withHiddenChildren(filteredRoot);
+    if (subtree !== root) {
+        return {...root, children: [filteredSubtree]};
+    }
+    return filteredSubtree;
 }
 
 export function sortFlattenTree(sortInfo, flattenTree = [], columnFields) {
