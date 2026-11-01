@@ -2,6 +2,7 @@ import {connect} from 'react-redux';
 import {
     selectFavouriteAccountsSet,
     selectFilteredAccounts,
+    selectUsableAccountsSet,
 } from '../../../../../store/selectors/accounts/dashboard';
 
 import {selectAccountsVisibilityMode} from '../../../../../store/selectors/settings';
@@ -64,6 +65,7 @@ const makeMapStateToProps = () => {
 
             activeAccountAggregation: selectActiveAccountAggregationRow(state),
             favouriteAccountsSet,
+            usableAccountsSet: selectUsableAccountsSet(state),
             accountsVisibilityMode: selectAccountsVisibilityMode(state),
             abcServiceFilter: selectAccountsAbcServiceIdSlugFilter(state),
             columnFields: selectAccountsColumnFields(state),
