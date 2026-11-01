@@ -76,8 +76,7 @@ const defaultUserSettings: Partial<DescribedSettings> = {
 
     'global::scheduling::expandStaticConfiguration': false,
 
-    'global::accounts::dashboardVisibilityMode': 'usable',
-    'global::accounts::accountsVisibilityMode': 'all',
+    'global::accounts::visibilityMode': 'all',
     'global::accounts::expandStaticConfiguration': true,
     'global::accounts::accountUsageViewType': 'tree',
     'global::accounts::accountUsageColumnsTree': [],
