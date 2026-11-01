@@ -180,15 +180,8 @@ export const selectMastersHostType = createSelector(selectGetSetting, (getSettin
     getSetting(SettingName.SYSTEM.MASTERS_HOST_TYPE, NAMESPACES.SYSTEM),
 );
 
-export const selectAccountsVisibilityModeOfDashboard = createSelector(
-    selectGetSetting,
-    (getSetting) => {
-        return getSetting(SettingName.ACCOUNTS.DASHBOARD_VISIBILITY_MODE, NAMESPACES.ACCOUNTS);
-    },
-);
-
 export const selectAccountsVisibilityMode = createSelector(selectGetSetting, (getSetting) => {
-    return getSetting(SettingName.ACCOUNTS.ACCOUNTS_VISIBILITY_MODE, NAMESPACES.ACCOUNTS);
+    return getSetting(SettingName.ACCOUNTS.VISIBILITY_MODE, NAMESPACES.ACCOUNTS);
 });
 
 export const selectSettingTableDisplayRawStrings = createSelector(

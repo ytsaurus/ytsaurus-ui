@@ -68,7 +68,6 @@ function Bytes({bytes, isAggregation}) {
     );
 }
 
-const DB_VISIBILITY_MODE_PROPS = genRadioButtonVisibleAccounts();
 const ACCOUNTS_VISIBILITY_MODE_PROPS = genRadioButtonVisibleAccounts(true);
 
 const ElementsTableWithHeaderAndFooter = compose(withStickyHead, withStickyFooter)(ElementsTable);
@@ -140,7 +139,7 @@ export class AccountsGeneralTabBase extends Component {
             }),
         ),
         activeAccountAggregation: PropTypes.object,
-        dashboardVisibilityMode: PropTypes.string,
+        accountsVisibilityMode: PropTypes.string,
         favouriteAccountsSet: PropTypes.object.isRequired,
 
         changeNameFilter: PropTypes.func.isRequired,
@@ -150,7 +149,7 @@ export class AccountsGeneralTabBase extends Component {
         loadUsers: PropTypes.func.isRequired,
         setAccountsTreeState: PropTypes.func.isRequired,
         setActiveAccount: PropTypes.func.isRequired,
-        setAccountsVisibilityModeOfDashboard: PropTypes.func.isRequired,
+        setAccountsVisibilityMode: PropTypes.func.isRequired,
         accountsToggleFavourite: PropTypes.func.isRequired,
         setAccountsAbcServiceFilter: PropTypes.func.isRequired,
 
@@ -202,24 +201,21 @@ export class AccountsGeneralTabBase extends Component {
             activeNameFilter,
             activeMediumFilter,
             activeContentModeFilter,
-            dashboardVisibilityMode,
+            accountsVisibilityMode,
             abcServiceFilter: {slug, id} = {},
-            contextView,
         } = this.props;
 
         const showMediumType =
             mediumList &&
             (activeContentModeFilter === 'default' || activeContentModeFilter === 'disk_space');
 
-        const isDashboard = contextView === DASHBOARD_VIEW_CONTEXT;
-        const radioProps = isDashboard ? DB_VISIBILITY_MODE_PROPS : ACCOUNTS_VISIBILITY_MODE_PROPS;
         return (
             <div className={b('toolbar', 'elements-section')}>
                 <div className={b('dashboard-visibility-mode', 'elements-toolbar__component')}>
                     <CustomRadioButton
-                        onChange={this.onDashboardVisibilityModeChange}
-                        {...radioProps}
-                        value={dashboardVisibilityMode}
+                        onChange={this.onAccountsVisibilityModeChange}
+                        {...ACCOUNTS_VISIBILITY_MODE_PROPS}
+                        value={accountsVisibilityMode}
                     />
                 </div>
                 <div className={b('name-filter', 'elements-toolbar__component')}>
@@ -270,13 +266,8 @@ export class AccountsGeneralTabBase extends Component {
         setAccountsAbcServiceFilter(id, slug);
     };
 
-    onDashboardVisibilityModeChange = (event) => {
-        const {viewContext} = this.props;
-        if (viewContext === DASHBOARD_VIEW_CONTEXT) {
-            this.props.setAccountsVisibilityModeOfDashboard(event.target.value);
-        } else {
-            this.props.setAccountsVisibilityMode(event.target.value);
-        }
+    onAccountsVisibilityModeChange = (event) => {
+        this.props.setAccountsVisibilityMode(event.target.value);
     };
 
     renderUsableError() {
@@ -639,7 +630,7 @@ export class AccountsGeneralTabBase extends Component {
             wasLoaded,
             accountsTreeState,
             enable_per_account_tablet_accounting,
-            dashboardVisibilityMode,
+            accountsVisibilityMode,
             metadataFetching,
         } = this.props;
 
@@ -662,7 +653,7 @@ export class AccountsGeneralTabBase extends Component {
         return (
             <div className={b('content', 'elements-section')}>
                 {!allowTable && <TabletAccountingNotice className={b('tcb-resource-notice')} />}
-                {allowTable && <VisibilityNotice mode={dashboardVisibilityMode} />}
+                {allowTable && <VisibilityNotice mode={accountsVisibilityMode} />}
                 {allowTable && (
                     <ElementsTableWithHeaderAndFooter
                         {...tableProps}
