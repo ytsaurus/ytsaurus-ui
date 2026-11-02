@@ -632,22 +632,22 @@ export function DynamicSpec({
                                 ? onUpdatePatch(edit.patch, parsePatchChanges(encoded), comment ?? '', edit.version)
                                 : onUpdateComment(edit.patch, comment ?? '', edit.version);
                         }
+                        if (edit.patch !== undefined) {
+                            return changed
+                                ? onUpdatePatch(
+                                      edit.patch,
+                                      [{path: edit.path, value: encoded}],
+                                      comment ?? '',
+                                      edit.version,
+                                  )
+                                : onUpdateComment(edit.patch, comment ?? '', edit.version);
+                        }
                         const changes = dynamicSpecEdits(edit.value ?? null, encoded).map(({path, value}) => ({
                             path: [...edit.path, ...path],
                             value,
                         }));
                         if (changes.some(({path, value}) => !path.length || value === undefined)) {
                             throw new Error(i18n('error_deletion-unsupported'));
-                        }
-                        if (edit.patch !== undefined) {
-                            return changed
-                                ? onUpdatePatch(
-                                      edit.patch,
-                                      changes,
-                                      comment ?? '',
-                                      edit.version,
-                                  )
-                                : onUpdateComment(edit.patch, comment ?? '', edit.version);
                         }
                         return changed
                             ? onSet(changes, edit.version, comment)

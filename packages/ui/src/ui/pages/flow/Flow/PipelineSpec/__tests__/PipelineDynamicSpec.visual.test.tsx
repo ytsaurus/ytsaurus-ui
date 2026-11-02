@@ -23,7 +23,6 @@ import {
     flatDynamicSpecSnapshot,
     legacyDynamicSpecHandler,
     unavailableDynamicSpecHandler,
-    unicodeGroup,
 } from '../__stories__/mocks';
 
 async function expectDynamicSpecScreenshot(
@@ -1645,6 +1644,40 @@ test('PipelineDynamicSpec: flat patches preserve order values and explicit patch
         command: 'cancel-pipeline-dynamic-spec-patch',
         body: {patch: {$type: 'int64', $value: MAP_VERSION}, expected_version: exactVersion},
     });
+});
+
+test('PipelineDynamicSpec: updating a map patch preserves its unchanged fields', async ({
+    mount,
+    page,
+    router,
+}) => {
+    const mutations: unknown[] = [];
+    await router.use(
+        http.put('*/api/v4/flow_execute', async ({request}) => {
+            const read = await dynamicSpecResponse(flatDynamicSpecSnapshot, request);
+            if (read) return read;
+            mutations.push(await request.json());
+            return Response.json({version: exactVersion});
+        }),
+    );
+    await mount(<PipelineDynamicSpecStories.FlatPatches />);
+    await page.getByRole('radio', {name: 'Patches', exact: true}).check();
+    await page
+        .locator('.yt-flow-dynamic-spec__table tbody tr')
+        .first()
+        .getByRole('button', {name: 'Update', exact: true})
+        .click();
+    await replaceEditorContent(page, JSON.stringify({keep: 2, added: 5}));
+    await applyEditor(page, 'Update map');
+    await expect.poll(() => mutations).toEqual([
+        {
+            patch: {$type: 'int64', $value: OWNER_VERSION},
+            set_path: '/group',
+            set_value: {keep: 2, added: 5},
+            comment: 'Update map',
+            expected_version: exactVersion,
+        },
+    ]);
 });
 
 test('PipelineDynamicSpec: one patch groups several paths and leaves unchanged map fields unblamed', async ({

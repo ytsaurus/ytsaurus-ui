@@ -573,7 +573,10 @@ export type FlowDynamicSpecPatch = {
     timestamp: string;
 };
 
-export type FlowDynamicSpecBlame = Record<string, Pick<FlowDynamicSpecPatch, 'patch_id' | 'comment' | 'timestamp'>>;
+export type FlowDynamicSpecBlame = Record<
+    string,
+    Pick<FlowDynamicSpecPatch, 'patch_id' | 'comment' | 'timestamp'>
+>;
 
 export type FlowDynamicSpecSnapshot = {
     version: Int64;
