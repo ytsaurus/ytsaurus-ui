@@ -19,7 +19,6 @@
   "value_source-override": "Override",
   "alert_override-state-unavailable": "This controller does not support override provenance. The effective specification remains available for viewing and editing.",
   "context_override-intent": "Patches are applied in order. A map patch can cover earlier nested patches without deleting them; canceling it restores their effect. Inherited entries follow the current base.",
-  "context_runtime-target-state": "Runtime target state: {{state}}. Pipeline lifecycle controls this field separately from user overrides.",
   "context_no-overrides": "No active user overrides.",
   "error_unsafe-version": "Cannot read the dynamic specification: the controller returned a version that cannot be represented exactly.",
   "field_patch": "Patch",

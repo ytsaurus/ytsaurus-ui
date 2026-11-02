@@ -436,15 +436,6 @@ export function DynamicSpec({
                     <Text as="p" color="secondary">
                         {i18n('context_override-intent')}
                     </Text>
-                    {snapshot.runtime_target_state !== undefined &&
-                        snapshot.runtime_target_state !== null && (
-                            <Alert
-                                theme="info"
-                                message={i18n('context_runtime-target-state', {
-                                    state: snapshot.runtime_target_state,
-                                })}
-                            />
-                        )}
                     {(snapshot.patches ? snapshot.patches.length : overrides.length) ? (
                         <>
                             <div className={block('patches')}>

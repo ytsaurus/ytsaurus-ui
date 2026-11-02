@@ -86,6 +86,17 @@ test('PipelineDynamicSpec: base effective and override provenance', async ({
                 probe.remove();
                 return color;
             });
+            const secondary = await page.evaluate(() => {
+                const probe = document.createElement('span');
+                probe.style.color = 'var(--g-color-text-secondary)';
+                document.querySelector('.yt-flow-dynamic-spec')?.append(probe);
+                const color = getComputedStyle(probe).color;
+                probe.remove();
+                return color;
+            });
+            await expect(
+                page.locator('.yt-flow-dynamic-spec__attribution_override').first(),
+            ).toHaveCSS('color', secondary);
             await expect(
                 page.getByRole('button', {
                     name: 'Edit /job_manager/resource_limits/cpu',
@@ -204,7 +215,7 @@ test('PipelineDynamicSpec: base effective and override provenance', async ({
     await expect(page.getByRole('button', {name: 'Cancel change', exact: true})).toHaveCount(0);
     expect(dynamicSpecSnapshot.base_spec).toMatchObject({job_manager: {resource_limits: {cpu: 2}}});
     await expect(page.getByRole('row').filter({hasText: /^\/empty/})).toBeVisible();
-    await expect(page.getByText('Runtime target state: completed.', {exact: false})).toBeVisible();
+    await expect(page.getByText('Runtime target state: completed.', {exact: false})).toHaveCount(0);
     await expect(page.locator('thead th').filter({hasText: /^Patch$/})).toBeVisible();
     await expect(page.locator('thead th').filter({hasText: /^Actions$/})).toHaveCount(0);
     await expect(page.locator('thead th')).toHaveCount(5);
