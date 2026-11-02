@@ -18,8 +18,8 @@ describe('selectFirstComputation', () => {
 
     it.each([
         ['fixed computation', {fixedComputationId: 'fixed'}, filters({})],
-        ['initial computation', {initialFilters: {computationId: 'initial'}}, filters({})],
-        ['initial partition', {initialFilters: {partitionId: 'partition'}}, filters({})],
+        ['initial computation', {}, filters({computationId: 'initial'})],
+        ['initial partition', {}, filters({partitionId: 'partition'})],
         ['user selection', {userModified: true}, filters({computationId: 'second'})],
         ['explicit user clear', {userModified: true}, filters({})],
     ] as const)('preserves %s', (_name, options, current) => {
