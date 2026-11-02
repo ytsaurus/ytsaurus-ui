@@ -7,12 +7,10 @@ export function selectFirstComputation(
     {
         staticSpec,
         fixedComputationId,
-        initialFilters,
         userModified,
     }: {
         staticSpec?: FlowStaticSpec;
         fixedComputationId?: string;
-        initialFilters?: Partial<FlowStateFiltersValue>;
         userModified: boolean;
     },
 ): FlowStateFiltersValue {
@@ -21,8 +19,6 @@ export function selectFirstComputation(
         !firstComputationId ||
         userModified ||
         fixedComputationId ||
-        initialFilters?.computationId ||
-        initialFilters?.partitionId ||
         current.computationId ||
         current.partitionId
     ) {

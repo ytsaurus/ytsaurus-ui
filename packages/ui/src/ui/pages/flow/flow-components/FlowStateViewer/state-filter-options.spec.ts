@@ -4,7 +4,6 @@ import {
     getStateNameSelectItems,
     reconcileStateName,
     reconcileStateTarget,
-    seedStateFilters,
 } from './state-filter-options';
 import type {FlowStaticSpec} from '../../../../../shared/yt-types';
 import {joinedSpec} from './state-test-fixtures';
@@ -94,16 +93,5 @@ describe('getStateNameSelectItems', () => {
     });
     it('returns the known names without a current value', () => {
         expect(getStateNameSelectItems(['/a'], undefined)).toEqual(['/a']);
-    });
-});
-
-describe('seedStateFilters', () => {
-    it('prefers the fixed computation over the initial one', () => {
-        expect(seedStateFilters('fixed', {computationId: 'initial'}).computationId).toBe('fixed');
-    });
-    it('falls back to the initial computation when none is fixed', () => {
-        expect(seedStateFilters(undefined, {computationId: 'initial'}).computationId).toBe(
-            'initial',
-        );
     });
 });
