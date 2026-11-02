@@ -1,6 +1,6 @@
-import {Settings} from '../../shared/constants/settings-types';
+import {type DescribedSettings} from '../../shared/constants/settings-types';
 
-export const defaultUserSettingsOverrides: Partial<Settings> = {
+export const defaultUserSettingsOverrides: Partial<DescribedSettings> = {
     ['global::theme']: 'light',
     ['global::navigation::useSmartSort']: false,
     ['global::components::enableSideBar']: true,

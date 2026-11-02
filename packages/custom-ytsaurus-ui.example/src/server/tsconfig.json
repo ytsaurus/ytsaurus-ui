@@ -4,6 +4,7 @@
   "exclude": ["../ytsaurus-ui.ui/*", "../ui/*", "../../node_modules/*"],
   "compilerOptions": {
     "noUnusedParameters": false,
+    "target": "es2021",
     "outDir": "../../dist",
     "resolveJsonModule": true,
     "paths": {

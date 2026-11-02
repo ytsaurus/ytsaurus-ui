@@ -1,8 +1,7 @@
 import typeis from 'type-is';
 
 import {AuthPolicy} from '@gravity-ui/expresskit';
-import {uiSettingFromEnv} from '../../shared/ui-settings';
-import {CustomAppConfig} from '../../custom-shared/types';
+import {type CustomAppConfig} from '../../custom-shared/types';
 
 const localModeConfig: Partial<CustomAppConfig> = {
     appAuthPolicy: AuthPolicy.disabled,
@@ -23,7 +22,6 @@ const localModeConfig: Partial<CustomAppConfig> = {
     },
 
     uiSettings: {
-        ...uiSettingFromEnv,
         newTableReplicasCount: 1,
         uploadTableMaxSize: 50 * 1024 * 1024,
         uploadTableUseLocalmode: true,

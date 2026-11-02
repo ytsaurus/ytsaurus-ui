@@ -1,5 +1,4 @@
 import type {StorybookConfig} from '@storybook/react-webpack5';
-import {configureWebpackConfigForStorybook} from '@gravity-ui/app-builder';
 import path from 'path';
 
 const config: StorybookConfig = {
@@ -27,6 +26,9 @@ const config: StorybookConfig = {
         reactDocgen: 'react-docgen-typescript',
     },
     webpackFinal: async (config) => {
+        const {configureWebpackConfigForStorybook} = await import(
+            /* webpackChunkName: "app-builder" */ '@gravity-ui/app-builder'
+        );
         const uiCoreConfig = await configureWebpackConfigForStorybook(
             'production',
             {

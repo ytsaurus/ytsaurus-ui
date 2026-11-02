@@ -5,15 +5,7 @@ import fs from 'fs';
 const analyzeBundle: Required<ServiceConfig>['client']['analyzeBundle'] = process.env
     .ANALYZE_BUNDLE as any;
 
-if (analyzeBundle) {
-    console.log({analyzeBundle}, '\n');
-}
-
 const debugPort = process.env.DEBUG_PORT ? Number(process.env.DEBUG_PORT) : undefined;
-if (debugPort) {
-    console.log({debugPort}, '\n');
-}
-
 const useRspack = ['1', 'true'].includes(String(process.env.USE_RSPACK).toLowerCase());
 const rspackConfig: Pick<ServiceConfig['client'], 'bundler' | 'cache' | 'javaScriptLoader'> = {
     bundler: 'rspack',
@@ -28,6 +20,20 @@ export default function () {
     return {
         client: {
             ...(useRspack ? rspackConfig : {}),
+            swc(config) {
+                if (config.jsc?.transform?.optimizer) {
+                    // simplify breaks Monaco's process detection in production builds.
+                    config.jsc.transform.optimizer.simplify = false;
+                }
+                return config;
+            },
+            alias: {
+                // monaco-vim uses legacy paths that Monaco 0.56 no longer exports.
+                'monaco-editor/esm/vs': path.resolve(
+                    require.resolve('monaco-editor/editor/editor.api'),
+                    '../..',
+                ),
+            },
             watchOptions: {
                 aggregateTimeout: 1000,
             },
