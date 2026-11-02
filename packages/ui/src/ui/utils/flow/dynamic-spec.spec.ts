@@ -533,6 +533,29 @@ describe('flat dynamic spec patches', () => {
         ).toMatchObject({patchId: version.$value});
     });
 
+    it('keeps several changed fields under one patch and leaves unchanged map fields unblamed', () => {
+        const multi: FlowDynamicSpecSnapshot = {
+            ...flat,
+            patches: [{
+                ...parent,
+                changes: [
+                    {path: '/group/pin', value: 4},
+                    {path: '/group/removed', value: 5},
+                ],
+            }],
+            blame: {'/group/pin': parent, '/group/removed': parent},
+        };
+        const rows = dynamicSpecOverrideRows(multi);
+        expect(rows.map(({path, patchIndex, patchSize}) => ({path, patchIndex, patchSize}))).toEqual([
+            {path: ['group', 'pin'], patchIndex: 0, patchSize: 2},
+            {path: ['group', 'removed'], patchIndex: 1, patchSize: 2},
+        ]);
+        expect(dynamicSpecEffectiveSource(multi, ['group', 'pin'])).toMatchObject({patchId: version.$value});
+        expect(dynamicSpecEffectiveSource(multi, ['group', 'removed'])).toMatchObject({patchId: version.$value});
+        expect(dynamicSpecEffectiveSource(multi, ['group', 'retained'])).toEqual({source: 'base'});
+        expect(dynamicSpecEffectiveSource(multi, ['group'])).toEqual({source: 'base'});
+    });
+
     it('decodes escaped YPath segments and normalizes hex escapes in blame', () => {
         const path = ['a/b', 'c\\d', '@key', '\x01'];
         expect(dynamicSpecPathParts(dynamicSpecPath(path))).toEqual(path);

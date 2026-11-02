@@ -566,13 +566,14 @@ export type FlowDynamicSpecAudit = {
 
 export type FlowDynamicSpecPatch = {
     patch_id: Int64;
-    path: string;
-    value: unknown;
+    path?: string;
+    value?: unknown;
+    changes?: Array<{path: string; value: unknown}>;
     comment?: string | null;
     timestamp: string;
 };
 
-export type FlowDynamicSpecBlame = Record<string, Omit<FlowDynamicSpecPatch, 'path' | 'value'>>;
+export type FlowDynamicSpecBlame = Record<string, Pick<FlowDynamicSpecPatch, 'patch_id' | 'comment' | 'timestamp'>>;
 
 export type FlowDynamicSpecSnapshot = {
     version: Int64;
@@ -711,6 +712,12 @@ export type FlowExecuteTypes = {
                       patch?: Int64;
                       expected_version: Int64;
                   }
+                | {
+                      set_changes: Array<{path: string; value: unknown}>;
+                      comment: string;
+                      patch?: Int64;
+                      expected_version: Int64;
+                  }
                 | {patch: Int64; comment: string; expected_version: Int64};
         };
         ResponseType: {version: Int64; patch_id: Int64};
@@ -747,15 +754,7 @@ export type FlowExecuteTypes = {
         BodyType: {body?: undefined};
         ResponseType: {
             version: Int64;
-            patches: Array<
-                | FlowDynamicSpecPatch
-                | {
-                      patch_id: Int64;
-                      comment?: string | null;
-                      timestamp: string;
-                      changes: FlowDynamicSpecOverride;
-                  }
-            >;
+            patches: Array<FlowDynamicSpecPatch>;
         };
     };
     'describe-computation': {

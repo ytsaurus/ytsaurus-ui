@@ -7,13 +7,13 @@ import {type RenderRowExtraTools} from '@gravity-ui/react-unipika';
 import {type FlowDynamicSpecSnapshot, type Int64} from '../../../../../../shared/yt-types';
 import {type YTError} from '../../../../../../@types/types';
 import {YTErrorBlock} from '../../../../../containers/Block/Block';
-import {YTDFDialog} from '../../../../../containers/Dialog';
 import {EditSpecDialog} from '../EditSpecDialog';
 import {Yson} from '../../../../../components/Yson/Yson';
 import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
 import {type UnipikaSettings} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {
     type DynamicSpecSource,
+    type DynamicSpecEdit,
     decodeDynamicSpecText,
     decodeDynamicSpecValue,
     dynamicSpecEdits,
@@ -34,18 +34,6 @@ import './DynamicSpec.scss';
 const block = cn('yt-flow-dynamic-spec');
 type SpecView = 'effective' | 'base' | 'override';
 
-function editablePath(specPath: string): Array<string> | undefined {
-    if (!specPath.startsWith('/')) {
-        return undefined;
-    }
-    try {
-        const path = dynamicSpecPathParts(specPath);
-        return path.length > 0 && path.every(Boolean) ? path : undefined;
-    } catch {
-        return undefined;
-    }
-}
-
 function hasSelectedText(element: HTMLElement) {
     const selection = window.getSelection();
     return (
@@ -63,6 +51,28 @@ function isMultilineValue(map: boolean, value: unknown): boolean {
             !Array.isArray(value) &&
             !('$type' in value))
     );
+}
+
+function parsePatchChanges(value: unknown): Array<DynamicSpecEdit> {
+    if (!Array.isArray(value) || !value.length) {
+        throw new Error(i18n('error_patch-changes'));
+    }
+    return value.map((change) => {
+        if (
+            !change ||
+            typeof change !== 'object' ||
+            typeof change.path !== 'string' ||
+            !change.path.startsWith('/') ||
+            !Object.hasOwn(change, 'value')
+        ) {
+            throw new Error(i18n('error_patch-changes'));
+        }
+        const path = dynamicSpecPathParts(change.path);
+        if (!path.length || path.some((part) => !part)) {
+            throw new Error(i18n('error_patch-changes'));
+        }
+        return {path, value: change.value};
+    });
 }
 
 function EditableValue({
@@ -240,13 +250,12 @@ export type DynamicSpecProps = {
         onOpenEdit?: () => void,
     ) => React.ReactNode;
     pipelinePath: string;
-    onSet: (path: Array<string>, value: unknown, version: Int64, comment?: string) => Promise<void>;
+    onSet: (changes: Array<DynamicSpecEdit>, version: Int64, comment?: string) => Promise<void>;
     onCancelOwner: (owner: Int64, version: Int64) => Promise<void>;
     onUpdateComment: (patch: Int64, comment: string, version: Int64) => Promise<void>;
     onUpdatePatch: (
         patch: Int64,
-        path: Array<string>,
-        value: unknown,
+        changes: Array<DynamicSpecEdit>,
         comment: string,
         version: Int64,
     ) => Promise<void>;
@@ -302,13 +311,12 @@ export function DynamicSpec({
     onReset,
 }: DynamicSpecProps) {
     const [view, setView] = React.useState<SpecView>('effective');
-    const [selectingPath, setSelectingPath] = React.useState(false);
     const [edit, setEdit] = React.useState<{
         path: Array<string>;
         value: unknown;
         version: Int64;
-        hasInheritedFields?: boolean;
         patch?: string;
+        patchChanges?: boolean;
         comment?: string;
     }>();
     const editorValue = React.useMemo(
@@ -351,19 +359,15 @@ export function DynamicSpec({
             path: atomicPath,
             value,
             version: snapshot.version,
-            hasInheritedFields: rawOverride?.hasInheritedFields,
         });
     };
-    let editHelp =
+    const editHelp =
         edit?.value !== null &&
         typeof edit?.value === 'object' &&
         !Array.isArray(edit.value) &&
         !('$type' in edit.value)
             ? i18n('context_replace-map')
             : undefined;
-    if (edit?.hasInheritedFields) {
-        editHelp = `${i18n('context_replace-map')} ${i18n('context_map-inherited-fields')}`;
-    }
     const selectedView = snapshot ? view : 'effective';
     const renderRowExtraTools: RenderRowExtraTools = ({path, value}) => {
         if (!snapshot || !path?.length || path[0] !== 'spec') {
@@ -421,7 +425,7 @@ export function DynamicSpec({
             {selectedView === 'effective' &&
                 renderEffective(
                     renderRowExtraTools,
-                    snapshot ? () => setSelectingPath(true) : undefined,
+                    snapshot ? () => openEdit([]) : undefined,
                 )}
             {selectedView === 'base' && snapshot && (
                 <YsonWithScroll
@@ -479,15 +483,19 @@ export function DynamicSpec({
                                                 row.operation === 'map' || row.operation === 'mask';
                                             const multiline = isMultilineValue(map, row.value);
                                             const editRow = () =>
-                                                openEdit(row.path, {
-                                                    value: map ? row.editorValue : row.value,
-                                                });
+                                                snapshot.patches
+                                                    ? openEdit(row.path)
+                                                    : openEdit(row.path, {
+                                                          value: map ? row.editorValue : row.value,
+                                                      });
                                             const audit =
                                                 row.source.source === 'override'
                                                     ? row.source.audit
                                                     : undefined;
+                                            const showPatchMeta = row.patchIndex === undefined || row.patchIndex === 0;
+                                            const patchRowSpan = row.patchSize ?? 1;
                                             return (
-                                                <tr key={JSON.stringify([row.path, patchId])}>
+                                                <tr key={JSON.stringify([row.path, patchId, row.patchIndex])}>
                                                     <td className={block('path')}>
                                                         {decodeDynamicSpecText(
                                                             dynamicSpecPath(row.path),
@@ -520,10 +528,10 @@ export function DynamicSpec({
                                                             </EditableValue>
                                                         </div>
                                                     </td>
-                                                    <td className={block('comment')}>
+                                                    {showPatchMeta && <td rowSpan={patchRowSpan} className={block('comment')}>
                                                         {audit?.comment || '—'}
-                                                    </td>
-                                                    <td className={block('time')}>
+                                                    </td>}
+                                                    {showPatchMeta && <td rowSpan={patchRowSpan} className={block('time')}>
                                                         {audit ? (
                                                             <time
                                                                 dateTime={audit.timestamp}
@@ -537,8 +545,8 @@ export function DynamicSpec({
                                                         ) : (
                                                             '—'
                                                         )}
-                                                    </td>
-                                                    <td>
+                                                    </td>}
+                                                    {showPatchMeta && <td rowSpan={patchRowSpan}>
                                                         {patchId === undefined ? (
                                                             '—'
                                                         ) : (
@@ -552,17 +560,17 @@ export function DynamicSpec({
                                                                         'context_update-patch',
                                                                     )}
                                                                     onClick={() => {
+                                                                        const multiPath = Boolean(row.patch?.changes?.length);
                                                                         setEdit({
-                                                                            path: row.path,
-                                                                            value: row.value,
+                                                                            path: multiPath ? [] : row.path,
+                                                                            value: multiPath ? row.patch?.changes : row.value,
                                                                             patch: patchId,
+                                                                            patchChanges: multiPath,
                                                                             comment:
                                                                                 audit?.comment ??
                                                                                 '',
                                                                             version:
                                                                                 snapshot.version,
-                                                                            hasInheritedFields:
-                                                                                row.hasInheritedFields,
                                                                         });
                                                                     }}
                                                                 >
@@ -587,7 +595,7 @@ export function DynamicSpec({
                                                                 </Button>
                                                             </div>
                                                         )}
-                                                    </td>
+                                                    </td>}
                                                 </tr>
                                             );
                                         })}
@@ -600,42 +608,11 @@ export function DynamicSpec({
                     )}
                 </>
             )}
-            {selectingPath && snapshot && (
-                <YTDFDialog<{specPath: string}>
-                    visible
-                    size="s"
-                    headerProps={{title: 'Edit dynamic specification'}}
-                    initialValues={{specPath: ''}}
-                    validate={({specPath}) =>
-                        editablePath(specPath)
-                            ? undefined
-                            : {specPath: i18n('error_parameter-path')}
-                    }
-                    fields={[
-                        {
-                            name: 'specPath',
-                            caption: i18n('field_path'),
-                            type: 'text',
-                            fullWidth: true,
-                            validateFields: ['specPath'],
-                        },
-                    ]}
-                    onClose={() => setSelectingPath(false)}
-                    onAdd={async (form) => {
-                        const path = editablePath(form.getState().values.specPath);
-                        if (!path) {
-                            return;
-                        }
-                        setSelectingPath(false);
-                        openEdit(path);
-                    }}
-                />
-            )}
             {edit && (
                 <EditSpecDialog
                     key={JSON.stringify([edit.path, dynamicSpecVersion(edit.version), edit.patch])}
                     path={pipelinePath}
-                    specPath={decodeDynamicSpecText(dynamicSpecPath(edit.path))}
+                    specPath={edit.patchChanges ? undefined : decodeDynamicSpecText(dynamicSpecPath(edit.path))}
                     name="dynamic specification"
                     visible
                     spec={editorValue}
@@ -650,19 +627,30 @@ export function DynamicSpec({
                     onSpecApply={(value, {comment}) => {
                         const encoded = encodeDynamicSpecValue(value, edit.value ?? null);
                         const changed = dynamicSpecEdits(edit.value ?? null, encoded).length > 0;
+                        if (edit.patchChanges && edit.patch !== undefined) {
+                            return changed
+                                ? onUpdatePatch(edit.patch, parsePatchChanges(encoded), comment ?? '', edit.version)
+                                : onUpdateComment(edit.patch, comment ?? '', edit.version);
+                        }
+                        const changes = dynamicSpecEdits(edit.value ?? null, encoded).map(({path, value}) => ({
+                            path: [...edit.path, ...path],
+                            value,
+                        }));
+                        if (changes.some(({path, value}) => !path.length || value === undefined)) {
+                            throw new Error(i18n('error_deletion-unsupported'));
+                        }
                         if (edit.patch !== undefined) {
                             return changed
                                 ? onUpdatePatch(
                                       edit.patch,
-                                      edit.path,
-                                      encoded,
+                                      changes,
                                       comment ?? '',
                                       edit.version,
                                   )
                                 : onUpdateComment(edit.patch, comment ?? '', edit.version);
                         }
                         return changed
-                            ? onSet(edit.path, encoded, edit.version, comment)
+                            ? onSet(changes, edit.version, comment)
                             : Promise.resolve();
                     }}
                 />

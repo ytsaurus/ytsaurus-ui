@@ -21,6 +21,9 @@ export type DynamicSpecOverrideRow = {
     source: DynamicSpecSource;
     editorValue?: unknown;
     hasInheritedFields?: boolean;
+    patch?: FlowDynamicSpecPatch;
+    patchIndex?: number;
+    patchSize?: number;
 };
 
 export class UnsafeDynamicSpecVersionError extends Error {}
@@ -391,12 +394,22 @@ export function dynamicSpecOverrideEditor(state: FlowDynamicSpecSnapshot, path: 
 
 export function dynamicSpecOverrideRows(state: FlowDynamicSpecSnapshot) {
     if (state.patches) {
-        return state.patches.map((patch): DynamicSpecOverrideRow => ({
-            path: dynamicSpecPathParts(patch.path),
-            operation: 'set',
-            value: patch.value,
-            source: patchSource(patch),
-        }));
+        return state.patches.flatMap((patch): Array<DynamicSpecOverrideRow> => {
+            const changes = patch.changes?.length
+                ? patch.changes
+                : patch.path !== undefined
+                  ? [{path: patch.path, value: patch.value}]
+                  : [];
+            return changes.map((change, patchIndex) => ({
+                path: dynamicSpecPathParts(change.path),
+                operation: 'set',
+                value: change.value,
+                source: patchSource(patch),
+                patch,
+                patchIndex,
+                patchSize: changes.length,
+            }));
+        });
     }
     const rows: Array<DynamicSpecOverrideRow> = [];
     const visit = (

@@ -338,10 +338,9 @@ async function applyEditor(page: Page, comment = 'Update value') {
 }
 
 async function openParameterEditor(page: Page, path: string) {
-    await page.getByRole('button', {name: 'Edit dynamic specification', exact: true}).click();
-    const picker = page.getByRole('dialog');
-    await picker.getByRole('textbox', {name: 'Path', exact: true}).fill(path);
-    await picker.getByRole('button', {name: 'Confirm', exact: true}).click();
+    const value = page.getByRole('button', {name: `Edit ${path}`, exact: true}).first();
+    await value.scrollIntoViewIfNeeded();
+    await value.click();
     await expect(page.getByRole('dialog').getByText(path, {exact: true})).toBeVisible();
 }
 
@@ -508,8 +507,8 @@ test('PipelineDynamicSpec: grouped map edits only its raw intent without normali
         .poll(() => mutations)
         .toEqual([
             {
-                set_path: '/throttlers/ui_demo',
-                set_value: {...demoMap, period: 1500},
+                set_path: '/throttlers/ui_demo/period',
+                set_value: 1500,
                 expected_version: exactVersion,
                 comment: Buffer.from('Период map 😊', 'utf8').toString('latin1'),
             },
@@ -569,15 +568,15 @@ test('PipelineDynamicSpec: mixed map keeps separate child attribution and preser
         .poll(() => mutations)
         .toEqual([
             {
-                set_path: '/throttlers/ui_demo',
-                set_value: {limit: 2000, period: 1500},
+                set_path: '/throttlers/ui_demo/period',
+                set_value: 1500,
                 expected_version: exactVersion,
                 comment: 'Update value',
             },
         ]);
 });
 
-test('PipelineDynamicSpec: inherited map fields stay out of the draft and warn before replacement', async ({
+test('PipelineDynamicSpec: inherited map fields stay out of the draft and unchanged fields stay inherited', async ({
     mount,
     page,
     router,
@@ -616,8 +615,7 @@ test('PipelineDynamicSpec: inherited map fields stay out of the draft and warn b
     await expect(hole.locator('td').nth(1)).toHaveText('99');
     await expect(hole.getByRole('button', {name: 'Cancel', exact: true})).toHaveCount(0);
     await parent.getByRole('button', {name: 'Edit /throttlers/ui_demo', exact: true}).click();
-    const warning =
-        'This map currently inherits some fields from the base. Replacing the whole map stops inheriting those fields. Include them explicitly to keep their current values.';
+    const warning = 'Only changed fields are saved in this patch.';
     await expect(page.getByRole('dialog')).toContainText(warning);
     await expect.poll(() => editorJSON(page)).toEqual(demoMap);
     await replaceEditorContent(page, JSON.stringify(demoMap));
@@ -644,8 +642,8 @@ test('PipelineDynamicSpec: inherited map fields stay out of the draft and warn b
         .poll(() => mutations)
         .toEqual([
             {
-                set_path: '/throttlers/ui_demo',
-                set_value: {...demoMap, period: 1500},
+                set_path: '/throttlers/ui_demo/period',
+                set_value: 1500,
                 expected_version: exactVersion,
                 comment: 'Update value',
             },
@@ -934,7 +932,7 @@ test('PipelineDynamicSpec: editing one backoff sends one leaf with original CAS 
         ]);
 });
 
-test('PipelineDynamicSpec: Edit selects a parameter and replaces a whole map', async ({
+test('PipelineDynamicSpec: Edit opens the root and saves a multi-path patch', async ({
     mount,
     page,
     router,
@@ -951,17 +949,13 @@ test('PipelineDynamicSpec: Edit selects a parameter and replaces a whole map', a
     );
     await mount(<PipelineDynamicSpecStories.Overrides />);
     await page.getByRole('button', {name: 'Edit dynamic specification'}).click();
-    const picker = page.getByRole('dialog');
-    await picker.getByRole('textbox', {name: 'Path', exact: true}).fill('/');
-    await expect(picker.getByRole('button', {name: 'Confirm', exact: true})).toBeDisabled();
-    await picker.getByRole('textbox', {name: 'Path', exact: true}).fill('/computations/noop');
-    await picker.getByRole('button', {name: 'Confirm', exact: true}).click();
-    await expect
-        .poll(() => editorJSON(page))
-        .toEqual({
-            empty_batch_backoff: 250,
-            max_rows_per_batch: 1001,
-        });
+    const original = (await editorJSON(page)) as {
+        computations: {noop: {empty_batch_backoff: number; max_rows_per_batch: number}};
+    };
+    expect(original.computations.noop).toEqual({
+        empty_batch_backoff: 250,
+        max_rows_per_batch: 1001,
+    });
     await page
         .getByRole('dialog')
         .getByRole('textbox', {name: 'Comment', exact: true})
@@ -972,15 +966,20 @@ test('PipelineDynamicSpec: Edit selects a parameter and replaces a whole map', a
     await page.getByRole('dialog').getByRole('button', {name: 'Cancel', exact: true}).click();
     await expect(page.getByRole('dialog')).toHaveCount(0);
     expect(mutations).toEqual([]);
-    await openParameterEditor(page, '/computations/noop');
-    await replaceEditorContent(page, '{"empty_batch_backoff": 280, "max_rows_per_batch": 1002}');
+    await page.getByRole('button', {name: 'Edit dynamic specification'}).click();
+    const updated = JSON.parse(JSON.stringify(original));
+    updated.computations.noop.empty_batch_backoff = 280;
+    updated.computations.noop.max_rows_per_batch = 1002;
+    await replaceEditorContent(page, JSON.stringify(updated));
     await applyEditor(page);
     await expect
         .poll(() => mutations)
         .toEqual([
             {
-                set_path: '/computations/noop',
-                set_value: {empty_batch_backoff: 280, max_rows_per_batch: 1002},
+                set_changes: [
+                    {path: '/computations/noop/empty_batch_backoff', value: 280},
+                    {path: '/computations/noop/max_rows_per_batch', value: 1002},
+                ],
                 expected_version: exactVersion,
                 comment: 'Update value',
             },
@@ -1277,7 +1276,7 @@ test('PipelineDynamicSpec: subtree editing preserves raw Unicode and binary sibl
         .click();
     let dialog = page.getByRole('dialog');
     await expect(
-        dialog.getByText('This action replaces the selected map in the effective specification.', {
+        dialog.getByText('Only changed fields are saved in this patch.', {
             exact: false,
         }),
     ).toBeVisible();
@@ -1290,8 +1289,8 @@ test('PipelineDynamicSpec: subtree editing preserves raw Unicode and binary sibl
         .poll(() => mutations)
         .toEqual([
             {
-                set_path: '/unicode_group',
-                set_value: {...unicodeGroup, changed: 2},
+                set_path: '/unicode_group/changed',
+                set_value: 2,
                 expected_version: exactVersion,
                 comment: 'Update value',
             },
@@ -1305,8 +1304,8 @@ test('PipelineDynamicSpec: subtree editing preserves raw Unicode and binary sibl
         .poll(() => mutations)
         .toEqual([
             {
-                set_path: '/unicode_group',
-                set_value: {...unicodeGroup, changed: 2},
+                set_path: '/unicode_group/changed',
+                set_value: 2,
                 expected_version: exactVersion,
                 comment: 'Update value',
             },
@@ -1397,8 +1396,8 @@ for (const kind of ['scalar', 'map'] as const) {
                 {
                     command: 'patch-pipeline-dynamic-spec',
                     body: {
-                        set_path: path,
-                        set_value: changed,
+                        set_path: kind === 'map' ? `${path}/period` : path,
+                        set_value: kind === 'map' ? 1500 : changed,
                         expected_version: exactVersion,
                         comment:
                             '\u00d0\u009f\u00d1\u0080\u00d0\u00b8\u00d1\u0087\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00b8\u00d0\u00b7\u00d0\u00bc\u00d0\u00b5\u00d0\u00bd\u00d0\u00b5\u00d0\u00bd\u00d0\u00b8\u00d1\u008f \u00f0\u009f\u0098\u008a',
@@ -1646,4 +1645,49 @@ test('PipelineDynamicSpec: flat patches preserve order values and explicit patch
         command: 'cancel-pipeline-dynamic-spec-patch',
         body: {patch: {$type: 'int64', $value: MAP_VERSION}, expected_version: exactVersion},
     });
+});
+
+test('PipelineDynamicSpec: one patch groups several paths and leaves unchanged map fields unblamed', async ({
+    mount,
+    page,
+    router,
+}) => {
+    const patchId = {$type: 'int64', $value: OWNER_VERSION} as const;
+    const audit = {patch_id: patchId, comment: 'Multi-field change', timestamp: '2026-10-05T08:00:00Z'};
+    const changes = [
+        {path: '/group/keep', value: 3},
+        {path: '/group/added', value: 4},
+    ];
+    const snapshot: FlowDynamicSpecSnapshot = {
+        ...flatDynamicSpecSnapshot,
+        effective_spec: {group: {keep: 3, removed: 2, added: 4}, baseline: 7},
+        patches: [{...audit, changes}],
+        blame: {'/group/keep': audit, '/group/added': audit},
+    };
+    const mutations: unknown[] = [];
+    await router.use(http.put('*/api/v4/flow_execute', async ({request}) => {
+        const read = await dynamicSpecResponse(snapshot, request);
+        if (read) return read;
+        mutations.push(await request.json());
+        return Response.json({version: exactVersion});
+    }));
+    await mount(<PipelineDynamicSpecStories.FlatPatches />);
+    await expect(page.getByRole('button', {name: 'Edit /group/removed', exact: true}))
+        .not.toHaveAttribute('data-dynamic-spec-override');
+    await page.getByRole('radio', {name: 'Patches', exact: true}).check();
+    const rows = page.locator('.yt-flow-dynamic-spec__table tbody tr');
+    await expect(rows).toHaveCount(2);
+    await expect(rows.nth(0).locator('td').first()).toHaveText('/group/keep');
+    await expect(rows.nth(1).locator('td').first()).toHaveText('/group/added');
+    await expect(rows.getByRole('button', {name: 'Cancel', exact: true})).toHaveCount(1);
+    await rows.getByRole('button', {name: 'Update', exact: true}).click();
+    await expect.poll(() => editorJSON(page)).toEqual(changes);
+    await replaceEditorContent(page, JSON.stringify([{path: '/group/keep', value: 5}, changes[1]]));
+    await applyEditor(page, 'Updated multi-field change');
+    await expect.poll(() => mutations).toEqual([{
+        patch: patchId,
+        set_changes: [{path: '/group/keep', value: 5}, changes[1]],
+        comment: 'Updated multi-field change',
+        expected_version: exactVersion,
+    }]);
 });

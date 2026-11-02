@@ -183,14 +183,23 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
                 unavailable={data?.dynamic_spec_state_unavailable}
                 settings={settings}
                 pipelinePath={path}
-                onSet={(specPath, spec, expected_version, comment) =>
+                onSet={(changes, expected_version, comment) =>
                     dispatch(
                         mutateFlowDynamicSpec({
                             path,
                             command: 'patch-pipeline-dynamic-spec',
                             body: {
-                                set_path: dynamicSpecPath(specPath),
-                                set_value: spec,
+                                ...(changes.length === 1
+                                    ? {
+                                          set_path: dynamicSpecPath(changes[0].path),
+                                          set_value: changes[0].value,
+                                      }
+                                    : {
+                                          set_changes: changes.map(({path, value}) => ({
+                                              path: dynamicSpecPath(path),
+                                              value,
+                                          })),
+                                      }),
                                 expected_version,
                                 comment: comment ?? '',
                             },
@@ -215,15 +224,24 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
                         }),
                     )
                 }
-                onUpdatePatch={(patch, specPath, spec, comment, expected_version) =>
+                onUpdatePatch={(patch, changes, comment, expected_version) =>
                     dispatch(
                         mutateFlowDynamicSpec({
                             path,
                             command: 'patch-pipeline-dynamic-spec',
                             body: {
                                 patch,
-                                set_path: dynamicSpecPath(specPath),
-                                set_value: spec,
+                                ...(changes.length === 1
+                                    ? {
+                                          set_path: dynamicSpecPath(changes[0].path),
+                                          set_value: changes[0].value,
+                                      }
+                                    : {
+                                          set_changes: changes.map(({path, value}) => ({
+                                              path: dynamicSpecPath(path),
+                                              value,
+                                          })),
+                                      }),
                                 comment,
                                 expected_version,
                             },
