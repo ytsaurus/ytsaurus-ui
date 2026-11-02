@@ -248,7 +248,7 @@ export class DetailedOperationSelector extends OperationSelector {
     runningJobsProgress?: number;
     jobsProgress?: number;
 
-    totalFailedJobs?: number;
+    maxFailedJobCount?: number;
     failedJobsProgress?: number;
 
     description?: string | CypressNodeRaw<Record<string, unknown>, unknown>;
@@ -326,10 +326,13 @@ export class DetailedOperationSelector extends OperationSelector {
             this.failedJobs = jobs.failed;
 
             if (this.resultingSpec) {
-                this.totalFailedJobs = ypath.getValue(this.resultingSpec, '/max_failed_job_count');
+                this.maxFailedJobCount = ypath.getValue(
+                    this.resultingSpec,
+                    '/max_failed_job_count',
+                );
             }
-            this.failedJobsProgress = this.totalFailedJobs
-                ? (this.failedJobs! / this.totalFailedJobs) * 100
+            this.failedJobsProgress = this.maxFailedJobCount
+                ? (this.failedJobs! / this.maxFailedJobCount) * 100
                 : 0;
         }
 

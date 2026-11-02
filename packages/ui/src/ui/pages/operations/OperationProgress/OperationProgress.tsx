@@ -77,14 +77,14 @@ class OperationProgress extends Component<OperationProgressProps & ReduxProps> {
 
     renderFailedJobCounters() {
         const {operation} = this.props;
-        const {failedJobs, totalFailedJobs} = operation;
+        const {failedJobs, maxFailedJobCount} = operation;
 
         const className = 'operation-progress__counters';
 
         return (
-            typeof totalFailedJobs !== 'undefined' && (
+            typeof maxFailedJobCount !== 'undefined' && (
                 <div className={className}>
-                    {this.renderCounter('failed', failedJobs, totalFailedJobs)}
+                    {this.renderCounter('failed', failedJobs, maxFailedJobCount)}
                 </div>
             )
         );
