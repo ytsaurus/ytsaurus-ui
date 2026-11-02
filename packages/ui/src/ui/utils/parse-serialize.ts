@@ -172,7 +172,12 @@ export function makeBase64ParseSerialize(initialValue: unknown) {
             if (isEqual_(v, initialValue) || v === undefined) {
                 return undefined;
             }
-            return btoa(JSON.stringify(v));
+            // Escape non-Latin-1 code units to keep the existing Base64(JSON) format.
+            const json = JSON.stringify(v).replace(
+                /[\u0100-\uffff]/g,
+                (char) => `\\u${char.charCodeAt(0).toString(16).padStart(4, '0')}`,
+            );
+            return btoa(json);
         },
     };
 }
