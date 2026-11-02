@@ -395,11 +395,10 @@ export function dynamicSpecOverrideEditor(state: FlowDynamicSpecSnapshot, path: 
 export function dynamicSpecOverrideRows(state: FlowDynamicSpecSnapshot) {
     if (state.patches) {
         return state.patches.flatMap((patch): Array<DynamicSpecOverrideRow> => {
-            const changes = patch.changes?.length
-                ? patch.changes
-                : patch.path !== undefined
-                  ? [{path: patch.path, value: patch.value}]
-                  : [];
+            let changes = patch.changes ?? [];
+            if (!changes.length && patch.path !== undefined) {
+                changes = [{path: patch.path, value: patch.value}];
+            }
             return changes.map((change, patchIndex) => ({
                 path: dynamicSpecPathParts(change.path),
                 operation: 'set',

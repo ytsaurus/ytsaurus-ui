@@ -195,8 +195,8 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
                                           set_value: changes[0].value,
                                       }
                                     : {
-                                          set_changes: changes.map(({path, value}) => ({
-                                              path: dynamicSpecPath(path),
+                                          set_changes: changes.map(({path: changePath, value}) => ({
+                                              path: dynamicSpecPath(changePath),
                                               value,
                                           })),
                                       }),
@@ -237,8 +237,8 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
                                           set_value: changes[0].value,
                                       }
                                     : {
-                                          set_changes: changes.map(({path, value}) => ({
-                                              path: dynamicSpecPath(path),
+                                          set_changes: changes.map(({path: changePath, value}) => ({
+                                              path: dynamicSpecPath(changePath),
                                               value,
                                           })),
                                       }),

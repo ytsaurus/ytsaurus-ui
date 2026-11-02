@@ -1669,15 +1669,17 @@ test('PipelineDynamicSpec: updating a map patch preserves its unchanged fields',
         .click();
     await replaceEditorContent(page, JSON.stringify({keep: 2, added: 5}));
     await applyEditor(page, 'Update map');
-    await expect.poll(() => mutations).toEqual([
-        {
-            patch: {$type: 'int64', $value: OWNER_VERSION},
-            set_path: '/group',
-            set_value: {keep: 2, added: 5},
-            comment: 'Update map',
-            expected_version: exactVersion,
-        },
-    ]);
+    await expect
+        .poll(() => mutations)
+        .toEqual([
+            {
+                patch: {$type: 'int64', $value: OWNER_VERSION},
+                set_path: '/group',
+                set_value: {keep: 2, added: 5},
+                comment: 'Update map',
+                expected_version: exactVersion,
+            },
+        ]);
 });
 
 test('PipelineDynamicSpec: one patch groups several paths and leaves unchanged map fields unblamed', async ({
@@ -1686,7 +1688,11 @@ test('PipelineDynamicSpec: one patch groups several paths and leaves unchanged m
     router,
 }) => {
     const patchId = {$type: 'int64', $value: OWNER_VERSION} as const;
-    const audit = {patch_id: patchId, comment: 'Multi-field change', timestamp: '2026-10-05T08:00:00Z'};
+    const audit = {
+        patch_id: patchId,
+        comment: 'Multi-field change',
+        timestamp: '2026-10-05T08:00:00Z',
+    };
     const changes = [
         {path: '/group/keep', value: 3},
         {path: '/group/added', value: 4},
@@ -1698,15 +1704,18 @@ test('PipelineDynamicSpec: one patch groups several paths and leaves unchanged m
         blame: {'/group/keep': audit, '/group/added': audit},
     };
     const mutations: unknown[] = [];
-    await router.use(http.put('*/api/v4/flow_execute', async ({request}) => {
-        const read = await dynamicSpecResponse(snapshot, request);
-        if (read) return read;
-        mutations.push(await request.json());
-        return Response.json({version: exactVersion});
-    }));
+    await router.use(
+        http.put('*/api/v4/flow_execute', async ({request}) => {
+            const read = await dynamicSpecResponse(snapshot, request);
+            if (read) return read;
+            mutations.push(await request.json());
+            return Response.json({version: exactVersion});
+        }),
+    );
     await mount(<PipelineDynamicSpecStories.FlatPatches />);
-    await expect(page.getByRole('button', {name: 'Edit /group/removed', exact: true}))
-        .not.toHaveAttribute('data-dynamic-spec-override');
+    await expect(
+        page.getByRole('button', {name: 'Edit /group/removed', exact: true}),
+    ).not.toHaveAttribute('data-dynamic-spec-override');
     await page.getByRole('radio', {name: 'Patches', exact: true}).check();
     const rows = page.locator('.yt-flow-dynamic-spec__table tbody tr');
     await expect(rows).toHaveCount(2);
@@ -1717,10 +1726,14 @@ test('PipelineDynamicSpec: one patch groups several paths and leaves unchanged m
     await expect.poll(() => editorJSON(page)).toEqual(changes);
     await replaceEditorContent(page, JSON.stringify([{path: '/group/keep', value: 5}, changes[1]]));
     await applyEditor(page, 'Updated multi-field change');
-    await expect.poll(() => mutations).toEqual([{
-        patch: patchId,
-        set_changes: [{path: '/group/keep', value: 5}, changes[1]],
-        comment: 'Updated multi-field change',
-        expected_version: exactVersion,
-    }]);
+    await expect
+        .poll(() => mutations)
+        .toEqual([
+            {
+                patch: patchId,
+                set_changes: [{path: '/group/keep', value: 5}, changes[1]],
+                comment: 'Updated multi-field change',
+                expected_version: exactVersion,
+            },
+        ]);
 });

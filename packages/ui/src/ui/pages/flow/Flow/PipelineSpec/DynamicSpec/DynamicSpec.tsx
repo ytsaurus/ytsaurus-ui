@@ -12,8 +12,8 @@ import {Yson} from '../../../../../components/Yson/Yson';
 import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
 import {type UnipikaSettings} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {
-    type DynamicSpecSource,
     type DynamicSpecEdit,
+    type DynamicSpecSource,
     decodeDynamicSpecText,
     decodeDynamicSpecValue,
     dynamicSpecEdits,
@@ -423,10 +423,7 @@ export function DynamicSpec({
                 </div>
             )}
             {selectedView === 'effective' &&
-                renderEffective(
-                    renderRowExtraTools,
-                    snapshot ? () => openEdit([]) : undefined,
-                )}
+                renderEffective(renderRowExtraTools, snapshot ? () => openEdit([]) : undefined)}
             {selectedView === 'base' && snapshot && (
                 <YsonWithScroll
                     value={{version: snapshot.version, spec: snapshot.base_spec}}
@@ -492,10 +489,18 @@ export function DynamicSpec({
                                                 row.source.source === 'override'
                                                     ? row.source.audit
                                                     : undefined;
-                                            const showPatchMeta = row.patchIndex === undefined || row.patchIndex === 0;
+                                            const showPatchMeta =
+                                                row.patchIndex === undefined ||
+                                                row.patchIndex === 0;
                                             const patchRowSpan = row.patchSize ?? 1;
                                             return (
-                                                <tr key={JSON.stringify([row.path, patchId, row.patchIndex])}>
+                                                <tr
+                                                    key={JSON.stringify([
+                                                        row.path,
+                                                        patchId,
+                                                        row.patchIndex,
+                                                    ])}
+                                                >
                                                     <td className={block('path')}>
                                                         {decodeDynamicSpecText(
                                                             dynamicSpecPath(row.path),
@@ -528,74 +533,105 @@ export function DynamicSpec({
                                                             </EditableValue>
                                                         </div>
                                                     </td>
-                                                    {showPatchMeta && <td rowSpan={patchRowSpan} className={block('comment')}>
-                                                        {audit?.comment || '—'}
-                                                    </td>}
-                                                    {showPatchMeta && <td rowSpan={patchRowSpan} className={block('time')}>
-                                                        {audit ? (
-                                                            <time
-                                                                dateTime={audit.timestamp}
-                                                                title={audit.timestamp}
-                                                            >
-                                                                {audit.timestamp
-                                                                    .slice(0, 19)
-                                                                    .replace('T', ' ')}{' '}
-                                                                UTC
-                                                            </time>
-                                                        ) : (
-                                                            '—'
-                                                        )}
-                                                    </td>}
-                                                    {showPatchMeta && <td rowSpan={patchRowSpan}>
-                                                        {patchId === undefined ? (
-                                                            '—'
-                                                        ) : (
-                                                            <div className={block('patch-actions')}>
-                                                                <Button
-                                                                    size="s"
-                                                                    view="flat"
-                                                                    disabled={pending}
-                                                                    data-owner-version={owner}
-                                                                    title={i18n(
-                                                                        'context_update-patch',
+                                                    {showPatchMeta && (
+                                                        <td
+                                                            rowSpan={patchRowSpan}
+                                                            className={block('comment')}
+                                                        >
+                                                            {audit?.comment || '—'}
+                                                        </td>
+                                                    )}
+                                                    {showPatchMeta && (
+                                                        <td
+                                                            rowSpan={patchRowSpan}
+                                                            className={block('time')}
+                                                        >
+                                                            {audit ? (
+                                                                <time
+                                                                    dateTime={audit.timestamp}
+                                                                    title={audit.timestamp}
+                                                                >
+                                                                    {audit.timestamp
+                                                                        .slice(0, 19)
+                                                                        .replace('T', ' ')}{' '}
+                                                                    UTC
+                                                                </time>
+                                                            ) : (
+                                                                '—'
+                                                            )}
+                                                        </td>
+                                                    )}
+                                                    {showPatchMeta && (
+                                                        <td rowSpan={patchRowSpan}>
+                                                            {patchId === undefined ? (
+                                                                '—'
+                                                            ) : (
+                                                                <div
+                                                                    className={block(
+                                                                        'patch-actions',
                                                                     )}
-                                                                    onClick={() => {
-                                                                        const multiPath = Boolean(row.patch?.changes?.length);
-                                                                        setEdit({
-                                                                            path: multiPath ? [] : row.path,
-                                                                            value: multiPath ? row.patch?.changes : row.value,
-                                                                            patch: patchId,
-                                                                            patchChanges: multiPath,
-                                                                            comment:
-                                                                                audit?.comment ??
-                                                                                '',
-                                                                            version:
-                                                                                snapshot.version,
-                                                                        });
-                                                                    }}
                                                                 >
-                                                                    {i18n('action_update-patch')}
-                                                                </Button>
-                                                                <Button
-                                                                    size="s"
-                                                                    view="flat"
-                                                                    disabled={pending}
-                                                                    data-owner-version={owner}
-                                                                    title={`${i18n('context_cancel-patch')}\n${i18n('field_version')}: ${owner}`}
-                                                                    onClick={() =>
-                                                                        run(() =>
-                                                                            onCancelOwner(
-                                                                                patchId,
-                                                                                snapshot.version,
-                                                                            ),
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    {i18n('action_cancel-patch')}
-                                                                </Button>
-                                                            </div>
-                                                        )}
-                                                    </td>}
+                                                                    <Button
+                                                                        size="s"
+                                                                        view="flat"
+                                                                        disabled={pending}
+                                                                        data-owner-version={owner}
+                                                                        title={i18n(
+                                                                            'context_update-patch',
+                                                                        )}
+                                                                        onClick={() => {
+                                                                            const multiPath =
+                                                                                Boolean(
+                                                                                    row.patch
+                                                                                        ?.changes
+                                                                                        ?.length,
+                                                                                );
+                                                                            setEdit({
+                                                                                path: multiPath
+                                                                                    ? []
+                                                                                    : row.path,
+                                                                                value: multiPath
+                                                                                    ? row.patch
+                                                                                          ?.changes
+                                                                                    : row.value,
+                                                                                patch: patchId,
+                                                                                patchChanges:
+                                                                                    multiPath,
+                                                                                comment:
+                                                                                    audit?.comment ??
+                                                                                    '',
+                                                                                version:
+                                                                                    snapshot.version,
+                                                                            });
+                                                                        }}
+                                                                    >
+                                                                        {i18n(
+                                                                            'action_update-patch',
+                                                                        )}
+                                                                    </Button>
+                                                                    <Button
+                                                                        size="s"
+                                                                        view="flat"
+                                                                        disabled={pending}
+                                                                        data-owner-version={owner}
+                                                                        title={`${i18n('context_cancel-patch')}\n${i18n('field_version')}: ${owner}`}
+                                                                        onClick={() =>
+                                                                            run(() =>
+                                                                                onCancelOwner(
+                                                                                    patchId,
+                                                                                    snapshot.version,
+                                                                                ),
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        {i18n(
+                                                                            'action_cancel-patch',
+                                                                        )}
+                                                                    </Button>
+                                                                </div>
+                                                            )}
+                                                        </td>
+                                                    )}
                                                 </tr>
                                             );
                                         })}
@@ -612,7 +648,11 @@ export function DynamicSpec({
                 <EditSpecDialog
                     key={JSON.stringify([edit.path, dynamicSpecVersion(edit.version), edit.patch])}
                     path={pipelinePath}
-                    specPath={edit.patchChanges ? undefined : decodeDynamicSpecText(dynamicSpecPath(edit.path))}
+                    specPath={
+                        edit.patchChanges
+                            ? undefined
+                            : decodeDynamicSpecText(dynamicSpecPath(edit.path))
+                    }
                     name="dynamic specification"
                     visible
                     spec={editorValue}
@@ -629,7 +669,12 @@ export function DynamicSpec({
                         const changed = dynamicSpecEdits(edit.value ?? null, encoded).length > 0;
                         if (edit.patchChanges && edit.patch !== undefined) {
                             return changed
-                                ? onUpdatePatch(edit.patch, parsePatchChanges(encoded), comment ?? '', edit.version)
+                                ? onUpdatePatch(
+                                      edit.patch,
+                                      parsePatchChanges(encoded),
+                                      comment ?? '',
+                                      edit.version,
+                                  )
                                 : onUpdateComment(edit.patch, comment ?? '', edit.version);
                         }
                         if (edit.patch !== undefined) {
@@ -642,16 +687,21 @@ export function DynamicSpec({
                                   )
                                 : onUpdateComment(edit.patch, comment ?? '', edit.version);
                         }
-                        const changes = dynamicSpecEdits(edit.value ?? null, encoded).map(({path, value}) => ({
-                            path: [...edit.path, ...path],
-                            value,
-                        }));
-                        if (changes.some(({path, value}) => !path.length || value === undefined)) {
+                        const changes = dynamicSpecEdits(edit.value ?? null, encoded).map(
+                            ({path, value: changeValue}) => ({
+                                path: [...edit.path, ...path],
+                                value: changeValue,
+                            }),
+                        );
+                        if (
+                            changes.some(
+                                ({path, value: changeValue}) =>
+                                    !path.length || changeValue === undefined,
+                            )
+                        ) {
                             throw new Error(i18n('error_deletion-unsupported'));
                         }
-                        return changed
-                            ? onSet(changes, edit.version, comment)
-                            : Promise.resolve();
+                        return changed ? onSet(changes, edit.version, comment) : Promise.resolve();
                     }}
                 />
             )}
