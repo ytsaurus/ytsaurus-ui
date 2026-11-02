@@ -1,6 +1,13 @@
+import {stateToParams} from 'redux-location-state/lib/stateToParams';
+
 import {Page} from '../../../shared/constants/settings';
 import {YT} from '../../config/yt-config';
-import {FlowTab, type FlowTabType} from '../../store/reducers/flow/filters';
+import {
+    type FlowStateFiltersValue,
+    FlowTab,
+    type FlowTabType,
+} from '../../store/reducers/flow/filters';
+import {flowComputationStateParams, flowStateParams} from '../../store/reducers/flow/url-mapping';
 
 type Params = {
     path: string;
@@ -64,3 +71,25 @@ export const makeFlowLink = ({
 
     return `${pathname}?${params}`;
 };
+
+export function makeFlowStateLink({
+    cluster,
+    path,
+    computation,
+    filters = {},
+}: {
+    cluster?: string;
+    path: string;
+    computation?: string;
+    filters?: Partial<FlowStateFiltersValue>;
+}): string {
+    const pathname = computation
+        ? makeFlowComputationTabLink({cluster, computation, tab: 'state'})
+        : `/${cluster || YT.cluster}/${Page.FLOWS}/state`;
+    const {location} = stateToParams(
+        {[pathname]: computation ? flowComputationStateParams : flowStateParams},
+        {flow: {filters: {pipelinePath: path, stateViewer: filters}}},
+        {pathname, search: ''},
+    );
+    return `${pathname}${location.search}`;
+}

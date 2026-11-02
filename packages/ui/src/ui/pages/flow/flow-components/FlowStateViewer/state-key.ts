@@ -10,6 +10,7 @@ import {
     getScalarKind,
     isBigIntegerType,
 } from '../../../../store/api/yt/flow/state-scalar-types';
+import {normalizeFlowStateRawKey} from '../../../../store/reducers/flow/filters';
 import {getOwnProperty} from './state-schema';
 import {YSON_AS_TEXT, prettyPrint} from '../../../../utils/unipika';
 
@@ -108,7 +109,7 @@ export function parseRuntimeKeyDraft(raw: string): RuntimeKeyParseResult {
         return {value: undefined};
     }
     try {
-        return {value: JSON.parse(raw)};
+        return {value: normalizeFlowStateRawKey(JSON.parse(raw))};
     } catch {
         return {error: {errorKey: 'validation_invalid-key-syntax'}};
     }

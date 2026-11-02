@@ -1,10 +1,5 @@
-import type {
-    FlowHeavyHitterEntry,
-    FlowHeavyHitterStateSeed,
-    FlowHeavyHittersMessageData,
-} from './types';
+import type {FlowHeavyHitterEntry, FlowHeavyHittersMessageData} from './types';
 
-import {makeFlowComputationTabLink} from '../../../../utils/app-url/makeFlowLink';
 import type {FlowMessageType} from '../../../../../shared/yt-types';
 import ypath from '../../../../common/thor/ypath';
 
@@ -154,49 +149,4 @@ export function parseHeavyHitterKeyText(keyText: string): Array<string> | undefi
     }
     const parts = tokens.map(keyTokenToText);
     return parts.every((part) => part !== undefined) ? (parts as Array<string>) : undefined;
-}
-
-export function buildHeavyHitterStateLink(
-    cluster: string,
-    pipelinePath: string,
-    computationId: string,
-    seed: FlowHeavyHitterStateSeed,
-): string {
-    const params = new URLSearchParams({
-        path: pipelinePath,
-        heavyHitterSeed: JSON.stringify(seed),
-    });
-    const link = makeFlowComputationTabLink({cluster, computation: computationId, tab: 'state'});
-    return `${link}?${params}`;
-}
-
-export function parseHeavyHitterStateSeed(
-    raw: string | null,
-): FlowHeavyHitterStateSeed | undefined {
-    if (!raw) {
-        return undefined;
-    }
-    let parsed: unknown;
-    try {
-        parsed = JSON.parse(raw);
-    } catch {
-        return undefined;
-    }
-    if (!parsed || typeof parsed !== 'object') {
-        return undefined;
-    }
-    const {partitionId, keyValues} = parsed as Record<string, unknown>;
-    const seed: FlowHeavyHitterStateSeed = {};
-    if (typeof partitionId === 'string') {
-        seed.partitionId = partitionId;
-    }
-    if (keyValues && typeof keyValues === 'object') {
-        const entries = Object.entries(keyValues as Record<string, unknown>).filter(
-            (entry): entry is [string, string] => typeof entry[1] === 'string',
-        );
-        if (entries.length) {
-            seed.keyValues = Object.fromEntries(entries);
-        }
-    }
-    return Object.keys(seed).length ? seed : undefined;
 }

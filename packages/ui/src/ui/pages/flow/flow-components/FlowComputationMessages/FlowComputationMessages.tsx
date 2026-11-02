@@ -22,11 +22,8 @@ import {
     getComputationKeyColumns,
 } from '../FlowStateViewer/state-schema';
 import {keyValuesFromRowKey} from '../FlowStateViewer/state-row-presentation';
-import {
-    buildHeavyHitterStateLink,
-    parseHeavyHitterKeyText,
-    splitHeavyHittersMessages,
-} from '../FlowStateViewer/heavy-hitters';
+import {parseHeavyHitterKeyText, splitHeavyHittersMessages} from '../FlowStateViewer/heavy-hitters';
+import {makeFlowStateLink} from '../../../../utils/app-url/makeFlowLink';
 import i18n from './i18n';
 import type {FlowHeavyHitterEntry} from '../FlowStateViewer/types';
 import type {FlowMessageType} from '../../../../../shared/yt-types';
@@ -70,8 +67,12 @@ export function FlowComputationMessages({
                         <TableCell>
                             {keyValues ? (
                                 <RoutedLink
-                                    href={buildHeavyHitterStateLink(cluster, path, computation, {
-                                        keyValues,
+                                    disablePreserveLocation
+                                    href={makeFlowStateLink({
+                                        cluster,
+                                        path,
+                                        computation,
+                                        filters: {keyValues},
                                     })}
                                     title={i18n('action_open-in-state')}
                                 >
@@ -99,8 +100,12 @@ export function FlowComputationMessages({
                 cell: ({row: {original}}) => (
                     <TableCell>
                         <RoutedLink
-                            href={buildHeavyHitterStateLink(cluster, path, computation, {
-                                partitionId: original.partitionId,
+                            disablePreserveLocation
+                            href={makeFlowStateLink({
+                                cluster,
+                                path,
+                                computation,
+                                filters: {partitionId: original.partitionId},
                             })}
                             title={i18n('action_open-in-state')}
                         >

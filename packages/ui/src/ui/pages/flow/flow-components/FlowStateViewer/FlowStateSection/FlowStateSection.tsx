@@ -14,7 +14,7 @@ import {FlowDeleteStatesDialog} from '../FlowDeleteStatesDialog/FlowDeleteStates
 import {FlowStateFilters} from '../FlowStateFilters/FlowStateFilters';
 import {FlowStateResults, FlowStateResultsActions} from '../FlowStateResults/FlowStateResults';
 import {flattenReadStatesResponse} from '../state-requests';
-import {seedStateFilters} from '../state-filter-options';
+import {initialState} from '../../../../../store/reducers/flow/filters';
 import {isDeleteCommitted, isWriteDeniedByPermission} from '../state-delete';
 import {useFlowStateCellHandlers} from './use-flow-state-cell-handlers';
 import {useFlowStateRead} from './use-flow-state-read';
@@ -28,14 +28,9 @@ const block = cn('yt-flow-state-section');
 export type FlowStateSectionProps = {
     pipeline_path: string;
     fixedComputationId?: string;
-    initialFilters?: Partial<FlowStateFiltersValue>;
 };
 
-export function FlowStateSection({
-    pipeline_path,
-    fixedComputationId,
-    initialFilters,
-}: FlowStateSectionProps) {
+export function FlowStateSection({pipeline_path, fixedComputationId}: FlowStateSectionProps) {
     const [rowSelection, setRowSelection] = React.useState<tanstack.RowSelectionState>({});
     const [deleteRows, setDeleteRows] = React.useState<Array<FlowStateResultRow>>();
     const [deleteVisible, setDeleteVisible] = React.useState(false);
@@ -53,7 +48,7 @@ export function FlowStateSection({
         readSucceeded,
         error,
         refetch,
-    } = useFlowStateRead({pipeline_path, fixedComputationId, initialFilters});
+    } = useFlowStateRead({pipeline_path, fixedComputationId});
 
     const permissionResult = useCheckPermissionQuery({
         id: YTApiId.checkPermissions,
@@ -80,7 +75,7 @@ export function FlowStateSection({
     );
 
     const handleReset = () => {
-        handleFiltersChange(seedStateFilters(fixedComputationId, initialFilters));
+        handleFiltersChange(initialState.stateViewer);
     };
 
     const cellHandlers = useFlowStateCellHandlers({

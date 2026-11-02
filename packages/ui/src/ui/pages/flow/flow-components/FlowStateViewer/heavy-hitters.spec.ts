@@ -1,10 +1,13 @@
+import {makeFlowStateLink} from '../../../../utils/app-url/makeFlowLink';
 import {
-    buildHeavyHitterStateLink,
     parseHeavyHitterEntry,
     parseHeavyHitterKeyText,
-    parseHeavyHitterStateSeed,
     splitHeavyHittersMessages,
 } from './heavy-hitters';
+
+jest.mock('../../../../store/reducers/prometheusDashboard/url-mapping', () => ({
+    prometheusDashboardParams: {},
+}));
 
 const heavyHittersMessage = {
     level: 'info' as const,
@@ -82,40 +85,46 @@ describe('parseHeavyHitterKeyText', () => {
     });
 });
 
-describe('buildHeavyHitterStateLink', () => {
-    it('builds a computation state-tab link carrying the pipeline path and the seed', () => {
+describe('makeFlowStateLink', () => {
+    it('builds a computation state-tab link carrying the pipeline path and filters', () => {
         expect(
-            buildHeavyHitterStateLink('hahn', '//pipeline', 'state', {keyValues: {key: '7'}}),
+            makeFlowStateLink({
+                cluster: 'hahn',
+                path: '//pipeline',
+                computation: 'state',
+                filters: {keyValues: {key: '7'}},
+            }),
         ).toBe(
-            '/hahn/flows/computations/state/state?path=%2F%2Fpipeline&heavyHitterSeed=%7B%22keyValues%22%3A%7B%22key%22%3A%227%22%7D%7D',
+            '/hahn/flows/computations/state/state?path=%2F%2Fpipeline&stateKeyValues=eyJrZXkiOiI3In0%3D',
         );
     });
     it('percent-encodes a computation id containing special characters', () => {
         expect(
-            buildHeavyHitterStateLink('hahn', '//pipeline', 'a/b', {partitionId: 'p'}),
+            makeFlowStateLink({
+                cluster: 'hahn',
+                path: '//pipeline',
+                computation: 'a/b',
+                filters: {partitionId: 'p'},
+            }),
         ).toContain('/computations/a%2Fb/state');
     });
 });
 
-describe('parseHeavyHitterStateSeed', () => {
+describe('state link filters', () => {
     it('round-trips keyValues and partitionId through the built link', () => {
         const seed = {keyValues: {key: '7'}, partitionId: 'p1'};
-        const url = buildHeavyHitterStateLink('hahn', '//pipeline', 'state', seed);
+        const url = makeFlowStateLink({
+            cluster: 'hahn',
+            path: '//pipeline',
+            computation: 'state',
+            filters: seed,
+        });
         const params = new URLSearchParams(url.split('?')[1]);
         expect(params.get('path')).toBe('//pipeline');
-        expect(parseHeavyHitterStateSeed(params.get('heavyHitterSeed'))).toEqual(seed);
-    });
-    it('returns undefined for missing, malformed or empty input', () => {
-        expect(parseHeavyHitterStateSeed(null)).toBeUndefined();
-        expect(parseHeavyHitterStateSeed('not json')).toBeUndefined();
-        expect(parseHeavyHitterStateSeed('null')).toBeUndefined();
-        expect(parseHeavyHitterStateSeed('{}')).toBeUndefined();
-        expect(parseHeavyHitterStateSeed('[]')).toBeUndefined();
-    });
-    it('drops non-string keyValues entries and a non-string partitionId', () => {
-        expect(
-            parseHeavyHitterStateSeed(JSON.stringify({partitionId: 5, keyValues: {a: '1', b: 2}})),
-        ).toEqual({keyValues: {a: '1'}});
+        expect({
+            keyValues: JSON.parse(atob(params.get('stateKeyValues') ?? '')),
+            partitionId: params.get('statePartitionId'),
+        }).toEqual(seed);
     });
 });
 
