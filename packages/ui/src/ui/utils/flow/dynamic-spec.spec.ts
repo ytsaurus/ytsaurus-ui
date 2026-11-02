@@ -8,6 +8,7 @@ import {
     dynamicSpecHasComment,
     dynamicSpecOverrideEditor,
     dynamicSpecOverrideRows,
+    dynamicSpecPatchDiff,
     dynamicSpecPath,
     dynamicSpecPathParts,
     dynamicSpecSource,
@@ -500,6 +501,32 @@ describe('flat dynamic spec patches', () => {
         ],
         blame: {'/group': parent, '/group/pin': child},
     };
+
+    it('shows the complete nested values of single- and multi-path patches', () => {
+        expect(
+            dynamicSpecPatchDiff({
+                ...parent,
+                path: '/computations/noop/batch_duration',
+                value: 1001,
+            }),
+        ).toEqual({computations: {noop: {batch_duration: 1001}}});
+        expect(
+            dynamicSpecPatchDiff({
+                ...child,
+                changes: [
+                    {path: '/computations/noop/batch_duration', value: 1002},
+                    {path: '/computations/noop/max_rows_per_batch', value: 2000},
+                ],
+            }),
+        ).toEqual({computations: {noop: {batch_duration: 1002, max_rows_per_batch: 2000}}});
+        expect(
+            dynamicSpecPatchDiff({
+                ...parent,
+                path: '/a\\/b/c\\\\d',
+                value: 5,
+            }),
+        ).toEqual({'a/b': {'c\\d': 5}});
+    });
 
     it('preserves application order and original parent values, including shadowed patches', () => {
         expect(dynamicSpecOverrideRows(flat).map(({path, value}) => ({path, value}))).toEqual([

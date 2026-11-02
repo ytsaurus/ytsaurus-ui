@@ -131,6 +131,15 @@
         overflow-x: auto;
     }
 
+    &__diff {
+        min-width: 360px;
+    }
+
+    &__diff-content {
+        max-width: 720px;
+        overflow-x: auto;
+    }
+
     &__table {
         width: 100%;
         border-collapse: collapse;

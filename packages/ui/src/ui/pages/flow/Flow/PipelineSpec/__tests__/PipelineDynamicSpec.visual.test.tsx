@@ -22,6 +22,7 @@ import {
     failedDynamicSpecHandler,
     flatDynamicSpecSnapshot,
     legacyDynamicSpecHandler,
+    multiPathDynamicSpecHandler,
     unavailableDynamicSpecHandler,
 } from '../__stories__/mocks';
 
@@ -315,9 +316,9 @@ const exactVersion = {$type: 'int64', $value: NEWER_VERSION} as const;
 
 async function replaceEditorContent(page: Page, text: string, verifyDraft = false) {
     const dialog = page.getByRole('dialog');
-    await dialog
-        .locator('.monaco-editor .monaco-scrollable-element.editor-scrollable')
-        .click({position: {x: 20, y: 20}});
+    const editor = dialog.getByRole('textbox', {name: 'Editor content'});
+    await editor.focus();
+    await expect(editor).toBeFocused();
     const modifier = await page.evaluate(() =>
         navigator.userAgent.includes('Macintosh') ? 'Meta' : 'Control',
     );
@@ -1609,17 +1610,17 @@ test('PipelineDynamicSpec: flat patches preserve order values and explicit patch
     await page.getByRole('radio', {name: 'Patches', exact: true}).check();
     const rows = page.locator('.yt-flow-dynamic-spec__table tbody tr');
     await expect(rows).toHaveCount(3);
-    await expect(rows.nth(0).locator('td').first()).toHaveText('/group');
-    await expect(rows.nth(1).locator('td').first()).toHaveText('/group/keep');
+    await expect(rows.nth(0).locator('td').first()).toHaveText(OWNER_VERSION);
+    await expect(rows.nth(1).locator('td').first()).toHaveText(MAP_VERSION);
     await expect(page.locator('thead th')).toHaveText([
-        'Path',
-        'Value',
+        'Patch ID',
+        'Diff',
         'Comment',
         'Time',
         'Patch',
     ]);
     await expect(rows.nth(0)).toContainText('Replace group');
-    const mapValue = rows.nth(0).getByRole('button', {name: 'Edit /group', exact: true});
+    const mapValue = rows.nth(0).locator('td').nth(1);
     expect(await mapValue.locator('pre').innerText()).toMatch(/\n\s*"added"/);
     await rows.nth(0).getByRole('button', {name: 'Update', exact: true}).click();
     await expect.poll(() => editorJSON(page)).toEqual({keep: 2, added: 4});
@@ -1660,6 +1661,37 @@ test('PipelineDynamicSpec: flat patches preserve order values and explicit patch
         command: 'cancel-pipeline-dynamic-spec-patch',
         body: {patch: {$type: 'int64', $value: MAP_VERSION}, expected_version: exactVersion},
     });
+});
+
+test('PipelineDynamicSpec: patch table shows nested YSON diff for multi-path changes', async ({
+    mount,
+    page,
+    router,
+}) => {
+    await router.use(multiPathDynamicSpecHandler);
+    await mount(<PipelineDynamicSpecStories.MultiPathPatches />);
+    await page.getByRole('radio', {name: 'Patches', exact: true}).check();
+
+    await expect(page.locator('thead th')).toHaveText([
+        'Patch ID',
+        'Diff',
+        'Comment',
+        'Time',
+        'Patch',
+    ]);
+    const rows = page.locator('.yt-flow-dynamic-spec__table tbody tr');
+    await expect(rows).toHaveCount(2);
+    await expect(rows.nth(0).locator('td').first()).toHaveText(OWNER_VERSION);
+    await expect(rows.nth(1).locator('td').first()).toHaveText(NEWER_VERSION);
+    const firstDiff = await rows.nth(0).locator('td').nth(1).locator('pre').innerText();
+    const secondDiff = await rows.nth(1).locator('td').nth(1).locator('pre').innerText();
+    expect(firstDiff).toMatch(/"computations"\s*=\s*\{/);
+    expect(firstDiff).toMatch(/"batch_duration"\s*=\s*1001/);
+    expect(firstDiff).not.toContain('max_rows_per_batch');
+    expect(secondDiff).toMatch(/"computations"\s*=\s*\{/);
+    expect(secondDiff).toMatch(/"batch_duration"\s*=\s*1002/);
+    expect(secondDiff).toMatch(/"max_rows_per_batch"\s*=\s*2000/);
+    await expectDynamicSpecScreenshot(page);
 });
 
 test('PipelineDynamicSpec: updating a map patch preserves its unchanged fields', async ({
@@ -1734,9 +1766,10 @@ test('PipelineDynamicSpec: one patch groups several paths and leaves unchanged m
     ).not.toHaveAttribute('data-dynamic-spec-override');
     await page.getByRole('radio', {name: 'Patches', exact: true}).check();
     const rows = page.locator('.yt-flow-dynamic-spec__table tbody tr');
-    await expect(rows).toHaveCount(2);
-    await expect(rows.nth(0).locator('td').first()).toHaveText('/group/keep');
-    await expect(rows.nth(1).locator('td').first()).toHaveText('/group/added');
+    await expect(rows).toHaveCount(1);
+    await expect(rows.locator('td').first()).toHaveText(OWNER_VERSION);
+    await expect(rows.locator('td').nth(1)).toContainText('keep');
+    await expect(rows.locator('td').nth(1)).toContainText('added');
     await expect(rows.getByRole('button', {name: 'Cancel', exact: true})).toHaveCount(1);
     await rows.getByRole('button', {name: 'Update', exact: true}).click();
     await expect.poll(() => editorJSON(page)).toEqual(changes);

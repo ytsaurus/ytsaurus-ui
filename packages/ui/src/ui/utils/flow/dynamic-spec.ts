@@ -151,6 +151,26 @@ export function dynamicSpecValue(spec: unknown, path: Array<string>): unknown {
 
 export type DynamicSpecEdit = {path: Array<string>; value: unknown};
 
+export function dynamicSpecPatchDiff(patch: FlowDynamicSpecPatch): Record<string, unknown> {
+    let changes = patch.changes ?? [];
+    if (!changes.length && patch.path !== undefined) {
+        changes = [{path: patch.path, value: patch.value}];
+    }
+    const diff: Record<string, unknown> = Object.create(null);
+    for (const {path, value} of changes) {
+        const parts = dynamicSpecPathParts(path);
+        let node = diff;
+        for (const key of parts.slice(0, -1)) {
+            node[key] = Object.assign(Object.create(null), mapValue(node[key]));
+            node = node[key] as Record<string, unknown>;
+        }
+        if (parts.length) {
+            node[parts[parts.length - 1]] = value;
+        }
+    }
+    return diff;
+}
+
 export function dynamicSpecEdits(before: unknown, after: unknown): Array<DynamicSpecEdit> {
     const edits: Array<DynamicSpecEdit> = [];
     const visit = (left: unknown, right: unknown, path: Array<string>) => {

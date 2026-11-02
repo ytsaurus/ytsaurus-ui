@@ -11,6 +11,7 @@ import {
     failedDynamicSpecHandler,
     flatDynamicSpecHandler,
     legacyDynamicSpecHandler,
+    multiPathDynamicSpecHandler,
     unavailableDynamicSpecHandler,
 } from './mocks';
 
@@ -51,4 +52,9 @@ export const StaticSpecification: Story = {
 export const FlatPatches: Story = {
     ...Overrides,
     parameters: {msw: {handlers: [flatDynamicSpecHandler]}},
+};
+
+export const MultiPathPatches: Story = {
+    ...Overrides,
+    parameters: {msw: {handlers: [multiPathDynamicSpecHandler]}},
 };

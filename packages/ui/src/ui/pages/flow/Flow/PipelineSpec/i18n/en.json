@@ -11,6 +11,8 @@
   "field_version": "Version",
   "field_path": "Path",
   "field_value": "Value",
+  "field_patch-id": "Patch ID",
+  "field_diff": "Diff",
   "value_source-base": "Base",
   "value_source-default": "Default",
   "value_source-runtime": "Runtime",

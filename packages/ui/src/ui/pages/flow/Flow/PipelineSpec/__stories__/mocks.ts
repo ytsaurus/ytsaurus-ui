@@ -260,3 +260,46 @@ export const flatDynamicSpecHandler = http.put(
         (await dynamicSpecResponse(flatDynamicSpecSnapshot, request)) ??
         Response.json({version: flatDynamicSpecSnapshot.version}),
 );
+
+export const multiPathDynamicSpecSnapshot: FlowDynamicSpecSnapshot = {
+    ...flatDynamicSpecSnapshot,
+    base_spec: {computations: {noop: {batch_duration: 1000, max_rows_per_batch: 1000}}},
+    effective_spec: {computations: {noop: {batch_duration: 1002, max_rows_per_batch: 2000}}},
+    patches: [
+        {
+            patch_id: version,
+            path: '/computations/noop/batch_duration',
+            value: 1001,
+            comment: 'First patch',
+            timestamp: '2026-11-02T15:55:47Z',
+        },
+        {
+            patch_id: newer,
+            changes: [
+                {path: '/computations/noop/batch_duration', value: 1002},
+                {path: '/computations/noop/max_rows_per_batch', value: 2000},
+            ],
+            comment: 'Second patch',
+            timestamp: '2026-11-02T15:56:23Z',
+        },
+    ],
+    blame: {
+        '/computations/noop/batch_duration': {
+            patch_id: newer,
+            comment: 'Second patch',
+            timestamp: '2026-11-02T15:56:23Z',
+        },
+        '/computations/noop/max_rows_per_batch': {
+            patch_id: newer,
+            comment: 'Second patch',
+            timestamp: '2026-11-02T15:56:23Z',
+        },
+    },
+};
+
+export const multiPathDynamicSpecHandler = http.put(
+    '*/api/v4/flow_execute',
+    async ({request}) =>
+        (await dynamicSpecResponse(multiPathDynamicSpecSnapshot, request)) ??
+        Response.json({version: multiPathDynamicSpecSnapshot.version}),
+);
