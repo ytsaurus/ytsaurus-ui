@@ -246,6 +246,17 @@ function useResultColumns({
                             label={original.computationId ?? ''}
                             handlers={handlers}
                         />
+                        {original.computationId && (
+                            <RoutedLink
+                                aria-label={i18n('link_open-computation-page')}
+                                className={`${block('row-link')} ${block('hover-action')}`}
+                                href={handlers.resolveComputationLink(original.computationId)}
+                                title={i18n('link_open-computation-page')}
+                                view="secondary"
+                            >
+                                <Icon data={ArrowUpRightFromSquare} size={14} />
+                            </RoutedLink>
+                        )}
                     </TableCell>
                 ),
             },
@@ -287,16 +298,33 @@ function useResultColumns({
                 size: 170,
                 enableSorting: true,
                 accessorFn: (row) => row.stateName,
-                cell: ({row: {original}}) => (
-                    <TableCell>
-                        <FilterCellValue
-                            row={original}
-                            field="stateName"
-                            label={original.stateName}
-                            handlers={handlers}
-                        />
-                    </TableCell>
-                ),
+                cell: ({row: {original}}) => {
+                    const location = handlers.resolveStoragePath(original);
+                    return (
+                        <TableCell>
+                            <FilterCellValue
+                                row={original}
+                                field="stateName"
+                                label={original.stateName}
+                                handlers={handlers}
+                            />
+                            {location && (
+                                <RoutedLink
+                                    aria-label={i18n('link_open-backing-storage')}
+                                    className={`${block('row-link')} ${block('hover-action')}`}
+                                    href={genNavigationUrl({
+                                        cluster: location.cluster ?? cluster,
+                                        path: location.path,
+                                    })}
+                                    title={i18n('link_open-backing-storage')}
+                                    view="secondary"
+                                >
+                                    <Icon data={Database} size={14} />
+                                </RoutedLink>
+                            )}
+                        </TableCell>
+                    );
+                },
             },
             {
                 id: 'partition',
@@ -387,10 +415,9 @@ function useResultColumns({
         columns.push({
             id: 'actions',
             header: () => null,
-            size: 128,
+            size: 72,
             enableSorting: false,
             cell: ({row: {original}}) => {
-                const location = handlers.resolveStoragePath(original);
                 const expandable =
                     typeof original.value === 'object' &&
                     original.value !== null &&
@@ -398,31 +425,6 @@ function useResultColumns({
                 return (
                     <TableCell justifyContent="flex-end">
                         <Flex gap={1} alignItems="center" wrap="nowrap">
-                            {original.computationId && (
-                                <RoutedLink
-                                    aria-label={i18n('link_open-computation-page')}
-                                    className={`${block('row-link')} ${block('hover-action')}`}
-                                    href={handlers.resolveComputationLink(original.computationId)}
-                                    title={i18n('link_open-computation-page')}
-                                    view="secondary"
-                                >
-                                    <Icon data={ArrowUpRightFromSquare} size={14} />
-                                </RoutedLink>
-                            )}
-                            {location && (
-                                <RoutedLink
-                                    aria-label={i18n('link_open-backing-storage')}
-                                    className={`${block('row-link')} ${block('hover-action')}`}
-                                    href={genNavigationUrl({
-                                        cluster: location.cluster ?? cluster,
-                                        path: location.path,
-                                    })}
-                                    title={i18n('link_open-backing-storage')}
-                                    view="secondary"
-                                >
-                                    <Icon data={Database} size={14} />
-                                </RoutedLink>
-                            )}
                             {expandable && (
                                 <span className={block('hover-action')}>
                                     <ClickableAttributesButton
