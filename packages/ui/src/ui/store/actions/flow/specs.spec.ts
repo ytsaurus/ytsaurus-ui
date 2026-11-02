@@ -164,6 +164,31 @@ describe('Flow specs actions', () => {
         );
     });
 
+    it('keeps multi-path patches without a legacy path field', async () => {
+        const patch = {
+            patch_id: version,
+            changes: [
+                {path: '/group/a', value: 1},
+                {path: '/group/b', value: 2},
+            ],
+            comment: 'Change both fields',
+            timestamp: '2026-10-05T08:00:00Z',
+        };
+        jest.mocked(ytApiV4.flowExecute)
+            .mockResolvedValueOnce({version, patches: [patch]})
+            .mockResolvedValueOnce({spec, version, blame: {}})
+            .mockResolvedValueOnce({spec: {}, version});
+        const dispatch = jest.fn();
+        await loadFlowDynamicSpec(pipelinePath)(dispatch, jest.fn(), undefined);
+        expect(dispatch).toHaveBeenLastCalledWith(
+            dynamicSpecActions.onSuccess({
+                data: expect.objectContaining({
+                    dynamic_spec_state: expect.objectContaining({patches: [patch]}),
+                }),
+            }),
+        );
+    });
+
     it('retries when sequential reads observe different DynamicSpec versions', async () => {
         const nextVersion = {$type: 'int64' as const, $value: '1917083822153720178'};
         const patches = (revision: typeof version) => ({version: revision, patches: []});

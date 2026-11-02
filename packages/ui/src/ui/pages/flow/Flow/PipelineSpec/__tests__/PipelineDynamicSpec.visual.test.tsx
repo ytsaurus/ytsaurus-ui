@@ -338,7 +338,6 @@ async function applyEditor(page: Page, comment = 'Update value') {
 
 async function openParameterEditor(page: Page, path: string) {
     const value = page.getByRole('button', {name: `Edit ${path}`, exact: true}).first();
-    await value.scrollIntoViewIfNeeded();
     await value.click();
     await expect(page.getByRole('dialog').getByText(path, {exact: true})).toBeVisible();
 }
@@ -614,7 +613,7 @@ test('PipelineDynamicSpec: inherited map fields stay out of the draft and unchan
     await expect(hole.locator('td').nth(1)).toHaveText('99');
     await expect(hole.getByRole('button', {name: 'Cancel', exact: true})).toHaveCount(0);
     await parent.getByRole('button', {name: 'Edit /throttlers/ui_demo', exact: true}).click();
-    const warning = 'Only changed fields are saved in this patch.';
+    const warning = 'Editing the effective specification saves only changed fields.';
     await expect(page.getByRole('dialog')).toContainText(warning);
     await expect.poll(() => editorJSON(page)).toEqual(demoMap);
     await replaceEditorContent(page, JSON.stringify(demoMap));
@@ -937,10 +936,22 @@ test('PipelineDynamicSpec: Edit opens the root and saves a multi-path patch', as
     router,
 }) => {
     test.slow();
+    const spec = {
+        computations: {noop: {empty_batch_backoff: 250, max_rows_per_batch: 1001}},
+    };
+    const snapshot: FlowDynamicSpecSnapshot = {
+        ...dynamicSpecSnapshot,
+        base_spec: spec,
+        effective_spec: spec,
+        override_spec: {operation: 'inherit'},
+        patches: [],
+        blame: {},
+        audit: [],
+    };
     const mutations: unknown[] = [];
     await router.use(
         http.put('*/api/v4/flow_execute', async ({request}) => {
-            const read = await dynamicSpecResponse(dynamicSpecSnapshot, request);
+            const read = await dynamicSpecResponse(snapshot, request);
             if (read) return read;
             mutations.push(await request.json());
             return Response.json({version: exactVersion});
@@ -948,6 +959,11 @@ test('PipelineDynamicSpec: Edit opens the root and saves a multi-path patch', as
     );
     await mount(<PipelineDynamicSpecStories.Overrides />);
     await page.getByRole('button', {name: 'Edit dynamic specification'}).click();
+    await expect
+        .poll(() => editorJSON(page))
+        .toMatchObject({
+            computations: {noop: {empty_batch_backoff: 250, max_rows_per_batch: 1001}},
+        });
     const original = (await editorJSON(page)) as {
         computations: {noop: {empty_batch_backoff: number; max_rows_per_batch: number}};
     };
@@ -1275,7 +1291,7 @@ test('PipelineDynamicSpec: subtree editing preserves raw Unicode and binary sibl
         .click();
     let dialog = page.getByRole('dialog');
     await expect(
-        dialog.getByText('Only changed fields are saved in this patch.', {
+        dialog.getByText('Editing the effective specification saves only changed fields.', {
             exact: false,
         }),
     ).toBeVisible();

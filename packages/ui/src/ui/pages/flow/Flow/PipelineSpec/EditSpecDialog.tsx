@@ -60,6 +60,14 @@ export function EditSpecDialog({
     const text = React.useMemo(() => {
         return {value: JSON.stringify(spec, null, 4)};
     }, [spec]);
+    const initialValues = React.useMemo(
+        () => ({
+            text,
+            path,
+            ...(requireComment ? {comment: initialComment ?? ''} : {}),
+        }),
+        [text, path, requireComment, initialComment],
+    );
 
     const forceHelpUrl = UIFactory.docsUrls['flow:update_static_spec:force'];
     const updateError = (value: unknown, comment?: string) => {
@@ -88,11 +96,7 @@ export function EditSpecDialog({
                 visible
                 size="l"
                 onClose={onClose}
-                initialValues={{
-                    text,
-                    path,
-                    ...(requireComment ? {comment: initialComment ?? ''} : {}),
-                }}
+                initialValues={initialValues}
                 validate={
                     requireComment
                         ? (values) => {

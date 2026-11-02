@@ -3,7 +3,6 @@ import {type ThunkAction} from 'redux-thunk';
 import {
     type FlowDynamicSpecBlame,
     type FlowDynamicSpecOverride,
-    type FlowDynamicSpecPatch,
     type FlowDynamicSpecSnapshot,
     type FlowExecuteTypes,
 } from '../../../../shared/yt-types';
@@ -155,9 +154,7 @@ export function loadFlowDynamicSpec(pipeline_path: string): AsyncAction {
                         ? {}
                         : {
                               blame: effective.blame as FlowDynamicSpecBlame,
-                              patches: patches.patches.filter(
-                                  (patch): patch is FlowDynamicSpecPatch => 'path' in patch,
-                              ),
+                              patches: patches.patches,
                           }),
                     runtime_target_state:
                         effective.spec !== null &&
