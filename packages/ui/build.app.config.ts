@@ -1,23 +1,22 @@
-import {ServiceConfig} from '@gravity-ui/app-builder';
+import type {ServiceConfig} from '@gravity-ui/app-builder';
 import path from 'path';
 
 const analyzeBundle: Required<ServiceConfig>['client']['analyzeBundle'] = process.env
     .ANALYZE_BUNDLE as any;
 
-if (analyzeBundle) {
-    console.log({analyzeBundle}, '\n');
-}
-
 const debugPort = process.env.DEBUG_PORT ? Number(process.env.DEBUG_PORT) : undefined;
-if (debugPort) {
-    console.log({debugPort}, '\n');
-}
-
 const port = Number(process.env.LOCAL_DEV_PORT);
 
 const client: ServiceConfig['client'] = {
     bundler: 'rspack',
     javaScriptLoader: 'swc',
+    swc(config) {
+        if (config.jsc?.transform?.optimizer) {
+            // simplify breaks Monaco's process detection in production builds.
+            config.jsc.transform.optimizer.simplify = false;
+        }
+        return config;
+    },
     cache: true,
     watchOptions: {
         aggregateTimeout: 1000,

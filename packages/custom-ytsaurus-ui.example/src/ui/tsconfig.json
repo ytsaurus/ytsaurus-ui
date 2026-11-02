@@ -1,17 +1,18 @@
 {
   "extends": "../../tsconfig",
-  "include": ["../**/*", "@types/*"],
-  "exclude": ["../ytsaurus-ui.server/*"],
+  "include": ["**/*", "../@types/*", "../ytsaurus-ui.ui/**/*"],
+  "exclude": ["../ytsaurus-ui.ui/playwright-components/*"],
   "compilerOptions": {
     "module": "ESNext",
+    "moduleResolution": "bundler",
     "isolatedModules": true,
     "outDir": "../../dist/public/build",
     "baseUrl": ".",
     "paths": {
-      "*": ["./*", "../../node_modules/*"]
+      "@gravity-ui/graph/build/*": ["../../node_modules/@gravity-ui/graph/build/*"]
     },
     "jsx": "react",
-    "lib": ["ES2018", "DOM", "DOM.Iterable", "ES2019.Array", "WebWorker"],
+    "lib": ["ES2022", "DOM", "DOM.Iterable", "WebWorker"],
     "target": "ES2018"
   }
 }
