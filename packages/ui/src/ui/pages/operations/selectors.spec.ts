@@ -24,7 +24,7 @@ describe('DetailedOperationSelector specification patch', () => {
         const operation = makeOperation(1, 10);
 
         expect(operation.resultingSpec).toEqual({max_failed_job_count: 10});
-        expect(operation.totalFailedJobs).toBe(10);
+        expect(operation.maxFailedJobCount).toBe(10);
         expect(operation.failedJobsProgress).toBe(50);
     });
 
@@ -32,14 +32,14 @@ describe('DetailedOperationSelector specification patch', () => {
         const operation = makeOperation(10);
 
         expect(operation.resultingSpec).toEqual({max_failed_job_count: 10});
-        expect(operation.totalFailedJobs).toBe(10);
+        expect(operation.maxFailedJobCount).toBe(10);
     });
 
     it('preserves zero max_failed_job_count', () => {
         const operation = makeOperation(10, 0);
 
         expect(operation.resultingSpec).toEqual({max_failed_job_count: 0});
-        expect(operation.totalFailedJobs).toBe(0);
+        expect(operation.maxFailedJobCount).toBe(0);
         expect(operation.failedJobsProgress).toBe(0);
     });
 
