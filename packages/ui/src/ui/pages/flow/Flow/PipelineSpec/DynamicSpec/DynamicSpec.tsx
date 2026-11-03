@@ -311,7 +311,7 @@ export function DynamicSpec({
     );
     const [pending, setPending] = React.useState(false);
     const [error, setError] = React.useState<YTError>();
-    const [resetConfirmation, setResetConfirmation] = React.useState(false);
+    const [resetConfirmation, setResetConfirmation] = React.useState<Int64>();
     const run = async (action: () => Promise<void>) => {
         setError(undefined);
         setPending(true);
@@ -429,7 +429,7 @@ export function DynamicSpec({
                                 <Button
                                     view="outlined-danger"
                                     disabled={pending}
-                                    onClick={() => setResetConfirmation(true)}
+                                    onClick={() => setResetConfirmation(snapshot.version)}
                                 >
                                     {i18n('action_reset-overrides')}
                                 </Button>
@@ -835,8 +835,8 @@ export function DynamicSpec({
                     }}
                 />
             )}
-            {resetConfirmation && snapshot && (
-                <DialogWrapper open onClose={() => setResetConfirmation(false)}>
+            {resetConfirmation !== undefined && (
+                <DialogWrapper open onClose={() => setResetConfirmation(undefined)}>
                     <DialogWrapper.Header caption={i18n('title_reset-patches')} />
                     <DialogWrapper.Body>{i18n('context_reset-patches-confirm')}</DialogWrapper.Body>
                     <DialogWrapper.Footer
@@ -844,10 +844,10 @@ export function DynamicSpec({
                         textButtonCancel={i18n('action_keep-patches')}
                         propsButtonApply={{view: 'outlined-danger'}}
                         onClickButtonApply={() => {
-                            setResetConfirmation(false);
-                            run(() => onReset(snapshot.version));
+                            setResetConfirmation(undefined);
+                            run(() => onReset(resetConfirmation));
                         }}
-                        onClickButtonCancel={() => setResetConfirmation(false)}
+                        onClickButtonCancel={() => setResetConfirmation(undefined)}
                     />
                 </DialogWrapper>
             )}
