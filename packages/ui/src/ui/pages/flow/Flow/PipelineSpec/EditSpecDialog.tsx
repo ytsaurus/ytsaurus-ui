@@ -36,6 +36,7 @@ export function EditSpecDialog({
     allowCommentOnly,
     initialComment,
     title,
+    specCaption,
     help,
     specPath,
 }: {
@@ -52,6 +53,7 @@ export function EditSpecDialog({
     allowCommentOnly?: boolean;
     initialComment?: string;
     title?: string;
+    specCaption?: string;
     help?: string;
     specPath?: string;
 }) {
@@ -160,7 +162,7 @@ export function EditSpecDialog({
                         : []),
                     {
                         name: 'text',
-                        caption: i18n('specification'),
+                        caption: specCaption ?? i18n('specification'),
                         type: 'json',
                         validateFields: requireComment ? ['comment'] : undefined,
                         fullWidth: true,

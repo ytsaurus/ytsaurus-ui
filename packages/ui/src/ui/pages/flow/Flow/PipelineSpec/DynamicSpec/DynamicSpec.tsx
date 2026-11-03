@@ -1,12 +1,19 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {Alert, Button, SegmentedRadioGroup, Text} from '@gravity-ui/uikit';
+import {Alert, Button, Icon, SegmentedRadioGroup, Text, Tooltip} from '@gravity-ui/uikit';
+import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
+import TrashBinIcon from '@gravity-ui/icons/svgs/trash-bin.svg';
 import {type RenderRowExtraTools} from '@gravity-ui/react-unipika';
 
-import {type FlowDynamicSpecSnapshot, type Int64} from '../../../../../../shared/yt-types';
+import {
+    type FlowDynamicSpecPatch,
+    type FlowDynamicSpecSnapshot,
+    type Int64,
+} from '../../../../../../shared/yt-types';
 import {type YTError} from '../../../../../../@types/types';
 import {YTErrorBlock} from '../../../../../containers/Block/Block';
+import {DialogWrapper} from '../../../../../components/DialogWrapper/DialogWrapper';
 import {EditSpecDialog} from '../EditSpecDialog';
 import {Yson} from '../../../../../components/Yson/Yson';
 import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
@@ -20,9 +27,9 @@ import {
     dynamicSpecEffectiveSource,
     dynamicSpecOverrideEditor,
     dynamicSpecOverrideRows,
+    dynamicSpecPatchChangesFromDiff,
     dynamicSpecPatchDiff,
     dynamicSpecPath,
-    dynamicSpecPathParts,
     dynamicSpecValue,
     dynamicSpecVersion,
     encodeDynamicSpecValue,
@@ -52,28 +59,6 @@ function isMultilineValue(map: boolean, value: unknown): boolean {
             !Array.isArray(value) &&
             !('$type' in value))
     );
-}
-
-function parsePatchChanges(value: unknown): Array<DynamicSpecEdit> {
-    if (!Array.isArray(value) || !value.length) {
-        throw new Error(i18n('error_patch-changes'));
-    }
-    return value.map((change) => {
-        if (
-            !change ||
-            typeof change !== 'object' ||
-            typeof change.path !== 'string' ||
-            !change.path.startsWith('/') ||
-            !Object.hasOwn(change, 'value')
-        ) {
-            throw new Error(i18n('error_patch-changes'));
-        }
-        const path = dynamicSpecPathParts(change.path);
-        if (!path.length || path.some((part) => !part)) {
-            throw new Error(i18n('error_patch-changes'));
-        }
-        return {path, value: change.value};
-    });
 }
 
 function EditableValue({
@@ -317,7 +302,7 @@ export function DynamicSpec({
         value: unknown;
         version: Int64;
         patch?: string;
-        patchChanges?: boolean;
+        patchRecord?: FlowDynamicSpecPatch;
         comment?: string;
     }>();
     const editorValue = React.useMemo(
@@ -326,6 +311,7 @@ export function DynamicSpec({
     );
     const [pending, setPending] = React.useState(false);
     const [error, setError] = React.useState<YTError>();
+    const [resetConfirmation, setResetConfirmation] = React.useState(false);
     const run = async (action: () => Promise<void>) => {
         setError(undefined);
         setPending(true);
@@ -363,6 +349,7 @@ export function DynamicSpec({
         });
     };
     const editHelp =
+        !edit?.patchRecord &&
         edit?.value !== null &&
         typeof edit?.value === 'object' &&
         !Array.isArray(edit.value) &&
@@ -442,7 +429,7 @@ export function DynamicSpec({
                                 <Button
                                     view="outlined-danger"
                                     disabled={pending}
-                                    onClick={() => run(() => onReset(snapshot.version))}
+                                    onClick={() => setResetConfirmation(true)}
                                 >
                                     {i18n('action_reset-overrides')}
                                 </Button>
@@ -465,7 +452,7 @@ export function DynamicSpec({
                                             </th>
                                             <th>{i18n('field_comment')}</th>
                                             <th>{i18n('field_time')}</th>
-                                            <th>{i18n('field_patch')}</th>
+                                            <th>{i18n('field_actions')}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -514,58 +501,74 @@ export function DynamicSpec({
                                                               <div
                                                                   className={block('patch-actions')}
                                                               >
-                                                                  <Button
-                                                                      size="s"
-                                                                      view="flat"
-                                                                      disabled={pending}
-                                                                      data-owner-version={patchId}
-                                                                      title={i18n(
+                                                                  <Tooltip
+                                                                      content={i18n(
                                                                           'context_update-patch',
                                                                       )}
-                                                                      onClick={() => {
-                                                                          const multiPath = Boolean(
-                                                                              patch.changes?.length,
-                                                                          );
-                                                                          setEdit({
-                                                                              path: multiPath
-                                                                                  ? []
-                                                                                  : dynamicSpecPathParts(
-                                                                                        patch.path ??
-                                                                                            '',
-                                                                                    ),
-                                                                              value: multiPath
-                                                                                  ? patch.changes
-                                                                                  : patch.value,
-                                                                              patch: patchId,
-                                                                              patchChanges:
-                                                                                  multiPath,
-                                                                              comment:
-                                                                                  patch.comment ??
-                                                                                  '',
-                                                                              version:
-                                                                                  snapshot.version,
-                                                                          });
-                                                                      }}
                                                                   >
-                                                                      {i18n('action_update-patch')}
-                                                                  </Button>
-                                                                  <Button
-                                                                      size="s"
-                                                                      view="flat"
-                                                                      disabled={pending}
-                                                                      data-owner-version={patchId}
-                                                                      title={`${i18n('context_cancel-patch')}\n${i18n('field_version')}: ${patchId}`}
-                                                                      onClick={() =>
-                                                                          run(() =>
-                                                                              onCancelOwner(
-                                                                                  patch.patch_id,
-                                                                                  snapshot.version,
-                                                                              ),
-                                                                          )
-                                                                      }
+                                                                      <Button
+                                                                          size="s"
+                                                                          view="flat"
+                                                                          disabled={pending}
+                                                                          data-owner-version={
+                                                                              patchId
+                                                                          }
+                                                                          aria-label={`${i18n('action_update-patch')} ${patchId}`}
+                                                                          title={i18n(
+                                                                              'context_update-patch',
+                                                                          )}
+                                                                          onClick={() =>
+                                                                              setEdit({
+                                                                                  path: [],
+                                                                                  value: dynamicSpecPatchDiff(
+                                                                                      patch,
+                                                                                  ),
+                                                                                  patch: patchId,
+                                                                                  patchRecord:
+                                                                                      patch,
+                                                                                  comment:
+                                                                                      patch.comment ??
+                                                                                      '',
+                                                                                  version:
+                                                                                      snapshot.version,
+                                                                              })
+                                                                          }
+                                                                      >
+                                                                          <Icon
+                                                                              data={PencilIcon}
+                                                                              size={16}
+                                                                          />
+                                                                      </Button>
+                                                                  </Tooltip>
+                                                                  <Tooltip
+                                                                      content={i18n(
+                                                                          'context_cancel-patch',
+                                                                      )}
                                                                   >
-                                                                      {i18n('action_cancel-patch')}
-                                                                  </Button>
+                                                                      <Button
+                                                                          size="s"
+                                                                          view="flat"
+                                                                          disabled={pending}
+                                                                          data-owner-version={
+                                                                              patchId
+                                                                          }
+                                                                          aria-label={`${i18n('action_cancel-patch')} ${patchId}`}
+                                                                          title={`${i18n('context_cancel-patch')}\n${i18n('field_version')}: ${patchId}`}
+                                                                          onClick={() =>
+                                                                              run(() =>
+                                                                                  onCancelOwner(
+                                                                                      patch.patch_id,
+                                                                                      snapshot.version,
+                                                                                  ),
+                                                                              )
+                                                                          }
+                                                                      >
+                                                                          <Icon
+                                                                              data={TrashBinIcon}
+                                                                              size={16}
+                                                                          />
+                                                                      </Button>
+                                                                  </Tooltip>
                                                               </div>
                                                           </td>
                                                       </tr>
@@ -684,68 +687,74 @@ export function DynamicSpec({
                                                                               'patch-actions',
                                                                           )}
                                                                       >
-                                                                          <Button
-                                                                              size="s"
-                                                                              view="flat"
-                                                                              disabled={pending}
-                                                                              data-owner-version={
-                                                                                  owner
-                                                                              }
-                                                                              title={i18n(
+                                                                          <Tooltip
+                                                                              content={i18n(
                                                                                   'context_update-patch',
                                                                               )}
-                                                                              onClick={() => {
-                                                                                  const multiPath =
-                                                                                      Boolean(
-                                                                                          row.patch
-                                                                                              ?.changes
-                                                                                              ?.length,
-                                                                                      );
-                                                                                  setEdit({
-                                                                                      path: multiPath
-                                                                                          ? []
-                                                                                          : row.path,
-                                                                                      value: multiPath
-                                                                                          ? row
-                                                                                                .patch
-                                                                                                ?.changes
-                                                                                          : row.value,
-                                                                                      patch: patchId,
-                                                                                      patchChanges:
-                                                                                          multiPath,
-                                                                                      comment:
-                                                                                          audit?.comment ??
-                                                                                          '',
-                                                                                      version:
-                                                                                          snapshot.version,
-                                                                                  });
-                                                                              }}
                                                                           >
-                                                                              {i18n(
-                                                                                  'action_update-patch',
+                                                                              <Button
+                                                                                  size="s"
+                                                                                  view="flat"
+                                                                                  disabled={pending}
+                                                                                  data-owner-version={
+                                                                                      owner
+                                                                                  }
+                                                                                  aria-label={`${i18n('action_update-patch')} ${patchId}`}
+                                                                                  title={i18n(
+                                                                                      'context_update-patch',
+                                                                                  )}
+                                                                                  onClick={() =>
+                                                                                      setEdit({
+                                                                                          path: row.path,
+                                                                                          value: row.value,
+                                                                                          patch: patchId,
+                                                                                          comment:
+                                                                                              audit?.comment ??
+                                                                                              '',
+                                                                                          version:
+                                                                                              snapshot.version,
+                                                                                      })
+                                                                                  }
+                                                                              >
+                                                                                  <Icon
+                                                                                      data={
+                                                                                          PencilIcon
+                                                                                      }
+                                                                                      size={16}
+                                                                                  />
+                                                                              </Button>
+                                                                          </Tooltip>
+                                                                          <Tooltip
+                                                                              content={i18n(
+                                                                                  'context_cancel-patch',
                                                                               )}
-                                                                          </Button>
-                                                                          <Button
-                                                                              size="s"
-                                                                              view="flat"
-                                                                              disabled={pending}
-                                                                              data-owner-version={
-                                                                                  owner
-                                                                              }
-                                                                              title={`${i18n('context_cancel-patch')}\n${i18n('field_version')}: ${owner}`}
-                                                                              onClick={() =>
-                                                                                  run(() =>
-                                                                                      onCancelOwner(
-                                                                                          patchId,
-                                                                                          snapshot.version,
-                                                                                      ),
-                                                                                  )
-                                                                              }
                                                                           >
-                                                                              {i18n(
-                                                                                  'action_cancel-patch',
-                                                                              )}
-                                                                          </Button>
+                                                                              <Button
+                                                                                  size="s"
+                                                                                  view="flat"
+                                                                                  disabled={pending}
+                                                                                  data-owner-version={
+                                                                                      owner
+                                                                                  }
+                                                                                  aria-label={`${i18n('action_cancel-patch')} ${patchId}`}
+                                                                                  title={`${i18n('context_cancel-patch')}\n${i18n('field_version')}: ${owner}`}
+                                                                                  onClick={() =>
+                                                                                      run(() =>
+                                                                                          onCancelOwner(
+                                                                                              patchId,
+                                                                                              snapshot.version,
+                                                                                          ),
+                                                                                      )
+                                                                                  }
+                                                                              >
+                                                                                  <Icon
+                                                                                      data={
+                                                                                          TrashBinIcon
+                                                                                      }
+                                                                                      size={16}
+                                                                                  />
+                                                                              </Button>
+                                                                          </Tooltip>
                                                                       </div>
                                                                   )}
                                                               </td>
@@ -767,7 +776,7 @@ export function DynamicSpec({
                     key={JSON.stringify([edit.path, dynamicSpecVersion(edit.version), edit.patch])}
                     path={pipelinePath}
                     specPath={
-                        edit.patchChanges
+                        edit.patchRecord
                             ? undefined
                             : decodeDynamicSpecText(dynamicSpecPath(edit.path))
                     }
@@ -780,19 +789,22 @@ export function DynamicSpec({
                     allowCommentOnly={edit.patch !== undefined}
                     initialComment={edit.comment}
                     title={edit.patch === undefined ? undefined : i18n('title_update-patch')}
+                    specCaption={edit.patchRecord ? i18n('field_diff') : undefined}
                     help={editHelp}
                     onClose={() => setEdit(undefined)}
                     onSpecApply={(value, {comment}) => {
                         const encoded = encodeDynamicSpecValue(value, edit.value ?? null);
                         const changed = dynamicSpecEdits(edit.value ?? null, encoded).length > 0;
-                        if (edit.patchChanges && edit.patch !== undefined) {
+                        if (edit.patchRecord && edit.patch !== undefined) {
+                            const changes = dynamicSpecPatchChangesFromDiff(
+                                edit.patchRecord,
+                                encoded,
+                            );
+                            if (!changes.length) {
+                                throw new Error(i18n('error_patch-changes'));
+                            }
                             return changed
-                                ? onUpdatePatch(
-                                      edit.patch,
-                                      parsePatchChanges(encoded),
-                                      comment ?? '',
-                                      edit.version,
-                                  )
+                                ? onUpdatePatch(edit.patch, changes, comment ?? '', edit.version)
                                 : onUpdateComment(edit.patch, comment ?? '', edit.version);
                         }
                         if (edit.patch !== undefined) {
@@ -822,6 +834,22 @@ export function DynamicSpec({
                         return changed ? onSet(changes, edit.version, comment) : Promise.resolve();
                     }}
                 />
+            )}
+            {resetConfirmation && snapshot && (
+                <DialogWrapper open onClose={() => setResetConfirmation(false)}>
+                    <DialogWrapper.Header caption={i18n('title_reset-patches')} />
+                    <DialogWrapper.Body>{i18n('context_reset-patches-confirm')}</DialogWrapper.Body>
+                    <DialogWrapper.Footer
+                        textButtonApply={i18n('action_reset-overrides')}
+                        textButtonCancel={i18n('action_keep-patches')}
+                        propsButtonApply={{view: 'outlined-danger'}}
+                        onClickButtonApply={() => {
+                            setResetConfirmation(false);
+                            run(() => onReset(snapshot.version));
+                        }}
+                        onClickButtonCancel={() => setResetConfirmation(false)}
+                    />
+                </DialogWrapper>
             )}
         </div>
     );

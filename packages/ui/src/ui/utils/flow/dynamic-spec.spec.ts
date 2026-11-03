@@ -8,6 +8,7 @@ import {
     dynamicSpecHasComment,
     dynamicSpecOverrideEditor,
     dynamicSpecOverrideRows,
+    dynamicSpecPatchChangesFromDiff,
     dynamicSpecPatchDiff,
     dynamicSpecPath,
     dynamicSpecPathParts,
@@ -526,6 +527,37 @@ describe('flat dynamic spec patches', () => {
                 value: 5,
             }),
         ).toEqual({'a/b': {'c\\d': 5}});
+    });
+
+    it('edits nested patch diffs while preserving original set paths', () => {
+        const mapPatch = {...parent, path: '/group', value: {keep: 2, added: 4}};
+        expect(dynamicSpecPatchChangesFromDiff(mapPatch, {group: {keep: 2, added: 5}})).toEqual([
+            {path: ['group'], value: {keep: 2, added: 5}},
+        ]);
+
+        const severalPaths = {
+            ...parent,
+            changes: [
+                {path: '/group/keep', value: 3},
+                {path: '/group/added', value: 4},
+            ],
+        };
+        expect(
+            dynamicSpecPatchChangesFromDiff(severalPaths, {
+                group: {keep: 5, extra: {}, added: 4},
+            }),
+        ).toEqual([
+            {path: ['group', 'keep'], value: 5},
+            {path: ['group', 'extra'], value: {}},
+            {path: ['group', 'added'], value: 4},
+        ]);
+        expect(dynamicSpecPatchChangesFromDiff(severalPaths, {group: {added: 4}})).toEqual([
+            {path: ['group', 'added'], value: 4},
+        ]);
+        expect(dynamicSpecPatchChangesFromDiff(severalPaths, {})).toEqual([]);
+        expect(
+            dynamicSpecPatchChangesFromDiff(severalPaths, [{path: '/group/keep', value: 5}]),
+        ).toEqual([]);
     });
 
     it('preserves application order and original parent values, including shadowed patches', () => {

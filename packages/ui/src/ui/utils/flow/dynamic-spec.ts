@@ -171,6 +171,37 @@ export function dynamicSpecPatchDiff(patch: FlowDynamicSpecPatch): Record<string
     return diff;
 }
 
+export function dynamicSpecPatchChangesFromDiff(
+    patch: FlowDynamicSpecPatch,
+    diff: unknown,
+): Array<DynamicSpecEdit> {
+    const originalChanges =
+        patch.changes?.length || patch.path === undefined
+            ? (patch.changes ?? [])
+            : [{path: patch.path, value: patch.value}];
+    const originalPaths = new Set(
+        originalChanges.map(({path}) => dynamicSpecPath(dynamicSpecPathParts(path))),
+    );
+    const changes: Array<DynamicSpecEdit> = [];
+    const visit = (value: unknown, path: Array<string>) => {
+        const map = mapValue(value);
+        if (
+            path.length &&
+            (originalPaths.has(dynamicSpecPath(path)) || !map || !Object.keys(map).length)
+        ) {
+            changes.push({path, value});
+            return;
+        }
+        for (const [key, child] of Object.entries(map ?? {})) {
+            visit(child, [...path, key]);
+        }
+    };
+    if (mapValue(diff)) {
+        visit(diff, []);
+    }
+    return changes;
+}
+
 export function dynamicSpecEdits(before: unknown, after: unknown): Array<DynamicSpecEdit> {
     const edits: Array<DynamicSpecEdit> = [];
     const visit = (left: unknown, right: unknown, path: Array<string>) => {
