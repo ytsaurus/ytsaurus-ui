@@ -47,10 +47,13 @@ export function Tree({
                 'local::test-cluster::accounts::favourites': favourites.map((path) => ({path})),
             },
         });
-        dispatch(setActiveAccount(activeAccount));
         dispatch(changeContentFilter('nodes'));
         setReady(true);
-    }, [dispatch, initialMode, activeAccount, favourites]);
+    }, [dispatch, initialMode, favourites]);
+
+    useLayoutEffect(() => {
+        dispatch(setActiveAccount(activeAccount));
+    }, [dispatch, activeAccount]);
 
     useLayoutEffect(() => {
         dispatch(setAccountsAbcServiceFilter(undefined, abcSlug));

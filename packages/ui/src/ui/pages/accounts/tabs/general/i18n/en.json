@@ -18,7 +18,5 @@
   "field_total": "Total",
   "context_account-without-use": "No \"Use\" permission. Shown as a parent of an account with this permission.",
   "context_account-not-in-favourites": "Not in Favourites. Shown as a parent of a favourite account.",
-  "context_account-hidden-children": "Totals include all child accounts, not just those shown.",
-  "context_account-outside-favourites": "Not in Favourites.",
-  "context_account-no-use": "No \"Use\" permission."
+  "context_account-hidden-children": "Totals include all child accounts, not just those shown."
 }

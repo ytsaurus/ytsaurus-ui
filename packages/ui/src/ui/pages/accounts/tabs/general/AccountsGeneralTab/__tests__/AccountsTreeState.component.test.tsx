@@ -173,6 +173,7 @@ for (const mode of ['all', 'usable'] as const) {
         }
         const component = await mount(<Tree initialMode={mode} activeAccount="parent" />);
         await expect(row(component, 'grandchild').getByText('5', {exact: true})).toBeVisible();
+        await expect(component.getByRole('radiogroup')).toHaveCount(0);
 
         await test.step('Refresh preserves a manually collapsed child', async () => {
             await component.getByTestId('account-tree-toggle-child').click();
