@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.32.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.31.0...ui-v3.32.0) (2026-11-03)
+
+
+### Features
+
+* **Clusters:** exclude configured clusters from browser config [YTFRONT-6126] ([87dc4fa](https://github.com/ytsaurus/ytsaurus-ui/commit/87dc4fab8b3ee7f75eea9a3c59906f37ac560841))
+* **Operations:** add pinnable job timeline details panel [YTFRONT-6116] ([f853e65](https://github.com/ytsaurus/ytsaurus-ui/commit/f853e654ff1c23a957301e4a8ee8f9385acf8f30))
+
+
+### Bug Fixes
+
+* **OperationProgress:** use failure limit for failed job counters [YTFRONT-5610] ([8c14997](https://github.com/ytsaurus/ytsaurus-ui/commit/8c14997d2fa0892784e9661225b744bb2483b371))
+
 ## [3.31.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.30.1...ui-v3.31.0) (2026-10-28)
 
 
