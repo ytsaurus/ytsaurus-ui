@@ -1,5 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
+import moment from 'moment';
 
 import {Alert, Button, Icon, SegmentedRadioGroup, Text, Tooltip} from '@gravity-ui/uikit';
 import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
@@ -15,6 +16,7 @@ import {type YTError} from '../../../../../../@types/types';
 import {YTErrorBlock} from '../../../../../containers/Block/Block';
 import {DialogWrapper} from '../../../../../components/DialogWrapper/DialogWrapper';
 import {EditSpecDialog} from '../EditSpecDialog';
+import {Markdown} from '../../../../../components/Markdown/Markdown';
 import {Yson} from '../../../../../components/Yson/Yson';
 import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
 import {type UnipikaSettings} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
@@ -41,6 +43,10 @@ import './DynamicSpec.scss';
 
 const block = cn('yt-flow-dynamic-spec');
 type SpecView = 'effective' | 'base' | 'override';
+
+function formatTimestamp(timestamp: string) {
+    return moment(timestamp).local().format('YYYY-MM-DD HH:mm:ss');
+}
 
 function hasSelectedText(element: HTMLElement) {
     const selection = window.getSelection();
@@ -271,7 +277,7 @@ function renderSource(source: DynamicSpecSource, compact = false) {
                         <span className={block('comment')}>{source.audit.comment}</span>
                     )}
                     <time dateTime={source.audit.timestamp}>
-                        {source.audit.timestamp.slice(0, 19).replace('T', ' ')} UTC
+                        {formatTimestamp(source.audit.timestamp)}
                     </time>
                 </>
             )}
@@ -476,7 +482,7 @@ export function DynamicSpec({
                                                                       )}
                                                                       settings={{
                                                                           ...settings,
-                                                                          format: 'yson',
+                                                                          format: 'json',
                                                                           compact: false,
                                                                           break: true,
                                                                       }}
@@ -484,17 +490,18 @@ export function DynamicSpec({
                                                               </div>
                                                           </td>
                                                           <td className={block('comment')}>
-                                                              {patch.comment || '—'}
+                                                              {patch.comment ? (
+                                                                  <Markdown text={patch.comment} />
+                                                              ) : (
+                                                                  '—'
+                                                              )}
                                                           </td>
                                                           <td className={block('time')}>
                                                               <time
                                                                   dateTime={patch.timestamp}
                                                                   title={patch.timestamp}
                                                               >
-                                                                  {patch.timestamp
-                                                                      .slice(0, 19)
-                                                                      .replace('T', ' ')}{' '}
-                                                                  UTC
+                                                                  {formatTimestamp(patch.timestamp)}
                                                               </time>
                                                           </td>
                                                           <td>
@@ -651,7 +658,13 @@ export function DynamicSpec({
                                                                   rowSpan={patchRowSpan}
                                                                   className={block('comment')}
                                                               >
-                                                                  {audit?.comment || '—'}
+                                                                  {audit?.comment ? (
+                                                                      <Markdown
+                                                                          text={audit.comment}
+                                                                      />
+                                                                  ) : (
+                                                                      '—'
+                                                                  )}
                                                               </td>
                                                           )}
                                                           {showPatchMeta && (
@@ -664,13 +677,9 @@ export function DynamicSpec({
                                                                           dateTime={audit.timestamp}
                                                                           title={audit.timestamp}
                                                                       >
-                                                                          {audit.timestamp
-                                                                              .slice(0, 19)
-                                                                              .replace(
-                                                                                  'T',
-                                                                                  ' ',
-                                                                              )}{' '}
-                                                                          UTC
+                                                                          {formatTimestamp(
+                                                                              audit.timestamp,
+                                                                          )}
                                                                       </time>
                                                                   ) : (
                                                                       '—'

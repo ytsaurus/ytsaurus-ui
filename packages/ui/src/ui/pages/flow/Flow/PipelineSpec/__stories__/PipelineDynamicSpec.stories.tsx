@@ -11,6 +11,7 @@ import {
     failedDynamicSpecHandler,
     flatDynamicSpecHandler,
     legacyDynamicSpecHandler,
+    markdownHandler,
     multiPathDynamicSpecHandler,
     unavailableDynamicSpecHandler,
 } from './mocks';
@@ -32,17 +33,19 @@ export const Overrides: Story = {
             <FlowDynamicSpec {...args} />
         </div>
     ),
-    parameters: {msw: {handlers: [dynamicSpecHandler]}},
+    parameters: {msw: {handlers: [dynamicSpecHandler, markdownHandler]}},
 };
 
 export const UnsupportedController: Story = {
     ...Overrides,
-    parameters: {msw: {handlers: [unavailableDynamicSpecHandler, legacyDynamicSpecHandler]}},
+    parameters: {
+        msw: {handlers: [unavailableDynamicSpecHandler, legacyDynamicSpecHandler, markdownHandler]},
+    },
 };
 
 export const RequestError: Story = {
     ...Overrides,
-    parameters: {msw: {handlers: [failedDynamicSpecHandler]}},
+    parameters: {msw: {handlers: [failedDynamicSpecHandler, markdownHandler]}},
 };
 
 export const StaticSpecification: Story = {
@@ -51,10 +54,10 @@ export const StaticSpecification: Story = {
 
 export const FlatPatches: Story = {
     ...Overrides,
-    parameters: {msw: {handlers: [flatDynamicSpecHandler]}},
+    parameters: {msw: {handlers: [flatDynamicSpecHandler, markdownHandler]}},
 };
 
 export const MultiPathPatches: Story = {
     ...Overrides,
-    parameters: {msw: {handlers: [multiPathDynamicSpecHandler]}},
+    parameters: {msw: {handlers: [multiPathDynamicSpecHandler, markdownHandler]}},
 };

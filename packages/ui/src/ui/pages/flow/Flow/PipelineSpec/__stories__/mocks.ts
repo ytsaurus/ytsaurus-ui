@@ -6,6 +6,17 @@ import {
 } from '../../../../../../shared/yt-types';
 
 export const PIPELINE_PATH = '//home/test/flow';
+export const markdownHandler = http.post('*/api/markdown-to-html', async ({request}) => {
+    const {text} = (await request.json()) as {text: string};
+    const html =
+        text === 'Second patch [YTFLOW-947](https://st.yandex-team.ru/YTFLOW-947)'
+            ? '<p>Second patch <a href="https://st.yandex-team.ru/YTFLOW-947">YTFLOW-947</a></p>'
+            : `<p>${text
+                  .replaceAll('&', '&amp;')
+                  .replaceAll('<', '&lt;')
+                  .replaceAll('>', '&gt;')}</p>`;
+    return Response.json({result: {html}});
+});
 export const OWNER_VERSION = '1923189626042933625';
 export const NEWER_VERSION = '1923307469208162014';
 export const MAP_VERSION = '1923307469208162013';
@@ -279,7 +290,7 @@ export const multiPathDynamicSpecSnapshot: FlowDynamicSpecSnapshot = {
                 {path: '/computations/noop/batch_duration', value: 1002},
                 {path: '/computations/noop/max_rows_per_batch', value: 2000},
             ],
-            comment: 'Second patch',
+            comment: 'Second patch [YTFLOW-947](https://st.yandex-team.ru/YTFLOW-947)',
             timestamp: '2026-11-02T15:56:23Z',
         },
     ],

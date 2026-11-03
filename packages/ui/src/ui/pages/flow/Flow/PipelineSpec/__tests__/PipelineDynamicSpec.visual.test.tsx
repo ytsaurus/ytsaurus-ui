@@ -22,9 +22,14 @@ import {
     failedDynamicSpecHandler,
     flatDynamicSpecSnapshot,
     legacyDynamicSpecHandler,
+    markdownHandler,
     multiPathDynamicSpecHandler,
     unavailableDynamicSpecHandler,
 } from '../__stories__/mocks';
+
+test.beforeEach(async ({router}) => {
+    await router.use(markdownHandler);
+});
 
 async function expectDynamicSpecScreenshot(
     page: Page,
@@ -229,7 +234,7 @@ test('PipelineDynamicSpec: base effective and override provenance', async ({
     await expect(mapPatch.locator('td').nth(2)).toHaveText(
         'Демо override для проверки вкладки Dynamic Spec.',
     );
-    await expect(mapPatch.locator('td').nth(3)).toHaveText('2026-10-05 08:48:47 UTC');
+    await expect(mapPatch.locator('td').nth(3)).toHaveText('2026-10-05 08:48:47');
     await expect(page.locator('.yt-flow-dynamic-spec__patch')).toHaveCount(0);
     await expect(
         page.locator('.yt-flow-dynamic-spec__patches').getByRole('button', {name: /^Cancel /}),
@@ -453,7 +458,7 @@ test('PipelineDynamicSpec: separate audit columns keep multiline map values clic
         has: page.getByRole('button', {name: 'Edit /throttlers/ui_demo', exact: true}),
     });
     await expect(row.locator('td').nth(2)).toHaveText('Map demo: limit and period cancel together');
-    await expect(row.locator('td').nth(3)).toHaveText('2026-10-05 17:01:04 UTC');
+    await expect(row.locator('td').nth(3)).toHaveText('2026-10-05 17:01:04');
     const value = row.getByRole('button', {name: 'Edit /throttlers/ui_demo', exact: true});
     expect(await value.locator('pre').innerText()).toMatch(/\n\s*"period"/);
     await value.locator('.number, .int64').click();
@@ -1697,7 +1702,7 @@ test('PipelineDynamicSpec: flat patches preserve order values and explicit patch
     });
 });
 
-test('PipelineDynamicSpec: patch table shows nested YSON diff for multi-path changes', async ({
+test('PipelineDynamicSpec: patch table shows nested JSON diff for multi-path changes', async ({
     mount,
     page,
     router,
@@ -1720,13 +1725,36 @@ test('PipelineDynamicSpec: patch table shows nested YSON diff for multi-path cha
     await expect(rows.nth(1).locator('td').first()).toHaveText(NEWER_VERSION);
     const firstDiff = await rows.nth(0).locator('td').nth(1).locator('pre').innerText();
     const secondDiff = await rows.nth(1).locator('td').nth(1).locator('pre').innerText();
-    expect(firstDiff).toMatch(/"computations"\s*=\s*\{/);
-    expect(firstDiff).toMatch(/"batch_duration"\s*=\s*1001/);
+    expect(firstDiff).toMatch(/"computations"\s*:\s*\{/);
+    expect(firstDiff).toMatch(/"batch_duration"\s*:\s*1001/);
     expect(firstDiff).not.toContain('max_rows_per_batch');
-    expect(secondDiff).toMatch(/"computations"\s*=\s*\{/);
-    expect(secondDiff).toMatch(/"batch_duration"\s*=\s*1002/);
-    expect(secondDiff).toMatch(/"max_rows_per_batch"\s*=\s*2000/);
+    expect(secondDiff).toMatch(/"computations"\s*:\s*\{/);
+    expect(secondDiff).toMatch(/"batch_duration"\s*:\s*1002/);
+    expect(secondDiff).toMatch(/"max_rows_per_batch"\s*:\s*2000/);
+    await expect(rows.nth(1).getByRole('link', {name: 'YTFLOW-947'})).toHaveAttribute(
+        'href',
+        'https://st.yandex-team.ru/YTFLOW-947',
+    );
     await expectDynamicSpecScreenshot(page);
+});
+
+test.describe('PipelineDynamicSpec: local patch time', () => {
+    test.use({timezoneId: 'Europe/Moscow'});
+
+    test('shows browser-local time and preserves the UTC timestamp', async ({
+        mount,
+        page,
+        router,
+    }) => {
+        await router.use(multiPathDynamicSpecHandler);
+        await mount(<PipelineDynamicSpecStories.MultiPathPatches />);
+        await page.getByRole('radio', {name: 'Patches', exact: true}).check();
+
+        const time = page.locator('.yt-flow-dynamic-spec__table tbody tr').nth(1).locator('time');
+        await expect(time).toHaveText('2026-11-02 18:56:23');
+        await expect(time).toHaveAttribute('dateTime', '2026-11-02T15:56:23Z');
+        await expect(time).toHaveAttribute('title', '2026-11-02T15:56:23Z');
+    });
 });
 
 test('PipelineDynamicSpec: updating a map patch preserves its unchanged fields', async ({
