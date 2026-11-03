@@ -190,6 +190,7 @@ export class AccountsGeneralTabBase extends Component {
             activeMediumFilter,
             activeContentModeFilter,
             accountsVisibilityMode,
+            activeAccount,
             abcServiceFilter: {slug, id} = {},
         } = this.props;
 
@@ -199,13 +200,15 @@ export class AccountsGeneralTabBase extends Component {
 
         return (
             <div className={b('toolbar', 'elements-section')}>
-                <Flex className="elements-toolbar__component" alignItems="center" gap={2}>
-                    <CustomRadioButton
-                        onChange={this.onAccountsVisibilityModeChange}
-                        {...ACCOUNTS_VISIBILITY_MODE_PROPS}
-                        value={accountsVisibilityMode}
-                    />
-                </Flex>
+                {!activeAccount && (
+                    <Flex className="elements-toolbar__component" alignItems="center" gap={2}>
+                        <CustomRadioButton
+                            onChange={this.onAccountsVisibilityModeChange}
+                            {...ACCOUNTS_VISIBILITY_MODE_PROPS}
+                            value={accountsVisibilityMode}
+                        />
+                    </Flex>
+                )}
                 <div className={b('name-filter', 'elements-toolbar__component')}>
                     <Filter
                         hasClear
@@ -312,18 +315,13 @@ export class AccountsGeneralTabBase extends Component {
 
                 const isInFavourites = favouriteAccountsSet.has(item.name);
                 const isContextParent =
-                    (accountsVisibilityMode === 'usable' && !usableAccountsSet.has(item.name)) ||
-                    (accountsVisibilityMode === 'favourites' && !isInFavourites);
-                let parentHint =
+                    !activeAccount &&
+                    ((accountsVisibilityMode === 'usable' && !usableAccountsSet.has(item.name)) ||
+                        (accountsVisibilityMode === 'favourites' && !isInFavourites));
+                const parentHint =
                     accountsVisibilityMode === 'favourites'
                         ? i18n('context_account-not-in-favourites')
                         : i18n('context_account-without-use');
-                if (activeAccount) {
-                    parentHint =
-                        accountsVisibilityMode === 'favourites'
-                            ? i18n('context_account-outside-favourites')
-                            : i18n('context_account-no-use');
-                }
                 const hint = [
                     isContextParent ? parentHint : '',
                     treeItem.hasHiddenChildren ? i18n('context_account-hidden-children') : '',

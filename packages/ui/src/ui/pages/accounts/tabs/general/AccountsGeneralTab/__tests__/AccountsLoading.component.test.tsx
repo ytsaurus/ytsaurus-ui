@@ -551,15 +551,23 @@ for (const mode of ['usable', 'favourites'] as const) {
                 row(component, 'Aggregation').getByText('90', {exact: true}),
             ).toBeVisible();
             await expect(row(component, 'parent').getByLabel(/Totals include/)).toHaveCount(0);
+            await expect(component.getByLabel(/No "Use" permission|Not in Favourites/)).toHaveCount(
+                0,
+            );
+            const childColor = await row(component, 'child')
+                .getByRole('link', {name: 'child', exact: true})
+                .evaluate((element) => getComputedStyle(element).color);
             await expect(
-                row(component, 'hidden').getByLabel(
-                    mode === 'usable' ? 'No "Use" permission.' : 'Not in Favourites.',
-                    {exact: true},
-                ),
-            ).toBeVisible();
+                row(component, 'hidden').getByRole('link', {name: 'hidden', exact: true}),
+            ).toHaveCSS('color', childColor);
+            await expect(component.getByTestId('account-favourite-hidden')).toBeEnabled();
             expect(ytApiRequests.some(({id}) => id === YTApiId.accountsSelectedMetadata)).toBe(
                 false,
             );
+        });
+
+        await test.step('Visibility mode control is absent inside the selected subtree', async () => {
+            await expect(component.getByRole('radiogroup')).toHaveCount(0);
         });
         await test.step('Name filtering still works inside the selected subtree', async () => {
             await component.getByPlaceholder('Account...').fill('grandchild');
@@ -580,6 +588,15 @@ for (const mode of ['usable', 'favourites'] as const) {
                 }),
             );
             await component.update(<Tree initialMode={mode} />);
+            for (const name of ['All', 'Usable', 'Favourites']) {
+                await expect(component.getByRole('radio', {name, exact: true})).toBeEnabled();
+            }
+            await expect(
+                component.getByRole('radio', {
+                    name: mode === 'usable' ? 'Usable' : 'Favourites',
+                    exact: true,
+                }),
+            ).toBeChecked();
             await expect(row(component, 'child').getByText('11', {exact: true})).toBeVisible();
             await expect(row(component, 'grandchild')).toHaveCount(0);
             await expect(row(component, 'hidden')).toHaveCount(0);
