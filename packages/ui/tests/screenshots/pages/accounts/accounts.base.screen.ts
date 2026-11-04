@@ -160,34 +160,35 @@ test('Accounts - Editor', async ({page}) => {
     await page.goto(makeClusterUrl(`accounts/general?account=account-for-e2e`));
 
     await accounts(page).showEditor('account-for-e2e');
+    const dialog = page.getByRole('dialog');
 
     await test.step('General', async () => {
-        await expect(page).toHaveScreenshot();
+        await expect(dialog).toHaveScreenshot();
     });
 
     await test.step('Disk space', async () => {
         await accounts(page).selectEditorPage('Disk space');
-        await expect(page).toHaveScreenshot();
+        await expect(dialog).toHaveScreenshot();
     });
 
     await test.step('Nodes', async () => {
         await accounts(page).selectEditorPage('Nodes');
-        await expect(page).toHaveScreenshot();
+        await expect(dialog).toHaveScreenshot();
     });
 
     await test.step('Chunks', async () => {
         await accounts(page).selectEditorPage('Chunks');
-        await expect(page).toHaveScreenshot();
+        await expect(dialog).toHaveScreenshot();
     });
 
     await test.step('Master memory', async () => {
         await accounts(page).selectEditorPage('Master memory');
-        await expect(page).toHaveScreenshot();
+        await expect(dialog).toHaveScreenshot();
     });
 
     await test.step('Delete', async () => {
         await accounts(page).selectEditorPage('Delete');
-        await expect(page).toHaveScreenshot();
+        await expect(dialog).toHaveScreenshot();
     });
 });
 
