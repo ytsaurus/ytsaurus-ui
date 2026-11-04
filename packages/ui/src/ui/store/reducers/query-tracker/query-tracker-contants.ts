@@ -13,6 +13,7 @@ export const UPDATE_QUERY = 'query-tracker/UPDATE_QUERY';
 export const UPDATE_DRAFT = 'query-tracker/UPDATE_DRAFT';
 export const UPDATE_QUERY_ITEM = 'query-tracker/UPDATE_QUERY_ITEM';
 export const SET_QUERY_LOAD_ERROR = 'query-tracker/SET_QUERY_LOAD_ERROR';
+export const SET_QUERY_FILES = 'query-tracker/SET_QUERY_FILES';
 export const SET_QUERY_PATCH = 'query-tracker/SET_QUERY_PATCH';
 export const SET_QUERY_PARAMS = 'query-tracker/SET_QUERY_PARAMS';
 export const SET_QUERY_CLIQUE_LOADING = 'query-tracker/SET_QUERY_CLIQUE_LOADING';
@@ -29,3 +30,7 @@ export const SET_QUERY_RESULTS_PAGE = 'query-tracker/SET_QUERY_RESULTS_PAGE';
 export const SET_QUERY_RESULTS_ERROR = 'query-tracker/SET_QUERY_RESULTS_ERROR';
 export const SET_QUERY_RESULTS_ERRORS = 'query-tracker/SET_QUERY_RESULTS_ERRORS';
 export const SET_QUERY_RESULTS_SETTINGS = 'query-tracker/SET_QUERY_RESULTS_SETTINGS';
+
+export const SET_QUERY_SUBMITTING = 'query-tracker/SET_QUERY_SUBMITTING';
+
+export const RESTORE_QUERY_DIRTY_AFTER_SUBMIT = 'query-tracker/RESTORE_QUERY_DIRTY_AFTER_SUBMIT';

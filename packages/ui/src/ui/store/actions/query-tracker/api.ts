@@ -10,10 +10,8 @@ import {getClusterConfigByName, getClusterProxy} from '../../selectors/global';
 import {selectMergedUiSettings} from '../../selectors/global/cluster';
 import {type RootState} from '../../reducers';
 import {makeDirectDownloadPath} from '../../../utils/navigation';
-import {UPDATE_QUERIES_LIST} from '../../reducers/query-tracker/query-tracker-contants';
 import {
     selectEffectiveApiStage,
-    selectQueryAnnotations,
     selectQueryTrackerRequestOptions,
 } from '../../selectors/query-tracker/query';
 import {type AnyAction} from 'redux';
@@ -154,6 +152,7 @@ const QUERIES_LIST_ATTRIBUTES = [
     'finish_time',
     'user',
     'engine',
+    'settings',
     'annotations',
     'is_tutorial',
     'access_control_objects',
@@ -438,29 +437,6 @@ export function getQueryResultMetaList(
     };
 }
 
-export function setQueryName(
-    query_id: string,
-    annotations: QueryItem['annotations'],
-): ThunkAction<Promise<any>, RootState, any, AnyAction> {
-    return async (dispatch, getState) => {
-        const state = getState();
-        const {stage} = selectQueryTrackerRequestOptions(state);
-        await ytApiV4Id.alterQuery(YTApiId.alterQuery, {
-            parameters: {
-                stage,
-                query_id,
-                annotations,
-            },
-            setup: getQTApiSetup(),
-        });
-        const query = await dispatch(getQuery(query_id));
-        dispatch({
-            type: UPDATE_QUERIES_LIST,
-            data: [query],
-        });
-    };
-}
-
 export function addACOToLastSelected(
     aco: string[],
 ): ThunkAction<Promise<any>, RootState, any, AnyAction> {
@@ -491,8 +467,6 @@ export function updateACOQuery({
         const state = getState();
         const isMultipleAco = selectIsMultipleAco(state);
         const {stage} = selectQueryTrackerRequestOptions(state);
-        const annotations = selectQueryAnnotations(state);
-        const chartConfig = state.queryTracker.queryChart.visualization;
 
         return ytApiV4Id
             .alterQuery(YTApiId.alterQuery, {
@@ -502,48 +476,11 @@ export function updateACOQuery({
                     ...(isMultipleAco
                         ? {access_control_objects: aco}
                         : {access_control_object: aco[0]}),
-                    annotations: {
-                        ...annotations,
-                        chartConfig,
-                    },
                 },
                 setup: getQTApiSetup(),
             })
             .then(() => {
                 return dispatch(addACOToLastSelected(aco));
             });
-    };
-}
-
-export function alterQueryChartConfig({
-    query_id,
-    aco,
-    annotations,
-    chartConfig,
-}: {
-    query_id: string;
-    aco: string[];
-    annotations: QueryItem['annotations'];
-    chartConfig: unknown;
-}): ThunkAction<Promise<any>, RootState, any, AnyAction> {
-    return async (_dispatch, getState) => {
-        const state = getState();
-        const isMultipleAco = selectIsMultipleAco(state);
-        const {stage} = selectQueryTrackerRequestOptions(state);
-
-        return ytApiV4Id.alterQuery(YTApiId.alterQuery, {
-            parameters: {
-                stage,
-                query_id,
-                ...(isMultipleAco
-                    ? {access_control_objects: aco}
-                    : {access_control_object: aco[0]}),
-                annotations: {
-                    ...annotations,
-                    chartConfig,
-                },
-            },
-            setup: getQTApiSetup(),
-        });
     };
 }

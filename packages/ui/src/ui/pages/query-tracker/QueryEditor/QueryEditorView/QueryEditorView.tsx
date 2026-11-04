@@ -1,16 +1,16 @@
+import {selectQuerySubmitting} from '../../../../store/selectors/query-tracker/querySubmitting';
+import {useInactiveCliquePolling} from '../../hooks/useInactiveCliquePolling';
 import React, {memo, useCallback, useEffect, useRef} from 'react';
 import type * as monaco from 'monaco-editor';
 import {useMonaco} from '../../hooks/useMonaco';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
     selectIsQueryButtonActive,
-    selectQueryDraftCluster,
     selectQueryEngine,
     selectQueryId,
-    selectShouldPollCliqueWhenInactive,
 } from '../../../../store/selectors/query-tracker/query';
 import {selectIsSupportedQtACO} from '../../../../store/selectors/query-tracker/queryAco';
-import {loadCliqueByCluster, runQuery} from '../../../../store/actions/query-tracker/query';
+import {runQuery} from '../../../../store/actions/query-tracker/query';
 import {Flex, Icon} from '@gravity-ui/uikit';
 import Button from '../../../../components/Button/Button';
 import playIcon from '../../../../assets/img/svg/play.svg';
@@ -30,8 +30,6 @@ type Props = {
     hideAco?: boolean;
 };
 
-const INACTIVE_CLIQUE_REFRESH_INTERVAL = 5000;
-
 export const QueryEditorView = memo<Props>(function QueryEditorView({
     onStartQuery,
     pathNavigation,
@@ -41,24 +39,17 @@ export const QueryEditorView = memo<Props>(function QueryEditorView({
     const {setEditor} = useMonaco();
     const id = useSelector(selectQueryId);
     const engine = useSelector(selectQueryEngine);
-    const queryCluster = useSelector(selectQueryDraftCluster);
-    const shouldPollClique = useSelector(selectShouldPollCliqueWhenInactive);
     const isACOSupported = useSelector(selectIsSupportedQtACO);
     const isRunButtonActive = useSelector(selectIsQueryButtonActive);
     const dispatch = useDispatch();
 
-    const runButtonDisabled = !isRunButtonActive;
+    const submitting = useSelector(selectQuerySubmitting);
+    const runButtonDisabled = !isRunButtonActive || submitting;
 
-    useEffect(() => {
-        if (!shouldPollClique || !queryCluster) return;
-        const intervalId = setInterval(() => {
-            dispatch(loadCliqueByCluster(QueryEngine.CHYT, queryCluster));
-        }, INACTIVE_CLIQUE_REFRESH_INTERVAL);
-        return () => clearInterval(intervalId);
-    }, [dispatch, shouldPollClique, queryCluster]);
+    useInactiveCliquePolling();
 
     const runQueryCallback = useCallback(() => {
-        dispatch(runQuery(onStartQuery));
+        dispatch(runQuery(onStartQuery)).catch(() => {});
     }, [dispatch, onStartQuery]);
 
     useEffect(() => {
@@ -74,7 +65,7 @@ export const QueryEditorView = memo<Props>(function QueryEditorView({
 
     useEffect(() => {
         const runQueryByKey = (e: KeyboardEvent) => {
-            if (!isRunButtonActive) return;
+            if (runButtonDisabled) return;
             const isCtrlOrMetaPressed = e.ctrlKey || e.metaKey;
             const isEnterOrEKeyPressed = e.key === 'Enter' || e.key === 'e';
             const isF8KeyPressed = e.key === 'F8';
@@ -90,18 +81,18 @@ export const QueryEditorView = memo<Props>(function QueryEditorView({
         return () => {
             document.removeEventListener('keydown', runQueryByKey, true);
         };
-    }, [isRunButtonActive, runQueryCallback]);
+    }, [runButtonDisabled, runQueryCallback]);
 
     const validateQueryCallback = useCallback(
         function () {
-            dispatch(runQuery(onStartQuery, {execution_mode: 'validate'}));
+            dispatch(runQuery(onStartQuery, {execution_mode: 'validate'})).catch(() => {});
         },
         [dispatch, onStartQuery],
     );
 
     const explainQueryCallback = useCallback(
         function () {
-            dispatch(runQuery(onStartQuery, {execution_mode: 'optimize'}));
+            dispatch(runQuery(onStartQuery, {execution_mode: 'optimize'})).catch(() => {});
         },
         [dispatch, onStartQuery],
     );
@@ -123,10 +114,10 @@ export const QueryEditorView = memo<Props>(function QueryEditorView({
                             {i18n('action_run')}
                         </Button>
 
-                        {runButtonDisabled && <CliqueDisabledBlock />}
+                        {!isRunButtonActive && <CliqueDisabledBlock />}
                     </Flex>
 
-                    {isRunButtonActive && (
+                    {!runButtonDisabled && (
                         <>
                             {engine === QueryEngine.YQL ? (
                                 <>

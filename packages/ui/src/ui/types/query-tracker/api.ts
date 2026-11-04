@@ -117,7 +117,8 @@ export interface QueryItem extends DraftQuery {
     is_tutorial?: boolean;
     annotations?: {
         title?: string;
-        chartConfig?: VisualizationState;
+        chartConfig?: Record<number, VisualizationState>;
+        dashboardChartsConfig?: unknown;
         is_tutorial?: boolean;
     };
 }

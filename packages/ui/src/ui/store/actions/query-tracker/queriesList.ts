@@ -32,22 +32,22 @@ const QUERIES_LIST_LIMIT = 20;
 const queriesListCancelHelper = new CancelHelper();
 let queriesListRequestSeq = 0;
 
-export const resetQueryList =
-    (silent = false): AsyncAction =>
-    (dispatch) => {
-        dispatch(
-            updateListState({
-                items: [],
-                hasLoaded: false,
-                cursor: {
-                    direction: QueriesHistoryCursorDirection.PAST,
-                },
-            }),
-        );
-        dispatch(requestQueriesList(silent));
-    };
+export const resetQueryList = (): AsyncAction => (dispatch) => {
+    dispatch(
+        updateListState({
+            isLoading: true,
+            items: [],
+            hasMore: false,
+            hasLoaded: false,
+            cursor: {
+                direction: QueriesHistoryCursorDirection.PAST,
+            },
+        }),
+    );
+    dispatch(requestQueriesList());
+};
 
-export function requestQueriesList(silent = false): AsyncAction {
+export function requestQueriesList(silent = false, refresh = false): AsyncAction {
     return async (dispatch, getState) => {
         const requestId = ++queriesListRequestSeq;
         const state = getState();
@@ -63,7 +63,9 @@ export function requestQueriesList(silent = false): AsyncAction {
                     loadQueriesList({
                         params: selectQueriesListFilterParams(state),
                         cursor: selectQueriesListCursorParams(state),
-                        limit: QUERIES_LIST_LIMIT,
+                        limit: refresh
+                            ? Math.max(QUERIES_LIST_LIMIT, list.length)
+                            : QUERIES_LIST_LIMIT,
                         cancellation: queriesListCancelHelper.removeAllAndSave,
                     }),
                 ),
@@ -79,7 +81,9 @@ export function requestQueriesList(silent = false): AsyncAction {
             }
 
             const itemsMap = new Map<string, QueryItem>();
-            list.forEach((item) => itemsMap.set(item.id, item));
+            if (!refresh) {
+                list.forEach((item) => itemsMap.set(item.id, item));
+            }
             result.queries.forEach((item) => itemsMap.set(item.id, item));
             const items = Array.from(itemsMap.values());
             items.sort((a, b) => {
@@ -104,6 +108,13 @@ export function requestQueriesList(silent = false): AsyncAction {
                 dispatch(setLoading(false));
             }
         }
+    };
+}
+
+export function refreshQueriesList(silent = true): AsyncAction {
+    return (dispatch) => {
+        dispatch(setCursor({direction: QueriesHistoryCursorDirection.PAST}));
+        return dispatch(requestQueriesList(silent, true));
     };
 }
 
@@ -134,7 +145,7 @@ export function resetFilter(): AsyncAction {
         const currentFilter = selectQueriesFilters(state);
 
         dispatch(setFilter({...DefaultQueriesListFilter[listMode], filter: currentFilter.filter}));
-        dispatch(requestQueriesList());
+        dispatch(resetQueryList());
     };
 }
 
@@ -143,8 +154,7 @@ export function applyFilter(patch: QueriesListFilter): AsyncAction {
         const filter = selectQueriesFilters(getState());
 
         dispatch(setFilter({...filter, ...patch}));
-        const silent = !('filter' in patch);
-        dispatch(resetQueryList(silent));
+        dispatch(resetQueryList());
     };
 }
 

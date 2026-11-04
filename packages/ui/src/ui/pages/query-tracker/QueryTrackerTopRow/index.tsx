@@ -23,8 +23,8 @@ import {setSettingByKey} from '../../../store/actions/settings';
 import {useIsDesktop} from '../../../hooks/useIsDesktop';
 import {QueryClusterSelector} from './QueryClusterSelector';
 import {LazyQueryTokenButton} from '../QueryToken/lazy';
-import {type DraftQuery, setQueryName} from '../../../store/actions/query-tracker/api';
-import {updateQueryInList} from '../../../store/actions/query-tracker/queriesList';
+import {type DraftQuery} from '../../../store/actions/query-tracker/api';
+import {setQueryName} from '../../../store/actions/query-tracker/queryAnnotations';
 import i18n from './i18n';
 
 const getNamePlaceholder = () => i18n('field_no-name');
@@ -54,12 +54,7 @@ const QueryTrackerTopRow: FC = () => {
 
             if (id && annotations) {
                 try {
-                    await dispatch(setQueryName(id, {...annotations, title}));
-                    dispatch(
-                        updateQueryInList(id, {
-                            annotations: {...annotations, title},
-                        }),
-                    );
+                    await dispatch(setQueryName(id, title));
                 } catch (err) {}
             }
         },

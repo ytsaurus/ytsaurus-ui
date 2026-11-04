@@ -28,7 +28,13 @@ export default class ClusterPageWrapper extends React.PureComponent {
                     path="/:cluster/"
                     render={(props) => {
                         const {cluster} = props.match.params;
-                        return <ClusterPage key={cluster} cluster={cluster} />;
+                        return (
+                            <ClusterPage
+                                key={cluster}
+                                cluster={cluster}
+                                location={props.location}
+                            />
+                        );
                     }}
                 />
             </Switch>

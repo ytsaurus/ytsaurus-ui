@@ -12,17 +12,18 @@ import {
 import {type Type, getSchemaDateType, parseV3Type} from '@ytsaurus/components';
 import {
     selectHasQueryResult,
+    selectQueryResult,
     selectQueryResultGlobalSettings,
     selectQueryResultSettings,
 } from '../../selectors/query-tracker/queryResult';
 import {getClusterConfigByName, getClusterProxy} from '../../selectors/global';
 import {
     type QueryResultErrorState,
-    type QueryResultReadyState,
+    type SourceQueryResultReadyState as QueryResultReadyState,
     QueryResultState,
-    type Result,
+    type SourceCell,
 } from '../../../types/query-tracker/queryResult';
-import {prepareFormattedValue} from '../../../utils/queries/format';
+import {prepareSourceRows} from '../../../utils/query-tracker/resultRows';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {selectPrimitiveTypesMap} from '../../selectors/global/supported-features';
 import ypath from '../../../common/thor/ypath';
@@ -39,6 +40,7 @@ import {
     SET_QUERY_RESULTS_SETTINGS,
 } from '../../reducers/query-tracker/query-tracker-contants';
 import {ytApiV3} from '../../../rum/rum-wrap-api';
+import executionI18n from '../../../pages/query-tracker/QueryEditor/QueryExecutionView/i18n';
 
 export function applySettings(
     queryId: QueryItem['id'],
@@ -107,20 +109,27 @@ async function attachExistenceToFullResult(fullResult: QueryResultMeta['full_res
 }
 
 const QUERY_RESULT_ROWS_LIMIT = 1000;
+let nextResultRequestId = 0;
 
 export function loadQueryResult(
     queryId: QueryItem['id'],
     resultIndex = 0,
+    {fromStart = false}: {fromStart?: boolean} = {},
 ): ThunkAction<any, RootState, any, QueryResultsActions> {
     return async (dispatch, getState) => {
         const state = getState();
-        if (selectHasQueryResult(state, queryId, resultIndex)) {
-            return;
+        const cached = selectQueryResult(state, queryId, resultIndex);
+        if (cached && cached.state !== QueryResultState.Error) {
+            if (!fromStart) return;
+            if (cached.state === QueryResultState.Loading) {
+                if (cached.requestOffset === 0) return;
+            } else if (cached.resultReady && cached.rowOffset === 0) return;
         }
+        const requestId = ++nextResultRequestId;
         try {
             dispatch({
                 type: REQUEST_QUERY_RESULTS,
-                data: {queryId, index: resultIndex},
+                data: {queryId, index: resultIndex, requestId, rowOffset: 0},
             });
             const meta = await dispatch(getQueryResultMeta(queryId, resultIndex));
             if (meta?.error) throw meta.error;
@@ -141,7 +150,7 @@ export function loadQueryResult(
                     };
                 }) || [];
 
-            const settings = selectQueryResultGlobalSettings();
+            const settings = cached?.settings || selectQueryResultGlobalSettings();
             const result = await wrapApiPromiseByToaster(
                 dispatch(
                     readQueryResults({
@@ -162,23 +171,14 @@ export function loadQueryResult(
                 },
             );
 
-            const {rows, yql_type_registry: types} = result;
-
-            const formattedResult = rows.map((v) => {
-                return Object.entries(v).reduce(
-                    (acc, [k, [value, typeIndex]]) => {
-                        acc[k] = prepareFormattedValue(value, types[Number(typeIndex)]);
-                        return acc;
-                    },
-                    {} as Record<string, Result>,
-                );
-            });
+            const sourceRows = prepareSourceRows(result);
             dispatch({
                 type: SET_QUERY_RESULTS,
                 data: {
                     queryId,
                     index: resultIndex,
-                    results: formattedResult,
+                    requestId,
+                    results: sourceRows,
                     columns,
                     meta,
                 },
@@ -189,7 +189,72 @@ export function loadQueryResult(
                 data: {
                     queryId,
                     index: resultIndex,
+                    requestId,
                     error: e as Error,
+                },
+            });
+        }
+    };
+}
+
+export function loadNextQueryResult(
+    queryId: string,
+    resultIndex: number,
+): ThunkAction<Promise<void>, RootState, unknown, QueryResultsActions> {
+    return async (dispatch, getState) => {
+        const previous = selectQueryResult(getState(), queryId, resultIndex);
+        if (previous?.state !== QueryResultState.Ready || previous.rowOffset !== 0) return;
+        const start = previous.results.length;
+        if (start >= previous.meta.data_statistics.row_count) return;
+
+        const requestId = ++nextResultRequestId;
+        dispatch({
+            type: REQUEST_QUERY_RESULTS,
+            data: {queryId, index: resultIndex, requestId, rowOffset: 0},
+        });
+        try {
+            const next = await wrapApiPromiseByToaster(
+                dispatch(
+                    readQueryResults({
+                        query_id: queryId,
+                        result_index: resultIndex,
+                        cursor: {start, end: start + QUERY_RESULT_ROWS_LIMIT},
+                        columns: previous.columns.map(({name}) => name),
+                        settings: {cellsSize: previous.settings.cellSize},
+                    }),
+                ),
+                {
+                    toasterName: `load_result_page_${queryId}_${resultIndex}`,
+                    skipSuccessToast: true,
+                    errorTitle: executionI18n('alert_load-result-error'),
+                },
+            );
+            const current = selectQueryResult(getState(), queryId, resultIndex);
+            if (!current?.resultReady || current.requestId !== requestId) return;
+            const rows = prepareSourceRows(next, start);
+            dispatch({
+                type: SET_QUERY_RESULTS_PAGE,
+                data: {
+                    queryId,
+                    index: resultIndex,
+                    page: 0,
+                    rowOffset: 0,
+                    requestId,
+                    results: [...current.results, ...rows],
+                },
+            });
+        } catch {
+            const current = selectQueryResult(getState(), queryId, resultIndex);
+            if (!current?.resultReady || current.requestId !== requestId) return;
+            dispatch({
+                type: SET_QUERY_RESULTS_PAGE,
+                data: {
+                    queryId,
+                    index: resultIndex,
+                    page: current.page,
+                    rowOffset: current.rowOffset,
+                    requestId,
+                    results: current.results,
                 },
             });
         }
@@ -202,22 +267,18 @@ export function injectQueryResults({
     rowIndex,
     columnName,
     data,
+    expectedCell,
 }: {
     queryId: string;
     resultIndex: number;
     rowIndex: number;
     columnName: string;
     data: QueryResult;
+    expectedCell?: SourceCell;
 }): ThunkAction<void, RootState, unknown, QueryResultsActions> {
     return (dispatch) => {
-        const {rows, yql_type_registry: types} = data;
-
-        const [value, typeIndex] = rows[0][columnName];
-        const cellData = prepareFormattedValue(value, types[Number(typeIndex)], {
-            maxListSize: undefined,
-            maxStringSize: undefined,
-            treatValAsData: true,
-        });
+        const cellData = prepareSourceRows(data, rowIndex, true)[0]?.cells[columnName];
+        if (!cellData) return;
 
         dispatch({
             type: SET_QUERY_RESULTS_CELL_DATA,
@@ -227,6 +288,7 @@ export function injectQueryResults({
                 rowIndex,
                 columnName,
                 cellData,
+                expectedCell,
             },
         });
     };
@@ -238,11 +300,12 @@ export function updateQueryResult(
     page: number,
 ): ThunkAction<any, RootState, any, QueryResultsActions> {
     return async (dispatch, getState) => {
+        const requestId = ++nextResultRequestId;
         try {
             const settings = selectQueryResultSettings(getState(), queryId, resultIndex);
             dispatch({
                 type: REQUEST_QUERY_RESULTS,
-                data: {queryId, index: resultIndex},
+                data: {queryId, index: resultIndex, requestId, rowOffset: page * settings.pageSize},
             });
 
             const startPage = page * settings.pageSize;
@@ -269,27 +332,17 @@ export function updateQueryResult(
                 },
             );
 
-            const {rows, yql_type_registry: types} = result;
-
-            const formattedResult = result.rows.map((v) => {
-                return Object.entries(v).reduce(
-                    (acc, [k, [value, typeIndex]]) => {
-                        acc[k] = prepareFormattedValue(value, types[Number(typeIndex)]);
-                        return acc;
-                    },
-                    {} as Record<string, Result>,
-                );
-            });
-
-            if (Array.isArray(rows) && rows.length) {
+            if (Array.isArray(result.rows)) {
+                const sourceRows = prepareSourceRows(result, startPage);
                 dispatch({
                     type: SET_QUERY_RESULTS_PAGE,
                     data: {
                         queryId,
                         index: resultIndex,
-                        results: formattedResult,
-                        settings,
+                        results: sourceRows,
                         page,
+                        rowOffset: startPage,
+                        requestId,
                     },
                 });
             }
@@ -299,6 +352,7 @@ export function updateQueryResult(
                 data: {
                     queryId,
                     index: resultIndex,
+                    requestId,
                     error: e as Error,
                 },
             });
