@@ -1,4 +1,5 @@
 import {type YTPermissionType} from '../../../shared/yt-types';
+import {type YTError} from '../../types';
 import {type YTPermissionTypeUI} from './acl-api';
 import {type PreparedRole, type SubjectGroupType} from './index';
 
@@ -47,6 +48,7 @@ export interface UpdateResponse {
 
 export interface RoleUpdateStatus {
     role: Role;
+    warnings?: Array<YTError>;
 }
 
 export interface Role {
