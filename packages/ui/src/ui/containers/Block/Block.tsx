@@ -60,7 +60,7 @@ type YTErrorBlockInternalProps = {
 };
 
 export type YTErrorBlockProps = Omit<YTErrorBlockInternalProps, 'error'> & {
-    error?: YTErrorBlockInternalProps['error'] | {error: string} | Error;
+    error?: unknown;
 };
 
 class YTErrorBlockImpl extends React.Component<YTErrorBlockInternalProps> {
