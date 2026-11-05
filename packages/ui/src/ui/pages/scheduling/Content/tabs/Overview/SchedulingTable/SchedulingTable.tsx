@@ -905,7 +905,7 @@ function RowActions({item}: {item: RowData}) {
                     text: i18n('action_attributes'),
                     action: () => {
                         if (type === 'pool') {
-                            const exactPath = dispatch(getPoolPathsByName(item.name))?.orchidPath;
+                            const exactPath = dispatch(getPoolPathsByName(item.name)).orchidPath;
                             dispatch(openAttributesModal({title: item.name, exactPath}));
                         } else {
                             dispatch(

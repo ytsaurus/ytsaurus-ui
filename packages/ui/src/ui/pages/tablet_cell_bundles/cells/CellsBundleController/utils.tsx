@@ -102,7 +102,7 @@ export const renderAllocationRequest = (props: ColumnRenderProps<RowData>) => {
         <span className={block('alloc-request')}>
             <ClickableAttributesButton
                 className={block('alloc-request-attrs')}
-                title={uuid}
+                title={uuid ?? hulkRequestPath}
                 exactPath={hulkRequestPath}
             />
             <Link
