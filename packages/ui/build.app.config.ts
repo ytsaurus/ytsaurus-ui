@@ -17,6 +17,8 @@ const port = Number(process.env.LOCAL_DEV_PORT);
 
 const client: ServiceConfig['client'] = {
     bundler: 'rspack',
+    // The default AIKit Markdown plugins do not use these Node.js APIs.
+    fallback: {url: false, path: false, fs: false},
     javaScriptLoader: 'swc',
     cache: true,
     watchOptions: {
