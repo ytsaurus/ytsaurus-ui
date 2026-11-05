@@ -33,7 +33,6 @@ const config: StorybookConfig = {
                 includes: [path.resolve(__dirname, '../src')],
                 fallback: {
                     path: require.resolve('path-browserify'),
-                    fs: false,
                 },
             },
             [
