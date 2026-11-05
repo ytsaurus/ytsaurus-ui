@@ -40,6 +40,8 @@ import Placeholder from '../../../pages/components/Placeholder';
 import {Page} from '../../../constants/index';
 import {DEFAULT_TAB, type OperationTabType, Tab} from '../../../constants/operations/detail';
 import {useUpdater} from '../../../hooks/use-updater';
+import {type promptAction} from '../../../store/actions/actions';
+import {type ActionModalData} from '../../../store/reducers/actions';
 import {updateOperation} from '../../../store/actions/operations/detail';
 import {type TabSettings, makeTabProps} from '../../../utils';
 import {
@@ -105,7 +107,7 @@ type ReduxProps = {
         binaryAsHex: boolean;
         asHTML: boolean;
     };
-    promptAction(data: unknown): void;
+    promptAction: typeof promptAction;
     getOperation: (id: string) => void;
     updateListJobsFilter: (data: UpdateFilterData) => void;
     listOperationEvents: (operationId: string) => void;
@@ -205,7 +207,7 @@ export class OperationDetailBase extends React.Component<ReduxProps & RouteProps
         const {promptAction, operation} = this.props;
 
         const message = action.message || i18n('confirm_perform-action', {name: action.name});
-        const handler = ({currentOption}: {currentOption?: string}) =>
+        const handler = ({currentOption}: ActionModalData) =>
             performAction({
                 ...action,
                 operation,

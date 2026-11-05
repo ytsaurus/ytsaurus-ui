@@ -16,6 +16,12 @@ import Button from '../../../components/Button/Button';
 import Link from '../../../containers/Link/Link';
 import Icon, {type IconName} from '../../../components/Icon/Icon';
 
+import {
+    type ActionModalData,
+    type ActionModalOptions,
+    type ActionModalPrompt,
+} from '../../../store/reducers/actions';
+
 import {selectJob, selectJobActions} from '../../../store/selectors/job/detail';
 import {loadJobData} from '../../../store/actions/job/general';
 import {promptAction} from '../../../store/actions/actions';
@@ -35,31 +41,13 @@ import './JobActions.scss';
 
 type ActionName = 'interrupt' | 'abort' | 'abandon';
 
-interface OptionAction {
-    value: string;
-    text: string;
-    data: Record<string, any>;
-}
-
-export interface Action {
-    icon: IconName;
-    modalKey: string;
-    name: ActionName;
-    successMessage: string;
-    confirmationText?: string;
-    theme?: ButtonProps['view'];
-    message?: string | JSX.Element;
-
-    optionMessage?: string;
-    optionValue?: string | number;
-    optionType?: string;
-    options?: OptionAction[];
-}
-
-interface IntermediateAction extends Action {
-    message: string | JSX.Element;
-    handler: ({currentOption}: Record<string, any>) => void;
-}
+export type Action = Omit<ActionModalPrompt, 'handler' | 'message' | 'optionType' | 'optionValue'> &
+    ActionModalOptions & {
+        icon: IconName;
+        name: ActionName;
+        theme?: ButtonProps['view'];
+        message?: ActionModalPrompt['message'];
+    };
 
 const block = cn('job-actions');
 const codeBlock = cn('elements-code');
@@ -117,7 +105,7 @@ const getAdditionalActions = (
 };
 
 interface PerformAction {
-    currentOption?: number;
+    currentOption: ActionModalData['currentOption'];
     name: ActionName;
     id: string;
 }
@@ -144,7 +132,7 @@ const performAction = ({currentOption, name, id}: PerformAction) => {
     if (currentOption) {
         parameters = {
             ...parameters,
-            interrupt_timeout: currentOption,
+            interrupt_timeout: Number(currentOption),
         };
     }
 
@@ -189,11 +177,11 @@ function ActionBlock(action: Action) {
         setTimeout(reset, 5000);
     }, [dispatch, operationId, id]);
     const intermediateAction = useCallback(
-        (data: IntermediateAction) => dispatch(promptAction(data)),
+        (data: ActionModalPrompt) => dispatch(promptAction(data)),
         [dispatch],
     );
     const handler = useCallback(
-        ({currentOption}: Record<string, number>) => {
+        ({currentOption}: ActionModalData) => {
             const data = {...action, currentOption, id};
             return performAction(data).then(update);
         },

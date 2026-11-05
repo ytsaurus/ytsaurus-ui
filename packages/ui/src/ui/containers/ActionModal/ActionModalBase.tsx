@@ -1,8 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
-import values_ from 'lodash/values';
+import {type ConnectedProps} from 'react-redux';
+import {type ActionModalData, type ActionModalState} from '../../store/reducers/actions';
+import {type connector} from './ActionModal';
 
 import Modal from '../../components/Modal/Modal';
 import {YTErrorBlock} from '../../containers/Block/Block';
@@ -16,49 +17,33 @@ import i18n from './i18n';
 
 const block = cn('elements-confirmation');
 
-export class ActionModalBase extends React.Component {
-    static propTypes = {
-        dismissAction: PropTypes.func,
-        confirmAction: PropTypes.func,
-        status: PropTypes.oneOf(values_(MODAL_STATES)),
-        handler: PropTypes.func,
-        message: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-        details: PropTypes.string,
-        errorMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-        errorValue: PropTypes.string,
-        optionMessage: PropTypes.string,
-        optionValue: PropTypes.string,
-        optionType: PropTypes.oneOf(['radio', 'input', 'time']),
-        confirmationText: PropTypes.string,
-        options: PropTypes.arrayOf(
-            PropTypes.shape({
-                text: PropTypes.string,
-                value: PropTypes.string,
-            }),
-        ),
-        error: PropTypes.object,
-        modalKey: PropTypes.string,
-        confirmed: PropTypes.bool,
-    };
+type Props = ConnectedProps<typeof connector>;
 
-    state = {
-        currentOption: undefined,
-        modalKey: undefined,
-        confirmed: false,
-        validity: false,
-    };
+interface State extends ActionModalData {
+    modalKey: ActionModalState['modalKey'];
+    confirmed: boolean;
+    validity: boolean;
+}
 
-    static getDerivedStateFromProps(props, state) {
+export class ActionModalBase extends React.Component<Props, State> {
+    static getDerivedStateFromProps(props: Props, state: State) {
         if (props.modalKey !== state.modalKey) {
             return {
                 currentOption: props.optionValue,
                 modalKey: props.modalKey,
-                validity: props.optionType === 'time' ? isNaN(props.currentOption) : true,
+                validity: true,
             };
         }
 
         return null;
     }
+
+    override state: State = {
+        currentOption: undefined,
+        modalKey: undefined,
+        confirmed: false,
+        validity: false,
+    };
 
     dismissAction = () => {
         const {dismissAction} = this.props;
@@ -80,7 +65,7 @@ export class ActionModalBase extends React.Component {
         );
     };
 
-    handleInputChange = (value) => {
+    handleInputChange = (value: number) => {
         if (isNaN(value)) {
             this.setState({validity: false});
         } else {
@@ -96,8 +81,8 @@ export class ActionModalBase extends React.Component {
             <Radiobox
                 size="m"
                 layout="vertical"
-                value={currentOption}
-                items={options}
+                value={typeof currentOption === 'string' ? currentOption : undefined}
+                items={options ?? []}
                 onChange={(event) => this.setState({currentOption: event.target.value})}
             />
         );
@@ -107,14 +92,7 @@ export class ActionModalBase extends React.Component {
         const {currentOption} = this.state;
 
         return (
-            <TimeInput
-                size="m"
-                theme="normal"
-                view="default"
-                tone="default"
-                value={currentOption}
-                onChange={this.handleInputChange}
-            />
+            <TimeInput size="m" value={Number(currentOption)} onChange={this.handleInputChange} />
         );
     }
 
@@ -132,7 +110,7 @@ export class ActionModalBase extends React.Component {
         );
     }
 
-    render() {
+    override render() {
         const {message, details, options, status, errorMessage, error, confirmationText} =
             this.props;
         const {confirmed, validity} = this.state;
@@ -150,10 +128,10 @@ export class ActionModalBase extends React.Component {
             );
         }
 
-        const isConfirmDisabled = !validity || (confirmationText && !confirmed);
+        const isConfirmDisabled = !validity || (Boolean(confirmationText) && !confirmed);
 
         return (
-            [MODAL_STATES.PROMPT, MODAL_STATES.PENDING].indexOf(status) > -1 && (
+            (status === MODAL_STATES.PROMPT || status === MODAL_STATES.PENDING) && (
                 <Modal
                     isConfirmDisabled={() => isConfirmDisabled}
                     visible
@@ -169,7 +147,7 @@ export class ActionModalBase extends React.Component {
                                 <p className="elements-secondary-text">{details}</p>
                             </div>
 
-                            {options?.length > 0 && this.renderOptions()}
+                            {Boolean(options?.length) && this.renderOptions()}
 
                             {confirmationText && (
                                 <Checkbox

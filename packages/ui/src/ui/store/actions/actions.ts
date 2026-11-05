@@ -1,49 +1,32 @@
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../reducers';
+import {
+    type ActionModalAction,
+    type ActionModalData,
+    type ActionModalPrompt,
+} from '../reducers/actions';
+
 import {CONFIRM_ACTION, DISMISS_ACTION, PROMPT_ACTION} from '../../constants/actions';
 
 import {toaster} from '../../utils/toaster';
 
-export function promptAction(data) {
-    const {
-        handler,
-        successMessage,
-        errorMessage,
-        optionMessage,
-        optionValue,
-        optionType,
-        options,
-        message,
-        details,
-        successMessageTemplate,
-        modalKey,
-        confirmationText,
-    } = data;
-
+export function promptAction(data: ActionModalPrompt): ActionModalAction {
     return {
         type: PROMPT_ACTION,
-        data: {
-            handler,
-            successMessage,
-            errorMessage,
-            optionMessage,
-            optionValue,
-            optionType,
-            options,
-            message,
-            details,
-            successMessageTemplate,
-            modalKey,
-            confirmationText,
-        },
+        data,
     };
 }
 
-export function dismissAction() {
+export function dismissAction(): ActionModalAction {
     return {
         type: DISMISS_ACTION,
     };
 }
 
-export function confirmAction(handler, data) {
+export function confirmAction(
+    handler: ActionModalPrompt['handler'],
+    data: ActionModalData,
+): ThunkAction<Promise<void>, RootState, null, ActionModalAction> {
     return (dispatch, getState) => {
         dispatch({
             type: CONFIRM_ACTION.REQUEST,
@@ -56,12 +39,11 @@ export function confirmAction(handler, data) {
                 dispatch(dismissAction());
                 toaster.add({
                     name: 'confirm action',
-                    timeout: 10000,
                     theme: 'success',
                     title: successMessage,
                 });
             },
-            (error) => {
+            (error: unknown) => {
                 dispatch({
                     type: CONFIRM_ACTION.FAILURE,
                     data: error,
@@ -71,7 +53,7 @@ export function confirmAction(handler, data) {
     };
 }
 
-export function showErrorModal(error) {
+export function showErrorModal(error: unknown): ActionModalAction {
     return {
         type: CONFIRM_ACTION.FAILURE,
         data: error,
