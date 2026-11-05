@@ -1,4 +1,4 @@
-import React, {memo, useState} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import UIFactory, {type MarkdownRenderState} from '../../UIFactory';
 import {YTErrorBlock} from '../../containers/Block/Block';
 import {YTErrorInline} from '../../containers/YTErrorInline/YTErrorInline';
@@ -13,10 +13,15 @@ import './yfm-overrides.scss';
 type Props = {
     text: string;
     errorMode?: 'block' | 'inline';
+    onRenderStateChange?: (state: MarkdownRenderState, text: string) => void;
 };
 
-const MarkdownImpl = ({text, errorMode}: Props) => {
+const MarkdownImpl = ({text, errorMode, onRenderStateChange}: Props) => {
     const [renderState, setRenderState] = useState<MarkdownRenderState>({status: 'loading'});
+
+    useEffect(() => {
+        onRenderStateChange?.(renderState, text);
+    }, [onRenderStateChange, renderState, text]);
 
     if (renderState.status === 'error') {
         const error = renderState.error as YTError | Error;
