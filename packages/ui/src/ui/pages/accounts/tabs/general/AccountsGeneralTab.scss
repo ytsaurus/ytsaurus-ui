@@ -115,7 +115,8 @@ $elements-table: '.elements-table';
     &__table {
         min-width: 1200px;
 
-        & * {
+        & *,
+        & #{$elements-table}__cell {
             box-sizing: border-box;
         }
 
@@ -287,6 +288,11 @@ $elements-table: '.elements-table';
                 visibility: unset;
             }
         }
+    }
+
+    &__parent-hint {
+        margin-left: 4px;
+        color: var(--g-color-text-secondary);
     }
 
     &__item-bytes {

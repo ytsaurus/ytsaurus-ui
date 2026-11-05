@@ -13,6 +13,7 @@ import {
     selectAccountsTree,
 } from './accounts-ts';
 import {concatByAnd} from '../../../common/hammer/predicate';
+import {filterAccountBranches} from '../../../utils/accounts/accounts-visibility';
 import {accountMemoryMediumToFieldName} from '../../../utils/accounts/accounts-selector';
 
 export const selectActiveAccount = (state) => state.accounts.accounts.activeAccount;
@@ -54,21 +55,23 @@ export function getAccountName(treeItem) {
     return account && account.name;
 }
 
-function prepareAccountsFlattenTreeImpl(treeList, activeAccount, nameFilter = '', {slug} = {}) {
-    let root = treeList['<Root>'];
+export function prepareAccountsFlattenTreeImpl(
+    treeList,
+    activeAccount,
+    nameFilter = '',
+    {slug} = {},
+    visibleNames,
+) {
+    const root = treeList['<Root>'];
     if (root === undefined) {
         return [];
     }
 
-    if (activeAccount && treeList[activeAccount]) {
-        root = {...root, children: [treeList[activeAccount]]};
-    }
-
-    let filteredRoot = root;
+    const subtree = (activeAccount && treeList[activeAccount]) || root;
+    let filteredRoot = filterAccountBranches(subtree, visibleNames);
 
     const isRoot = (treeNode) => {
-        const {attributes: account} = treeNode;
-        return treeNode === root || account.name === activeAccount;
+        return treeNode.name === subtree.name;
     };
 
     const predicates = [];
@@ -88,13 +91,23 @@ function prepareAccountsFlattenTreeImpl(treeList, activeAccount, nameFilter = ''
     }
 
     if (predicates.length) {
-        filteredRoot = hammer.treeList.filterTree(root, concatByAnd(...predicates));
+        filteredRoot = hammer.treeList.filterTree(filteredRoot, concatByAnd(...predicates));
     }
 
-    return filteredRoot;
+    const withHiddenChildren = (node) => ({
+        ...node,
+        hasHiddenChildren: node.children.length < treeList[node.name].children.length,
+        children: node.children.map(withHiddenChildren),
+    });
+
+    const filteredSubtree = withHiddenChildren(filteredRoot);
+    if (subtree !== root) {
+        return {...root, children: [filteredSubtree]};
+    }
+    return filteredSubtree;
 }
 
-function sortFlattenTree(sortInfo, flattenTree = [], columnFields) {
+export function sortFlattenTree(sortInfo, flattenTree = [], columnFields) {
     if (sortInfo) {
         hammer.treeList.sortTree(flattenTree, sortInfo, columnFields);
     }

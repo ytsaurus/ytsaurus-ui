@@ -4,7 +4,10 @@ import {type AccountParsedData} from '../../../utils/accounts/accounts-selector'
 import {prepareAccountsTree} from '../../../utils/accounts/accounts-tree';
 import {parseAccountsDataSync} from '../../../store/actions/accounts/accounts-ts';
 import Account from '../selector';
-import {type AccountTreeYsonNode, accountTreeYsonToList} from './accountTreeYsonToList';
+import {
+    type AccountTreeYsonNode,
+    accountTreeYsonToList,
+} from '../../../utils/accounts/accountTreeYsonToList';
 
 export type AccountEditorAccount = InstanceType<typeof Account> & AccountParsedData;
 

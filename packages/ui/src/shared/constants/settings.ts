@@ -105,8 +105,7 @@ export const SettingName = {
         USE_SAFE_COLORS: 'useSafeColors',
     },
     ACCOUNTS: {
-        DASHBOARD_VISIBILITY_MODE: 'dashboardVisibilityMode',
-        ACCOUNTS_VISIBILITY_MODE: 'accountsVisibilityMode',
+        VISIBILITY_MODE: 'visibilityMode',
         EXPAND_STATIC_CONFIGURATION: 'expandStaticConfiguration',
         ACCOUNTS_USAGE_VIEW_TYPE: 'accountUsageViewType',
         ACCOUNTS_USAGE_COLUMNS_TREE: 'accountUsageColumnsTree',

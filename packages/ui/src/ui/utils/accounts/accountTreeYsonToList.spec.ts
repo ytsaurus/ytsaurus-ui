@@ -1,18 +1,7 @@
-import {parseAccountsDataSync} from '../../../store/actions/accounts/accounts-ts';
-import {accountPathToTopLevel, accountTreeYsonToList} from './accountTreeYsonToList';
+import {parseAccountsDataSync} from '../../store/actions/accounts/accounts-ts';
+import {accountTreeYsonToList} from './accountTreeYsonToList';
 
 describe('account editor YSON helpers', () => {
-    describe('accountPathToTopLevel', () => {
-        it('extracts the top-level account from its Cypress path', () => {
-            expect(accountPathToTopLevel('//sys/account_tree/top/parent/account')).toBe('top');
-        });
-
-        it('rejects paths outside account_tree', () => {
-            expect(accountPathToTopLevel('//sys/accounts/account')).toBeUndefined();
-            expect(accountPathToTopLevel('')).toBeUndefined();
-        });
-    });
-
     describe('accountTreeYsonToList', () => {
         it('flattens all levels and keeps attributes compatible with the existing parser', () => {
             const items = accountTreeYsonToList('top', {

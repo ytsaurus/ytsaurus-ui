@@ -36,6 +36,8 @@ export const selectAccountsIsFinalLoadingStatus = createSelector(
     },
 );
 
+export const selectAccountsList = (state: RootState) => state.accounts.accounts.accountList;
+
 export const selectActiveAccount = (state: RootState) => state.accounts.accounts.activeAccount;
 export const selectActiveMediumFilter = (state: RootState) =>
     state.accounts.accounts.activeMediumFilter;
@@ -43,7 +45,6 @@ export const selectAccountsContentMode = (state: RootState) =>
     state.accounts.accounts.activeContentModeFilter;
 export const selectAccountsMasterMemoryContentMode = (state: RootState) =>
     state.accounts.accounts.masterMemoryContentMode;
-export const selectAccountsEditCounter = (state: RootState) => state.accounts.accounts.editCounter;
 
 export interface AccountSelector {
     name: string;
