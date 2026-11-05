@@ -1,67 +1,36 @@
 import React from 'react';
-import {type ButtonProps} from '../../Button/Button';
+import omit_ from 'lodash/omit';
+import {type OpenAttributesModalParams} from '../../../store/actions/modals/attributes-modal';
 
 import AttributesButton, {type AttributesButtonProps} from '../AttributesButton';
 
 import i18n from '../i18n';
 
-interface Props extends Omit<AttributesButtonProps, 'onClick' | 'title'> {
-    title: React.ReactNode;
+type Props = Omit<AttributesButtonProps, 'onClick' | 'title'> & OpenAttributesModalParams;
 
-    // The function is called inside click handler, and overrides path and exactPath
-    getPathProps?: () => Pick<Partial<Props>, 'path' | 'exactPath'>;
-    path?: string;
-    exactPath?: string;
-
-    attribute?: string;
-    attributes?: object;
-
-    size?: ButtonProps['size'];
-    view?: ButtonProps['view'];
-}
-
-export function ClickableAttributesButtonBase({
-    title,
-    getPathProps = () => {
-        return {};
+export function ClickableAttributesButtonBase(
+    props: Props & {
+        openAttributesModal: (params: OpenAttributesModalParams) => void;
     },
-    path,
-    exactPath,
-    attribute,
-    attributes,
-    openAttributesModal,
-    withTooltip = true,
-    tooltipProps = {placement: 'bottom-end', content: i18n('tooltip-content')},
-    // Extract potentially problematic props
-    ...rest
-}: Props & {
-    openAttributesModal: (args_0: {
-        title: React.ReactNode;
-        path?: string;
-        exactPath?: string;
-        attribute?: string;
-        attributes?: object;
-    }) => void;
-}) {
+) {
+    const {
+        openAttributesModal,
+        withTooltip = true,
+        tooltipProps = {placement: 'bottom-end', content: i18n('tooltip-content')},
+    } = props;
     return (
         <AttributesButton
-            {...rest}
+            {...omit_(props, [
+                'title',
+                'path',
+                'exactPath',
+                'attribute',
+                'attributes',
+                'openAttributesModal',
+            ])}
             tooltipProps={tooltipProps}
             withTooltip={withTooltip}
-            onClick={() => {
-                const pathProps = {
-                    path,
-                    exactPath,
-                    ...getPathProps(),
-                };
-
-                openAttributesModal({
-                    title,
-                    ...pathProps,
-                    attribute,
-                    attributes,
-                });
-            }}
+            onClick={() => openAttributesModal(props)}
         />
     );
 }

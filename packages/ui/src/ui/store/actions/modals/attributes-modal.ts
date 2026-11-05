@@ -7,13 +7,12 @@ import {TYPED_OUTPUT_FORMAT} from '../../../constants';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {type ThunkAction} from 'redux-thunk';
 import {type RootState} from '../../reducers';
-import {type Action} from 'redux';
-import {type ReactNode} from 'react';
+import {type AttributesModalAction} from '../../reducers/modals/attributes-modal';
 
-type ModalThunkAction = ThunkAction<void, RootState, null, Action>;
+type ModalThunkAction = ThunkAction<void, RootState, null, AttributesModalAction>;
 
 export const openModal =
-    ({title, promise}: {title: ReactNode; promise: Promise<unknown>}): ModalThunkAction =>
+    ({title, promise}: {title: string; promise: Promise<unknown>}): ModalThunkAction =>
     async (dispatch) => {
         dispatch({
             type: OPEN_ATTRIBUTES_MODAL,
@@ -22,19 +21,29 @@ export const openModal =
 
         dispatch({type: LOAD_ATTRIBUTES.REQUEST});
 
-        try {
-            const attributes = await promise;
-            dispatch({
-                type: LOAD_ATTRIBUTES.SUCCESS,
-                data: {attributes},
+        await promise
+            .then((attributes) => {
+                dispatch({
+                    type: LOAD_ATTRIBUTES.SUCCESS,
+                    data: {attributes},
+                });
+            })
+            .catch((error: unknown) => {
+                dispatch({
+                    type: LOAD_ATTRIBUTES.FAILURE,
+                    data: {error},
+                });
             });
-        } catch (error) {
-            dispatch({
-                type: LOAD_ATTRIBUTES.FAILURE,
-                data: {error},
-            });
-        }
     };
+
+export type OpenAttributesModalParams = {
+    title: string;
+    attribute?: string;
+} & (
+    | {attributes: object; path?: string; exactPath?: string}
+    | {attributes?: undefined; path: string; exactPath?: string}
+    | {attributes?: undefined; path?: string; exactPath: string}
+);
 
 export const openAttributesModal =
     ({
@@ -43,13 +52,7 @@ export const openAttributesModal =
         exactPath,
         attribute,
         attributes,
-    }: {
-        title: ReactNode;
-        path?: string;
-        exactPath?: string;
-        attribute?: string;
-        attributes?: object;
-    }): ModalThunkAction =>
+    }: OpenAttributesModalParams): ModalThunkAction =>
     (dispatch) => {
         if (attributes) {
             dispatch(openModal({title, promise: Promise.resolve(attributes)}));
@@ -59,7 +62,7 @@ export const openAttributesModal =
         if (!path && !exactPath) {
             dispatch({
                 type: LOAD_ATTRIBUTES.FAILURE,
-                data: new Error(`Path is not defined, nothing to load`),
+                data: {error: new Error(`Path is not defined, nothing to load`)},
             });
             return;
         }
@@ -75,7 +78,7 @@ export const openAttributesModal =
         );
     };
 
-export function closeAttributesModal() {
+export function closeAttributesModal(): AttributesModalAction {
     return {
         type: CLOSE_ATTRIBUTES_MODAL,
     };
