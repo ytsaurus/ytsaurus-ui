@@ -3,7 +3,12 @@ import {
     OpenAIService,
     ResponseStream,
 } from '@gravity-ui/aikit/server/openai';
-import {type AIChatConfig, type Conversation, type ConversationPage} from '../../shared/ai-chat';
+import {
+    type AIChatConfig,
+    type AIChatModels,
+    type Conversation,
+    type ConversationPage,
+} from '../../shared/ai-chat';
 import {type SendMessageRequest} from '../types/ai-chat';
 
 export class AiChat {
@@ -13,6 +18,10 @@ export class AiChat {
     constructor(config: AIChatConfig, authHeaders?: Record<string, string | undefined>) {
         this.config = config;
         this.authHeaders = authHeaders;
+    }
+
+    getModels() {
+        return this.getClient().get<AIChatModels>('/models', {query: this.config.modelsQuery});
     }
 
     createConversation(metadata: Record<string, string>) {
@@ -43,7 +52,7 @@ export class AiChat {
         // Keep the signal on the SDK request to cancel before response headers arrive.
         const stream = await this.getClient().responses.create(
             {
-                model: this.config.model,
+                model: request.model ?? this.config.defaultModel,
                 stream: true,
                 conversation: request.conversation,
                 input: request.input,
@@ -76,7 +85,7 @@ export class AiChat {
         // AIKit 2.25 summarizeConvTitle only reads output[0].content[0], which may
         // be reasoning or a tool call. The SDK collects text across the response.
         const response = await client.responses.create({
-            model: this.config.model,
+            model: this.config.defaultModel,
             metadata: {...this.config.metadata, ...metadata},
             input: [
                 {
@@ -132,7 +141,7 @@ export class AiChat {
 
     private getClient() {
         const client = new OpenAIService({
-            model: this.config.model,
+            model: this.config.defaultModel,
             baseURL: this.config.baseUrl.replace(/\/+$/, ''),
             apiKey: '',
             organization: null,

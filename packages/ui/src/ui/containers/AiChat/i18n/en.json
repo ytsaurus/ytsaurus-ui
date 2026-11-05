@@ -14,5 +14,8 @@
   "alert_response-interrupted": "The response stream was interrupted. Please try again.",
   "alert_response-timeout": "The model did not respond within 5 minutes. Try another model or send the message again.",
   "action_apply": "Apply",
-  "action_cancel": "Cancel"
+  "action_cancel": "Cancel",
+  "field_model": "Model",
+  "alert_models-load-failed": "Failed to load models",
+  "action_retry-models": "Retry"
 }
