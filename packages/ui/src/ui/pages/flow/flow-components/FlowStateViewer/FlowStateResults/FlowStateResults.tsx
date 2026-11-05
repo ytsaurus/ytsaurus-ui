@@ -683,6 +683,7 @@ export function FlowStateResultsActions({
     error?: unknown;
 }) {
     if (
+        !response ||
         !shouldShowFlowStateResultsUtilities({
             response,
             hasScope,

@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
+import {type ConnectedProps, connect} from 'react-redux';
+import {type RootState} from '../../store/reducers';
 import cn from 'bem-cn-lite';
 import unipika from '../../common/thor/unipika';
 
 import FormattedText from '../../components/formatters/FormattedText';
 import SimpleModal from '../../components/Modal/SimpleModal';
 import {YTErrorBlock} from '../../containers/Block/Block';
-import {Yson, YsonSettingsPropTypes} from '../../components/Yson/Yson';
+import {Yson} from '../../components/Yson/Yson';
 
 import {closeAttributesModal} from '../../store/actions/modals/attributes-modal';
 import {DownloadFileButton} from '../../components/DownloadAttributesButton';
@@ -17,36 +17,26 @@ import './AttributesModal.scss';
 
 const block = cn('yt-attributes-modal');
 
-export class AttributesModal extends Component {
-    static propTypes = {
-        // from connect
-        title: PropTypes.string.isRequired,
-        visible: PropTypes.bool.isRequired,
-        loading: PropTypes.bool.isRequired,
-        loaded: PropTypes.bool.isRequired,
-        error: PropTypes.bool.isRequired,
-        errorData: PropTypes.object.isRequired,
-        attributes: PropTypes.object.isRequired,
-        ysonSettings: YsonSettingsPropTypes.isRequired,
+type Props = ConnectedProps<typeof connector>;
 
-        closeAttributesModal: PropTypes.func.isRequired,
-    };
-
+export class AttributesModal extends Component<Props> {
     handleClose = () => this.props.closeAttributesModal();
 
     renderContent() {
         const {attributes, ysonSettings, errorData, error} = this.props;
 
-        return error ? (
-            <YTErrorBlock error={errorData} />
-        ) : (
-            <Yson className={block('content')} value={attributes} settings={ysonSettings} />
-        );
+        if (error) {
+            return <YTErrorBlock error={errorData} />;
+        }
+
+        return <Yson className={block('content')} value={attributes} settings={ysonSettings} />;
     }
 
     renderDownloadButton() {
         const convertedValue = attributesToString(this.props.attributes, this.props.ysonSettings);
-        if (!convertedValue) return null;
+        if (!convertedValue) {
+            return null;
+        }
 
         return (
             <DownloadFileButton
@@ -57,7 +47,7 @@ export class AttributesModal extends Component {
         );
     }
 
-    render() {
+    override render() {
         const {visible, title, loading} = this.props;
 
         return (
@@ -78,14 +68,13 @@ export class AttributesModal extends Component {
     }
 }
 
-const mapStateToProps = ({modals}) => {
-    const {visible, loading, loaded, error, errorData, title, attributes} = modals.attributesModal;
+const mapStateToProps = ({modals}: RootState) => {
+    const {visible, loading, error, errorData, title, attributes} = modals.attributesModal;
     const ysonSettings = unipika.prepareSettings();
 
     return {
         visible,
         loading,
-        loaded,
         error,
         errorData,
         title,
@@ -98,4 +87,6 @@ const mapDispatchToProps = {
     closeAttributesModal,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AttributesModal);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default connector(AttributesModal);
