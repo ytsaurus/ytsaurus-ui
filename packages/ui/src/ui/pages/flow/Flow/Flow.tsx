@@ -1,6 +1,6 @@
 import {Button, Flex, Link, Spin} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Redirect, Route, Switch} from 'react-router';
 import {Page} from '../../../../shared/constants/settings';
 import {formatByParams} from '../../../../shared/utils/format';
@@ -33,6 +33,7 @@ import {
 import {selectCluster} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 import {makeTabProps} from '../../../utils';
+import {makeFlowStateLink} from '../../../utils/app-url';
 import {toaster} from '../../../utils/toaster';
 import {FlowEntityTitle} from '../flow-components/FlowEntityHeader';
 import {FlowPipelineStateTab} from '../flow-components/FlowStateViewer/FlowPipelineStateTab';
@@ -67,8 +68,9 @@ export function Flow() {
 
 export function FlowTabs() {
     const cluster = useSelector(selectCluster);
+    const path = useSelector(selectFlowPipelinePath);
 
-    const tabsProps = React.useMemo(() => {
+    const tabsProps = useMemo(() => {
         const {urlTemplate, component} = UIFactory.getMonitoringComponentForNavigationFlow() ?? {};
         const LogsComponent = UIFactory.getFlowLogsTab();
         const showSettings = {
@@ -85,8 +87,21 @@ export function FlowTabs() {
             [FlowTab.DYNAMIC_SPEC]: {title: i18n('dynamic-spec')},
         };
 
-        return makeTabProps(`/${cluster}/${Page.FLOWS}`, FlowTab, showSettings);
-    }, [cluster]);
+        const props = makeTabProps(`/${cluster}/${Page.FLOWS}`, FlowTab, showSettings);
+        return {
+            ...props,
+            items: props.items.map((item) => {
+                if (item.value !== FlowTab.STATE) {
+                    return item;
+                }
+                return {
+                    ...item,
+                    url: makeFlowStateLink({cluster, path}),
+                    routedPreserveLocation: false,
+                };
+            }),
+        };
+    }, [cluster, path]);
 
     return <Tabs className={block('tabs')} routed routedPreserveLocation {...tabsProps} />;
 }

@@ -1,4 +1,4 @@
-import type {FlowStateFiltersValue, FlowStateNameInputMode} from './types';
+import type {FlowStateNameInputMode} from './types';
 
 import type {FlowStateTarget, FlowStaticSpec} from '../../../../../shared/yt-types';
 import {
@@ -6,18 +6,6 @@ import {
     getComputationKeyColumns,
     getComputationStateNames,
 } from './state-schema';
-
-export function seedStateFilters(
-    fixedComputationId: string | undefined,
-    initialFilters: Partial<FlowStateFiltersValue> | undefined,
-): FlowStateFiltersValue {
-    return {
-        keyValues: {},
-        target: 'all',
-        ...initialFilters,
-        computationId: fixedComputationId ?? initialFilters?.computationId,
-    };
-}
 
 export function getAvailableStateTargets(
     spec: FlowStaticSpec | undefined,

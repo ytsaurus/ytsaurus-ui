@@ -1,6 +1,7 @@
 import {type LocationParameters} from '../../../store/location';
 import {prometheusDashboardParams} from '../../../store/reducers/prometheusDashboard/url-mapping';
-import {initialState as filtersInitialState} from './filters';
+import {makeBase64ParseSerialize} from '../../../utils/parse-serialize';
+import {initialState as filtersInitialState, normalizeFlowStateRawKey} from './filters';
 
 export const flowParams: LocationParameters = {
     path: {
@@ -72,4 +73,67 @@ export const flowWorkerParams: typeof flowParams = {
 export const flowWorkerMonitorParams: typeof flowParams = {
     ...flowParams,
     ...prometheusDashboardParams,
+};
+
+const stateKeyValues = makeBase64ParseSerialize(filtersInitialState.stateViewer.keyValues);
+const stateRawKey = makeBase64ParseSerialize(undefined);
+
+export const flowComputationStateParams: typeof flowParams = {
+    ...flowParams,
+    statePartitionId: {
+        stateKey: 'flow.filters.stateViewer.partitionId',
+        initialState: filtersInitialState.stateViewer.partitionId,
+    },
+    stateName: {
+        stateKey: 'flow.filters.stateViewer.stateName',
+        initialState: filtersInitialState.stateViewer.stateName,
+    },
+    stateTarget: {
+        stateKey: 'flow.filters.stateViewer.target',
+        initialState: filtersInitialState.stateViewer.target,
+        options: {
+            parse: (value) => {
+                if (
+                    value === 'key_state' ||
+                    value === 'partition_state' ||
+                    value === 'external_key_state'
+                ) {
+                    return value;
+                }
+                return filtersInitialState.stateViewer.target;
+            },
+        },
+    },
+    stateKeyValues: {
+        stateKey: 'flow.filters.stateViewer.keyValues',
+        initialState: filtersInitialState.stateViewer.keyValues,
+        options: {
+            ...stateKeyValues,
+            parse: (value) => {
+                const parsed: unknown = stateKeyValues.parse(value);
+                if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+                    return filtersInitialState.stateViewer.keyValues;
+                }
+                return Object.fromEntries(
+                    Object.entries(parsed).filter(([, entry]) => typeof entry === 'string'),
+                );
+            },
+        },
+    },
+    stateRawKey: {
+        stateKey: 'flow.filters.stateViewer.rawKey',
+        initialState: filtersInitialState.stateViewer.rawKey,
+        options: {
+            parse: (value) => normalizeFlowStateRawKey(stateRawKey.parse(value)),
+            serialize: (value) => stateRawKey.serialize(normalizeFlowStateRawKey(value)),
+        },
+    },
+};
+
+export const flowStateParams: typeof flowParams = {
+    ...flowComputationStateParams,
+    stateComputationId: {
+        stateKey: 'flow.filters.stateViewer.computationId',
+        initialState: filtersInitialState.stateViewer.computationId,
+    },
 };

@@ -1,15 +1,18 @@
 import React from 'react';
 import type {Meta, StoryObj} from '@storybook/react';
 import {FlowRoutedStoryHarness} from '../../../FlowRoutedStoryHarness';
-import {FlowStateSection} from '../FlowStateSection';
+import {FlowStateSection, type FlowStateSectionProps} from '../FlowStateSection';
+import type {FlowStateFiltersValue} from '../../types';
 import {createStateReadHandlers} from './mocks';
 
-const meta: Meta<typeof FlowStateSection> = {
+type StoryProps = FlowStateSectionProps & {initialFilters?: Partial<FlowStateFiltersValue>};
+
+const meta: Meta<StoryProps> = {
     title: 'Pages/Flow/FlowStateSection',
     component: FlowStateSection,
     decorators: [
-        (Story) => (
-            <FlowRoutedStoryHarness>
+        (Story, {args}) => (
+            <FlowRoutedStoryHarness stateFilters={args.initialFilters}>
                 <div style={{width: 1400}}>
                     <Story />
                 </div>
@@ -20,7 +23,7 @@ const meta: Meta<typeof FlowStateSection> = {
     parameters: {msw: {handlers: createStateReadHandlers()}},
 };
 export default meta;
-type Story = StoryObj<typeof FlowStateSection>;
+type Story = StoryObj<StoryProps>;
 export const Default: Story = {};
 
 export const ActiveComputations: Story = {

@@ -101,10 +101,12 @@ import {ChytCliquePageTab} from '../constants/chyt-page';
 import {
     flowComputationMonitorParams,
     flowComputationParams,
+    flowComputationStateParams,
     flowComputationsParams,
     flowGraphParams,
     flowParams,
     flowPartitionParams,
+    flowStateParams,
     flowWorkerMonitorParams,
     flowWorkerParams,
     flowWorkersParams,
@@ -210,13 +212,14 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*`, [flowComputationParams]],
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*/details`, [flowComputationParams]],
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*/distribution`, [flowComputationParams]],
-    [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*/state`, [flowComputationParams]],
+    [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*/state`, [flowComputationStateParams]],
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*/monitor`, [flowComputationMonitorParams]],
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*/partition/*`, [flowPartitionParams]],
     [`/*/${Page.FLOWS}/${FlowTab.WORKERS}`, [flowWorkersParams]],
     [`/*/${Page.FLOWS}/${FlowTab.WORKERS}/*/details`, [flowWorkerParams]],
     [`/*/${Page.FLOWS}/${FlowTab.WORKERS}/*/monitor`, [flowWorkerMonitorParams]],
 
+    [`/*/${Page.FLOWS}/state`, [flowStateParams]],
     [`/*/${Page.FLOWS}/*`, [flowParams]],
 
     ['global', [globalParams, getGlobalPreparedState]],
