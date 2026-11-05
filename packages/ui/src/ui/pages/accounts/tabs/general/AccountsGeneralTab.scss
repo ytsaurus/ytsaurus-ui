@@ -115,7 +115,8 @@ $elements-table: '.elements-table';
     &__table {
         min-width: 1200px;
 
-        & * {
+        & *,
+        & #{$elements-table}__cell {
             box-sizing: border-box;
         }
 
