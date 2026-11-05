@@ -10,6 +10,7 @@ import {type YTCoreConfig} from '../../@types/core';
 const ERROR_MESSAGE = {
     CONFIG_NOT_SET: 'AI Chat configuration is not set in UI settings',
     CONFIG_INVALID: 'AI Chat configuration is invalid: missing required fields',
+    FAILED_GET_MODELS: 'Failed to get models',
     FAILED_CREATE_CONVERSATION: 'Failed to create conversation',
     FAILED_GET_CONVERSATIONS: 'Failed to get conversations',
     FAILED_GET_CONVERSATION_ITEMS: 'Failed to get conversation items',
@@ -26,7 +27,7 @@ const getAiChatConfiguration = (req: Request) => {
         throw new ErrorWithCode(500, ERROR_MESSAGE.CONFIG_NOT_SET);
     }
 
-    if (!aiChatConfig.baseUrl || !aiChatConfig.model) {
+    if (!aiChatConfig.baseUrl || !aiChatConfig.defaultModel) {
         throw new ErrorWithCode(500, ERROR_MESSAGE.CONFIG_INVALID);
     }
 
@@ -41,16 +42,29 @@ const getAiChatInstance = (req: Request) => {
 export const sendMessage = async (req: Request, res: Response) => {
     try {
         const aiChat = getAiChatInstance(req);
-        const {input, conversation, metadata} = req.body as SendMessageRequest;
+        const {input, conversation, metadata, model} = req.body as SendMessageRequest;
         if (typeof conversation !== 'string' || !conversation) {
             throw new ErrorWithCode(400, 'Conversation ID is required');
         }
+        if (model !== undefined && (typeof model !== 'string' || !model.trim())) {
+            throw new ErrorWithCode(400, 'Model must be a non-empty string');
+        }
         await sendResponseStream(res, (signal) =>
-            aiChat.sendMessage({input, conversation, metadata}, signal),
+            aiChat.sendMessage({input, conversation, metadata, model}, signal),
         );
     } catch (error) {
         req.ctx.logError(ERROR_MESSAGE.FAILED_SEND_MESSAGE, error);
         if (!res.headersSent) sendApiError(res, error);
+    }
+};
+
+export const getModels = async (req: Request, res: Response) => {
+    try {
+        const {data} = await getAiChatInstance(req).getModels();
+        res.json({data: data.map(({id}) => ({id}))});
+    } catch (error) {
+        req.ctx.logError(ERROR_MESSAGE.FAILED_GET_MODELS, error);
+        sendApiError(res, error);
     }
 };
 

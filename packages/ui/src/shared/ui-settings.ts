@@ -221,12 +221,12 @@ export interface UISettings {
     /**
      * Configuration for AI chat assistant integration.
      * baseUrl - Full API root
-     * model - Name of the AI model to use
+     * defaultModel - Default model for chat messages; also used to generate conversation titles
      * Provide server-side credentials through getAuthHeaders('aiChat', req); never put them in uiSettings.
      * @example
      * aiChatConfig: {
      *   baseUrl: 'https://your-llm.example',
-     *   model: 'your-model'
+     *   defaultModel: 'your-model'
      * }
      */
     aiChatConfig?: AIChatConfig;
