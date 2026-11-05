@@ -17,3 +17,4 @@ The repository contains code related to UI for [YTsaurus platform](https://ytsau
 - to release new version of a changed package your PR should contain at least one `fix`/`feat`/`BREAKING_CHANGES` commit
 - CHANGELOG.md files are automatically generated from titles of `fix`/`feat`/`BREAKING_CHANGES` commits, so they should have short clear descriptions
 
+
