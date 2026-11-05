@@ -1,0 +1,28 @@
+.yt-flow-dynamic-spec {
+    &__toolbar {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 12px;
+    }
+
+    &__diff {
+        max-height: 300px;
+        overflow: auto;
+    }
+
+    &__actions {
+        display: flex;
+        gap: 4px;
+    }
+
+    &__reset {
+        margin-bottom: 12px;
+    }
+
+    &__cell {
+        vertical-align: top;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+}
