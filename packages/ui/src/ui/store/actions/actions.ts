@@ -26,7 +26,7 @@ export function dismissAction(): ActionModalAction {
 export function confirmAction(
     handler: ActionModalPrompt['handler'],
     data: ActionModalData,
-): ThunkAction<Promise<void>, RootState, null, ActionModalAction> {
+): ThunkAction<Promise<void>, Pick<RootState, 'actions'>, null, ActionModalAction> {
     return (dispatch, getState) => {
         dispatch({
             type: CONFIRM_ACTION.REQUEST,
@@ -37,11 +37,13 @@ export function confirmAction(
                 const {successMessage} = getState().actions;
 
                 dispatch(dismissAction());
-                toaster.add({
-                    name: 'confirm action',
-                    theme: 'success',
-                    title: successMessage,
-                });
+                if (successMessage) {
+                    toaster.add({
+                        name: 'confirm action',
+                        theme: 'success',
+                        title: successMessage,
+                    });
+                }
             },
             (error: unknown) => {
                 dispatch({
