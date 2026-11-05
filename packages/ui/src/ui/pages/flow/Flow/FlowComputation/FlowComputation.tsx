@@ -19,7 +19,7 @@ import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {selectFlowPipelinePath} from '../../../../store/selectors/flow/filters';
 import {selectCluster} from '../../../../store/selectors/global/cluster';
 import UIFactory, {type FlowComputationMonitorProps} from '../../../../UIFactory';
-import {makeFlowComputationTabLink} from '../../../../utils/app-url';
+import {makeFlowComputationTabLink, makeFlowStateLink} from '../../../../utils/app-url';
 import './FlowComputation.scss';
 import {FlowComputationPartitions} from './FlowComputationPartitions';
 import {FlowComputationPerformance} from './FlowComputationPerformance/FlowComputationPerformance';
@@ -114,6 +114,7 @@ function FlowComputationExtraTabView({
 
 function FlowComputationTabs({computation}: {computation: string}) {
     const cluster = useSelector(selectCluster);
+    const path = useSelector(selectFlowPipelinePath);
 
     return (
         <Tabs
@@ -146,7 +147,8 @@ function FlowComputationTabs({computation}: {computation: string}) {
                 ...extraTabs.map((tab) => ({
                     value: tab.value,
                     text: tab.title,
-                    url: makeFlowComputationTabLink({cluster, computation, tab: tab.value}),
+                    url: makeFlowStateLink({cluster, path, computation}),
+                    routedPreserveLocation: false,
                     show: true,
                 })),
             ]}
