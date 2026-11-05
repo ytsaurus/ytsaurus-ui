@@ -38,6 +38,7 @@ export interface TabItem<ValueT extends string = string> {
     title?: string;
     url?: string;
     routed?: boolean;
+    routedPreserveLocation?: boolean;
     external?: boolean;
 
     hotkey?: HotkeyProps['settings'];
@@ -74,7 +75,8 @@ class Tabs<ValueT extends string = string> extends React.Component<Props<ValueT>
     }
 
     renderNavLink(item: TabItem<ValueT>) {
-        const to = !this.props.routedPreserveLocation
+        const preserveLocation = item.routedPreserveLocation ?? this.props.routedPreserveLocation;
+        const to = !preserveLocation
             ? item.url
             : () => {
                   return makeRoutedURL(item.url!);
