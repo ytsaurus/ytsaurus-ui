@@ -1,5 +1,6 @@
 import {type Response} from '@gravity-ui/expresskit';
 import axios from 'axios';
+import OpenAI from 'openai';
 import {ErrorWithCode, sendError} from './index';
 
 export const sendApiError = (res: Response, error: unknown) => {
@@ -9,6 +10,9 @@ export const sendApiError = (res: Response, error: unknown) => {
     if (axios.isAxiosError(error)) {
         status = error.response?.status;
         message = error.response?.statusText;
+    } else if (error instanceof OpenAI.APIError) {
+        status = error.status;
+        message = error.message;
     } else if (error instanceof ErrorWithCode) {
         status = error.code;
         message = error.message;
