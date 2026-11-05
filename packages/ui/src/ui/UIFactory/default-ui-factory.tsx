@@ -193,6 +193,9 @@ export const defaultUIFactory: UIFactory = {
     getStatisticsComponentForBundle() {
         return undefined;
     },
+    getBundleExtraTabs() {
+        return [];
+    },
 
     renderNavigationExtraActions() {
         return null;
@@ -219,6 +222,9 @@ export const defaultUIFactory: UIFactory = {
     },
 
     getExtraMetaTableItemsForBundle() {
+        return undefined;
+    },
+    renderBundleMetaTableExtraContent() {
         return undefined;
     },
 
