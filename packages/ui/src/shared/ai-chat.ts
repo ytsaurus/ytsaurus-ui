@@ -1,51 +1,18 @@
-export type McpMessage = {
-    approval_request_id: string | null;
-    arguments: Record<string, string>;
-    error: null | Error;
-    id: string;
-    name: 'search_docs' | 'get_table_schema';
-    output: string;
-    server_label: 'server';
-    type: 'mcp_call';
-};
+import type {OpenAIConversationLike} from '@gravity-ui/aikit/adapters';
 
-export interface LLMStreamEvent {
-    type: string;
-    delta?: string;
-    item?: {
-        id: string;
-        type?: string;
-        name?: string;
-        output?: string | null;
-    };
-}
+export type {ConversationItem} from 'openai/resources/conversations/items';
 
 export interface AIChatConfig {
     baseUrl: string;
     model: string;
+    metadata?: Record<string, string>;
+    conversationLookup?: 'retrieve' | 'list';
 }
 
-export type Conversation = {
-    id: string;
-    object: 'conversations';
-    created_at: number;
-    metadata: {
-        topic?: string;
-    };
-};
+export type Conversation = OpenAIConversationLike;
 
-export interface ConversationMessage {
-    id: string;
-    role: 'user' | 'assistant';
-    status: 'completed' | 'in_progress' | 'failed' | 'cancelled';
-    type: 'message';
-    content: {type: string; text: string}[];
-}
-
-export interface GetConversationItemsResponse {
-    data: (ConversationMessage | McpMessage)[];
-    total: number;
-    first_id: string;
-    last_id: string;
+export interface ConversationPage<T> {
+    data: T[];
     has_more: boolean;
+    last_id?: string | null;
 }
