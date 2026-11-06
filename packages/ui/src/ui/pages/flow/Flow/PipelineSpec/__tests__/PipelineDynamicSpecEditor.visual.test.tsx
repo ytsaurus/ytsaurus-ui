@@ -13,9 +13,12 @@ async function replaceEditor(page: Page, spec: unknown) {
     const editor = page.getByRole('dialog').getByRole('textbox', {name: 'Editor content'});
     await editor.focus();
     await expect(editor).toBeFocused();
-    await page.keyboard.press('Control+A');
+    const modifier = await page.evaluate(() =>
+        navigator.userAgent.includes('Macintosh') ? 'Meta' : 'Control',
+    );
+    await page.keyboard.press(`${modifier}+A`);
     await page.keyboard.press('Backspace');
-    await page.keyboard.insertText(JSON.stringify(spec, null, 4));
+    await page.keyboard.insertText(JSON.stringify(spec));
 }
 for (const theme of ['light', 'dark'] as const) {
     test(`PipelineDynamicSpecEditor: multi-path root edit ${theme}`, async ({
@@ -158,7 +161,7 @@ test('PipelineDynamicSpecEditor: old controller keeps the legacy editor', async 
     await mount(<Stories.Effective />);
     await page.getByRole('button', {name: 'Edit dynamic specification'}).click();
     await expect(page.getByRole('textbox', {name: 'Comment'})).toHaveCount(0);
-    await expect(
-        page.getByRole('dialog').getByRole('textbox', {name: 'Editor content'}),
-    ).toBeVisible();
+    const editor = page.getByRole('dialog').getByRole('textbox', {name: 'Editor content'});
+    await editor.focus();
+    await expect(editor).toBeFocused();
 });
