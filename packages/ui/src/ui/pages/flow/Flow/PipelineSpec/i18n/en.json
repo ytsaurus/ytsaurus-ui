@@ -4,5 +4,12 @@
   "for-more-details-2": "documentation",
   "force": "Force",
   "pipeline-path": "Pipeline path",
-  "specification": "Specification"
+  "specification": "Specification",
+  "field_comment": "Comment",
+  "context_comment-required": "Add a comment explaining the change.",
+  "context_value-change-required": "Change the specification to save an update.",
+  "context_patch-change-required": "Change the value or comment to save an update.",
+  "error_deletion-unsupported": "Deleting fields is not supported. Restore the removed fields before saving.",
+  "error_target-state-readonly": "Use the pipeline lifecycle controls to change target_state.",
+  "error_unsafe-version": "Cannot read the dynamic specification: the controller returned a version that cannot be represented exactly."
 }
