@@ -6,9 +6,18 @@
         margin-bottom: 12px;
     }
 
+    &__patches-table .gt-table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    &__diff-column {
+        // Override the inline column width supplied by DataTableGravity.
+        width: auto !important;
+    }
+
     &__diff {
-        max-height: 300px;
-        overflow: auto;
+        overflow-wrap: anywhere;
     }
 
     &__actions {

@@ -27,6 +27,26 @@ export const snapshot: FlowDynamicSpecSnapshot = {
     ],
 };
 
+export const largePatchSnapshot: FlowDynamicSpecSnapshot = {
+    ...snapshot,
+    patches: [
+        {
+            ...snapshot.patches[0],
+            changes: [
+                {
+                    path: '/computations/noop/options',
+                    value: Object.fromEntries(
+                        Array.from({length: 24}, (_, index) => [
+                            `option_${index}`,
+                            index === 23 ? 'long_value_'.repeat(30) : index,
+                        ]),
+                    ),
+                },
+            ],
+        },
+    ],
+};
+
 export function requestParameters(request: Request) {
     const encoded = [...request.headers.entries()]
         .filter(([name]) => name.startsWith('x-yt-parameters-'))

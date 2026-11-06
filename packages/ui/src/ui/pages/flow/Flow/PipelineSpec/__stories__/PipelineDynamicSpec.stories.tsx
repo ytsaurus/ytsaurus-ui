@@ -8,6 +8,7 @@ import {FlowDynamicSpec} from '../PipelineSpec';
 import {
     PIPELINE_PATH,
     dynamicSpecHandler,
+    largePatchSnapshot,
     legacyHandler,
     markdownHandler,
     snapshot,
@@ -30,6 +31,11 @@ type Story = StoryObj<typeof PipelineDynamicSpec>;
 
 export const Patches: Story = {
     parameters: {msw: {handlers: [dynamicSpecHandler(), markdownHandler]}},
+};
+export const LargePatch: Story = {
+    parameters: {
+        msw: {handlers: [dynamicSpecHandler(largePatchSnapshot), markdownHandler]},
+    },
 };
 export const Empty: Story = {
     parameters: {

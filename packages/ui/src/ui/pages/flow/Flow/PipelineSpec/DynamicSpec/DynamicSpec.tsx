@@ -211,6 +211,10 @@ export function DynamicSpec({
                             </Button>
                             <DataTableGravity
                                 table={table}
+                                className={block('patches-table')}
+                                headerCellClassName={(header) =>
+                                    header.column.id === 'diff' ? block('diff-column') : ''
+                                }
                                 cellAttributes={{className: block('cell')}}
                             />
                         </>

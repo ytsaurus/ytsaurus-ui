@@ -8,6 +8,7 @@ import {
     PATCH_ID,
     VERSION,
     dynamicSpecHandler,
+    largePatchSnapshot,
     legacyHandler,
     markdownHandler,
     requestParameters,
@@ -68,6 +69,50 @@ for (const theme of ['light', 'dark'] as const) {
             await expect(second.getByRole('link', {name: 'YTFRONT-6091'})).toBeVisible();
             await expectScreenshot({themes: [theme]});
         });
+    });
+}
+
+for (const theme of ['light', 'dark'] as const) {
+    test(`PipelineDynamicSpec: full-width table and complete large patch ${theme}`, async ({
+        mount,
+        page,
+        expectScreenshot,
+        router,
+    }) => {
+        test.slow();
+        await router.use(dynamicSpecHandler(largePatchSnapshot));
+        await page.setViewportSize({width: 1280, height: 1100});
+        await mount(<PipelineDynamicSpecStories.LargePatch />);
+        await page.getByRole('radio', {name: 'Patches', exact: true}).click();
+        const table = page.getByRole('table');
+        const diff = page.locator('.yt-flow-dynamic-spec__diff');
+        await expect(diff).toContainText('option_23');
+        const initialDiffWidth = await diff.evaluate(
+            (element) => element.getBoundingClientRect().width,
+        );
+        await page.setViewportSize({width: 1800, height: 1100});
+        await expect
+            .poll(
+                async () =>
+                    (await diff.evaluate((element) => element.getBoundingClientRect().width)) -
+                    initialDiffWidth,
+            )
+            .toBeGreaterThan(500);
+        const dimensions = await table.evaluate((element) => ({
+            width: element.getBoundingClientRect().width,
+            availableWidth: element.parentElement?.getBoundingClientRect().width ?? 0,
+        }));
+        expect(Math.abs(dimensions.width - dimensions.availableWidth)).toBeLessThanOrEqual(1);
+        const content = await diff.evaluate((element) => ({
+            height: element.clientHeight,
+            scrollHeight: element.scrollHeight,
+            width: element.clientWidth,
+            scrollWidth: element.scrollWidth,
+        }));
+        expect(content.height).toBeGreaterThan(300);
+        expect(content.scrollHeight).toBeLessThanOrEqual(content.height + 1);
+        expect(content.scrollWidth).toBeLessThanOrEqual(content.width + 1);
+        await expectScreenshot({themes: [theme]});
     });
 }
 
