@@ -1,16 +1,14 @@
 import React from 'react';
-import {composeStories} from '@storybook/react';
 import {http} from 'msw';
 import {type Page} from '@playwright/test';
 import {expect, test} from '../../../../../playwright-components/core';
-import * as stories from '../__stories__/PipelineDynamicSpecEditor.stories';
+import {PipelineDynamicSpecEditorStories as Stories} from '../__stories__';
 import {
     dynamicSpecEditorHandler,
     effective,
     requestParameters,
     version,
 } from '../__stories__/editor-mocks';
-const Stories = composeStories(stories);
 async function replaceEditor(page: Page, spec: unknown) {
     const editor = page.getByRole('dialog').getByRole('textbox', {name: 'Editor content'});
     await editor.focus();

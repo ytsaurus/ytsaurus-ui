@@ -112,8 +112,9 @@ export function loadFlowDynamicSpec(pipeline_path: string): AsyncAction {
                 const message =
                     typeof inner.message === 'string' ? inner.message : inner.message?.$value;
                 if (
-                    message?.startsWith('No such command: get-pipeline-dynamic-spec.') ||
-                    message?.startsWith('No such command: get-pipeline-dynamic-spec-patches.')
+                    typeof message === 'string' &&
+                    (message.startsWith('No such command: get-pipeline-dynamic-spec.') ||
+                        message.startsWith('No such command: get-pipeline-dynamic-spec-patches.'))
                 ) {
                     unavailable = true;
                 }
