@@ -1,7 +1,6 @@
 import React from 'react';
-import cn from 'bem-cn-lite';
 
-import {Alert, Button, Link} from '@gravity-ui/uikit';
+import {Button} from '@gravity-ui/uikit';
 
 import {type YTError} from '../../../../../@types/types';
 
@@ -11,6 +10,7 @@ import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
     loadFlowDynamicSpec,
     loadFlowStaticSpec,
+    mutateFlowDynamicSpec,
     updateFlowDynamicSpec,
     updateFlowStaticSpec,
 } from '../../../../store/actions/flow/specs';
@@ -28,18 +28,16 @@ import {type FlowSpecState} from '../../../../store/reducers/flow/specs';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
 import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 import Icon from '../../../../components/Icon/Icon';
-import {YTDFDialog, makeErrorFields} from '../../../../containers/Dialog';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
 import Loader from '../../../../components/Loader/Loader';
-import {type UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
-import UIFactory from '../../../../UIFactory';
 
 import {pathToFileName} from '../../../navigation/helpers/pathToFileName';
 
-import './PipelineSpec.scss';
-import i18n from './i18n';
+import {EditSpecDialog} from './EditSpecDialog/EditSpecDialog';
+import {DynamicSpec} from './DynamicSpec/DynamicSpec';
+import {dynamicSpecPath} from '../../../../utils/flow/dynamic-spec';
 
-const block = cn('yt-pipeline-spec');
+import './PipelineSpec.scss';
 
 type PipelineSpecProps = {
     path: string;
@@ -68,7 +66,13 @@ function PipelineSpec({path, data, error, name, onSave, allowForce}: PipelineSpe
                             settings={settings}
                             name={`pipeline_spec_${pathToFileName(path)}`}
                         />
-                        <Button view="outlined" onClick={() => setShowEdit(true)}>
+                        <Button
+                            view="outlined"
+                            disabled={!data}
+                            onClick={() => {
+                                setShowEdit(true);
+                            }}
+                        >
                             <Icon awesome="pencil" />
                             Edit {name}
                         </Button>
@@ -86,125 +90,6 @@ function PipelineSpec({path, data, error, name, onSave, allowForce}: PipelineSpe
                 allowForce={allowForce}
             />
         </React.Fragment>
-    );
-}
-
-type FormValues = {
-    text: {value?: string};
-    path: string;
-    force?: boolean;
-};
-
-function EditSpecDialog({
-    path,
-    visible,
-    spec,
-    onClose,
-    onSpecApply,
-    name,
-    settings,
-    allowForce,
-}: Pick<PipelineSpecProps, 'name' | 'path'> & {
-    spec?: unknown;
-    visible: boolean;
-    onClose: () => void;
-    settings: UnipikaSettings;
-    onSpecApply: (spec: unknown, options: {force?: boolean}) => Promise<void>;
-    allowForce?: boolean;
-}) {
-    const [error, setError] = React.useState<YTError | undefined>();
-
-    const text = React.useMemo(() => {
-        return {value: JSON.stringify(spec, null, 4)};
-    }, [spec]);
-
-    const forceHelpUrl = UIFactory.docsUrls['flow:update_static_spec:force'];
-
-    return (
-        visible && (
-            <YTDFDialog<FormValues>
-                visible
-                size="l"
-                onClose={onClose}
-                initialValues={{text, path}}
-                headerProps={{
-                    title: `Edit ${name}`,
-                }}
-                onAdd={async (f) => {
-                    setError(undefined);
-                    const {text: textData, force} = f.getState().values;
-                    if (textData.value) {
-                        try {
-                            return await onSpecApply(JSON.parse(textData.value), {force});
-                        } catch (e: any) {
-                            setError(e);
-                            return Promise.reject(e);
-                        }
-                    } else {
-                        return Promise.resolve();
-                    }
-                }}
-                fields={[
-                    {
-                        caption: i18n('pipeline-path'),
-                        name: 'path',
-                        type: 'plain',
-                    },
-                    {
-                        name: 'text',
-                        caption: i18n('specification'),
-                        type: 'json',
-                        fullWidth: true,
-                        extras: {
-                            className: block('editor'),
-                            initialShowPreview: false,
-                            unipikaSettings: settings,
-                        },
-                    },
-                    ...(allowForce
-                        ? [
-                              {
-                                  name: 'force',
-                                  caption: i18n('force'),
-                                  type: 'tumbler' as const,
-                              },
-                          ]
-                        : []),
-                    {
-                        name: 'forceWarningn',
-                        caption: '',
-                        type: 'block',
-                        visibilityCondition: {when: 'force', isActive: (v) => v},
-                        extras: {
-                            children: (
-                                <Alert
-                                    style={{marginTop: -16}}
-                                    theme="warning"
-                                    message={
-                                        <div>
-                                            {i18n('alert_force-mode-unrecoverable')}{' '}
-                                            {Boolean(forceHelpUrl) && (
-                                                <>
-                                                    {i18n('for-more-details-1')}{' '}
-                                                    <Link
-                                                        href={forceHelpUrl}
-                                                        target="_blank"
-                                                        style={{display: 'inline'}}
-                                                    >
-                                                        {i18n('for-more-details-2')}.
-                                                    </Link>
-                                                </>
-                                            )}
-                                        </div>
-                                    }
-                                />
-                            ),
-                        },
-                    },
-                    ...makeErrorFields([error]),
-                ]}
-            />
-        )
     );
 }
 
@@ -245,6 +130,7 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
     const dispatch = useDispatch();
 
     const data = useSelector(selectFlowDynamicSpecData);
+    const settings = useSelector(selectFlowSpecYsonSettings);
     const error = useSelector(selectFlowDynamicSpecError);
     const firstLoading = useSelector(selectFlowDynamicSpecFirstLoading);
 
@@ -260,15 +146,67 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
         [path, dispatch],
     );
 
-    return firstLoading ? (
-        <Loader />
-    ) : (
-        <PipelineSpec
-            path={path}
-            data={data}
-            error={error}
-            name="dynamic specification"
-            onSave={onEdit}
-        />
+    if (firstLoading) {
+        return <Loader />;
+    }
+    return (
+        <>
+            {Boolean(error) && <YTErrorBlock error={error} />}
+            <DynamicSpec
+                key={path}
+                snapshot={data?.dynamic_spec_state}
+                unavailable={data?.dynamic_spec_state_unavailable}
+                settings={settings}
+                pipelinePath={path}
+                onCancel={(patch, expected_version) =>
+                    dispatch(
+                        mutateFlowDynamicSpec({
+                            path,
+                            command: 'cancel-pipeline-dynamic-spec-patch',
+                            body: {patch, expected_version},
+                        }),
+                    )
+                }
+                onUpdate={(patch, changes, comment, expected_version) =>
+                    dispatch(
+                        mutateFlowDynamicSpec({
+                            path,
+                            command: 'patch-pipeline-dynamic-spec',
+                            body: {
+                                patch,
+                                comment,
+                                expected_version,
+                                ...(changes === undefined
+                                    ? {}
+                                    : {
+                                          set_changes: changes.map(({path: changePath, value}) => ({
+                                              path: dynamicSpecPath(changePath),
+                                              value,
+                                          })),
+                                      }),
+                            },
+                        }),
+                    )
+                }
+                onReset={(expected_version) =>
+                    dispatch(
+                        mutateFlowDynamicSpec({
+                            path,
+                            command: 'reset-pipeline-dynamic-spec',
+                            body: {expected_version},
+                        }),
+                    )
+                }
+                renderEffective={() => (
+                    <PipelineSpec
+                        path={path}
+                        data={data && {spec: data.spec, version: data.version}}
+                        error={undefined}
+                        name="dynamic specification"
+                        onSave={onEdit}
+                    />
+                )}
+            />
+        </>
     );
 }
