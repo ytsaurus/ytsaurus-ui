@@ -44,6 +44,7 @@ export const largePatchSnapshot: FlowDynamicSpecSnapshot = {
                 },
             ],
         },
+        snapshot.patches[1],
     ],
 };
 

@@ -30,6 +30,7 @@
     }
 
     &__cell {
+        border-bottom: 1px solid var(--g-color-line-generic);
         vertical-align: top;
         padding-top: 8px;
         padding-bottom: 8px;

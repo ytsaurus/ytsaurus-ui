@@ -85,7 +85,7 @@ for (const theme of ['light', 'dark'] as const) {
         await mount(<PipelineDynamicSpecStories.LargePatch />);
         await page.getByRole('radio', {name: 'Patches', exact: true}).click();
         const table = page.getByRole('table');
-        const diff = page.locator('.yt-flow-dynamic-spec__diff');
+        const diff = page.locator('.yt-flow-dynamic-spec__diff').first();
         await expect(diff).toContainText('option_23');
         const initialDiffWidth = await diff.evaluate(
             (element) => element.getBoundingClientRect().width,
