@@ -1,21 +1,17 @@
-import React from 'react';
+import React, {useMemo, useState} from 'react';
 import {type Meta, type StoryObj} from '@storybook/react';
-import {Checkbox, Flex, Text} from '@gravity-ui/uikit';
+import {Button, Checkbox, Flex, Text} from '@gravity-ui/uikit';
 
 import {SegmentedRadioGroupOrSelect} from '../SegmentedRadioGroupOrSelect';
+import {Toolbar} from '../../WithStickyToolbar/Toolbar/Toolbar';
+
+import '../../WithStickyToolbar/WithStickyToolbar.scss';
 
 const meta: Meta<typeof SegmentedRadioGroupOrSelect> = {
     title: 'Components/SegmentedRadioGroupOrSelect',
     component: SegmentedRadioGroupOrSelect,
     parameters: {
         layout: 'centered',
-    },
-    argTypes: {
-        observeWidthBy: {
-            control: 'select',
-            options: ['parent', 'grandparent'],
-            description: 'Which ancestor element to observe width for mode switching',
-        },
     },
     decorators: [
         (Story) => (
@@ -87,6 +83,8 @@ export const ObserveParent: Story = {
 };
 
 function ObserverGrandParentDemo() {
+    const [container, setContainer] = useState<HTMLDivElement | null>(null);
+    const resizeTriggerElements = useMemo(() => [container], [container]);
     const [value, setValue] = React.useState<string>('option1');
     const [halfGrandParent, setHalfGrandParent] = React.useState(false);
     return (
@@ -96,7 +94,10 @@ function ObserverGrandParentDemo() {
                 Half grand-parent
             </Checkbox>
 
-            <Flex style={{width: halfGrandParent ? '50%' : '100%', overflow: 'hidden'}}>
+            <Flex
+                ref={setContainer}
+                style={{width: halfGrandParent ? '50%' : '100%', overflow: 'hidden'}}
+            >
                 <Flex
                     gap={2}
                     alignItems={'center'}
@@ -106,7 +107,7 @@ function ObserverGrandParentDemo() {
                     style={{overflow: 'hidden'}}
                 >
                     <SegmentedRadioGroupOrSelect
-                        observeWidthBy="grandparent"
+                        resizeTriggerElements={resizeTriggerElements}
                         value={value}
                         options={OPTIONS}
                         onUpdate={setValue}
@@ -131,4 +132,94 @@ export const ObserveGrandParent: Story = {
             },
         },
     },
+};
+
+function ResizableNeighbor({
+    name,
+    elementRef,
+}: {
+    name: string;
+    elementRef?: React.Ref<HTMLDivElement>;
+}) {
+    const [expanded, setExpanded] = useState(false);
+    return (
+        <div ref={elementRef} style={{width: expanded ? 650 : 180}}>
+            <Button width="max" onClick={() => setExpanded(!expanded)}>
+                Resize {name} neighbor
+            </Button>
+        </div>
+    );
+}
+
+function ObserveNeighborsDemo({observeSpacer = false}: {observeSpacer?: boolean}) {
+    const [value, setValue] = useState('option1');
+    const [container, setContainer] = useState<HTMLDivElement | null>(null);
+    const [spacer, setSpacer] = useState<HTMLDivElement | null>(null);
+    const [firstNeighbor, setFirstNeighbor] = useState<HTMLDivElement | null>(null);
+    const [secondNeighbor, setSecondNeighbor] = useState<HTMLDivElement | null>(null);
+    const [showFirst, setShowFirst] = useState(true);
+    const [replacement, setReplacement] = useState(0);
+    const resizeTriggerElements = useMemo(
+        () => (observeSpacer ? [container, spacer] : [container, firstNeighbor, secondNeighbor]),
+        [container, spacer, firstNeighbor, secondNeighbor, observeSpacer],
+    );
+    return (
+        <Flex direction="column" gap={3} style={{width: 1400}}>
+            <Checkbox checked={showFirst} onUpdate={setShowFirst}>
+                Show first neighbor
+            </Checkbox>
+            <Button onClick={() => setReplacement((previous) => previous + 1)}>
+                Replace second neighbor
+            </Button>
+            <Toolbar
+                containerRef={setContainer}
+                itemsToWrap={[
+                    {
+                        name: 'selector',
+                        shrinkable: true,
+                        node: (
+                            <SegmentedRadioGroupOrSelect
+                                value={value}
+                                options={OPTIONS}
+                                onUpdate={setValue}
+                                resizeTriggerElements={resizeTriggerElements}
+                            />
+                        ),
+                    },
+                    {
+                        name: 'first',
+                        node: showFirst && (
+                            <ResizableNeighbor name="first" elementRef={setFirstNeighbor} />
+                        ),
+                    },
+                    {
+                        name: 'second',
+                        node: (
+                            <ResizableNeighbor
+                                key={replacement}
+                                name="second"
+                                elementRef={setSecondNeighbor}
+                            />
+                        ),
+                    },
+                    {
+                        name: 'spacer',
+                        elementRef: setSpacer,
+                        growable: true,
+                        shrinkable: true,
+                        node: <span />,
+                    },
+                ]}
+            />
+            <Text>Selected value: {value}</Text>
+        </Flex>
+    );
+}
+
+export const ObserveNeighbors: Story = {
+    render: () => <ObserveNeighborsDemo />,
+};
+
+export const ObserveSpacer: Story = {
+    render: () => <ObserveNeighborsDemo observeSpacer />,
 };
