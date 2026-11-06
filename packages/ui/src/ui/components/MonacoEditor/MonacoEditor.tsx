@@ -70,16 +70,21 @@ const MonacoEditor: FC<Props> = ({
 
     const prevScopeRef = useRef<string>(key.getScope());
     const silentRef = useRef<boolean>(false);
+    const onChangeRef = useRef(onChange);
     const prevProps = useRef<Pick<Props, 'monacoConfig' | 'readOnly'> & {theme: string}>({
         theme,
         monacoConfig,
         readOnly,
     });
 
+    useEffect(() => {
+        onChangeRef.current = onChange;
+    }, [onChange]);
+
     const onContentChanged = useCallback(() => {
         if (silentRef.current) return;
-        onChange?.(modelRef.current.getValue());
-    }, [onChange]);
+        onChangeRef.current?.(modelRef.current.getValue());
+    }, []);
 
     // first init
     useEffect(() => {

@@ -9,7 +9,7 @@ export type FlowSpecState = {
     error: YTError | undefined;
 
     pipeline_path: string | undefined;
-    data: {spec: unknown; version: Int64} | undefined;
+    data: {spec: unknown; version: Int64; dynamic_spec_state_unavailable?: boolean} | undefined;
 };
 
 const initialState: FlowSpecState = {
