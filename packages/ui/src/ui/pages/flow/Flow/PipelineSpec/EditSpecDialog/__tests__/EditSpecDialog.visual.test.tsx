@@ -57,5 +57,7 @@ test('EditSpecDialog: save error stays in the open editor', async ({mount, page}
     await dialog.getByRole('button', {name: 'Confirm', exact: true}).click();
     await expect(dialog).toBeVisible();
     await expect(dialog.getByText('Cannot save specification').first()).toBeVisible();
+    await dialog.getByRole('button', {name: 'Cancel', exact: true}).click();
+    await expect(dialog).toHaveCount(0);
     await expect(page.getByRole('status', {name: 'Applied specification'})).toBeEmpty();
 });
