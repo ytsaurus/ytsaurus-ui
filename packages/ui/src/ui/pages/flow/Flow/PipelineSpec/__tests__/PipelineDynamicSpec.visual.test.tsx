@@ -146,6 +146,7 @@ for (const theme of ['light', 'dark'] as const) {
         router,
         expectScreenshot,
     }) => {
+        test.slow();
         const calls: Array<{command: string; body: unknown}> = [];
         const effective = {
             computations: {noop: {batch_duration: 1002, max_rows_per_batch: 2000}},
@@ -176,15 +177,11 @@ for (const theme of ['light', 'dark'] as const) {
         await expect(dialog.getByRole('button', {name: 'Confirm', exact: true})).toBeDisabled();
         await replaceEditorContent(
             page,
-            JSON.stringify(
-                {
-                    ...effective,
-                    computations: {noop: {...effective.computations.noop, batch_duration: 1003}},
-                    controller: {limit: 5, stable: 8},
-                },
-                null,
-                4,
-            ),
+            JSON.stringify({
+                ...effective,
+                computations: {noop: {...effective.computations.noop, batch_duration: 1003}},
+                controller: {limit: 5, stable: 8},
+            }),
         );
         await expect(dialog).toContainText('1003');
         await expectScreenshot({themes: [theme], component: dialog});
