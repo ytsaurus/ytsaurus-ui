@@ -13,6 +13,8 @@ for (const theme of ['light', 'dark'] as const) {
         const dialog = page.getByRole('dialog');
         const comment = dialog.getByRole('textbox', {name: 'Comment'});
         const confirm = dialog.getByRole('button', {name: 'Confirm', exact: true});
+        await expect(dialog.getByRole('textbox', {name: 'Editor content'})).toBeVisible();
+        await expect(dialog.getByText('"batch_duration"', {exact: true})).toBeVisible();
         await expect(comment).toHaveValue('Initial reason');
         await expect(confirm).toBeDisabled();
         await comment.fill('   ');
