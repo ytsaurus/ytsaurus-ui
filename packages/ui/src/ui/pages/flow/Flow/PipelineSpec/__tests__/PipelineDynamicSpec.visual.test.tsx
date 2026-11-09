@@ -152,7 +152,6 @@ test('PipelineDynamicSpec: Edit reads and saves base without switching view', as
     await dialog.getByRole('button', {name: 'Show preview', exact: true}).click();
     await expect(dialog).toContainText('1000');
     await expect(dialog).not.toContainText('1002');
-    await expect(page.getByRole('radio', {name: 'Effective', exact: true})).toBeChecked();
     const edited = {computations: {noop: {batch_duration: 1003, max_rows_per_batch: 1000}}};
     const editor = dialog.getByRole('textbox', {name: 'Editor content'});
     await editor.focus();
@@ -166,6 +165,8 @@ test('PipelineDynamicSpec: Edit reads and saves base without switching view', as
     await dialog.getByRole('button', {name: 'Confirm', exact: true}).click();
     await expect.poll(() => writes.length).toBe(1);
     expect(writes[0]).toMatchObject({parameters: {expected_version: 42}, body: edited});
+    await expect(dialog).toBeHidden();
+    await expect(page.getByRole('radio', {name: 'Effective', exact: true})).toBeChecked();
 });
 
 test('PipelineDynamicSpec: failed base read does not open effective for editing', async ({
