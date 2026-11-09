@@ -10,6 +10,11 @@ export const selectFlowStaticSpecFirstLoading = (state: RootState) => {
 
 export const selectFlowDynamicSpecData = (state: RootState) => state.flow.dynamicSpec.data;
 export const selectFlowDynamicSpecPath = (state: RootState) => state.flow.dynamicSpec.pipeline_path;
+export const selectFlowDynamicSpecView = (state: RootState) =>
+    state.flow.dynamicSpec.view ?? 'effective';
+export const selectFlowDynamicSpecSupportedFeatures = (state: RootState) =>
+    state.flow.dynamicSpec.supported_features;
+export const selectFlowDynamicSpecLoading = (state: RootState) => state.flow.dynamicSpec.loading;
 export const selectFlowDynamicSpecError = (state: RootState) => state.flow.dynamicSpec.error;
 export const selectFlowDynamicSpecFirstLoading = (state: RootState) => {
     const {loading, loaded} = state.flow.dynamicSpec;
