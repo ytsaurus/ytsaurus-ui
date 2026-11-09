@@ -1,5 +1,7 @@
 import {type ThunkAction} from 'redux-thunk';
 
+import {type FlowExecuteTypes} from '../../../../shared/yt-types';
+
 import {type YTError, type YTErrorRaw} from '../../../../@types/types';
 import {ytApiV4} from '../../../rum/rum-wrap-api';
 import ypath from '../../../common/thor/ypath';
@@ -16,6 +18,7 @@ import {
 import {
     selectFlowDynamicSpecPath,
     selectFlowDynamicSpecSupportedFeatures,
+    selectFlowDynamicSpecView,
     selectFlowStaticSpecPath,
 } from '../../../store/selectors/flow/specs';
 
@@ -199,5 +202,49 @@ export function loadFlowDynamicSpecForEdit(
         return ytApiV4.getPipelineDynamicSpec({
             parameters: {pipeline_path: path, output_format: 'web_json'},
         });
+    };
+}
+
+export type DynamicSpecMutationCommand =
+    'cancel-pipeline-dynamic-spec-patch' | 'reset-pipeline-dynamic-spec';
+
+export type DynamicSpecMutation = {
+    [Command in DynamicSpecMutationCommand]: {
+        path: string;
+        command: Command;
+        body: FlowExecuteTypes[Command]['BodyType']['body'];
+    };
+}[DynamicSpecMutationCommand];
+
+export function mutateFlowDynamicSpec({
+    path,
+    command,
+    body,
+}: DynamicSpecMutation): AsyncAction<Promise<void>> {
+    return async (dispatch, getState) => {
+        try {
+            await ytApiV4.flowExecute<DynamicSpecMutationCommand>({
+                parameters: {
+                    pipeline_path: path,
+                    flow_command: command,
+                    input_format: {$value: 'json', $attributes: {encode_utf8: true}},
+                    output_format: 'web_json',
+                },
+                data: {
+                    ...body,
+                    expected_version: {
+                        $type: 'int64',
+                        $value: String(ypath.getValue(body.expected_version)),
+                    },
+                    ...('patch' in body && body.patch !== undefined
+                        ? {patch: {$type: 'int64', $value: String(ypath.getValue(body.patch))}}
+                        : {}),
+                },
+            });
+        } finally {
+            if (path === selectFlowDynamicSpecPath(getState())) {
+                dispatch(loadFlowDynamicSpec(path, selectFlowDynamicSpecView(getState())));
+            }
+        }
     };
 }

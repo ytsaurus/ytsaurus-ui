@@ -12,6 +12,7 @@ import {
     loadFlowDynamicSpec,
     loadFlowDynamicSpecForEdit,
     loadFlowStaticSpec,
+    mutateFlowDynamicSpec,
     updateFlowDynamicSpec,
     updateFlowStaticSpec,
 } from '../../../../store/actions/flow/specs';
@@ -336,6 +337,24 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
                     loading={loading}
                     settings={settings}
                     renderEffective={renderEffective}
+                    onCancel={(patch, version) =>
+                        dispatch(
+                            mutateFlowDynamicSpec({
+                                path,
+                                command: 'cancel-pipeline-dynamic-spec-patch',
+                                body: {patch, expected_version: version},
+                            }),
+                        )
+                    }
+                    onReset={(version) =>
+                        dispatch(
+                            mutateFlowDynamicSpec({
+                                path,
+                                command: 'reset-pipeline-dynamic-spec',
+                                body: {expected_version: version},
+                            }),
+                        )
+                    }
                 />
             ) : (
                 renderEffective()

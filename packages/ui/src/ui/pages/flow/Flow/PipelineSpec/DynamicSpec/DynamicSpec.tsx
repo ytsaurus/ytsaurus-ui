@@ -1,9 +1,11 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import moment from 'moment';
-import {SegmentedRadioGroup, Text} from '@gravity-ui/uikit';
+import {Button, Icon, SegmentedRadioGroup, Text, Tooltip} from '@gravity-ui/uikit';
 
-import {type FlowDynamicSpecPatch} from '../../../../../../shared/yt-types';
+import TrashBinIcon from '@gravity-ui/icons/svgs/trash-bin.svg';
+
+import {type FlowDynamicSpecPatch, type Int64} from '../../../../../../shared/yt-types';
 import ypath from '../../../../../common/thor/ypath';
 import {
     DataTableGravity,
@@ -20,6 +22,9 @@ import {
 } from '../../../../../store/reducers/flow/specs';
 import {type UnipikaSettings} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {dynamicSpecPatchDiff} from '../../../../../utils/flow/dynamic-spec';
+import {CancelDynamicSpecPatchDialog} from './CancelDynamicSpecPatchDialog/CancelDynamicSpecPatchDialog';
+import {ResetDynamicSpecPatchesDialog} from './ResetDynamicSpecPatchesDialog/ResetDynamicSpecPatchesDialog';
+
 import i18n from '../i18n';
 
 import './DynamicSpec.scss';
@@ -33,9 +38,25 @@ type Props = {
     loading: boolean;
     settings: UnipikaSettings;
     renderEffective: () => React.ReactNode;
+    onCancel: (patch: Int64, version: Int64) => Promise<void>;
+    onReset: (version: Int64) => Promise<void>;
 };
 
-export function DynamicSpec({data, view, onViewChange, loading, settings, renderEffective}: Props) {
+export function DynamicSpec({
+    data,
+    view,
+    onViewChange,
+    loading,
+    settings,
+    renderEffective,
+    onCancel,
+    onReset,
+}: Props) {
+    const [cancelConfirmation, setCancelConfirmation] = React.useState<{
+        patch: Int64;
+        version: Int64;
+    }>();
+    const [resetConfirmation, setResetConfirmation] = React.useState<Int64>();
     const columns: Array<tanstack.ColumnDef<FlowDynamicSpecPatch>> = [
         {
             id: 'patch-id',
@@ -71,6 +92,26 @@ export function DynamicSpec({data, view, onViewChange, loading, settings, render
                 <time dateTime={patch.timestamp} title={patch.timestamp}>
                     {moment(patch.timestamp).local().format('YYYY-MM-DD HH:mm:ss')}
                 </time>
+            ),
+        },
+        {
+            id: 'actions',
+            header: '',
+            size: 50,
+            cell: ({row: {original: patch}}) => (
+                <Tooltip content={i18n('context_cancel-patch')}>
+                    <Button
+                        size="s"
+                        view="flat"
+                        aria-label={`${i18n('action_cancel-patch')} ${ypath.getValue(patch.patch_id)}`}
+                        onClick={() =>
+                            data &&
+                            setCancelConfirmation({patch: patch.patch_id, version: data.version})
+                        }
+                    >
+                        <Icon data={TrashBinIcon} size={16} />
+                    </Button>
+                </Tooltip>
             ),
         },
     ];
@@ -113,18 +154,42 @@ export function DynamicSpec({data, view, onViewChange, loading, settings, render
                         {i18n('context_patch-order')}
                     </Text>
                     {data.patches.length ? (
-                        <DataTableGravity
-                            table={table}
-                            className={block('patches-table')}
-                            headerCellClassName={(header) =>
-                                header.column.id === 'diff' ? block('diff-column') : ''
-                            }
-                            cellAttributes={{className: block('cell')}}
-                        />
+                        <>
+                            <Button
+                                className={block('reset')}
+                                view="outlined-danger"
+                                onClick={() => setResetConfirmation(data.version)}
+                            >
+                                {i18n('action_reset-patches')}
+                            </Button>
+                            <DataTableGravity
+                                table={table}
+                                className={block('patches-table')}
+                                headerCellClassName={(header) =>
+                                    header.column.id === 'diff' ? block('diff-column') : ''
+                                }
+                                cellAttributes={{className: block('cell')}}
+                            />
+                        </>
                     ) : (
                         <Text as="p">{i18n('context_no-patches')}</Text>
                     )}
                 </>
+            )}
+            {cancelConfirmation && (
+                <CancelDynamicSpecPatchDialog
+                    patch={cancelConfirmation.patch}
+                    version={cancelConfirmation.version}
+                    onCancel={onCancel}
+                    onClose={() => setCancelConfirmation(undefined)}
+                />
+            )}
+            {resetConfirmation !== undefined && (
+                <ResetDynamicSpecPatchesDialog
+                    version={resetConfirmation}
+                    onReset={onReset}
+                    onClose={() => setResetConfirmation(undefined)}
+                />
             )}
         </div>
     );
