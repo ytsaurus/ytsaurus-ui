@@ -4,5 +4,15 @@
   "for-more-details-2": "documentation",
   "force": "Force",
   "pipeline-path": "Pipeline path",
-  "specification": "Specification"
+  "specification": "Specification",
+  "value_base": "Base",
+  "value_effective": "Effective",
+  "field_diff": "Diff",
+  "field_patch-id": "Patch ID",
+  "field_time": "Time",
+  "field_version": "Version",
+  "field_comment": "Comment",
+  "value_patches": "Patches",
+  "context_patch-order": "Patches are applied from top to bottom: later rows can cover earlier changes.",
+  "context_no-patches": "No active patches."
 }

@@ -10,7 +10,7 @@ import {YTSortIndicator} from './YTSortIndicator';
 const block = cn('yt-gravity-table');
 
 export type VirtuallizerProps =
-    {virtualized: never; rowHeight: never} | {virtualized: true; rowHeight: number};
+    {virtualized?: false; rowHeight?: never} | {virtualized: true; rowHeight: number};
 
 export const getCellStyles = <TData, TValue = unknown>(
     cell?: Cell<TData, TValue> | Header<TData, TValue>,
@@ -35,7 +35,7 @@ export const getCellStyles = <TData, TValue = unknown>(
 export function DataTableGravity<TData, TScrollElement extends Element | Window>({
     className,
     virtualized,
-    rowHeight,
+    rowHeight = 0,
     scrollToIndex,
     rowClassName,
     isHighlightedRow,

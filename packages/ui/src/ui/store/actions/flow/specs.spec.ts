@@ -7,6 +7,7 @@ import {
 
 import {
     loadFlowDynamicSpec,
+    loadFlowDynamicSpecForEdit,
     loadFlowStaticSpec,
     updateFlowDynamicSpec,
     updateFlowStaticSpec,
@@ -24,6 +25,7 @@ jest.mock('../../../rum/rum-wrap-api', () => ({
 
 jest.mock('../../../store/selectors/flow/specs', () => ({
     selectFlowDynamicSpecPath: () => '//home/flow',
+    selectFlowDynamicSpecSupportedFeatures: (state: {features: string[]}) => state.features,
     selectFlowStaticSpecPath: () => '//home/flow',
 }));
 
@@ -315,5 +317,36 @@ describe('dynamic spec feature discovery', () => {
         });
         expect(otherPipeline.data).toBeUndefined();
         expect(otherPipeline.supported_features).toBeUndefined();
+    });
+});
+
+describe('dynamic specification base editing', () => {
+    it('reads base and its version without replacing the selected view', async () => {
+        jest.mocked(ytApiV4.flowExecute).mockResolvedValue({spec, version});
+        const dispatch = jest.fn();
+        const draft = await loadFlowDynamicSpecForEdit(pipelinePath)(
+            dispatch,
+            (() => ({features: ['dynamic_spec_patches']})) as never,
+            undefined,
+        );
+        expect(draft).toEqual({spec, version});
+        expect(ytApiV4.flowExecute).toHaveBeenCalledWith({
+            parameters: {
+                pipeline_path: pipelinePath,
+                output_format: 'web_json',
+                flow_command: 'get-pipeline-dynamic-spec',
+            },
+            data: {view: 'base'},
+        });
+        expect(dispatch).not.toHaveBeenCalled();
+    });
+    it('keeps the legacy read when patches are unsupported', async () => {
+        jest.mocked(ytApiV4.getPipelineDynamicSpec).mockResolvedValue({spec, version});
+        const draft = await loadFlowDynamicSpecForEdit(pipelinePath)(
+            jest.fn(),
+            (() => ({features: []})) as never,
+            undefined,
+        );
+        expect(draft).toEqual({spec, version});
     });
 });
