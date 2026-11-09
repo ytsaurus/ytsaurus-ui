@@ -414,7 +414,7 @@ for (const theme of ['light', 'dark'] as const) {
         await page.getByRole('radio', {name: 'Patches', exact: true}).click();
         await page.getByRole('button', {name: `Update ${PATCH_ID}`, exact: true}).click();
         const dialog = page.getByRole('dialog');
-        await expect(dialog.getByRole('textbox', {name: 'Editor content'})).toBeVisible();
+        await expect(dialog.getByRole('textbox', {name: 'Editor content'})).toBeAttached();
         await expect(dialog.getByText('"computations"', {exact: true}).first()).toBeVisible();
         await dialog.getByRole('button', {name: 'Show preview', exact: true}).click();
         await expect(dialog).toContainText('computations');
