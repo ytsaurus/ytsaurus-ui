@@ -45,3 +45,7 @@ export const Empty: Story = {
 export const Unsupported: Story = {
     parameters: {msw: {handlers: [unsupportedHandler, legacyHandler]}},
 };
+
+export const NoPatchFeature: Story = {
+    parameters: {msw: {handlers: [dynamicSpecHandler(snapshot, []), legacyHandler]}},
+};

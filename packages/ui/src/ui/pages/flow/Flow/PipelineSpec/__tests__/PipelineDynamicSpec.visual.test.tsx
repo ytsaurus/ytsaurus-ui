@@ -139,62 +139,117 @@ test('PipelineDynamicSpec: old controller keeps legacy view', async ({mount, pag
     await expect(page.getByText('1002', {exact: true})).toBeVisible();
 });
 
-test('PipelineDynamicSpec: Edit reads and saves base without switching view', async ({
+for (const theme of ['light', 'dark'] as const) {
+    test(`PipelineDynamicSpec: root Edit creates one minimal patch ${theme}`, async ({
+        mount,
+        page,
+        router,
+        expectScreenshot,
+    }) => {
+        const calls: Array<{command: string; body: unknown}> = [];
+        const effective = {
+            computations: {noop: {batch_duration: 1002, max_rows_per_batch: 2000}},
+            controller: {limit: 4, stable: 8},
+        };
+        await router.use(
+            http.put('*/api/v4/flow_execute', async ({request}) => {
+                if (requestParameters(request).flow_command !== 'patch-pipeline-dynamic-spec')
+                    return;
+                calls.push({command: 'patch', body: await request.json()});
+                return Response.json({version: snapshot.version});
+            }),
+            dynamicSpecHandler({...snapshot, effective_spec: effective}),
+            http.put('*/api/v4/set_pipeline_dynamic_spec', () => {
+                calls.push({command: 'set', body: {}});
+                return Response.json({});
+            }),
+        );
+        await mount(<PipelineDynamicSpecStories.Patches />);
+        await page.getByRole('button', {name: 'Edit dynamic specification'}).click();
+        const dialog = page.getByRole('dialog');
+        await expect(dialog.getByRole('textbox', {name: 'Editor content'})).toBeAttached();
+        await expect(dialog.getByText('"computations"', {exact: true})).toBeVisible();
+        await dialog.getByRole('button', {name: 'Show preview', exact: true}).click();
+        await expect(dialog).toContainText('1002');
+        await expect(dialog).not.toContainText('1000');
+        await dialog.getByRole('textbox', {name: 'Comment'}).fill('Two runtime changes');
+        await expect(dialog.getByRole('button', {name: 'Confirm', exact: true})).toBeDisabled();
+        await replaceEditorContent(
+            page,
+            JSON.stringify(
+                {
+                    ...effective,
+                    computations: {noop: {...effective.computations.noop, batch_duration: 1003}},
+                    controller: {limit: 5, stable: 8},
+                },
+                null,
+                4,
+            ),
+        );
+        await expect(dialog).toContainText('1003');
+        await expectScreenshot({themes: [theme], component: dialog});
+        await dialog.getByRole('button', {name: 'Confirm', exact: true}).click();
+        await expect.poll(() => calls.length).toBe(1);
+        expect(calls[0]).toEqual({
+            command: 'patch',
+            body: {
+                set_changes: [
+                    {path: '/computations/noop/batch_duration', value: 1003},
+                    {path: '/controller/limit', value: 5},
+                ],
+                comment: 'Two runtime changes',
+                expected_version: snapshot.version,
+            },
+        });
+        await expect(dialog).toHaveCount(0);
+        await expect(page.getByRole('radio', {name: 'Effective', exact: true})).toBeChecked();
+    });
+}
+
+test('PipelineDynamicSpec: old Controller still saves base through Set', async ({
     mount,
     page,
     router,
 }) => {
-    const writes: Array<{parameters: unknown; body: unknown}> = [];
+    const calls: unknown[] = [];
     await router.use(
-        http.put('*/api/v4/flow_execute', async ({request}) => {
-            if (requestParameters(request).flow_command === 'get-pipeline-dynamic-spec') {
-                const body = (await request.clone().json()) as {view: string};
-                if (body.view === 'base')
-                    return Response.json({version: 42, spec: snapshot.base_spec});
-            }
-            return;
-        }),
-        dynamicSpecHandler(),
+        unsupportedHandler,
+        http.get('*/api/v4/get_pipeline_dynamic_spec', () =>
+            Response.json({version: 42, spec: snapshot.base_spec}),
+        ),
         http.put('*/api/v4/set_pipeline_dynamic_spec', async ({request}) => {
-            writes.push({parameters: requestParameters(request), body: await request.json()});
+            calls.push({parameters: requestParameters(request), body: await request.json()});
             return Response.json({});
         }),
     );
-    await mount(<PipelineDynamicSpecStories.Patches />);
+    await mount(<PipelineDynamicSpecStories.Unsupported />);
     await page.getByRole('button', {name: 'Edit dynamic specification'}).click();
     const dialog = page.getByRole('dialog');
-    await dialog.getByRole('button', {name: 'Show preview', exact: true}).click();
-    await expect(dialog).toContainText('1000');
-    await expect(dialog).not.toContainText('1002');
+    await expect(dialog.getByRole('textbox', {name: 'Comment'})).toHaveCount(0);
     const edited = {computations: {noop: {batch_duration: 1003, max_rows_per_batch: 1000}}};
-    const editor = dialog.getByRole('textbox', {name: 'Editor content'});
-    await editor.focus();
-    await expect(editor).toBeFocused();
-    const modifier = await page.evaluate(() =>
-        navigator.userAgent.includes('Macintosh') ? 'Meta' : 'Control',
-    );
-    await page.keyboard.press(`${modifier}+A`);
-    await page.keyboard.press('Backspace');
-    await page.keyboard.insertText(JSON.stringify(edited));
+    await replaceEditorContent(page, JSON.stringify(edited));
     await dialog.getByRole('button', {name: 'Confirm', exact: true}).click();
-    await expect.poll(() => writes.length).toBe(1);
-    expect(writes[0]).toMatchObject({parameters: {expected_version: 42}, body: edited});
-    await expect(dialog).toBeHidden();
-    await expect(page.getByRole('radio', {name: 'Effective', exact: true})).toBeChecked();
+    await expect.poll(() => calls.length).toBe(1);
+    expect(calls[0]).toMatchObject({parameters: {expected_version: 42}, body: edited});
 });
 
-test('PipelineDynamicSpec: failed base read does not open effective for editing', async ({
+test('PipelineDynamicSpec: failed fresh read does not open a stale editor', async ({
     mount,
     page,
     router,
 }) => {
+    let reads = 0;
     await router.use(
         http.put('*/api/v4/flow_execute', async ({request}) => {
             if (
                 requestParameters(request).flow_command === 'get-pipeline-dynamic-spec' &&
-                ((await request.clone().json()) as {view: string}).view === 'base'
+                ((await request.clone().json()) as {view: string}).view === 'effective' &&
+                ++reads > 1
             ) {
-                return Response.json({code: 1, message: 'Cannot read base'}, {status: 500});
+                return Response.json(
+                    {code: 1, message: 'Cannot read specification'},
+                    {status: 500},
+                );
             }
             return;
         }),
@@ -202,7 +257,7 @@ test('PipelineDynamicSpec: failed base read does not open effective for editing'
     );
     await mount(<PipelineDynamicSpecStories.Patches />);
     await page.getByRole('button', {name: 'Edit dynamic specification'}).click();
-    await expect(page.getByText('Cannot read base').first()).toBeVisible();
+    await expect(page.getByText('Cannot read specification').first()).toBeVisible();
     await expect(page.getByRole('dialog')).toHaveCount(0);
 });
 
@@ -513,4 +568,195 @@ test('PipelineDynamicSpec: Update keeps its captured patch and version after con
     ]);
     await dialog.getByRole('button', {name: 'Cancel', exact: true}).click();
     await expect(dialog).toHaveCount(0);
+});
+
+for (const createPatch of [true, false]) {
+    test(`PipelineDynamicSpec: open draft keeps mode when feature becomes ${!createPatch}`, async ({
+        mount,
+        page,
+        router,
+    }) => {
+        let supported = createPatch;
+        const calls: Array<{command: string; parameters?: unknown; body: unknown}> = [];
+        await router.use(
+            http.put('*/api/v4/flow_execute', async ({request}) => {
+                const command = requestParameters(request).flow_command;
+                if (command === 'get-supported-features')
+                    return Response.json(supported ? ['dynamic_spec_patches'] : []);
+                if (command === 'patch-pipeline-dynamic-spec') {
+                    calls.push({command: 'patch', body: await request.json()});
+                    return Response.json({version: 43});
+                }
+                if (command === 'get-pipeline-dynamic-spec')
+                    return Response.json({version: 42, spec: snapshot.effective_spec});
+                return undefined;
+            }),
+            dynamicSpecHandler(),
+            http.put('*/api/v4/set_pipeline_dynamic_spec', async ({request}) => {
+                calls.push({
+                    command: 'set',
+                    parameters: requestParameters(request),
+                    body: await request.json(),
+                });
+                return Response.json({});
+            }),
+            http.get('*/api/v4/get_pipeline_dynamic_spec', () =>
+                Response.json({version: 42, spec: snapshot.effective_spec}),
+            ),
+        );
+        await mount(
+            createPatch ? (
+                <PipelineDynamicSpecStories.Patches />
+            ) : (
+                <PipelineDynamicSpecStories.NoPatchFeature />
+            ),
+        );
+        await page.getByRole('button', {name: 'Edit dynamic specification'}).click();
+        const dialog = page.getByRole('dialog');
+        await replaceEditorContent(
+            page,
+            '{"computations":{"noop":{"batch_duration":1003,"max_rows_per_batch":2000}}}',
+        );
+        if (createPatch) await dialog.getByRole('textbox', {name: 'Comment'}).fill('Frozen reason');
+        supported = !createPatch;
+        await page.evaluate((feature) => {
+            (
+                window as typeof window & {store: {dispatch: (action: unknown) => unknown}}
+            ).store.dispatch({
+                type: 'flow.dynamicSpec/onSuccess',
+                payload: {
+                    supported_features: feature ? ['dynamic_spec_patches'] : [],
+                    data: {
+                        version: 43,
+                        spec: {
+                            computations: {noop: {batch_duration: 1004, max_rows_per_batch: 2000}},
+                        },
+                    },
+                },
+            });
+        }, supported);
+        await expect(dialog).toBeVisible();
+        await expect(dialog.getByRole('textbox', {name: 'Comment'})).toHaveCount(
+            createPatch ? 1 : 0,
+        );
+        await dialog.getByRole('button', {name: 'Confirm', exact: true}).click();
+        await expect.poll(() => calls.length).toBe(1);
+        expect(calls[0]).toMatchObject(
+            createPatch
+                ? {
+                      command: 'patch',
+                      body: {
+                          expected_version: {$type: 'int64', $value: '42'},
+                          comment: 'Frozen reason',
+                          set_changes: [{path: '/computations/noop/batch_duration', value: 1003}],
+                      },
+                  }
+                : {
+                      command: 'set',
+                      parameters: {expected_version: 42},
+                      body: {
+                          computations: {noop: {batch_duration: 1003, max_rows_per_batch: 2000}},
+                      },
+                  },
+        );
+        await expect(dialog).toHaveCount(0);
+    });
+}
+
+test('PipelineDynamicSpec: create conflict keeps the draft without fallback Set', async ({
+    mount,
+    page,
+    router,
+}) => {
+    const calls: string[] = [];
+    await router.use(
+        http.put('*/api/v4/flow_execute', async ({request}) => {
+            if (requestParameters(request).flow_command !== 'patch-pipeline-dynamic-spec') return;
+            calls.push('patch');
+            return Response.json(
+                {code: 1, message: 'Dynamic spec version mismatch'},
+                {status: 500},
+            );
+        }),
+        dynamicSpecHandler(),
+        http.put('*/api/v4/set_pipeline_dynamic_spec', () => {
+            calls.push('set');
+            return Response.json({});
+        }),
+    );
+    await mount(<PipelineDynamicSpecStories.Patches />);
+    await page.getByRole('button', {name: 'Edit dynamic specification'}).click();
+    const dialog = page.getByRole('dialog');
+    await replaceEditorContent(
+        page,
+        '{"computations":{"noop":{"batch_duration":1003,"max_rows_per_batch":2000}}}',
+    );
+    await dialog.getByRole('textbox', {name: 'Comment'}).fill('Keep this draft');
+    await dialog.getByRole('button', {name: 'Confirm', exact: true}).click();
+    await expect(dialog.getByText('Dynamic spec version mismatch').first()).toBeVisible();
+    await expect(dialog.getByRole('textbox', {name: 'Comment'})).toHaveValue('Keep this draft');
+    expect(calls).toEqual(['patch']);
+});
+
+for (const [name, edited, error] of [
+    [
+        'parameter deletion',
+        {computations: {noop: {batch_duration: 1002}}},
+        'Deleting dynamic specification parameters',
+    ],
+    ['map deletion', {}, 'Deleting dynamic specification parameters'],
+    [
+        'lifecycle change',
+        {
+            computations: {noop: {batch_duration: 1002, max_rows_per_batch: 2000}},
+            target_state: 'paused',
+        },
+        'Use pipeline lifecycle controls',
+    ],
+] as const) {
+    test(`PipelineDynamicSpec: root Edit rejects ${name} before sending changes`, async ({
+        mount,
+        page,
+        router,
+    }) => {
+        const calls: unknown[] = [];
+        await router.use(
+            http.put('*/api/v4/flow_execute', async ({request}) => {
+                if (requestParameters(request).flow_command !== 'patch-pipeline-dynamic-spec')
+                    return;
+                calls.push(await request.json());
+                return Response.json({});
+            }),
+            dynamicSpecHandler(),
+        );
+        await mount(<PipelineDynamicSpecStories.Patches />);
+        await page.getByRole('button', {name: 'Edit dynamic specification'}).click();
+        const dialog = page.getByRole('dialog');
+        await replaceEditorContent(page, JSON.stringify(edited));
+        await dialog.getByRole('textbox', {name: 'Comment'}).fill('Rejected edit');
+        await dialog.getByRole('button', {name: 'Confirm', exact: true}).click();
+        await expect(dialog.getByText(error, {exact: false}).first()).toBeVisible();
+        expect(calls).toHaveLength(0);
+    });
+}
+
+test('PipelineDynamicSpec: discovery failure does not enable legacy editing', async ({
+    mount,
+    page,
+    router,
+}) => {
+    const legacyReads: unknown[] = [];
+    await router.use(
+        http.put('*/api/v4/flow_execute', () =>
+            Response.json({code: 1, message: 'Access denied'}, {status: 500}),
+        ),
+        http.get('*/api/v4/get_pipeline_dynamic_spec', () => {
+            legacyReads.push('read');
+            return Response.json({version: 42, spec: {}});
+        }),
+    );
+    await mount(<PipelineDynamicSpecStories.Patches />);
+    await expect(page.getByText('Access denied').first()).toBeVisible();
+    await expect(page.getByRole('button', {name: 'Edit dynamic specification'})).toBeDisabled();
+    expect(legacyReads).toHaveLength(0);
 });

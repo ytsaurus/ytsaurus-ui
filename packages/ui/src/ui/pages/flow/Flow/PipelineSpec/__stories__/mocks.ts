@@ -66,11 +66,13 @@ export function requestParameters(request: Request) {
     );
 }
 
-export function dynamicSpecHandler(state: FlowDynamicSpecSnapshot = snapshot) {
+export function dynamicSpecHandler(
+    state: FlowDynamicSpecSnapshot = snapshot,
+    supportedFeatures = ['dynamic_spec_patches'],
+) {
     return http.put('*/api/v4/flow_execute', async ({request}) => {
         const {flow_command} = requestParameters(request);
-        if (flow_command === 'get-supported-features')
-            return Response.json(['dynamic_spec_patches']);
+        if (flow_command === 'get-supported-features') return Response.json(supportedFeatures);
         if (flow_command === 'get-pipeline-dynamic-spec-patches') {
             return Response.json({version: state.version, patches: state.patches});
         }
