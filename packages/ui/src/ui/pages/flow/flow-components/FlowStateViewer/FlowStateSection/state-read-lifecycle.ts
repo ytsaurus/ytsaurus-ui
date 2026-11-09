@@ -1,5 +1,4 @@
 import type {FlowStaticSpec} from '../../../../../../shared/yt-types';
-import {reconcileStateTarget} from '../state-filter-options';
 import type {FlowStateFiltersValue} from '../types';
 
 export function selectFirstComputation(
@@ -27,7 +26,6 @@ export function selectFirstComputation(
     return {
         ...current,
         computationId: firstComputationId,
-        target: reconcileStateTarget(staticSpec, firstComputationId, current.target),
     };
 }
 

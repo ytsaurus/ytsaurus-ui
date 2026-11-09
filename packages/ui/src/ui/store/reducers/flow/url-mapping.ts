@@ -91,18 +91,6 @@ export const flowComputationStateParams: typeof flowParams = {
     stateTarget: {
         stateKey: 'flow.filters.stateViewer.target',
         initialState: filtersInitialState.stateViewer.target,
-        options: {
-            parse: (value) => {
-                if (
-                    value === 'key_state' ||
-                    value === 'partition_state' ||
-                    value === 'external_key_state'
-                ) {
-                    return value;
-                }
-                return filtersInitialState.stateViewer.target;
-            },
-        },
     },
     stateKeyValues: {
         stateKey: 'flow.filters.stateViewer.keyValues',
