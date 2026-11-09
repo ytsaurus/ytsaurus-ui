@@ -1,7 +1,9 @@
 import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
 
 import {type YTError} from '../../../../@types/types';
-import {type Int64} from '../../../../shared/yt-types';
+import {type FlowDynamicSpecPatch, type Int64} from '../../../../shared/yt-types';
+
+export type FlowDynamicSpecView = 'effective' | 'base' | 'patches';
 
 export type FlowSpecState = {
     loaded: boolean;
@@ -9,7 +11,9 @@ export type FlowSpecState = {
     error: YTError | undefined;
 
     pipeline_path: string | undefined;
-    data: {spec: unknown; version: Int64} | undefined;
+    view?: FlowDynamicSpecView;
+    supported_features?: string[];
+    data: {spec: unknown; version: Int64; patches?: FlowDynamicSpecPatch[]} | undefined;
 };
 
 const initialState: FlowSpecState = {
@@ -24,15 +28,36 @@ const initialState: FlowSpecState = {
 const reducers = {
     onRequest(
         state: FlowSpecState,
-        {payload: {pipeline_path}}: PayloadAction<Pick<FlowSpecState, 'pipeline_path'>>,
+        {
+            payload: {pipeline_path, view},
+        }: PayloadAction<Pick<FlowSpecState, 'pipeline_path' | 'view'>>,
     ) {
         Object.assign(state, {loading: true, error: undefined});
         if (pipeline_path !== state.pipeline_path) {
-            Object.assign(state, {pipeline_path, data: undefined});
+            Object.assign(state, {
+                pipeline_path,
+                data: undefined,
+                loaded: false,
+                supported_features: undefined,
+            });
+        }
+        if (view !== state.view) {
+            Object.assign(state, {view, data: undefined});
         }
     },
-    onSuccess(state: FlowSpecState, {payload: {data}}: PayloadAction<Pick<FlowSpecState, 'data'>>) {
-        Object.assign(state, {data, loaded: true, loading: false, error: undefined});
+    onSuccess(
+        state: FlowSpecState,
+        {
+            payload: {data, supported_features},
+        }: PayloadAction<Pick<FlowSpecState, 'data' | 'supported_features'>>,
+    ) {
+        Object.assign(state, {
+            data,
+            supported_features,
+            loaded: true,
+            loading: false,
+            error: undefined,
+        });
     },
     onError(state: FlowSpecState, {payload: {error}}: PayloadAction<Pick<FlowSpecState, 'error'>>) {
         Object.assign(state, {error, loading: false});

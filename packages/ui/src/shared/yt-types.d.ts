@@ -547,6 +547,13 @@ export type TableParams = {
 
 export type Int64 = string | number | {$type: 'int64'; $value: string};
 
+export type FlowDynamicSpecPatch = {
+    patch_id: Int64;
+    timestamp: string;
+    comment?: string;
+    changes: Array<{path: string; value: unknown}>;
+};
+
 export type ExpectedVersion = {
     expected_version?: Int64;
 };
@@ -637,6 +644,33 @@ export type GetQueryTrackerInfoResponse = {
 };
 
 export type FlowExecuteTypes = {
+    'get-supported-features': {
+        ParamsType: {
+            pipeline_path: string;
+            flow_command: 'get-supported-features';
+            output_format?: 'web_json';
+        };
+        BodyType: {body?: undefined};
+        ResponseType: string[];
+    };
+    'get-pipeline-dynamic-spec': {
+        ParamsType: {
+            pipeline_path: string;
+            flow_command: 'get-pipeline-dynamic-spec';
+            output_format?: 'web_json';
+        };
+        BodyType: {body: {view: 'effective' | 'base'}};
+        ResponseType: {version: Int64; spec: unknown};
+    };
+    'get-pipeline-dynamic-spec-patches': {
+        ParamsType: {
+            pipeline_path: string;
+            flow_command: 'get-pipeline-dynamic-spec-patches';
+            output_format?: 'web_json';
+        };
+        BodyType: {body?: undefined};
+        ResponseType: {version: Int64; patches: FlowDynamicSpecPatch[]};
+    };
     'describe-computation': {
         ParamsType: {
             flow_command: 'describe-computation';
