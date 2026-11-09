@@ -149,12 +149,23 @@ test('PipelineDynamicSpec: Edit reads and saves base without switching view', as
     await mount(<PipelineDynamicSpecStories.Patches />);
     await page.getByRole('button', {name: 'Edit dynamic specification'}).click();
     const dialog = page.getByRole('dialog');
-    await expect(dialog.getByRole('textbox', {name: 'Editor content'})).toContainText('1000');
-    await expect(dialog.getByRole('textbox', {name: 'Editor content'})).not.toContainText('1002');
+    await dialog.getByRole('button', {name: 'Show preview', exact: true}).click();
+    await expect(dialog).toContainText('1000');
+    await expect(dialog).not.toContainText('1002');
     await expect(page.getByRole('radio', {name: 'Effective', exact: true})).toBeChecked();
+    const edited = {computations: {noop: {batch_duration: 1003, max_rows_per_batch: 1000}}};
+    const editor = dialog.getByRole('textbox', {name: 'Editor content'});
+    await editor.focus();
+    await expect(editor).toBeFocused();
+    const modifier = await page.evaluate(() =>
+        navigator.userAgent.includes('Macintosh') ? 'Meta' : 'Control',
+    );
+    await page.keyboard.press(`${modifier}+A`);
+    await page.keyboard.press('Backspace');
+    await page.keyboard.insertText(JSON.stringify(edited));
     await dialog.getByRole('button', {name: 'Confirm', exact: true}).click();
     await expect.poll(() => writes.length).toBe(1);
-    expect(writes[0]).toMatchObject({parameters: {expected_version: 42}, body: snapshot.base_spec});
+    expect(writes[0]).toMatchObject({parameters: {expected_version: 42}, body: edited});
 });
 
 test('PipelineDynamicSpec: failed base read does not open effective for editing', async ({
