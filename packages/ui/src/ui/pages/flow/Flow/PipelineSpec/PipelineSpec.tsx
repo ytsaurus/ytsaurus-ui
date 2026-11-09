@@ -1,7 +1,6 @@
 import React from 'react';
-import cn from 'bem-cn-lite';
 
-import {Alert, Button, Link} from '@gravity-ui/uikit';
+import {Button} from '@gravity-ui/uikit';
 
 import {type YTError} from '../../../../../@types/types';
 
@@ -34,20 +33,13 @@ import {type FlowDynamicSpecView, type FlowSpecState} from '../../../../store/re
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
 import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 import Icon from '../../../../components/Icon/Icon';
-import {YTDFDialog, makeErrorFields} from '../../../../containers/Dialog';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
 import Loader from '../../../../components/Loader/Loader';
-import {type UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
-import UIFactory from '../../../../UIFactory';
 
 import {pathToFileName} from '../../../navigation/helpers/pathToFileName';
 
 import {DynamicSpec} from './DynamicSpec/DynamicSpec';
-
-import './PipelineSpec.scss';
-import i18n from './i18n';
-
-const block = cn('yt-pipeline-spec');
+import {EditSpecDialog} from './EditSpecDialog/EditSpecDialog';
 
 type PipelineSpecProps = {
     path: string;
@@ -134,125 +126,6 @@ function PipelineSpec({
                 allowForce={allowForce}
             />
         </React.Fragment>
-    );
-}
-
-type FormValues = {
-    text: {value?: string};
-    path: string;
-    force?: boolean;
-};
-
-function EditSpecDialog({
-    path,
-    visible,
-    spec,
-    onClose,
-    onSpecApply,
-    name,
-    settings,
-    allowForce,
-}: Pick<PipelineSpecProps, 'name' | 'path'> & {
-    spec?: unknown;
-    visible: boolean;
-    onClose: () => void;
-    settings: UnipikaSettings;
-    onSpecApply: (spec: unknown, options: {force?: boolean}) => Promise<void>;
-    allowForce?: boolean;
-}) {
-    const [error, setError] = React.useState<YTError | undefined>();
-
-    const text = React.useMemo(() => {
-        return {value: JSON.stringify(spec, null, 4)};
-    }, [spec]);
-
-    const forceHelpUrl = UIFactory.docsUrls['flow:update_static_spec:force'];
-
-    return (
-        visible && (
-            <YTDFDialog<FormValues>
-                visible
-                size="l"
-                onClose={onClose}
-                initialValues={{text, path}}
-                headerProps={{
-                    title: `Edit ${name}`,
-                }}
-                onAdd={async (f) => {
-                    setError(undefined);
-                    const {text: textData, force} = f.getState().values;
-                    if (textData.value) {
-                        try {
-                            return await onSpecApply(JSON.parse(textData.value), {force});
-                        } catch (e: any) {
-                            setError(e);
-                            return Promise.reject(e);
-                        }
-                    } else {
-                        return Promise.resolve();
-                    }
-                }}
-                fields={[
-                    {
-                        caption: i18n('pipeline-path'),
-                        name: 'path',
-                        type: 'plain',
-                    },
-                    {
-                        name: 'text',
-                        caption: i18n('specification'),
-                        type: 'json',
-                        fullWidth: true,
-                        extras: {
-                            className: block('editor'),
-                            initialShowPreview: false,
-                            unipikaSettings: settings,
-                        },
-                    },
-                    ...(allowForce
-                        ? [
-                              {
-                                  name: 'force',
-                                  caption: i18n('force'),
-                                  type: 'tumbler' as const,
-                              },
-                          ]
-                        : []),
-                    {
-                        name: 'forceWarningn',
-                        caption: '',
-                        type: 'block',
-                        visibilityCondition: {when: 'force', isActive: (v) => v},
-                        extras: {
-                            children: (
-                                <Alert
-                                    style={{marginTop: -16}}
-                                    theme="warning"
-                                    message={
-                                        <div>
-                                            {i18n('alert_force-mode-unrecoverable')}{' '}
-                                            {Boolean(forceHelpUrl) && (
-                                                <>
-                                                    {i18n('for-more-details-1')}{' '}
-                                                    <Link
-                                                        href={forceHelpUrl}
-                                                        target="_blank"
-                                                        style={{display: 'inline'}}
-                                                    >
-                                                        {i18n('for-more-details-2')}.
-                                                    </Link>
-                                                </>
-                                            )}
-                                        </div>
-                                    }
-                                />
-                            ),
-                        },
-                    },
-                    ...makeErrorFields([error]),
-                ]}
-            />
-        )
     );
 }
 
