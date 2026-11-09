@@ -1,35 +1,6 @@
 import type {FlowStateNameInputMode} from './types';
 
-import type {FlowStateTarget, FlowStaticSpec} from '../../../../../shared/yt-types';
-import {
-    getComputationGroupByColumns,
-    getComputationKeyColumns,
-    getComputationStateNames,
-} from './state-schema';
-
-export function getAvailableStateTargets(
-    spec: FlowStaticSpec | undefined,
-    computationId: string | undefined,
-): Record<FlowStateTarget, boolean> {
-    if (!computationId) {
-        return {all: true, key_state: true, partition_state: true, external_key_state: true};
-    }
-    return {
-        all: true,
-        key_state: getComputationKeyColumns(spec, computationId).length > 0,
-        partition_state: getComputationGroupByColumns(spec, computationId).length > 0,
-        external_key_state:
-            getComputationStateNames(spec, computationId, 'external_key_state').length > 0,
-    };
-}
-
-export function reconcileStateTarget(
-    spec: FlowStaticSpec | undefined,
-    computationId: string | undefined,
-    target: FlowStateTarget,
-): FlowStateTarget {
-    return getAvailableStateTargets(spec, computationId)[target] ? target : 'all';
-}
+import type {FlowStateTarget} from '../../../../../shared/yt-types';
 
 export function getStateNameInputMode(target: FlowStateTarget): FlowStateNameInputMode {
     if (target === 'external_key_state') {

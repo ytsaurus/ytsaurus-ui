@@ -8,11 +8,9 @@ import {useFlowExecuteQuery} from '../../../../../store/api/yt/flow';
 
 import {FlowStateKeyBuilder} from '../FlowStateKeyBuilder/FlowStateKeyBuilder';
 import {
-    getAvailableStateTargets,
     getStateNameInputMode,
     getStateNameSelectItems,
     reconcileStateName,
-    reconcileStateTarget,
 } from '../state-filter-options';
 import {getComputationStateNames, resolveKeySchema} from '../state-schema';
 import i18n from './i18n';
@@ -45,7 +43,7 @@ const TARGET_OPTIONS: Array<{value: FlowStateTarget; textKey: FlowStateApiValueK
 ];
 
 function toItems(values: Array<string>) {
-    return values.map((value) => ({value}));
+    return values.map((value) => ({value, text: value}));
 }
 
 function PartitionSelect({
@@ -112,12 +110,14 @@ export function FlowStateFilters({
         value.target,
     );
     const stateNames = getComputationStateNames(staticSpec, value.computationId, value.target);
-    const availableTargets = getAvailableStateTargets(staticSpec, value.computationId);
     const hasScope = Boolean(value.computationId || value.partitionId);
     const stateNameInputMode = getStateNameInputMode(value.target);
     const stateNameItems =
         stateNameInputMode === 'suggested'
-            ? getStateNameSelectItems(stateNames, value.stateName)
+            ? getStateNameSelectItems(
+                  [...new Set([...stateNames, '/__buffer_warmup'])],
+                  value.stateName,
+              )
             : stateNames;
     const stateNameDisabled =
         !hasScope || (stateNameInputMode === 'declared-only' && !stateNameItems.length);
@@ -130,7 +130,6 @@ export function FlowStateFilters({
             keyValues: {},
             rawKey: undefined,
             stateName: undefined,
-            target: reconcileStateTarget(staticSpec, computationId, value.target),
         });
     };
 
@@ -159,10 +158,6 @@ export function FlowStateFilters({
                     options={TARGET_OPTIONS.map(({value: target, textKey}) => ({
                         value: target,
                         content: i18nApiValues(textKey),
-                        disabled: !availableTargets[target],
-                        title: availableTargets[target]
-                            ? undefined
-                            : i18n('hint_target-unavailable'),
                     }))}
                     onUpdate={([next]) => {
                         if (!hasScope) {

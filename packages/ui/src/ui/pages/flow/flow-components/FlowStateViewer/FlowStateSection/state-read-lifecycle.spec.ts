@@ -7,14 +7,17 @@ const staticSpec: FlowStaticSpec = {
 };
 
 describe('selectFirstComputation', () => {
-    it('selects the first computation when describe data arrives', () => {
-        expect(
-            selectFirstComputation(filters({}), {
-                staticSpec,
-                userModified: false,
-            }),
-        ).toEqual(filters({computationId: 'first'}));
-    });
+    it.each(['all', 'key_state', 'partition_state', 'external_key_state'] as const)(
+        'preserves target %s when selecting the first computation without a schema',
+        (target) => {
+            expect(
+                selectFirstComputation(filters({target}), {
+                    staticSpec,
+                    userModified: false,
+                }),
+            ).toEqual(filters({computationId: 'first', target}));
+        },
+    );
 
     it.each([
         ['fixed computation', {fixedComputationId: 'fixed'}, filters({})],

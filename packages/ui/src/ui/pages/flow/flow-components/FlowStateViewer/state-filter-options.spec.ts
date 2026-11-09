@@ -1,55 +1,8 @@
 import {
-    getAvailableStateTargets,
     getStateNameInputMode,
     getStateNameSelectItems,
     reconcileStateName,
-    reconcileStateTarget,
 } from './state-filter-options';
-import type {FlowStaticSpec} from '../../../../../shared/yt-types';
-import {joinedSpec} from './state-test-fixtures';
-
-describe('getAvailableStateTargets', () => {
-    it('leaves every target available without a chosen computation', () => {
-        expect(getAvailableStateTargets(joinedSpec, undefined)).toEqual({
-            all: true,
-            key_state: true,
-            partition_state: true,
-            external_key_state: true,
-        });
-    });
-    it('marks every kind available for a computation declaring all of them', () => {
-        expect(getAvailableStateTargets(joinedSpec, 'state')).toEqual({
-            all: true,
-            key_state: true,
-            partition_state: true,
-            external_key_state: true,
-        });
-    });
-    it('disables kinds the computation does not declare', () => {
-        const bareSpec: FlowStaticSpec = {computations: {state: {}}};
-        expect(getAvailableStateTargets(bareSpec, 'state')).toEqual({
-            all: true,
-            key_state: false,
-            partition_state: false,
-            external_key_state: false,
-        });
-    });
-});
-describe('reconcileStateTarget', () => {
-    it('keeps the target when the new computation still declares it', () => {
-        expect(reconcileStateTarget(joinedSpec, 'state', 'external_key_state')).toBe(
-            'external_key_state',
-        );
-    });
-    it('falls back to all when the new computation no longer declares the target', () => {
-        const bareSpec: FlowStaticSpec = {computations: {state: {}}};
-        expect(reconcileStateTarget(bareSpec, 'state', 'external_key_state')).toBe('all');
-    });
-    it('leaves all untouched regardless of the computation', () => {
-        const bareSpec: FlowStaticSpec = {computations: {state: {}}};
-        expect(reconcileStateTarget(bareSpec, 'state', 'all')).toBe('all');
-    });
-});
 
 describe('getStateNameInputMode', () => {
     it('constrains the name to declared managers only for external_key_state', () => {
