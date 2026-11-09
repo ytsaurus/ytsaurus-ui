@@ -1,5 +1,6 @@
 import React from 'react';
 import {http} from 'msw';
+import {type Page} from '@playwright/test';
 
 import {expect, test} from '../../../../../playwright-components/core';
 import {PipelineDynamicSpecStories} from '../__stories__';
@@ -18,6 +19,18 @@ import {
 test.beforeEach(async ({router}) => {
     await router.use(markdownHandler);
 });
+
+async function replaceEditorContent(page: Page, text: string) {
+    const editor = page.getByRole('dialog').getByRole('textbox', {name: 'Editor content'});
+    await editor.focus();
+    await expect(editor).toBeFocused();
+    const modifier = await page.evaluate(() =>
+        navigator.userAgent.includes('Macintosh') ? 'Meta' : 'Control',
+    );
+    await page.keyboard.press(`${modifier}+A`);
+    await page.keyboard.press('Backspace');
+    await page.keyboard.insertText(text);
+}
 
 for (const theme of ['light', 'dark'] as const) {
     test(`PipelineDynamicSpec: tabs and grouped JSON patches ${theme}`, async ({
@@ -379,3 +392,125 @@ for (const theme of ['light', 'dark'] as const) {
         await expectScreenshot({themes: [theme], component: page.getByRole('dialog')});
     });
 }
+
+for (const theme of ['light', 'dark'] as const) {
+    test(`PipelineDynamicSpec: Update edits grouped JSON and comment ${theme}`, async ({
+        mount,
+        page,
+        router,
+        expectScreenshot,
+    }) => {
+        const calls: unknown[] = [];
+        await router.use(
+            http.put('*/api/v4/flow_execute', async ({request}) => {
+                if (requestParameters(request).flow_command !== 'patch-pipeline-dynamic-spec')
+                    return;
+                calls.push(await request.json());
+                return Response.json({version: snapshot.version});
+            }),
+            dynamicSpecHandler(),
+        );
+        await mount(<PipelineDynamicSpecStories.Patches />);
+        await page.getByRole('radio', {name: 'Patches', exact: true}).click();
+        await page.getByRole('button', {name: `Update ${PATCH_ID}`, exact: true}).click();
+        const dialog = page.getByRole('dialog');
+        await expect(dialog.getByRole('textbox', {name: 'Editor content'})).toBeVisible();
+        await expect(dialog.getByText('"computations"', {exact: true}).first()).toBeVisible();
+        await dialog.getByRole('button', {name: 'Show preview', exact: true}).click();
+        await expect(dialog).toContainText('computations');
+        await expect(dialog).toContainText('1001');
+        await expect(dialog).not.toContainText('max_rows_per_batch');
+        await dialog.getByRole('textbox', {name: 'Comment'}).fill('Updated reason');
+        await expectScreenshot({themes: [theme], component: dialog});
+        await dialog.getByRole('button', {name: 'Confirm', exact: true}).click();
+        await expect.poll(() => calls.length).toBe(1);
+        expect(calls[0]).toEqual({
+            patch: snapshot.patches[0].patch_id,
+            expected_version: snapshot.version,
+            comment: 'Updated reason',
+        });
+        await expect(dialog).toHaveCount(0);
+    });
+}
+
+test('PipelineDynamicSpec: Update replaces all changes of an existing patch', async ({
+    mount,
+    page,
+    router,
+}) => {
+    const calls: unknown[] = [];
+    await router.use(
+        http.put('*/api/v4/flow_execute', async ({request}) => {
+            if (requestParameters(request).flow_command !== 'patch-pipeline-dynamic-spec') return;
+            calls.push(await request.json());
+            return Response.json({version: snapshot.version});
+        }),
+        dynamicSpecHandler(),
+    );
+    await mount(<PipelineDynamicSpecStories.Patches />);
+    await page.getByRole('radio', {name: 'Patches', exact: true}).click();
+    await page.getByRole('button', {name: `Update ${VERSION}`, exact: true}).click();
+    const dialog = page.getByRole('dialog');
+    await replaceEditorContent(
+        page,
+        JSON.stringify({computations: {noop: {batch_duration: 1003, max_rows_per_batch: 3000}}}),
+    );
+    await dialog.getByRole('textbox', {name: 'Comment'}).fill('Value reason');
+    await dialog.getByRole('button', {name: 'Confirm', exact: true}).click();
+    await expect.poll(() => calls.length).toBe(1);
+    expect(calls[0]).toEqual({
+        patch: snapshot.patches[1].patch_id,
+        expected_version: snapshot.version,
+        comment: 'Value reason',
+        set_changes: [
+            {path: '/computations/noop/batch_duration', value: 1003},
+            {path: '/computations/noop/max_rows_per_batch', value: 3000},
+        ],
+    });
+});
+
+test('PipelineDynamicSpec: Update keeps its captured patch and version after conflict', async ({
+    mount,
+    page,
+    router,
+}) => {
+    const calls: unknown[] = [];
+    await router.use(
+        http.put('*/api/v4/flow_execute', async ({request}) => {
+            if (requestParameters(request).flow_command !== 'patch-pipeline-dynamic-spec') return;
+            calls.push(await request.json());
+            return Response.json(
+                {code: 1, message: 'Dynamic spec version mismatch'},
+                {status: 500},
+            );
+        }),
+        dynamicSpecHandler(),
+    );
+    await mount(<PipelineDynamicSpecStories.Patches />);
+    await page.getByRole('radio', {name: 'Patches', exact: true}).click();
+    await page.getByRole('button', {name: `Update ${PATCH_ID}`, exact: true}).click();
+    await page.evaluate(() => {
+        (
+            window as typeof window & {store: {dispatch: (action: unknown) => unknown}}
+        ).store.dispatch({
+            type: 'flow.dynamicSpec/onSuccess',
+            payload: {
+                data: {version: {$type: 'int64', $value: '1923307469208162015'}, patches: []},
+                supported_features: ['dynamic_spec_patches'],
+            },
+        });
+    });
+    const dialog = page.getByRole('dialog');
+    await dialog.getByRole('textbox', {name: 'Comment'}).fill('Updated reason');
+    await dialog.getByRole('button', {name: 'Confirm', exact: true}).click();
+    await expect(dialog.getByText('Dynamic spec version mismatch').first()).toBeVisible();
+    expect(calls).toEqual([
+        {
+            patch: snapshot.patches[0].patch_id,
+            expected_version: snapshot.version,
+            comment: 'Updated reason',
+        },
+    ]);
+    await dialog.getByRole('button', {name: 'Cancel', exact: true}).click();
+    await expect(dialog).toHaveCount(0);
+});

@@ -654,6 +654,32 @@ export type FlowExecuteTypes = {
         BodyType: {body: {patch: Int64; expected_version: Int64}};
         ResponseType: {version: Int64};
     };
+    'patch-pipeline-dynamic-spec': {
+        ParamsType: {
+            flow_command: 'patch-pipeline-dynamic-spec';
+            pipeline_path: string;
+            input_format?: unknown;
+            output_format?: 'web_json';
+        };
+        BodyType: {
+            body:
+                | {
+                      set_path: string;
+                      set_value: unknown;
+                      comment: string;
+                      patch?: Int64;
+                      expected_version: Int64;
+                  }
+                | {
+                      set_changes: Array<{path: string; value: unknown}>;
+                      comment: string;
+                      patch?: Int64;
+                      expected_version: Int64;
+                  }
+                | {patch: Int64; comment: string; expected_version: Int64};
+        };
+        ResponseType: {version: Int64; patch_id: Int64};
+    };
     'reset-pipeline-dynamic-spec': {
         ParamsType: {
             flow_command: 'reset-pipeline-dynamic-spec';

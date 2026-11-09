@@ -1,4 +1,11 @@
-import {dynamicSpecPatchDiff} from './dynamic-spec';
+import {
+    decodeDynamicSpecValue,
+    dynamicSpecPatchChangesFromDiff,
+    dynamicSpecPatchDiff,
+    dynamicSpecPath,
+    dynamicSpecPathParts,
+    encodeDynamicSpecValue,
+} from './dynamic-spec';
 
 describe('dynamic spec patch JSON', () => {
     const patch = {
@@ -31,5 +38,44 @@ describe('dynamic spec patch JSON', () => {
         });
         expect(Object.getPrototypeOf(diff)).toBeNull();
         expect(Object.getOwnPropertyDescriptor(diff, '__proto__')?.value).toEqual({'a/b': 3});
+    });
+});
+
+describe('dynamic spec patch editing', () => {
+    const patch = {
+        patch_id: '9007199254740993',
+        timestamp: '2026-11-02T15:55:23Z',
+        changes: [{path: '/computations/noop', value: {batch_duration: 1001, limit: 10000}}],
+    };
+    it('preserves map replacement boundaries and sibling fields', () => {
+        expect(
+            dynamicSpecPatchChangesFromDiff(patch, {
+                computations: {noop: {batch_duration: 1002, limit: 10000}},
+            }),
+        ).toEqual([{path: ['computations', 'noop'], value: {batch_duration: 1002, limit: 10000}}]);
+        expect(patch.changes[0].value.batch_duration).toBe(1001);
+    });
+    it('round-trips escaped YPath keys', () => {
+        const parts = ['computations', 'a/b', 'key\\name', '@value'];
+        expect(dynamicSpecPathParts(dynamicSpecPath(parts))).toEqual(parts);
+    });
+    it.each([null, 42, [], {}])('rejects an empty or non-map diff (%j)', (diff) => {
+        expect(dynamicSpecPatchChangesFromDiff(patch, diff)).toEqual([]);
+    });
+    it('preserves Unicode, binary siblings and exact typed uint64 values', () => {
+        const rawKey = Buffer.from('Квота').toString('latin1');
+        const original = {
+            [rawKey]: Buffer.from('Причина 😊').toString('latin1'),
+            binary: '\xff',
+            limit: {$type: 'uint64', $value: '18446744073709551615'},
+            changed: 1,
+        };
+        const decoded = decodeDynamicSpecValue(original) as Record<string, unknown>;
+        expect(decoded.Квота).toBe('Причина 😊');
+        expect(encodeDynamicSpecValue({...decoded, changed: 2}, original)).toEqual({
+            ...original,
+            changed: 2,
+        });
+        expect(encodeDynamicSpecValue(decoded, original)).toBe(original);
     });
 });

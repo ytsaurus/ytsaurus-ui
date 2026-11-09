@@ -38,6 +38,7 @@ import Loader from '../../../../components/Loader/Loader';
 
 import {pathToFileName} from '../../../navigation/helpers/pathToFileName';
 
+import {dynamicSpecPath} from '../../../../utils/flow/dynamic-spec';
 import {DynamicSpec} from './DynamicSpec/DynamicSpec';
 import {EditSpecDialog} from './EditSpecDialog/EditSpecDialog';
 
@@ -209,7 +210,31 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
                     onViewChange={setView}
                     loading={loading}
                     settings={settings}
+                    pipelinePath={path}
                     renderEffective={renderEffective}
+                    onUpdate={(patch, changes, comment, expected_version) =>
+                        dispatch(
+                            mutateFlowDynamicSpec({
+                                path,
+                                command: 'patch-pipeline-dynamic-spec',
+                                body: {
+                                    patch,
+                                    comment,
+                                    expected_version,
+                                    ...(changes === undefined
+                                        ? {}
+                                        : {
+                                              set_changes: changes.map(
+                                                  ({path: changePath, value}) => ({
+                                                      path: dynamicSpecPath(changePath),
+                                                      value,
+                                                  }),
+                                              ),
+                                          }),
+                                },
+                            }),
+                        )
+                    }
                     onCancel={(patch, version) =>
                         dispatch(
                             mutateFlowDynamicSpec({

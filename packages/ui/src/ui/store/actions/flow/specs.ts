@@ -5,6 +5,7 @@ import {type FlowExecuteTypes} from '../../../../shared/yt-types';
 import {type YTError, type YTErrorRaw} from '../../../../@types/types';
 import {ytApiV4} from '../../../rum/rum-wrap-api';
 import ypath from '../../../common/thor/ypath';
+import unipika from '../../../common/thor/unipika';
 import {type RootState} from '../../../store/reducers';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {decodeDynamicSpecText} from '../../../utils/flow/dynamic-spec';
@@ -206,7 +207,9 @@ export function loadFlowDynamicSpecForEdit(
 }
 
 export type DynamicSpecMutationCommand =
-    'cancel-pipeline-dynamic-spec-patch' | 'reset-pipeline-dynamic-spec';
+    | 'cancel-pipeline-dynamic-spec-patch'
+    | 'reset-pipeline-dynamic-spec'
+    | 'patch-pipeline-dynamic-spec';
 
 export type DynamicSpecMutation = {
     [Command in DynamicSpecMutationCommand]: {
@@ -232,6 +235,9 @@ export function mutateFlowDynamicSpec({
                 },
                 data: {
                     ...body,
+                    ...('comment' in body && body.comment
+                        ? {comment: unipika.utils.utf8.encode(body.comment)}
+                        : {}),
                     expected_version: {
                         $type: 'int64',
                         $value: String(ypath.getValue(body.expected_version)),
