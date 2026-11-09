@@ -101,15 +101,17 @@ export function getDefaultRequestOutputFormat({
 }
 
 export function getParsedError(error) {
-    let message;
     try {
-        message = JSON.parse(error).message;
-    } catch (err) {
-        message = i18n('alert_table-reader-error');
+        const parsedError = JSON.parse(error);
+        if (parsedError && typeof parsedError === 'object' && !Array.isArray(parsedError)) {
+            return parsedError;
+        }
+    } catch {
+        // Preserve non-JSON diagnostics in stderrs below.
     }
 
     return {
-        message,
+        message: i18n('alert_table-reader-error'),
         attributes: {
             stderrs: error,
         },

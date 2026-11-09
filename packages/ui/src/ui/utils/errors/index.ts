@@ -40,7 +40,7 @@ export function getPermissionDeniedError<T extends YTErrorRaw>(error: T): T | un
 }
 
 export function getNotFoundError<T extends YTErrorRaw>(error: T): T | undefined {
-    return getErrorWithCode([error], yt.codes.NOT_FOUND);
+    return getErrorWithCode([error], yt.codes.NODE_DOES_NOT_EXIST);
 }
 
 export function isPermissionDeniedOrNotFoundError(error: YTErrorRaw | undefined): boolean {
