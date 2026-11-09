@@ -27,6 +27,7 @@ import {
 } from '../../../store/selectors/scheduling/scheduling';
 import {type TabSettings, makeTabProps} from '../../../utils';
 import {makeSchedulingUrl} from '../../../utils/app-url';
+import {insertTab} from '../../../utils/tabs';
 import './Content.scss';
 import SchedulingExpandedPoolsUpdater from './SchedulingExpandedPoolsUpdater';
 import {PoolAttributes} from './tabs/PoolAttributes/PoolAttributes';
@@ -49,7 +50,7 @@ function Content({match, location}: ContentProps) {
     const isRoot = useSelector(selectSchedulingIsRoot);
     const allowAcl = useSelector(selectIsPoolAclAllowed);
 
-    const localTab: Record<string, string> = {...SchedulingTab};
+    const tabs: Array<{value: string}> = Object.values(SchedulingTab).map((value) => ({value}));
 
     const showSettings = reduce_(
         SchedulingTab,
@@ -80,11 +81,11 @@ function Content({match, location}: ContentProps) {
     const extraRoutes: Array<React.ReactElement> = [];
 
     extraTabs.forEach((tab) => {
-        const {name, title, component, urlTemplate, hidden} = tab;
+        const {value, title, component, urlTemplate, hidden} = tab;
 
         const tabSettings: TabSettings = {show: !hidden};
 
-        showSettings[name] = tabSettings;
+        showSettings[value] = tabSettings;
 
         if (urlTemplate) {
             tabSettings.routed = false;
@@ -96,17 +97,20 @@ function Content({match, location}: ContentProps) {
             });
         }
 
-        localTab[name] = name;
+        insertTab(tabs, tab);
         if (title) {
-            titleDict[name] = title;
+            titleDict[value] = title;
         }
         if (component) {
-            const route = <Route key={name} path={`${match.path}/${name}`} component={component} />;
+            const route = (
+                <Route key={value} path={`${match.path}/${value}`} component={component} />
+            );
             extraRoutes.push(route);
         }
     });
 
-    delete localTab.ACL;
+    const localTab = Object.fromEntries(tabs.map(({value}) => [value, value]));
+    delete localTab[SchedulingTab.ACL];
     localTab[SchedulingTab.ACL] = SchedulingTab.ACL;
 
     const props = makeTabProps(match.url, localTab, showSettings, {pool, tree}, titleDict);

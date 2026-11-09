@@ -11,6 +11,7 @@ import {type ClusterAppearance} from '../appearance';
 import {type AppNavigationProps} from '../containers/AppNavigation/AppNavigationPageLayout';
 import {type ExternalSchemaDescription} from '../pages/navigation/tabs/Schema/ExternalDescription/ExternalDescription';
 import {type AclApi} from '../utils/acl/external-acl-api';
+import {type TabDescription, type TabPosition} from '../utils/tabs';
 import {type SubjectsControlProps} from '../containers/ACL/SubjectsControl/SubjectsControl';
 import {type SettingsPage} from '../containers/SettingsPanel/settings-description';
 import {type UserSuggestProps} from '../containers/UserSuggest/UserSuggest';
@@ -96,9 +97,7 @@ export type RenderMarkdownParams = {
     setRenderState: MarkdownSetRenderState;
 };
 
-export interface SchedulingExtraTab {
-    name: string;
-    title?: string;
+export interface SchedulingExtraTab extends Pick<TabDescription, 'value' | 'title' | 'position'> {
     component?: React.ComponentType<any>;
     /**
      * Allows to redefine link of corresponding tab
@@ -132,15 +131,12 @@ export type AclRoleActionsType = Partial<Omit<PreparedAclSubject | PreparedRole,
 
 export type TabName = string;
 
-export type ExtraTab = {
+export type ExtraTab = TabDescription & {
     value: `extra_${TabName}`;
     title: string;
-    text?: string;
-    caption?: string;
-    hotkey?: string;
     component: React.ComponentType;
     isSupported: (attributes: Record<string, any>) => boolean;
-    position: {before: TabName} | {after: TabName};
+    position: TabPosition;
     urlMapping?: {
         params: LocationParameters;
         getPreparedState: (state: RootState, location: {query: RootState}) => RootState;
@@ -190,8 +186,7 @@ export type BundleExtraTabProps = {
     cluster: string;
     bundle: string;
 };
-export type BundleExtraTab = {
-    name: string;
+export type BundleExtraTab = Pick<TabDescription, 'value' | 'position'> & {
     title: string;
     component: React.ComponentType<BundleExtraTabProps>;
 };

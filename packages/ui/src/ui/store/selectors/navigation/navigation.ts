@@ -18,6 +18,7 @@ import {type ValueOf, type YTError} from '../../../types';
 import UIFactory from '../../../UIFactory';
 import {type ParsedPath, prepareNavigationState} from '../../../utils/navigation';
 import {isPipelineNode} from '../../../utils/navigation/isPipelineNode';
+import {type PreparedTab, insertTab} from '../../../utils/tabs';
 import {selectAttributes, selectParsedPath, selectPath, selectTransaction} from './index';
 
 export function selectNavigationPathAttributesLoadState(state: RootState) {
@@ -180,21 +181,14 @@ export const selectTabs = createSelector(
     (supportedTabs, tabletErrorsCount, attributes, originatingQueuePath, cluster) => {
         const isACO = attributes?.type === 'access_control_object';
 
-        const tabs: {
-            value: string;
-            title: string;
-            hotkey?: {
-                keys: string;
-                tab: string;
-                scope: string;
-            }[];
-            text?: string;
-            caption?: string;
-            counter?: number;
-            url?: string;
-            external?: boolean;
-            routed?: false;
-        }[] = [
+        const tabs: Array<
+            PreparedTab & {
+                counter?: number;
+                url?: string;
+                external?: boolean;
+                routed?: false;
+            }
+        > = [
             {
                 value: Tab.CONSUMER,
                 title: i18n('title_go-to-consumer'),
@@ -362,33 +356,7 @@ export const selectTabs = createSelector(
         ];
 
         UIFactory.getNavigationExtraTabs().forEach((extraTab) => {
-            for (let i = 0; i < tabs.length; i++) {
-                let indexOffset = 0;
-                let tabToFind;
-
-                if ('before' in extraTab.position) {
-                    tabToFind = extraTab.position.before;
-                }
-
-                if ('after' in extraTab.position) {
-                    tabToFind = extraTab.position.after;
-                    indexOffset = 1;
-                }
-
-                if (tabs[i].value === tabToFind) {
-                    const newTab = {
-                        value: extraTab.value,
-                        title: extraTab.title,
-                        hotkey: extraTab.hotkey
-                            ? [{keys: extraTab.hotkey, tab: extraTab.value, scope: 'all'}]
-                            : undefined,
-                        text: extraTab.text,
-                        caption: extraTab.caption,
-                    };
-                    tabs.splice(i + indexOffset, 0, newTab);
-                    break;
-                }
-            }
+            insertTab(tabs, extraTab);
         });
 
         return tabs.filter((tab) => supportedTabs.has(tab.value));

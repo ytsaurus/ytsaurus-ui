@@ -10,6 +10,7 @@ import {TabletsTab} from '../../constants/tablets';
 import {Redirect, Route, Switch, useRouteMatch} from 'react-router';
 import {BundleCells} from './cells/Cells';
 import {type TabSettings, makeTabProps} from '../../utils';
+import {insertTab} from '../../utils/tabs';
 import {useUpdater} from '../../hooks/use-updater';
 import {useDispatch, useSelector} from '../../store/redux-hooks';
 import {fetchChaosBundles} from '../../store/actions/chaos_cell_bundles';
@@ -99,8 +100,8 @@ export default function TabletCellBundles() {
     statsTab.show = statsTab.show && Boolean(UIFactory.getStatisticsComponentForBundle());
 
     const bundleExtraTabs = UIFactory.getBundleExtraTabs();
-    bundleExtraTabs.forEach(({name}) => {
-        showSettings[name] = {show: Boolean(activeBundle)};
+    bundleExtraTabs.forEach(({value}) => {
+        showSettings[value] = {show: Boolean(activeBundle)};
     });
 
     const monTab = showSettings[TabletsTab.MONITOR];
@@ -192,10 +193,10 @@ export default function TabletCellBundles() {
                             />
                         )}
                         {activeBundle &&
-                            bundleExtraTabs.map(({name, component: Component}) => (
+                            bundleExtraTabs.map(({value, component: Component}) => (
                                 <Route
-                                    key={name}
-                                    path={`/${cluster}/${Page.TABLET_CELL_BUNDLES}/${name}`}
+                                    key={value}
+                                    path={`/${cluster}/${Page.TABLET_CELL_BUNDLES}/${value}`}
                                     render={() => (
                                         <Component cluster={cluster} bundle={activeBundle} />
                                     )}
@@ -326,16 +327,18 @@ function TabletsTabsImpl({
     const match = useRouteMatch<{cluster: string}>();
     const {cluster} = match.params;
 
-    const extraTabs: Record<string, string> = {};
+    const tabs: Array<{value: string}> = Object.values(TabletsTab).map((value) => ({value}));
     const extraTabTitles: Record<string, string> = {};
 
-    bundleExtraTabs.forEach(({name, title}) => {
-        extraTabs[name] = name;
-        extraTabTitles[name] = title;
+    bundleExtraTabs.forEach((extraTab) => {
+        insertTab(tabs, extraTab);
+        extraTabTitles[extraTab.value] = extraTab.title;
     });
 
+    const localTabs = Object.fromEntries(tabs.map(({value}) => [value, value]));
+
     const tabProps = activeBundle
-        ? makeTabProps(match.url, {...TabletsTab, ...extraTabs}, showSettings, undefined, {
+        ? makeTabProps(match.url, localTabs, showSettings, undefined, {
               [TabletsTab.MONITOR]: monitoringTitle,
               ...extraTabTitles,
           })
