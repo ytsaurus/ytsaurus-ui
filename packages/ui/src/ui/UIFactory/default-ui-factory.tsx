@@ -79,7 +79,7 @@ export const defaultUIFactory: UIFactory = {
 
         if (getConfigData().allowPrometheusDashboards) {
             res.push({
-                name: SchedulingExtraTabs.PROMETHEUS_DASHBOARD,
+                value: SchedulingExtraTabs.PROMETHEUS_DASHBOARD,
                 title: 'Monitoring',
                 component: SchedulingMonitoringLazy,
             });
@@ -88,7 +88,7 @@ export const defaultUIFactory: UIFactory = {
         if (uiSettings.schedulingMonitoring?.urlTemplate) {
             const {urlTemplate, title = 'Monitoring'} = uiSettings.schedulingMonitoring;
             res.push({
-                name: 'monitoring',
+                value: 'monitoring',
                 title,
                 urlTemplate,
             });
