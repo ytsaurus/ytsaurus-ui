@@ -34,6 +34,7 @@ export function EditButtons({readonly}: {readonly?: boolean}) {
     return (
         <Button view={'outlined'} onClick={edit}>
             <Icon awesome={'pencil'} />
+            {i18n('action_edit')}
         </Button>
     );
 }

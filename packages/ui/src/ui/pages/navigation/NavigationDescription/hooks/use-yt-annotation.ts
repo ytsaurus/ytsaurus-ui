@@ -10,9 +10,10 @@ export function useYTAnnotation() {
     const cluster = useSelector(selectCluster);
 
     const {
-        data: annotationData,
+        currentData: annotationData,
         isSuccess: isAnnotationSuccess,
-        isLoading,
+        isFetching,
+        error,
     } = useAnnotationQuery({path, cluster});
 
     const {annotation_path, annotation} = annotationData ?? {};
@@ -21,6 +22,7 @@ export function useYTAnnotation() {
         ytAnnotation: annotationData,
         ytAnnotationPath: annotation_path,
         isAnnotationLoadedWithData: Boolean(isAnnotationSuccess && annotation?.length),
-        isAnnotationLoading: isLoading,
+        isAnnotationLoading: isFetching,
+        annotationError: error,
     };
 }

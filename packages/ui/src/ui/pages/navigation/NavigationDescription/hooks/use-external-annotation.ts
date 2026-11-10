@@ -8,8 +8,12 @@ export function useExternalAnnotation() {
     const path: string = useSelector(selectPath);
     const cluster = useSelector(selectCluster);
 
-    const {data: externalAnnotaionData, isSuccess: isExternalAnnotationSuccess} =
-        useExternalDescriptionQuery({cluster, path});
+    const {
+        currentData: externalAnnotaionData,
+        isSuccess: isExternalAnnotationSuccess,
+        isFetching,
+        error,
+    } = useExternalDescriptionQuery({cluster, path});
 
     const isExternalAnnotatonLoadedWithData = Boolean(
         isExternalAnnotationSuccess && externalAnnotaionData?.externalAnnotation,
@@ -18,5 +22,7 @@ export function useExternalAnnotation() {
     return {
         ...externalAnnotaionData,
         isExternalAnnotatonLoadedWithData,
+        isExternalAnnotationLoading: isFetching,
+        externalAnnotationError: error,
     };
 }

@@ -6,5 +6,6 @@
   "value_external": "External",
   "title_description": "Description",
   "action_save": "Save",
-  "action_cancel": "Cancel"
+  "action_cancel": "Cancel",
+  "action_edit": "Edit description"
 }
