@@ -1,17 +1,11 @@
+import {useQueryEngineChange} from '../../hooks/useQueryEngineChange';
 import React, {type FC, useCallback, useState} from 'react';
-import {useDispatch, useSelector} from '../../../../store/redux-hooks';
+import {useSelector} from '../../../../store/redux-hooks';
 import {
     selectClusterLoading,
-    selectHasLoadedQueryItem,
-    selectIsQueryDraftEditted,
     selectQueryEngine,
-    selectQueryGetParams,
     selectSupportedEnginesOptions,
 } from '../../../../store/selectors/query-tracker/query';
-import {
-    createQueryFromTablePath,
-    setQueryEngine,
-} from '../../../../store/actions/query-tracker/query';
 import {type QueryEngine} from '../../../../../shared/constants/engines';
 import {ModalWithoutHandledScrollBar as Modal} from '../../../../components/Modal/Modal';
 import RadioButton from '../../../../components/RadioButton/RadioButton';
@@ -19,7 +13,6 @@ import {Select} from '@gravity-ui/uikit';
 import './QueryEngineSelector.scss';
 import cn from 'bem-cn-lite';
 import i18n from './i18n';
-import {toaster} from '../../../../utils/toaster';
 
 const block = cn('yt-query-engine-selector');
 
@@ -38,51 +31,17 @@ export const QueryEngineSelector: FC<Props> = ({
     tableCluster,
     tablePath,
 }) => {
-    const dispatch = useDispatch();
     const engine = useSelector(selectQueryEngine);
     const options = useSelector(selectSupportedEnginesOptions);
-    const isEdited = useSelector(selectIsQueryDraftEditted);
-    const hasLoadedQuery = useSelector(selectHasLoadedQueryItem);
     const loading = useSelector(selectClusterLoading);
-    const {cluster: paramCluster, path: paramPath} = useSelector(selectQueryGetParams);
-
-    const hasFullParams = Boolean(paramCluster && paramPath);
-    const hasFullTableFallback = Boolean(tableCluster && tablePath);
-    let cluster: string | undefined;
-    let path: string | undefined;
-
-    if (hasFullParams) {
-        cluster = paramCluster;
-        path = paramPath;
-    } else if (hasFullTableFallback) {
-        cluster = tableCluster;
-        path = tablePath;
-    }
-
-    const showPrompt = Boolean((isEdited || hasLoadedQuery) && cluster && path);
+    const {showPrompt, applyEngine: handleChangeEngine} = useQueryEngineChange({
+        tableCluster,
+        tablePath,
+        onChange,
+    });
 
     const [modalVisibility, setModalVisibility] = useState<boolean>(false);
     const [selectedEngine, setSelectedEngine] = useState<QueryEngine | undefined>(undefined);
-
-    const handleChangeEngine = useCallback(
-        async (newEngine: QueryEngine) => {
-            try {
-                if (cluster && path) {
-                    await dispatch(createQueryFromTablePath(newEngine, cluster, path));
-                } else {
-                    dispatch(setQueryEngine(newEngine));
-                }
-                await onChange?.(newEngine);
-            } catch {
-                toaster.add({
-                    name: 'query_engine_selector_change_failed',
-                    theme: 'danger',
-                    title: i18n('alert_change-engine-failed'),
-                });
-            }
-        },
-        [cluster, dispatch, onChange, path],
-    );
 
     const handleOnChange = useCallback(
         (value: string | string[]) => {

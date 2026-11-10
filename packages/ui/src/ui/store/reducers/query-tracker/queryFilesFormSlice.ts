@@ -1,7 +1,15 @@
+import {SET_QUERY_FILES} from './query-tracker-contants';
+import type {ActionD} from '../../../types';
+
 import {type Reducer} from 'redux';
 import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {type QueryFile, type QueryFileType} from '../../../types/query-tracker/api';
 import {mergeStateOnClusterChange} from '../utils';
+
+export type SetQueryFilesAction = ActionD<
+    typeof SET_QUERY_FILES,
+    {files: QueryFile[]; deletedFiles: QueryFile[]}
+>;
 
 export type QueryFileAddForm = {
     isOpen: boolean;
@@ -37,6 +45,11 @@ const initialState: QueryFilesState = {
 const queryFilesFormSlice = createSlice({
     name: 'queryFilesModal',
     initialState,
+    extraReducers: (builder) => {
+        builder.addCase(SET_QUERY_FILES, (state, action: SetQueryFilesAction) => {
+            state.deletedFiles = action.data.deletedFiles;
+        });
+    },
     reducers: {
         setDeletedFiles(state, {payload}: PayloadAction<QueryFile[]>) {
             state.deletedFiles = payload;
