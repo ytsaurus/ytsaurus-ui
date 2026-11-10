@@ -3,6 +3,7 @@ import cn from 'bem-cn-lite';
 import moment from 'moment';
 import {Button, Icon, SegmentedRadioGroup, Text, Tooltip} from '@gravity-ui/uikit';
 
+import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
 import TrashBinIcon from '@gravity-ui/icons/svgs/trash-bin.svg';
 
 import {type FlowDynamicSpecPatch, type Int64} from '../../../../../../shared/yt-types';
@@ -21,7 +22,8 @@ import {
     type FlowSpecState,
 } from '../../../../../store/reducers/flow/specs';
 import {type UnipikaSettings} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
-import {dynamicSpecPatchDiff} from '../../../../../utils/flow/dynamic-spec';
+import {type DynamicSpecEdit, dynamicSpecPatchDiff} from '../../../../../utils/flow/dynamic-spec';
+import {EditDynamicSpecPatchDialog} from './EditDynamicSpecPatchDialog/EditDynamicSpecPatchDialog';
 import {CancelDynamicSpecPatchDialog} from './CancelDynamicSpecPatchDialog/CancelDynamicSpecPatchDialog';
 import {ResetDynamicSpecPatchesDialog} from './ResetDynamicSpecPatchesDialog/ResetDynamicSpecPatchesDialog';
 
@@ -31,13 +33,20 @@ import './DynamicSpec.scss';
 
 const block = cn('yt-flow-dynamic-spec');
 
-type Props = {
+export type DynamicSpecProps = {
     data: FlowSpecState['data'];
     view: FlowDynamicSpecView;
     onViewChange: (view: FlowDynamicSpecView) => void;
     loading: boolean;
     settings: UnipikaSettings;
     renderEffective: () => React.ReactNode;
+    pipelinePath: string;
+    onUpdate: (
+        patch: Int64,
+        changes: Array<DynamicSpecEdit> | undefined,
+        comment: string,
+        version: Int64,
+    ) => Promise<void>;
     onCancel: (patch: Int64, version: Int64) => Promise<void>;
     onReset: (version: Int64) => Promise<void>;
 };
@@ -49,9 +58,12 @@ export function DynamicSpec({
     loading,
     settings,
     renderEffective,
+    pipelinePath,
+    onUpdate,
     onCancel,
     onReset,
-}: Props) {
+}: DynamicSpecProps) {
+    const [edit, setEdit] = React.useState<{patch: FlowDynamicSpecPatch; version: Int64}>();
     const [cancelConfirmation, setCancelConfirmation] = React.useState<{
         patch: Int64;
         version: Int64;
@@ -97,21 +109,36 @@ export function DynamicSpec({
         {
             id: 'actions',
             header: '',
-            size: 50,
+            size: 100,
             cell: ({row: {original: patch}}) => (
-                <Tooltip content={i18n('context_cancel-patch')}>
-                    <Button
-                        size="s"
-                        view="flat"
-                        aria-label={`${i18n('action_cancel-patch')} ${ypath.getValue(patch.patch_id)}`}
-                        onClick={() =>
-                            data &&
-                            setCancelConfirmation({patch: patch.patch_id, version: data.version})
-                        }
-                    >
-                        <Icon data={TrashBinIcon} size={16} />
-                    </Button>
-                </Tooltip>
+                <div className={block('actions')}>
+                    <Tooltip content={i18n('context_update-patch')}>
+                        <Button
+                            size="s"
+                            view="flat"
+                            aria-label={`${i18n('action_update-patch')} ${ypath.getValue(patch.patch_id)}`}
+                            onClick={() => data && setEdit({patch, version: data.version})}
+                        >
+                            <Icon data={PencilIcon} size={16} />
+                        </Button>
+                    </Tooltip>
+                    <Tooltip content={i18n('context_cancel-patch')}>
+                        <Button
+                            size="s"
+                            view="flat"
+                            aria-label={`${i18n('action_cancel-patch')} ${ypath.getValue(patch.patch_id)}`}
+                            onClick={() =>
+                                data &&
+                                setCancelConfirmation({
+                                    patch: patch.patch_id,
+                                    version: data.version,
+                                })
+                            }
+                        >
+                            <Icon data={TrashBinIcon} size={16} />
+                        </Button>
+                    </Tooltip>
+                </div>
             ),
         },
     ];
@@ -175,6 +202,16 @@ export function DynamicSpec({
                         <Text as="p">{i18n('context_no-patches')}</Text>
                     )}
                 </>
+            )}
+            {edit && (
+                <EditDynamicSpecPatchDialog
+                    patch={edit.patch}
+                    version={edit.version}
+                    pipelinePath={pipelinePath}
+                    settings={settings}
+                    onUpdate={onUpdate}
+                    onClose={() => setEdit(undefined)}
+                />
             )}
             {cancelConfirmation && (
                 <CancelDynamicSpecPatchDialog

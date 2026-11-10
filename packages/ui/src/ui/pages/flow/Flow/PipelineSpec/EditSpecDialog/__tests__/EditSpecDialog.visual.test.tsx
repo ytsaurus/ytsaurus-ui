@@ -9,23 +9,28 @@ for (const theme of ['light', 'dark'] as const) {
         page,
         expectScreenshot,
     }) => {
-        await mount(<EditSpecDialogStories.Comment />);
+        await mount(<EditSpecDialogStories.MultilineComment />);
         const dialog = page.getByRole('dialog');
         const comment = dialog.getByRole('textbox', {name: 'Comment'});
         const confirm = dialog.getByRole('button', {name: 'Confirm', exact: true});
         await expect(dialog.getByRole('textbox', {name: 'Editor content'})).toBeAttached();
         await expect(dialog.getByText('"batch_duration"', {exact: true})).toBeVisible();
-        await expect(comment).toHaveValue('Initial reason');
+        await expect(comment).toHaveJSProperty('tagName', 'TEXTAREA');
+        await expect(comment).toHaveValue(
+            'Initial reason\n[YTFRONT-6091](https://st.yandex-team.ru/YTFRONT-6091)',
+        );
         await expect(confirm).toBeDisabled();
         await comment.fill('   ');
         await expect(confirm).toBeDisabled();
-        await comment.fill('New reason');
+        const newComment = 'New reason\n[YTFRONT-6091](https://st.yandex-team.ru/YTFRONT-6091)';
+        await comment.fill(newComment);
         await expect(confirm).toBeEnabled();
+        await dialog.getByRole('code').hover();
         await expectScreenshot({themes: [theme], component: dialog});
         await confirm.click();
         await expect(dialog).toHaveCount(0);
         await expect(page.getByRole('status', {name: 'Applied specification'})).toHaveText(
-            JSON.stringify({spec: {batch_duration: 1001}, options: {comment: 'New reason'}}),
+            JSON.stringify({spec: {batch_duration: 1001}, options: {comment: newComment}}),
         );
     });
 }
