@@ -1,0 +1,7 @@
+{
+  "title_no-description": "No description",
+  "context_add-description": "Add a description for this object.",
+  "action_add-description": "Add description",
+  "action_open-external": "Open {{serviceName}}",
+  "context_add-description-external": "Add a short description or a detailed markdown description in {{serviceName}}"
+}

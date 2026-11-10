@@ -22,6 +22,7 @@ import {useDescriptionCollapse} from '../hooks/use-description-collapse';
 import {useYTAnnotation} from '../hooks/use-yt-annotation';
 
 import {AnnotationWithPartial} from '../AnnotationWithPartial';
+import {NavigationDescriptionEmpty} from '../NavigationDescriptionEmpty/NavigationDescriptionEmpty';
 
 const block = cn('navigation-description');
 
@@ -69,7 +70,7 @@ export function NavigationDescriptionContent() {
         );
     }
     if (!description) {
-        return null;
+        return <NavigationDescriptionEmpty />;
     }
     return (
         <AnnotationWithPartial

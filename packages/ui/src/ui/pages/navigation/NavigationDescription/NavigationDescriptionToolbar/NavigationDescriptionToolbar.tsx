@@ -3,7 +3,7 @@ import {Button, Flex, Icon, Link, Text} from '@gravity-ui/uikit';
 import React from 'react';
 import {ClipboardButton, Label, MetaTable, Tooltip} from '@ytsaurus/components';
 import {RoutedLink} from '../../../../containers/RoutedLink/RoutedLink';
-import {getDescriptionType} from '../../../../store/reducers/navigation/description';
+import {getDescriptionType, getEditMode} from '../../../../store/reducers/navigation/description';
 import {useSelector} from '../../../../store/redux-hooks';
 import {selectPath} from '../../../../store/selectors/navigation';
 import UIFactory from '../../../../UIFactory';
@@ -17,9 +17,10 @@ import i18n from './i18n';
 export function NavigationDescriptionToolbar() {
     const {externalAnnotationLink, editable} = useExternalAnnotation();
     const descriptionType = useSelector(getDescriptionType);
+    const editMode = useSelector(getEditMode);
 
     const path = useSelector(selectPath);
-    const {path: descriptionPath} = useDescription();
+    const {path: descriptionPath, description} = useDescription();
 
     const inheritedPath = path !== descriptionPath ? descriptionPath : undefined;
 
@@ -27,14 +28,18 @@ export function NavigationDescriptionToolbar() {
 
     const hasExternal = Boolean(load);
 
-    const allowEdit = (descriptionType === 'yt' || Boolean(edit)) && !inheritedPath;
-    const readonly = descriptionType === 'external' && !editable && !inheritedPath;
+    const allowEdit =
+        (Boolean(description) || editMode) &&
+        (descriptionType === 'yt' || Boolean(edit)) &&
+        !inheritedPath;
+    const readonly =
+        Boolean(description) && descriptionType === 'external' && !editable && !inheritedPath;
 
     return (
         <Flex direction={'row'} gap={2} alignItems={'center'}>
             {hasExternal && <SwitchDescription />}
             {allowEdit && <EditButtons readonly={readonly} />}
-            {descriptionType === 'external' && (
+            {descriptionType === 'external' && externalAnnotationLink && (
                 <Tooltip content={externalServiceName || ''}>
                     <Link href={externalAnnotationLink || ''} target="_blank">
                         <Button view="outlined">
