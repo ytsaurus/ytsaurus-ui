@@ -12,7 +12,7 @@ export const createProvideSuggestionsFunction =
         model: editor.ITextModel,
         monacoCursorPosition: Position,
         _context: languages.CompletionContext,
-        _token: CancellationToken,
+        token: CancellationToken,
     ) => {
         const parseResult = parser(model.getValue(), {
             line: monacoCursorPosition.lineNumber,
@@ -25,6 +25,7 @@ export const createProvideSuggestionsFunction =
             monacoCursorPosition,
             engine,
             range,
+            token,
         });
 
         const columnsSuggestions = await getColumnSuggestions({
@@ -32,7 +33,10 @@ export const createProvideSuggestionsFunction =
             engine,
             tableSuggestions: parseResult.suggestColumns,
             range,
+            token,
         });
+
+        if (token.isCancellationRequested) return {suggestions: []};
 
         const templateSuggestions = getTemplateSuggestions({model, parseResult, range});
         const suggestions = getSuggestions(parseResult, range);

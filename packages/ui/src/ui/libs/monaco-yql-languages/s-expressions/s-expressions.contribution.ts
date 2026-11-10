@@ -1,6 +1,7 @@
+import {MonacoLanguage} from '../../../constants/monaco';
 import {registerLanguage} from '../_.contribution';
 
-export const LANGUAGE_ID = 's-expression';
+export const LANGUAGE_ID = MonacoLanguage.SPYT;
 
 registerLanguage({
     id: LANGUAGE_ID,

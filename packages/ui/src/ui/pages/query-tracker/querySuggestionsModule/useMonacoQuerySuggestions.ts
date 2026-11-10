@@ -17,13 +17,17 @@ export const useMonacoQuerySuggestions = (editor?: monaco.editor.IStandaloneCode
                 UIFactory.getInlineSuggestionsApi()?.sendTelemetry('discarded');
             }
         },
-        [editor],
+        [editor, enabled],
     );
 
     useEffect(() => {
-        monaco.editor.registerCommand('accessQuerySuggestionsTelemetry', async () => {
-            UIFactory.getInlineSuggestionsApi()?.sendTelemetry('accepted');
-        });
+        const command = monaco.editor.registerCommand(
+            'accessQuerySuggestionsTelemetry',
+            async () => {
+                UIFactory.getInlineSuggestionsApi()?.sendTelemetry('accepted');
+            },
+        );
+        return () => command.dispose();
     }, []);
 
     useEffect(() => {

@@ -3,6 +3,7 @@ import {type TableContextSuggestion} from '@gravity-ui/websql-autocomplete/share
 import {type QueryEngine} from '../../../../shared/constants/engines';
 import {loadTableData} from './loadTableData';
 import {suggestionIndexToWeight} from './suggestionIndexToWeight';
+import type {CatalogCancellation} from '../../../utils/query-tracker/queryCatalog';
 import {SuggestionsWeight} from './generateSuggestions';
 
 type Props = (data: {
@@ -10,9 +11,16 @@ type Props = (data: {
     engine: QueryEngine;
     tableSuggestions?: TableContextSuggestion;
     range: IRange;
+    token?: CatalogCancellation;
 }) => Promise<languages.CompletionItem[]>;
 
-export const getColumnSuggestions: Props = async ({tableSuggestions, model, engine, range}) => {
+export const getColumnSuggestions: Props = async ({
+    tableSuggestions,
+    model,
+    engine,
+    range,
+    token,
+}) => {
     if (!tableSuggestions) return [];
     const result: languages.CompletionItem[] = [
         {
@@ -24,7 +32,7 @@ export const getColumnSuggestions: Props = async ({tableSuggestions, model, engi
         },
     ];
 
-    const tables = await loadTableData(model.getValue(), engine);
+    const tables = await loadTableData(model.getValue(), engine, token);
     tableSuggestions.tables?.forEach(({name, alias}) => {
         const path = name.replace(/`/g, '');
         if (path in tables) {
