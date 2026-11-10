@@ -2,6 +2,10 @@ import {type FlowDynamicSpecPatch} from '../../../shared/yt-types';
 import ypath from '../../common/thor/ypath';
 import unipika from '../../common/thor/unipika';
 
+export function dynamicSpecHasComment(comment?: string): boolean {
+    return typeof comment === 'string' && !/^[\s\u0085]*$/u.test(comment);
+}
+
 export function decodeDynamicSpecText(value: string): string {
     if (Array.from(value).some((char) => char.charCodeAt(0) > 0xff)) {
         return value;

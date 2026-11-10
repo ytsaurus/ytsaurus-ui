@@ -23,5 +23,8 @@
   "action_keep-patch": "Keep patch",
   "context_cancel-patch-confirm": "This will cancel this patch. Earlier patches and the current base will determine the effective values.",
   "context_cancel-patch": "Cancel all remaining changes from this patch",
-  "action_cancel-patch": "Cancel"
+  "action_cancel-patch": "Cancel",
+  "context_comment-required": "Add a comment explaining the change.",
+  "context_patch-change-required": "Change the value or comment to save an update.",
+  "context_value-change-required": "Change the specification to save an update."
 }
