@@ -4,12 +4,12 @@ import {useSelector} from '../../../store/redux-hooks';
 import block from 'bem-cn-lite';
 
 import {type RootState} from '../../../store/reducers';
-import {selectQueryResult} from '../../../store/selectors/query-tracker/queryResult';
+import {selectFormattedQueryResult} from '../../../store/selectors/query-tracker/queryResult';
 import {YTErrorBlock} from '../../../containers/Block/Block';
 import {ResultsTable} from './ResultsTable';
 import {type QueryItem} from '../../../types/query-tracker/api';
 import {
-    type QueryResultReadyState,
+    type FormattedQueryResultReadyState,
     QueryResultState,
     QueryResultsViewMode,
 } from '../../../types/query-tracker/queryResult';
@@ -34,7 +34,7 @@ function QueryReadyResultView({
 }: {
     queryId: string;
     resultIndex: number;
-    result: QueryResultReadyState;
+    result: FormattedQueryResultReadyState;
     engine: QueryEngine;
     onShowPreview: ShowPreviewCallback;
 }) {
@@ -76,7 +76,9 @@ function QueryReadyResultView({
 
 export const QueryResultsView = React.memo(
     function QueryResultsView({query, index}: {query: QueryItem; index: number}) {
-        const result = useSelector((state: RootState) => selectQueryResult(state, query.id, index));
+        const result = useSelector((state: RootState) =>
+            selectFormattedQueryResult(state, query.id, index),
+        );
         const engine = useSelector(selectQueryEngine);
 
         const {onShowPreview} = useShowPreviewHandler({
