@@ -1,5 +1,6 @@
 import {
     decodeDynamicSpecValue,
+    dynamicSpecEdits,
     dynamicSpecPatchChangesFromDiff,
     dynamicSpecPatchDiff,
     dynamicSpecPath,
@@ -77,5 +78,60 @@ describe('dynamic spec patch editing', () => {
             changed: 2,
         });
         expect(encodeDynamicSpecValue(decoded, original)).toBe(original);
+    });
+});
+
+describe('root dynamic spec diff', () => {
+    it('groups multiple edits without including unchanged effective patches or siblings', () => {
+        const before = {
+            computations: {noop: {batch_duration: 1002, max_rows_per_batch: 2000}},
+            controller: {limit: 4},
+        };
+        const after = {
+            computations: {noop: {batch_duration: 1003, max_rows_per_batch: 2000}},
+            controller: {limit: 5},
+        };
+        expect(dynamicSpecEdits(before, after)).toEqual([
+            {path: ['computations', 'noop', 'batch_duration'], value: 1003},
+            {path: ['controller', 'limit'], value: 5},
+        ]);
+        expect(before.computations.noop.max_rows_per_batch).toBe(2000);
+    });
+    it('preserves typed integers, UTF8 text and unchanged annotated values', () => {
+        const integer = {$type: 'int64', $value: '9223372036854775807'};
+        const unsigned = {$type: 'uint64', $value: '18446744073709551615'};
+        const before = {stable: integer, limit: integer, title: 'ascii'};
+        const human = {
+            ...(decodeDynamicSpecValue(before) as typeof before),
+            limit: unsigned,
+            title: 'Причина',
+        };
+        const after = encodeDynamicSpecValue(human, before);
+        expect(dynamicSpecEdits(before, after)).toEqual([
+            {path: ['limit'], value: unsigned},
+            {path: ['title'], value: encodeDynamicSpecValue('Причина', 'ascii')},
+        ]);
+    });
+    it.each([{}, {computations: {}}])('marks removed maps or fields for rejection: %j', (after) => {
+        expect(dynamicSpecEdits({computations: {noop: {limit: 4}}}, after)).toEqual([
+            {
+                path: Object.keys(after).length ? ['computations', 'noop'] : ['computations'],
+                value: undefined,
+            },
+        ]);
+    });
+    it('treats an edited list as one Set and detects lifecycle changes explicitly', () => {
+        expect(
+            dynamicSpecEdits(
+                {names: ['a'], target_state: 'working'},
+                {names: ['a', 'b'], target_state: 'paused'},
+            ),
+        ).toEqual([
+            {path: ['names'], value: ['a', 'b']},
+            {path: ['target_state'], value: 'paused'},
+        ]);
+    });
+    it('returns no changes for identical values', () => {
+        expect(dynamicSpecEdits({a: {b: 2}}, {a: {b: 2}})).toEqual([]);
     });
 });

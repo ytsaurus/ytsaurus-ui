@@ -323,8 +323,8 @@ describe('dynamic spec feature discovery', () => {
     });
 });
 
-describe('dynamic specification base editing', () => {
-    it('reads base and its version without replacing the selected view', async () => {
+describe('dynamic specification root editing', () => {
+    it('captures patch mode and reads effective with its version without replacing the selected view', async () => {
         jest.mocked(ytApiV4.flowExecute).mockResolvedValue({spec, version});
         const dispatch = jest.fn();
         const draft = await loadFlowDynamicSpecForEdit(pipelinePath)(
@@ -332,14 +332,14 @@ describe('dynamic specification base editing', () => {
             (() => ({features: ['dynamic_spec_patches']})) as never,
             undefined,
         );
-        expect(draft).toEqual({spec, version});
+        expect(draft).toEqual({data: {spec, version}, createPatch: true});
         expect(ytApiV4.flowExecute).toHaveBeenCalledWith({
             parameters: {
                 pipeline_path: pipelinePath,
                 output_format: 'web_json',
                 flow_command: 'get-pipeline-dynamic-spec',
             },
-            data: {view: 'base'},
+            data: {view: 'effective'},
         });
         expect(dispatch).not.toHaveBeenCalled();
     });
@@ -350,7 +350,7 @@ describe('dynamic specification base editing', () => {
             (() => ({features: []})) as never,
             undefined,
         );
-        expect(draft).toEqual({spec, version});
+        expect(draft).toEqual({data: {spec, version}, createPatch: false});
     });
 });
 
@@ -499,4 +499,24 @@ describe('DynamicSpec patch updates', () => {
             });
         },
     );
+});
+
+it('creates one patch with lossless values and version without a supplied ID', async () => {
+    flowExecute.mockReset().mockResolvedValueOnce({version});
+    const changes = [{path: '/count', value: {$type: 'uint64', $value: '18446744073709551615'}}];
+    await mutateFlowDynamicSpec({
+        path: pipelinePath,
+        command: 'patch-pipeline-dynamic-spec',
+        body: {set_changes: changes, comment: 'Reason', expected_version: version},
+    })(jest.fn(), jest.fn(), undefined);
+    expect(flowExecute).toHaveBeenCalledWith(
+        expect.objectContaining({
+            data: {
+                set_changes: changes,
+                comment: 'Reason',
+                expected_version: version,
+            },
+        }),
+    );
+    expect(flowExecute).toHaveBeenCalledTimes(1);
 });
