@@ -2,6 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {HelpMark} from '@gravity-ui/uikit';
 import Button from '../../../../components/Button/Button';
 import useResizeObserver from '../../../../hooks/useResizeObserver';
+import {useOpenDescriptionPanel} from '../NavigationDescriptionPanelProvider/NavigationDescriptionPanelProvider';
 import {useRoutedClickHandler} from '../../../../hooks/useRoutedClickHandler';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
@@ -13,7 +14,6 @@ import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';
 import {selectPath} from '../../../../store/selectors/navigation';
 import {selectCluster} from '../../../../store/selectors/global';
 import {Tab} from '../../../../constants/navigation';
-import {setMode} from '../../../../store/actions/navigation';
 import {makeNavigationLink} from '../../../../utils/app-url';
 import cn from 'bem-cn-lite';
 import {Markdown} from '../../../../components/Markdown/Markdown';
@@ -24,7 +24,9 @@ import './NavigationDescriptionPreview.scss';
 const block = cn('navigation-description-preview');
 
 export function NavigationDescriptionPreview() {
-    const {description, error} = useDescription();
+    const dispatch = useDispatch();
+    const collapsed = useSelector(getPreviewCollapsed);
+    const {description, error, path: descriptionPath} = useDescription();
     const [element, setElement] = useState<HTMLElement | null>(null);
     const handleResize = useCallback(() => {
         setTimeout(() => window.dispatchEvent(new Event('resize')), 0);
@@ -32,10 +34,18 @@ export function NavigationDescriptionPreview() {
     useResizeObserver({element, onResize: handleResize});
     const path = useSelector(selectPath);
     const cluster = useSelector(selectCluster);
-    const dispatch = useDispatch();
-    const collapsed = useSelector(getPreviewCollapsed);
+    const openDescription = useOpenDescriptionPanel();
     const handleOpen = useRoutedClickHandler({
-        navigate: () => dispatch(setMode(Tab.ANNOTATION)),
+        navigate: () => {
+            if (description) {
+                openDescription({
+                    description,
+                    path,
+                    cluster,
+                    inheritedPath: descriptionPath !== path ? descriptionPath : undefined,
+                });
+            }
+        },
         onClick: undefined,
     });
     return (
@@ -65,7 +75,11 @@ export function NavigationDescriptionPreview() {
                     <Button
                         className={block('action')}
                         view="flat-secondary"
-                        href={makeNavigationLink({path, cluster, navmode: Tab.ANNOTATION})}
+                        href={makeNavigationLink({
+                            path,
+                            cluster,
+                            navmode: Tab.ANNOTATION,
+                        })}
                         onClick={handleOpen}
                     >
                         {i18n('action_view-full-description')}

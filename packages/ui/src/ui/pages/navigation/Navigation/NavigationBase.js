@@ -32,6 +32,7 @@ import CreateACOModal from '../modals/CreateACOModal';
 import Button from '../../../components/Button/Button';
 import Icon from '../../../components/Icon/Icon';
 import {CellPreviewModal} from '../../../containers/CellPreviewModal/CellPreviewModal';
+import {NavigationDescriptionPanelProvider} from '../NavigationDescription/NavigationDescriptionPanelProvider/NavigationDescriptionPanelProvider';
 import {NavigationDescriptionPreview} from '../NavigationDescription/NavigationDescriptionPreview/NavigationDescriptionPreview';
 import {OpenQueryButtonsContent} from '../../../containers/OpenQueryButtons/OpenQueryButtons';
 import {UpdateAccessLogAvailability} from '../../../pages/navigation/tabs/AccessLog/UpdateAccessLogAvailability/UpdateAccessLogAvailability';
@@ -254,24 +255,26 @@ export class NavigationBase extends Component {
 
         return (
             <ErrorBoundary>
-                <UpdateAccessLogAvailability />
-                <div className={block({error: hasError}, 'elements-main-section')}>
-                    <div className={block('header')}>
-                        <NavigationPermissionsNotice />
+                <NavigationDescriptionPanelProvider>
+                    <UpdateAccessLogAvailability />
+                    <div className={block({error: hasError}, 'elements-main-section')}>
+                        <div className={block('header')}>
+                            <NavigationPermissionsNotice />
 
-                        <div className={block('tabs')}>
-                            {this.renderEditButton()}
-                            {this.renderTabs()}
+                            <div className={block('tabs')}>
+                                {this.renderEditButton()}
+                                {this.renderTabs()}
+                            </div>
                         </div>
-                    </div>
 
-                    <div className={block('main')}>
-                        {(loaded || showDescription) && this.renderView()}
-                    </div>
-                    {hasError && !showDescription && this.renderError()}
+                        <div className={block('main')}>
+                            {(loaded || showDescription) && this.renderView()}
+                        </div>
+                        {hasError && !showDescription && this.renderError()}
 
-                    {renderModals()}
-                </div>
+                        {renderModals()}
+                    </div>
+                </NavigationDescriptionPanelProvider>
             </ErrorBoundary>
         );
     }
