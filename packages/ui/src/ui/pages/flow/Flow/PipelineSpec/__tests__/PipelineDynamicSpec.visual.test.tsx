@@ -59,6 +59,7 @@ for (const theme of ['light', 'dark'] as const) {
                 'Diff',
                 'Comment',
                 'Time',
+                '',
             ]);
             expect(reads).toEqual(['effective', 'base', 'patches']);
             const first = page.getByRole('row').filter({hasText: PATCH_ID});
@@ -191,3 +192,190 @@ test('PipelineDynamicSpec: failed base read does not open effective for editing'
     await expect(page.getByText('Cannot read base').first()).toBeVisible();
     await expect(page.getByRole('dialog')).toHaveCount(0);
 });
+
+test('PipelineDynamicSpec: Cancel and Reset require confirmation', async ({
+    mount,
+    page,
+    router,
+}) => {
+    const calls: Array<{command: string; body: unknown}> = [];
+    await router.use(
+        http.put('*/api/v4/flow_execute', async ({request}) => {
+            const command = requestParameters(request).flow_command;
+            if (
+                !['cancel-pipeline-dynamic-spec-patch', 'reset-pipeline-dynamic-spec'].includes(
+                    command,
+                )
+            )
+                return;
+            calls.push({command, body: await request.json()});
+            return Response.json({version: snapshot.version});
+        }),
+        dynamicSpecHandler(),
+    );
+    await mount(<PipelineDynamicSpecStories.Patches />);
+    await page.getByRole('radio', {name: 'Patches', exact: true}).click();
+    await page.getByRole('button', {name: `Cancel ${PATCH_ID}`, exact: true}).click();
+    await expect(page.getByRole('dialog')).toBeVisible();
+    expect(calls).toHaveLength(0);
+    await page.getByRole('button', {name: 'Keep patch', exact: true}).click();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    expect(calls).toHaveLength(0);
+    await page.getByRole('button', {name: `Cancel ${PATCH_ID}`, exact: true}).click();
+    await page.getByRole('dialog').getByRole('button', {name: 'Cancel', exact: true}).click();
+    await expect.poll(() => calls.length).toBe(1);
+    expect(calls[0]).toEqual({
+        command: 'cancel-pipeline-dynamic-spec-patch',
+        body: {patch: {$type: 'int64', $value: PATCH_ID}, expected_version: snapshot.version},
+    });
+    const reset = page.getByRole('button', {name: 'Reset all patches', exact: true});
+    await reset.click();
+    await expect(page.getByRole('button', {name: 'Keep patches', exact: true})).toBeVisible();
+    expect(calls).toHaveLength(1);
+    await page.getByRole('button', {name: 'Keep patches', exact: true}).click();
+    expect(calls).toHaveLength(1);
+    await reset.click();
+    await page
+        .getByRole('dialog')
+        .getByRole('button', {name: 'Reset all patches', exact: true})
+        .click();
+    await expect.poll(() => calls.length).toBe(2);
+    expect(calls[1]).toEqual({
+        command: 'reset-pipeline-dynamic-spec',
+        body: {expected_version: snapshot.version},
+    });
+});
+
+test('PipelineDynamicSpec: Cancel keeps its dialog and original version on failure', async ({
+    mount,
+    page,
+    router,
+}) => {
+    const calls: unknown[] = [];
+    await router.use(
+        http.put('*/api/v4/flow_execute', async ({request}) => {
+            if (requestParameters(request).flow_command !== 'cancel-pipeline-dynamic-spec-patch')
+                return;
+            calls.push(await request.json());
+            return Response.json(
+                {code: 1, message: 'Dynamic spec version mismatch'},
+                {status: 500},
+            );
+        }),
+        dynamicSpecHandler(),
+    );
+    await mount(<PipelineDynamicSpecStories.Patches />);
+    await page.getByRole('radio', {name: 'Patches', exact: true}).click();
+    await page.getByRole('button', {name: `Cancel ${PATCH_ID}`, exact: true}).click();
+    await page.evaluate(() => {
+        (
+            window as typeof window & {store: {dispatch: (action: unknown) => unknown}}
+        ).store.dispatch({
+            type: 'flow.dynamicSpec/onSuccess',
+            payload: {
+                data: {version: {$type: 'int64', $value: '1923307469208162015'}, patches: []},
+                supported_features: ['dynamic_spec_patches'],
+            },
+        });
+    });
+    const dialog = page.getByRole('dialog');
+    await dialog.getByRole('button', {name: 'Cancel', exact: true}).click();
+    await expect(dialog).toBeVisible();
+    await expect(
+        dialog.getByText('Dynamic spec version mismatch', {exact: false}).first(),
+    ).toBeVisible();
+    expect(calls).toEqual([
+        {
+            patch: snapshot.patches[0].patch_id,
+            expected_version: snapshot.version,
+        },
+    ]);
+    const errors = page.getByText('Dynamic spec version mismatch', {exact: true});
+    expect(await errors.count()).toBeGreaterThan(0);
+    expect(await dialog.getByText('Dynamic spec version mismatch', {exact: true}).count()).toBe(
+        await errors.count(),
+    );
+    await dialog.getByRole('button', {name: 'Keep patch', exact: true}).click();
+    await expect(dialog).toHaveCount(0);
+});
+
+test('PipelineDynamicSpec: Reset keeps its dialog and original version on failure', async ({
+    mount,
+    page,
+    router,
+}) => {
+    const calls: unknown[] = [];
+    await router.use(
+        http.put('*/api/v4/flow_execute', async ({request}) => {
+            if (requestParameters(request).flow_command !== 'reset-pipeline-dynamic-spec') return;
+            calls.push(await request.json());
+            return Response.json(
+                {code: 1, message: 'Dynamic spec version mismatch'},
+                {status: 500},
+            );
+        }),
+        dynamicSpecHandler(),
+    );
+    await mount(<PipelineDynamicSpecStories.Patches />);
+    await page.getByRole('radio', {name: 'Patches', exact: true}).click();
+    await page.getByRole('button', {name: 'Reset all patches', exact: true}).click();
+    await page.evaluate(() => {
+        (
+            window as typeof window & {store: {dispatch: (action: unknown) => unknown}}
+        ).store.dispatch({
+            type: 'flow.dynamicSpec/onSuccess',
+            payload: {
+                data: {version: {$type: 'int64', $value: '1923307469208162015'}, patches: []},
+                supported_features: ['dynamic_spec_patches'],
+            },
+        });
+    });
+    const dialog = page.getByRole('dialog');
+    await dialog.getByRole('button', {name: 'Reset all patches', exact: true}).click();
+    await expect(dialog).toBeVisible();
+    await expect(
+        dialog.getByText('Dynamic spec version mismatch', {exact: false}).first(),
+    ).toBeVisible();
+    expect(calls).toEqual([
+        {
+            expected_version: snapshot.version,
+        },
+    ]);
+    const errors = page.getByText('Dynamic spec version mismatch', {exact: true});
+    expect(await errors.count()).toBeGreaterThan(0);
+    expect(await dialog.getByText('Dynamic spec version mismatch', {exact: true}).count()).toBe(
+        await errors.count(),
+    );
+    await dialog.getByRole('button', {name: 'Keep patches', exact: true}).click();
+    await expect(dialog).toHaveCount(0);
+});
+
+for (const theme of ['light', 'dark'] as const) {
+    test(`PipelineDynamicSpec: Cancel confirmation ${theme}`, async ({
+        mount,
+        page,
+        router,
+        expectScreenshot,
+    }) => {
+        await router.use(dynamicSpecHandler());
+        await mount(<PipelineDynamicSpecStories.Patches />);
+        await page.getByRole('radio', {name: 'Patches', exact: true}).click();
+        await page.getByRole('button', {name: `Cancel ${PATCH_ID}`, exact: true}).click();
+        await expect(page.getByRole('dialog')).toBeVisible();
+        await expectScreenshot({themes: [theme], component: page.getByRole('dialog')});
+    });
+
+    test(`PipelineDynamicSpec: Reset confirmation ${theme}`, async ({
+        mount,
+        page,
+        router,
+        expectScreenshot,
+    }) => {
+        await router.use(dynamicSpecHandler());
+        await mount(<PipelineDynamicSpecStories.Patches />);
+        await page.getByRole('radio', {name: 'Patches', exact: true}).click();
+        await page.getByRole('button', {name: 'Reset all patches', exact: true}).click();
+        await expect(page.getByRole('dialog')).toBeVisible();
+        await expectScreenshot({themes: [theme], component: page.getByRole('dialog')});
+    });
+}

@@ -14,5 +14,14 @@
   "field_comment": "Comment",
   "value_patches": "Patches",
   "context_patch-order": "Patches are applied from top to bottom: later rows can cover earlier changes.",
-  "context_no-patches": "No active patches."
+  "context_no-patches": "No active patches.",
+  "action_reset-patches": "Reset all patches",
+  "context_reset-patches-confirm": "This will cancel every patch for this pipeline. The effective specification will return to the current base. This cannot be undone.",
+  "action_keep-patches": "Keep patches",
+  "title_reset-patches": "Reset all patches?",
+  "title_cancel-patch": "Cancel patch?",
+  "action_keep-patch": "Keep patch",
+  "context_cancel-patch-confirm": "This will cancel this patch. Earlier patches and the current base will determine the effective values.",
+  "context_cancel-patch": "Cancel all remaining changes from this patch",
+  "action_cancel-patch": "Cancel"
 }

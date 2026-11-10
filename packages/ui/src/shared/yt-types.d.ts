@@ -644,6 +644,26 @@ export type GetQueryTrackerInfoResponse = {
 };
 
 export type FlowExecuteTypes = {
+    'cancel-pipeline-dynamic-spec-patch': {
+        ParamsType: {
+            flow_command: 'cancel-pipeline-dynamic-spec-patch';
+            pipeline_path: string;
+            input_format?: unknown;
+            output_format?: 'web_json';
+        };
+        BodyType: {body: {patch: Int64; expected_version: Int64}};
+        ResponseType: {version: Int64};
+    };
+    'reset-pipeline-dynamic-spec': {
+        ParamsType: {
+            flow_command: 'reset-pipeline-dynamic-spec';
+            pipeline_path: string;
+            input_format?: unknown;
+            output_format?: 'web_json';
+        };
+        BodyType: {body: {expected_version: Int64}};
+        ResponseType: {version: Int64};
+    };
     'get-supported-features': {
         ParamsType: {
             pipeline_path: string;

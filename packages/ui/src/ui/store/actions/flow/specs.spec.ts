@@ -6,9 +6,11 @@ import {
 } from '../../../store/reducers/flow/specs';
 
 import {
+    type DynamicSpecMutation,
     loadFlowDynamicSpec,
     loadFlowDynamicSpecForEdit,
     loadFlowStaticSpec,
+    mutateFlowDynamicSpec,
     updateFlowDynamicSpec,
     updateFlowStaticSpec,
 } from './specs';
@@ -24,7 +26,8 @@ jest.mock('../../../rum/rum-wrap-api', () => ({
 }));
 
 jest.mock('../../../store/selectors/flow/specs', () => ({
-    selectFlowDynamicSpecPath: () => '//home/flow',
+    selectFlowDynamicSpecPath: (state?: {path?: string}) => state?.path ?? '//home/flow',
+    selectFlowDynamicSpecView: (state?: {view?: string}) => state?.view ?? 'effective',
     selectFlowDynamicSpecSupportedFeatures: (state: {features: string[]}) => state.features,
     selectFlowStaticSpecPath: () => '//home/flow',
 }));
@@ -348,5 +351,100 @@ describe('dynamic specification base editing', () => {
             undefined,
         );
         expect(draft).toEqual({spec, version});
+    });
+});
+
+describe('DynamicSpec cancel and reset', () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+        flowExecute.mockReset();
+    });
+
+    it.each(['9007199254740992', '9007199254740993', '9223372036854775806', '9223372036854775807'])(
+        'preserves adjacent int64 IDs and versions: %s',
+        async (value) => {
+            const annotated = {$type: 'int64' as const, $value: value};
+            for (const input of [value, annotated]) {
+                flowExecute.mockResolvedValue({version});
+                await mutateFlowDynamicSpec({
+                    path: pipelinePath,
+                    command: 'cancel-pipeline-dynamic-spec-patch',
+                    body: {patch: input, expected_version: input},
+                })(jest.fn(), jest.fn(), undefined);
+                expect(flowExecute).toHaveBeenLastCalledWith({
+                    parameters: {
+                        pipeline_path: pipelinePath,
+                        flow_command: 'cancel-pipeline-dynamic-spec-patch',
+                        input_format: {$value: 'json', $attributes: {encode_utf8: true}},
+                        output_format: 'web_json',
+                    },
+                    data: {patch: annotated, expected_version: annotated},
+                });
+            }
+        },
+    );
+
+    const mutations: DynamicSpecMutation[] = [
+        {
+            path: pipelinePath,
+            command: 'cancel-pipeline-dynamic-spec-patch',
+            body: {patch: version, expected_version: version},
+        },
+        {
+            path: pipelinePath,
+            command: 'reset-pipeline-dynamic-spec',
+            body: {expected_version: version},
+        },
+    ];
+    it.each(mutations)(
+        'refreshes the current selected view on $command success or conflict without retry',
+        async (mutation) => {
+            for (const error of [undefined, {message: 'Dynamic spec version mismatch'}]) {
+                flowExecute.mockReset();
+                if (error) flowExecute.mockRejectedValueOnce(error);
+                else flowExecute.mockResolvedValueOnce({version});
+                const dispatch = jest.fn();
+                const getState = jest.fn().mockReturnValue({path: pipelinePath, view: 'patches'});
+                const promise = mutateFlowDynamicSpec(mutation)(dispatch, getState, undefined);
+                if (error) await expect(promise).rejects.toEqual(error);
+                else await promise;
+                expect(flowExecute).toHaveBeenCalledTimes(1);
+                expect(flowExecute).toHaveBeenCalledWith(
+                    expect.objectContaining({data: mutation.body}),
+                );
+                const refresh = dispatch.mock.calls[0]?.[0];
+                expect(refresh).toEqual(expect.any(Function));
+                flowExecute
+                    .mockResolvedValueOnce(features)
+                    .mockResolvedValueOnce({version, patches: []});
+                await refresh(dispatch, getState, undefined);
+                expect(flowExecute).toHaveBeenCalledTimes(3);
+                expect(flowExecute).toHaveBeenLastCalledWith(
+                    expect.objectContaining({
+                        parameters: {
+                            pipeline_path: pipelinePath,
+                            flow_command: 'get-pipeline-dynamic-spec-patches',
+                            output_format: 'web_json',
+                        },
+                    }),
+                );
+                expect(dispatch).toHaveBeenLastCalledWith(
+                    dynamicSpecActions.onSuccess({
+                        supported_features: features,
+                        data: {version, spec: undefined, patches: []},
+                    }),
+                );
+            }
+        },
+    );
+    it.each(mutations)('does not refresh another pipeline after $command', async (mutation) => {
+        flowExecute.mockResolvedValue({version});
+        const dispatch = jest.fn();
+        await mutateFlowDynamicSpec(mutation)(
+            dispatch,
+            jest.fn().mockReturnValue({path: '//home/other'}),
+            undefined,
+        );
+        expect(dispatch).not.toHaveBeenCalled();
     });
 });
