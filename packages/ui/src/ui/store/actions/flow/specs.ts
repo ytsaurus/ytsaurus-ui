@@ -15,6 +15,7 @@ import {
 } from '../../../store/reducers/flow/specs';
 import {
     selectFlowDynamicSpecPath,
+    selectFlowDynamicSpecSupportedFeatures,
     selectFlowStaticSpecPath,
 } from '../../../store/selectors/flow/specs';
 
@@ -178,5 +179,25 @@ export function updateFlowDynamicSpec({
                     dispatch(loadFlowDynamicSpec(path));
                 }
             });
+    };
+}
+
+export function loadFlowDynamicSpecForEdit(
+    path: string,
+): AsyncAction<Promise<NonNullable<FlowSpecState['data']>>> {
+    return async (_dispatch, getState) => {
+        if (selectFlowDynamicSpecSupportedFeatures(getState())?.includes('dynamic_spec_patches')) {
+            return ytApiV4.flowExecute<'get-pipeline-dynamic-spec'>({
+                parameters: {
+                    pipeline_path: path,
+                    output_format: 'web_json',
+                    flow_command: 'get-pipeline-dynamic-spec',
+                },
+                data: {view: 'base'},
+            });
+        }
+        return ytApiV4.getPipelineDynamicSpec({
+            parameters: {pipeline_path: path, output_format: 'web_json'},
+        });
     };
 }
