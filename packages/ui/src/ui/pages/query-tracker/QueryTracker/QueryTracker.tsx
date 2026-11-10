@@ -31,6 +31,7 @@ import {SET_QUERY_PARAMS} from '../../../store/reducers/query-tracker/query-trac
 import {RedirectConfirmModal} from '../../../components/RedirectConfirmModal';
 import {selectLastUserChoiceQueryEngine} from '../../../store/selectors/settings/settings-queries';
 import i18n from './i18n';
+import {useQueriesListInitialization} from '../QueriesList/useQueriesListState';
 
 const b = cn('query-tracker-page');
 
@@ -109,6 +110,7 @@ function QueryPage(props: Props) {
 }
 
 export default function QueryTracker({match}: Props) {
+    useQueriesListInitialization();
     const {isQueriesListSidebarVisible, toggleQueriesListSideBarToggle} =
         useQueriesListSidebarToggle();
     const isQueryStateDirty = useSelector(selectIsQueryTextDirty);

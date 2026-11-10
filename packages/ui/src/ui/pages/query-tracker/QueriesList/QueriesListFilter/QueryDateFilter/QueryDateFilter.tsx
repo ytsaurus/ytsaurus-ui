@@ -1,45 +1,32 @@
-import React, {type FC, useMemo} from 'react';
-import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
-import {selectQueriesFilters} from '../../../../../store/selectors/query-tracker/queriesList';
+import React from 'react';
 import {DatePicker} from '@gravity-ui/date-components';
 import {type DateTime, dateTimeParse} from '../../../../../utils/date-utils';
 import {Flex} from '@gravity-ui/uikit';
-import {applyFilter} from '../../../../../store/actions/query-tracker/queriesList';
 import i18n from './i18n';
 
-export const QueryDateFilter: FC = () => {
-    const dispatch = useDispatch();
-    const {from, to} = useSelector(selectQueriesFilters);
+type DateFilterValue = {from?: number; to?: number};
+type Props = {value: DateFilterValue; onChange: (value: DateFilterValue) => void};
 
-    const setFilter = useMemo(
-        () => ({
-            from: (value?: DateTime | null) => {
-                dispatch(applyFilter({from: value ? value.valueOf() : undefined}));
-            },
-            to: (value?: DateTime | null) => {
-                dispatch(applyFilter({to: value ? value.endOf('day').valueOf() : undefined}));
-            },
-        }),
-        [dispatch],
-    );
-
+export function QueryDateFilterField({value, onChange}: Props) {
     return (
         <Flex alignItems="center" gap={1}>
             <DatePicker
                 placeholder={i18n('context_start-date')}
                 format="DD.MM.YYYY"
-                value={from ? dateTimeParse(from) : null}
-                onUpdate={setFilter.from}
+                value={value.from ? dateTimeParse(value.from) : null}
+                onUpdate={(next?: DateTime | null) => onChange({...value, from: next?.valueOf()})}
                 hasClear
             />{' '}
             &mdash;
             <DatePicker
                 placeholder={i18n('context_end-date')}
                 format="DD.MM.YYYY"
-                value={to ? dateTimeParse(to)?.startOf('day') : null}
-                onUpdate={setFilter.to}
+                value={value.to ? dateTimeParse(value.to)?.startOf('day') : null}
+                onUpdate={(next?: DateTime | null) =>
+                    onChange({...value, to: next?.endOf('day').valueOf()})
+                }
                 hasClear
             />
         </Flex>
     );
-};
+}
