@@ -5,10 +5,10 @@ import {EditSpecDialog, type SpecEditOptions} from '../EditSpecDialog';
 
 type Props = Pick<
     React.ComponentProps<typeof EditSpecDialog>,
-    'allowForce' | 'withComment' | 'requireComment' | 'allowCommentOnly'
+    'allowForce' | 'withComment' | 'requireComment' | 'allowCommentOnly' | 'initialComment'
 > & {submitError?: boolean};
 
-function SpecEditor({submitError, ...props}: Props) {
+function SpecEditor({submitError, initialComment = 'Initial reason', ...props}: Props) {
     const [visible, setVisible] = React.useState(true);
     const [applied, setApplied] = React.useState<{spec: unknown; options: SpecEditOptions}>();
     return (
@@ -21,7 +21,7 @@ function SpecEditor({submitError, ...props}: Props) {
                 title="Update patch"
                 specCaption="Diff"
                 spec={{batch_duration: 1001}}
-                initialComment="Initial reason"
+                initialComment={initialComment}
                 settings={{format: 'json'}}
                 onClose={() => setVisible(false)}
                 onSpecApply={async (spec, options) => {
@@ -43,6 +43,12 @@ type Story = StoryObj<typeof SpecEditor>;
 
 export const Comment: Story = {
     args: {withComment: true, requireComment: true, allowCommentOnly: true},
+};
+export const MultilineComment: Story = {
+    args: {
+        ...Comment.args,
+        initialComment: 'Initial reason\n[YTFRONT-6091](https://st.yandex-team.ru/YTFRONT-6091)',
+    },
 };
 export const ValueRequired: Story = {
     args: {withComment: true, requireComment: true},

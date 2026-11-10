@@ -354,7 +354,7 @@ describe('dynamic specification base editing', () => {
     });
 });
 
-describe('DynamicSpec cancel and reset', () => {
+describe('DynamicSpec mutations', () => {
     beforeEach(() => {
         jest.clearAllMocks();
         flowExecute.mockReset();
@@ -394,6 +394,16 @@ describe('DynamicSpec cancel and reset', () => {
             path: pipelinePath,
             command: 'reset-pipeline-dynamic-spec',
             body: {expected_version: version},
+        },
+        {
+            path: pipelinePath,
+            command: 'patch-pipeline-dynamic-spec',
+            body: {
+                patch: version,
+                expected_version: version,
+                comment: 'Reason',
+                set_changes: [{path: '/count', value: 2}],
+            },
         },
     ];
     it.each(mutations)(
@@ -447,4 +457,46 @@ describe('DynamicSpec cancel and reset', () => {
         );
         expect(dispatch).not.toHaveBeenCalled();
     });
+});
+
+describe('DynamicSpec patch updates', () => {
+    beforeEach(() => {
+        flowExecute.mockReset();
+        flowExecute.mockResolvedValue({version});
+    });
+    it('sends comment-only updates without value fields', async () => {
+        await mutateFlowDynamicSpec({
+            path: pipelinePath,
+            command: 'patch-pipeline-dynamic-spec',
+            body: {patch: version, expected_version: version, comment: 'Причина 😊'},
+        })(jest.fn(), jest.fn(), undefined);
+        expect(flowExecute.mock.calls[0][0]).toMatchObject({
+            parameters: {flow_command: 'patch-pipeline-dynamic-spec'},
+            data: {
+                patch: version,
+                expected_version: version,
+                comment: Buffer.from('Причина 😊').toString('latin1'),
+            },
+        });
+        expect(flowExecute.mock.calls[0][0]).not.toHaveProperty('data.set_changes');
+        expect(flowExecute.mock.calls[0][0]).not.toHaveProperty('data.set_path');
+    });
+    it.each(['9007199254740992', '9007199254740993', '9223372036854775806', '9223372036854775807'])(
+        'updates exact opaque ID %s and preserves all replacement changes',
+        async (id) => {
+            const patch = {$type: 'int64' as const, $value: id};
+            const changes = [
+                {path: '/limit', value: {$type: 'uint64', $value: '18446744073709551615'}},
+                {path: '/count', value: 3},
+            ];
+            await mutateFlowDynamicSpec({
+                path: pipelinePath,
+                command: 'patch-pipeline-dynamic-spec',
+                body: {patch: id, expected_version: id, comment: 'Reason', set_changes: changes},
+            })(jest.fn(), jest.fn(), undefined);
+            expect(flowExecute.mock.calls[0][0]).toMatchObject({
+                data: {patch, expected_version: patch, comment: 'Reason', set_changes: changes},
+            });
+        },
+    );
 });

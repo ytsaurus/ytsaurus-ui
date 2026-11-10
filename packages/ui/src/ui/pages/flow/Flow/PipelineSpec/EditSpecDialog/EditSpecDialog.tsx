@@ -152,7 +152,13 @@ export function EditSpecDialog({
                         },
                     },
                     ...(withComment
-                        ? [{name: 'comment', caption: i18n('field_comment'), type: 'text' as const}]
+                        ? [
+                              {
+                                  name: 'comment',
+                                  caption: i18n('field_comment'),
+                                  type: 'textarea' as const,
+                              },
+                          ]
                         : []),
                     ...(allowForce
                         ? [
