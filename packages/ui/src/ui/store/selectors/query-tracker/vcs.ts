@@ -14,7 +14,7 @@ export const selectRepository = (state: RootState) => state.queryTracker.vcs.rep
 export const selectBranch = (state: RootState) => state.queryTracker.vcs.branch;
 export const selectBranches = (state: RootState) => state.queryTracker.vcs.branches;
 export const selectListFilter = (state: RootState) => state.queryTracker.vcs.listFilter;
-export const selectListError = (state: RootState) => state.queryTracker.vcs.listError;
+export const selectListError = (state: RootState) => state.queryTracker.vcs.requests.list.error;
 
 export const selectShowFilter = createSelector([selectBranch, selectPreview], (branch, preview) => {
     return Boolean(branch && !preview.name);
