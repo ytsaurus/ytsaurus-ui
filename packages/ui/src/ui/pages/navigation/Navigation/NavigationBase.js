@@ -32,6 +32,7 @@ import CreateACOModal from '../modals/CreateACOModal';
 import Button from '../../../components/Button/Button';
 import Icon from '../../../components/Icon/Icon';
 import {CellPreviewModal} from '../../../containers/CellPreviewModal/CellPreviewModal';
+import {NavigationDescriptionPreview} from '../NavigationDescription/NavigationDescriptionPreview/NavigationDescriptionPreview';
 import {OpenQueryButtonsContent} from '../../../containers/OpenQueryButtons/OpenQueryButtons';
 import {UpdateAccessLogAvailability} from '../../../pages/navigation/tabs/AccessLog/UpdateAccessLogAvailability/UpdateAccessLogAvailability';
 
@@ -226,10 +227,23 @@ export class NavigationBase extends Component {
             error: {message, details},
             cluster,
             path,
+            mode,
         } = this.props;
 
         return (
-            <NavigationError cluster={cluster} path={path} details={details} message={message} />
+            <>
+                {mode === Tab.CONTENT && !getNotFoundError(details) && (
+                    <div className={block('viewer', {mode})}>
+                        <NavigationDescriptionPreview />
+                    </div>
+                )}
+                <NavigationError
+                    cluster={cluster}
+                    path={path}
+                    details={details}
+                    message={message}
+                />
+            </>
         );
     }
 

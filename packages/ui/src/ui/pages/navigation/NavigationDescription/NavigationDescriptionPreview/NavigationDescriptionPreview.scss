@@ -1,0 +1,86 @@
+.navigation-description-preview {
+    padding: 10px 0;
+    max-width: 1080px;
+
+    &_empty {
+        padding: 0;
+    }
+
+    &__section {
+        margin-top: 0;
+    }
+
+    &__heading {
+        align-items: center;
+    }
+
+    &__action {
+        margin-top: var(--g-spacing-2);
+    }
+
+    &__text > .yfm {
+        /* stylelint-disable-next-line value-no-vendor-prefix */
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 5;
+        overflow: hidden;
+        overflow-wrap: anywhere;
+    }
+
+    // Text-mode feature request for @diplodoc/transform: https://nda.ya.ru/t/qyFvduDk7wCgJq
+    &__text .yfm {
+        --yfm-text-block-margin-block: 0;
+        --yfm-list-item-margin-block: 0;
+        --yfm-list-text-margin-block: 0;
+
+        // Hide complete YFM blocks so their controls and spacing disappear together.
+        img,
+        svg,
+        iframe,
+        video,
+        table,
+        pre,
+        hr,
+        .embed-responsive,
+        .yfm-cut,
+        .yfm-note,
+        .yfm-tabs,
+        .yfm-code-floating-container,
+        .yfm-anchor,
+        .yfm-file__icon {
+            display: none;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            margin: var(--g-spacing-2) 0 var(--g-spacing-1);
+            font: inherit;
+
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+
+        blockquote {
+            padding: 0;
+            border: 0;
+            background: none;
+        }
+
+        ul,
+        ol {
+            padding-left: 1.5em;
+        }
+
+        dl dt,
+        dl dd {
+            margin: 0;
+            padding: 0;
+            font-weight: inherit;
+        }
+    }
+}

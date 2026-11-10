@@ -5,5 +5,6 @@
   "title_description": "Description",
   "action_save": "Save",
   "action_cancel": "Cancel",
-  "action_edit": "Edit description"
+  "action_edit": "Edit description",
+  "context_text-preview": "This preview shows text only and is limited to five lines. Open the full description to see all content and formatting."
 }
