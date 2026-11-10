@@ -20,6 +20,10 @@
         overflow-wrap: anywhere;
     }
 
+    &__reset {
+        margin-bottom: 12px;
+    }
+
     &__cell {
         border-bottom: 1px solid var(--g-color-line-generic);
         vertical-align: top;
