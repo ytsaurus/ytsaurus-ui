@@ -3,7 +3,7 @@ import {YCLOUD_THEME} from '@gravity-ui/react-data-table/build/esm/lib/constants
 import {type SortOrder} from '@gravity-ui/react-data-table';
 import YQLTable, {type ShowPreviewCallback} from '../YQLTable/YQLTable';
 import {formatResults} from '../../../../utils/queries/format';
-import {type QueryResultReadyState} from '../../../../types/query-tracker/queryResult';
+import {type FormattedQueryResultReadyState} from '../../../../types/query-tracker/queryResult';
 import isEqual_ from 'lodash/isEqual';
 import {useQueryResultTableData} from './hooks/useQueryResultTableData';
 import {useDispatch} from '../../../../store/redux-hooks';
@@ -34,7 +34,7 @@ export const ResultsTable = React.memo(
     }: {
         queryId: string;
         resultIndex: number;
-        result: QueryResultReadyState;
+        result: FormattedQueryResultReadyState;
         onShowPreview: ShowPreviewCallback;
     }) {
         const dispatch = useDispatch();
