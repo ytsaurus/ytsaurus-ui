@@ -1,10 +1,7 @@
-import React, {type FC, useCallback} from 'react';
+import React from 'react';
 import {Select} from '@gravity-ui/uikit';
 import {QueryStatus} from '../../../../../types/query-tracker';
 import hammer from '../../../../../common/hammer';
-import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
-import {applyFilter} from '../../../../../store/actions/query-tracker/queriesList';
-import {selectQueriesFilters} from '../../../../../store/selectors/query-tracker/queriesList';
 import i18n from './i18n';
 
 const ALL_STATUS_KEY = '__all';
@@ -21,27 +18,21 @@ const getStatusesList = () => [
     }),
 ];
 
-export const QueryStateFilter: FC = () => {
-    const dispatch = useDispatch();
-    const {state} = useSelector(selectQueriesFilters);
+type Props = {
+    value?: QueryStatus;
+    onChange: (value: QueryStatus | undefined) => void;
+};
 
-    const onChangeStatusFilter = useCallback(
-        (values: string[]) => {
-            const selectedStatus = values[0];
-            const result =
-                selectedStatus === ALL_STATUS_KEY ? undefined : (selectedStatus as QueryStatus);
-            dispatch(applyFilter({state: result}));
-        },
-        [dispatch],
-    );
-
+export function QueryStateFilterField({value, onChange}: Props) {
     return (
         <Select
             width="max"
             options={getStatusesList()}
-            value={[state || ALL_STATUS_KEY]}
-            onUpdate={onChangeStatusFilter}
+            value={[value || ALL_STATUS_KEY]}
+            onUpdate={([next]) =>
+                onChange(next === ALL_STATUS_KEY ? undefined : (next as QueryStatus))
+            }
             placeholder={i18n('context_select-status')}
         />
     );
-};
+}

@@ -1,26 +1,24 @@
-import React, {type FC, useCallback, useMemo} from 'react';
-import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
+import React, {useMemo} from 'react';
+import {useSelector} from '../../../../../store/redux-hooks';
 import {selectAllUserNames, selectCurrentUserName} from '../../../../../store/selectors/global';
 import {useAllUserNamesFiltered} from '../../../../../hooks/global';
 import {Select, type SelectOption} from '@gravity-ui/uikit';
-import {selectQueriesFilters} from '../../../../../store/selectors/query-tracker/queriesList';
 import {QueriesListAuthorFilter} from '../../../../../types/query-tracker/queryList';
-import {applyFilter} from '../../../../../store/actions/query-tracker/queriesList';
 
-const ALL_STATUS_KEY = '__all';
+import i18n from '../QueryFastUserFilter/i18n';
 
-export const QueryUserFilter: FC = () => {
+type Props = {value?: string; onChange: (value: string) => void};
+
+export function QueryUserFilterField({value: user, onChange}: Props) {
     useAllUserNamesFiltered();
-    const dispatch = useDispatch();
     const userNames = useSelector(selectAllUserNames);
     const login = useSelector(selectCurrentUserName);
-    const {user} = useSelector(selectQueriesFilters);
 
     const values = useMemo<SelectOption[]>(() => {
         return [
             {
-                value: ALL_STATUS_KEY,
-                content: 'All',
+                value: QueriesListAuthorFilter.All,
+                content: i18n('value_all'),
             },
             ...userNames.map((userName) => ({
                 value: userName,
@@ -31,8 +29,8 @@ export const QueryUserFilter: FC = () => {
 
     const value = useMemo(() => {
         let result = user;
-        if (!result) {
-            result = ALL_STATUS_KEY;
+        if (!result || result === '__all') {
+            result = QueriesListAuthorFilter.All;
         }
         if (result === QueriesListAuthorFilter.My) {
             result = login;
@@ -40,12 +38,7 @@ export const QueryUserFilter: FC = () => {
         return [result];
     }, [login, user]);
 
-    const handleOnChange = useCallback(
-        (items: string[]) => {
-            dispatch(applyFilter({user: items[0]}));
-        },
-        [dispatch],
+    return (
+        <Select options={values} value={value} onUpdate={([next]) => onChange(next)} filterable />
     );
-
-    return <Select options={values} value={value} onUpdate={handleOnChange} filterable />;
-};
+}
