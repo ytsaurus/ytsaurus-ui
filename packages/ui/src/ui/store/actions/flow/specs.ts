@@ -186,23 +186,31 @@ export function updateFlowDynamicSpec({
     };
 }
 
+export type FlowDynamicSpecEditDraft = {
+    data: NonNullable<FlowSpecState['data']>;
+    createPatch: boolean;
+};
+
 export function loadFlowDynamicSpecForEdit(
     path: string,
-): AsyncAction<Promise<NonNullable<FlowSpecState['data']>>> {
+): AsyncAction<Promise<FlowDynamicSpecEditDraft>> {
     return async (_dispatch, getState) => {
-        if (selectFlowDynamicSpecSupportedFeatures(getState())?.includes('dynamic_spec_patches')) {
-            return ytApiV4.flowExecute<'get-pipeline-dynamic-spec'>({
-                parameters: {
-                    pipeline_path: path,
-                    output_format: 'web_json',
-                    flow_command: 'get-pipeline-dynamic-spec',
-                },
-                data: {view: 'base'},
-            });
-        }
-        return ytApiV4.getPipelineDynamicSpec({
-            parameters: {pipeline_path: path, output_format: 'web_json'},
-        });
+        const createPatch = Boolean(
+            selectFlowDynamicSpecSupportedFeatures(getState())?.includes('dynamic_spec_patches'),
+        );
+        const data = createPatch
+            ? await ytApiV4.flowExecute<'get-pipeline-dynamic-spec'>({
+                  parameters: {
+                      pipeline_path: path,
+                      output_format: 'web_json',
+                      flow_command: 'get-pipeline-dynamic-spec',
+                  },
+                  data: {view: 'effective'},
+              })
+            : await ytApiV4.getPipelineDynamicSpec({
+                  parameters: {pipeline_path: path, output_format: 'web_json'},
+              });
+        return {data, createPatch};
     };
 }
 

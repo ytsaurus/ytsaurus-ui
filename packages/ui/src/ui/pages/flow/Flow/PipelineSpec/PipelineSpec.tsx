@@ -38,7 +38,14 @@ import Loader from '../../../../components/Loader/Loader';
 
 import {pathToFileName} from '../../../navigation/helpers/pathToFileName';
 
-import {dynamicSpecPath} from '../../../../utils/flow/dynamic-spec';
+import {
+    decodeDynamicSpecValue,
+    dynamicSpecEdits,
+    dynamicSpecPath,
+    encodeDynamicSpecValue,
+} from '../../../../utils/flow/dynamic-spec';
+import {type FlowDynamicSpecEditDraft} from '../../../../store/actions/flow/specs';
+import i18n from './i18n';
 import {DynamicSpec} from './DynamicSpec/DynamicSpec';
 import {EditSpecDialog} from './EditSpecDialog/EditSpecDialog';
 
@@ -47,10 +54,20 @@ type PipelineSpecProps = {
     error: YTError | undefined;
     data: FlowSpecState['data'];
     name: string;
-    onSave: (data: PipelineSpecProps['data'], options: {force?: boolean}) => Promise<void>;
-    allowForce?: boolean;
-    onLoadEditSpec?: () => Promise<NonNullable<FlowSpecState['data']>>;
-};
+} & (
+    | {
+          onSave: (data: FlowSpecState['data'], options: {force?: boolean}) => Promise<void>;
+          allowForce?: boolean;
+          onEdit?: never;
+          editLoading?: never;
+      }
+    | {
+          onSave?: never;
+          allowForce?: never;
+          onEdit: () => void;
+          editLoading: boolean;
+      }
+);
 
 function PipelineSpec({
     path,
@@ -59,37 +76,17 @@ function PipelineSpec({
     name,
     onSave,
     allowForce,
-    onLoadEditSpec,
+    onEdit,
+    editLoading,
 }: PipelineSpecProps) {
     const [showEdit, setShowEdit] = React.useState(false);
     const [editData, setEditData] = React.useState(data);
-    const [editLoading, setEditLoading] = React.useState(false);
-    const [editError, setEditError] = React.useState<YTError>();
-    const editRequest = React.useRef(0);
-    React.useEffect(
-        () => () => {
-            ++editRequest.current;
-        },
-        [path],
-    );
-    const openEdit = async () => {
-        const request = ++editRequest.current;
-        setEditError(undefined);
-        if (!onLoadEditSpec) {
+    const openEdit = () => {
+        if (onEdit) {
+            onEdit();
+        } else {
             setEditData(data);
             setShowEdit(true);
-            return;
-        }
-        setEditLoading(true);
-        try {
-            const draft = await onLoadEditSpec();
-            if (request !== editRequest.current) return;
-            setEditData(draft);
-            setShowEdit(true);
-        } catch (e) {
-            if (request === editRequest.current) setEditError(e as YTError);
-        } finally {
-            if (request === editRequest.current) setEditLoading(false);
         }
     };
 
@@ -98,7 +95,6 @@ function PipelineSpec({
     return (
         <React.Fragment>
             {Boolean(error) && <YTErrorBlock error={error} />}
-            {Boolean(editError) && <YTErrorBlock error={editError} />}
             <YsonWithScroll
                 value={data}
                 settings={settings}
@@ -109,23 +105,30 @@ function PipelineSpec({
                             settings={settings}
                             name={`pipeline_spec_${pathToFileName(path)}`}
                         />
-                        <Button view="outlined" loading={editLoading} onClick={openEdit}>
+                        <Button
+                            view="outlined"
+                            loading={editLoading}
+                            disabled={Boolean(onEdit && !data)}
+                            onClick={openEdit}
+                        >
                             <Icon awesome="pencil" />
                             Edit {name}
                         </Button>
                     </React.Fragment>
                 }
             />
-            <EditSpecDialog
-                path={path}
-                name={name}
-                visible={showEdit}
-                onSpecApply={(spec, options) => onSave({...editData!, spec}, options)}
-                onClose={() => setShowEdit(false)}
-                spec={editData?.spec}
-                settings={settings}
-                allowForce={allowForce}
-            />
+            {onSave && (
+                <EditSpecDialog
+                    path={path}
+                    name={name}
+                    visible={showEdit}
+                    onSpecApply={(spec, options) => onSave({...editData!, spec}, options)}
+                    onClose={() => setShowEdit(false)}
+                    spec={editData?.spec}
+                    settings={settings}
+                    allowForce={allowForce}
+                />
+            )}
         </React.Fragment>
     );
 }
@@ -182,10 +185,38 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
     }, [dispatch, path, view]);
     useUpdater(updateFn);
 
-    const onEdit = React.useCallback(
-        (newData: typeof data) => dispatch(updateFlowDynamicSpec({path, data: newData})),
-        [path, dispatch],
+    const [editDraft, setEditDraft] = React.useState<FlowDynamicSpecEditDraft & {path: string}>();
+    const [editLoading, setEditLoading] = React.useState(false);
+    const [editError, setEditError] = React.useState<YTError>();
+    const editRequest = React.useRef(0);
+    React.useEffect(() => {
+        setEditDraft(undefined);
+        setEditError(undefined);
+        setEditLoading(false);
+        return () => {
+            editRequest.current += 1;
+        };
+    }, [path]);
+    const editorSpec = React.useMemo(
+        () =>
+            editDraft?.createPatch
+                ? decodeDynamicSpecValue(editDraft.data.spec)
+                : editDraft?.data.spec,
+        [editDraft],
     );
+    const openEdit = async () => {
+        const request = ++editRequest.current;
+        setEditError(undefined);
+        setEditLoading(true);
+        try {
+            const draft = await dispatch(loadFlowDynamicSpecForEdit(path));
+            if (request === editRequest.current) setEditDraft({...draft, path});
+        } catch (cause) {
+            if (request === editRequest.current) setEditError(cause as YTError);
+        } finally {
+            if (request === editRequest.current) setEditLoading(false);
+        }
+    };
     const renderEffective = () => (
         <PipelineSpec
             key={path}
@@ -193,8 +224,8 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
             data={data}
             error={undefined}
             name="dynamic specification"
-            onSave={onEdit}
-            onLoadEditSpec={() => dispatch(loadFlowDynamicSpecForEdit(path))}
+            onEdit={openEdit}
+            editLoading={editLoading}
         />
     );
 
@@ -202,6 +233,7 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
     return (
         <>
             {Boolean(error) && <YTErrorBlock error={error} />}
+            {Boolean(editError) && <YTErrorBlock error={editError} />}
             {features?.includes('dynamic_spec_patches') ? (
                 <DynamicSpec
                     key={path}
@@ -256,6 +288,53 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
                 />
             ) : (
                 renderEffective()
+            )}
+            {editDraft?.path === path && (
+                <EditSpecDialog
+                    path={editDraft.path}
+                    name="dynamic specification"
+                    visible
+                    spec={editorSpec}
+                    settings={settings}
+                    withComment={editDraft.createPatch}
+                    requireComment={editDraft.createPatch}
+                    onClose={() => setEditDraft(undefined)}
+                    onSpecApply={async (edited, {comment}) => {
+                        if (!editDraft.createPatch) {
+                            return dispatch(
+                                updateFlowDynamicSpec({
+                                    path: editDraft.path,
+                                    data: {...editDraft.data, spec: edited},
+                                }),
+                            );
+                        }
+                        const spec = encodeDynamicSpecValue(edited, editDraft.data.spec);
+                        const changes = dynamicSpecEdits(editDraft.data.spec, spec);
+                        if (
+                            changes.some(({path: key, value}) => !key.length || value === undefined)
+                        ) {
+                            throw new Error(i18n('error_deletion-unsupported'));
+                        }
+                        if (changes.some(({path: key}) => key[0] === 'target_state')) {
+                            throw new Error(i18n('error_target-state-readonly'));
+                        }
+                        if (!changes.length) throw new Error(i18n('context_value-change-required'));
+                        return dispatch(
+                            mutateFlowDynamicSpec({
+                                path: editDraft.path,
+                                command: 'patch-pipeline-dynamic-spec',
+                                body: {
+                                    set_changes: changes.map(({path: key, value}) => ({
+                                        path: dynamicSpecPath(key),
+                                        value,
+                                    })),
+                                    comment: comment ?? '',
+                                    expected_version: editDraft.data.version,
+                                },
+                            }),
+                        );
+                    }}
+                />
             )}
         </>
     );

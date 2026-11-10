@@ -139,3 +139,25 @@ function mapValue(value: unknown): Record<string, unknown> | undefined {
         ? (value as Record<string, unknown>)
         : undefined;
 }
+
+export function dynamicSpecEdits(before: unknown, after: unknown): Array<DynamicSpecEdit> {
+    const edits: Array<DynamicSpecEdit> = [];
+    const visit = (left: unknown, right: unknown, path: Array<string>) => {
+        if (isEqual_(left, right)) return;
+        const leftMap = mapValue(left);
+        const rightMap = mapValue(right);
+        if (leftMap && rightMap) {
+            for (const key of new Set([...Object.keys(leftMap), ...Object.keys(rightMap)])) {
+                visit(
+                    Object.hasOwn(leftMap, key) ? leftMap[key] : undefined,
+                    Object.hasOwn(rightMap, key) ? rightMap[key] : undefined,
+                    [...path, key],
+                );
+            }
+        } else {
+            edits.push({path, value: right});
+        }
+    };
+    visit(before, after, []);
+    return edits;
+}
