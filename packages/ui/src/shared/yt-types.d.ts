@@ -547,6 +547,13 @@ export type TableParams = {
 
 export type Int64 = string | number | {$type: 'int64'; $value: string};
 
+export type FlowDynamicSpecPatch = {
+    patch_id: Int64;
+    changes: Array<{path: string; value: unknown}>;
+    comment?: string | null;
+    timestamp: string;
+};
+
 export type ExpectedVersion = {
     expected_version?: Int64;
 };
@@ -637,6 +644,54 @@ export type GetQueryTrackerInfoResponse = {
 };
 
 export type FlowExecuteTypes = {
+    'get-pipeline-dynamic-spec-patches': {
+        ParamsType: {
+            flow_command: 'get-pipeline-dynamic-spec-patches';
+            pipeline_path: string;
+            output_format?: 'web_json';
+        };
+        BodyType: {body?: undefined};
+        ResponseType: {version: Int64; patches: Array<FlowDynamicSpecPatch>};
+    };
+    'patch-pipeline-dynamic-spec': {
+        ParamsType: {
+            flow_command: 'patch-pipeline-dynamic-spec';
+            pipeline_path: string;
+            input_format?: unknown;
+            output_format?: 'web_json';
+        };
+        BodyType: {
+            body:
+                | {
+                      set_path: string;
+                      set_value: unknown;
+                      comment: string;
+                      patch?: Int64;
+                      expected_version: Int64;
+                  }
+                | {
+                      set_changes: Array<{path: string; value: unknown}>;
+                      comment: string;
+                      patch?: Int64;
+                      expected_version: Int64;
+                  }
+                | {patch: Int64; comment: string; expected_version: Int64};
+        };
+        ResponseType: {version: Int64; patch_id: Int64};
+    };
+    'get-pipeline-dynamic-spec': {
+        ParamsType: {
+            flow_command: 'get-pipeline-dynamic-spec';
+            pipeline_path: string;
+            output_format?: 'web_json';
+        };
+        BodyType: {body: {view?: 'effective' | 'base'}};
+        ResponseType: {
+            spec: unknown;
+            version: Int64;
+        };
+    };
+
     'describe-computation': {
         ParamsType: {
             flow_command: 'describe-computation';
