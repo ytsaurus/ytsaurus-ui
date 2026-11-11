@@ -32,6 +32,7 @@ import {selectAccountsRequestedNames} from '../../../store/selectors/accounts/vi
 import {selectAccountsRequestParams} from '../../../store/selectors/accounts/request-params';
 import {accountTreeYsonToList} from '../../../utils/accounts/accountTreeYsonToList';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
+import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import i18n from '../../../pages/accounts/i18n';
 
 const attributesToLoad = [
@@ -103,7 +104,7 @@ function fetchAccountsList({params, isCurrentRequest}) {
                         data: {error},
                     });
                 }
-                throw error;
+                return undefined;
             });
     };
 }
@@ -278,27 +279,22 @@ function fetchAccountsDetails(request) {
     const {params, isCurrentRequest} = request;
     return (dispatch, getState) => {
         const usable = dispatch(fetchUsableAccounts(request));
-        const metadata =
-            params.mode === 'usable' && !params.activeAccount
-                ? usable.then((accounts) => {
-                      if (!isCurrentRequest()) {
-                          return undefined;
-                      }
-                      return dispatch(
-                          fetchAccountsMetadata(
-                              request,
-                              accounts === undefined
-                                  ? new Set()
-                                  : selectAccountsRequestedNames(getState(), params),
-                          ),
-                      );
-                  })
-                : dispatch(
-                      fetchAccountsMetadata(
-                          request,
-                          selectAccountsRequestedNames(getState(), params),
-                      ),
-                  );
+        const metadata = (async () => {
+            let usableFailed = false;
+            if (params.mode === 'usable' && !params.activeAccount) {
+                const accounts = await usable;
+                if (!isCurrentRequest()) {
+                    return undefined;
+                }
+                usableFailed = accounts === undefined;
+            }
+
+            const accountNames = usableFailed
+                ? new Set()
+                : selectAccountsRequestedNames(getState(), params);
+
+            return dispatch(fetchAccountsMetadata(request, accountNames));
+        })();
 
         return Promise.all([
             metadata,
@@ -315,14 +311,19 @@ export function fetchAccounts(params) {
         const isCurrentRequest = () =>
             !cancelToken.reason && isEqual_(selectAccountsRequestParams(getState()), params);
         const request = {params, isCurrentRequest};
-        return dispatch(fetchAccountsList(request))
-            .then((accounts) => {
+        return wrapApiPromiseByToaster(
+            dispatch(fetchAccountsList(request)).then((accounts) => {
                 if (!accounts || !isCurrentRequest()) {
                     return undefined;
                 }
                 return dispatch(fetchAccountsDetails(request)).then(() => accounts);
-            })
-            .catch(() => undefined);
+            }),
+            {
+                toasterName: 'fetch-accounts',
+                skipSuccessToast: true,
+                skipErrorFn: () => !isCurrentRequest(),
+            },
+        ).catch(() => undefined);
     };
 }
 
