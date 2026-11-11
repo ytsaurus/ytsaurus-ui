@@ -2,7 +2,7 @@ import isEqual_ from 'lodash/isEqual';
 
 import unipika from '../../common/thor/unipika';
 import ypath from '../../common/thor/ypath';
-import {type FlowDynamicSpecPatch} from '../../../shared/yt-types';
+import {type FlowDynamicSpecBlame, type FlowDynamicSpecPatch} from '../../../shared/yt-types';
 
 export function dynamicSpecHasComment(comment?: string): boolean {
     return typeof comment === 'string' && !/^[\s\u0085]*$/u.test(comment);
@@ -82,6 +82,14 @@ export function dynamicSpecPathParts(path: string): Array<string> {
     return ypath.YPath.parseRelative(path).map(({name}: {name: string}) =>
         ypath.YPath.fragmentToYSON(name),
     );
+}
+
+export function dynamicSpecSource(blame: FlowDynamicSpecBlame, path: Array<string>) {
+    for (let depth = path.length; depth >= 0; --depth) {
+        const key = dynamicSpecPath(path.slice(0, depth));
+        if (Object.hasOwn(blame, key)) return blame[key];
+    }
+    return undefined;
 }
 
 export type DynamicSpecEdit = {path: Array<string>; value: unknown};

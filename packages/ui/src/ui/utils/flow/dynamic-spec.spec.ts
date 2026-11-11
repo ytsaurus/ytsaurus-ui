@@ -5,8 +5,44 @@ import {
     dynamicSpecPatchDiff,
     dynamicSpecPath,
     dynamicSpecPathParts,
+    dynamicSpecSource,
     encodeDynamicSpecValue,
 } from './dynamic-spec';
+
+describe('dynamic spec blame', () => {
+    const parent = {patch_id: '9223372036854775806', timestamp: '2026-11-02T15:55:23Z'};
+    const child = {patch_id: '9223372036854775807', timestamp: '2026-11-02T15:56:23Z'};
+    const blame = {
+        '/computations/noop/options': parent,
+        '/computations/noop/options/limit': child,
+        '/computations/noop/batch_duration': child,
+    };
+
+    it('selects the nearest enclosing patch without converting its ID', () => {
+        expect(dynamicSpecSource(blame, ['computations', 'noop', 'options', 'limit'])).toBe(child);
+        expect(dynamicSpecSource(blame, ['computations', 'noop', 'options', 'other'])).toBe(parent);
+        expect(dynamicSpecSource(blame, ['computations', 'noop', 'options'])).toBe(parent);
+    });
+
+    it('does not attribute ancestors or unchanged siblings to a point patch', () => {
+        for (const path of [
+            [],
+            ['computations'],
+            ['computations', 'noop'],
+            ['computations', 'noop', 'max_rows_per_batch'],
+        ]) {
+            expect(dynamicSpecSource(blame, path)).toBeUndefined();
+        }
+    });
+
+    it('matches escaped keys and ignores prototype properties', () => {
+        const path = ['computations', 'a/b', 'key\\name', '@limit'];
+        expect(dynamicSpecSource({[dynamicSpecPath(path)]: parent}, path)).toBe(parent);
+        expect(
+            dynamicSpecSource(Object.create({'/computations': parent}), ['computations']),
+        ).toBeUndefined();
+    });
+});
 
 describe('dynamic spec patch JSON', () => {
     const patch = {

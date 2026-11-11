@@ -1,11 +1,16 @@
 import {http} from 'msw';
-import {type FlowDynamicSpecPatch, type Int64} from '../../../../../../shared/yt-types';
+import {
+    type FlowDynamicSpecBlame,
+    type FlowDynamicSpecPatch,
+    type Int64,
+} from '../../../../../../shared/yt-types';
 
 type FlowDynamicSpecSnapshot = {
     version: Int64;
     base_spec: unknown;
     effective_spec: unknown;
     patches: FlowDynamicSpecPatch[];
+    blame?: FlowDynamicSpecBlame;
 };
 
 export const PIPELINE_PATH = '//home/test/flow';
@@ -55,6 +60,42 @@ export const largePatchSnapshot: FlowDynamicSpecSnapshot = {
     ],
 };
 
+export const blameSnapshot: FlowDynamicSpecSnapshot = {
+    ...snapshot,
+    base_spec: {
+        computations: {
+            noop: {
+                batch_duration: 1000,
+                max_rows_per_batch: 1000,
+                options: {changed: 3, unchanged: 9},
+            },
+        },
+    },
+    effective_spec: {
+        computations: {
+            noop: {
+                batch_duration: 1002,
+                max_rows_per_batch: 2000,
+                options: {changed: 4, unchanged: 9},
+            },
+        },
+    },
+    blame: Object.fromEntries(
+        Object.entries({
+            '/computations/noop/options/changed': snapshot.patches[0],
+            '/computations/noop/batch_duration': snapshot.patches[1],
+            '/computations/noop/max_rows_per_batch': snapshot.patches[1],
+        }).map(([path, source]) => {
+            const {patch_id, timestamp, comment} = source;
+            return [path, {patch_id, timestamp, comment}];
+        }),
+    ),
+    patches: [
+        {...snapshot.patches[0], changes: [{path: '/computations/noop/options/changed', value: 4}]},
+        snapshot.patches[1],
+    ],
+};
+
 export function requestParameters(request: Request) {
     const encoded = [...request.headers.entries()]
         .filter(([name]) => name.startsWith('x-yt-parameters-'))
@@ -77,10 +118,11 @@ export function dynamicSpecHandler(
             return Response.json({version: state.version, patches: state.patches});
         }
         if (flow_command === 'get-pipeline-dynamic-spec') {
-            const {view} = (await request.json()) as {view: string};
+            const {view, blame} = (await request.json()) as {view: string; blame?: boolean};
             return Response.json({
                 version: state.version,
                 spec: view === 'base' ? state.base_spec : state.effective_spec,
+                ...(blame && state.blame ? {blame: state.blame} : {}),
             });
         }
         return Response.json({version: state.version});

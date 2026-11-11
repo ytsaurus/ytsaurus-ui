@@ -1,4 +1,40 @@
 .yt-flow-dynamic-spec {
+    // Complete the 10 px spacing provided by the Flow tab bar.
+    padding-top: 10px;
+
+    &__attribution {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 12px;
+        padding-left: 16px;
+        color: var(--g-color-text-secondary);
+        font-family: var(--g-font-family-sans);
+        white-space: nowrap;
+    }
+
+    &__comment {
+        min-width: 0;
+        max-width: 440px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        .yt-markdown.yfm {
+            display: inline;
+            color: inherit;
+            font: inherit;
+
+            > p {
+                display: inline;
+                margin: 0;
+            }
+
+            > p + p::before {
+                content: ' ';
+            }
+        }
+    }
+
     &__actions {
         display: flex;
         gap: 4px;
@@ -9,6 +45,12 @@
         align-items: center;
         gap: 16px;
         margin-bottom: 20px;
+
+        &_view_effective,
+        &_view_base {
+            // Yson adds another 10 px above its toolbar controls.
+            margin-bottom: 10px;
+        }
     }
 
     &__patches-table .gt-table {

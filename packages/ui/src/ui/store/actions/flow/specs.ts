@@ -132,7 +132,7 @@ export function loadFlowDynamicSpec(
                       })
                     : await ytApiV4.flowExecute<'get-pipeline-dynamic-spec'>({
                           parameters: {...parameters, flow_command: 'get-pipeline-dynamic-spec'},
-                          data: {view},
+                          data: {view, ...(view === 'effective' ? {blame: true} : {})},
                           cancellation: cancelHelper.removeAllAndSave,
                       });
             if (!isCurrentRequest()) return;
@@ -142,6 +142,22 @@ export function loadFlowDynamicSpec(
                     data: {
                         version: data.version,
                         spec: 'spec' in data ? data.spec : undefined,
+                        ...('blame' in data && data.blame
+                            ? {
+                                  blame: Object.fromEntries(
+                                      Object.entries(data.blame).map(([path, source]) => [
+                                          path,
+                                          {
+                                              ...source,
+                                              comment:
+                                                  source.comment === undefined
+                                                      ? undefined
+                                                      : decodeDynamicSpecText(source.comment),
+                                          },
+                                      ]),
+                                  ),
+                              }
+                            : {}),
                         ...('patches' in data
                             ? {
                                   patches: data.patches.map((patch) => ({
