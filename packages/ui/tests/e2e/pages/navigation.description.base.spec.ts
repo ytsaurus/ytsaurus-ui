@@ -56,9 +56,11 @@ test('Navigation - Description: save YT annotation', async ({page, navigation}, 
         await expect(page.getByText(description, {exact: true})).toBeVisible();
         await page.getByRole('button', {name: 'Cancel', exact: true}).click();
         await page.getByRole('button', {name: 'Content', exact: true}).click();
-        await expect(page.getByTestId('navigation-description-preview-text')).toHaveText(
-            description,
-        );
+        await expect(
+            page
+                .getByTestId('navigation-description-preview-text')
+                .getByText(description, {exact: true}),
+        ).toBeVisible();
     });
 });
 
@@ -76,9 +78,11 @@ test('Navigation - Description: keep the panel while navigating and go to edit',
         await page.getByRole('link', {name: directory.split('/').pop(), exact: true}).click();
 
         await expect(page).toHaveURL((url) => url.searchParams.get('path') === directory);
-        await expect(page.getByTestId('navigation-description-preview-text')).toHaveText(
-            parentDescription,
-        );
+        await expect(
+            page
+                .getByTestId('navigation-description-preview-text')
+                .getByText(parentDescription, {exact: true}),
+        ).toBeVisible();
         await expect(panel.getByText(initialDescription, {exact: true})).toBeVisible();
         await expect(panel.getByText(parentDescription, {exact: true})).toBeHidden();
     });

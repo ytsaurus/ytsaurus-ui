@@ -14,9 +14,10 @@ type Props = {
     text: string;
     allowHTML?: boolean;
     errorMode?: 'block' | 'inline';
+    contentBelow?: React.ReactNode;
 };
 
-const MarkdownImpl = ({text, allowHTML = true, errorMode}: Props) => {
+const MarkdownImpl = ({text, allowHTML = true, errorMode, contentBelow}: Props) => {
     const [renderState, setRenderState] = useState<MarkdownRenderState>({status: 'loading'});
 
     if (renderState.status === 'error') {
@@ -32,9 +33,16 @@ const MarkdownImpl = ({text, allowHTML = true, errorMode}: Props) => {
     const customMarkdown = UIFactory.renderMarkdown({text, allowHTML, setRenderState});
 
     return (
-        customMarkdown ?? (
-            <MarkdownFallback text={text} allowHTML={allowHTML} setRenderState={setRenderState} />
-        )
+        <>
+            {customMarkdown ?? (
+                <MarkdownFallback
+                    text={text}
+                    allowHTML={allowHTML}
+                    setRenderState={setRenderState}
+                />
+            )}
+            {renderState.status === 'ready' && contentBelow}
+        </>
     );
 };
 

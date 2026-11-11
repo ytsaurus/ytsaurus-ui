@@ -70,20 +70,25 @@ export function NavigationDescriptionPreview() {
                     }
                 >
                     <div className={block('text')} data-qa="navigation-description-preview-text">
-                        <Markdown text={description} allowHTML={false} />
+                        <Markdown
+                            text={description}
+                            allowHTML={false}
+                            contentBelow={
+                                <Button
+                                    className={block('action')}
+                                    view="flat-secondary"
+                                    href={makeNavigationLink({
+                                        path,
+                                        cluster,
+                                        navmode: Tab.ANNOTATION,
+                                    })}
+                                    onClick={handleOpen}
+                                >
+                                    {i18n('action_view-full-description')}
+                                </Button>
+                            }
+                        />
                     </div>
-                    <Button
-                        className={block('action')}
-                        view="flat-secondary"
-                        href={makeNavigationLink({
-                            path,
-                            cluster,
-                            navmode: Tab.ANNOTATION,
-                        })}
-                        onClick={handleOpen}
-                    >
-                        {i18n('action_view-full-description')}
-                    </Button>
                 </CollapsibleSectionStateLess>
             )}
         </section>
