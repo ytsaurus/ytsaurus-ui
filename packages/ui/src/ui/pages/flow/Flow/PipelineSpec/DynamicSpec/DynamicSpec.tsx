@@ -1,7 +1,8 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import moment from 'moment';
-import {Button, Icon, SegmentedRadioGroup, Text, Tooltip} from '@gravity-ui/uikit';
+import {Button, Flex, Icon, SegmentedRadioGroup, Text, Tooltip} from '@gravity-ui/uikit';
+import {type RenderRowExtraTools} from '@gravity-ui/react-unipika';
 
 import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
 import TrashBinIcon from '@gravity-ui/icons/svgs/trash-bin.svg';
@@ -22,7 +23,11 @@ import {
     type FlowSpecState,
 } from '../../../../../store/reducers/flow/specs';
 import {type UnipikaSettings} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
-import {type DynamicSpecEdit, dynamicSpecPatchDiff} from '../../../../../utils/flow/dynamic-spec';
+import {
+    type DynamicSpecEdit,
+    dynamicSpecPatchDiff,
+    dynamicSpecSource,
+} from '../../../../../utils/flow/dynamic-spec';
 import {EditDynamicSpecPatchDialog} from './EditDynamicSpecPatchDialog/EditDynamicSpecPatchDialog';
 import {CancelDynamicSpecPatchDialog} from './CancelDynamicSpecPatchDialog/CancelDynamicSpecPatchDialog';
 import {ResetDynamicSpecPatchesDialog} from './ResetDynamicSpecPatchesDialog/ResetDynamicSpecPatchesDialog';
@@ -39,7 +44,7 @@ export type DynamicSpecProps = {
     onViewChange: (view: FlowDynamicSpecView) => void;
     loading: boolean;
     settings: UnipikaSettings;
-    renderEffective: () => React.ReactNode;
+    renderEffective: (renderRowExtraTools?: RenderRowExtraTools) => React.ReactNode;
     pipelinePath: string;
     onUpdate: (
         patch: Int64,
@@ -63,6 +68,31 @@ export function DynamicSpec({
     onCancel,
     onReset,
 }: DynamicSpecProps) {
+    const renderRowExtraTools: RenderRowExtraTools = ({path}) => {
+        if (!data?.blame || path?.[0] !== 'spec') return null;
+        const source = dynamicSpecSource(data.blame, path.slice(1));
+        if (!source) return null;
+        const patchId = String(ypath.getValue(source.patch_id));
+        return (
+            <div
+                className={block('attribution')}
+                data-qa="dynamic-spec-blame"
+                title={`${source.comment ?? ''}\n${source.timestamp}\n${i18n('field_patch-id')}: ${patchId}`}
+            >
+                {source.comment && (
+                    <div className={block('comment')}>
+                        <Markdown text={source.comment} errorMode="inline" />
+                    </div>
+                )}
+                <time dateTime={source.timestamp}>
+                    {moment(source.timestamp).local().format('YYYY-MM-DD HH:mm:ss')}
+                </time>
+                <span>
+                    {i18n('field_patch-id')}: {patchId}
+                </span>
+            </div>
+        );
+    };
     const [edit, setEdit] = React.useState<{patch: FlowDynamicSpecPatch; version: Int64}>();
     const [cancelConfirmation, setCancelConfirmation] = React.useState<{
         patch: Int64;
@@ -151,7 +181,7 @@ export function DynamicSpec({
 
     return (
         <div className={block()}>
-            <div className={block('toolbar')}>
+            <div className={block('toolbar', {view})}>
                 <SegmentedRadioGroup<FlowDynamicSpecView>
                     value={view}
                     onUpdate={onViewChange}
@@ -162,13 +192,17 @@ export function DynamicSpec({
                     ]}
                 />
                 {data && (
-                    <Text color="secondary">
-                        {i18n('field_version')}: <Yson value={data.version} inline />
+                    <Text as="div" color="secondary">
+                        <Flex alignItems="baseline" gap={1}>
+                            {i18n('field_version')}: <Yson value={data.version} inline />
+                        </Flex>
                     </Text>
                 )}
             </div>
             {loading && !data && <Loader />}
-            {data && view === 'effective' && renderEffective()}
+            {data &&
+                view === 'effective' &&
+                renderEffective(data.blame ? renderRowExtraTools : undefined)}
             {data && view === 'base' && (
                 <YsonWithScroll
                     value={{version: data.version, spec: data.spec}}

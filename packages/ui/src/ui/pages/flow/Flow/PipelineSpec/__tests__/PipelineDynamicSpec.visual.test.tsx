@@ -7,6 +7,7 @@ import {PipelineDynamicSpecStories} from '../__stories__';
 import {
     PATCH_ID,
     VERSION,
+    blameSnapshot,
     dynamicSpecHandler,
     largePatchSnapshot,
     legacyHandler,
@@ -31,6 +32,38 @@ async function replaceEditorContent(page: Page, text: string) {
     await page.keyboard.press('Backspace');
     await page.keyboard.insertText(text);
 }
+
+test('PipelineDynamicSpec: effective patch blame', async ({mount, page, router}) => {
+    await router.use(dynamicSpecHandler(blameSnapshot));
+    await mount(<PipelineDynamicSpecStories.Blame />);
+    const blame = page.locator('[data-qa="dynamic-spec-blame"]');
+    await test.step('Only changed fields show the patch that supplied their effective value', async () => {
+        await expect(blame).toHaveCount(3);
+        await expect(blame.filter({hasText: PATCH_ID})).toHaveCount(1);
+        await expect(blame.filter({hasText: VERSION})).toHaveCount(2);
+        await expect(blame.filter({hasText: PATCH_ID})).toContainText('First patch');
+        await expect(page.getByText('9', {exact: true})).toBeVisible();
+        await expect(page.getByRole('button', {name: /^Edit \//})).toHaveCount(0);
+    });
+    await test.step('Ticket links are clickable and Patch ID follows the comment and time', async () => {
+        const annotation = blame.filter({hasText: VERSION}).first();
+        await expect(annotation.getByRole('link', {name: 'YTFRONT-6091'})).toHaveAttribute(
+            'href',
+            'https://st.yandex-team.ru/YTFRONT-6091',
+        );
+        await expect(annotation).not.toContainText('[YTFRONT-6091](');
+        await expect(annotation).toHaveText(
+            new RegExp(
+                `^Second patch YTFRONT-6091\\s*\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\s*Patch ID: ${VERSION}$`,
+            ),
+        );
+    });
+    await test.step('Base has no patch blame', async () => {
+        await page.getByRole('radio', {name: 'Base', exact: true}).click();
+        await expect(page.getByText('1000', {exact: true}).first()).toBeVisible();
+        await expect(blame).toHaveCount(0);
+    });
+});
 
 for (const theme of ['light', 'dark'] as const) {
     test(`PipelineDynamicSpec: tabs and grouped JSON patches ${theme}`, async ({
@@ -84,6 +117,40 @@ for (const theme of ['light', 'dark'] as const) {
             await expect(second.getByRole('link', {name: 'YTFRONT-6091'})).toBeVisible();
             await expectScreenshot({themes: [theme]});
         });
+    });
+}
+
+for (const theme of ['light', 'dark'] as const) {
+    test(`PipelineDynamicSpec: specification spacing ${theme}`, async ({
+        mount,
+        page,
+        router,
+        expectScreenshot,
+    }) => {
+        await router.use(dynamicSpecHandler());
+        await mount(<PipelineDynamicSpecStories.WithTabs />, {width: 1200});
+        await page.getByRole('link', {name: 'Dynamic spec', exact: true}).click();
+        const mainTabs = page.locator('.yt-flow__tabs');
+        const views = page.getByRole('radiogroup');
+        const toolbarButton = page.getByTestId('qa:structuredyson:expand-all');
+        for (const view of ['Effective', 'Base', 'Effective']) {
+            await page.getByRole('radio', {name: view, exact: true}).click();
+            await expect(toolbarButton).toBeVisible();
+            await expect
+                .poll(async () => {
+                    const tabsBox = await mainTabs.boundingBox();
+                    const viewsBox = await views.boundingBox();
+                    const toolbarBox = await toolbarButton.boundingBox();
+                    return tabsBox && viewsBox && toolbarBox
+                        ? {
+                              belowTabs: Math.round(viewsBox.y - tabsBox.y - tabsBox.height),
+                              aboveToolbar: Math.round(toolbarBox.y - viewsBox.y - viewsBox.height),
+                          }
+                        : undefined;
+                })
+                .toEqual({belowTabs: 20, aboveToolbar: 20});
+        }
+        await expectScreenshot({themes: [theme]});
     });
 }
 

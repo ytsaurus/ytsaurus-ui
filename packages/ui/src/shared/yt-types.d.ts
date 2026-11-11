@@ -554,6 +554,11 @@ export type FlowDynamicSpecPatch = {
     changes: Array<{path: string; value: unknown}>;
 };
 
+export type FlowDynamicSpecBlame = Record<
+    string,
+    Pick<FlowDynamicSpecPatch, 'patch_id' | 'timestamp' | 'comment'>
+>;
+
 export type ExpectedVersion = {
     expected_version?: Int64;
 };
@@ -705,8 +710,8 @@ export type FlowExecuteTypes = {
             flow_command: 'get-pipeline-dynamic-spec';
             output_format?: 'web_json';
         };
-        BodyType: {body: {view: 'effective' | 'base'}};
-        ResponseType: {version: Int64; spec: unknown};
+        BodyType: {body: {view: 'effective' | 'base'; blame?: boolean}};
+        ResponseType: {version: Int64; spec: unknown; blame?: FlowDynamicSpecBlame};
     };
     'get-pipeline-dynamic-spec-patches': {
         ParamsType: {

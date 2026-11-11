@@ -1,7 +1,11 @@
 import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
 
 import {type YTError} from '../../../../@types/types';
-import {type FlowDynamicSpecPatch, type Int64} from '../../../../shared/yt-types';
+import {
+    type FlowDynamicSpecBlame,
+    type FlowDynamicSpecPatch,
+    type Int64,
+} from '../../../../shared/yt-types';
 
 export type FlowDynamicSpecView = 'effective' | 'base' | 'patches';
 
@@ -13,7 +17,14 @@ export type FlowSpecState = {
     pipeline_path: string | undefined;
     view?: FlowDynamicSpecView;
     supported_features?: string[];
-    data: {spec: unknown; version: Int64; patches?: FlowDynamicSpecPatch[]} | undefined;
+    data:
+        | {
+              spec: unknown;
+              version: Int64;
+              patches?: FlowDynamicSpecPatch[];
+              blame?: FlowDynamicSpecBlame;
+          }
+        | undefined;
 };
 
 const initialState: FlowSpecState = {

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {Button} from '@gravity-ui/uikit';
+import {type RenderRowExtraTools} from '@gravity-ui/react-unipika';
 
 import {type YTError} from '../../../../../@types/types';
 
@@ -54,6 +55,7 @@ type PipelineSpecProps = {
     error: YTError | undefined;
     data: FlowSpecState['data'];
     name: string;
+    renderRowExtraTools?: RenderRowExtraTools;
 } & (
     | {
           onSave: (data: FlowSpecState['data'], options: {force?: boolean}) => Promise<void>;
@@ -78,6 +80,7 @@ function PipelineSpec({
     allowForce,
     onEdit,
     editLoading,
+    renderRowExtraTools,
 }: PipelineSpecProps) {
     const [showEdit, setShowEdit] = React.useState(false);
     const [editData, setEditData] = React.useState(data);
@@ -98,6 +101,7 @@ function PipelineSpec({
             <YsonWithScroll
                 value={data}
                 settings={settings}
+                renderRowExtraTools={renderRowExtraTools}
                 extraTools={
                     <React.Fragment>
                         <YsonDownloadButton
@@ -217,15 +221,16 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
             if (request === editRequest.current) setEditLoading(false);
         }
     };
-    const renderEffective = () => (
+    const renderEffective = (renderRowExtraTools?: RenderRowExtraTools) => (
         <PipelineSpec
             key={path}
             path={path}
-            data={data}
+            data={data && {version: data.version, spec: data.spec}}
             error={undefined}
             name="dynamic specification"
             onEdit={openEdit}
             editLoading={editLoading}
+            renderRowExtraTools={renderRowExtraTools}
         />
     );
 

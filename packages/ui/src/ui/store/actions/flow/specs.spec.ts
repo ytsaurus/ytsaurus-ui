@@ -126,7 +126,7 @@ describe('dynamic spec feature discovery', () => {
                         flow_command: 'get-pipeline-dynamic-spec',
                         output_format: 'web_json',
                     },
-                    data: {view},
+                    data: {view, ...(view === 'effective' ? {blame: true} : {})},
                     cancellation: expect.any(Function),
                 },
             ]);
@@ -136,6 +136,40 @@ describe('dynamic spec feature discovery', () => {
             expect(ytApiV4.getPipelineDynamicSpec).not.toHaveBeenCalled();
         },
     );
+
+    it('reads blame with the effective spec, preserves exact IDs and decodes comments', async () => {
+        const blame = {
+            '/computations/noop/batch_duration': {
+                patch_id: {$type: 'int64' as const, $value: '9223372036854775806'},
+                timestamp: '2026-11-02T15:55:23Z',
+                comment: Buffer.from('Причина 😊').toString('latin1'),
+            },
+            '/computations/noop/max_rows_per_batch': {
+                patch_id: {$type: 'int64' as const, $value: '9223372036854775807'},
+                timestamp: '2026-11-02T15:56:23Z',
+            },
+        };
+        flowExecute.mockResolvedValueOnce(features).mockResolvedValueOnce({spec, version, blame});
+        const dispatch = jest.fn();
+        await loadFlowDynamicSpec(pipelinePath)(dispatch, jest.fn(), undefined);
+        expect(flowExecute).toHaveBeenCalledTimes(2);
+        expect(dispatch).toHaveBeenLastCalledWith(
+            dynamicSpecActions.onSuccess({
+                supported_features: features,
+                data: {
+                    spec,
+                    version,
+                    blame: {
+                        ...blame,
+                        '/computations/noop/batch_duration': {
+                            ...blame['/computations/noop/batch_duration'],
+                            comment: 'Причина 😊',
+                        },
+                    },
+                },
+            }),
+        );
+    });
 
     it.each([
         [Buffer.from('Причина').toString('latin1'), 'Причина'],
