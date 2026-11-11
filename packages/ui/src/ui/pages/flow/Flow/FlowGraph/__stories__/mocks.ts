@@ -211,3 +211,31 @@ function makeMultipleSourcesFlowGraphResponse(): FlowDescribePipelineData {
 export const multipleSourcesFlowGraphHandler = makeFlowGraphHandler(
     makeMultipleSourcesFlowGraphResponse(),
 );
+
+export const MULTIPLE_SINKS = ['A', 'B', 'C'].map((key) => ({
+    sinkId: `sink-${key.toLowerCase()}`,
+    sinkName: `Sink ${key}`,
+    streamName: `Output stream ${key}`,
+    streamId: `output-stream-${key}`,
+}));
+
+function makeMultipleSinksFlowGraphResponse(): FlowDescribePipelineData {
+    const response = makeFlowGraphResponse();
+    const outputStream = response.streams[OUTPUT_STREAM_ID];
+    delete response.streams[OUTPUT_STREAM_ID];
+    response.computations.computation.output_streams = MULTIPLE_SINKS.map(({streamId}) => streamId);
+    MULTIPLE_SINKS.forEach(({streamId, streamName}) => {
+        response.streams[streamId] = {...outputStream, id: streamId, name: streamName};
+    });
+    response.sinks = Object.fromEntries(
+        MULTIPLE_SINKS.map(({sinkId, sinkName, streamId}) => [
+            sinkId,
+            {id: sinkId, name: sinkName, status: 'info', stream_id: streamId},
+        ]),
+    );
+    return response;
+}
+
+export const multipleSinksFlowGraphHandler = makeFlowGraphHandler(
+    makeMultipleSinksFlowGraphResponse(),
+);

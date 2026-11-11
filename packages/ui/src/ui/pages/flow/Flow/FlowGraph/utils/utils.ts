@@ -237,19 +237,39 @@ export function makeTimerAnchors(src: TBlock, dst: TBlock, c: TConnection) {
 type LaidOutConnection = Pick<TConnection, 'sourceBlockId' | 'targetBlockId'> &
     Partial<Pick<TMultipointConnection, 'points' | 'labels'>>;
 
-// Each source feeds exactly one source stream, so the laid-out slots of a group's sources
-// (positions together with the routes of their edges) can be handed out in the order of the
-// group's source streams: source -> source stream connections stop crossing, while the source
-// streams and the rest of the graph stay where they were.
+// Reassign external blocks' positions and edge routes in stream order without moving the groups.
 export function orderSourcesLikeSourceStreams<
     B extends Pick<TBlock, 'id' | 'x' | 'y'>,
     C extends LaidOutConnection,
 >(
-    {blocks, connections}: {blocks: Array<B>; connections: Array<C>},
+    data: {blocks: Array<B>; connections: Array<C>},
     sourceIdsByGroupId: Map<TBlockId, Array<TBlockId>>,
+) {
+    return orderBlocksLikeStreams(data, sourceIdsByGroupId, 'source');
+}
+
+export function orderSinksLikeOutputStreams<
+    B extends Pick<TBlock, 'id' | 'x' | 'y'>,
+    C extends LaidOutConnection,
+>(
+    data: {blocks: Array<B>; connections: Array<C>},
+    sinkIdsByGroupId: Map<TBlockId, Array<TBlockId>>,
+) {
+    return orderBlocksLikeStreams(data, sinkIdsByGroupId, 'sink');
+}
+
+function orderBlocksLikeStreams<
+    B extends Pick<TBlock, 'id' | 'x' | 'y'>,
+    C extends LaidOutConnection,
+>(
+    {blocks, connections}: {blocks: Array<B>; connections: Array<C>},
+    blockIdsByGroupId: Map<TBlockId, Array<TBlockId>>,
+    direction: 'source' | 'sink',
 ) {
     const blockById = new Map(blocks.map((item) => [item.id, item]));
     const edgeKey = (source?: TBlockId, target?: TBlockId) => `${source}->${target}`;
+    const groupEdgeKey = (id: TBlockId, groupId: TBlockId) =>
+        direction === 'source' ? edgeKey(id, groupId) : edgeKey(groupId, id);
     const edgeByKey = new Map(
         connections.map((item) => [edgeKey(item.sourceBlockId, item.targetBlockId), item]),
     );
@@ -257,20 +277,23 @@ export function orderSourcesLikeSourceStreams<
     const positionById = new Map<TBlockId, Pick<B, 'x' | 'y'>>();
     const routeByEdgeKey = new Map<string, Pick<C, 'points' | 'labels'>>();
 
-    sourceIdsByGroupId.forEach((sourceIds, groupId) => {
-        const slots = sourceIds.flatMap((id) => {
+    blockIdsByGroupId.forEach((blockIds, groupId) => {
+        const slots = blockIds.flatMap((id) => {
             const block = blockById.get(id);
-            const edge = edgeByKey.get(edgeKey(id, groupId));
+            const edge = edgeByKey.get(groupEdgeKey(id, groupId));
             return block && edge ? [{block, edge}] : [];
         });
-        if (slots.length < 2 || slots.length !== sourceIds.length) {
+        if (slots.length < 2 || slots.length !== blockIds.length) {
             return;
         }
 
         sortBy_(slots, ({block}) => block.y).forEach(({block, edge}, index) => {
-            const id = sourceIds[index];
+            const id = blockIds[index];
             positionById.set(id, {x: block.x, y: block.y});
-            routeByEdgeKey.set(edgeKey(id, groupId), {points: edge.points, labels: edge.labels});
+            routeByEdgeKey.set(groupEdgeKey(id, groupId), {
+                points: edge.points,
+                labels: edge.labels,
+            });
         });
     });
 
