@@ -58,7 +58,11 @@ test('AccountsLoading: modes show the right branches and resource values', async
     expect(
         ytApiRequests.filter(({id}) => id === YTApiId.accountsSelectedMetadata)[0].parameters
             .requests,
-    ).toHaveLength(3);
+    ).toMatchObject([
+        {parameters: {path: '//sys/accounts/child'}},
+        {parameters: {path: '//sys/accounts/parent'}},
+        {parameters: {path: '//sys/accounts/usable-only'}},
+    ]);
 
     await test.step('Favourites keeps its parent and hides other children', async () => {
         await router.use(
@@ -68,6 +72,16 @@ test('AccountsLoading: modes show the right branches and resource values', async
         await expect(row(component, 'usable-only')).toHaveCount(0);
         await expect(row(component, 'child').getByText('11', {exact: true})).toBeVisible();
         await expect(row(component, 'parent').getByText('90', {exact: true})).toBeVisible();
+        await expect
+            .poll(
+                () =>
+                    ytApiRequests.filter(({id}) => id === YTApiId.accountsSelectedMetadata).at(-1)
+                        ?.parameters.requests,
+            )
+            .toMatchObject([
+                {parameters: {path: '//sys/accounts/child'}},
+                {parameters: {path: '//sys/accounts/parent'}},
+            ]);
     });
 
     await test.step('All includes resources of the hidden child', async () => {
@@ -216,6 +230,7 @@ test('AccountsLoading: usable failure stays filtered and recovers on refresh', a
 
     await component.getByRole('button', {name: 'Refresh accounts'}).click();
     await expect(row(component, 'child').getByText('11', {exact: true})).toBeVisible();
+    await expect(row(component, 'usable-only').getByText('22', {exact: true})).toBeVisible();
     await expect(component.getByText('Usable is unavailable', {exact: true})).toHaveCount(0);
 });
 
