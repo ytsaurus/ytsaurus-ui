@@ -24,7 +24,15 @@ type TextTag = keyof React.JSX.IntrinsicElements;
 type TextOwnProps<T extends TextTag> = {
     as?: T;
     ellipsis?: boolean;
-    color?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'warning-light' | 'danger';
+    color?:
+        | 'primary'
+        | 'secondary'
+        | 'success'
+        | 'info'
+        | 'warning'
+        | 'warning-light'
+        | 'danger'
+        | 'utility';
     disabled?: boolean;
     bold?: boolean;
     noWrap?: boolean;
