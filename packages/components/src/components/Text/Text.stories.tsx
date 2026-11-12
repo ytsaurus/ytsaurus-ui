@@ -26,6 +26,7 @@ const meta = {
                 'warning',
                 'warning-light',
                 'danger',
+                'utility',
             ] satisfies Array<TextProps['color'] | undefined>,
         },
         bold: {control: 'boolean'},

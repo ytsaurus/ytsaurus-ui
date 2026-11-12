@@ -47,6 +47,7 @@ export const textVisualStoryCases = {
             props: {children: 'Warning light', color: 'warning-light'},
         },
         'color-danger': {props: {children: 'Danger', color: 'danger'}},
+        'color-utility': {props: {children: 'Utility', color: 'utility'}},
         bold: {props: {children: 'Bold text', bold: true}},
         disabled: {props: {children: 'Disabled', disabled: true}},
         'secondary-disabled': {
