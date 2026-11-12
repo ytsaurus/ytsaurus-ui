@@ -12,10 +12,12 @@ import './yfm-overrides.scss';
 
 type Props = {
     text: string;
+    allowHTML?: boolean;
     errorMode?: 'block' | 'inline';
+    contentBelow?: React.ReactNode;
 };
 
-const MarkdownImpl = ({text, errorMode}: Props) => {
+const MarkdownImpl = ({text, allowHTML = true, errorMode, contentBelow}: Props) => {
     const [renderState, setRenderState] = useState<MarkdownRenderState>({status: 'loading'});
 
     if (renderState.status === 'error') {
@@ -28,9 +30,20 @@ const MarkdownImpl = ({text, errorMode}: Props) => {
         );
     }
 
-    const customMarkdown = UIFactory.renderMarkdown({text, setRenderState});
+    const customMarkdown = UIFactory.renderMarkdown({text, allowHTML, setRenderState});
 
-    return customMarkdown ?? <MarkdownFallback text={text} setRenderState={setRenderState} />;
+    return (
+        <>
+            {customMarkdown ?? (
+                <MarkdownFallback
+                    text={text}
+                    allowHTML={allowHTML}
+                    setRenderState={setRenderState}
+                />
+            )}
+            {renderState.status === 'ready' && contentBelow}
+        </>
+    );
 };
 
 export const Markdown = memo((props: Props) => {
@@ -38,7 +51,7 @@ export const Markdown = memo((props: Props) => {
         return null;
     }
 
-    return <MarkdownImpl key={props.text} {...props} />;
+    return <MarkdownImpl key={`${props.allowHTML ?? true}:${props.text}`} {...props} />;
 });
 
 Markdown.displayName = 'Markdown';

@@ -1,7 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import {type YTError} from '../../../../../@types/types';
-import NavigationDescription from '../../../../pages/navigation/NavigationDescription/NavigationDescription';
 import {getPermissionDeniedError} from '../../../../utils/errors';
 import {PrettyError} from '../../../../containers/PrettyError';
 import {type ErrorsInfoMap, determineErrorCode} from '../../../../containers/PrettyError/helpers';
@@ -52,11 +51,6 @@ export function NavigationError(props: Props) {
                 errorsInfo={ErrorsInfo}
                 errorContext={{path}}
                 vertical={vertical}
-                renderAdditionalContent={() =>
-                    errorCode === 901 ? (
-                        <NavigationDescription className="error-description" />
-                    ) : undefined
-                }
                 renderActions={
                     errorCode === 901
                         ? () => <RequestPermission cluster={cluster} path={path} error={error} />

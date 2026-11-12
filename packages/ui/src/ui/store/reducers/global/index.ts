@@ -57,6 +57,11 @@ export type GlobalState = {
         isSplit: boolean;
         paneClassNames: Array<string>;
         type: string;
+        ownerId?: string;
+    };
+
+    sidePanelReplacement?: {
+        ownerId: string;
     };
 
     blocked: boolean; // user may become automatically temporarily banned
@@ -295,10 +300,10 @@ export default (state = initialState, action: GloablStateAction): GlobalState =>
         }
 
         case SPLIT_SCREEN: {
-            const {paneClassNames, type} = action.data;
-            const splitScreen = {isSplit: true, paneClassNames, type};
+            const {paneClassNames, type, ownerId} = action.data;
+            const splitScreen = {isSplit: true, paneClassNames, type, ownerId};
 
-            return {...state, splitScreen};
+            return {...state, splitScreen, sidePanelReplacement: undefined};
         }
 
         case MERGE_SCREEN:

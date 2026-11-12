@@ -31,7 +31,7 @@ import {getWindowStore} from '../../../store/window-store';
 import {reloadUserSettings} from '../settings';
 import {YT} from '../../../config/yt-config';
 import {getConfigData} from '../../../config/ui-settings';
-import {type GloablStateAction} from '../../../store/reducers/global';
+import {type GloablStateAction, type GlobalState} from '../../../store/reducers/global';
 import {toaster} from '../../../utils/toaster';
 
 export function setTheme(theme: 'light' | 'dark' | 'system' | 'light-hc' | 'dark-hc') {
@@ -294,12 +294,55 @@ export function setOngoingClusterEvents(cluster: string, events: Array<unknown>)
     };
 }
 
-export function splitScreen(type: string, paneClassNames: Array<string> = []) {
+export function splitScreen(type: string, paneClassNames: Array<string> = [], ownerId?: string) {
     document.body.style.overflow = 'hidden';
 
     return {
         type: SPLIT_SCREEN,
-        data: {paneClassNames, type},
+        data: {paneClassNames, type, ownerId},
+    };
+}
+
+function setSidePanelReplacement(
+    sidePanelReplacement: GlobalState['sidePanelReplacement'],
+): GloablStateAction {
+    return {type: GLOBAL_PARTIAL, data: {sidePanelReplacement}};
+}
+
+export function requestSidePanelConfirmation(
+    ownerId: string,
+    type: string,
+): YTThunkAction<boolean> {
+    return (dispatch, getState) => {
+        const current = getState().global.splitScreen;
+        if (current.isSplit && current.type !== type) {
+            dispatch(setSidePanelReplacement({ownerId}));
+            return true;
+        }
+        return false;
+    };
+}
+
+export function finishSidePanelConfirmation(
+    replacement: NonNullable<GlobalState['sidePanelReplacement']>,
+): YTThunkAction<boolean> {
+    return (dispatch, getState) => {
+        if (getState().global.sidePanelReplacement !== replacement) {
+            return false;
+        }
+        dispatch(setSidePanelReplacement(undefined));
+        return true;
+    };
+}
+
+export function closeSidePanel(ownerId: string): YTThunkAction<void> {
+    return (dispatch, getState) => {
+        if (getState().global.sidePanelReplacement?.ownerId === ownerId) {
+            dispatch(setSidePanelReplacement(undefined));
+        }
+        if (getState().global.splitScreen.ownerId === ownerId) {
+            dispatch(mergeScreen());
+        }
     };
 }
 

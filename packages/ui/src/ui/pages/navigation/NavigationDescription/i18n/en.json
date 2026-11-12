@@ -1,10 +1,14 @@
 {
   "action_show-more": "Show more",
   "action_hide-more": "Hide more",
-  "alert_no-description-found": "No {{serviceName}} description found",
-  "action_create-with": "Create with {{serviceName}}",
   "value_external": "External",
   "title_description": "Description",
   "action_save": "Save",
-  "action_cancel": "Cancel"
+  "action_cancel": "Cancel",
+  "action_edit": "Edit description",
+  "title_full-description": "Full description",
+  "action_view-full-description": "View full description",
+  "action_close": "Close",
+  "action_open-description-tab": "Go to edit",
+  "context_text-preview": "This preview shows text only and is limited to five lines. Open the full description to see all content and formatting."
 }

@@ -1,14 +1,6 @@
 @use '../../../styles/common.scss';
 
-.error-description {
-    margin-top: 20px;
-}
-
 .navigation-description {
-    &__collapsible {
-        margin-top: unset;
-    }
-
     &__edit-block {
         height: 300px;
     }

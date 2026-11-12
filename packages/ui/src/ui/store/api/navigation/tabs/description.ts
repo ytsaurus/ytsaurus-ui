@@ -10,7 +10,7 @@ const descriptionQuery = async (args: {cluster: string; path: string}) => {
     const {cluster, path} = args;
     try {
         const data = await UIFactory?.externalAnnotationSetup?.load(cluster, path);
-        return {data};
+        return {data: data ?? {}};
     } catch (error) {
         return {error};
     }
@@ -41,6 +41,9 @@ const annotationQuery = async (args: {cluster: string; path: string}) => {
             },
         );
 
+        if (response?.[0]?.error) {
+            throw response[0].error;
+        }
         const data = response?.[0]?.output ?? {};
 
         return {data};

@@ -10,6 +10,7 @@ type DescriptionState = {
     modifiedByUser: boolean;
     descriptionType: 'yt' | 'external';
     isSaving: boolean;
+    previewCollapsed: boolean;
 
     annotation: Partial<GetAnnotationResponse>;
     externalDescription: ExternalAnnotationResponse;
@@ -21,6 +22,7 @@ const initialState: DescriptionState = {
     modifiedByUser: false,
     descriptionType: 'yt',
     isSaving: false,
+    previewCollapsed: false,
 
     annotation: {},
     externalDescription: {},
@@ -60,6 +62,9 @@ const descriptionSlice = createSlice({
         ) => {
             state.descriptionType = payload.descriptionType;
         },
+        setPreviewCollapsed: (state, {payload}: PayloadAction<boolean>) => {
+            state.previewCollapsed = payload;
+        },
         setSaving: (state, {payload}: PayloadAction<Pick<DescriptionState, 'isSaving'>>) => {
             state.isSaving = payload.isSaving;
         },
@@ -69,11 +74,23 @@ const descriptionSlice = createSlice({
         getDescriptionType: (state) => state.descriptionType,
         getEdittingAnnotation: (state) => state.edittingAnnotation,
         getIsSaving: (state) => state.isSaving,
+        getPreviewCollapsed: (state) => state.previewCollapsed,
     },
 });
 
-export const {getEditMode, getDescriptionType, getEdittingAnnotation, getIsSaving} =
-    descriptionSlice.getSelectors((state: RootState) => state.navigation.description);
-export const {startEdit, stopEdit, setEdittingAnnotation, setDescriptionType, setSaving} =
-    descriptionSlice.actions;
+export const {
+    getEditMode,
+    getDescriptionType,
+    getEdittingAnnotation,
+    getIsSaving,
+    getPreviewCollapsed,
+} = descriptionSlice.getSelectors((state: RootState) => state.navigation.description);
+export const {
+    startEdit,
+    stopEdit,
+    setEdittingAnnotation,
+    setDescriptionType,
+    setSaving,
+    setPreviewCollapsed,
+} = descriptionSlice.actions;
 export const description = descriptionSlice.reducer;

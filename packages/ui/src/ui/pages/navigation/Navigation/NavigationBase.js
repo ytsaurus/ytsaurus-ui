@@ -17,6 +17,7 @@ import ContentViewer from './ContentViewer/ContentViewer';
 import {checkContentIsSupported} from './ContentViewer/helpers';
 import Tabs from '../../../components/Tabs/Tabs';
 import {NavigationError} from './NavigationError';
+import {getNotFoundError} from '../../../utils/errors';
 
 import {Tab} from '../../../constants/navigation';
 import {NavigationPermissionsNotice} from './NavigationPermissionsNotice';
@@ -31,6 +32,8 @@ import CreateACOModal from '../modals/CreateACOModal';
 import Button from '../../../components/Button/Button';
 import Icon from '../../../components/Icon/Icon';
 import {CellPreviewModal} from '../../../containers/CellPreviewModal/CellPreviewModal';
+import {NavigationDescriptionPanelProvider} from '../NavigationDescription/NavigationDescriptionPanelProvider/NavigationDescriptionPanelProvider';
+import {NavigationDescriptionPreview} from '../NavigationDescription/NavigationDescriptionPreview/NavigationDescriptionPreview';
 import {OpenQueryButtonsContent} from '../../../containers/OpenQueryButtons/OpenQueryButtons';
 import {UpdateAccessLogAvailability} from '../../../pages/navigation/tabs/AccessLog/UpdateAccessLogAvailability/UpdateAccessLogAvailability';
 
@@ -225,34 +228,53 @@ export class NavigationBase extends Component {
             error: {message, details},
             cluster,
             path,
+            mode,
         } = this.props;
 
         return (
-            <NavigationError cluster={cluster} path={path} details={details} message={message} />
+            <>
+                {mode === Tab.CONTENT && !getNotFoundError(details) && (
+                    <div className={block('viewer', {mode})}>
+                        <NavigationDescriptionPreview />
+                    </div>
+                )}
+                <NavigationError
+                    cluster={cluster}
+                    path={path}
+                    details={details}
+                    message={message}
+                />
+            </>
         );
     }
 
     render() {
-        const {loaded, hasError} = this.props;
+        const {loaded, hasError, mode, error} = this.props;
+        const showDescription =
+            mode === Tab.ANNOTATION && !(hasError && getNotFoundError(error.details));
 
         return (
             <ErrorBoundary>
-                <UpdateAccessLogAvailability />
-                <div className={block({error: hasError}, 'elements-main-section')}>
-                    <div className={block('header')}>
-                        <NavigationPermissionsNotice />
+                <NavigationDescriptionPanelProvider>
+                    <UpdateAccessLogAvailability />
+                    <div className={block({error: hasError}, 'elements-main-section')}>
+                        <div className={block('header')}>
+                            <NavigationPermissionsNotice />
 
-                        <div className={block('tabs')}>
-                            {this.renderEditButton()}
-                            {this.renderTabs()}
+                            <div className={block('tabs')}>
+                                {this.renderEditButton()}
+                                {this.renderTabs()}
+                            </div>
                         </div>
+
+                        <div className={block('main')}>
+                            {(loaded || showDescription) && this.renderView()}
+                        </div>
+                        {hasError && !showDescription && this.renderError()}
+
+                        {renderModals()}
                     </div>
-
-                    <div className={block('main')}>{loaded && this.renderView()}</div>
-                    {hasError && this.renderError()}
-
-                    {renderModals()}
-                </div>
+                </NavigationDescriptionPanelProvider>
             </ErrorBoundary>
         );
     }

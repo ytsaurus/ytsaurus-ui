@@ -38,6 +38,7 @@ export const ChatSidePanel: FC = () => {
     );
 
     const {widgetContent, openWidget, closeWidget} = useSidePanel('chat', {
+        onClose: handleClose,
         renderContent: () => {
             const {Chat} = uiFactory.getAiChat();
             return (
