@@ -37,6 +37,10 @@
         &_danger {
             color: var(--danger-text, var(--g-color-text-danger));
         }
+
+        &_utility {
+            color: var(--g-color-text-utility);
+        }
     }
 
     &_disabled {

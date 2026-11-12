@@ -21,10 +21,20 @@ type Props = {
 
 type TextTag = keyof React.JSX.IntrinsicElements;
 
+type TextColor =
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'info'
+    | 'warning'
+    | 'warning-light'
+    | 'danger'
+    | 'utility';
+
 type TextOwnProps<T extends TextTag> = {
     as?: T;
     ellipsis?: boolean;
-    color?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'warning-light' | 'danger';
+    color?: TextColor;
     disabled?: boolean;
     bold?: boolean;
     noWrap?: boolean;
