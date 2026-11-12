@@ -118,9 +118,6 @@ const reducer = (state = initialState, action: NavigationAction): NavigationStat
             };
         }
 
-        case UPDATE_VIEW.CANCELLED:
-            return {...state, loadState: LOADING_STATUS.LOADED};
-
         case UPDATE_VIEW.FAILURE: {
             const {message, details, isIdmSupported} = action.data;
             const error = {message, details};
@@ -165,7 +162,7 @@ const reducer = (state = initialState, action: NavigationAction): NavigationStat
 };
 
 export type NavigationAction =
-    | Action<typeof CLEAR_TRANSACTION | typeof UPDATE_VIEW.CANCELLED>
+    | Action<typeof CLEAR_TRANSACTION>
     | ActionD<typeof UPDATE_VIEW.REQUEST, {resetNodeState?: boolean}>
     | ActionD<typeof SET_MODE, NavigationState['mode']>
     | ActionD<typeof SET_TRANSACTION, NavigationState['transaction']>

@@ -1,7 +1,5 @@
+import {type CancelToken} from 'axios';
 import {type ThunkAction} from 'redux-thunk';
-
-// @ts-expect-error
-import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {getBatchError} from '../../../../shared/utils/error';
 
@@ -24,6 +22,7 @@ import {
 } from '../../../utils/navigation';
 import {prepareAttributes} from '../../../utils/index';
 import {getPermissionDeniedError} from '../../../utils/errors';
+import {isCancelled} from '../../../utils/cancel-helper';
 
 import {GENERIC_ERROR_MESSAGE, TYPED_OUTPUT_FORMAT} from '../../../constants/index';
 import {
@@ -77,15 +76,16 @@ export function updateView(
 
         const id = new RumWrapper(cluster, RumMeasureTypes.NAVIGATION_PRELOAD);
 
+        let requestCancelToken: CancelToken | undefined;
+
         return id
             .fetch(
                 YTApiId.navigationAttributes,
-                ytApiV3Id.executeBatch(
-                    YTApiId.navigationAttributes,
-                    {
+                ytApiV3Id.executeBatch(YTApiId.navigationAttributes, {
+                    parameters: {
                         requests: [
                             {
-                                command: 'get' as const,
+                                command: 'get',
                                 parameters: {
                                     ...prepareRequest('/@', requestParams),
                                     attributes: getAttributesToLoad(),
@@ -94,8 +94,11 @@ export function updateView(
                         ],
                         output_format: TYPED_OUTPUT_FORMAT,
                     },
-                    saveRequestCancellation,
-                ),
+                    cancellation: (source) => {
+                        requestCancelToken = source.token;
+                        saveRequestCancellation(source);
+                    },
+                }),
             )
             .then((results) => {
                 const [attrs] = results;
@@ -137,6 +140,10 @@ export function updateView(
                     Partial<NavigationState>,
                     'isWriteable' | 'isAccountUsable' | 'checkPermissionsError'
                 >) => {
+                    if (requestCancelToken?.reason) {
+                        return;
+                    }
+
                     dispatch({
                         type: NAVIGATION_PARTIAL,
                         data: {isWriteable, isAccountUsable, checkPermissionsError},
@@ -185,29 +192,33 @@ export function updateView(
                     });
             })
             .catch((error) => {
-                if (error.code === yt.codes.CANCELLED) {
-                    dispatch({
-                        type: UPDATE_VIEW.CANCELLED,
-                    });
-                } else {
-                    const permissionDeniedError = getPermissionDeniedError(error);
-                    const message = [i18n('alert_load-path-error')];
-                    if (!permissionDeniedError) message.push(GENERIC_ERROR_MESSAGE);
-
-                    ytApiV3
-                        .exists({path: '//sys/idm/lock'})
-                        .catch(() => false)
-                        .then((isIdmSupported) => {
-                            dispatch({
-                                type: UPDATE_VIEW.FAILURE,
-                                data: {
-                                    message: message.join(' '),
-                                    details: error,
-                                    isIdmSupported,
-                                },
-                            });
-                        });
+                if (isCancelled(error)) {
+                    return;
                 }
+
+                const permissionDeniedError = getPermissionDeniedError(error);
+                const message = [i18n('alert_load-path-error')];
+                if (!permissionDeniedError) {
+                    message.push(GENERIC_ERROR_MESSAGE);
+                }
+
+                ytApiV3
+                    .exists({path: '//sys/idm/lock'})
+                    .catch(() => false)
+                    .then((isIdmSupported) => {
+                        if (requestCancelToken?.reason) {
+                            return;
+                        }
+
+                        dispatch({
+                            type: UPDATE_VIEW.FAILURE,
+                            data: {
+                                message: message.join(' '),
+                                details: error,
+                                isIdmSupported,
+                            },
+                        });
+                    });
             });
     };
 }
