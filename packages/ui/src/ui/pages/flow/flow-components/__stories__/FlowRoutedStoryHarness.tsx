@@ -8,8 +8,8 @@ import {
     type FlowStateFiltersValue,
     filtersSlice,
     initialState,
-} from '../../../store/reducers/flow/filters';
-import {setWindowStoreAndHistory} from '../../../store/window-store';
+} from '../../../../store/reducers/flow/filters';
+import {setWindowStoreAndHistory} from '../../../../store/window-store';
 
 export function FlowRoutedStoryHarness({
     children,

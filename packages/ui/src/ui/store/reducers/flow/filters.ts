@@ -1,3 +1,6 @@
+import isEmpty_ from 'lodash/isEmpty';
+import isPlainObject_ from 'lodash/isPlainObject';
+
 import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {
     type FlowPartitionJobStateType,
@@ -15,7 +18,7 @@ export type FlowStateFiltersValue = {
 };
 
 export function normalizeFlowStateRawKey(value: unknown): unknown {
-    if (value && typeof value === 'object' && !Object.keys(value).length) {
+    if ((isPlainObject_(value) || Array.isArray(value)) && isEmpty_(value)) {
         return undefined;
     }
     return value;

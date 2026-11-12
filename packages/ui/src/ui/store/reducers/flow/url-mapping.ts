@@ -1,3 +1,5 @@
+import isPlainObject_ from 'lodash/isPlainObject';
+
 import {type LocationParameters} from '../../../store/location';
 import {prometheusDashboardParams} from '../../../store/reducers/prometheusDashboard/url-mapping';
 import {makeBase64ParseSerialize} from '../../../utils/parse-serialize';
@@ -98,8 +100,8 @@ export const flowComputationStateParams: typeof flowParams = {
         options: {
             ...stateKeyValues,
             parse: (value) => {
-                const parsed: unknown = stateKeyValues.parse(value);
-                if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+                const parsed = stateKeyValues.parse(value);
+                if (!isPlainObject_(parsed)) {
                     return filtersInitialState.stateViewer.keyValues;
                 }
                 return Object.fromEntries(

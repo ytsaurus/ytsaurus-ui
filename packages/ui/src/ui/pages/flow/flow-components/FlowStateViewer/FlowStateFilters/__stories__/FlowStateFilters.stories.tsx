@@ -3,7 +3,7 @@ import {type Meta, type StoryFn, type StoryObj} from '@storybook/react';
 
 import AttributesModal from '../../../../../../containers/AttributesModal/AttributesModal';
 import type {FlowStaticSpec} from '../../../../../../../shared/yt-types';
-import {FlowRoutedStoryHarness} from '../../../FlowRoutedStoryHarness';
+import {FlowRoutedStoryHarness} from '../../../__stories__/FlowRoutedStoryHarness';
 import {FlowStateResultsActions} from '../../FlowStateResults/FlowStateResults';
 import {FlowStateFilters} from '../FlowStateFilters';
 

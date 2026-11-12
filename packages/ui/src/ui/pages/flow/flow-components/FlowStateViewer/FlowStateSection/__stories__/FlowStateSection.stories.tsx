@@ -1,6 +1,6 @@
 import React from 'react';
 import type {Meta, StoryObj} from '@storybook/react';
-import {FlowRoutedStoryHarness} from '../../../FlowRoutedStoryHarness';
+import {FlowRoutedStoryHarness} from '../../../__stories__/FlowRoutedStoryHarness';
 import {FlowStateSection, type FlowStateSectionProps} from '../FlowStateSection';
 import type {FlowStateFiltersValue} from '../../types';
 import {createStateReadHandlers} from './mocks';
