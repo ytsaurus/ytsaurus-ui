@@ -50,13 +50,18 @@ import {fetchOriginatingQueuePath} from './tabs/queue/exports';
 
 type NavigationThunk<T = void> = ThunkAction<T, RootState, unknown, NavigationAction>;
 
-export function updateView(settings: {trackVisit?: boolean} = {}): NavigationThunk {
+export function updateView(
+    settings: {trackVisit?: boolean; resetNodeState?: boolean} = {},
+): NavigationThunk {
     return (dispatch, getState) => {
         const state = getState();
         const currentPath = selectPath(state);
         const transaction = selectTransaction(state);
 
-        dispatch({type: UPDATE_VIEW.REQUEST});
+        dispatch({
+            type: UPDATE_VIEW.REQUEST,
+            data: {resetNodeState: settings.resetNodeState},
+        });
         // Update path for use default path and auto correct path
         const path = dispatch(updatePath(currentPath, false));
         cancelRequests();
@@ -218,9 +223,9 @@ export function setMode(mode: NavigationState['mode']): NavigationThunk {
     };
 }
 
-export function onTransactionChange(): NavigationThunk {
+export function onTransactionChange(settings: {resetNodeState?: boolean} = {}): NavigationThunk {
     return (dispatch) => {
-        dispatch(updateView({trackVisit: true}));
+        dispatch(updateView({trackVisit: true, resetNodeState: settings.resetNodeState}));
         // Need to update breadcrumbs dimensions after transaction change
         window.dispatchEvent(new Event('resize'));
     };

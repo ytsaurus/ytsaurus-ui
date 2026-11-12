@@ -101,10 +101,12 @@ export class NavigationBase extends Component {
         const {transaction, path, updateView, onTransactionChange} = this.props;
         const {transaction: prevTransaction, path: prevPath} = prevProps;
 
+        const resetNodeState = path !== prevPath;
+
         if (transaction !== prevTransaction) {
-            onTransactionChange();
-        } else if (path !== prevPath) {
-            updateView({trackVisit: true});
+            onTransactionChange({resetNodeState});
+        } else if (resetNodeState) {
+            updateView({trackVisit: true, resetNodeState});
         }
 
         if (this.props.parsedPath !== prevProps.parsedPath) {

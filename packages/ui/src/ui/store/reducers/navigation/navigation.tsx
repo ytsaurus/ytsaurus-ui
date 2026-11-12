@@ -108,8 +108,15 @@ const reducer = (state = initialState, action: NavigationAction): NavigationStat
             };
         }
 
-        case UPDATE_VIEW.REQUEST:
-            return {...state, loadState: LOADING_STATUS.LOADING};
+        case UPDATE_VIEW.REQUEST: {
+            const {resetNodeState} = action.data;
+
+            return {
+                ...state,
+                ...(resetNodeState ? {...nodeInitialState, ...requestInitialState} : {}),
+                loadState: LOADING_STATUS.LOADING,
+            };
+        }
 
         case UPDATE_VIEW.CANCELLED:
             return {...state, loadState: LOADING_STATUS.LOADED};
@@ -158,7 +165,8 @@ const reducer = (state = initialState, action: NavigationAction): NavigationStat
 };
 
 export type NavigationAction =
-    | Action<typeof CLEAR_TRANSACTION | typeof UPDATE_VIEW.REQUEST | typeof UPDATE_VIEW.CANCELLED>
+    | Action<typeof CLEAR_TRANSACTION | typeof UPDATE_VIEW.CANCELLED>
+    | ActionD<typeof UPDATE_VIEW.REQUEST, {resetNodeState?: boolean}>
     | ActionD<typeof SET_MODE, NavigationState['mode']>
     | ActionD<typeof SET_TRANSACTION, NavigationState['transaction']>
     | ActionD<typeof SET_ORIGINATING_QUEUE_PATH, NavigationState['originatingQueuePath']>
