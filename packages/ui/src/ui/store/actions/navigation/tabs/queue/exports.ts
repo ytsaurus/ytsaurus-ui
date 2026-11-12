@@ -6,6 +6,7 @@ import {selectAttributes} from '../../../../selectors/navigation';
 
 import {ytApiV3} from '../../../../../rum/rum-wrap-api';
 import {SET_ORIGINATING_QUEUE_PATH} from '../../../../../constants/navigation';
+import {saveRequestCancellation} from '../../../../../utils/navigation';
 type AsyncAction<R = void> = ThunkAction<R, RootState, unknown, UnknownAction>;
 
 export function fetchOriginatingQueuePath(): AsyncAction {
@@ -28,6 +29,7 @@ export function fetchOriginatingQueuePath(): AsyncAction {
                         },
                     ],
                 },
+                cancellation: saveRequestCancellation,
             });
             dispatch({
                 type: SET_ORIGINATING_QUEUE_PATH,

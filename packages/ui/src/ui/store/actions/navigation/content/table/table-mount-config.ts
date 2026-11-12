@@ -7,6 +7,7 @@ import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
 import {type RootState} from '../../../../../store/reducers';
 import {type TableMountConfigAction} from '../../../../../store/reducers/navigation/content/table/table-mount-config';
 import {isCancelled} from '../../../../../utils/cancel-helper';
+import {saveRequestCancellation} from '../../../../../utils/navigation';
 
 type TableMountConfigThunkAction = ThunkAction<unknown, RootState, unknown, TableMountConfigAction>;
 
@@ -16,7 +17,10 @@ export function fetchTableMountConfig(path: string): TableMountConfigThunkAction
 
         return ytApiV3Id
             .executeBatch(YTApiId.navigationTableMountConfig, {
-                requests: [{command: 'get', parameters: {path: `${path}/@mount_config`}}],
+                parameters: {
+                    requests: [{command: 'get', parameters: {path: `${path}/@mount_config`}}],
+                },
+                cancellation: saveRequestCancellation,
             })
             .then(([{output, error}]) => {
                 if (error && error?.code !== yt.codes.NODE_DOES_NOT_EXIST) {
