@@ -235,7 +235,7 @@ function useResultColumns({
                         onSort={onSort}
                     />
                 ),
-                size: 160,
+                size: 188,
                 enableSorting: true,
                 accessorFn: (row) => row.computationId ?? '',
                 cell: ({row: {original}}) => (
@@ -295,7 +295,7 @@ function useResultColumns({
                         onSort={onSort}
                     />
                 ),
-                size: 170,
+                size: 198,
                 enableSorting: true,
                 accessorFn: (row) => row.stateName,
                 cell: ({row: {original}}) => {

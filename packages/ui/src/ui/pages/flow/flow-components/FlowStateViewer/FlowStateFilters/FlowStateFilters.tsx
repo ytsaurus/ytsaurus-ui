@@ -103,12 +103,7 @@ export function FlowStateFilters({
         [pipelineData],
     );
 
-    const {keyColumns} = resolveKeySchema(
-        staticSpec,
-        value.computationId,
-        value.stateName,
-        value.target,
-    );
+    const {keyColumns} = resolveKeySchema(staticSpec, value);
     const stateNames = getComputationStateNames(staticSpec, value.computationId, value.target);
     const hasScope = Boolean(value.computationId || value.partitionId);
     const stateNameInputMode = getStateNameInputMode(value.target);

@@ -55,8 +55,8 @@ describe('makeBase64ParseSerialize', () => {
 
             const encoded = serialize(value) ?? '';
 
-            expect(JSON.parse(atob(encoded))).toEqual(value);
-            expect(parse(encoded)).toEqual(value);
+            expect(JSON.parse(atob(encoded))).toStrictEqual(value);
+            expect(parse(encoded)).toStrictEqual(value);
         },
     );
 
@@ -67,7 +67,7 @@ describe('makeBase64ParseSerialize', () => {
         const {parse, serialize} = makeBase64ParseSerialize(undefined);
 
         expect(serialize(value)).toBe(encoded);
-        expect(parse(encoded)).toEqual(value);
+        expect(parse(encoded)).toStrictEqual(value);
     });
 
     it.each([{value: null}, {value: false}, {value: 0}, {value: ''}, {value: []}, {value: {}}])(
@@ -75,7 +75,7 @@ describe('makeBase64ParseSerialize', () => {
         ({value}) => {
             const {parse, serialize} = makeBase64ParseSerialize(undefined);
 
-            expect(parse(serialize(value) ?? '')).toEqual(value);
+            expect(parse(serialize(value) ?? '')).toStrictEqual(value);
         },
     );
 
@@ -92,7 +92,7 @@ describe('makeBase64ParseSerialize', () => {
             const initialValue = {panels: []};
             const {parse} = makeBase64ParseSerialize(initialValue);
 
-            expect(parse(encoded)).toEqual(initialValue);
+            expect(parse(encoded)).toStrictEqual(initialValue);
         },
     );
 });

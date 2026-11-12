@@ -148,7 +148,13 @@ describe('resolveKeySchema declaration ownership', () => {
             },
         };
 
-        expect(resolveKeySchema(specWithInheritedManager, 'state', '/joined', 'all')).toEqual({
+        expect(
+            resolveKeySchema(specWithInheritedManager, {
+                computationId: 'state',
+                stateName: '/joined',
+                target: 'all',
+            }),
+        ).toEqual({
             keyColumns: [{name: 'joined', type: 'string'}],
             allKeyColumns: [{name: 'joined', type: 'string'}],
             overrideActive: true,
@@ -160,15 +166,23 @@ describe('resolveKeySchema', () => {
     it.each(['all', 'external_key_state'] as const)(
         'applies the joiner override under the %s target and drops its expression columns',
         (target) => {
-            expect(resolveKeySchema(joinerOverrideSpec, 'state', '/joined', target)).toEqual(
-                overrideResolution,
-            );
+            expect(
+                resolveKeySchema(joinerOverrideSpec, {
+                    computationId: 'state',
+                    stateName: '/joined',
+                    target,
+                }),
+            ).toEqual(overrideResolution);
         },
     );
     it('reads an override wrapped in yson attributes at every level', () => {
-        expect(resolveKeySchema(wrappedJoinerOverrideSpec, 'state', '/joined', 'all')).toEqual(
-            overrideResolution,
-        );
+        expect(
+            resolveKeySchema(wrappedJoinerOverrideSpec, {
+                computationId: 'state',
+                stateName: '/joined',
+                target: 'all',
+            }),
+        ).toEqual(overrideResolution);
     });
     it('does not activate an inherited joiner override', () => {
         const inheritedJoiners = Object.create({
@@ -179,49 +193,93 @@ describe('resolveKeySchema', () => {
                 state: {group_by_schema: keyColumns, external_state_joiners: inheritedJoiners},
             },
         } as FlowStaticSpec;
-        expect(resolveKeySchema(inheritedSpec, 'state', '/joined', 'all')).toEqual(
-            computationResolution,
-        );
+        expect(
+            resolveKeySchema(inheritedSpec, {
+                computationId: 'state',
+                stateName: '/joined',
+                target: 'all',
+            }),
+        ).toEqual(computationResolution);
     });
     it.each(['key_state', 'partition_state'] as const)(
         'keeps the computation schema under the internal %s target',
         (target) => {
-            expect(resolveKeySchema(joinerOverrideSpec, 'state', '/joined', target)).toEqual(
-                computationResolution,
-            );
+            expect(
+                resolveKeySchema(joinerOverrideSpec, {
+                    computationId: 'state',
+                    stateName: '/joined',
+                    target,
+                }),
+            ).toEqual(computationResolution);
         },
     );
     it('keeps the computation schema for a joiner without an override', () => {
-        expect(resolveKeySchema(joinerOverrideSpec, 'state', '/plain', 'all')).toEqual(
-            computationResolution,
-        );
-        expect(resolveKeySchema(joinerOverrideSpec, 'state', '/streams-only', 'all')).toEqual(
-            computationResolution,
-        );
+        expect(
+            resolveKeySchema(joinerOverrideSpec, {
+                computationId: 'state',
+                stateName: '/plain',
+                target: 'all',
+            }),
+        ).toEqual(computationResolution);
+        expect(
+            resolveKeySchema(joinerOverrideSpec, {
+                computationId: 'state',
+                stateName: '/streams-only',
+                target: 'all',
+            }),
+        ).toEqual(computationResolution);
     });
     it('keeps the computation schema for manager, unknown and absent names', () => {
-        expect(resolveKeySchema(joinerOverrideSpec, 'state', '/state', 'all')).toEqual(
-            computationResolution,
-        );
-        expect(resolveKeySchema(joinerOverrideSpec, 'state', '/unknown', 'all')).toEqual(
-            computationResolution,
-        );
-        expect(resolveKeySchema(joinerOverrideSpec, 'state', undefined, 'all')).toEqual(
-            computationResolution,
-        );
+        expect(
+            resolveKeySchema(joinerOverrideSpec, {
+                computationId: 'state',
+                stateName: '/state',
+                target: 'all',
+            }),
+        ).toEqual(computationResolution);
+        expect(
+            resolveKeySchema(joinerOverrideSpec, {
+                computationId: 'state',
+                stateName: '/unknown',
+                target: 'all',
+            }),
+        ).toEqual(computationResolution);
+        expect(
+            resolveKeySchema(joinerOverrideSpec, {
+                computationId: 'state',
+                stateName: undefined,
+                target: 'all',
+            }),
+        ).toEqual(computationResolution);
     });
     it('prefers the manager schema when a name is declared as both', () => {
-        expect(resolveKeySchema(collisionSpec, 'state', '/both', 'all')).toEqual(
-            computationResolution,
-        );
+        expect(
+            resolveKeySchema(collisionSpec, {
+                computationId: 'state',
+                stateName: '/both',
+                target: 'all',
+            }),
+        ).toEqual(computationResolution);
     });
     it('resolves empty without a spec or computation', () => {
-        expect(resolveKeySchema(undefined, 'state', '/joined', 'all')).toEqual({
+        expect(
+            resolveKeySchema(undefined, {
+                computationId: 'state',
+                stateName: '/joined',
+                target: 'all',
+            }),
+        ).toEqual({
             keyColumns: [],
             allKeyColumns: [],
             overrideActive: false,
         });
-        expect(resolveKeySchema(joinerOverrideSpec, undefined, '/joined', 'all')).toEqual({
+        expect(
+            resolveKeySchema(joinerOverrideSpec, {
+                computationId: undefined,
+                stateName: '/joined',
+                target: 'all',
+            }),
+        ).toEqual({
             keyColumns: [],
             allKeyColumns: [],
             overrideActive: false,

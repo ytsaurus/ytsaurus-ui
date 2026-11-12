@@ -1,9 +1,10 @@
-import {useCallback, useEffect, useMemo, useRef} from 'react';
+import {useCallback, useEffect, useRef} from 'react';
 
 import {skipToken} from '@reduxjs/toolkit/query';
 
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {filtersSlice} from '../../../../../store/reducers/flow/filters';
+import {selectFlowStateFilters} from '../../../../../store/selectors/flow/filters';
 
 import {useDebouncedValue} from '../../../../../hooks/useDebouncedValue';
 import {useFlowReadStatesQuery, useFlowStaticSpecQuery} from '../../../../../store/api/yt/flow';
@@ -22,12 +23,7 @@ export function useFlowStateRead({
     fixedComputationId?: string;
 }): FlowStateReadResult {
     const dispatch = useDispatch();
-    const stateViewer = useSelector((state) => state.flow.filters.stateViewer);
-    const filters = useMemo(
-        () =>
-            fixedComputationId ? {...stateViewer, computationId: fixedComputationId} : stateViewer,
-        [fixedComputationId, stateViewer],
-    );
+    const filters = useSelector((state) => selectFlowStateFilters(state, fixedComputationId));
     const userModifiedRef = useRef(false);
     const setFilters = useCallback(
         (next: FlowStateFiltersValue) => {
@@ -63,15 +59,7 @@ export function useFlowStateRead({
     );
     const built =
         hasDebouncedScope && debouncedFilters
-            ? buildStateReadBody(
-                  debouncedFilters,
-                  resolveKeySchema(
-                      staticSpec,
-                      debouncedFilters.computationId,
-                      debouncedFilters.stateName,
-                      debouncedFilters.target,
-                  ),
-              )
+            ? buildStateReadBody(debouncedFilters, resolveKeySchema(staticSpec, debouncedFilters))
             : undefined;
     const validationError =
         built && 'error' in built ? i18n(built.error.errorKey, built.error.params) : undefined;

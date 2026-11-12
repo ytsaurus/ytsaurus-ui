@@ -1,4 +1,9 @@
-import type {FlowKeySchemaResolution, FlowRowKeySchema, FlowStateResultRow} from './types';
+import type {
+    FlowKeySchemaResolution,
+    FlowRowKeySchema,
+    FlowStateFiltersValue,
+    FlowStateResultRow,
+} from './types';
 
 import type {FlowKeyColumn, FlowStateTarget, FlowStaticSpec} from '../../../../../shared/yt-types';
 import ypath from '../../../../common/thor/ypath';
@@ -61,9 +66,11 @@ function isDeclaredManager(
 
 export function resolveKeySchema(
     spec: FlowStaticSpec | undefined,
-    computationId: string | undefined,
-    stateName: string | undefined,
-    target: FlowStateTarget,
+    {
+        computationId,
+        stateName,
+        target,
+    }: Pick<FlowStateFiltersValue, 'computationId' | 'stateName' | 'target'>,
 ): FlowKeySchemaResolution {
     const reachesJoiners = target === 'all' || target === 'external_key_state';
     const overrideColumns = reachesJoiners
