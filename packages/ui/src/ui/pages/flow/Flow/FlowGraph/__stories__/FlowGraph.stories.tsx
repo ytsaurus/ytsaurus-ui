@@ -13,6 +13,7 @@ import {
     inputOnlyStreamFlowGraphHandler,
     messagesFlowGraphHandler,
     mixedFlowGraphHandler,
+    multipleSinksFlowGraphHandler,
     multipleSourcesFlowGraphHandler,
 } from './mocks';
 
@@ -69,4 +70,9 @@ export const InputOnlyStream: Story = {
 export const MultipleSources: Story = {
     render: renderGraph,
     parameters: {msw: {handlers: [multipleSourcesFlowGraphHandler]}},
+};
+
+export const MultipleSinks: Story = {
+    render: renderGraph,
+    parameters: {msw: {handlers: [multipleSinksFlowGraphHandler]}},
 };

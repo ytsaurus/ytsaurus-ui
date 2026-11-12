@@ -8,6 +8,7 @@ import {
     INPUT_ONLY_STREAM_NAME,
     ISOLATED_STREAM_NAME,
     MESSAGE_TEXT,
+    MULTIPLE_SINKS,
     MULTIPLE_SOURCES,
     SOURCE_NAME,
     backpressuredFlowGraphHandler,
@@ -16,6 +17,7 @@ import {
     inputOnlyStreamFlowGraphHandler,
     messagesFlowGraphHandler,
     mixedFlowGraphHandler,
+    multipleSinksFlowGraphHandler,
     multipleSourcesFlowGraphHandler,
 } from '../__stories__/mocks';
 
@@ -251,5 +253,43 @@ test('FlowGraph: sources follow the order of their source streams', async ({
 
     expect(streamsTopDown).toEqual(MULTIPLE_SOURCES.map(({streamName}) => streamName));
     expect(sourcesTopDown).toEqual(streamsTopDown.map((name) => sourceByStream[name]));
+    await expectScreenshot();
+});
+
+test('FlowGraph: sinks follow the order of their output streams', async ({
+    mount,
+    expectScreenshot,
+    page,
+    router,
+}) => {
+    await router.use(multipleSinksFlowGraphHandler);
+    await mount(<FlowGraphStories.MultipleSinks />);
+
+    async function getTopDown(names: Array<string>) {
+        const tops = await Promise.all(
+            names.map(async (name) => {
+                const block = page.locator('.graph-block-wrapper', {
+                    has: page.getByText(name, {exact: true}),
+                });
+                const box = await block.boundingBox();
+                if (!box) {
+                    throw new Error(`Block "${name}" must have measurable bounds`);
+                }
+                return {name, y: box.y};
+            }),
+        );
+        return tops.sort((l, r) => l.y - r.y).map(({name}) => name);
+    }
+
+    await page.getByText(MULTIPLE_SINKS[0].sinkName, {exact: true}).waitFor();
+
+    const streamsTopDown = await getTopDown(MULTIPLE_SINKS.map(({streamName}) => streamName));
+    const sinksTopDown = await getTopDown(MULTIPLE_SINKS.map(({sinkName}) => sinkName));
+    const sinkByStream = Object.fromEntries(
+        MULTIPLE_SINKS.map(({streamName, sinkName}) => [streamName, sinkName]),
+    );
+
+    expect(streamsTopDown).toEqual(MULTIPLE_SINKS.map(({streamName}) => streamName));
+    expect(sinksTopDown).toEqual(streamsTopDown.map((name) => sinkByStream[name]));
     await expectScreenshot();
 });

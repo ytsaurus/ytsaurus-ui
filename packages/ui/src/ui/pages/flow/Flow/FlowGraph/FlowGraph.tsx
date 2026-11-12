@@ -62,6 +62,7 @@ import {
     makeFlowComputationRuntimeData,
     makeTimerAnchors,
     mergeConnectionStreamStatus,
+    orderSinksLikeOutputStreams,
     orderSourcesLikeSourceStreams,
 } from './utils/utils';
 import {type FlowGraphConnection} from './utils/utils';
@@ -532,10 +533,23 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                 }),
             ]),
         );
-        const {blocks, connections} = orderSourcesLikeSourceStreams(
-            elkRes.data,
-            sourceIdsByGroupId,
+        const orderedSources = orderSourcesLikeSourceStreams(elkRes.data, sourceIdsByGroupId);
+
+        const sinkIdsByStreamId = new Map<string, Array<string>>();
+        Object.values(loadedData?.sinks ?? {}).forEach(({id, stream_id}) => {
+            const sinkIds = sinkIdsByStreamId.get(stream_id) ?? [];
+            sinkIds.push(id);
+            sinkIdsByStreamId.set(stream_id, sinkIds);
+        });
+        const sinkIdsByGroupId = new Map(
+            [...data.groupById].map(([groupId, group]) => [
+                groupId,
+                (group.meta.output_streams ?? []).flatMap(
+                    (streamId) => sinkIdsByStreamId.get(streamId) ?? [],
+                ),
+            ]),
         );
+        const {blocks, connections} = orderSinksLikeOutputStreams(orderedSources, sinkIdsByGroupId);
 
         blocks.forEach(({id, x, y}) => {
             const group = data.groupById.get(id);

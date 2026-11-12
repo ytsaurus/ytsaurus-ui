@@ -5,6 +5,7 @@ import {
     collapseConnectionEndpoints,
     makeComputationGroupId,
     mergeConnectionStreamStatus,
+    orderSinksLikeOutputStreams,
     orderSourcesLikeSourceStreams,
 } from './utils';
 
@@ -172,5 +173,58 @@ describe('orderSourcesLikeSourceStreams', () => {
 
         expect(positions['src-a']).toEqual({x: 0, y: 200});
         expect(positions['src-b']).toEqual({x: 0, y: 0});
+    });
+});
+
+describe('orderSinksLikeOutputStreams', () => {
+    const blocks = [
+        {id: 'sink-a', x: 0, y: 200},
+        {id: 'sink-b', x: 0, y: 0},
+        {id: 'sink-c', x: 10, y: 100},
+        {id: 'group', x: 300, y: 0},
+        {id: 'other', x: 0, y: 500},
+    ];
+    const route = (y: number) => [{x: 0, y}];
+    const connections = [
+        {sourceBlockId: 'group', targetBlockId: 'sink-a', points: route(200)},
+        {sourceBlockId: 'group', targetBlockId: 'sink-b', points: route(0)},
+        {sourceBlockId: 'group', targetBlockId: 'sink-c', points: route(100)},
+        {sourceBlockId: 'group', targetBlockId: 'other', points: route(500)},
+    ];
+
+    function order(sinkIds: Array<string>) {
+        const res = orderSinksLikeOutputStreams(
+            {blocks, connections},
+            new Map([['group', sinkIds]]),
+        );
+        return {
+            positions: Object.fromEntries(res.blocks.map(({id, x, y}) => [id, {x, y}])),
+            routes: Object.fromEntries(res.connections.map((c) => [c.targetBlockId, c.points])),
+        };
+    }
+
+    it('hands out the laid-out slots top-down in the order of the output streams', () => {
+        const {positions, routes} = order(['sink-a', 'sink-b', 'sink-c']);
+
+        expect(positions).toEqual({
+            'sink-a': {x: 0, y: 0},
+            'sink-b': {x: 10, y: 100},
+            'sink-c': {x: 0, y: 200},
+            group: {x: 300, y: 0},
+            other: {x: 0, y: 500},
+        });
+        expect(routes).toEqual({
+            'sink-a': route(0),
+            'sink-b': route(100),
+            'sink-c': route(200),
+            other: route(500),
+        });
+    });
+
+    it('keeps the layout when a sink is not laid out', () => {
+        const {positions} = order(['sink-a', 'sink-b', 'missing']);
+
+        expect(positions['sink-a']).toEqual({x: 0, y: 200});
+        expect(positions['sink-b']).toEqual({x: 0, y: 0});
     });
 });
