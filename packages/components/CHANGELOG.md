@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v2.0.3...components-v2.1.0) (2026-11-13)
+
+
+### Features
+
+* **YTText:** add utility text color [YTFRONT-6102] ([d8d8956](https://github.com/ytsaurus/ytsaurus-ui/commit/d8d89566dd7925b33501571b880063fd64af953d))
+
 ## [2.0.3](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v2.0.2...components-v2.0.3) (2026-10-21)
 
 
