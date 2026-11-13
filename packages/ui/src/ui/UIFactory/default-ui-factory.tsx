@@ -119,6 +119,9 @@ export const defaultUIFactory: UIFactory = {
         const {urlTemplate, title} = uiSettings.accountsMonitoring;
         return {urlTemplate, title};
     },
+    getMonitoringForChaosBundle() {
+        return undefined;
+    },
     getMonitoringForBundle() {
         if (getConfigData().allowPrometheusDashboards) {
             return {component: BundleMonitoringPrometheusLazy};

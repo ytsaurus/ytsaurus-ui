@@ -25,9 +25,9 @@ export const TabletsTab = {
     PROXIES: 'proxies',
     TABLET_CELLS: 'tablet_cells',
     STATISTICS: 'statistics',
-    MONITOR: 'monitor',
-    ACL: 'acl',
     // We need to think if it is better to have separate set of tabs for active chaos-cell-bundle
     CHAOS_CELLS: 'chaos_cells',
+    MONITOR: 'monitor',
+    ACL: 'acl',
     TABLET_ERRORS: 'tablet_errors',
 } as const;
