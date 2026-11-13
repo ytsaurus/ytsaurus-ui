@@ -13,7 +13,6 @@ import {type TabSettings, makeTabProps} from '../../utils';
 import {insertTab} from '../../utils/tabs';
 import {useUpdater} from '../../hooks/use-updater';
 import {useDispatch, useSelector} from '../../store/redux-hooks';
-import {fetchChaosBundles} from '../../store/actions/chaos_cell_bundles';
 import {fetchTabletsBundles} from '../../store/actions/tablet_cell_bundles';
 import {
     selectTabletBundlesWriteableByName,
@@ -42,36 +41,31 @@ import {
 } from '../../store/selectors/global';
 import ChartLink from '../../components/ChartLink/ChartLink';
 import {Page} from '../../constants/index';
-import ChaosCellBundles from '../../pages/chaos_cell_bundles/bundles/Bundles';
-import ChaosBundleEditorDialog from '../../pages/chaos_cell_bundles/bundles/ChaosBundleEditorDialog/ChaosBundleEditorDialog.connected';
-import {ChaosCells} from '../../pages/chaos_cell_bundles/cells/Cells';
 import UIFactory, {type BundleExtraTab} from '../../UIFactory';
 import {type TabletBundle} from '../../store/reducers/tablet_cell_bundles';
 import {formatByParams} from '../../../shared/utils/format';
 import {UI_TAB_SIZE} from '../../constants/global';
 import {TabletErrorsLazy} from '../../pages/tablet-errors-by-bundle/lazy';
 import {getConfigData} from '../../config/ui-settings';
+import {AllBundlesTabs} from './AllBundlesTabs/AllBundlesTabs';
 
 const b = cn('tablets');
 
 const TabletsTabs = React.memo(TabletsTabsImpl);
 
-function useShowSettings(activeBundle: string | undefined, enableBundleController: boolean) {
-    return React.useMemo(() => {
-        return reduce_(
-            TabletsTab,
-            (acc, v) => {
-                if (v === TabletsTab.CHAOS_CELLS) {
-                    // TODO: fix me when a page of active chaos-cell-bundle is ready
-                    acc[v] = {show: false};
-                } else {
-                    acc[v] = {show: v === TabletsTab.TABLET_CELLS || Boolean(activeBundle)};
-                }
-                return acc;
-            },
-            {} as Record<string, TabSettings>,
-        );
-    }, [activeBundle, enableBundleController]);
+function getShowSettings(activeBundle: string | undefined) {
+    return reduce_(
+        TabletsTab,
+        (acc, v) => {
+            if (v === TabletsTab.CHAOS_CELLS) {
+                acc[v] = {show: false};
+            } else {
+                acc[v] = {show: v === TabletsTab.TABLET_CELLS || Boolean(activeBundle)};
+            }
+            return acc;
+        },
+        {} as Record<string, TabSettings>,
+    );
 }
 
 export default function TabletCellBundles() {
@@ -84,7 +78,7 @@ export default function TabletCellBundles() {
         useSelector(selectTabletsActiveBundleData) || ({} as Partial<TabletBundle>);
     const dispatch = useDispatch();
     const fetchFn = React.useCallback(() => {
-        Promise.all([dispatch(fetchChaosBundles()), dispatch(fetchTabletsBundles())]);
+        dispatch(fetchTabletsBundles());
     }, [dispatch]);
     useUpdater(fetchFn);
 
@@ -94,7 +88,7 @@ export default function TabletCellBundles() {
 
     const allowEdit = enableBundleController || bundleWritable;
 
-    const showSettings = useShowSettings(activeBundle, enableBundleController);
+    const showSettings = getShowSettings(activeBundle);
 
     const statsTab = showSettings[TabletsTab.STATISTICS];
     statsTab.show = statsTab.show && Boolean(UIFactory.getStatisticsComponentForBundle());
@@ -176,10 +170,6 @@ export default function TabletCellBundles() {
                             path={`/${cluster}/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}`}
                             component={BundleCells}
                         />
-                        <Route
-                            path={`/${cluster}/${Page.CHAOS_CELL_BUNDLES}/${TabletsTab.CHAOS_CELLS}`}
-                            component={ChaosCells}
-                        />
                         {statsTab.show && (
                             <Route
                                 path={`/${cluster}/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.STATISTICS}`}
@@ -210,10 +200,6 @@ export default function TabletCellBundles() {
                             path={`/${cluster}/${Page.TABLET_CELL_BUNDLES}`}
                             component={Bundles}
                         />
-                        <Route
-                            path={`/${cluster}/${Page.CHAOS_CELL_BUNDLES}`}
-                            component={ChaosCellBundles}
-                        />
                         <Redirect
                             from={`/${cluster}/${Page.TABLET_CELL_BUNDLES}/*`}
                             to={match.path}
@@ -222,7 +208,6 @@ export default function TabletCellBundles() {
                 </div>
             </section>
             <TabletBundleEditorDialog />
-            <ChaosBundleEditorDialog />
         </div>
     );
 }
@@ -274,45 +259,6 @@ function ActiveBundleDetails({
     );
 }
 
-function makeAllTabsProps(matchUrl: string, cluster: string) {
-    const res = makeTabProps(matchUrl, {});
-    res.items = [
-        {
-            value: Page.TABLET_CELL_BUNDLES,
-            get text() {
-                return i18n('title_tablet-cell-bundles');
-            },
-            show: true,
-            url: `/${cluster}/${Page.TABLET_CELL_BUNDLES}`,
-        },
-        {
-            value: TabletsTab.TABLET_CELLS,
-            get text() {
-                return i18n('title_tablet-cells');
-            },
-            show: true,
-            url: `/${cluster}/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}`,
-        },
-        {
-            value: Page.CHAOS_CELL_BUNDLES,
-            get text() {
-                return i18n('title_chaos-cell-bundles');
-            },
-            show: true,
-            url: `/${cluster}/${Page.CHAOS_CELL_BUNDLES}`,
-        },
-        {
-            value: TabletsTab.CHAOS_CELLS,
-            get text() {
-                return i18n('title_chaos-cells');
-            },
-            show: true,
-            url: `/${cluster}/${Page.CHAOS_CELL_BUNDLES}/${TabletsTab.CHAOS_CELLS}`,
-        },
-    ];
-    return res;
-}
-
 function TabletsTabsImpl({
     activeBundle,
     showSettings,
@@ -325,7 +271,6 @@ function TabletsTabsImpl({
     bundleExtraTabs: Array<BundleExtraTab>;
 }) {
     const match = useRouteMatch<{cluster: string}>();
-    const {cluster} = match.params;
 
     const tabs: Array<{value: string}> = Object.values(TabletsTab).map((value) => ({value}));
     const extraTabTitles: Record<string, string> = {};
@@ -337,12 +282,14 @@ function TabletsTabsImpl({
 
     const localTabs = Object.fromEntries(tabs.map(({value}) => [value, value]));
 
-    const tabProps = activeBundle
-        ? makeTabProps(match.url, localTabs, showSettings, undefined, {
-              [TabletsTab.MONITOR]: monitoringTitle,
-              ...extraTabTitles,
-          })
-        : makeAllTabsProps(match.url, cluster);
+    if (!activeBundle) {
+        return <AllBundlesTabs className={b('tabs')} />;
+    }
+
+    const tabProps = makeTabProps(match.url, localTabs, showSettings, undefined, {
+        [TabletsTab.MONITOR]: monitoringTitle,
+        ...extraTabTitles,
+    });
 
     return (
         <Tabs

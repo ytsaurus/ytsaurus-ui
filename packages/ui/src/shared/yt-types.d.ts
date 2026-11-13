@@ -99,11 +99,14 @@ export type ClusterTheme =
     | 'rubber'
     | 'electricviolet';
 
+export type ClusterConfigEnvironment =
+    'development' | 'production' | 'prestable' | 'testing' | 'localmode';
+
 export interface ClusterConfig {
     id: string;
     name: string;
     theme: ClusterTheme;
-    environment: 'development' | 'production' | 'prestable' | 'testing' | 'localmode';
+    environment: ClusterConfigEnvironment;
     group?: string;
     primaryMaster?: {
         cellTag: number;
