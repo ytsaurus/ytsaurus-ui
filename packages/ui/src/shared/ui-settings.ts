@@ -220,12 +220,13 @@ export interface UISettings {
 
     /**
      * Configuration for AI chat assistant integration.
-     * baseUrl - Base URL of the AI chat API endpoint
-     * model - Name of the AI model to use
+     * baseUrl - Full API root
+     * defaultModel - Default model for chat messages; also used to generate conversation titles
+     * Provide server-side credentials through getAuthHeaders('aiChat', req); never put them in uiSettings.
      * @example
      * aiChatConfig: {
-     *   baseUrl: 'https://api.openai.com/v1',
-     *   model: 'gpt-4'
+     *   baseUrl: 'https://your-llm.example',
+     *   defaultModel: 'your-model'
      * }
      */
     aiChatConfig?: AIChatConfig;

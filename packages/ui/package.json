@@ -79,6 +79,7 @@
   },
   "dependencies": {
     "@diplodoc/transform": "^4.72.0",
+    "@gravity-ui/aikit": "2.29.0",
     "@gravity-ui/app-layout": "^1.8.0",
     "@gravity-ui/expresskit": "^2.11.1",
     "@gravity-ui/i18n": "^1.8.0",
@@ -88,11 +89,12 @@
     "axios": "^1.8.4",
     "cacheable-lookup": "^6.1.0",
     "cookie-parser": "1.4.6",
-    "dayjs": "^1.11.10",
+    "dayjs": "^1.11.19",
     "highlight.js": "^11.10.0",
     "js-cookie": "^3.0.8",
     "lodash": "^4.17.23",
     "object-hash": "^3.0.0",
+    "openai": "6.35.0",
     "opentracing": "^0.14.7",
     "qs": "^6.15.2",
     "source-map-support": "0.5.21",
@@ -230,6 +232,9 @@
   "gitHead": "aba657f50f894370eaef7f27d5083386e218afe8",
   "overrides": {
     "axios": "$axios",
+    "@gravity-ui/aikit": {
+      "uuid": "$uuid"
+    },
     "react-split-pane": {
       "react": "$react",
       "react-dom": "$react-dom"
@@ -247,6 +252,9 @@
     "@gravity-ui/timeline": {
       "dayjs": "$dayjs",
       "rbush": "$rbush"
+    },
+    "@gravity-ui/date-utils": {
+      "dayjs": "$dayjs"
     }
   },
   "msw": {

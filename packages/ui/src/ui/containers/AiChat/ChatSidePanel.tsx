@@ -1,4 +1,4 @@
-import React, {type FC, useCallback, useEffect} from 'react';
+import React, {type FC, useCallback, useEffect, useState} from 'react';
 import {useSidePanel} from '../../hooks/use-side-panel';
 import {useDispatch, useSelector} from '../../store/redux-hooks';
 import {
@@ -13,6 +13,7 @@ import {YT} from '../../config/yt-config';
 
 export const ChatSidePanel: FC = () => {
     const dispatch = useDispatch();
+    const [activated, setActivated] = useState(false);
     const open = useSelector(selectChatOpen);
     const isConfigured = useSelector(selectAiChatConfigured);
     const {getEditor} = useMonaco();
@@ -54,6 +55,7 @@ export const ChatSidePanel: FC = () => {
         if (!isConfigured) {
             return;
         }
+        if (open) setActivated(true);
         const action = open ? openWidget : closeWidget;
         action();
     }, [closeWidget, open, openWidget, isConfigured]);
@@ -62,5 +64,6 @@ export const ChatSidePanel: FC = () => {
         return null;
     }
 
-    return widgetContent;
+    const {Provider} = uiFactory.getAiChat();
+    return Provider && (activated || open) ? <Provider>{widgetContent}</Provider> : widgetContent;
 };
