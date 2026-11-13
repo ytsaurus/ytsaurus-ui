@@ -21,6 +21,8 @@ import CollapsibleSection from '../../../../../../components/CollapsibleSection/
 import {performJobAction} from '../utils';
 import {LOADING_STATUS} from '../../../../../../constants/index';
 import {TEXT} from '../../../../../../utils/actions';
+import {toaster} from '../../../../../../utils/toaster';
+import {makeNavigationLink} from '../../../../../../utils/app-url';
 import UIFactory from '../../../../../../UIFactory';
 import {StaleJobIcon} from '../StaleJobIcon';
 
@@ -111,15 +113,6 @@ export class OperationJobsTableBase extends React.Component {
             get text() {
                 return i18n('action_dump-input-context');
             },
-            successMessageTemplate: (data) => {
-                const url = `/${this.props.cluster}/navigation?path=${data}`;
-                return (
-                    <span>
-                        {i18n('alert_dump-success')}{' '}
-                        <Link url={url}>{i18n('action_dump-success-here')}</Link>
-                    </span>
-                );
-            },
             get errorMessage() {
                 return i18n('alert_dump-error');
             },
@@ -147,7 +140,23 @@ export class OperationJobsTableBase extends React.Component {
                             currentOption,
                             login,
                         };
-                        return performJobAction(finalParams);
+                        return performJobAction(finalParams).then((path) => {
+                            if (actionSettings.name === 'input_context') {
+                                const url = makeNavigationLink({cluster: this.props.cluster, path});
+                                toaster.add({
+                                    name: 'confirm action',
+                                    theme: 'success',
+                                    content: (
+                                        <span>
+                                            {i18n('alert_dump-success')}{' '}
+                                            <Link url={url}>
+                                                {i18n('action_dump-success-here')}
+                                            </Link>
+                                        </span>
+                                    ),
+                                });
+                            }
+                        });
                     },
                 });
             },

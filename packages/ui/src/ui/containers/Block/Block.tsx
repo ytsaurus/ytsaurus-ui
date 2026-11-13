@@ -60,7 +60,7 @@ type YTErrorBlockInternalProps = {
 };
 
 export type YTErrorBlockProps = Omit<YTErrorBlockInternalProps, 'error'> & {
-    error?: YTErrorBlockInternalProps['error'] | {error: string} | Error;
+    error?: unknown;
 };
 
 class YTErrorBlockImpl extends React.Component<YTErrorBlockInternalProps> {
@@ -199,8 +199,12 @@ class YTErrorBlockImpl extends React.Component<YTErrorBlockInternalProps> {
 
 export function YTErrorBlock({error, ...props}: YTErrorBlockProps) {
     const e = React.useMemo(() => {
-        if (typeof error === 'string') {
-            return {message: error};
+        if (error === undefined || error === null) {
+            return undefined;
+        }
+
+        if (typeof error !== 'object') {
+            return {message: String(error)};
         }
 
         if (error instanceof Error) {

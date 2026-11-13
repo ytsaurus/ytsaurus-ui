@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {type OpenAttributesModalParams} from '../../../../../store/actions/modals/attributes-modal';
 import hammer from '../../../../../common/hammer';
 
 import Button from '../../../../../components/Button/Button';
@@ -24,13 +25,7 @@ type OwnProps = {
 };
 
 type DispatchProps = {
-    openAttributesModal: (args_0: {
-        title: React.ReactNode;
-        path?: string;
-        exactPath?: string;
-        attribute?: string;
-        attributes?: object;
-    }) => void;
+    openAttributesModal: (params: OpenAttributesModalParams) => void;
 };
 
 type NodeCountProps = OwnProps & DispatchProps;
