@@ -330,7 +330,13 @@ function useFlowGraphData(params: {pipeline_path: string}) {
 
     const data: {data: FlowData; groups: FlowData; groupById: Map<string, FlowGroupBlock>} =
         React.useMemo(() => {
-            const {computations = {}, streams = {}, sinks = {}, sources = {}} = loadedData ?? {};
+            const {
+                computations = {},
+                streams = {},
+                sinks = {},
+                sources = {},
+                edges = [],
+            } = loadedData ?? {};
 
             const res: typeof data = {
                 data: {blocks: [], connections: []},
@@ -488,10 +494,19 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                 res.groups.blocks.push(source);
             });
 
+            // Collect data-channel edges: a sink writes and a source reads the same channel,
+            // edges of other kinds are not supported yet
+            edges.forEach(({from, to, kind}) => {
+                if (kind !== 'data_channel' || !blockById.has(from) || !blockById.has(to)) {
+                    return;
+                }
+                addFlowConnection(res.data.connections, from, to, {dashed: true});
+            });
+
             // Transform connections to group connections
             const connectionById = new Map<string, (typeof res.data.connections)[number]>();
             res.data.connections.forEach((item) => {
-                const {sourceBlockId, targetBlockId, styles, flowStreamStatus} = item;
+                const {sourceBlockId, targetBlockId, styles, flowStreamStatus, dashed} = item;
                 const src = blockById.get(sourceBlockId!)!;
                 const dst = blockById.get(targetBlockId!)!;
 
@@ -506,6 +521,7 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                         c = addFlowConnection(res.groups.connections, source, target, {
                             styles,
                             flowStreamStatus,
+                            dashed,
                         });
                         connectionById.set(id, c);
                     } else {
