@@ -74,7 +74,12 @@ export const FileItem: FC<Props> = ({file, validator, onChange, onEditFile, onDe
             <div className={block('actions')}>
                 {isFile && (
                     <Tooltip content={i18n('action_edit-file')} placement="top">
-                        <Button onClick={handleFileEdit} view="flat" size="l">
+                        <Button
+                            qa="query-file-edit-content"
+                            onClick={handleFileEdit}
+                            view="flat"
+                            size="l"
+                        >
                             <Icon data={PencilToSquareIcon} size={16} />
                         </Button>
                     </Tooltip>

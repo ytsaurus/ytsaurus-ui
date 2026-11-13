@@ -1,6 +1,6 @@
 import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {type Reducer} from 'redux';
-import {type GithubRepository, type GitlabRepository, type VcsConfig} from '../../../../shared/vcs';
+import {type VcsConfig, type VcsRepository} from '../../../../shared/vcs';
 import {uiSettings} from '../../../config/ui-settings';
 
 export type DirectoryItem = {
@@ -15,7 +15,22 @@ export type FileItem = {
     url: string;
 };
 
-export type Repositories = Record<string, GithubRepository> | Record<string, GitlabRepository>;
+export type Repositories = Record<string, VcsRepository>;
+
+export type VcsFileContext = {
+    name: string;
+    path: string;
+    directory: string;
+    providerId: string;
+    repositoryId: string;
+    repository: VcsRepository;
+    branch: string;
+    sourceUrl?: string;
+};
+
+type RequestState = {loading: boolean; error: boolean};
+export type VcsRequest = 'repositories' | 'branches' | 'list' | 'preview';
+const emptyRequest: RequestState = {loading: false, error: false};
 
 export type VcsState = {
     vcsConfig: VcsConfig[] | undefined;
@@ -30,8 +45,12 @@ export type VcsState = {
     preview: {
         name: string;
         content: string;
+        context?: VcsFileContext;
     };
-    listError: boolean;
+    navigationId: string;
+    fileActionRequestId: string;
+    previewRequestId: string;
+    requests: Record<VcsRequest, RequestState> & {list: RequestState & {loaded: boolean}};
 };
 
 const getVcsConfig = (): VcsConfig[] | undefined => {
@@ -54,13 +73,46 @@ const initialState: VcsState = {
         name: '',
         content: '',
     },
-    listError: false,
+    navigationId: '',
+    fileActionRequestId: '',
+    previewRequestId: '',
+    requests: {
+        repositories: {...emptyRequest},
+        branches: {...emptyRequest},
+        list: {...emptyRequest, loaded: false},
+        preview: {...emptyRequest},
+    },
 };
 
 const vcsSlice = createSlice({
     name: 'vcs',
     initialState,
     reducers: {
+        setFileActionRequestId(state, {payload}: PayloadAction<string>) {
+            state.fileActionRequestId = payload;
+        },
+        setNavigationId(state, {payload}: PayloadAction<string>) {
+            if (state.navigationId === payload) return;
+            state.navigationId = payload;
+            state.preview = initialState.preview;
+            state.previewRequestId = '';
+            for (const request of Object.values(state.requests)) request.loading = false;
+            state.requests.preview = {...emptyRequest};
+        },
+        setPreviewRequestId(state, {payload}: PayloadAction<string>) {
+            state.previewRequestId = payload;
+        },
+        setVcsRequest(
+            state,
+            {
+                payload,
+            }: PayloadAction<
+                | {kind: 'list'; state: Partial<VcsState['requests']['list']>}
+                | {kind: Exclude<VcsRequest, 'list'>; state: Partial<RequestState>}
+            >,
+        ) {
+            Object.assign(state.requests[payload.kind], payload.state);
+        },
         setVcsTokensAvailability(state, {payload}: PayloadAction<string[]>) {
             const {vcsSettings} = uiSettings;
             if (!vcsSettings) return;
@@ -84,6 +136,7 @@ const vcsSlice = createSlice({
                 ...initialState,
                 vcsConfig: state.vcsConfig,
                 vcs: payload,
+                navigationId: state.navigationId,
             };
         },
         setList(state, {payload}: PayloadAction<Record<string, DirectoryItem | FileItem>>) {
@@ -94,8 +147,17 @@ const vcsSlice = createSlice({
                 ...state,
                 path: initialState.path,
                 list: initialState.list,
-                branch: payload ? state.repositories[payload].defaultBranch : initialState.branch,
+                branch: payload ? state.repositories[payload]?.defaultBranch : initialState.branch,
                 repository: payload,
+                branches: [],
+                preview: initialState.preview,
+                previewRequestId: '',
+                requests: {
+                    ...state.requests,
+                    branches: {...emptyRequest},
+                    list: {...emptyRequest, loaded: false},
+                    preview: {...emptyRequest},
+                },
             };
         },
         setBranch(state, {payload}: PayloadAction<string | undefined>) {
@@ -106,17 +168,20 @@ const vcsSlice = createSlice({
         },
         setPreview(state, {payload}: PayloadAction<VcsState['preview']>) {
             state.preview = payload;
+            state.previewRequestId = '';
+            state.requests.preview = {...emptyRequest};
         },
         setListFilter(state, {payload}: PayloadAction<string>) {
             state.listFilter = payload;
-        },
-        setListError(state, {payload}: PayloadAction<boolean>) {
-            state.listError = payload;
         },
     },
 });
 
 export const {
+    setFileActionRequestId,
+    setNavigationId,
+    setPreviewRequestId,
+    setVcsRequest,
     setVcsConfig,
     setVcs,
     setPath,
@@ -127,7 +192,6 @@ export const {
     setList,
     setPreview,
     setListFilter,
-    setListError,
     setVcsTokensAvailability,
 } = vcsSlice.actions;
 

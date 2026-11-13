@@ -9,6 +9,7 @@ import {
     selectPath,
     selectPreview,
     selectShowFilter,
+    selectVcs,
 } from '../../../../store/selectors/query-tracker/vcs';
 import {VcsListFolder} from './VcsListFolder';
 import {
@@ -23,7 +24,7 @@ import {VcsListPreview} from './VcsListPreview';
 import {setPreview} from '../../../../store/reducers/query-tracker/vcsSlice';
 import {NoContent} from '../../../../components/NoContent';
 import {VcsPath} from '../VcsPath';
-import {Alert} from '@gravity-ui/uikit';
+import {Alert, Loader} from '@gravity-ui/uikit';
 import i18n from './i18n';
 
 const block = cn('vcs-items-list');
@@ -33,6 +34,7 @@ export const VcsItemsList: FC = () => {
     const list = useSelector(selectListArray);
     const path = useSelector(selectPath);
     const preview = useSelector(selectPreview);
+    const {requests} = useSelector(selectVcs);
     const listError = useSelector(selectListError);
     const showBreadcrumbs = useSelector(selectShowFilter);
     const currentRepository = useSelector(selectCurrentRepository);
@@ -64,7 +66,6 @@ export const VcsItemsList: FC = () => {
 
     const handleAddFile = useCallback(
         (name: string) => {
-            dispatch(setPreview({name: '', content: ''}));
             dispatch(addFileToQuery(name));
         },
         [dispatch],
@@ -111,6 +112,8 @@ export const VcsItemsList: FC = () => {
         return (
             <VcsListPreview
                 preview={preview}
+                loading={requests.preview.loading}
+                error={requests.preview.error}
                 onAddFile={handleAddFile}
                 onInsertFile={handleInsertFile}
                 onClose={handleClosePreview}
@@ -120,14 +123,16 @@ export const VcsItemsList: FC = () => {
     return (
         <div className={block()}>
             {showBreadcrumbs && <VcsPath path={path} onPathChange={handlePathChange} />}
-            {listError ? (
+            {requests.list.loading && <Loader />}
+            {!requests.list.loading && listError && (
                 <Alert
                     className={block('error')}
                     theme="danger"
                     title={i18n('alert_error')}
                     message={i18n('alert_repository-content-error')}
                 />
-            ) : (
+            )}
+            {!requests.list.loading && !listError && (
                 <>
                     {itemsList.length ? (
                         itemsList

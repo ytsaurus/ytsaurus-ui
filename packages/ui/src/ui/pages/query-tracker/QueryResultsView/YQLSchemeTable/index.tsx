@@ -2,8 +2,8 @@ import DataTable, {type Column, type Settings} from '@gravity-ui/react-data-tabl
 import React from 'react';
 import {Text} from '@gravity-ui/uikit';
 import {
+    type FormattedQueryResultReadyState,
     type QueryResultColumn,
-    type QueryResultReadyState,
 } from '../../../../types/query-tracker/queryResult';
 import block from 'bem-cn-lite';
 import './index.scss';
@@ -48,7 +48,11 @@ const config: Column<QueryResultColumn>[] = [
     },
 ];
 
-const SchemeTable = React.memo(function SchemeTable({result}: {result: QueryResultReadyState}) {
+const SchemeTable = React.memo(function SchemeTable({
+    result,
+}: {
+    result: FormattedQueryResultReadyState;
+}) {
     return (
         <DataTable
             theme="yandex-cloud"
@@ -64,7 +68,7 @@ export function YQLSchemeTable({
     result,
     className,
 }: {
-    result: QueryResultReadyState;
+    result: FormattedQueryResultReadyState;
     className?: string;
 }) {
     return (

@@ -23,7 +23,7 @@ const pendingUpdates = new Map<string, Promise<void>>();
 
 export function saveQueryAnnotations(
     queryId: string,
-    patch: QueryItem['annotations'],
+    patchOrPrepare: QueryItem['annotations'] | ((query: QueryItem) => QueryItem['annotations']),
 ): ThunkAction<Promise<void>, RootState, unknown, AnyAction> {
     return (dispatch, getState) => {
         const stateAtEnqueue = getState();
@@ -45,6 +45,8 @@ export function saveQueryAnnotations(
                 parameters: {stage, query_id: queryId, output_format: 'json'},
                 setup: {...setup, JSONSerializer},
             });
+            const patch =
+                typeof patchOrPrepare === 'function' ? patchOrPrepare(query) : patchOrPrepare;
             const annotations = {...query.annotations, ...patch};
             await ytApiV4Id.alterQuery(YTApiId.alterQuery, {
                 parameters: {stage, query_id: queryId, annotations},

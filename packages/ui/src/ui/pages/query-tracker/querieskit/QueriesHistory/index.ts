@@ -1,0 +1,1 @@
+export {useQueriesHistoryProps} from './useQueriesHistoryProps';
