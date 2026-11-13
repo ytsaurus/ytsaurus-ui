@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ytsaurus-ui-chart-v0.5.0...ytsaurus-ui-chart-v0.5.1) (2026-11-13)
+
+
+### Bug Fixes
+
+* **ui-helm-chart:** restart pods when configuration changes [YTSAURUSSUP-2262] ([d72cf54](https://github.com/ytsaurus/ytsaurus-ui/commit/d72cf547ba34da480f29d69a55703b23efca6bb1))
+
 ## [0.5.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ytsaurus-ui-chart-v0.4.0...ytsaurus-ui-chart-v0.5.0) (2025-08-04)
 
 
