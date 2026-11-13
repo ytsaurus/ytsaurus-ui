@@ -41,6 +41,8 @@ function TabletCellBundlesTopRowContent({
     setActiveBundle,
 }: PropsFromRedux) {
     const clusterUiConfig = useSelector(selectClusterUiConfig);
+    const cellsTab =
+        page === Page.CHAOS_CELL_BUNDLES ? TabletsTab.CHAOS_CELLS : TabletsTab.TABLET_CELLS;
 
     return (
         <RowWithName page={page} urlParams={{activeBundle: ''}}>
@@ -48,6 +50,7 @@ function TabletCellBundlesTopRowContent({
                 isActiveBundleInFavourites={isActiveBundleInFavourites}
                 activeBundle={activeBundle}
                 page={page}
+                cellsTab={cellsTab}
                 setActiveBundle={setActiveBundle}
                 items={favourites}
                 toggleFavourite={toggleFavourite}
@@ -55,6 +58,8 @@ function TabletCellBundlesTopRowContent({
             <BundleBreadcrumbs
                 className={block('breadcrumbs')}
                 bcItems={bcItems}
+                page={page}
+                cellsTab={cellsTab}
                 setActiveBundle={setActiveBundle}
             />
             {UIFactory.renderTopRowExtraControlsForBundle({
@@ -67,6 +72,7 @@ function TabletCellBundlesTopRowContent({
 }
 
 interface BundleFavouritesProps {
+    cellsTab: ValueOf<typeof TabletsTab>;
     isActiveBundleInFavourites: boolean;
     activeBundle: string;
     page: ValueOf<typeof Page>;
@@ -76,6 +82,7 @@ interface BundleFavouritesProps {
 }
 
 function BundleFavourites({
+    cellsTab,
     isActiveBundleInFavourites,
     items,
     activeBundle,
@@ -92,11 +99,11 @@ function BundleFavourites({
                 getAppBrowserHistory().push(`/${cluster}/${page}`);
             } else {
                 getAppBrowserHistory().push(
-                    `/${cluster}/${page}/${TabletsTab.TABLET_CELLS}?activeBundle=${item.path}`,
+                    `/${cluster}/${page}/${cellsTab}?activeBundle=${encodeURIComponent(item.path)}`,
                 );
             }
         },
-        [cluster, setActiveBundle],
+        [cluster, page, cellsTab, setActiveBundle],
     );
 
     const handleFavouriteToggle = React.useCallback(() => {
@@ -117,29 +124,37 @@ function BundleFavourites({
 }
 
 interface BundleBreadcrumbsProps {
+    cellsTab: ValueOf<typeof TabletsTab>;
     className: string;
+    page: ValueOf<typeof Page>;
     bcItems: TabletsCellBundlesBreadcrumbsItem[];
     setActiveBundle(activeBundle: string): void;
 }
 
-function BundleBreadcrumbs({className, bcItems, setActiveBundle}: BundleBreadcrumbsProps) {
+function BundleBreadcrumbs({
+    className,
+    bcItems,
+    setActiveBundle,
+    page,
+    cellsTab,
+}: BundleBreadcrumbsProps) {
     const cluster = useSelector(selectCluster);
     const history = useHistory();
 
     const handleItemClick = React.useCallback(
         (item: string | number) => {
-            if (history.location.pathname !== `/${cluster}/${Page.TABLET_CELL_BUNDLES}`) {
+            if (history.location.pathname !== `/${cluster}/${page}`) {
                 if (item === '<bundles>') {
-                    history.push(`/${cluster}/${Page.TABLET_CELL_BUNDLES}`);
+                    history.push(`/${cluster}/${page}`);
                 } else {
                     setActiveBundle(item.toString());
                     history.push(
-                        `/${cluster}/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}?activeBundle=${item}`,
+                        `/${cluster}/${page}/${cellsTab}?activeBundle=${encodeURIComponent(item)}`,
                     );
                 }
             }
         },
-        [setActiveBundle],
+        [cluster, page, cellsTab, history, setActiveBundle],
     );
 
     const items = React.useMemo(() => {

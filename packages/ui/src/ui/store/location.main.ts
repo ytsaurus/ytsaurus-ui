@@ -85,6 +85,7 @@ import {
 import {TabletsTab} from '../constants/tablets';
 import {
     chaosAllBundlesParams,
+    chaosBundlesMonitoringParams,
     chaosBundlesParams,
     chaosCellsParams,
     getChaosBundlesPreparedState,
@@ -203,6 +204,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
         `/*/${Page.CHAOS_CELL_BUNDLES}/${TabletsTab.CHAOS_CELLS}`,
         [chaosCellsParams, getChaosCellsPreparedState],
     ],
+    [`/*/${Page.CHAOS_CELL_BUNDLES}/monitor`, [chaosBundlesMonitoringParams]],
     [`/*/${Page.CHAOS_CELL_BUNDLES}`, [chaosAllBundlesParams, getChaosBundlesPreparedState]],
     [`/*/${Page.CHAOS_CELL_BUNDLES}/*`, [chaosBundlesParams, getChaosBundlesPreparedState]],
     [`/*/${Page.QUERIES}/*`, [draftQueryParameters, getDraftQueryParameters]],

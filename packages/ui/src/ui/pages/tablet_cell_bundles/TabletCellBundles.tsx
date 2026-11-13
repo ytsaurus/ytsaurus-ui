@@ -13,6 +13,8 @@ import {type TabSettings, makeTabProps} from '../../utils';
 import {insertTab} from '../../utils/tabs';
 import {useUpdater} from '../../hooks/use-updater';
 import {useDispatch, useSelector} from '../../store/redux-hooks';
+import {selectChaosActiveBundle, selectChaosError} from '../../store/selectors/chaos_cell_bundles';
+import {ChaosBundleMonitorTab} from '../chaos_cell_bundles/ChaosBundleMonitorTab/ChaosBundleMonitorTab';
 import {fetchChaosBundles} from '../../store/actions/chaos_cell_bundles';
 import {fetchTabletsBundles} from '../../store/actions/tablet_cell_bundles';
 import {
@@ -56,30 +58,34 @@ const b = cn('tablets');
 
 const TabletsTabs = React.memo(TabletsTabsImpl);
 
-function useShowSettings(activeBundle: string | undefined, enableBundleController: boolean) {
-    return React.useMemo(() => {
-        return reduce_(
-            TabletsTab,
-            (acc, v) => {
-                if (v === TabletsTab.CHAOS_CELLS) {
-                    // TODO: fix me when a page of active chaos-cell-bundle is ready
-                    acc[v] = {show: false};
-                } else {
-                    acc[v] = {show: v === TabletsTab.TABLET_CELLS || Boolean(activeBundle)};
-                }
-                return acc;
-            },
-            {} as Record<string, TabSettings>,
-        );
-    }, [activeBundle, enableBundleController]);
+function getShowSettings(activeBundle: string | undefined, isChaos: boolean) {
+    return reduce_(
+        TabletsTab,
+        (acc, v) => {
+            if (isChaos) {
+                acc[v] = {
+                    show:
+                        Boolean(activeBundle) &&
+                        (v === TabletsTab.CHAOS_CELLS || v === TabletsTab.MONITOR),
+                };
+            } else if (v === TabletsTab.CHAOS_CELLS) {
+                acc[v] = {show: false};
+            } else {
+                acc[v] = {show: v === TabletsTab.TABLET_CELLS || Boolean(activeBundle)};
+            }
+            return acc;
+        },
+        {} as Record<string, TabSettings>,
+    );
 }
 
 export default function TabletCellBundles() {
     const match = useRouteMatch();
     const cluster = useSelector(selectCluster);
 
-    const error = useSelector(selectTabletsError);
-    const activeBundle = useSelector(selectTabletsActiveBundle);
+    const isChaos = match.path === `/:cluster/${Page.CHAOS_CELL_BUNDLES}`;
+    const error = useSelector(isChaos ? selectChaosError : selectTabletsError);
+    const activeBundle = useSelector(isChaos ? selectChaosActiveBundle : selectTabletsActiveBundle);
     const {enable_bundle_controller: enableBundleController = false} =
         useSelector(selectTabletsActiveBundleData) || ({} as Partial<TabletBundle>);
     const dispatch = useDispatch();
@@ -94,12 +100,12 @@ export default function TabletCellBundles() {
 
     const allowEdit = enableBundleController || bundleWritable;
 
-    const showSettings = useShowSettings(activeBundle, enableBundleController);
+    const showSettings = getShowSettings(activeBundle, isChaos);
 
     const statsTab = showSettings[TabletsTab.STATISTICS];
     statsTab.show = statsTab.show && Boolean(UIFactory.getStatisticsComponentForBundle());
 
-    const bundleExtraTabs = UIFactory.getBundleExtraTabs();
+    const bundleExtraTabs = isChaos ? [] : UIFactory.getBundleExtraTabs();
     bundleExtraTabs.forEach(({value}) => {
         showSettings[value] = {show: Boolean(activeBundle)};
     });
@@ -111,9 +117,13 @@ export default function TabletCellBundles() {
         urlTemplate,
         title: monitoringTitle,
     } = UIFactory.getMonitoringForBundle() ?? {};
-    monTab.show = monTab.show && Boolean(monitoringComponent || urlTemplate);
+    const chaosMonitoringComponent = UIFactory.getMonitoringForChaosBundle();
+    const hasMonitoring = isChaos
+        ? Boolean(chaosMonitoringComponent)
+        : Boolean(monitoringComponent || urlTemplate);
+    monTab.show = monTab.show && hasMonitoring;
 
-    if (urlTemplate) {
+    if (!isChaos && urlTemplate) {
         monTab.external = true;
         monTab.routed = false;
         monTab.url = formatByParams(urlTemplate, {
@@ -136,16 +146,23 @@ export default function TabletCellBundles() {
             <section className={b(null, 'elements-main-section')}>
                 <div className={b('content')}>
                     <div className={b('heading')}>
-                        <ActiveBundleDetails
-                            allowEdit={allowEdit}
-                            activeBundle={activeBundle}
-                            cluster={cluster}
-                        />
+                        {isChaos && activeBundle && (
+                            <div className="elements-heading elements-heading_size_l">
+                                {activeBundle}
+                            </div>
+                        )}
+                        {!isChaos && (
+                            <ActiveBundleDetails
+                                allowEdit={allowEdit}
+                                activeBundle={activeBundle}
+                                cluster={cluster}
+                            />
+                        )}
                         <div className={b('tabs')}>
                             <TabletsTabs
                                 activeBundle={activeBundle}
                                 showSettings={showSettings}
-                                monitoringTitle={monitoringTitle}
+                                monitoringTitle={isChaos ? undefined : monitoringTitle}
                                 bundleExtraTabs={bundleExtraTabs}
                             />
                         </div>
@@ -186,7 +203,15 @@ export default function TabletCellBundles() {
                                 component={BundleStatisticsTab}
                             />
                         )}
-                        {monTab.show && monitoringComponent && (
+                        {isChaos && chaosMonitoringComponent && (
+                            <Route
+                                path={`/${cluster}/${Page.CHAOS_CELL_BUNDLES}/${TabletsTab.MONITOR}`}
+                                render={() => (
+                                    <ChaosBundleMonitorTab component={chaosMonitoringComponent} />
+                                )}
+                            />
+                        )}
+                        {!isChaos && monTab.show && monitoringComponent && (
                             <Route
                                 path={`/${cluster}/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.MONITOR}`}
                                 render={() => <BundleMonitorTab component={monitoringComponent} />}
@@ -340,6 +365,7 @@ function TabletsTabsImpl({
     const tabProps = activeBundle
         ? makeTabProps(match.url, localTabs, showSettings, undefined, {
               [TabletsTab.MONITOR]: monitoringTitle,
+              [TabletsTab.CHAOS_CELLS]: i18n('title_chaos-cells'),
               ...extraTabTitles,
           })
         : makeAllTabsProps(match.url, cluster);
