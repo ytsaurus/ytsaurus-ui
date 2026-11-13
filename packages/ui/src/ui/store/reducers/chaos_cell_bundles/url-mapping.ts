@@ -1,3 +1,4 @@
+import {prometheusDashboardParams} from '../prometheusDashboard/url-mapping';
 import {initialState} from './index';
 import {type RootState} from '../../../store/reducers';
 import {produce} from 'immer';
@@ -97,3 +98,8 @@ export function getChaosCellsPreparedState(
         updateIfChanged(draftTcb, 'cellsSort', queryTcb.cellsSort);
     });
 }
+
+export const chaosBundlesMonitoringParams = {
+    ...chaosBundlesParams,
+    ...prometheusDashboardParams,
+};

@@ -17,6 +17,7 @@ import {NavigationLazy} from '../../pages/navigation/lazy';
 import {PathViewerLazy} from '../../pages/path-viewer/lazy';
 import {TabletLazy} from '../../pages/tablet/lazy';
 import {TabletCellBundlesLazy} from '../../pages/tablet_cell_bundles/lazy';
+import {ChaosCellBundlesLazy} from '../../pages/chaos_cell_bundles/lazy';
 import {GroupsPageLazy} from '../../pages/groups/lazy';
 import {UsersPageLazy} from '../../pages/users/lazy';
 import {SchedulingLazy} from '../../pages/scheduling/lazy';
@@ -221,11 +222,12 @@ class ClusterPage extends Component {
                     <Route path={`/:cluster/${Page.SYSTEM}`} component={SystemLazy} />
                     <Route path={`/:cluster/${Page.ACCOUNTS}`} component={AccountsLazy} />
                     <Route
-                        path={[
-                            `/:cluster/${Page.TABLET_CELL_BUNDLES}`,
-                            `/:cluster/${Page.CHAOS_CELL_BUNDLES}`,
-                        ]}
+                        path={`/:cluster/${Page.TABLET_CELL_BUNDLES}`}
                         component={TabletCellBundlesLazy}
+                    />
+                    <Route
+                        path={`/:cluster/${Page.CHAOS_CELL_BUNDLES}`}
+                        component={ChaosCellBundlesLazy}
                     />
                     <Route path={`/:cluster/${Page.NAVIGATION}`} component={NavigationLazy} />
                     <Route path={`/:cluster/${Page.FLOWS}`} component={FlowPageLazy} />

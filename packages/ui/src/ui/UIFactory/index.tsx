@@ -182,6 +182,10 @@ export type BundleMonitoringProps = {
     tablet_cell_bundle: string;
     bundleData: any;
 };
+export type ChaosBundleMonitoringProps = {
+    cluster: string;
+    chaos_cell_bundle: string;
+};
 export type BundleExtraTabProps = {
     cluster: string;
     bundle: string;
@@ -280,6 +284,7 @@ export interface UIFactory {
               title?: undefined;
           }
         | {urlTemplate: string; title?: string; component?: undefined};
+    getMonitoringForChaosBundle(): React.ComponentType<ChaosBundleMonitoringProps> | undefined;
     getMonitoringForBundle():
         | undefined
         | {
