@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.34.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.33.0...ui-v3.34.0) (2026-11-13)
+
+
+### Features
+
+* **Accounts:** show selected account branches and parent resources [YTFRONT-6021] ([5f40ba6](https://github.com/ytsaurus/ytsaurus-ui/commit/5f40ba606ae8cd5f174c5caec0fc446666e176b6))
+
 ## [3.33.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.32.0...ui-v3.33.0) (2026-11-13)
 
 
