@@ -14,7 +14,7 @@ import {useExternalAnnotation} from '../hooks/use-external-annotation';
 import {SwitchDescription} from '../SwitchDescription';
 import i18n from './i18n';
 
-export function NavigationDescriptionOverview() {
+export function NavigationDescriptionToolbar() {
     const {externalAnnotationLink, editable} = useExternalAnnotation();
     const descriptionType = useSelector(getDescriptionType);
 
