@@ -8,13 +8,14 @@ const block = cn('yt-markdown');
 
 type Props = {
     text: string;
+    allowHTML?: boolean;
     setRenderState?: MarkdownSetRenderState;
 };
 
-export const MarkdownFallback = ({text, setRenderState}: Props) => {
+export const MarkdownFallback = ({text, allowHTML = true, setRenderState}: Props) => {
     const {data, loading, error} = useMarkdown({
         text,
-        allowHTML: true,
+        allowHTML,
         linkify: true,
         skipErrorToast: true,
     });
