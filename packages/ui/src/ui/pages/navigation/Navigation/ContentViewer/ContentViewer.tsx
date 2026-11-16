@@ -2,6 +2,7 @@ import React, {type FC} from 'react';
 import cn from 'bem-cn-lite';
 import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import {Tab} from '../../../../constants/navigation';
+import {NavigationDescriptionPreview} from '../../NavigationDescription/NavigationDescriptionPreview/NavigationDescriptionPreview';
 import {getComponentByContentType, getComponentByMode} from './helpers';
 
 const block = cn('navigation');
@@ -22,6 +23,7 @@ const ContentViewer: FC<Props> = ({type, mode}) => {
     return (
         <ErrorBoundary>
             <div className={block('viewer', {mode})}>
+                {isContentTab && <NavigationDescriptionPreview />}
                 <Component />
             </div>
         </ErrorBoundary>

@@ -94,6 +94,7 @@ export type MarkdownSetRenderState = (state: MarkdownRenderState) => void;
 
 export type RenderMarkdownParams = {
     text: string;
+    allowHTML?: boolean;
     setRenderState: MarkdownSetRenderState;
 };
 
