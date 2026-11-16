@@ -10,15 +10,9 @@ export class AclPage extends BasePage {
     }
 
     async waitForStyles() {
-        await Promise.all([
-            this.page.waitForLoadState('load'),
-            this.page.waitForLoadState('networkidle'),
-            this.page.evaluate(() => document.fonts.ready),
-        ]);
-
-        await this.waitForCSS('th.navigation-acl__table-item_type_subjects', {
-            'max-width': '320px',
-        });
+        await this.locator('.navigation-acl__acl-actions').waitFor({state: 'attached'});
+        await this.locator('.navigation-acl__object-permissions').waitFor({state: 'visible'});
+        await this.page.evaluate(() => document.fonts.ready);
     }
 
     async waitForClusterFontWeight() {

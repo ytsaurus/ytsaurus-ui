@@ -38,12 +38,17 @@ export class NavigationPage extends BasePage {
     }
 
     async mapNodeCreateObject(hasText: 'Table' | 'Directory' | 'Link', path?: string) {
-        await this.page.waitForLoadState('networkidle');
-        await this.page.waitForTimeout(500);
+        await this.page
+            .getByRole('table')
+            .or(this.page.getByText('No items to show', {exact: true}))
+            .waitFor({state: 'visible'});
+        await this.page
+            .locator('.elements-table__no-data-placeholder')
+            .first()
+            .waitFor({state: 'hidden'});
+        await this.page.evaluate(() => document.fonts.ready);
 
-        await this.page.getByText('Create object').click();
-
-        await this.page.waitForTimeout(500);
+        await this.page.getByRole('button', {name: 'Create object', exact: true}).click();
         await this.page.getByRole('menuitem').filter({hasText}).click();
 
         if (path) {
