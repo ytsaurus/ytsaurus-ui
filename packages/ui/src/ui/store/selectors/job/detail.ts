@@ -8,7 +8,6 @@ import sumBy_ from 'lodash/sumBy';
 import values_ from 'lodash/values';
 
 import {type RootState} from '../../reducers';
-import {TEXT} from '../../../utils/actions';
 import {type JobPipes, type PipesIO, type StatisticsIO} from '../../../types/operations/job';
 import {type Action as JobAction} from '../../../pages/job/JobActions/JobActions';
 
@@ -131,45 +130,30 @@ export const selectJobActions = createSelector(selectJob, (job) => {
 
     if (state !== 'completed' && state !== 'failed' && state !== 'aborted') {
         actions.push({
-            modalKey: 'abort',
             name: 'abort',
             successMessage: 'Job was successfully aborted. Please wait',
             icon: 'redo',
             message: 'Job will be immediately aborted. Are you sure you want to proceed?',
-            confirmationText: TEXT.pleaseProceedText,
+            requireConfirmation: true,
         });
 
         actions.push({
-            modalKey: 'interrupt',
             name: 'interrupt',
             successMessage: 'Job was successfully aborted. Please wait',
             icon: 'hand-paper',
             message: 'Job will be immediately interrupted. Are you sure you want to proceed?',
-            confirmationText: TEXT.pleaseProceedText,
-            optionMessage: 'Interruption timeout',
-            optionValue: 10000,
-            optionType: 'input',
-            options: [
-                {
-                    data: {
-                        parameters: {interrupt_timeout: 10000},
-                    },
-                    value: 'timeout',
-                    text: 'timeout',
-                },
-            ],
+            requireConfirmation: true,
         });
     }
 
     if (state === 'running') {
         actions.push({
-            modalKey: 'abandon',
             name: 'abandon',
             successMessage: 'Job was successfully aborted. Please wait',
             icon: 'trash-bin',
             message:
                 'Job will be aborted, but considered as completed, output data of job will be lost. Do you want to proceed?',
-            confirmationText: TEXT.pleaseProceedText,
+            requireConfirmation: true,
         });
     }
 

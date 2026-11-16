@@ -40,15 +40,9 @@ import Placeholder from '../../../pages/components/Placeholder';
 import {Page} from '../../../constants/index';
 import {DEFAULT_TAB, type OperationTabType, Tab} from '../../../constants/operations/detail';
 import {useUpdater} from '../../../hooks/use-updater';
-import {type promptAction} from '../../../store/actions/actions';
-import {type ActionModalData} from '../../../store/reducers/actions';
 import {updateOperation} from '../../../store/actions/operations/detail';
 import {type TabSettings, makeTabProps} from '../../../utils';
-import {
-    getDetailsTabsShowSettings,
-    operationMonitoringUrl,
-    performAction,
-} from '../../../utils/operations/detail';
+import {getDetailsTabsShowSettings, operationMonitoringUrl} from '../../../utils/operations/detail';
 import {isOperationId} from '../../../utils/operations/list';
 
 import UIFactory from '../../../UIFactory';
@@ -68,6 +62,7 @@ import {type YTError} from '../../../types';
 import {JobsTimeline} from './tabs/JobsTimeline';
 import OperationDetailsMonitor from './tabs/monitor/OperationDetailsMonitor';
 import {EditOperationButton} from '../EditOperationButton/EditOperationButton';
+import {OperationActionDialog} from '../OperationActionDialog/OperationActionDialog';
 
 const detailBlock = cn('operation-detail');
 
@@ -107,7 +102,6 @@ type ReduxProps = {
         binaryAsHex: boolean;
         asHTML: boolean;
     };
-    promptAction: typeof promptAction;
     getOperation: (id: string) => void;
     updateListJobsFilter: (data: UpdateFilterData) => void;
     listOperationEvents: (operationId: string) => void;
@@ -193,7 +187,13 @@ function SpecialWaitingStatus({type}: {type: 'jobs' | 'resources'}) {
     );
 }
 
-export class OperationDetailBase extends React.Component<ReduxProps & RouteProps> {
+interface State {
+    actionDialog?: {action: OperationAction; operation: DetailedOperationSelector; message: string};
+}
+
+export class OperationDetailBase extends React.Component<ReduxProps & RouteProps, State> {
+    override state: State = {};
+
     get settings() {
         return unipika.prepareSettings();
     }
@@ -204,17 +204,9 @@ export class OperationDetailBase extends React.Component<ReduxProps & RouteProps
     }
 
     renderAction = (action: ReduxProps['actions'][0]) => {
-        const {promptAction, operation} = this.props;
+        const {operation} = this.props;
 
         const message = action.message || i18n('confirm_perform-action', {name: action.name});
-        const handler = ({currentOption}: ActionModalData) =>
-            performAction({
-                ...action,
-                operation,
-                currentOption,
-            }).then(() => {
-                return this.props.getOperation(operation.$value);
-            });
 
         return (
             <Button
@@ -222,7 +214,7 @@ export class OperationDetailBase extends React.Component<ReduxProps & RouteProps
                 view={action.theme}
                 className={detailBlock('action')}
                 title={i18n(`action_${action.name}`)}
-                onClick={() => promptAction({...action, message, handler})}
+                onClick={() => this.setState({actionDialog: {action, operation, message}})}
             >
                 <Icon awesome={action.icon} size={13} />
                 &nbsp;
@@ -575,10 +567,19 @@ export class OperationDetailBase extends React.Component<ReduxProps & RouteProps
             },
         } = this.props;
         const isFirstLoading = loading && !loaded;
+        const {actionDialog} = this.state;
 
         return (
             <ErrorBoundary>
                 <OperationDetailUpdater operationId={operationId} />
+                {actionDialog && (
+                    <OperationActionDialog
+                        key={`${actionDialog.operation.$value}:${actionDialog.action.name}`}
+                        {...actionDialog}
+                        onSuccess={() => this.props.getOperation(actionDialog.operation.$value)}
+                        onClose={() => this.setState({actionDialog: undefined})}
+                    />
+                )}
                 <div className={detailBlock({loading: isFirstLoading})}>
                     {error && !loaded ? this.renderError() : this.renderContent(isFirstLoading)}
                 </div>

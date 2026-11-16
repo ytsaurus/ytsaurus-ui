@@ -4,8 +4,8 @@ import {formatByParams} from '../../../shared/utils/format';
 import ypath from '../../common/thor/ypath';
 import {getMetrics} from '../../common/utils/metrics';
 import {ytApiV3} from '../../rum/rum-wrap-api';
-import {TEXT} from '../../utils/actions';
 import {hasTaskHistograms} from './jobs';
+import {wrapApiPromiseByToaster} from '../utils';
 
 import i18n from './i18n';
 
@@ -36,30 +36,36 @@ export function checkUserTransaction(operationAttributes: {
 
 type OperationActionName = 'complete' | 'abort' | 'resume' | 'suspend';
 
-interface PerformActionOptions<T = unknown> {
+export type RunningJobsStrategy = 'abort' | 'retain';
+
+interface PerformActionOptions {
     operation: DetailedOperationSelector;
     name: OperationActionName;
-    options?: {value: T; data?: {parameters: Record<string, unknown>}}[];
-    updateOperation?: (data: unknown) => void;
-    currentOption: T;
+    runningJobsStrategy?: RunningJobsStrategy;
+    successMessage: string;
 }
 
-export function performAction<T = unknown>({
-    updateOperation,
+export function performAction({
     operation,
-    currentOption,
-    options = [],
     name,
-}: PerformActionOptions<T>) {
-    const option = options.find((o) => o?.value === currentOption);
-    let parameters = {operation_id: operation.$value};
-    if (option?.data?.parameters) {
-        parameters = {...parameters, ...option.data.parameters};
-    }
+    runningJobsStrategy,
+    successMessage,
+}: PerformActionOptions) {
+    const parameters = {
+        operation_id: operation.$value,
+        ...(name === 'suspend' && runningJobsStrategy === 'abort'
+            ? {abort_running_jobs: true}
+            : {}),
+    };
 
     getMetrics().countEvent('operation_detail_action', name);
 
-    return ytApiV3[`${name}Operation` as const](parameters).then(updateOperation);
+    return wrapApiPromiseByToaster(ytApiV3[`${name}Operation` as const](parameters), {
+        toasterName: 'confirm action',
+        successTitle: successMessage,
+        skipErrorToast: true,
+        timeout: 5000,
+    });
 }
 
 export function getDetailsTabsShowSettings(operation: unknown) {
@@ -78,22 +84,13 @@ export function getDetailsTabsShowSettings(operation: unknown) {
 }
 
 export interface OperationAction {
-    modalKey: string;
     name: OperationActionName;
     successMessage: string;
     icon: IconName;
     message?: string;
-    confirmationText?: string;
+    requireConfirmation?: boolean;
     details?: string;
     theme?: 'action';
-    optionMessage?: string;
-    optionValue?: string;
-    optionType?: 'radio';
-    options?: Array<{
-        data?: any;
-        text: string;
-        value: string;
-    }>;
 }
 
 export function prepareActions(operation: DetailedOperationSelector) {
@@ -103,28 +100,25 @@ export function prepareActions(operation: DetailedOperationSelector) {
 
     if (state !== 'completed' && state !== 'failed' && state !== 'aborted') {
         actions.push({
-            modalKey: 'abort',
             name: 'abort',
             successMessage: i18n('alert_operation-aborted'),
             icon: 'stop-circle',
             message: i18n('confirm_abort-operation'),
-            confirmationText: TEXT.pleaseProceedText,
+            requireConfirmation: true,
         });
     }
 
     if (state === 'running') {
         actions.push({
-            modalKey: 'complete',
             name: 'complete',
             successMessage: i18n('alert_operation-completed'),
             icon: 'check-circle',
             message: i18n('confirm_complete-operation'),
-            confirmationText: TEXT.pleaseProceedText,
+            requireConfirmation: true,
         });
 
         if (suspended) {
             actions.push({
-                modalKey: 'resume',
                 name: 'resume',
                 details: i18n('confirm_resume-operation'),
                 successMessage: i18n('alert_operation-resumed'),
@@ -133,30 +127,10 @@ export function prepareActions(operation: DetailedOperationSelector) {
             });
         } else {
             actions.push({
-                modalKey: 'suspend',
                 name: 'suspend',
                 details: i18n('confirm_suspend-operation'),
                 successMessage: i18n('alert_operation-suspended'),
                 icon: 'pause-circle',
-                optionMessage: i18n('field_running-jobs-strategy'),
-                optionValue: 'abort',
-                optionType: 'radio',
-                options: [
-                    {
-                        data: {
-                            parameters: {abort_running_jobs: true},
-                        },
-                        value: 'abort',
-                        text: i18n('value_abort-running-jobs'),
-                    },
-                    {
-                        data: {
-                            parameters: {},
-                        },
-                        value: 'retain',
-                        text: i18n('value_retain-running-jobs'),
-                    },
-                ],
             });
         }
     }

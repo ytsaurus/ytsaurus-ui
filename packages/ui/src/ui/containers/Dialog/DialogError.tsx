@@ -33,10 +33,10 @@ export function makeErrorFields(errors: Array<YTError | Error | undefined>) {
 
 const FORM_ERROR: typeof FormErrorType = 'FINAL_FORM/form-error';
 
-export function makeFormSubmitError(error: YTError) {
+export function makeFormSubmitError(error: unknown, message?: React.ReactNode) {
     return {
         validationErrors: {
-            [FORM_ERROR]: <DialogError error={error} />,
+            [FORM_ERROR]: <DialogError error={error} message={message} />,
         },
     };
 }

@@ -8,8 +8,5 @@
   "confirm_resume-operation": "Operation will be resumed.",
   "alert_operation-resumed": "Operation was successfully resumed",
   "confirm_suspend-operation": "Operation will be suspended.",
-  "alert_operation-suspended": "Operation was successfully suspended",
-  "field_running-jobs-strategy": "Running jobs strategy",
-  "value_abort-running-jobs": "Abort running jobs",
-  "value_retain-running-jobs": "Retain running jobs"
+  "alert_operation-suspended": "Operation was successfully suspended"
 }

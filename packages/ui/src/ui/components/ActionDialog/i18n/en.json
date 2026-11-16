@@ -1,0 +1,9 @@
+{
+  "title_confirmation": "Confirmation",
+  "alert_timeout-required": "Enter an interruption timeout",
+  "label_interruption-timeout": "Interruption timeout",
+  "field_running-jobs-strategy": "Running jobs strategy",
+  "value_abort-running-jobs": "Abort running jobs",
+  "value_retain-running-jobs": "Retain running jobs",
+  "confirm_please-proceed": "Please proceed, I understand the risks."
+}
