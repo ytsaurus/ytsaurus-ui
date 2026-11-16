@@ -6,39 +6,40 @@
 
     .chunk-cells {
         &__table {
+            table-layout: fixed;
             &-item_type {
                 &_cell-tag {
-                    width: 65px;
+                    width: 70px;
                 }
                 &_foreign-chunks {
-                    width: 105px;
+                    width: 70px;
                 }
                 &_overreplicated-chunks {
-                    width: 147px;
+                    width: 120px;
                 }
                 &_underreplicated-chunks {
-                    width: 156px;
+                    width: 130px;
                 }
                 &_quorum-missing-chunks {
-                    width: 156px;
+                    width: 130px;
                 }
                 &_data-missing-chunks {
-                    width: 131px;
+                    width: 105px;
                 }
                 &_parity-missing-chunks {
-                    width: 140px;
+                    width: 115px;
                 }
                 &_lost-chunks {
-                    width: 66px;
+                    width: 65px;
                 }
                 &_lost-vital-chunks {
-                    width: 102px;
+                    width: 80px;
                 }
                 &_unsafely-placed-chunks {
-                    width: 153px;
+                    width: 126px;
                 }
                 &_chunks {
-                    width: 125px;
+                    width: 120px;
                 }
             }
         }
