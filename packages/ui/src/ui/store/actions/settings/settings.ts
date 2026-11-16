@@ -6,7 +6,6 @@ import {setSetting, setSettingByKey} from './index';
 
 // @ts-ignore
 import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
-import {type AnnotationVisibilityType} from '../../../../shared/constants/settings-ts';
 import {type AccountUsageViewType} from '../../../store/reducers/accounts/usage/accounts-usage-filters';
 import {selectQueryTokens} from '../../selectors/settings/settings-queries';
 import {type QueryToken} from '../../../../shared/constants/settings-types';
@@ -21,16 +20,6 @@ export function setTableDisplayRawStrings(value: boolean): SettingThunkAction {
                 NAMESPACES.NAVIGATION,
                 value,
             ),
-        );
-    };
-}
-
-export function setSettingAnnotationVisibility(
-    value: AnnotationVisibilityType,
-): SettingThunkAction {
-    return (dispatch) => {
-        dispatch(
-            setSetting(SettingName.NAVIGATION.ANNOTATION_VISIBILITY, NAMESPACES.NAVIGATION, value),
         );
     };
 }

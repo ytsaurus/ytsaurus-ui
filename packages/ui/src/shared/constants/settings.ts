@@ -96,7 +96,6 @@ export const SettingName = {
         CLUSTER_PAGE_PANE_SIZES: 'clusterPagePaneSizes',
         DEFAULT_CHYT_ALIAS: 'defaultChytAlias',
         TABLE_DISPLAY_RAW_STRINGS: 'tableDisplayRawStrings',
-        ANNOTATION_VISIBILITY: 'annotationVisibility',
         QUEUE_PARTITIONS_VISIBILITY: 'queuePartitionsVisibility',
         QUEUE_CONSUMERS_VISIBILITY: 'queueConsumersVisibility',
         CONSUMER_PARTITIONS_VISIBILITY: 'consumerPartitionsVisibility',

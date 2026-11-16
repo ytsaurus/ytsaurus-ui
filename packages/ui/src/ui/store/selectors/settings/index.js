@@ -191,10 +191,6 @@ export const selectSettingTableDisplayRawStrings = createSelector(
     },
 );
 
-export const selectSettingAnnotationVisibility = createSelector(selectGetSetting, (getSetting) => {
-    return getSetting(SettingName.NAVIGATION.ANNOTATION_VISIBILITY, NAMESPACES.NAVIGATION);
-});
-
 export const selectSettingNavigationPanelExpanded = createSelector(
     selectGetSetting,
     (getSetting) => {

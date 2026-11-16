@@ -1,5 +1,6 @@
 import cn from 'bem-cn-lite';
 import {createErrorFromData} from '../../../../../shared/utils/error';
+import {Markdown} from '../../../../components/Markdown/Markdown';
 import Loader from '../../../../components/Loader/Loader';
 import {LOADING_STATUS} from '../../../../constants';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
@@ -18,10 +19,9 @@ import {
 import {EditAnnotationWithPreview} from '../../../../components/EditAnnotationWithPreview/EditAnnotationWithPreview';
 
 import {useDescription} from '../hooks/use-description';
-import {useDescriptionCollapse} from '../hooks/use-description-collapse';
 import {useYTAnnotation} from '../hooks/use-yt-annotation';
 
-import {AnnotationWithPartial} from '../AnnotationWithPartial';
+import {NavigationDescriptionEmpty} from '../NavigationDescriptionEmpty/NavigationDescriptionEmpty';
 
 const block = cn('navigation-description');
 
@@ -30,8 +30,6 @@ export function NavigationDescriptionContent() {
 
     const edittingAnnotation = useSelector(getEdittingAnnotation);
     const editMode = useSelector(getEditMode);
-
-    const {expanded, toggleExpanded} = useDescriptionCollapse();
 
     const {description, loading, error, descriptionType} = useDescription();
     const navigationError = useSelector(selectError);
@@ -69,13 +67,7 @@ export function NavigationDescriptionContent() {
         );
     }
     if (!description) {
-        return null;
+        return <NavigationDescriptionEmpty />;
     }
-    return (
-        <AnnotationWithPartial
-            annotation={description}
-            expanded={expanded}
-            onToggle={toggleExpanded}
-        />
-    );
+    return <Markdown text={description} />;
 }
