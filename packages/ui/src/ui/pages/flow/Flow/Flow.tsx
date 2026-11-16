@@ -340,12 +340,14 @@ export function FlowMessagesLoaded() {
     const pipeline_path = useSelector(selectFlowPipelinePath);
 
     const cluster = useSelector(selectCluster);
-    const {data, error} =
+    const {data, error, refetch} =
         useFlowExecuteQuery<'describe-pipeline'>({
             cluster,
             parameters: {pipeline_path, flow_command: 'describe-pipeline'},
             body: {status_only: true},
         }) ?? {};
+
+    useUpdater(refetch);
 
     return error ? (
         <YTErrorInline message={i18n('failed-to-load-messages')} error={error} />
