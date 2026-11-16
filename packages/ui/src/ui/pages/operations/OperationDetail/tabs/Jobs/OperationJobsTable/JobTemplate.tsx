@@ -5,7 +5,7 @@ import {
     TemplateDownloadLink,
     TemplateError,
 } from '../../../../../../components/MetaTable/templates/Template';
-import {showErrorModal} from '../../../../../../store/actions/actions';
+import {showErrorModal} from '../../../../../../store/actions/modals/errors';
 import {showInputPaths} from '../../../../../../store/actions/operations/jobs';
 import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
 import {selectMergedUiSettings} from '../../../../../../store/selectors/global/cluster';
@@ -18,7 +18,10 @@ function JobError({error}: {error: Error}) {
     const dispatch = useDispatch();
     return (
         <div>
-            <TemplateError error={error} onClick={() => dispatch(showErrorModal(error))} />
+            <TemplateError
+                error={error}
+                onClick={() => dispatch(showErrorModal(error, {hideOopsMsg: true}))}
+            />
         </div>
     );
 }

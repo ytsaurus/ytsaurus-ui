@@ -4,7 +4,6 @@ import forEach_ from 'lodash/forEach';
 
 import acl from './acl/acl';
 import aclFilters from './acl/acl-filters';
-import actions from './actions';
 import clustersMenu from './clusters-menu/clusters-menu';
 import components from './components';
 import global from './global';
@@ -51,7 +50,6 @@ import odin from '../../pages/odin/_reducers';
 export const appReducers = {
     acl,
     aclFilters,
-    actions,
     clustersMenu,
     components,
     global,

@@ -15,7 +15,6 @@ import AttributesModal from '../../containers/AttributesModal/AttributesModal';
 import {MaxContentWidth} from '../../containers/MaxContentWidth';
 import {ClustersMenuLazy} from '../../containers/ClustersMenu/lazy';
 import {ClusterPageWrapperLazy} from '../../containers/ClusterPageWrapper/lazy';
-import ActionModal from '../ActionModal/ActionModal';
 import {ChangePasswordFormPage} from '../../containers/Login/ChangePasswordFormPage/ChangePasswordFormPage';
 import {LoginFormPage} from '../../containers/Login/LoginFormPage/LoginFormPage';
 
@@ -107,7 +106,6 @@ function AppWithRum() {
                                     />
                                 </MaxContentWidth>
                                 <AttributesModal />
-                                <ActionModal />
                                 <ModalErrors />
                                 <RetryBatchModals />
                                 <ManageTokensModal />

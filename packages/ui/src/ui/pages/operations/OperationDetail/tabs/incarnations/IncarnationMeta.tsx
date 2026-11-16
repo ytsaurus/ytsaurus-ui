@@ -10,7 +10,7 @@ import format from '../../../../../common/hammer/format';
 import {selectCluster} from '../../../../../store/selectors/global';
 import {selectOperation} from '../../../../../store/selectors/operations/operation';
 import {type Incarnation} from '../../../../../store/selectors/operations/incarnations';
-import {showErrorModal} from '../../../../../store/actions/actions';
+import {showErrorModal} from '../../../../../store/actions/modals/errors';
 
 import {MetaTable} from '@ytsaurus/components';
 import YTLink from '../../../../../containers/Link/Link';
@@ -71,7 +71,11 @@ export function IncarnationMeta(props: Props) {
             value: (
                 <TemplateError
                     error={switch_info?.trigger_job_error as YTError}
-                    onClick={() => dispatch(showErrorModal(switch_info?.trigger_job_error))}
+                    onClick={() =>
+                        dispatch(
+                            showErrorModal(switch_info?.trigger_job_error, {hideOopsMsg: true}),
+                        )
+                    }
                 />
             ),
             label: i18n('field_error'),
