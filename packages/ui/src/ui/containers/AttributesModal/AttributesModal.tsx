@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {type ConnectedProps, connect} from 'react-redux';
+import {connect} from 'react-redux';
 import {type RootState} from '../../store/reducers';
 import cn from 'bem-cn-lite';
 import unipika from '../../common/thor/unipika';
@@ -7,7 +7,7 @@ import unipika from '../../common/thor/unipika';
 import FormattedText from '../../components/formatters/FormattedText';
 import SimpleModal from '../../components/Modal/SimpleModal';
 import {YTErrorBlock} from '../../containers/Block/Block';
-import {Yson} from '../../components/Yson/Yson';
+import {Yson, type YsonSettings} from '../../components/Yson/Yson';
 
 import {closeAttributesModal} from '../../store/actions/modals/attributes-modal';
 import {DownloadFileButton} from '../../components/DownloadAttributesButton';
@@ -17,7 +17,16 @@ import './AttributesModal.scss';
 
 const block = cn('yt-attributes-modal');
 
-type Props = ConnectedProps<typeof connector>;
+interface Props {
+    visible: boolean;
+    loading: boolean;
+    error: boolean;
+    errorData: unknown;
+    title: string;
+    attributes: unknown;
+    ysonSettings: YsonSettings;
+    closeAttributesModal: () => void;
+}
 
 export class AttributesModal extends Component<Props> {
     handleClose = () => this.props.closeAttributesModal();

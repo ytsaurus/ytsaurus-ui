@@ -6,13 +6,12 @@ import AttributesButton, {type AttributesButtonProps} from '../AttributesButton'
 
 import i18n from '../i18n';
 
-type Props = Omit<AttributesButtonProps, 'onClick' | 'title'> & OpenAttributesModalParams;
-
-export function ClickableAttributesButtonBase(
-    props: Props & {
+type Props = Omit<AttributesButtonProps, 'onClick' | 'title'> &
+    OpenAttributesModalParams & {
         openAttributesModal: (params: OpenAttributesModalParams) => void;
-    },
-) {
+    };
+
+export function ClickableAttributesButtonBase(props: Props) {
     const {
         openAttributesModal,
         withTooltip = true,
