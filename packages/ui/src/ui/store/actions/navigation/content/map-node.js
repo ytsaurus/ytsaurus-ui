@@ -163,10 +163,11 @@ export function updateResourceUsage() {
         const nodesChunks = chunk_(nodes, BATCH_LIMIT);
         const batchedRequests = map_(nodesChunks, (nodesChunk) => {
             const requests = map_(nodesChunk, (node) => {
+                const suppressRedirection = node.type !== 'rootstock' && node.type !== 'scion';
                 return {
                     command: 'get',
                     parameters: {
-                        path: node.path + '&/@recursive_resource_usage',
+                        path: `${node.path}${suppressRedirection ? '&' : ''}/@recursive_resource_usage`,
                         timeout: 60 * 1000,
                     },
                 };
