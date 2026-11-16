@@ -31,7 +31,7 @@ export function requestAttributes(): AsyncAction<Promise<void>> {
         try {
             cancelHelper.removeAllRequests();
 
-            const attributesP = ytApiV3Id.get(YTApiId.nodeAttributes, {
+            const attributesP = ytApiV3Id.get(YTApiId.navigationAllAttributes, {
                 parameters: {
                     ...prepareRequest('/@', requestParams),
                     output_format: TYPED_OUTPUT_FORMAT,
@@ -39,7 +39,7 @@ export function requestAttributes(): AsyncAction<Promise<void>> {
                 cancellation: cancelHelper.saveCancelToken,
             });
 
-            const opaqueAttributeKeysP = ytApiV3Id.get(YTApiId.nodeAttributes, {
+            const opaqueAttributeKeysP = ytApiV3Id.get(YTApiId.navigationOpaqueAttributeKeys, {
                 parameters: prepareRequest('/@opaque_attribute_keys', requestParams),
                 cancellation: cancelHelper.saveCancelToken,
             });
@@ -69,7 +69,7 @@ export function requestAttribute(name: AttributeName): AsyncAction<Promise<void>
         const requestParams = {path, transaction};
 
         try {
-            const dataP = ytApiV3Id.get(YTApiId.nodeAttributes, {
+            const dataP = ytApiV3Id.get(YTApiId.navigationAttribute, {
                 parameters: {
                     ...prepareRequest(`/@${name}`, requestParams),
                     output_format: TYPED_OUTPUT_FORMAT,
