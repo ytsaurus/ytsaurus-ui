@@ -219,12 +219,12 @@ export class OperationDetailBase extends React.Component<ReduxProps & RouteProps
                 key={action.name}
                 view={action.theme}
                 className={detailBlock('action')}
-                title={hammer.format['ReadableField'](action.name)}
+                title={i18n(`action_${action.name}`)}
                 onClick={() => promptAction({...action, message, handler})}
             >
                 <Icon awesome={action.icon} size={13} />
                 &nbsp;
-                {hammer.format['ReadableField'](action.name)}
+                {i18n(`action_${action.name}`)}
             </Button>
         );
     };

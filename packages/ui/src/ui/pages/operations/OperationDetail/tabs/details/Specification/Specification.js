@@ -216,7 +216,7 @@ export default class Specification extends Component {
         );
     }
 
-    renderIO(type, items, tableProps) {
+    renderIO(type, items, tableProps, heading = type) {
         return (
             <CollapsibleTable
                 {...tableProps}
@@ -224,7 +224,7 @@ export default class Specification extends Component {
                 filterVisibleItems={filterVisibleItems}
                 className={specificationBlock(type)}
                 css={specificationBlock('io')}
-                heading={type}
+                heading={heading}
                 items={items}
             />
         );
@@ -270,9 +270,11 @@ export default class Specification extends Component {
                 {remote && this.renderRemote(remote)}
                 {startedBy && this.renderStartedBy(startedBy)}
 
-                {input?.length > 0 && this.renderIO('input', input, inputTableProps)}
+                {input?.length > 0 &&
+                    this.renderIO('input', input, inputTableProps, i18n('title_input'))}
                 {intermediate && this.renderIntermediate(intermediate, i18n('title_intermediate'))}
-                {output?.length > 0 && this.renderIO('output', output, outputTableProps)}
+                {output?.length > 0 &&
+                    this.renderIO('output', output, outputTableProps, i18n('title_output'))}
                 {stderr?.length > 0 && this.renderIO('stderr', stderr, stderrTableProps)}
                 {coredumps?.length > 0 && this.renderIO('core', coredumps, stderrTableProps)}
 

@@ -24,5 +24,9 @@
   "field_finished": "Finished",
   "field_duration": "Duration",
   "field_total-job-wall-time": "Total job wall time",
-  "field_total-cpu-time-spent": "Total CPU time spent"
+  "field_total-cpu-time-spent": "Total CPU time spent",
+  "action_abort": "Abort",
+  "action_complete": "Complete",
+  "action_suspend": "Suspend",
+  "action_resume": "Resume"
 }

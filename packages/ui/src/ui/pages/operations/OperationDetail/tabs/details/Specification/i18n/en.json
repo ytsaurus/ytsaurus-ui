@@ -14,5 +14,7 @@
   "field_environment": "environment",
   "field_files": "files",
   "field_command": "command",
-  "field_layer-paths": "layer paths"
+  "field_layer-paths": "layer paths",
+  "title_input": "Input",
+  "title_output": "Output"
 }

@@ -9,5 +9,6 @@
   "context_completed-statistics": "Completed statistics: {{caption}}",
   "context_task": "Task {{caption}}",
   "context_job-type": "Job type {{jobType}}",
-  "context_tasks-caption": "Tasks: {{caption}}"
+  "context_tasks-caption": "Tasks: {{caption}}",
+  "value_rows-per-second": "{{value}} rows/s"
 }

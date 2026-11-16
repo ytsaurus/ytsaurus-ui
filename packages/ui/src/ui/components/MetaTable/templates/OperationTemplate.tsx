@@ -18,6 +18,7 @@ import hammer from '../../../common/hammer';
 import {Page} from '../../../constants/index';
 import CollapsableText from '../../../components/CollapsableText/CollapsableText';
 import {genNavigationUrl} from '../../../utils/navigation/navigation';
+import i18n from '../../../utils/operations/tabs/details/specification/i18n';
 import './OperationTemplate.scss';
 
 const itemBlock = cn('meta-table-item');
@@ -237,9 +238,9 @@ export function TemplateLivePreivew({path, transaction, cluster}: TemplateLivePr
     const url = genNavigationUrl({cluster, path, transaction});
 
     return (
-        <Link href={url} title="Live preview" target="_blank">
+        <Link href={url} title={i18n('field_live-preview')} target="_blank">
             <Icon awesome="play-circle" />
-            Live preview
+            {i18n('field_live-preview')}
         </Link>
     );
 }

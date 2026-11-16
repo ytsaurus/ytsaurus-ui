@@ -4,5 +4,8 @@
   "field_rows": "Rows",
   "field_slices": "Slices",
   "field_uncompressed": "Uncompressed",
-  "field_weight": "Weight"
+  "field_weight": "Weight",
+  "field_account": "Account",
+  "field_disk-space": "Disk space",
+  "field_nodes": "Nodes"
 }
