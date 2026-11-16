@@ -19,8 +19,9 @@ import Button from '../../../../components/Button/Button';
 import Link from '../../../../containers/Link/Link';
 import Icon from '../../../../components/Icon/Icon';
 import {OperationType} from '../../../../components/OperationType/OperationType';
-import {performAction, prepareActions} from '../../../../utils/operations/detail';
+import {prepareActions} from '../../../../utils/operations/detail';
 import {PathItem} from './PathItem';
+import {OperationActionDialog} from '../../OperationActionDialog/OperationActionDialog';
 import i18n from './i18n';
 import {EditOperationButton} from '../../EditOperationButton/EditOperationButton';
 import {EditOperationDialog} from '../../EditOperationDialog/EditOperationDialog';
@@ -113,13 +114,14 @@ export class OperationsListTableBase extends Component {
         initialLoading: PropTypes.bool.isRequired,
         cluster: PropTypes.string.isRequired,
 
-        promptAction: PropTypes.func.isRequired,
         updateOperationsList: PropTypes.func.isRequired,
         // from react-router
         match: PropTypes.shape({
             url: PropTypes.string.isRequired,
         }),
     };
+
+    state = {actionDialog: undefined};
 
     static renderType(item) {
         return <OperationType value={item.type} />;
@@ -245,8 +247,6 @@ export class OperationsListTableBase extends Component {
     };
 
     renderActions = (operation) => {
-        const {promptAction} = this.props;
-
         const actions = prepareActions(operation);
 
         return (
@@ -260,14 +260,6 @@ export class OperationsListTableBase extends Component {
                             actionName: action.name,
                             operationId: $value,
                         });
-                    const handler = ({currentOption}) =>
-                        performAction({
-                            ...action,
-                            operation,
-                            currentOption,
-                        }).then(() => {
-                            this.props.updateOperationsList();
-                        });
 
                     return (
                         <Button
@@ -279,7 +271,9 @@ export class OperationsListTableBase extends Component {
                                 placement: 'bottom',
                                 content: text,
                             }}
-                            onClick={() => promptAction({...action, message, handler})}
+                            onClick={() =>
+                                this.setState({actionDialog: {action, operation, message}})
+                            }
                         >
                             <Icon awesome={icon} size={13} />
                         </Button>
@@ -381,13 +375,25 @@ export class OperationsListTableBase extends Component {
     render() {
         const {operations, initialLoading} = this.props;
 
+        const {actionDialog} = this.state;
+
         return (
-            <ElementsTable
-                emptyDataDescription={i18n('alert_change-filter-settings')}
-                isLoading={initialLoading}
-                items={operations}
-                {...this.settings}
-            />
+            <>
+                <ElementsTable
+                    emptyDataDescription={i18n('alert_change-filter-settings')}
+                    isLoading={initialLoading}
+                    items={operations}
+                    {...this.settings}
+                />
+                {actionDialog && (
+                    <OperationActionDialog
+                        key={`${actionDialog.operation.$value}:${actionDialog.action.name}`}
+                        {...actionDialog}
+                        onSuccess={this.props.updateOperationsList}
+                        onClose={() => this.setState({actionDialog: undefined})}
+                    />
+                )}
+            </>
         );
     }
 }

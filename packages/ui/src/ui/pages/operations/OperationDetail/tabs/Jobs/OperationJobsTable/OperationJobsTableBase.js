@@ -9,6 +9,7 @@ import ypath from '../../../../../../common/thor/ypath';
 import unipika from '../../../../../../common/thor/unipika';
 import format from '../../../../../../common/hammer/format';
 import ElementsTable from '../../../../../../components/ElementsTable/ElementsTable';
+import {ActionDialog} from '../../../../../../components/ActionDialog/ActionDialog';
 import {OPERATION_JOBS_TABLE_ID} from '../../../../../../constants/operations/jobs';
 import SimpleModal from '../../../../../../components/Modal/SimpleModal';
 import {YTErrorBlock} from '../../../../../../containers/Block/Block';
@@ -20,7 +21,6 @@ import Link from '../../../../../../containers/Link/Link';
 import CollapsibleSection from '../../../../../../components/CollapsibleSection/CollapsibleSection';
 import {performJobAction} from '../utils';
 import {LOADING_STATUS} from '../../../../../../constants/index';
-import {TEXT} from '../../../../../../utils/actions';
 import {toaster} from '../../../../../../utils/toaster';
 import {makeNavigationLink} from '../../../../../../utils/app-url';
 import UIFactory from '../../../../../../UIFactory';
@@ -54,19 +54,18 @@ export class OperationJobsTableBase extends React.Component {
         }),
 
         showJobAttributesModal: PropTypes.func.isRequired,
-        showErrorModal: PropTypes.func.isRequired,
         showInputPaths: PropTypes.func.isRequired,
         hideInputPaths: PropTypes.func.isRequired,
-        promptAction: PropTypes.func.isRequired,
         getJobs: PropTypes.func.isRequired,
         getCompetitiveJobs: PropTypes.func.isRequired,
         taskNamesNumber: PropTypes.number,
     };
 
+    state = {actionDialog: undefined};
+
     actions = [
         {
             name: 'abort',
-            modalKey: 'job_abort',
             get successMessage() {
                 return i18n('alert_abort-success');
             },
@@ -79,11 +78,10 @@ export class OperationJobsTableBase extends React.Component {
             get message() {
                 return i18n('confirm_abort-job');
             },
-            confirmationText: TEXT.pleaseProceedText,
+            requireConfirmation: true,
         },
         {
             name: 'abandon',
-            modalKey: 'job_abandon',
             get successMessage() {
                 return i18n('alert_abandon-success');
             },
@@ -96,11 +94,10 @@ export class OperationJobsTableBase extends React.Component {
             get message() {
                 return i18n('confirm_abandon-job');
             },
-            confirmationText: TEXT.pleaseProceedText,
+            requireConfirmation: true,
         },
         {
             name: 'input_context',
-            modalKey: 'job_input_context',
             get message() {
                 return (
                     <span>
@@ -119,49 +116,61 @@ export class OperationJobsTableBase extends React.Component {
         },
     ];
 
-    prepareJobAction = (actionSettings) => {
-        const {login, promptAction} = this.props;
+    prepareJobAction = (actionSettings) => ({
+        get text() {
+            return actionSettings.text;
+        },
+        action: (params) => this.setState({actionDialog: {actionSettings, params}}),
+    });
 
-        return {
-            get text() {
-                return actionSettings.text;
-            },
-            action: (params) => {
-                const message = actionSettings.message || (
-                    <span>{i18n('context_about-to-job', {name: actionSettings.name})}</span>
-                );
-                return promptAction({
-                    ...actionSettings,
-                    message,
-                    handler: ({currentOption}) => {
-                        const finalParams = {
-                            ...params,
-                            name: actionSettings.name,
-                            currentOption,
-                            login,
-                        };
-                        return performJobAction(finalParams).then((path) => {
-                            if (actionSettings.name === 'input_context') {
-                                const url = makeNavigationLink({cluster: this.props.cluster, path});
-                                toaster.add({
-                                    name: 'confirm action',
-                                    theme: 'success',
-                                    content: (
-                                        <span>
-                                            {i18n('alert_dump-success')}{' '}
-                                            <Link url={url}>
-                                                {i18n('action_dump-success-here')}
-                                            </Link>
-                                        </span>
-                                    ),
-                                });
-                            }
+    renderActionDialog() {
+        const {actionDialog} = this.state;
+        if (!actionDialog) {
+            return null;
+        }
+
+        const {actionSettings, params} = actionDialog;
+        const {login, cluster} = this.props;
+        return (
+            <ActionDialog
+                key={`${params.item.id}:${actionSettings.name}`}
+                message={
+                    actionSettings.message || (
+                        <span>{i18n('context_about-to-job', {name: actionSettings.name})}</span>
+                    )
+                }
+                requireConfirmation={actionSettings.requireConfirmation}
+                errorMessage={actionSettings.errorMessage}
+                onConfirm={async () => {
+                    const path = await performJobAction({
+                        ...params,
+                        name: actionSettings.name,
+                        login,
+                    });
+                    if (actionSettings.name === 'input_context') {
+                        const url = makeNavigationLink({cluster, path});
+                        toaster.add({
+                            name: 'confirm action',
+                            theme: 'success',
+                            content: (
+                                <span>
+                                    {i18n('alert_dump-success')}{' '}
+                                    <Link url={url}>{i18n('action_dump-success-here')}</Link>
+                                </span>
+                            ),
                         });
-                    },
-                });
-            },
-        };
-    };
+                    } else {
+                        toaster.add({
+                            name: 'confirm action',
+                            theme: 'success',
+                            title: actionSettings.successMessage,
+                        });
+                    }
+                }}
+                onClose={() => this.setState({actionDialog: undefined})}
+            />
+        );
+    }
 
     preparedActions = map_(this.actions, this.prepareJobAction);
 
@@ -513,6 +522,7 @@ export class OperationJobsTableBase extends React.Component {
             return (
                 <Fragment>
                     {this.renderInputPathsModal()}
+                    {this.renderActionDialog()}
                     <ElementsTable
                         {...this.settings}
                         items={[job].filter(Boolean)}
@@ -540,6 +550,7 @@ export class OperationJobsTableBase extends React.Component {
         return (
             <Fragment>
                 {this.renderInputPathsModal()}
+                {this.renderActionDialog()}
                 <ElementsTable
                     {...this.settings}
                     items={jobs}

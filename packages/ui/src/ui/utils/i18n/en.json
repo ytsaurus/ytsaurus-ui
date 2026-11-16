@@ -1,7 +1,6 @@
 {
   "alert_load-date-locales": "Failed to load date translations",
   "alert_configuration-error": "Application configuration error",
-  "confirm_please-proceed": "Please proceed, I understand the risks.",
   "title_success": "Success",
   "title_failure": "Failure",
   "title_name-failure": "{{name}} failure",

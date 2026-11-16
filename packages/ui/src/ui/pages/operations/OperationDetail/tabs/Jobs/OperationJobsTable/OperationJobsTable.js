@@ -7,7 +7,6 @@ import {
     showInputPaths,
     showJobAttributesModal,
 } from '../../../../../../store/actions/operations/jobs';
-import {promptAction, showErrorModal} from '../../../../../../store/actions/actions';
 import {getShowCompetitiveJobs} from '../../../../../../pages/operations/selectors';
 import {selectJobsOperationId} from '../../../../../../store/selectors/operations/jobs';
 import {
@@ -49,8 +48,6 @@ const mapDispatchToProps = {
     showJobAttributesModal,
     showInputPaths,
     hideInputPaths,
-    showErrorModal,
-    promptAction,
     getJobs,
     getCompetitiveJobs,
 };

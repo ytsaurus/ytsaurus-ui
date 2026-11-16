@@ -16,20 +16,15 @@ import Button from '../../../components/Button/Button';
 import Link from '../../../containers/Link/Link';
 import Icon, {type IconName} from '../../../components/Icon/Icon';
 
-import {
-    type ActionModalData,
-    type ActionModalOptions,
-    type ActionModalPrompt,
-} from '../../../store/reducers/actions';
+import {ActionDialog, type FormValues} from '../../../components/ActionDialog/ActionDialog';
 
 import {selectJob, selectJobActions} from '../../../store/selectors/job/detail';
 import {loadJobData} from '../../../store/actions/job/general';
-import {promptAction} from '../../../store/actions/actions';
 import {selectCluster} from '../../../store/selectors/global';
 import {selectMergedUiSettings} from '../../../store/selectors/global/cluster';
 import {type RootState} from '../../../store/reducers';
 import {type PreparedJob} from '../../../types/operations/job';
-import {showErrorPopup} from '../../../utils/utils';
+import {showErrorPopup, wrapApiPromiseByToaster} from '../../../utils/utils';
 import hammer from '../../../common/hammer';
 import {type YTError} from '../../../types';
 import {toaster} from '../../../utils/toaster';
@@ -41,13 +36,14 @@ import './JobActions.scss';
 
 type ActionName = 'interrupt' | 'abort' | 'abandon';
 
-export type Action = Omit<ActionModalPrompt, 'handler' | 'message' | 'optionType' | 'optionValue'> &
-    ActionModalOptions & {
-        icon: IconName;
-        name: ActionName;
-        theme?: ButtonProps['view'];
-        message?: ActionModalPrompt['message'];
-    };
+export interface Action {
+    name: ActionName;
+    icon: IconName;
+    theme?: ButtonProps['view'];
+    message?: string;
+    successMessage: string;
+    requireConfirmation?: boolean;
+}
 
 const block = cn('job-actions');
 const codeBlock = cn('elements-code');
@@ -105,9 +101,10 @@ const getAdditionalActions = (
 };
 
 interface PerformAction {
-    currentOption: ActionModalData['currentOption'];
+    interruptTimeout?: number;
     name: ActionName;
     id: string;
+    successMessage: string;
 }
 
 interface YTParameters {
@@ -126,17 +123,22 @@ const getActionAction = (name: ActionName) => {
     return mapper[name];
 };
 
-const performAction = ({currentOption, name, id}: PerformAction) => {
+const performAction = ({interruptTimeout, name, id, successMessage}: PerformAction) => {
     const actionAction = getActionAction(name);
     let parameters: YTParameters = {job_id: id};
-    if (currentOption) {
+    if (interruptTimeout) {
         parameters = {
             ...parameters,
-            interrupt_timeout: Number(currentOption),
+            interrupt_timeout: interruptTimeout,
         };
     }
 
-    return actionAction(parameters);
+    return wrapApiPromiseByToaster(actionAction(parameters), {
+        toasterName: 'confirm action',
+        successTitle: successMessage,
+        skipErrorToast: true,
+        timeout: 5000,
+    });
 };
 
 const dumpJobContext = (id: string, path: string, cluster: string) => {
@@ -176,35 +178,43 @@ function ActionBlock(action: Action) {
         const reset = () => dispatch(loadJobData(operationId, id));
         setTimeout(reset, 5000);
     }, [dispatch, operationId, id]);
-    const intermediateAction = useCallback(
-        (data: ActionModalPrompt) => dispatch(promptAction(data)),
-        [dispatch],
-    );
+    const [dialogVisible, setDialogVisible] = useState(false);
     const handler = useCallback(
-        ({currentOption}: ActionModalData) => {
-            const data = {...action, currentOption, id};
-            return performAction(data).then(update);
-        },
-        [id, action, update],
-    );
-    const onClick = useCallback(
-        () => dispatch(intermediateAction({...action, message, handler})),
-        [dispatch, intermediateAction, action, message, handler],
+        ({timeout}: FormValues) =>
+            performAction({
+                name: action.name,
+                id,
+                interruptTimeout: timeout?.value,
+                successMessage: action.successMessage,
+            }).then(update),
+        [id, action.name, action.successMessage, update],
     );
 
     return (
-        <Button
-            size="m"
-            key={action.name}
-            onClick={onClick}
-            view={action.theme || 'outlined'}
-            className={block('action')}
-            title={hammer.format['ReadableField'](action.name)}
-        >
-            <Icon awesome={action.icon} />
-            &nbsp;
-            {hammer.format['ReadableField'](action.name)}
-        </Button>
+        <>
+            <Button
+                size="m"
+                key={action.name}
+                onClick={() => setDialogVisible(true)}
+                view={action.theme || 'outlined'}
+                className={block('action')}
+                title={hammer.format['ReadableField'](action.name)}
+            >
+                <Icon awesome={action.icon} />
+                &nbsp;
+                {hammer.format['ReadableField'](action.name)}
+            </Button>
+            {dialogVisible && (
+                <ActionDialog
+                    key={id}
+                    message={message}
+                    requireConfirmation={action.requireConfirmation}
+                    showTimeout={action.name === 'interrupt'}
+                    onConfirm={handler}
+                    onClose={() => setDialogVisible(false)}
+                />
+            )}
+        </>
     );
 }
 
