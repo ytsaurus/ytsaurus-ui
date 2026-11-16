@@ -245,14 +245,19 @@ jobs:
         run: |
           cd packages/ui
           WITH_AUTH=true YT_TOKEN=password YT_PROXY=`hostname`:8000 npm run e2e:localmode:monitoring:init
+      - name: Init password-auth accounts
+        run: |
+          cd packages/ui
+          YT_TOKEN=password YT_PROXY=`hostname`:8000 npm run e2e:localmode:passwd:init
       - name: YT auth
         run: |
           cd packages/ui
           npm run e2e:localmode:passwd:auth
-      - name: E2E-monitoring
+      - name: E2E with password auth
         run: |
           cd packages/ui
           npm run e2e:localmode:passwd
+          YT_TOKEN=password YT_PROXY=`hostname`:8000 npm run e2e:localmode:passwd:check
       - name: Upload local test-results
         uses: actions/upload-artifact@v4
         if: always()
