@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {prepareTableColumns} from '../../../../../utils/index';
 import i18n from './i18n';
 
@@ -31,43 +33,73 @@ export const completedTableProps = {
             name: {
                 sort: false,
                 align: 'left',
-                get caption() {
-                    return i18n('field_name');
+                renderHeader() {
+                    const caption = i18n('field_name');
+                    return (
+                        <div className="elements-table__column-name" title={caption}>
+                            {caption}
+                        </div>
+                    );
                 },
             },
             row_count: {
                 sort: false,
                 align: 'right',
-                get caption() {
-                    return i18n('field_rows');
+                renderHeader() {
+                    const caption = i18n('field_rows');
+                    return (
+                        <div className="elements-table__column-name" title={caption}>
+                            {caption}
+                        </div>
+                    );
                 },
             },
             compressed_data_size: {
                 sort: false,
                 align: 'right',
-                get caption() {
-                    return i18n('field_compressed');
+                renderHeader() {
+                    const caption = i18n('field_compressed');
+                    return (
+                        <div className="elements-table__column-name" title={caption}>
+                            {caption}
+                        </div>
+                    );
                 },
             },
             uncompressed_data_size: {
                 sort: false,
                 align: 'right',
-                get caption() {
-                    return i18n('field_uncompressed');
+                renderHeader() {
+                    const caption = i18n('field_uncompressed');
+                    return (
+                        <div className="elements-table__column-name" title={caption}>
+                            {caption}
+                        </div>
+                    );
                 },
             },
             data_weight: {
                 sort: false,
                 align: 'right',
-                get caption() {
-                    return i18n('field_weight');
+                renderHeader() {
+                    const caption = i18n('field_weight');
+                    return (
+                        <div className="elements-table__column-name" title={caption}>
+                            {caption}
+                        </div>
+                    );
                 },
             },
             chunk_count: {
                 sort: false,
                 align: 'right',
-                get caption() {
-                    return i18n('field_slices');
+                renderHeader() {
+                    const caption = i18n('field_slices');
+                    return (
+                        <div className="elements-table__column-name" title={caption}>
+                            {caption}
+                        </div>
+                    );
                 },
             },
             actions: {
@@ -91,21 +123,50 @@ export const intermediateTableProps = {
             account: {
                 sort: false,
                 align: 'left',
+                renderHeader() {
+                    const caption = i18n('field_account');
+                    return (
+                        <div className="elements-table__column-name" title={caption}>
+                            {caption}
+                        </div>
+                    );
+                },
             },
             disk_space: {
                 sort: false,
                 align: 'right',
+                renderHeader() {
+                    const caption = i18n('field_disk-space');
+                    return (
+                        <div className="elements-table__column-name" title={caption}>
+                            {caption}
+                        </div>
+                    );
+                },
             },
             chunk_count: {
                 sort: false,
                 align: 'right',
-                get caption() {
-                    return i18n('field_slices');
+                renderHeader() {
+                    const caption = i18n('field_slices');
+                    return (
+                        <div className="elements-table__column-name" title={caption}>
+                            {caption}
+                        </div>
+                    );
                 },
             },
             node_count: {
                 sort: false,
                 align: 'right',
+                renderHeader() {
+                    const caption = i18n('field_nodes');
+                    return (
+                        <div className="elements-table__column-name" title={caption}>
+                            {caption}
+                        </div>
+                    );
+                },
             },
         }),
         mode: 'default',

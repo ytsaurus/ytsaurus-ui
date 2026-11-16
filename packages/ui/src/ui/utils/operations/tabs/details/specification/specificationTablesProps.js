@@ -1,3 +1,5 @@
+import React from 'react';
+
 import i18n from './i18n';
 
 const tableProps = {
@@ -32,7 +34,14 @@ const tableProps = {
             live_preview: {
                 sort: false,
                 align: 'left',
-                caption: 'Live Preview',
+                renderHeader() {
+                    const caption = i18n('field_live-preview');
+                    return (
+                        <div className="elements-table__column-name" title={caption}>
+                            {caption}
+                        </div>
+                    );
+                },
             },
             filters: {
                 sort: false,

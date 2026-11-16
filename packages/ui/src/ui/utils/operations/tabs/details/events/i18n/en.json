@@ -3,5 +3,22 @@
   "field_state": "State",
   "field_state-phase": "State : Phase",
   "field_start-time": "Start time",
-  "value_total": "Total"
+  "value_total": "Total",
+  "value_starting": "Starting",
+  "value_waiting_for_agent": "Waiting for agent",
+  "value_initializing": "Initializing",
+  "value_preparing": "Preparing",
+  "value_pending": "Pending",
+  "value_materializing": "Materializing",
+  "value_running": "Running",
+  "value_completing": "Completing",
+  "value_completed": "Completed",
+  "value_aborting": "Aborting",
+  "value_aborted": "Aborted",
+  "value_failing": "Failing",
+  "value_failed": "Failed",
+  "value_reviving": "Reviving",
+  "value_reviving_jobs": "Reviving jobs",
+  "value_suspended": "Suspended",
+  "value_waiting": "Waiting"
 }

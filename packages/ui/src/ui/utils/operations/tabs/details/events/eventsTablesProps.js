@@ -1,6 +1,15 @@
 import {prepareTableColumns} from '../../../../../utils/index';
 import hammer from '../../../../../common/hammer';
+import {i18n as globalI18n} from '../../../../../i18n';
 import i18n from './i18n';
+
+function formatState(state) {
+    const key = `value_${state}`;
+    if (globalI18n.has('yt:events-table-props', key)) {
+        return i18n(key);
+    }
+    return hammer.format['Readable'](state);
+}
 
 export const columns = {
     state: {
@@ -9,7 +18,7 @@ export const columns = {
             return i18n('field_state');
         },
         get(event) {
-            return event.state;
+            return formatState(event.state);
         },
     },
     phase: {
@@ -23,7 +32,7 @@ export const columns = {
             }
 
             const formatter = hammer.format['Readable'];
-            const state = formatter(event.state);
+            const state = formatState(event.state);
             const phase = formatter(event.phase || hammer.format.NO_VALUE);
 
             return `${state} : ${phase}`;

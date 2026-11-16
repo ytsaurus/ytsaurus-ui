@@ -1,3 +1,5 @@
+import React from 'react';
+
 import filter_ from 'lodash/filter';
 import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
@@ -174,8 +176,13 @@ function prepareColumns() {
         job_type: {
             sort: false,
             align: 'left',
-            get caption() {
-                return i18n('field_task');
+            renderHeader() {
+                const caption = i18n('field_task');
+                return (
+                    <div className="elements-table__column-name" title={caption}>
+                        {caption}
+                    </div>
+                );
             },
         },
     };
@@ -183,8 +190,13 @@ function prepareColumns() {
     forEach_(states, (state) => {
         columns[state] = {
             sort: false,
-            get caption() {
-                return i18n(`field_${state}`);
+            renderHeader() {
+                const caption = i18n(`field_${state}`);
+                return (
+                    <div className="elements-table__column-name" title={caption}>
+                        {caption}
+                    </div>
+                );
             },
             align: 'right',
         };
