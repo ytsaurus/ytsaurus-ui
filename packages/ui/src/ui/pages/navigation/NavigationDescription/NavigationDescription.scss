@@ -1,7 +1,14 @@
 @use '../../../styles/common.scss';
 
 .navigation-description {
+    min-height: 0;
+
+    &__content {
+        min-height: 0;
+    }
+
     &__edit-block {
-        height: 300px;
+        flex: 1;
+        min-height: 300px;
     }
 }

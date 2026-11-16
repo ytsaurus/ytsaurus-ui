@@ -34,7 +34,7 @@ export function NavigationDescriptionEmpty() {
                     </Text>
                     <Flex gap={2}>
                         {descriptionType === 'yt' && (
-                            <Button view="outlined" onClick={edit}>
+                            <Button view="outlined" onClick={() => edit('empty_state')}>
                                 {i18n('action_add-description')}
                             </Button>
                         )}

@@ -4,5 +4,11 @@
   "action_save": "Save",
   "action_cancel": "Cancel",
   "action_edit": "Edit description",
-  "context_text-preview": "This preview shows text only and is limited to three lines. Open the full description to see all content and formatting."
+  "title_full-description": "Full description",
+  "action_view-full-description": "View full description",
+  "action_close": "Close",
+  "context_text-preview": "This preview shows text only and is limited to three lines. Open the full description to see all content and formatting.",
+  "action_view-description": "View description",
+  "title_source-description": "{{source}} Description",
+  "action_open-external": "Open {{service}}"
 }
