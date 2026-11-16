@@ -1,6 +1,24 @@
 .navigation {
     min-width: 1200px;
 
+    &_mode_annotation {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - var(--app-header-height) - var(--app-footer-height));
+
+        .navigation__header {
+            flex-shrink: 0;
+        }
+
+        .navigation__main,
+        .navigation__viewer_mode_annotation {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
+        }
+    }
+
     &_error {
         display: flex;
         flex-direction: column;

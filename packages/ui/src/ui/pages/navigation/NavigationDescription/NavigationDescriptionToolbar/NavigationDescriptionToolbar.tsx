@@ -1,13 +1,12 @@
-import {ArrowUpRightFromSquare, CircleQuestion} from '@gravity-ui/icons';
+import {ArrowUpRightFromSquare} from '@gravity-ui/icons';
 import {Button, Flex, Icon, Link, Text} from '@gravity-ui/uikit';
 import React from 'react';
-import {ClipboardButton, Label, MetaTable, Tooltip} from '@ytsaurus/components';
-import {RoutedLink} from '../../../../containers/RoutedLink/RoutedLink';
+import {Label, Tooltip} from '@ytsaurus/components';
 import {getDescriptionType, getEditMode} from '../../../../store/reducers/navigation/description';
 import {useSelector} from '../../../../store/redux-hooks';
 import {selectPath} from '../../../../store/selectors/navigation';
 import UIFactory from '../../../../UIFactory';
-import {makeNavigationLink} from '../../../../utils/app-url';
+import {DescriptionSourcePath} from '../DescriptionSourcePath/DescriptionSourcePath';
 import {EditButtons} from '../EditButtons';
 import {useDescription} from '../hooks/use-description';
 import {useExternalAnnotation} from '../hooks/use-external-annotation';
@@ -55,51 +54,9 @@ export function NavigationDescriptionToolbar() {
             )}
             {inheritedPath ? (
                 <Text>
-                    <SourcePath path={inheritedPath} />
+                    <DescriptionSourcePath path={inheritedPath} />
                 </Text>
             ) : null}
         </Flex>
-    );
-}
-
-function SourcePath({path}: {path: string}) {
-    const url = makeNavigationLink({path});
-
-    return (
-        <Tooltip
-            content={
-                <MetaTable
-                    legacyGroupSpacing
-                    alignItems="baseline"
-                    items={[
-                        {
-                            key: 'source-path',
-                            label: i18n('field_source-path'),
-                            value: (
-                                <Flex alignItems="baseline" overflow="hidden" gap={1}>
-                                    <Text ellipsis>
-                                        <RoutedLink view="secondary" href={url}>
-                                            {path}
-                                        </RoutedLink>
-                                    </Text>
-
-                                    <ClipboardButton view="flat-secondary" text={path} />
-                                </Flex>
-                            ),
-                        },
-                    ]}
-                />
-            }
-        >
-            <Label>
-                <Flex alignItems={'center'} gap={1}>
-                    <RoutedLink view="secondary" href={url}>
-                        {i18n('value_inherited')}
-                    </RoutedLink>
-
-                    <Icon data={CircleQuestion} size={14} style={{marginBottom: '-2px'}} />
-                </Flex>
-            </Label>
-        </Tooltip>
     );
 }

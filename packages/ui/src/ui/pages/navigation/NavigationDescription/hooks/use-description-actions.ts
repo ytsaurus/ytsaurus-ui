@@ -14,6 +14,7 @@ import {selectCluster} from '../../../../store/selectors/global';
 import {udpateAnnotationExternal} from '../../../../store/api/navigation/tabs/description';
 import {selectPath} from '../../../../store/selectors/navigation';
 
+import {trackDescriptionEdit} from '../metrics';
 import {useUpdateAnnotation} from './use-update-annotaton';
 import {useExternalAnnotation} from './use-external-annotation';
 import {useYTAnnotation} from './use-yt-annotation';
@@ -34,9 +35,13 @@ export function useDescriptionActions() {
     const externalDescription = useExternalAnnotation();
     const {ytAnnotation} = useYTAnnotation();
 
-    const edit = useCallback(() => {
-        dispatch(startEdit({externalDescription, annotation: ytAnnotation}));
-    }, [externalDescription, ytAnnotation, dispatch]);
+    const edit = useCallback(
+        (location: 'tab' | 'empty_state') => {
+            trackDescriptionEdit(type, location);
+            dispatch(startEdit({externalDescription, annotation: ytAnnotation}));
+        },
+        [type, externalDescription, ytAnnotation, dispatch],
+    );
 
     const cancel = useCallback(() => {
         dispatch(stopEdit());
