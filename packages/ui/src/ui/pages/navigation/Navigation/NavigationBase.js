@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
 import hammer from '../../../common/hammer';
+import {getMetrics} from '../../../common/utils/metrics';
 import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
@@ -17,6 +18,7 @@ import ContentViewer from './ContentViewer/ContentViewer';
 import {checkContentIsSupported} from './ContentViewer/helpers';
 import Tabs from '../../../components/Tabs/Tabs';
 import {NavigationError} from './NavigationError';
+import {getNotFoundError} from '../../../utils/errors';
 
 import {Tab} from '../../../constants/navigation';
 import {NavigationPermissionsNotice} from './NavigationPermissionsNotice';
@@ -146,6 +148,9 @@ export class NavigationBase extends Component {
 
     onTabChange = (value) => {
         const {setMode} = this.props;
+        if (value === Tab.ANNOTATION) {
+            getMetrics().countEvent('navigation_description_tab');
+        }
         if (value !== Tab.ORIGINATING_QUEUE) {
             setMode(value);
         }
@@ -235,7 +240,9 @@ export class NavigationBase extends Component {
     }
 
     render() {
-        const {loaded, hasError} = this.props;
+        const {loaded, hasError, mode, error} = this.props;
+        const showDescription =
+            mode === Tab.ANNOTATION && !(hasError && getNotFoundError(error.details));
 
         return (
             <ErrorBoundary>
@@ -250,8 +257,10 @@ export class NavigationBase extends Component {
                         </div>
                     </div>
 
-                    <div className={block('main')}>{loaded && this.renderView()}</div>
-                    {hasError && this.renderError()}
+                    <div className={block('main')}>
+                        {(loaded || showDescription) && this.renderView()}
+                    </div>
+                    {hasError && !showDescription && this.renderError()}
 
                     {renderModals()}
                 </div>
