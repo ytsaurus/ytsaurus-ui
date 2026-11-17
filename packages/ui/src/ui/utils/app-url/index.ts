@@ -5,6 +5,7 @@ export * from './makeFlowLink';
 export * from './makeOperationJobsUrl';
 export * from './makeOperationJobUrl';
 export * from './makeOperationLogsUrl';
+export * from './makeOperationsUrl';
 export * from './makeProxyUrl';
 export * from './makeQueryUrl';
 export * from './makeSchedulingUrl';
