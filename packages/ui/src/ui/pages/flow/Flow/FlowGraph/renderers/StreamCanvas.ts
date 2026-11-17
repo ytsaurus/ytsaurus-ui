@@ -50,6 +50,11 @@ export class StreamCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockItem<'st
         });
     }
 
+    // All anchors of a stream are on its top
+    override getAnchorSide() {
+        return 'top' as const;
+    }
+
     override getAnchorPosition({index = 0}: TAnchor) {
         const {length = 0} = this.state.anchors ?? {};
 
