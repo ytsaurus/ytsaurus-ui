@@ -6,7 +6,9 @@ import {ReactUnipika as ReactUnipikaWindowScroll} from '@gravity-ui/react-unipik
 import {ReactUnipika as ReactUnipikaContainerScroll} from '@gravity-ui/react-unipika/container-scroll';
 
 import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
+import {YTErrorInline} from '../../containers/YTErrorInline/YTErrorInline';
 import {type UnipikaSettings} from './StructuredYson/StructuredYsonTypes';
+import i18n from './i18n';
 
 export type YsonSettings = UnipikaSettings;
 
@@ -47,6 +49,15 @@ export const YsonSettingsPropTypes = PropTypes.shape({
     break: PropTypes.bool,
 });
 
+function renderError(error: unknown) {
+    return (
+        <YTErrorInline
+            error={error instanceof Error ? error : new Error(String(error))}
+            hint={i18n('context_disable-utf8-decoding')}
+        />
+    );
+}
+
 export const Yson = ({
     scrollContainer,
     settings = defaultUnipikaSettings,
@@ -64,9 +75,15 @@ export const Yson = ({
             virtualized={virtualized}
             settings={settings}
             scrollContainerRef={scrollContainerRef}
+            renderError={renderError}
         />
     ) : (
-        <ReactUnipikaWindowScroll {...rest} virtualized={virtualized} settings={settings} />
+        <ReactUnipikaWindowScroll
+            {...rest}
+            virtualized={virtualized}
+            settings={settings}
+            renderError={renderError}
+        />
     );
 
     return <ErrorBoundary>{content}</ErrorBoundary>;

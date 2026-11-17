@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {type ReactNode} from 'react';
 import cn from 'bem-cn-lite';
 
-import {Flex, Text} from '@gravity-ui/uikit';
+import {Flex, HelpMark, Text} from '@gravity-ui/uikit';
 
 import {type YTError} from '../../types';
 
@@ -16,9 +16,11 @@ const block = cn('yt-error-inline');
 export type YTErrorInlineProps = Pick<
     YTErrorBlockProps,
     'className' | 'error' | 'message' | 'type'
->;
+> & {
+    hint?: ReactNode;
+};
 
-export function YTErrorInline({className, error, message, type}: YTErrorInlineProps) {
+export function YTErrorInline({className, error, message, type, hint}: YTErrorInlineProps) {
     let msg = message;
     if (!msg) {
         msg = ypath.getValue(error, '/message');
@@ -33,7 +35,7 @@ export function YTErrorInline({className, error, message, type}: YTErrorInlinePr
                     {msg}
                 </Text>
             </Flex>
-            <Flex alignItems="baseline" shrink={0}>
+            <Flex alignItems="baseline" shrink={0} gap={1}>
                 <ClickableText
                     className={block('details')}
                     onClick={() => {
@@ -43,6 +45,11 @@ export function YTErrorInline({className, error, message, type}: YTErrorInlinePr
                     {''}
                     {i18n('action_details')}
                 </ClickableText>
+                {hint && (
+                    <HelpMark aria-label={typeof hint === 'string' ? hint : i18n('action_details')}>
+                        {hint}
+                    </HelpMark>
+                )}
             </Flex>
         </Flex>
     );
