@@ -1,7 +1,11 @@
 import {type TAnchor} from '@gravity-ui/graph';
 import CpuIcon from '@gravity-ui/icons/svgs/cpu.svg';
 import format from '../../../../../common/hammer/format';
-import {YTGraphCanvasBlock, type YTGraphFontSize} from '../../../../../components/YTGraph';
+import {
+    type PortSide,
+    YTGraphCanvasBlock,
+    type YTGraphFontSize,
+} from '../../../../../components/YTGraph';
 import {type FlowGraphBlockItem} from '../FlowGraph';
 import {
     COMPUTATION_IN,
@@ -10,6 +14,11 @@ import {
     COMPUTATION_TIMER_OUT,
 } from '../utils/utils';
 import {ComputationAnchor} from './ComputationAnchor';
+
+const ANCHOR_SIDE: Partial<Record<string, PortSide>> = {
+    [COMPUTATION_TIMER_IN]: 'bottom',
+    [COMPUTATION_TIMER_OUT]: 'bottom',
+};
 
 export class ComputationCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockItem<'computation'>> {
     PADDING = 15;
@@ -97,6 +106,10 @@ export class ComputationCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockIte
             skipLabel,
             color: hightlight_memory_usage ? 'warning' : undefined,
         });
+    }
+
+    override getAnchorSide({type}: TAnchor) {
+        return ANCHOR_SIDE[type];
     }
 
     override getAnchorPosition(anchor: TAnchor) {

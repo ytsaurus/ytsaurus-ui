@@ -1,7 +1,8 @@
-import {CanvasBlock} from '@gravity-ui/graph';
+import {CanvasBlock, type TAnchor} from '@gravity-ui/graph';
 import {GRAPH_BACKGROUND_COLORS, GRAPH_COLORS} from '../constants';
 import {type YTGraphBlock} from '../types';
 import {svgDataToBase} from '../utils/iconToBase';
+import {type PortSide} from './helpers/generateBezierParams';
 import {type SVGIconSvgrData} from '../../../types/uikit';
 
 export const DEFAULT_PADDING = 10;
@@ -57,6 +58,14 @@ export class YTGraphCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canv
     iconSrc: null | string = null;
 
     zoomLevel: ZoomMode = 'detailed';
+
+    /**
+     * The side of the block where the anchor lies, an edge leaves or enters it perpendicularly to the side.
+     * By default edges leave on the right and enter on the left.
+     */
+    getAnchorSide(_anchor: TAnchor): PortSide | undefined {
+        return undefined;
+    }
 
     override renderMinimalisticBlock() {
         this.zoomLevel = 'minimalistic';
