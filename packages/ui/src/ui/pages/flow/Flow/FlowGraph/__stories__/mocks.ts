@@ -56,6 +56,7 @@ function makeComputation(
         output_streams: [OUTPUT_STREAM_ID],
         source_streams: sourceStreams,
         timer_streams: [],
+        key_visitor_streams: [],
         extended_input_streams: [],
         extended_output_streams: [],
         extended_source_streams: extendedSourceStream ? [extendedSourceStream] : [],
@@ -298,3 +299,113 @@ function makeMultipleSinksFlowGraphResponse(): FlowDescribePipelineData {
 export const multipleSinksFlowGraphHandler = makeFlowGraphHandler(
     makeMultipleSinksFlowGraphResponse(),
 );
+
+// The writer has a timer, a second output stream and visits its own state; the visitor visits a state table of
+// the writer and the table of a sink. As in the describe response, the computations are keyed apart from their graph ids.
+function makeKeyVisitorFlowGraphResponse(): FlowDescribePipelineData {
+    const {streams, sources, sinks} = makeFlowGraphResponse();
+    const writer: FlowComputationType = {
+        ...makeComputation(),
+        output_streams: [OUTPUT_STREAM_ID, 'second-output-stream'],
+        timer_streams: ['timer-stream'],
+        key_visitor_streams: ['own-visit-stream'],
+    };
+    const visitor: FlowComputationType = {
+        ...makeComputation(undefined, [], ['second-output-stream']),
+        id: 'visitor',
+        name: 'Visitor',
+        output_streams: ['visitor-output-stream'],
+        key_visitor_streams: ['joiner-visit-stream', 'sink-table-visit-stream'],
+        extended_key_visitor_streams: [
+            {...makeExtendedStream({drained: true}), stream_graph_entity_id: 'joiner-visit-stream'},
+        ],
+    };
+    const names: Record<string, string> = {
+        'second-output-stream': 'Second output stream',
+        'timer-stream': 'Timer stream',
+        'own-visit-stream': 'Own state visit',
+        'joiner-visit-stream': 'Joiner visit',
+        'sink-table-visit-stream': 'Sink table visit',
+        'visitor-output-stream': 'Visitor output stream',
+    };
+    return {
+        computations: {writer, visitor},
+        streams: {
+            ...streams,
+            ...Object.fromEntries(
+                Object.entries(names).map(([id, name]) => [
+                    id,
+                    {...streams[OUTPUT_STREAM_ID], id, name},
+                ]),
+            ),
+        },
+        sources,
+        sinks,
+        edges: [
+            {from: 'computation', to: 'own-visit-stream', kind: 'data_channel'},
+            {
+                from: 'computation',
+                to: 'joiner-visit-stream',
+                kind: 'data_channel',
+                label: 'yt:primary://home/flow/state',
+            },
+            {
+                from: 'sink',
+                to: 'sink-table-visit-stream',
+                kind: 'data_channel',
+                label: 'yt:primary://home/flow/sink_table',
+            },
+        ],
+    };
+}
+
+export const keyVisitorFlowGraphHandler = makeFlowGraphHandler(makeKeyVisitorFlowGraphResponse());
+
+// A dense computation with a source, fed by the producer: own-state visits alternate with visits fed by the producer
+// and the sink. As in the describe response, the dense computation is keyed apart from its graph id.
+function makeDenseFlowGraphResponse(): FlowDescribePipelineData {
+    const {streams, sources, sinks} = makeFlowGraphResponse();
+    const ids = (prefix: string, count: number) =>
+        Array.from({length: count}, (_, i) => `${prefix}-${i + 1}`);
+    const dense: FlowComputationType = {
+        ...makeComputation(undefined, ['dense-source-stream'], [OUTPUT_STREAM_ID]),
+        id: 'cmp-dense',
+        name: 'Dense',
+        output_streams: ids('dense-output', 4),
+        timer_streams: ids('dense-timer', 3),
+        key_visitor_streams: ids('dense-visit', 4),
+    };
+    const denseStreamIds = [
+        ...dense.source_streams,
+        ...dense.output_streams,
+        ...dense.timer_streams,
+        ...dense.key_visitor_streams,
+    ];
+    const visitFrom = [dense.id, 'computation', dense.id, 'sink'];
+    return {
+        computations: {computation: makeComputation(), dense},
+        streams: {
+            ...streams,
+            ...Object.fromEntries(
+                denseStreamIds.map((id) => [id, {...streams[OUTPUT_STREAM_ID], id, name: id}]),
+            ),
+        },
+        sources: {
+            ...sources,
+            'dense-source': {
+                id: 'dense-source',
+                name: 'Dense source',
+                status: 'info',
+                stream_id: 'dense-source-stream',
+            },
+        },
+        sinks,
+        edges: dense.key_visitor_streams.map((to, i) => ({
+            from: visitFrom[i],
+            to,
+            kind: 'data_channel',
+        })),
+    };
+}
+
+export const denseFlowGraphHandler = makeFlowGraphHandler(makeDenseFlowGraphResponse());

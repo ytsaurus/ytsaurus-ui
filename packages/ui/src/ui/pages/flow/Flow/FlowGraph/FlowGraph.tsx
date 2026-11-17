@@ -1,5 +1,6 @@
 import {ECameraScaleLevel, type Graph, type TBlockId} from '@gravity-ui/graph';
 import {GraphBlock, useGraphEvents} from '@gravity-ui/graph/react';
+import ArrowsRotateRightIcon from '@gravity-ui/icons/svgs/arrows-rotate-right.svg';
 import ClockIcon from '@gravity-ui/icons/svgs/clock.svg';
 import FileCodeIcon from '@gravity-ui/icons/svgs/file-code.svg';
 import ReceiptIcon from '@gravity-ui/icons/svgs/receipt.svg';
@@ -277,6 +278,7 @@ const ICON_BY_TYPE: Record<
     output_streams: {icon: FileCodeIcon},
     source_streams: {icon: FileCodeIcon},
     timer_streams: {icon: ClockIcon},
+    key_visitor_streams: {icon: ArrowsRotateRightIcon},
 };
 
 const COMPUTATION_SIZE = {width: 320, height: 130};
@@ -347,6 +349,20 @@ function useFlowGraphData(params: {pipeline_path: string}) {
 
             const blockById: Map<TBlockId, FlowGraphBlock> = new Map();
 
+            // Own-state visits as `${computation.id}->${streamId}`: data-channel edges from a computation
+            // to its own key-visitor stream
+            const keyVisitorStreams = new Set(
+                Object.values(computations).flatMap(({id, key_visitor_streams = []}) =>
+                    key_visitor_streams.map((streamId) => `${id}->${streamId}`),
+                ),
+            );
+            const ownStateVisits = new Set(
+                edges
+                    .filter(({kind}) => kind === 'data_channel')
+                    .map(({from, to}) => `${from}->${to}`)
+                    .filter((visit) => keyVisitorStreams.has(visit)),
+            );
+
             const streamPlacementById = new Map<
                 string,
                 {
@@ -359,17 +375,22 @@ function useFlowGraphData(params: {pipeline_path: string}) {
             Object.values(computations).forEach((computation) => {
                 const groupId = makeComputationGroupId(computation.id);
 
-                (['output_streams', 'source_streams', 'timer_streams'] as const).forEach(
-                    (streamType) => {
-                        computation[streamType]?.forEach((streamId) => {
-                            streamPlacementById.set(streamId, {
-                                groupId,
-                                stream_type: streamType,
-                                ...ICON_BY_TYPE[streamType],
-                            });
+                (
+                    [
+                        'output_streams',
+                        'source_streams',
+                        'timer_streams',
+                        'key_visitor_streams',
+                    ] as const
+                ).forEach((streamType) => {
+                    computation[streamType]?.forEach((streamId) => {
+                        streamPlacementById.set(streamId, {
+                            groupId,
+                            stream_type: streamType,
+                            ...ICON_BY_TYPE[streamType],
                         });
-                    },
-                );
+                    });
+                });
             });
 
             // Collect streams
@@ -465,6 +486,27 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                             );
                             makeTimerAnchors(timerBlock, timerComputationBlock, cIn);
                             applyConnectionStyle(cIn, timerInfo);
+                        } else if (key === 'key_visitor_streams') {
+                            // A key-visitor stream loops like a timer when it visits the state of
+                            // its own computation, the data edge is dashed
+                            const keyVisitorBlock = blockById.get(id)!;
+
+                            if (ownStateVisits.has(`${computation.id}->${id}`)) {
+                                const cOut = addFlowConnection(
+                                    res.data.connections,
+                                    computation.id,
+                                    id,
+                                    {dashed: true},
+                                );
+                                makeTimerAnchors(computationBlock, keyVisitorBlock, cOut);
+                            }
+
+                            const cIn = addFlowConnection(res.data.connections, id, computation.id);
+                            makeTimerAnchors(keyVisitorBlock, computationBlock, cIn);
+                            applyConnectionStyle(
+                                cIn,
+                                runtimeData.timer.extendedStreams.get(id) ?? {},
+                            );
                         }
                     });
                 }
@@ -473,6 +515,7 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                 collectStreams('output_streams');
                 collectStreams('source_streams');
                 collectStreams('timer_streams');
+                collectStreams('key_visitor_streams');
             });
 
             // Collect sinks
@@ -495,10 +538,16 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                 res.groups.blocks.push(source);
             });
 
-            // Collect data-channel edges: a sink writes and a source reads the same channel.
+            // Collect data-channel edges: a sink or a computation produces the data that a source or
+            // a key-visitor stream reads, own-state visits are collected with key-visitor streams.
             // Edges of other kinds are not supported yet.
             edges.forEach(({from, to, kind}) => {
-                if (kind !== 'data_channel' || !blockById.has(from) || !blockById.has(to)) {
+                if (
+                    kind !== 'data_channel' ||
+                    ownStateVisits.has(`${from}->${to}`) ||
+                    !blockById.has(from) ||
+                    !blockById.has(to)
+                ) {
                     return;
                 }
                 addFlowConnection(res.data.connections, from, to, {dashed: true});

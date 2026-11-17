@@ -157,6 +157,8 @@ export function makeFlowComputationRuntimeData(
     collectStreamsSummary(output, computation.extended_output_streams);
     collectStreamsSummary(input, computation.extended_source_streams);
     collectStreamsSummary(timer, computation.extended_timer_streams);
+    // Key-visitor streams loop through the timer anchors
+    collectStreamsSummary(timer, computation.extended_key_visitor_streams);
 
     return {
         input,
