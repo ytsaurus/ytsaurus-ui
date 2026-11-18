@@ -51,6 +51,7 @@ import {selectIsVcsVisible, selectVcsConfig} from '../../store/selectors/query-t
 import {SegmentedRadioGroupSettingItem} from '../SettingsMenu/SettingsMenuSelect';
 import {CheckboxSettingItem} from '../SettingsMenu/CheckboxSettingItem';
 import {queriesPage} from './queriesPage';
+import queriesI18n from './queriesPage/i18n';
 import {type SettingsPage, makeItem, makePage, makePageBySections} from './settings-page-builders';
 
 export {type SettingsPage, makeItem, makePage} from './settings-page-builders';
@@ -210,6 +211,16 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                             settingKey="global::development::regularUserUI"
                             title={i18n('field_regular-user-ui')}
                             description={i18n('context_regular-user-ui-description')}
+                        />,
+                    ),
+                    makeItem(
+                        'global::queryTracker::useNewQueriesView',
+                        queriesI18n('field_new-queries-view'),
+                        'top',
+                        <CheckboxSettingItem
+                            settingKey="global::queryTracker::useNewQueriesView"
+                            description={queriesI18n('context_new-queries-view-description')}
+                            oneLine
                         />,
                     ),
                     makeItem(

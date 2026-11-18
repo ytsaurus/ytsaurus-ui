@@ -2,6 +2,13 @@ import {createSelector} from 'reselect';
 import {selectSettingsData} from './settings-base';
 import {selectQueryDraft} from '../query-tracker/query';
 
+export const selectSettingsQueryTrackerNewQueriesView = createSelector(
+    selectSettingsData,
+    (data) => {
+        return data['global::queryTracker::useNewQueriesView'] || false;
+    },
+);
+
 export const selectQuerySuggestionsEnabled = createSelector(selectSettingsData, (data) => {
     return data['global::queryTracker::suggestions'] || false;
 });
