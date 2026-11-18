@@ -1,4 +1,4 @@
-name: "[manual]: Docker build"
+name: "[manual]: Docker build dev"
 
 on:
   workflow_dispatch:

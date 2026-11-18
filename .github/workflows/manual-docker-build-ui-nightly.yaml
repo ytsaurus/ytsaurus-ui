@@ -1,0 +1,63 @@
+name: "[manual]: Docker build release"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "UI version without ui-v (for example, 3.26.0)"
+        required: true
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      VERSION: ${{ inputs.version }}
+      IMAGE: ghcr.io/ytsaurus/ui-nightly:${{ inputs.version }}
+    steps:
+      - name: Checkout release tag
+        uses: actions/checkout@v2
+        with:
+          ref: refs/tags/ui-v${{ inputs.version }}
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push UI
+        working-directory: packages/ui
+        shell: bash
+        run: |
+          check_image_absent() {
+            local token status
+            token=$(curl --fail --silent --show-error --max-time 30 \
+              'https://ghcr.io/token?service=ghcr.io&scope=repository:ytsaurus/ui-nightly:pull' \
+              | jq -er '.token')
+            status=$(curl --silent --show-error --max-time 30 \
+              --head --output /dev/null --write-out '%{http_code}' \
+              --header "Authorization: Bearer ${token}" \
+              --header 'Accept: application/vnd.oci.image.index.v1+json, application/vnd.oci.image.manifest.v1+json, application/vnd.docker.distribution.manifest.list.v2+json, application/vnd.docker.distribution.manifest.v2+json' \
+              "https://ghcr.io/v2/ytsaurus/ui-nightly/manifests/${VERSION}")
+
+            if [[ "$status" != 404 ]]; then
+              echo "::error::Expected HTTP 404 for absent image ${IMAGE}, got HTTP ${status}"
+              exit 1
+            fi
+          }
+
+          check_image_absent
+          npm run docker:build --dockertag="$VERSION"
+          check_image_absent
+          docker push "$IMAGE"
