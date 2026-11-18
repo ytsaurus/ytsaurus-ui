@@ -14,6 +14,12 @@
         }
     }
 
+    &__panes-wrapper_without-header {
+        --app-header-height: 0px;
+
+        min-height: calc(100vh - var(--app-footer-height));
+    }
+
     &__panes-wrapper_with-pane {
         overflow: auto;
         max-width: calc(100vw - var(--gn-aside-header-size));

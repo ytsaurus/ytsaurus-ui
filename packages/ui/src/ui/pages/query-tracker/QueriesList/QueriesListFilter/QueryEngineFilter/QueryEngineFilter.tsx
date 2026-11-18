@@ -1,4 +1,4 @@
-import React, {type FC, useCallback} from 'react';
+import React, {type FC} from 'react';
 import {Select} from '@gravity-ui/uikit';
 import {Engines} from '../../../../../types/query-tracker/api';
 import {type QueryEngine, QueryEnginesNames} from '../../../../../../shared/constants/engines';
@@ -22,31 +22,31 @@ const getEnginesList = () => [
     }),
 ];
 
-export const QueryEngineFilter: FC = () => {
-    const dispatch = useDispatch();
-    const {engine} = useSelector(selectQueriesFilters);
+type Props = {
+    value?: QueryEngine;
+    onChange: (value: QueryEngine | undefined) => void;
+};
 
-    const onChangeEngineFilter = useCallback(
-        (values: string[]) => {
-            const selectedEngine = values[0];
-            dispatch(
-                applyFilter({
-                    engine:
-                        selectedEngine === ALL_ENGINE_KEY
-                            ? undefined
-                            : (selectedEngine as QueryEngine),
-                }),
-            );
-        },
-        [dispatch],
-    );
-
+export function QueryEngineFilterField({value, onChange}: Props) {
     return (
         <Select
             options={getEnginesList()}
-            value={[engine || ALL_ENGINE_KEY]}
-            onUpdate={onChangeEngineFilter}
+            value={[value || ALL_ENGINE_KEY]}
+            onUpdate={([next]) =>
+                onChange(next === ALL_ENGINE_KEY ? undefined : (next as QueryEngine))
+            }
             placeholder={i18n('context_select-engine')}
+        />
+    );
+}
+
+export const QueryEngineFilter: FC = () => {
+    const dispatch = useDispatch();
+    const {engine} = useSelector(selectQueriesFilters);
+    return (
+        <QueryEngineFilterField
+            value={engine}
+            onChange={(value) => dispatch(applyFilter({engine: value}))}
         />
     );
 };

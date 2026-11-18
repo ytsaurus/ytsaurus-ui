@@ -65,6 +65,7 @@ export const FileItemForm: FC<Props> = ({file, validator, onCancel, onSave, clas
         <div className={block(null, className)}>
             <div className={block(isLink ? 'link-form' : 'form')}>
                 <TextInput
+                    qa="query-file-name"
                     defaultValue={file.name}
                     onChange={handleChangeName}
                     onKeyDown={handleKeyDown}

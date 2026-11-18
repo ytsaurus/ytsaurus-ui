@@ -15,7 +15,7 @@ import {
     startQuery,
     updateACOQuery,
 } from './api';
-import {requestQueriesList} from './queriesList';
+import {refreshQueriesList} from './queriesList';
 import {
     SHARED_QUERY_ACO,
     selectCurrentDraftQueryACO,
@@ -557,7 +557,7 @@ export function runQuery(
                 dispatch(loadQuery(query_id));
             }
 
-            dispatch(requestQueriesList(true));
+            dispatch(refreshQueriesList());
         } catch (error) {
             dispatch({
                 type: RESTORE_QUERY_DIRTY_AFTER_SUBMIT,
@@ -583,7 +583,7 @@ export function abortCurrentQuery(): ThunkAction<any, RootState, any, SetQueryAc
                 errorTitle: 'Failed to abort query',
             });
             dispatch(loadQuery(currentQuery?.id, {dontReplaceQueryText: true}));
-            dispatch(requestQueriesList(true));
+            dispatch(refreshQueriesList());
         }
     };
 }
@@ -670,5 +670,5 @@ export const toggleShareQuery =
             type: UPDATE_ACO_QUERY,
             data: {access_control_objects: aco},
         });
-        dispatch(requestQueriesList(true));
+        dispatch(refreshQueriesList());
     };

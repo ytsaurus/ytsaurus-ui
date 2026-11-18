@@ -1,16 +1,16 @@
-import type {QueryResultReadyState} from '../../../../../types/query-tracker/queryResult';
+import type {FormattedQueryResultReadyState} from '../../../../../types/query-tracker/queryResult';
 import {useEffect, useMemo, useState} from 'react';
 
 export const useQueryResultTableData = (
-    result: QueryResultReadyState,
+    result: FormattedQueryResultReadyState,
 ): {
-    results: QueryResultReadyState['results'];
-    columns: QueryResultReadyState['columns'];
+    results: FormattedQueryResultReadyState['results'];
+    columns: FormattedQueryResultReadyState['columns'];
     visibleColumns: string[];
     transposed: boolean;
     startIndex: number;
 } => {
-    const [realResult, setResult] = useState<QueryResultReadyState | undefined>(undefined);
+    const [realResult, setResult] = useState<FormattedQueryResultReadyState | undefined>(undefined);
     useEffect(() => {
         const timer = setTimeout(() => {
             setResult(result);

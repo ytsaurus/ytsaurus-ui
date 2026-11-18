@@ -1,4 +1,7 @@
 import React from 'react';
+import {useStore} from 'react-redux';
+import type {RootState} from '../../../../store/reducers';
+import {selectQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
 import {useDispatch} from '../../../../store/redux-hooks';
 import {
     type CellDataHandlerQueries,
@@ -14,38 +17,39 @@ type Props = {
     resultIndex: number;
 };
 
-export function useShowPreviewHandler({queryId, resultIndex}: Props) {
+export function useQueryResultsPreviewHandler({queryId}: Pick<Props, 'queryId'>) {
     const dispatch = useDispatch();
+    const store = useStore<RootState>();
+    const cancelHelper = React.useMemo(() => new CancelHelper(), []);
+    const cancelPreviews = React.useCallback(
+        () => cancelHelper.removeAllRequests(),
+        [cancelHelper],
+    );
 
-    const {dataHandler, onShowPreview} = React.useMemo(() => {
-        const cancelHelper = new CancelHelper();
-
-        const cellDataHandler = {
-            onStartLoading: () => {},
-            onSuccess: ({columnName, rowIndex, data}) => {
-                dispatch(
-                    injectQueryResults({
-                        queryId,
-                        resultIndex,
-                        columnName,
-                        rowIndex,
-                        data,
-                    }),
-                );
-            },
-            onError: onErrorTableCellPreview,
-
-            cancelHelper,
-            saveCancellation: (token) => {
-                cancelHelper.saveCancelToken(token);
-            },
-        } as CellDataHandlerQueries & {cancelHelper: CancelHelper};
-
-        const showPreview = async (
-            columnName: string,
-            rowIndex: number,
-            tag: string | undefined,
-        ) => {
+    const onShowPreview = React.useCallback(
+        async (resultIndex: number, columnName: string, rowIndex: number, tag?: string) => {
+            const result = selectQueryResult(store.getState(), queryId, resultIndex);
+            const expectedCell = result?.resultReady
+                ? result.results.find((row) => row.sourceIndex === rowIndex)?.cells[columnName]
+                : undefined;
+            if (!expectedCell) return;
+            const cellDataHandler: CellDataHandlerQueries = {
+                onStartLoading: () => {},
+                onSuccess: ({columnName: name, rowIndex: row, data}) => {
+                    dispatch(
+                        injectQueryResults({
+                            queryId,
+                            resultIndex,
+                            columnName: name,
+                            rowIndex: row,
+                            data,
+                            expectedCell,
+                        }),
+                    );
+                },
+                onError: onErrorTableCellPreview,
+                saveCancellation: (token) => cancelHelper.saveCancelToken(token),
+            };
             const allowInlinePreview = isInlinePreviewAllowed(tag);
             await dispatch(
                 onCellPreviewQueryResults(
@@ -53,18 +57,25 @@ export function useShowPreviewHandler({queryId, resultIndex}: Props) {
                     resultIndex,
                     {columnName, rowIndex},
                     allowInlinePreview ? cellDataHandler : undefined,
+                    allowInlinePreview ? undefined : cellDataHandler.saveCancellation,
                 ),
             );
-        };
+        },
+        [queryId, dispatch, cancelHelper, store],
+    );
 
-        return {dataHandler: cellDataHandler, onShowPreview: showPreview};
-    }, [queryId, resultIndex, dispatch]);
+    React.useEffect(() => cancelPreviews, [cancelPreviews, queryId]);
 
-    React.useEffect(() => {
-        return () => {
-            dataHandler.cancelHelper.removeAllRequests();
-        };
-    }, [dataHandler]);
+    return {onShowPreview, cancelPreviews};
+}
 
+export function useShowPreviewHandler({queryId, resultIndex}: Props) {
+    const {onShowPreview: showPreview, cancelPreviews} = useQueryResultsPreviewHandler({queryId});
+    React.useEffect(() => cancelPreviews, [cancelPreviews, resultIndex]);
+    const onShowPreview = React.useCallback(
+        (columnName: string, rowIndex: number, tag?: string) =>
+            showPreview(resultIndex, columnName, rowIndex, tag),
+        [showPreview, resultIndex],
+    );
     return {onShowPreview};
 }

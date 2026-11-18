@@ -1,7 +1,8 @@
+import {MonacoLanguage} from '../../../constants/monaco';
 import {registerLanguage} from '../_.contribution';
 import {provideSuggestionsFunction} from './yql_ansi';
 
-export const LANGUAGE_ID = 'yql_ansi';
+export const LANGUAGE_ID = MonacoLanguage.YTQL;
 
 registerLanguage({
     id: LANGUAGE_ID,

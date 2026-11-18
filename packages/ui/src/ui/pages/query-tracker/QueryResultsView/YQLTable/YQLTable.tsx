@@ -1,8 +1,6 @@
 // TODO: revisit types
 import * as React from 'react';
 
-import {Eye} from '@gravity-ui/icons';
-import {Button, ClipboardButton, Text, Icon as UIKitIcon} from '@gravity-ui/uikit';
 import hammer from '../../../../common/hammer';
 import cn from 'bem-cn-lite';
 import DataTable, {
@@ -12,20 +10,16 @@ import DataTable, {
     type SortOrder,
 } from '@gravity-ui/react-data-table';
 import DataTypePopup from '../DataTypePopup/DataTypePopup';
-import {type StrictReactNode, hasKey} from './utils';
+import {hasKey} from './utils';
 import {MOVING} from '@gravity-ui/react-data-table/build/esm/lib/constants';
 import {DataTableYT} from '../../../../components/DataTableYT';
-import {ClickableText} from '../../../../components/ClickableText/ClickableText';
-import Label from '../../../../components/Label';
-import {unquote} from '../../../../utils/string';
 
+import {QueryResultCell} from './QueryResultCell/QueryResultCell';
 import './YQLTable.scss';
 
 const block = cn('yql-result-table');
 
 const INDEX_COLUMN = Symbol('__index__');
-const NUMBER_OF_STRIPPED_LINES = 5;
-const MAX_NUMBER_OF_LINE_IS_DISPLAYED_IMMEDIATELY = NUMBER_OF_STRIPPED_LINES + 3;
 
 type Node = {
     $type: string;
@@ -38,10 +32,6 @@ function rowKey(row: unknown, index: number) {
         return row[INDEX_COLUMN] as number;
     }
     return index;
-}
-
-function triggerWindowResize() {
-    window.dispatchEvent(new Event('resize'));
 }
 
 const tableSettings: Settings = {
@@ -133,89 +123,23 @@ export default function Table({
                         return column.render(data);
                     }
 
-                    const {value, index} = data as any;
-                    let formattedValue;
-                    if (!value) {
-                        return <span className="unipika">&lt;unsupported data type&gt;</span>;
-                    }
-                    if (Object.prototype.hasOwnProperty.call(value, '$formattedValue')) {
-                        formattedValue = value.$formattedValue;
-                    } else {
-                        formattedValue = format(value, formatterSettings);
-                    }
-                    const rawValue = unquote(value.$rawValue ?? value.$value);
-                    const fullFormattedValue = value.$fullFormattedValue ?? formattedValue;
-                    let strippedDown: string;
-                    if (
-                        value.$type === 'yql.string' &&
-                        formattedValue.startsWith('<span class="quote">')
-                    ) {
-                        strippedDown = formattedValue;
-                    } else {
-                        const lines = formattedValue.split('\n');
-                        if (lines.length > MAX_NUMBER_OF_LINE_IS_DISPLAYED_IMMEDIATELY) {
-                            strippedDown = lines.slice(0, NUMBER_OF_STRIPPED_LINES).join('\n');
-                        } else {
-                            strippedDown = formattedValue;
-                        }
-                    }
-                    const isStrippedDown = strippedDown !== fullFormattedValue;
-
-                    const additions = value.$additions ? (
-                        <React.Fragment>
-                            <br />
-                            <Text color="light-hint">{value.$additions}</Text>
-                        </React.Fragment>
-                    ) : null;
-
-                    const isTruncated: boolean = value.$incomplete;
-                    const tag = value.$tagValue;
-
-                    const handlePreviewClick = () => {
-                        return onShowPreview(name, index, tag);
-                    };
-
-                    if (isStrippedDown) {
-                        return (
-                            <TableCell
-                                rawValue={rawValue}
-                                onPreviewClick={handlePreviewClick}
-                                isTruncated={isTruncated}
-                                tag={tag}
-                            >
-                                {showFullValueInDialog ? (
-                                    <React.Fragment>
-                                        <span
-                                            className="unipika"
-                                            dangerouslySetInnerHTML={{
-                                                __html: strippedDown,
-                                            }}
-                                        />
-                                    </React.Fragment>
-                                ) : (
-                                    <ShowMoreInline
-                                        onClick={triggerWindowResize}
-                                        strippedDown={strippedDown}
-                                        formattedValue={fullFormattedValue}
-                                    />
-                                )}
-                                {additions}
-                            </TableCell>
-                        );
-                    }
+                    const {value, index, row} = data as any;
                     return (
-                        <TableCell
-                            rawValue={rawValue}
-                            onPreviewClick={handlePreviewClick}
-                            isTruncated={isTruncated}
-                            tag={tag}
-                        >
-                            <span
-                                className="unipika"
-                                dangerouslySetInnerHTML={{__html: formattedValue}}
-                            />
-                            {additions}
-                        </TableCell>
+                        <QueryResultCell
+                            value={value}
+                            format={format}
+                            formatterSettings={formatterSettings}
+                            showFullValueInDialog={showFullValueInDialog}
+                            onShowPreview={(tag) =>
+                                onShowPreview(
+                                    name,
+                                    row?.[INDEX_COLUMN] !== undefined
+                                        ? row[INDEX_COLUMN] - 1
+                                        : index,
+                                    tag,
+                                )
+                            }
+                        />
                     );
                 },
                 align: type.numeric ? defaultNumberAlign : undefined,
@@ -468,110 +392,4 @@ function getSortedData<T>(
 
 function visualRowIndex<T>(row: WithIndex<T>) {
     return hammer.format['Number'](row[INDEX_COLUMN]);
-}
-
-interface ShowMoreInlineProps {
-    formattedValue: string;
-    strippedDown: string;
-    onClick?(): void;
-}
-function ShowMoreInline({formattedValue, strippedDown, onClick}: ShowMoreInlineProps) {
-    const [showFull, setShowFull] = React.useState(false);
-    return (
-        <React.Fragment>
-            <span
-                className="unipika"
-                dangerouslySetInnerHTML={{
-                    __html: showFull ? formattedValue : strippedDown,
-                }}
-            />
-            <br />
-            <ClickableText
-                onClick={() => {
-                    setShowFull((v) => !v);
-
-                    onClick?.();
-                }}
-            >
-                {showFull ? 'Show less' : 'Show more'}
-            </ClickableText>
-        </React.Fragment>
-    );
-}
-
-const cellActionClassName = block('cell-action');
-
-interface TableCellProps {
-    children?: StrictReactNode;
-    rawValue?: string;
-    onPreviewClick: () => void;
-    isTruncated?: boolean;
-    tag?: string;
-}
-
-function TableCell({children, rawValue, onPreviewClick, isTruncated, tag}: TableCellProps) {
-    const cellNodeRef = React.useRef<HTMLDivElement>(null);
-    const [mount, setMount] = React.useState(false);
-
-    React.useEffect(() => {
-        const parent = cellNodeRef.current?.parentElement;
-
-        function handleMouseOver() {
-            setMount(true);
-        }
-        function handleMouseOut(e: MouseEvent) {
-            if (!parent?.contains(e.relatedTarget as any)) {
-                setMount(false);
-            }
-        }
-        parent?.addEventListener('mouseover', handleMouseOver);
-        parent?.addEventListener('mouseout', handleMouseOut);
-
-        return () => {
-            parent?.removeEventListener('mouseover', handleMouseOver);
-            parent?.removeEventListener('mouseout', handleMouseOut);
-        };
-    }, []);
-
-    const isTruncatedTaggedType = Boolean(tag && isTruncated);
-
-    const [isPreviewInProgress, setPreviewInProgress] = React.useState(false);
-
-    return (
-        <span ref={cellNodeRef}>
-            {isTruncatedTaggedType ? (
-                <Label theme="warning" text={`Incomplete '${tag}' type`} />
-            ) : (
-                <span className={block('cell-content')}>{children}</span>
-            )}
-            {(mount || isTruncatedTaggedType) && (
-                <>
-                    {rawValue && !isTruncated && (
-                        <ClipboardButton className={cellActionClassName} text={rawValue} size="s" />
-                    )}
-                    {isTruncated && (
-                        <Button
-                            className={cellActionClassName}
-                            view="flat-secondary"
-                            size="s"
-                            loading={isPreviewInProgress}
-                            onClick={async () => {
-                                try {
-                                    setPreviewInProgress(true);
-                                    if (!isPreviewInProgress) {
-                                        await onPreviewClick();
-                                    }
-                                } finally {
-                                    setPreviewInProgress(false);
-                                }
-                            }}
-                            qa="query:reqult:show-preview"
-                        >
-                            <UIKitIcon data={Eye} size="12" />
-                        </Button>
-                    )}
-                </>
-            )}
-        </span>
-    );
 }

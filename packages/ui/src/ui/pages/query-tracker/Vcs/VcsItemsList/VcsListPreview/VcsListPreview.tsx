@@ -5,22 +5,32 @@ import {type VcsState} from '../../../../../store/reducers/query-tracker/vcsSlic
 import './VcsListPreview.scss';
 import cn from 'bem-cn-lite';
 import FileTextIcon from '@gravity-ui/icons/svgs/file-text.svg';
-import {Button, Icon, Tooltip} from '@gravity-ui/uikit';
+import {Alert, Button, Icon, Loader, Tooltip} from '@gravity-ui/uikit';
 import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';
 import FilePlusIcon from '@gravity-ui/icons/svgs/file-plus.svg';
 import TextIndentIcon from '@gravity-ui/icons/svgs/text-indent.svg';
 import i18n from './i18n';
+import listI18n from '../i18n';
 
 const block = cn('vcs-list-preview');
 
 type Props = {
     preview: VcsState['preview'];
+    loading?: boolean;
+    error?: boolean;
     onAddFile: (name: string) => void;
     onInsertFile: (name: string) => void;
     onClose: () => void;
 };
 
-export const VcsListPreview: FC<Props> = ({preview, onAddFile, onInsertFile, onClose}) => {
+export const VcsListPreview: FC<Props> = ({
+    preview,
+    loading,
+    error,
+    onAddFile,
+    onInsertFile,
+    onClose,
+}) => {
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
 
     const handleAddFile = () => {
@@ -39,12 +49,12 @@ export const VcsListPreview: FC<Props> = ({preview, onAddFile, onInsertFile, onC
                 </div>
                 <div className={block('header-block')}>
                     <Tooltip content={i18n('action_insert-to-editor')}>
-                        <Button view="flat" onClick={handleInsertClick}>
+                        <Button view="flat" disabled={loading || error} onClick={handleInsertClick}>
                             <Icon data={TextIndentIcon} size={16} />
                         </Button>
                     </Tooltip>
                     <Tooltip content={i18n('action_attach-file')}>
-                        <Button view="flat" onClick={handleAddFile}>
+                        <Button view="flat" disabled={loading || error} onClick={handleAddFile}>
                             <Icon data={FilePlusIcon} size={16} />
                         </Button>
                     </Tooltip>
@@ -55,19 +65,23 @@ export const VcsListPreview: FC<Props> = ({preview, onAddFile, onInsertFile, onC
                     </Tooltip>
                 </div>
             </div>
-            <MonacoEditor
-                className={block('editor')}
-                editorRef={editorRef}
-                value={preview.content}
-                language="plaintext"
-                onChange={() => {}}
-                monacoConfig={{
-                    fontSize: 14,
-                    language: 'plaintext',
-                    renderWhitespace: 'boundary',
-                    readOnly: true,
-                }}
-            />
+            {loading && <Loader />}
+            {error && <Alert theme="danger" title={listI18n('alert_error')} />}
+            {!loading && !error && (
+                <MonacoEditor
+                    className={block('editor')}
+                    editorRef={editorRef}
+                    value={preview.content}
+                    language="plaintext"
+                    onChange={() => {}}
+                    monacoConfig={{
+                        fontSize: 14,
+                        language: 'plaintext',
+                        renderWhitespace: 'boundary',
+                        readOnly: true,
+                    }}
+                />
+            )}
         </div>
     );
 };

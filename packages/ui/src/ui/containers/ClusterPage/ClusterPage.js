@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import {Redirect, Route, Switch, useLocation} from 'react-router';
+import {Redirect, Route, Switch, matchPath, useLocation} from 'react-router';
 import {connect} from 'react-redux';
 import {useSelector} from '../../store/redux-hooks';
 import PropTypes from 'prop-types';
@@ -46,6 +46,7 @@ import {setSetting} from '../../store/actions/settings';
 import {unmountCluster, updateCluster} from '../../store/actions/cluster-params';
 import {updateTitle} from '../../store/actions/global';
 import {selectClusterUiConfig} from '../../store/selectors/global';
+import {selectSettingsQueryTrackerNewQueriesView} from '../../store/selectors/settings/settings-ts';
 import {selectIsExperimentalPagesReady} from '../../store/selectors/global/experimental-pages';
 import {getClusterConfig} from '../../utils';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
@@ -76,6 +77,7 @@ class ClusterPage extends Component {
         clusterPagePaneSizes: PropTypes.array,
         login: PropTypes.string,
         queriesPageAllowed: PropTypes.bool,
+        hideHeader: PropTypes.bool,
         startingPage: PropTypes.string.isRequired,
         isLoaded: PropTypes.bool.isRequired,
         hasError: PropTypes.bool.isRequired,
@@ -278,7 +280,7 @@ class ClusterPage extends Component {
     }
 
     render() {
-        const {cluster, splitScreen, clusters} = this.props;
+        const {cluster, splitScreen, clusters, hideHeader} = this.props;
 
         // TODO: put current cluster config into redux state to avoid doing things like these here
         const clusterConfig = getClusterConfig(clusters, cluster);
@@ -289,11 +291,12 @@ class ClusterPage extends Component {
                 <ClusterPageStopRumMeasure />
                 <PageHeadByCluster cluster={cluster} />
 
-                <ClusterPageHeader cluster={cluster} />
+                {!hideHeader && <ClusterPageHeader cluster={cluster} />}
 
                 <FlexSplitPane
                     className={b('panes-wrapper', {
                         'with-pane': splitScreen.isSplit,
+                        'without-header': hideHeader,
                     })}
                     paneClassNames={splitScreen.paneClassNames}
                     direction={FlexSplitPane.HORIZONTAL}
@@ -331,7 +334,7 @@ class ClusterPage extends Component {
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, {location}) {
     const {login, splitScreen, loadState, error, paramsCluster, paramsLoading, paramsError} =
         state.global;
 
@@ -351,6 +354,9 @@ function mapStateToProps(state) {
         allowChyt: Boolean(selectClusterUiConfig(state).chyt_controller_base_url),
         allowStartPageRedirect: selectIsExperimentalPagesReady(state),
         isNewDashboardPage: selectSettingNewDashboardPage(state),
+        hideHeader:
+            Boolean(matchPath(location.pathname, {path: `/:cluster/${Page.QUERIES}`})) &&
+            selectSettingsQueryTrackerNewQueriesView(state),
     };
 }
 

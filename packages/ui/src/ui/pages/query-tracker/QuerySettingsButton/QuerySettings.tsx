@@ -7,8 +7,7 @@ import './QuerySettings.scss';
 import cn from 'bem-cn-lite';
 import {type DraftQuery} from '../../../types/query-tracker/api';
 
-const SETTINGS_WITHOUT_EDIT_NODE = ['cluster', 'clique'];
-const SETTING_WITHOUT_REMOVE = 'cluster';
+import {getQuerySettingPermissions} from '../../../utils/query-tracker/settings';
 
 const block = cn('yt-query-settings');
 
@@ -64,9 +63,11 @@ export const QuerySettings: FC<Props> = ({settings, onChange}) => {
         <>
             <div className={block()}>
                 {Object.entries(settings || {}).map(([name, value]) => {
-                    const canEdit = SETTINGS_WITHOUT_EDIT_NODE.includes(name)
-                        ? undefined
-                        : {name: true, value: true};
+                    const permissions = getQuerySettingPermissions(name);
+                    const canEdit =
+                        permissions.canEditKey || permissions.canEditValue
+                            ? {name: permissions.canEditKey, value: permissions.canEditValue}
+                            : undefined;
 
                     return (
                         <SettingsItem
@@ -75,7 +76,7 @@ export const QuerySettings: FC<Props> = ({settings, onChange}) => {
                             name={name}
                             value={value as string}
                             canEdit={canEdit}
-                            canRemove={name !== SETTING_WITHOUT_REMOVE}
+                            canRemove={permissions.canRemove}
                             validator={validator}
                             onDelete={handleDelete}
                             onChange={handleChangeSettings}

@@ -6,6 +6,8 @@
   "context_query-tracker-stage-placeholder": "Enter stage...",
   "field_yql-agent-stage": "YQL agent stage",
   "context_yql-agent-stage-placeholder": "Enter YQL agent stage...",
+  "field_new-queries-view": "Use new Queries page",
+  "context_new-queries-view-description": "Enable the redesigned Queries page",
   "field_new-graph-progress": "Use new graph progress",
   "context_new-graph-progress-description": "Enable experimental graph view for Progress tab of a query",
   "field_graph-auto-center": "Graph auto-centering",

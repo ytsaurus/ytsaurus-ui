@@ -18,11 +18,11 @@ import {
 } from '../../../../store/reducers/query-tracker/queryFilesFormSlice';
 import {selectQueryFilesButtonConfig} from '../../../../store/selectors/query-tracker/queryFilesForm';
 import {
+    addQueryFile,
     changeQueryFile,
     deleteQueryFile,
     restoreQueryFile,
 } from '../../../../store/actions/query-tracker/queryFilesForm';
-import {updateQueryDraft} from '../../../../store/actions/query-tracker/query';
 import i18n from './i18n';
 
 const b = cn('query-files-popup');
@@ -71,10 +71,9 @@ export const QueryFilesButton: FC<Props> = ({popupClassName}) => {
 
     const handleAddFile = useCallback(
         (file: QueryFile) => {
-            dispatch(updateQueryDraft({files: [...files, file]}));
-            dispatch(setAddForm({isOpen: false}));
+            if (dispatch(addQueryFile(file))) dispatch(setAddForm({isOpen: false}));
         },
-        [dispatch, files],
+        [dispatch],
     );
 
     const handleToggleAddForm = useCallback(

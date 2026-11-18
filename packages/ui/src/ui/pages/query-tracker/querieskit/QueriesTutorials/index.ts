@@ -1,0 +1,1 @@
+export {useQueriesTutorialsProps} from './useQueriesTutorialsProps';

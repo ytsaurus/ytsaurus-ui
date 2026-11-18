@@ -1,4 +1,4 @@
-import {type QueryItem} from '../../../../../types/query-tracker/api';
+import {type QueryItem} from '../../../../types/query-tracker/api';
 
 const lineIndexAtCharIndex = (lines: string[], charIndex: number) => {
     let charPos = 0;

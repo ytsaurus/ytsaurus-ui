@@ -1,7 +1,7 @@
 import React, {type FC, useEffect, useState} from 'react';
 import block from 'bem-cn-lite';
 import {Loader} from '@gravity-ui/uikit';
-import {useDispatch, useSelector} from '../../../store/redux-hooks';
+import {useSelector} from '../../../store/redux-hooks';
 import {
     selectIsQueryExecuted,
     selectIsQueryLoading,
@@ -10,8 +10,6 @@ import FlexSplitPane from '../../../components/FlexSplitPane/FlexSplitPane';
 import './QueryEditor.scss';
 import {useCurrentQuery} from '../QueryResults/hooks/useCurrentQuery';
 import {useQueryACO} from '../QueryACO/useQueryACO';
-import hammer from '../../../common/hammer';
-import {updateTitle} from '../../../store/actions/global';
 import {ResultView} from './ResultView';
 import {QueryEditorView} from './QueryEditorView';
 
@@ -19,44 +17,19 @@ const b = block('query-container');
 
 type Props = {
     onStartQuery?: (queryId: string) => boolean | void;
-    showStatusInTitle?: boolean;
     pathNavigation?: boolean;
     hideAco?: boolean;
 };
 
 export type ResultMode = 'full' | 'minimized' | 'split';
 
-export const QueryEditor: FC<Props> = ({
-    onStartQuery,
-    showStatusInTitle,
-    pathNavigation,
-    hideAco,
-}) => {
-    const dispatch = useDispatch();
+export const QueryEditor: FC<Props> = ({onStartQuery, pathNavigation, hideAco}) => {
     const query = useCurrentQuery();
     const {isQueryTrackerInfoLoading} = useQueryACO();
 
     const [resultViewMode, setResultViewMode] = useState<ResultMode>('minimized');
 
     const [partSizes, setSize] = useState([50, 50]);
-
-    useEffect(() => {
-        if (!query || !showStatusInTitle) return;
-
-        const startDate = query.start_time
-            ? hammer.format['DateTime'](query.start_time, {format: 'short'})
-            : '';
-        const title = query.annotations?.title || '';
-        const state = query.state?.toUpperCase() || '';
-
-        if (startDate || title || state) {
-            dispatch(
-                updateTitle({
-                    path: `${title} ${state} ${startDate} @ ${query.engine}`,
-                }),
-            );
-        }
-    }, [dispatch, query, showStatusInTitle]);
 
     useEffect(() => {
         setResultViewMode('split');
