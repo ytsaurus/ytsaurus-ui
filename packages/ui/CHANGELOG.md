@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.35.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.34.0...ui-v3.35.0) (2026-11-18)
+
+
+### Features
+
+* **Bundles:** support monitoring for chaos cell bundles [YTFRONT-6131] ([ec75a8e](https://github.com/ytsaurus/ytsaurus-ui/commit/ec75a8ececdc7210ada98b7f6401e06f673e27fa))
+* **Flow/Graph:** draw sink to source data-channel edges [YTFRONT-6143] ([9afef85](https://github.com/ytsaurus/ytsaurus-ui/commit/9afef8531897be5fafd1ed81a94022c46698d3ad))
+* update logo and favicons [YTFRONT-5743] ([c1a8831](https://github.com/ytsaurus/ytsaurus-ui/commit/c1a883197e3f5549f37ccf7c8d48894b1caaf86a))
+
+
+### Bug Fixes
+
+* **Flow/Graph:** order sinks like their output streams [[#1952](https://github.com/ytsaurus/ytsaurus-ui/issues/1952)] ([c4a80e1](https://github.com/ytsaurus/ytsaurus-ui/commit/c4a80e183f1d1052dcfe31713baf913cc3434af9))
+* **Navigation:** normalize table metadata spacing [YTFRONT-6096] ([85b96ec](https://github.com/ytsaurus/ytsaurus-ui/commit/85b96ec7ea2e2755fdb170824b0c64dffe233701))
+
 ## [3.34.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.33.0...ui-v3.34.0) (2026-11-13)
 
 
