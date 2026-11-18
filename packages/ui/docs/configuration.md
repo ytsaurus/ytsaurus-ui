@@ -180,3 +180,7 @@ Example of usage:
   },
 };
 ```
+
+## AI chat
+
+See [AI chat configuration](ai-chat.md) for backend requirements, authentication, and setup.
