@@ -1,5 +1,6 @@
 .yt-pipeline-spec {
-    &__editor {
+    // The editor default can be loaded later with the lazy dialog.
+    &__editor.edit-text-with-preview {
         min-height: 50vh;
     }
 }
