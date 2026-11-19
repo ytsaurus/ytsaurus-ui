@@ -10,7 +10,7 @@ import ypath from '../../../common/thor/ypath';
 
 import {Loader} from '@gravity-ui/uikit';
 import Button from '../../../components/Button/Button';
-import {YTErrorBlock} from '../../../containers/Block/Block';
+import {OperationError} from '../../../containers/OperationError/OperationError';
 import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import Icon from '../../../components/Icon/Icon';
 import {
@@ -551,9 +551,16 @@ export class OperationDetailBase extends React.Component<ReduxProps & RouteProps
     }
 
     renderError() {
-        const {errorData} = this.props;
+        const {errorData, cluster, match} = this.props;
 
-        return <YTErrorBlock message={errorData.message} error={errorData.details} />;
+        return (
+            <OperationError
+                message={errorData.message}
+                error={errorData.details}
+                cluster={cluster}
+                operationId={match.params.operationId}
+            />
+        );
     }
 
     override render() {

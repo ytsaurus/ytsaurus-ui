@@ -10,5 +10,5 @@
   "context_task": "Task {{caption}}",
   "context_job-type": "Job type {{jobType}}",
   "context_tasks-caption": "Tasks: {{caption}}",
-  "value_rows-per-second": "{{value}} rows/s"
+  "value_rows": "rows"
 }

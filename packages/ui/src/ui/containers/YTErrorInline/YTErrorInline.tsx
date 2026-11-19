@@ -1,26 +1,32 @@
-import React, {type ReactNode} from 'react';
+import React, {type ReactNode, useMemo} from 'react';
 import cn from 'bem-cn-lite';
 
 import {Flex, HelpMark, Text} from '@gravity-ui/uikit';
 
-import {type YTError} from '../../types';
-
 import ypath from '../../common/thor/ypath';
-import {type YTErrorBlockProps} from '../../containers/Block/Block';
 import {ClickableText} from '../../components/ClickableText/ClickableText';
 import {showErrorPopup, unescapeSlashX} from '../../utils/utils';
+import {normalizeError} from '../../utils/normalize-error';
 import i18n from './i18n';
 
 const block = cn('yt-error-inline');
 
-export type YTErrorInlineProps = Pick<
-    YTErrorBlockProps,
-    'className' | 'error' | 'message' | 'type'
-> & {
+export type YTErrorInlineProps = {
+    className?: string;
+    error?: unknown;
+    message?: ReactNode;
+    type?: 'alert' | 'error' | 'info';
     hint?: ReactNode;
 };
 
-export function YTErrorInline({className, error, message, type, hint}: YTErrorInlineProps) {
+export function YTErrorInline({
+    className,
+    error: rawError,
+    message,
+    type,
+    hint,
+}: YTErrorInlineProps) {
+    const error = useMemo(() => normalizeError(rawError), [rawError]);
     let msg = message;
     if (!msg) {
         msg = ypath.getValue(error, '/message');
@@ -39,7 +45,7 @@ export function YTErrorInline({className, error, message, type, hint}: YTErrorIn
                 <ClickableText
                     className={block('details')}
                     onClick={() => {
-                        showErrorPopup(error as YTError, {type});
+                        showErrorPopup(error, {type});
                     }}
                 >
                     {''}

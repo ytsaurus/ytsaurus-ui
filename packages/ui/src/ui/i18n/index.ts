@@ -2,6 +2,7 @@ import moment from 'moment';
 
 import {I18N, type KeyData, type KeysData} from '@gravity-ui/i18n';
 import {setLang as ytsaurusSomponentsSetLang} from '@ytsaurus/components';
+import {setLang as interfaceHelpersSetLang} from '@ytsaurus/interface-helpers/lib/i18n';
 
 import {type AppLang} from '../../shared/constants/settings-types';
 import {configure} from './configure';
@@ -13,6 +14,7 @@ configure({lang: 'en'});
 ytSetLang('en');
 
 export function ytSetLang(lang: AppLang) {
+    interfaceHelpersSetLang(lang);
     i18n.setLang(lang);
     ytsaurusSomponentsSetLang(lang);
     configure({lang});
