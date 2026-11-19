@@ -17,6 +17,11 @@
         overflow: auto;
     }
 
+    &__querieskit-panel {
+        height: 100%;
+        min-height: 0;
+    }
+
     &__filter {
         padding: 12px 12px 0;
         margin-bottom: 8px;
