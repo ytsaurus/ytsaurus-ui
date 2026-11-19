@@ -11,6 +11,9 @@
     "lodash": "^4.17.15"
   },
   "private": false,
+  "dependencies": {
+    "@gravity-ui/i18n": "^1.8.0"
+  },
   "devDependencies": {
     "@gravity-ui/date-utils": "^2.6.0",
     "bignumber.js": "^9.0.1",

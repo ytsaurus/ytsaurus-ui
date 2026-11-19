@@ -1,0 +1,15 @@
+{
+  "value_per-second": "{{value}}/s",
+  "value_cores": "{{value}} cores",
+  "value_rows-per-second": "{{value}} rows/s",
+  "value_years-short": "y",
+  "value_months-short": "m",
+  "value_days-short": "d",
+  "value_bytes": "B",
+  "value_kibibytes": "KiB",
+  "value_mebibytes": "MiB",
+  "value_gibibytes": "GiB",
+  "value_tebibytes": "TiB",
+  "value_pebibytes": "PiB",
+  "value_exbibytes": "EiB"
+}

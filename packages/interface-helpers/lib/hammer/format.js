@@ -3,6 +3,7 @@ const _map = require('lodash/map');
 const forEach = require('lodash/forEach');
 const {dateTime, duration} = require('@gravity-ui/date-utils');
 
+const {i18n} = require('../i18n');
 const type = require('./type');
 const utils = require('./utils');
 
@@ -122,7 +123,9 @@ format['NumberPerSecond'] = function (value, settings) {
     settings = settings || {};
 
     if (format.validNumber(value)) {
-        return format['Number'](value, settings) + ' ' + settings.measure + '/s';
+        return i18n('value_per-second', {
+            value: format['Number'](value, settings) + ' ' + settings.measure,
+        });
     } else {
         return format.NO_VALUE;
     }
@@ -137,7 +140,15 @@ format['NumberWithSuffix'] = function (value, settings) {
 
 format['Bytes'] = function (value, settings) {
     const digits = parseSetting(settings, 'digits', 2);
-    const NAMES = [' B', ' KiB', ' MiB', ' GiB', ' TiB', ' PiB', ' EiB'];
+    const NAMES = [
+        'value_bytes',
+        'value_kibibytes',
+        'value_mebibytes',
+        'value_gibibytes',
+        'value_tebibytes',
+        'value_pebibytes',
+        'value_exbibytes',
+    ].map((key) => ' ' + i18n(key));
 
     return formatWithSuffixes({value, digits, NAMES, DIVIDER: 1024});
 };
@@ -203,7 +214,7 @@ function formatWithSuffixes({value, digits, NAMES, DIVIDER}) {
 
 format['BytesPerSecond'] = function (value, settings) {
     if (format.validNumber(value)) {
-        return format['Bytes'](value, settings) + '/s';
+        return i18n('value_per-second', {value: format['Bytes'](value, settings)});
     } else {
         return format.NO_VALUE;
     }
@@ -500,9 +511,9 @@ format['TimeDuration'] = function (value, settings) {
         'milliseconds',
     ];
     const OUTPUT_FORMATTER = {
-        years: 'y ',
-        months: 'm ',
-        days: 'd ',
+        years: i18n('value_years-short') + ' ',
+        months: i18n('value_months-short') + ' ',
+        days: i18n('value_days-short') + ' ',
         hours: ':',
         minutes: ':',
         seconds: '',
@@ -582,14 +593,14 @@ format['RackToVector'] = function (value) {
 
 format['vCores'] = function (value) {
     const tmp = Number.isNaN(value) ? undefined : Math.floor(value / 1000);
-    return `${format.Number(tmp)} cores`;
+    return i18n('value_cores', {value: format.Number(tmp)});
 };
 
 format['RowsPerSecond'] = function (value, settings = {digits: 2}) {
     if (!value) {
         return format.Number(value, settings);
     }
-    return `${format.Number(value, settings)} rows/s`;
+    return i18n('value_rows-per-second', {value: format.Number(value, settings)});
 };
 
 format['NumberSmart'] = function NumberSmart(value, settings) {
