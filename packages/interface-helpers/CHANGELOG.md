@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/ytsaurus/ytsaurus-ui/compare/interface-helpers-v1.3.0...interface-helpers-v1.4.0) (2026-11-19)
+
+
+### Features
+
+* **interface-helpers:** localize formatter labels [YTFRONT-5069] ([3dc9555](https://github.com/ytsaurus/ytsaurus-ui/commit/3dc9555ceedd02fcb9eb2ac377e9ffeb7d70e961))
+
 ## [1.3.0](https://github.com/ytsaurus/ytsaurus-ui/compare/interface-helpers-v1.2.0...interface-helpers-v1.3.0) (2026-06-08)
 
 
