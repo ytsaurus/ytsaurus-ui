@@ -35,5 +35,9 @@ The value must already be expressed in the supplied unit.
 
 The language also controls the labels in `Bytes`, `TimeDuration`, `vCores`, and
 `RowsPerSecond`. Numeric formatting, scale selection, and handling of missing
-values remain unchanged. Date localization is configured separately through
-`@gravity-ui/date-utils`.
+values remain unchanged.
+
+`setLang` is synchronous and only switches the library's translations. The
+application configures date localization separately through the shared
+`@gravity-ui/date-utils` dependency: await `settings.loadLocale(lang)`, then call
+`settings.setLocale(lang)`.
