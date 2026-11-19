@@ -65,6 +65,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 loadState: LOADING_STATUS.LOADED,
+                resourcesLoading: false,
                 error: undefined,
                 nodesData: action.data,
             };
@@ -119,6 +120,7 @@ const reducer = (state = initialState, action) => {
                       filterPathname: path,
                       error: undefined,
                       loadState: LOADING_STATUS.UNINITIALIZED,
+                      resourcesLoading: false,
                       nodesData: [],
                       selected: {},
                       lastSelected: undefined,

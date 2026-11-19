@@ -1,7 +1,6 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import block from 'bem-cn-lite';
 import {type AxiosError} from 'axios';
-import cloneDeepWith_ from 'lodash/cloneDeepWith';
 
 import {Button, Flex, Text} from '@gravity-ui/uikit';
 
@@ -18,6 +17,7 @@ import FormattedText from '../../components/formatters/FormattedText';
 import {rumLogError} from '../../rum/rum-counter';
 import {ErrorToClipboardButton} from '../../containers/ErrorToClipboardButton/ErrorToClipboardButton';
 import {showErrorPopup} from '../../utils/utils';
+import {normalizeError} from '../../utils/normalize-error';
 
 import Icon from '../../components/Icon/Icon';
 
@@ -198,21 +198,7 @@ class YTErrorBlockImpl extends React.Component<YTErrorBlockInternalProps> {
 }
 
 export function YTErrorBlock({error, ...props}: YTErrorBlockProps) {
-    const e = React.useMemo(() => {
-        if (typeof error === 'string') {
-            return {message: error};
-        }
-
-        if (error instanceof Error) {
-            return error;
-        }
-
-        return cloneDeepWith_(error, (value) => {
-            // Some UI-side errors might contain fields with `undefined`,
-            // such values might not be rendered as yson, so we have to replace them with null
-            return value === undefined ? null : undefined;
-        });
-    }, [error]);
+    const e = useMemo(() => normalizeError(error), [error]);
 
     return <YTErrorBlockImpl {...props} error={e} />;
 }

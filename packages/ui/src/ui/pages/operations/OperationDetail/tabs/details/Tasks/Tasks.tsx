@@ -279,12 +279,6 @@ class Tasks extends React.Component<Props, State> {
             averageReadRowRate,
             items,
         } = this.props.jobs;
-        const rowRateFormat = (value: unknown) => {
-            if (typeof value !== 'number' || !hammer.format.validNumber(value)) {
-                return hammer.format.NO_VALUE;
-            }
-            return i18n('value_rows-per-second', {value: hammer.format.Number(value)});
-        };
         const {allowActions, visibleItems} = this.state;
 
         return (
@@ -341,7 +335,8 @@ class Tasks extends React.Component<Props, State> {
                                 value: (
                                     <TemplateFormattedValue
                                         value={averageReadRowRate}
-                                        format={rowRateFormat}
+                                        format="NumberPerSecond"
+                                        settings={{measure: i18n('value_rows')}}
                                     />
                                 ),
                             },

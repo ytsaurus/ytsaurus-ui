@@ -50,12 +50,7 @@ export const YsonSettingsPropTypes = PropTypes.shape({
 });
 
 function renderError(error: unknown) {
-    return (
-        <YTErrorInline
-            error={error instanceof Error ? error : new Error(String(error))}
-            hint={i18n('context_disable-utf8-decoding')}
-        />
-    );
+    return <YTErrorInline error={error} hint={i18n('context_disable-utf8-decoding')} />;
 }
 
 export const Yson = ({

@@ -1,4 +1,5 @@
 import hammer from '@ytsaurus/interface-helpers/lib/hammer';
+import {i18n} from '@ytsaurus/interface-helpers/lib/i18n';
 
 import moment from 'moment';
 
@@ -140,9 +141,9 @@ format['TimeDuration'] = function (value, settings) {
         'milliseconds',
     ];
     const OUTPUT_FORMATTER = {
-        years: 'y ',
-        months: 'm ',
-        days: 'd ',
+        years: i18n('value_years-short') + ' ',
+        months: i18n('value_months-short') + ' ',
+        days: i18n('value_days-short') + ' ',
         hours: ':',
         minutes: ':',
         seconds: '',
@@ -219,18 +220,6 @@ format['RackToVector'] = function (value) {
     }
 
     return vector;
-};
-
-format['vCores'] = function (value) {
-    const tmp = Number.isNaN(value) ? undefined : Math.floor(value / 1000);
-    return `${format.Number(tmp)} cores`;
-};
-
-format['RowsPerSecond'] = function (value, settings = {digits: 2}) {
-    if (!value) {
-        return format.Number(value, settings);
-    }
-    return `${format.Number(value, settings)} rows/s`;
 };
 
 format['NumberSmart'] = function NumberSmart(value, settings) {

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import ColumnHeader from '../../../../../components/ColumnHeader/ColumnHeader';
+
 import {prepareTableColumns} from '../../../../../utils/index';
 import i18n from './i18n';
 
@@ -34,23 +36,15 @@ export const completedTableProps = {
                 sort: false,
                 align: 'left',
                 renderHeader() {
-                    const caption = i18n('field_name');
-                    return (
-                        <div className="elements-table__column-name" title={caption}>
-                            {caption}
-                        </div>
-                    );
+                    return <ColumnHeader column="name" title={i18n('field_name')} align="left" />;
                 },
             },
             row_count: {
                 sort: false,
                 align: 'right',
                 renderHeader() {
-                    const caption = i18n('field_rows');
                     return (
-                        <div className="elements-table__column-name" title={caption}>
-                            {caption}
-                        </div>
+                        <ColumnHeader column="row_count" title={i18n('field_rows')} align="right" />
                     );
                 },
             },
@@ -58,11 +52,12 @@ export const completedTableProps = {
                 sort: false,
                 align: 'right',
                 renderHeader() {
-                    const caption = i18n('field_compressed');
                     return (
-                        <div className="elements-table__column-name" title={caption}>
-                            {caption}
-                        </div>
+                        <ColumnHeader
+                            column="compressed_data_size"
+                            title={i18n('field_compressed')}
+                            align="right"
+                        />
                     );
                 },
             },
@@ -70,11 +65,12 @@ export const completedTableProps = {
                 sort: false,
                 align: 'right',
                 renderHeader() {
-                    const caption = i18n('field_uncompressed');
                     return (
-                        <div className="elements-table__column-name" title={caption}>
-                            {caption}
-                        </div>
+                        <ColumnHeader
+                            column="uncompressed_data_size"
+                            title={i18n('field_uncompressed')}
+                            align="right"
+                        />
                     );
                 },
             },
@@ -82,11 +78,12 @@ export const completedTableProps = {
                 sort: false,
                 align: 'right',
                 renderHeader() {
-                    const caption = i18n('field_weight');
                     return (
-                        <div className="elements-table__column-name" title={caption}>
-                            {caption}
-                        </div>
+                        <ColumnHeader
+                            column="data_weight"
+                            title={i18n('field_weight')}
+                            align="right"
+                        />
                     );
                 },
             },
@@ -94,11 +91,12 @@ export const completedTableProps = {
                 sort: false,
                 align: 'right',
                 renderHeader() {
-                    const caption = i18n('field_slices');
                     return (
-                        <div className="elements-table__column-name" title={caption}>
-                            {caption}
-                        </div>
+                        <ColumnHeader
+                            column="chunk_count"
+                            title={i18n('field_slices')}
+                            align="right"
+                        />
                     );
                 },
             },
@@ -124,11 +122,8 @@ export const intermediateTableProps = {
                 sort: false,
                 align: 'left',
                 renderHeader() {
-                    const caption = i18n('field_account');
                     return (
-                        <div className="elements-table__column-name" title={caption}>
-                            {caption}
-                        </div>
+                        <ColumnHeader column="account" title={i18n('field_account')} align="left" />
                     );
                 },
             },
@@ -136,11 +131,12 @@ export const intermediateTableProps = {
                 sort: false,
                 align: 'right',
                 renderHeader() {
-                    const caption = i18n('field_disk-space');
                     return (
-                        <div className="elements-table__column-name" title={caption}>
-                            {caption}
-                        </div>
+                        <ColumnHeader
+                            column="disk_space"
+                            title={i18n('field_disk-space')}
+                            align="right"
+                        />
                     );
                 },
             },
@@ -148,11 +144,12 @@ export const intermediateTableProps = {
                 sort: false,
                 align: 'right',
                 renderHeader() {
-                    const caption = i18n('field_slices');
                     return (
-                        <div className="elements-table__column-name" title={caption}>
-                            {caption}
-                        </div>
+                        <ColumnHeader
+                            column="chunk_count"
+                            title={i18n('field_slices')}
+                            align="right"
+                        />
                     );
                 },
             },
@@ -160,11 +157,12 @@ export const intermediateTableProps = {
                 sort: false,
                 align: 'right',
                 renderHeader() {
-                    const caption = i18n('field_nodes');
                     return (
-                        <div className="elements-table__column-name" title={caption}>
-                            {caption}
-                        </div>
+                        <ColumnHeader
+                            column="node_count"
+                            title={i18n('field_nodes')}
+                            align="right"
+                        />
                     );
                 },
             },

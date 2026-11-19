@@ -11,6 +11,7 @@ import {getBatchError} from '../../../../../shared/utils/error';
 
 import ypath from '../../../../common/thor/ypath';
 import {prepareRequest, saveRequestCancellation} from '../../../../utils/navigation';
+import CancelHelper from '../../../../utils/cancel-helper';
 import {
     APPLY_CUSTOM_SORT,
     FETCH_NODES,
@@ -133,6 +134,8 @@ export function fetchNodes() {
     };
 }
 
+const cancelHelperResourceUsage = new CancelHelper();
+
 export function updateResourceUsage() {
     const BATCH_LIMIT = 200;
 
@@ -149,12 +152,20 @@ export function updateResourceUsage() {
     }
 
     return (dispatch, getState) => {
+        const requestCancelToken = cancelHelperResourceUsage.removeAllAndGenerateNextToken();
+        saveRequestCancellation({
+            token: requestCancelToken,
+            cancel: cancelHelperResourceUsage.removeAllRequests,
+        });
+
         const state = getState();
+        const nodesData = selectNodesData(state);
 
         let nodes = selectFilteredNodes(state);
         nodes = filter_(nodes, (node) => !node.$attributes.recursive_resource_usage);
 
         if (selectIsRootNode(state) || nodes.length === 0) {
+            dispatch({type: UPDATE_RESOURCE_USAGE.CANCELLED});
             return;
         }
 
@@ -173,11 +184,18 @@ export function updateResourceUsage() {
                 };
             });
 
-            return ytApiV3Id.executeBatch(YTApiId.navigationResourceUsage, {requests});
+            return ytApiV3Id.executeBatch(YTApiId.navigationResourceUsage, {
+                parameters: {requests},
+                cancellation: cancelHelperResourceUsage.saveCancelToken,
+            });
         });
 
         Promise.all(batchedRequests)
             .then((resultChunks) => {
+                if (requestCancelToken.reason) {
+                    return;
+                }
+
                 const dataMap = {};
 
                 const errorResults = [];
@@ -196,7 +214,7 @@ export function updateResourceUsage() {
 
                 dispatch({
                     type: UPDATE_RESOURCE_USAGE.SUCCESS,
-                    data: map_(selectNodesData(state), (nodeData) =>
+                    data: map_(nodesData, (nodeData) =>
                         updatedNodeData(nodeData, dataMap[nodeData.$value]),
                     ),
                 });
@@ -207,6 +225,10 @@ export function updateResourceUsage() {
                 }
             })
             .catch((error) => {
+                if (requestCancelToken.reason) {
+                    return;
+                }
+
                 if (error.code !== yt.codes.CANCELLED) {
                     dispatch({
                         type: UPDATE_RESOURCE_USAGE.FAILURE,

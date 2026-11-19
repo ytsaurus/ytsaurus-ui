@@ -1,4 +1,4 @@
-import {ytSetLang} from './i18n';
+import './i18n';
 import './appearance';
 import './common/hammer';
 
@@ -13,6 +13,7 @@ import {selectSettingsData} from './store/selectors/settings/settings-base';
 import {createMainEntryStore} from './store/store.main';
 
 import App from './containers/App/App';
+import {useI18nLang} from './hooks/use-i18n-lang';
 import {getConfigData} from './config/ui-settings';
 import {toaster} from './utils/toaster';
 import {showErrorPopup} from './utils/utils';
@@ -54,12 +55,10 @@ function AppWithStore({store, history}: ReturnType<typeof createMainEntryStore>)
 function AppRoot({history}: Pick<ReturnType<typeof createMainEntryStore>, 'history'>) {
     const lang = useSelector(selectSettingsData)['global::lang'] ?? 'en';
 
-    React.useMemo(() => {
-        ytSetLang(lang);
-    }, [lang]);
+    const {locale, dateLocale} = useI18nLang(lang);
 
     return (
-        <ErrorYsonSettingsProvider key={lang}>
+        <ErrorYsonSettingsProvider key={`${locale}-${dateLocale}`}>
             <Suspense fallback={null}>
                 <Router history={history}>{UIFactory.wrapApp(<App />)}</Router>
             </Suspense>
