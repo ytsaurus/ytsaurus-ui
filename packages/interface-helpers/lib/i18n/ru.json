@@ -1,0 +1,15 @@
+{
+  "value_per-second": "{{value}}/с",
+  "value_cores": "{{value}} яд.",
+  "value_rows-per-second": "{{value}} строк/с",
+  "value_years-short": "г",
+  "value_months-short": "мес.",
+  "value_days-short": "д",
+  "value_bytes": "Б",
+  "value_kibibytes": "КиБ",
+  "value_mebibytes": "МиБ",
+  "value_gibibytes": "ГиБ",
+  "value_tebibytes": "ТиБ",
+  "value_pebibytes": "ПиБ",
+  "value_exbibytes": "ЭиБ"
+}
