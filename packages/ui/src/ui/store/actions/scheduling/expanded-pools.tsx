@@ -17,12 +17,12 @@ import {USE_IGNORE_NODE_DOES_NOT_EXIST} from '../../../utils/utils';
 import {makeGet, makeList} from '../../../utils/batch';
 import {
     ROOT_POOL_NAME,
+    SCHEDULING_DATA_FAILURE,
     SCHEDULING_EXPANDED_POOLS_FAILURE,
     SCHEDULING_EXPANDED_POOLS_PARTITION,
     SCHEDULING_EXPANDED_POOLS_REQUEST,
     SCHEDULING_EXPANDED_POOLS_SUCCESS,
 } from '../../../constants/scheduling';
-import {schedulingDataFailure} from './scheduling';
 import {
     calculatePoolPath,
     selectPool,
@@ -105,6 +105,7 @@ const POOL_TREE_GET_ATTRS = [
     'specified_resource_limits',
     'forbid_immediate_operations',
     'create_ephemeral_subpools',
+    'ephemeral_subpool_config',
     'fifo_sort_parameters',
     'config',
     'folder_id',
@@ -156,8 +157,8 @@ export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
                         throw new EmptyFullPath();
                     }
                 })
-                .catch((e) => {
-                    dispatch(schedulingDataFailure(e));
+                .catch((error) => {
+                    dispatch({type: SCHEDULING_DATA_FAILURE, data: {error}});
                 });
         }
     };
