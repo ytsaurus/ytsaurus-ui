@@ -37,6 +37,7 @@ export const docsUrls = {
     'overview:quickstart': `${baseUrl}/overview/try-yt`,
     'problems:jobstatistics': `${baseUrl}/user-guide/problems/jobstatistics`,
     'scheduler:integral_guarantees': `${baseUrl}/user-guide/data-processing/scheduler/integral-guarantees`,
+    'scheduler:pool_settings': `${baseUrl}/user-guide/data-processing/scheduler/pool-settings#pools`,
     'scheduler:scheduler_and_pools': `${baseUrl}/user-guide/data-processing/scheduler/scheduler-and-pools`,
     'storage:accounts': `${baseUrl}/user-guide/storage/accounts`,
     'storage:chunks#optimize_for': `${baseUrl}/user-guide/storage/chunks#optimize_for`,
