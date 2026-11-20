@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig",
-  "include": ["**/*", "../@types/*", "../ytsaurus-ui.ui/**/*"],
-  "exclude": ["../ytsaurus-ui.ui/playwright-components/*"],
+  "include": ["**/*", "../@types/*", "../ytsaurus-ui.ui/**/*.d.ts"],
+  "exclude": ["../ytsaurus-ui.ui/playwright-components/**/*"],
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "bundler",
