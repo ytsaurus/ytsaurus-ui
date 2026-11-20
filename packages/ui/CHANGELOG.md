@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.35.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.35.0...ui-v3.35.1) (2026-11-20)
+
+
+### Bug Fixes
+
+* **ActionModal:** show link after dumping job input context [YTFRONT-6057] ([63f59ac](https://github.com/ytsaurus/ytsaurus-ui/commit/63f59ac3779053ad894e1f4a299235d64c39ad9c))
+* **Flow:** refresh pipeline messages automatically [YTFRONT-6134] ([0e2b4c1](https://github.com/ytsaurus/ytsaurus-ui/commit/0e2b4c1f2af69a31c0cf8d6062f66f141d15a5ef))
+* **Job:** improve missing job and operation errors [YTFRONT-6138] ([c3e2149](https://github.com/ytsaurus/ytsaurus-ui/commit/c3e2149b60a24d57e3b810a9cb8c3c880f8ccc07))
+* **Navigation:** show scion resource usage [YTFRONT-6137] ([68abb24](https://github.com/ytsaurus/ytsaurus-ui/commit/68abb24813049181b35d2c5e49d7a02850aebf2f))
+* **Operations:** complete operation page localization [YTFRONT-5069] ([e379ca9](https://github.com/ytsaurus/ytsaurus-ui/commit/e379ca9f114efe867f6f2551c1006f76ea051466))
+* review fixes [YTFRONT-5069] ([fb2f417](https://github.com/ytsaurus/ytsaurus-ui/commit/fb2f4175148ca43f11a7c84a441d4cb7b434a74e))
+* **Yson:** show rendering errors with a UTF-8 hint [YTFRONT-6136] ([565254a](https://github.com/ytsaurus/ytsaurus-ui/commit/565254afec6350bc192ee3a8185f3f99ee3170d6))
+
 ## [3.35.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.34.0...ui-v3.35.0) (2026-11-18)
 
 
