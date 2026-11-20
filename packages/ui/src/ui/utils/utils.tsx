@@ -12,7 +12,7 @@ import set_ from 'lodash/set';
 import {getBatchError} from '../../shared/utils/error';
 
 import {type TypedKeys, type YTError} from '../types';
-import {Link, type ProgressProps, type ProgressTheme} from '@gravity-ui/uikit';
+import type {ProgressProps, ProgressTheme} from '@gravity-ui/uikit';
 import {
     type ThemeThreshold,
     addProgressStackSpacers,
@@ -308,14 +308,6 @@ export function delayed<T>(callBack: () => Promise<T>, timeout: number): Promise
             }
         }, timeout);
     });
-}
-
-export function makeLink(url: string, text: string) {
-    return !url ? undefined : (
-        <Link href={url} target={'_blank'}>
-            {text}
-        </Link>
-    );
 }
 
 export function showErrorPopup(

@@ -1,4 +1,5 @@
 import React from 'react';
+import {renderDocHelpLink} from '../../../components/HelpLink/renderDocHelpLink';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
 import find_ from 'lodash/find';
@@ -14,12 +15,10 @@ import {
     remoteCopy,
 } from '../../../store/actions/navigation/modals/remote-copy-modal';
 import {selectCluster} from '../../../store/selectors/global';
-import {makeLink} from './CreateTableModal/CreateTableModal';
+import {makeTableHelpLink} from './makeTableHelpLink';
 import {type YTError} from '../../../types';
 import {type RemoteCopyParams} from '../../../../@types/types';
 import {type AxiosError} from 'axios';
-import {docsUrl} from '../../../config';
-import UIFactory from '../../../UIFactory';
 import i18n from './RemoteCopyModal/i18n';
 
 type Values = Omit<RemoteCopyParams, 'input_table_paths'> & {
@@ -166,13 +165,11 @@ function RemoteCopyModal() {
                     warning: (
                         <>
                             {i18n('context_pool-must-have-limits')}{' '}
-                            {docsUrl(
-                                makeLink(
-                                    UIFactory.docsUrls['operations:remote_copy'],
-                                    i18n('action_limits'),
-                                    true,
-                                ),
-                            )}
+                            {renderDocHelpLink({
+                                docKey: 'operations:remote_copy',
+                                text: i18n('action_limits'),
+                                hideIcon: true,
+                            })}
                         </>
                     ),
                     visibilityCondition: {
@@ -180,12 +177,8 @@ function RemoteCopyModal() {
                         isActive: (value) => Boolean(value),
                     },
                     required: true,
-                    tooltip: docsUrl(
-                        makeLink(
-                            UIFactory.docsUrls[
-                                'operations:operations_options#obshie-opcii-dlya-vseh-tipov-operacij'
-                            ],
-                        ),
+                    tooltip: makeTableHelpLink(
+                        'operations:operations_options#obshie-opcii-dlya-vseh-tipov-operacij',
                     ),
                     extras: ({dstCluster}: Values) => {
                         return {

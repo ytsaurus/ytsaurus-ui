@@ -54,12 +54,11 @@ import {
     normalizeErasureCodec,
     storageOptionFromErasureCodec,
 } from '../../../utils/cypress-attributes';
-import {makeLink} from './CreateTableModal/CreateTableModal';
+import {makeTableHelpLink} from './makeTableHelpLink';
 import {
     selectCompressionCodecs,
     selectErasureCodecs,
 } from '../../../store/selectors/global/supported-features';
-import {docsUrl} from '../../../config';
 
 import './AttributesEditor.scss';
 import UIFactory from '../../../UIFactory';
@@ -346,14 +345,14 @@ function AttributesEditorLoaded() {
                 {value: InMemoryMode.UNCOMPRESSED, label: i18n('value_uncompressed')},
             ],
         },
-        tooltip: docsUrl(makeLink(UIFactory.docsUrls['dynamic-tables:overview#in_memory'])),
+        tooltip: makeTableHelpLink('dynamic-tables:overview#in_memory'),
     };
 
     const optimizeForField: DialogField = {
         name: 'optimize_for',
         type: 'radio',
         caption: i18n('field_optimize-for'),
-        tooltip: docsUrl(makeLink(UIFactory.docsUrls['storage:chunks#optimize_for'])),
+        tooltip: makeTableHelpLink('storage:chunks#optimize_for'),
         extras: {
             options: [
                 {value: 'scan', label: i18n('value_scan')},
@@ -396,7 +395,7 @@ function AttributesEditorLoaded() {
                             name: 'account',
                             type: 'usable-account',
                             caption: i18n('field_account'),
-                            tooltip: docsUrl(makeLink(UIFactory.docsUrls['storage:accounts'])),
+                            tooltip: makeTableHelpLink('storage:accounts'),
                             extras: {
                                 placeholder: i18n('context_account-placeholder'),
                             },
@@ -405,7 +404,7 @@ function AttributesEditorLoaded() {
                             name: 'primary_medium',
                             type: 'yt-select-single',
                             caption: i18n('field_primary-medium'),
-                            tooltip: docsUrl(makeLink(UIFactory.docsUrls['storage:media#primary'])),
+                            tooltip: makeTableHelpLink('storage:media#primary'),
                             extras: {
                                 placeholder: i18n('context_primary-medium-placeholder'),
                                 items: mediumList.map((value: string) => {
@@ -421,12 +420,8 @@ function AttributesEditorLoaded() {
                                       name: 'tablet_cell_bundle',
                                       type: 'tablet-cell-bundle' as const,
                                       caption: i18n('field_tablet-cell-bundle'),
-                                      tooltip: docsUrl(
-                                          makeLink(
-                                              UIFactory.docsUrls[
-                                                  'dynamic-tables:concepts#tablet_cell_bundles'
-                                              ],
-                                          ),
+                                      tooltip: makeTableHelpLink(
+                                          'dynamic-tables:concepts#tablet_cell_bundles',
                                       ),
                                       extras: {
                                           placeholder: i18n(
@@ -440,7 +435,7 @@ function AttributesEditorLoaded() {
                             name: 'expiration_time',
                             type: 'datepicker',
                             caption: i18n('field_expiration-time'),
-                            tooltip: docsUrl(makeLink(UIFactory.docsUrls['cypress:ttl'])),
+                            tooltip: makeTableHelpLink('cypress:ttl'),
                             extras: {
                                 format: 'yyyy-MM-dd HH:mm',
                                 range: false,
@@ -450,7 +445,7 @@ function AttributesEditorLoaded() {
                             name: 'expiration_timeout',
                             type: 'time-duration',
                             caption: i18n('field_expiration-timeout'),
-                            tooltip: docsUrl(makeLink(UIFactory.docsUrls['cypress:ttl'])),
+                            tooltip: makeTableHelpLink('cypress:ttl'),
                         },
                         ...mergeNoticeAndError,
                     ],
@@ -474,11 +469,7 @@ function AttributesEditorLoaded() {
                             name: 'compression_codec',
                             type: 'select-with-subitems' as const,
                             caption: i18n('field_compression'),
-                            tooltip: docsUrl(
-                                makeLink(
-                                    UIFactory.docsUrls['storage:compression#compression_codecs'],
-                                ),
-                            ),
+                            tooltip: makeTableHelpLink('storage:compression#compression_codecs'),
                             extras: {
                                 ...compressionCodecs,
                                 disablePortal: false,
@@ -488,9 +479,7 @@ function AttributesEditorLoaded() {
                             name: '_storageOption',
                             type: 'radio',
                             caption: i18n('field_storage-options'),
-                            tooltip: docsUrl(
-                                makeLink(UIFactory.docsUrls['storage:replication#replication']),
-                            ),
+                            tooltip: makeTableHelpLink('storage:replication#replication'),
                             extras: {
                                 options: [
                                     {
@@ -513,17 +502,13 @@ function AttributesEditorLoaded() {
                                 when: 'storage._storageOption',
                                 isActive: (value: string) => value === StorageOptions.REPLICATION,
                             },
-                            tooltip: docsUrl(
-                                makeLink(UIFactory.docsUrls['storage:replication#replication']),
-                            ),
+                            tooltip: makeTableHelpLink('storage:replication#replication'),
                         },
                         {
                             name: 'erasure_codec',
                             type: 'yt-select-single',
                             caption: i18n('field_erasure-codec'),
-                            tooltip: docsUrl(
-                                makeLink(UIFactory.docsUrls['storage:replication#erasure']),
-                            ),
+                            tooltip: makeTableHelpLink('storage:replication#erasure'),
                             visibilityCondition: {
                                 when: 'storage._storageOption',
                                 isActive: (value: string) => value === StorageOptions.ERASURE,

@@ -1,4 +1,5 @@
 import React, {type FocusEvent} from 'react';
+import {renderDocHelpLink} from '../../../components/HelpLink/renderDocHelpLink';
 import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
@@ -48,9 +49,6 @@ import {Tab} from '../../../constants/navigation';
 import {inTrash} from '../../../utils/navigation/restore-object';
 import {makeNavigationLink} from '../../../utils/app-url';
 import {decodeEscapedAbsPath} from '../../../utils/navigation';
-import {docsUrl} from '../../../config';
-import UIFactory from '../../../UIFactory';
-import {makeLink} from '../../../utils/utils';
 
 import i18n from './i18n';
 
@@ -152,12 +150,11 @@ function NavigationTargetPathLabel({decodedTargetPath}: {decodedTargetPath: stri
 
                     <Text>
                         {i18n('context_symlink-description')}{' '}
-                        {docsUrl(
-                            makeLink(
-                                UIFactory.docsUrls['cypress:links'],
-                                i18n('action_documentation'),
-                            ),
-                        )}
+                        {renderDocHelpLink({
+                            docKey: 'cypress:links',
+                            text: i18n('action_documentation'),
+                            hideIcon: true,
+                        })}
                     </Text>
                 </Flex>
             }

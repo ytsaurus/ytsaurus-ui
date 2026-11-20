@@ -1,4 +1,5 @@
 import React from 'react';
+import {renderDocHelpLink} from '../../../../../components/HelpLink/renderDocHelpLink';
 import {useSelector} from '../../../../../store/redux-hooks';
 
 import {selectPath} from '../../../../../store/selectors/navigation';
@@ -7,12 +8,9 @@ import Icon from '../../../../../components/Icon/Icon';
 import {Secondary, Tooltip, Warning} from '@ytsaurus/components';
 import {selectNavigationTableDataLensButtonAlerts} from '../../../../../store/selectors/navigation/content/table-ts';
 import {Button} from '@gravity-ui/uikit';
-import Link from '../../../../../containers/Link/Link';
 import {selectNavigationPathAttributesLoadState} from '../../../../../store/selectors/navigation/navigation';
 import {LOADING_STATUS} from '../../../../../constants';
-import {docsUrl} from '../../../../../config';
 import {uiSettings} from '../../../../../config/ui-settings';
-import UIFactory from '../../../../../UIFactory';
 import i18n from './i18n';
 
 export default function DataLensButton({className}: {className: string}) {
@@ -45,7 +43,6 @@ export default function DataLensButton({className}: {className: string}) {
         </Button>
     );
 
-    const linkUrl = UIFactory.docsUrls['chyt:yt_tables#dynamic'];
     const content = !showTooltip ? (
         btn
     ) : (
@@ -58,8 +55,11 @@ export default function DataLensButton({className}: {className: string}) {
                             {i18n('alert_dynamic-store-read-required-prefix')}{' '}
                             <Secondary>enable_dynamic_store_read</Secondary>{' '}
                             {i18n('alert_dynamic-store-read-required-suffix')}
-                            {linkUrl !== '' &&
-                                docsUrl(<Link url={linkUrl}>{i18n('action_help')}</Link>)}
+                            {renderDocHelpLink({
+                                docKey: 'chyt:yt_tables#dynamic',
+                                text: i18n('action_help'),
+                                hideIcon: true,
+                            })}
                         </div>
                     )}
                 </Warning>
