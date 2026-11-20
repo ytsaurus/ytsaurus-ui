@@ -1,4 +1,5 @@
 import React from 'react';
+import NavigationDescription from '../../../NavigationDescription/NavigationDescription';
 
 import AccessLog from '../../../../../pages/navigation/tabs/AccessLog/AccessLog';
 import ACL from '../../../../../pages/navigation/tabs/ACL/ACL';
@@ -18,6 +19,7 @@ import UIFactory from '../../../../../UIFactory';
 
 const getSupportedAttributeTypes = () => {
     const supportedAttributeTypes: Record<string, React.ComponentType> = {
+        [Tab.ANNOTATION]: NavigationDescription,
         acl: ACL,
         locks: Locks,
         schema: Schema,
