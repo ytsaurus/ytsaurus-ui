@@ -40,6 +40,18 @@ export const navigationTableSampleTable: NavigationTableData = {
     yqlTypes: null,
 };
 
+const frozenYsonKey = Object.freeze(['queue', Object.freeze([7, 42])]);
+const frozenYsonPayload = Object.freeze([frozenYsonKey]);
+
+export const navigationTableSampleTableWithFrozenYsonKey: NavigationTableData = {
+    name: '//home/demo/repaired_messages',
+    columns: ['key'],
+    rows: [Object.freeze({key: Object.freeze([frozenYsonPayload, 0])})],
+    schema: [{name: 'key', required: false, type: 'Any', sort_order: 'ascending'}],
+    meta: [[{key: 'row_count', value: '1'}]],
+    yqlTypes: [['OptionalType', ['DataType', 'Yson']]],
+};
+
 /** `payload` is what a cell holds once `onShowPreview` has loaded it in full. */
 export const navigationTableSampleTruncatedCell = {
     column: 'payload',

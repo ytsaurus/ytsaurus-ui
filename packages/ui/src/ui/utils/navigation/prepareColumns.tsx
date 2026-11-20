@@ -4,6 +4,7 @@ import unipika from '../../common/thor/unipika';
 import Icon from '../../components/Icon/Icon';
 import {ColumnCell, SchemaDataType, Tooltip, type TypeArray} from '@ytsaurus/components';
 
+import cloneDeep_ from 'lodash/cloneDeep';
 import map_ from 'lodash/map';
 
 import {type YsonSettings} from '../../store/selectors/thor/unipika';
@@ -35,7 +36,7 @@ export function prepareColumns({
         const render = ({value, index}: {value?: any; index: number; row: any}) => (
             <ColumnCell
                 allowRawStrings={useRawStrings}
-                value={value}
+                value={cloneDeep_(value)}
                 yqlTypes={yqlTypes || []}
                 ysonSettings={ysonSettings}
                 rowIndex={index}
