@@ -1,4 +1,5 @@
 import cn from 'bem-cn-lite';
+import {renderDocHelpLink} from '../../../components/HelpLink/renderDocHelpLink';
 import React, {useCallback, useMemo} from 'react';
 import {compose} from 'redux';
 import Button, {type ButtonProps} from '../../../components/Button/Button';
@@ -20,7 +21,6 @@ import hammer from '../../../common/hammer';
 import i18n from './i18n';
 import i18nPermissionValues from '../i18n-permission-values';
 import HelpLink from '../../../components/HelpLink/HelpLink';
-import {docsUrl} from '../../../config';
 import {type PermissionToRequest} from '../../../store/actions/acl';
 import {type YTPermissionTypeUI} from '../../../utils/acl/acl-api';
 import {
@@ -29,7 +29,6 @@ import {
     type IdmKindType,
     type InheritanceModeType,
 } from '../../../utils/acl/acl-types';
-import {makeLink} from '../../../utils/utils';
 import {useAvailablePermissions} from '../hooks/use-available-permissions';
 
 const block = cn('acl-request-permissions');
@@ -176,13 +175,12 @@ function RequestPermissions(props: Props) {
                 required: true,
                 tooltip: (
                     <>
-                        {docsUrl(
-                            makeLink(
-                                UIFactory.docsUrls['acl:permissions'],
-                                i18n('action_permissions-types'),
-                            ),
-                            i18n('action_permissions-types'),
-                        )}
+                        {renderDocHelpLink({
+                            docKey: 'acl:permissions',
+                            text: i18n('action_permissions-types'),
+                            fallback: i18n('action_permissions-types'),
+                            hideIcon: true,
+                        })}
                     </>
                 ),
                 extras: {

@@ -1,4 +1,5 @@
 import React from 'react';
+import {renderDocHelpLink} from '../../../../components/HelpLink/renderDocHelpLink';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 import isEmpty_ from 'lodash/isEmpty';
@@ -42,8 +43,6 @@ import {
     simpleBundleValidate,
 } from '../../../../utils/tablet_cell_bundles/bundles/bundle-editor-dialog';
 import UIFactory, {isAbcAllowed} from '../../../../UIFactory';
-import {makeLink} from '../../../../utils/utils';
-import {docsUrl} from '../../../../config';
 
 import './BundleEditorDialog.scss';
 import i18n from './i18n';
@@ -247,7 +246,11 @@ export function BundleEditorDialog() {
                     withoutDetailedBar: true,
                     hasClear: true,
                 },
-                tooltip: docsUrl(makeLink(UIFactory.docsUrls['dynamic-tables:cross-dc'], 'Help')),
+                tooltip: renderDocHelpLink({
+                    docKey: 'dynamic-tables:cross-dc',
+                    text: 'Help',
+                    hideIcon: true,
+                }),
                 validator: instanceCountValidate(dcConfigurations),
             },
             {
@@ -269,7 +272,11 @@ export function BundleEditorDialog() {
                     withoutDetailedBar: true,
                     hasClear: true,
                 },
-                tooltip: docsUrl(makeLink(UIFactory.docsUrls['dynamic-tables:cross-dc'], 'Help')),
+                tooltip: renderDocHelpLink({
+                    docKey: 'dynamic-tables:cross-dc',
+                    text: 'Help',
+                    hideIcon: true,
+                }),
                 validator: instanceCountValidate(dcConfigurations),
             },
             {
@@ -422,9 +429,11 @@ export function BundleEditorDialog() {
                     format: 'Bytes',
                     disabled: true,
                 },
-                tooltip: docsUrl(
-                    makeLink(UIFactory.docsUrls['bundle-controller:reserved-memory'], 'Help'),
-                ),
+                tooltip: renderDocHelpLink({
+                    docKey: 'bundle-controller:reserved-memory',
+                    text: 'Help',
+                    hideIcon: true,
+                }),
             },
             {
                 name: 'tablet_static',
