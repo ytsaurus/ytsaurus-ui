@@ -18,6 +18,8 @@ import {Vcs} from '../Vcs';
 import {Navigation} from '../Navigation';
 import {setFilter} from '../../../store/reducers/query-tracker/queryListSlice';
 import i18n from './i18n';
+import {selectSettingsQueryTrackerNewQueriesView} from '../../../store/selectors/settings/settings-queries';
+import {TutorialsTab} from '../querieskit/TutorialsTab/TutorialsTab';
 
 const b = block('queries-list');
 
@@ -49,8 +51,13 @@ const TabContent: Record<QueriesListMode, React.ReactNode> = {
     [QueriesListMode.Navigation]: <Navigation />,
 };
 
+const QueriesKitTabContent: Partial<Record<QueriesListMode, React.ReactNode>> = {
+    [QueriesListMode.Tutorials]: <TutorialsTab />,
+};
+
 export function QueriesList() {
     const dispatch = useDispatch();
+    const useNewView = useSelector(selectSettingsQueryTrackerNewQueriesView);
     const activeTab = useSelector(selectQueriesListMode);
     const tabsList = useSelector(selectQueriesListTabs);
     const isInitializedRef = useRef(false);
@@ -79,8 +86,18 @@ export function QueriesList() {
                 </TabList>
                 <div className={b('content')}>
                     {tabsList.map((tab) => (
-                        <TabPanel key={tab} value={tab}>
-                            {TabContent[tab]}
+                        <TabPanel
+                            key={tab}
+                            value={tab}
+                            className={
+                                useNewView && QueriesKitTabContent[tab]
+                                    ? b('querieskit-panel')
+                                    : undefined
+                            }
+                        >
+                            {useNewView
+                                ? (QueriesKitTabContent[tab] ?? TabContent[tab])
+                                : TabContent[tab]}
                         </TabPanel>
                     ))}
                 </div>

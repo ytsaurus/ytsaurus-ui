@@ -1,0 +1,10 @@
+.yt-querieskit-tutorials-tab {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+
+    &__list {
+        flex: 1;
+    }
+}
