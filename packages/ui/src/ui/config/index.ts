@@ -28,8 +28,8 @@ export function isDocsAllowed() {
     return Boolean(uiSettings.docsBaseUrl);
 }
 
-export function docsUrl<T, K = string>(url: T, alt?: K) {
-    return isDocsAllowed() ? url : (alt ?? '');
+export function whenDocsEnabled<T, K = string>(content: T, fallback?: K) {
+    return isDocsAllowed() ? content : (fallback ?? '');
 }
 
 export function getDocsBaseUrl() {

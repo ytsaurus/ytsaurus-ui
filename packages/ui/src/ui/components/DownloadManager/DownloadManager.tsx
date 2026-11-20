@@ -20,7 +20,7 @@ import Tabs from '../Tabs/Tabs';
 
 import {type WithVisibleProps} from '../../hocs/withVisible';
 
-import {docsUrl} from '../../config';
+import {whenDocsEnabled} from '../../config';
 import i18n from './i18n';
 import {SeparatorInput} from './SeparatorInput';
 import UIFactory from '../../UIFactory';
@@ -285,7 +285,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
     }
 
     private makeDocsUrl(path = '') {
-        return docsUrl(UIFactory.docsUrls['storage:formats'] + path);
+        return whenDocsEnabled(UIFactory.docsUrls['storage:formats'] + path);
     }
 
     private get formats() {
@@ -340,7 +340,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
                 name: 'excel' as const,
                 caption: 'Excel',
                 description: '',
-                doc: docsUrl(UIFactory.docsUrls['storage:excel#skachivanie']),
+                doc: whenDocsEnabled(UIFactory.docsUrls['storage:excel#skachivanie']),
                 show: excelExporter && isSchematicTable,
             },
         };
@@ -804,7 +804,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
             <div className={block('content')}>
                 <div className={messageBlock({theme: 'warning'})}>
                     {i18n('alert_download-error-appended')}{' '}
-                    {docsUrl(
+                    {whenDocsEnabled(
                         <>
                             {i18n('alert_see-faq-for-details')} {faqLink}{' '}
                             {i18n('alert_see-faq-for-details-after')}

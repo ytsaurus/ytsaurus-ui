@@ -20,7 +20,7 @@ import {
 import {statisticsTableProps} from '../../../../../utils/operations/tabs/statistics/statisticsTableProps';
 import {makeRadioButtonProps} from '../../../../../utils';
 import {type selectOperationStatisticsFiltered} from '../../../../../store/selectors/operations/statistics-v2';
-import {docsUrl} from '../../../../../config';
+import {whenDocsEnabled} from '../../../../../config';
 import {WaitForFont} from '../../../../../containers/WaitForFont/WaitForFont';
 
 import {OperationStatisticName, OperationStatisticValue} from './OperationStatisticName';
@@ -226,7 +226,7 @@ export class StatisticsBase extends Component<Props> {
                             </Button>
                         </span>
                     </div>
-                    {docsUrl(
+                    {whenDocsEnabled(
                         <div className={toolbarBlock('component', statisticsBlock('help'))}>
                             {renderDocHelpLink({docKey: 'problems:jobstatistics'})}
                         </div>,

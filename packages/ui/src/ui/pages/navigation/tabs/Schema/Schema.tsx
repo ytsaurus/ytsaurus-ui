@@ -39,7 +39,7 @@ import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
 import {selectAttributesPath, selectLoadState} from '../../../../store/selectors/navigation';
 import {isFinalLoadingStatus, wrapApiPromiseByToaster} from '../../../../utils/utils';
-import {docsUrl} from '../../../../config';
+import {whenDocsEnabled} from '../../../../config';
 import {type YTError} from '../../../../../@types/types';
 import {type RootState} from '../../../../store/reducers';
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
@@ -279,7 +279,7 @@ class Schema extends Component<SchemaProps> {
 
         return (
             <div className={block()}>
-                {docsUrl(
+                {whenDocsEnabled(
                     <div className={block('help')}>
                         {renderDocHelpLink({docKey: 'storage:static_schema'})}
                     </div>,
