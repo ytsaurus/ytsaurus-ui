@@ -26,7 +26,7 @@ import {useAppRumMeasureStart} from '../../../../../rum/rum-app-measures';
 import './Specification.scss';
 import ExperimentAssignments from '../../ExperimentAssignments/ExperimentAssignments';
 import i18n from './i18n';
-import {docsUrl} from '../../../../../config';
+import {whenDocsEnabled} from '../../../../../config';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
 import {YsonDownloadButton} from '../../../../../components/DownloadAttributesButton';
 import {selectIsCumulativeSpecPatchSupported} from '../../../../../store/selectors/global/supported-features';
@@ -79,7 +79,7 @@ function Specification({operation, operationId, isCumulativeSpecPatchSupported})
     return (
         <ErrorBoundary>
             <div className={block()}>
-                {docsUrl(
+                {whenDocsEnabled(
                     <div className={block('help', 'elements-section')}>
                         {renderDocHelpLink({docKey: 'operations:operations_options'})}
                     </div>,

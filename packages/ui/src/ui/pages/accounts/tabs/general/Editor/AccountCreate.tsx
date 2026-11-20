@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '../../../../../components/Button/Button';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';
-import {docsUrl} from '../../../../../config';
+import {whenDocsEnabled} from '../../../../../config';
 import {openCreateModal} from '../../../../../store/actions/accounts/editor';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {selectActiveAccount} from '../../../../../store/selectors/accounts/accounts-ts';
@@ -30,7 +30,9 @@ function AccountCreate({className}: Props) {
     if (createAccountUrl) {
         return (
             <span className={className}>
-                {docsUrl(<HelpLink url={createAccountUrl} text={i18n('title_create-account')} />)}
+                {whenDocsEnabled(
+                    <HelpLink url={createAccountUrl} text={i18n('title_create-account')} />,
+                )}
             </span>
         );
     }

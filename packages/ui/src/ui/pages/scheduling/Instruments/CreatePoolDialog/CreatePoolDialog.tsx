@@ -5,7 +5,7 @@ import React, {useCallback, useMemo, useState} from 'react';
 import Button from '../../../../components/Button/Button';
 import {type FormApi, YTDFDialog} from '../../../../containers/Dialog';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
-import {docsUrl, isIdmAclAvailable} from '../../../../config';
+import {isIdmAclAvailable, whenDocsEnabled} from '../../../../config';
 import {uiSettings} from '../../../../config/ui-settings';
 import {SCHEDULING_CREATE_POOL_CANCELLED} from '../../../../constants/scheduling';
 import {
@@ -177,7 +177,7 @@ function CreatePoolDialog(props: {onClose: () => void}) {
                     tooltip: (
                         <span>
                             {i18n('context_pool-tree')}{' '}
-                            {docsUrl(
+                            {whenDocsEnabled(
                                 <>
                                     {i18n('action_see')}{' '}
                                     {renderDocHelpLink({
