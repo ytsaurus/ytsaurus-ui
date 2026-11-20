@@ -8,6 +8,7 @@ import {
     type NavigationTableStoryState,
     navigationTableSampleAdditionalColumns,
     navigationTableSampleTable,
+    navigationTableSampleTableWithFrozenYsonKey,
     navigationTableSampleTableWithTruncatedCell,
     navigationTableSampleTruncatedCell,
     navigationTableStoryEmptyMessage,
@@ -57,6 +58,20 @@ const meta: Meta<DemoArgs> = {
 export default meta;
 
 export const Default: StoryObj<DemoArgs> = {};
+
+export const FrozenYsonKey: StoryObj<DemoArgs> = {
+    parameters: {controls: {disable: true}},
+    render: () => (
+        <div style={navigationTableStoryFrameStyle}>
+            <NavigationTable
+                table={navigationTableSampleTableWithFrozenYsonKey}
+                initialActiveTab="preview"
+                ysonSettings={YSON_DEFAULT_UNIPIKA_SETTINGS}
+                logError={() => undefined}
+            />
+        </div>
+    ),
+};
 
 const TruncatedCellPreviewDemo = () => {
     const [table, setTable] = useState<NavigationTableData>(

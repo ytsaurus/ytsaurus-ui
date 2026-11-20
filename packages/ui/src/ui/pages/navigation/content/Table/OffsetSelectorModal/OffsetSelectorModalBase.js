@@ -95,7 +95,7 @@ export class OffsetSelectorModalBase extends Component {
                 size="s"
                 placeholder={i18n('placeholder_search')}
                 onUpdate={this._changeFilter}
-                text={this.state.filter}
+                value={this.state.filter}
                 hasClear={true}
             />
         );
@@ -127,7 +127,7 @@ export class OffsetSelectorModalBase extends Component {
                                     size="s"
                                     placeholder=""
                                     onUpdate={this._handleInputChange(item.name)}
-                                    text={item.value}
+                                    value={item.value ?? ''}
                                     hasClear={true}
                                 />
                             </div>

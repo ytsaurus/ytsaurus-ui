@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import cn from 'bem-cn-lite';
+import cloneDeep_ from 'lodash/cloneDeep';
 
 import {Button, Flex, Icon as UIKitIcon} from '@gravity-ui/uikit';
 import {Eye} from '@gravity-ui/icons';
@@ -50,7 +51,7 @@ type ColumnCellProps = {
 };
 
 export function ColumnCell({
-    value = null,
+    value: inputValue = null,
     yqlTypes,
     ysonSettings,
     allowRawStrings,
@@ -62,6 +63,8 @@ export function ColumnCell({
     logError,
     ErrorBoundaryComponent = DefaultErrorBoundary,
 }: ColumnCellProps) {
+    // Unipika attaches parent references to nested values.
+    const value = cloneDeep_(inputValue);
     const logger = logError ?? console.log;
     const [hovered, setHovered] = useState(false);
     const handleMouseEnter = () => setHovered(true);

@@ -1,4 +1,5 @@
 import {type TypeArray} from '@ytsaurus/components';
+import cloneDeep_ from 'lodash/cloneDeep';
 import isEmpty_ from 'lodash/isEmpty';
 import map_ from 'lodash/map';
 import unipika from '../../../../common/thor/unipika';
@@ -71,7 +72,8 @@ export class Query {
         }
 
         const [data, typeIndex] = value as YqlRawValue;
-        const yqlValue = [data, prepareQueryValueType(yqlTypes[Number(typeIndex)])];
+        // Unipika adds parent references to YSON values while formatting them.
+        const yqlValue = [cloneDeep_(data), prepareQueryValueType(yqlTypes[Number(typeIndex)])];
         return unipika.formatFromYQL(yqlValue, settings);
     }
 
