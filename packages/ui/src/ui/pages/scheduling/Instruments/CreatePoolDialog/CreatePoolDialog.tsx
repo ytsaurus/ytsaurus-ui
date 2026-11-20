@@ -1,11 +1,11 @@
 import isEmpty_ from 'lodash/isEmpty';
+import {renderDocHelpLink} from '../../../../components/HelpLink/renderDocHelpLink';
 import sortedIndexOf_ from 'lodash/sortedIndexOf';
 import React, {useCallback, useMemo, useState} from 'react';
 import Button from '../../../../components/Button/Button';
 import {type FormApi, YTDFDialog} from '../../../../containers/Dialog';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
-import Link from '../../../../containers/Link/Link';
-import {docsUrl, isIdmAclAvailable} from '../../../../config';
+import {isIdmAclAvailable, whenDocsEnabled} from '../../../../config';
 import {uiSettings} from '../../../../config/ui-settings';
 import {SCHEDULING_CREATE_POOL_CANCELLED} from '../../../../constants/scheduling';
 import {
@@ -25,7 +25,6 @@ import {
     selectTreesSelectItems,
 } from '../../../../store/selectors/scheduling/scheduling';
 import {type FIX_MY_TYPE} from '../../../../types';
-import UIFactory from '../../../../UIFactory';
 import {type ResponsibleType} from '../../../../utils/acl/acl-types';
 import i18n from './i18n';
 
@@ -178,12 +177,14 @@ function CreatePoolDialog(props: {onClose: () => void}) {
                     tooltip: (
                         <span>
                             {i18n('context_pool-tree')}{' '}
-                            {docsUrl(
+                            {whenDocsEnabled(
                                 <>
                                     {i18n('action_see')}{' '}
-                                    <Link url={UIFactory.docsUrls['scheduler:scheduler_and_pools']}>
-                                        {i18n('action_documentation')}
-                                    </Link>{' '}
+                                    {renderDocHelpLink({
+                                        docKey: 'scheduler:scheduler_and_pools',
+                                        text: i18n('action_documentation'),
+                                        hideIcon: true,
+                                    })}{' '}
                                     {i18n('context_pool-tree-docs-suffix')}
                                 </>,
                             )}

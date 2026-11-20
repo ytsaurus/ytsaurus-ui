@@ -1,4 +1,5 @@
 import React from 'react';
+import {renderDocHelpLink} from '../../../../components/HelpLink/renderDocHelpLink';
 import cn from 'bem-cn-lite';
 import {connect} from 'react-redux';
 
@@ -14,7 +15,6 @@ import set_ from 'lodash/set';
 import Button from '../../../../components/Button/Button';
 import {type FormApi, YTDFDialog} from '../../../../containers/Dialog';
 import Icon from '../../../../components/Icon/Icon';
-import Link from '../../../../containers/Link/Link';
 
 import {
     closeCreateTableModal,
@@ -45,27 +45,18 @@ import {
     selectPrimitiveTypes,
 } from '../../../../store/selectors/global/supported-features';
 import {type SelectWithSubItemsProps} from '../../../../containers/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
-import {docsUrl, getNewTableReplicasCount} from '../../../../config';
+import {getNewTableReplicasCount} from '../../../../config';
 
 import './CreateTableModal.scss';
 import {ASCENDING, DESCENDING} from './CreateTableTabField/CreateTableTabField';
 import {type FIX_MY_TYPE} from '../../../../types';
-import UIFactory from '../../../../UIFactory';
+import {makeTableHelpLink} from '../makeTableHelpLink';
 import i18n from './i18n';
 
 const block = cn('create-table-modal');
 
 function getNoSuggestionsMsg() {
     return i18n('alert_no-suggestions-yet');
-}
-
-export function makeLink(url: string, label = i18n('action_help'), inline = false) {
-    const link = (
-        <Link target={'_blank'} url={url}>
-            {label}
-        </Link>
-    );
-    return inline ? link : <div>{link}</div>;
 }
 
 enum TableType {
@@ -599,23 +590,19 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                 tooltip: (
                                     <div className={block('tooltip')}>
                                         {i18n('context_data-rows-of')}{' '}
-                                        {docsUrl(
-                                            makeLink(
-                                                UIFactory.docsUrls['storage:static_tables'],
-                                                i18n('value_static-tables-link'),
-                                                true,
-                                            ),
-                                            i18n('value_static-tables-link'),
-                                        )}{' '}
+                                        {renderDocHelpLink({
+                                            docKey: 'storage:static_tables',
+                                            text: i18n('value_static-tables-link'),
+                                            fallback: i18n('value_static-tables-link'),
+                                            hideIcon: true,
+                                        })}{' '}
                                         {i18n('context_static-tables-description')}{' '}
-                                        {docsUrl(
-                                            makeLink(
-                                                UIFactory.docsUrls['dynamic-tables:overview'],
-                                                i18n('value_dynamic-tables-link'),
-                                                true,
-                                            ),
-                                            i18n('value_dynamic-tables-link'),
-                                        )}{' '}
+                                        {renderDocHelpLink({
+                                            docKey: 'dynamic-tables:overview',
+                                            text: i18n('value_dynamic-tables-link'),
+                                            fallback: i18n('value_dynamic-tables-link'),
+                                            hideIcon: true,
+                                        })}{' '}
                                         {i18n('context_dynamic-tables-allow-modify')}
                                         <div className={block('alert-text')}>
                                             {i18n('context_before-using-dynamic-tables')}{' '}
@@ -648,9 +635,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                 name: 'optimize_for',
                                 type: 'radio',
                                 caption: i18n('field_optimize-for'),
-                                tooltip: docsUrl(
-                                    makeLink(UIFactory.docsUrls['storage:chunks#optimize_for']),
-                                ),
+                                tooltip: makeTableHelpLink('storage:chunks#optimize_for'),
                                 extras: {
                                     options: [
                                         {value: 'scan', label: i18n('value_scan')},
@@ -662,12 +647,8 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                 name: 'compressionCodec',
                                 type: 'select-with-subitems',
                                 caption: i18n('field_compression'),
-                                tooltip: docsUrl(
-                                    makeLink(
-                                        UIFactory.docsUrls[
-                                            'storage:compression#compression_codecs'
-                                        ],
-                                    ),
+                                tooltip: makeTableHelpLink(
+                                    'storage:compression#compression_codecs',
                                 ),
                                 extras: {
                                     ...compressionCodecs,
@@ -678,9 +659,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                 name: 'storageOption',
                                 type: 'radio',
                                 caption: i18n('field_storage-options'),
-                                tooltip: docsUrl(
-                                    makeLink(UIFactory.docsUrls['storage:replication#replication']),
-                                ),
+                                tooltip: makeTableHelpLink('storage:replication#replication'),
                                 extras: {
                                     options: [
                                         {
@@ -711,11 +690,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                 tooltip: (
                                     <div className={block('tooltip')}>
                                         {i18n('context_erasure-encoding-description')}
-                                        {docsUrl(
-                                            makeLink(
-                                                UIFactory.docsUrls['storage:replication#erasure'],
-                                            ),
-                                        )}
+                                        {makeTableHelpLink('storage:replication#erasure')}
                                     </div>
                                 ),
                                 visibilityCondition: {
@@ -749,13 +724,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                 tooltip: (
                                     <div className={block('tooltip')}>
                                         {i18n('context_unique-keys-description')}
-                                        {docsUrl(
-                                            makeLink(
-                                                UIFactory.docsUrls[
-                                                    'storage:static_schema#overview'
-                                                ],
-                                            ),
-                                        )}
+                                        {makeTableHelpLink('storage:static_schema#overview')}
                                     </div>
                                 ),
                                 visibilityCondition: {
@@ -795,9 +764,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                 name: 'dataType',
                                 type: 'yt-select-single',
                                 caption: i18n('field_data-type'),
-                                tooltip: docsUrl(
-                                    makeLink(UIFactory.docsUrls['storage:data_types#schema']),
-                                ),
+                                tooltip: makeTableHelpLink('storage:data_types#schema'),
                                 extras: {
                                     items: primitiveTypes,
                                     placeholder: i18n('action_select-type'),
@@ -813,13 +780,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                 tooltip: (
                                     <div className={block('tooltip')}>
                                         {i18n('context_optional-description')}
-                                        {docsUrl(
-                                            makeLink(
-                                                UIFactory.docsUrls[
-                                                    'storage:data_types#schema_optional'
-                                                ],
-                                            ),
-                                        )}
+                                        {makeTableHelpLink('storage:data_types#schema_optional')}
                                     </div>
                                 ),
                             },
@@ -830,13 +791,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                 tooltip: (
                                     <div className={block('tooltip')}>
                                         {i18n('context_same-group-same-block')}
-                                        {docsUrl(
-                                            makeLink(
-                                                UIFactory.docsUrls[
-                                                    'storage:static_schema#overview'
-                                                ],
-                                            ),
-                                        )}
+                                        {makeTableHelpLink('storage:static_schema#overview')}
                                     </div>
                                 ),
                                 extras: {
@@ -871,13 +826,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                 tooltip: (
                                     <div className={block('tooltip')}>
                                         {i18n('context_lock-description')}
-                                        {docsUrl(
-                                            makeLink(
-                                                UIFactory.docsUrls[
-                                                    'dynamic-tables:transactions#conflicts'
-                                                ],
-                                            ),
-                                        )}
+                                        {makeTableHelpLink('dynamic-tables:transactions#conflicts')}
                                     </div>
                                 ),
                                 // TODO: fix this, so the definition of onChange didnt change, but the compiler throw errors
@@ -900,12 +849,8 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                 name: 'aggregate',
                                 type: 'yt-select-single',
                                 caption: i18n('field_aggregate'),
-                                tooltip: docsUrl(
-                                    makeLink(
-                                        UIFactory.docsUrls[
-                                            'dynamic-tables:sorted_dynamic_tables#aggr_columns'
-                                        ],
-                                    ),
+                                tooltip: makeTableHelpLink(
+                                    'dynamic-tables:sorted_dynamic_tables#aggr_columns',
                                 ),
                                 extras: {
                                     items: AGGREGATE_CHOICES,

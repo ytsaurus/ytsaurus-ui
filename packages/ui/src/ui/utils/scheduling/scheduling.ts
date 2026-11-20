@@ -4,6 +4,7 @@ import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
 import ypath from '../../common/thor/ypath';
+import {type EditJsonProps} from '../../components/EditJsonWithPreview/EditJsonWithPreview';
 import {ROOT_POOL_NAME} from '../../constants/scheduling';
 import {type OperationInfo, type PoolInfo} from '../../store/selectors/scheduling/scheduling-pools';
 import {attachTreeLeaves, prepareTree} from '../../common/hammer/tree-list';
@@ -198,7 +199,10 @@ export interface PoolEditorFormValues {
     otherSettings: {
         forbidImmediateOperations: boolean;
         fifoSortParams: Array<string>;
+    };
+    ephemeralSubpools: {
         createEphemeralSubpools: boolean;
+        config: EditJsonProps['value'];
     };
 }
 
@@ -290,7 +294,16 @@ export function getInitialValues(
         otherSettings: {
             forbidImmediateOperations: ypath.getBoolean(editItem, '/forbidImmediateOperations'),
             fifoSortParams: ypath.getValue(editItem, '/fifoSortParams'),
+        },
+        ephemeralSubpools: {
             createEphemeralSubpools: ypath.getBoolean(editItem, '/createEphemeralSubpools'),
+            config: {
+                value: JSON.stringify(
+                    ypath.getValue(editItem, '/cypressAttributes/ephemeral_subpool_config'),
+                    null,
+                    2,
+                ),
+            },
         },
     };
 }

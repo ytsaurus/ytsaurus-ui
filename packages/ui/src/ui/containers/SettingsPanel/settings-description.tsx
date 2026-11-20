@@ -22,7 +22,7 @@ import infoIcon from '../../assets/img/svg/info-icon.svg';
 import LogoGitlabIcon from '@gravity-ui/icons/svgs/logo-gitlab.svg';
 import PencilToSquareIcon from '@gravity-ui/icons/svgs/pencil-to-square.svg';
 import {useClusterFromLocation} from '../../hooks/use-cluster';
-import {docsUrl} from '../../config/index';
+import {whenDocsEnabled} from '../../config/index';
 import {getConfigData, uiSettings} from '../../config/ui-settings';
 
 import ypath from '../../common/thor/ypath';
@@ -395,7 +395,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                         description={renderHtmlDescription(
                             i18n('context_path-autocorrection-description') +
                                 ' ' +
-                                docsUrl(
+                                whenDocsEnabled(
                                     'For details see ' +
                                         `<a class="link link_theme_normal" href="${UIFactory.docsUrls['faq:enablepathautocorrection']}" target="_blank">FAQ</a>` +
                                         '.',

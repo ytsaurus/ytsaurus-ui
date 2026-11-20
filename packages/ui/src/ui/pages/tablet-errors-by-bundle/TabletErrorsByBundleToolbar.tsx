@@ -1,10 +1,8 @@
 import React from 'react';
+import {renderDocHelpLink} from '../../components/HelpLink/renderDocHelpLink';
 import {useDispatch, useSelector} from '../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
-import {docsUrl} from '../../config';
-
-import HelpLink from '../../components/HelpLink/HelpLink';
 import Select from '../../components/Select/Select';
 import SimplePagination from '../../components/Pagination/SimplePagination';
 import {Toolbar} from '../../components/WithStickyToolbar/Toolbar/Toolbar';
@@ -24,7 +22,6 @@ import {
     tabletErrorsByBundleActions,
 } from '../../store/reducers/tablet-errors/tablet-errors-by-bundle';
 import {loadTabletErrorsByBundle} from '../../store/actions/tablet-errors/tablet-errors-by-bundle';
-import UIFactory from '../../UIFactory';
 
 import i18n from './i18n';
 
@@ -125,9 +122,7 @@ export function TabletErrorsByBundleToolbar({
                         ),
                     },
                     {
-                        node: docsUrl(
-                            <HelpLink url={UIFactory.docsUrls['bundles:tablet-errors']} />,
-                        ),
+                        node: renderDocHelpLink({docKey: 'bundles:tablet-errors'}),
                     },
                 ]}
             />

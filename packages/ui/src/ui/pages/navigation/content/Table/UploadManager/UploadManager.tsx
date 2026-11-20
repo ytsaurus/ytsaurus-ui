@@ -1,4 +1,5 @@
 import React from 'react';
+import {renderDocHelpLink} from '../../../../../components/HelpLink/renderDocHelpLink';
 import {compose} from 'redux';
 import axios, {type AxiosProgressEvent} from 'axios';
 import cn from 'bem-cn-lite';
@@ -30,10 +31,8 @@ import {selectSchema} from '../../../../../store/selectors/navigation/tabs/schem
 import {selectCluster, selectCurrentClusterConfig} from '../../../../../store/selectors/global';
 import {type RootState} from '../../../../../store/reducers';
 import {getXsrfCookieName} from '../../../../../utils';
-import {docsUrl, getConfigUploadTable} from '../../../../../config';
-import HelpLink from '../../../../../components/HelpLink/HelpLink';
+import {getConfigUploadTable} from '../../../../../config';
 import CancelHelper from '../../../../../utils/cancel-helper';
-import UIFactory from '../../../../../UIFactory';
 import FileDropZone from '../../../../../components/FileDropZone/FileDropZone';
 import FileUploadProgress from '../../../../../components/FileUploadProgress/FileUploadProgress';
 
@@ -236,11 +235,9 @@ class UploadManager extends React.Component<Props, State> {
     renderFooterContent() {
         const {file, fileType} = this.state;
         const inProgress = this.inProgress();
-        const url =
-            fileType === 'xlsx'
-                ? UIFactory.docsUrls['storage:excel']
-                : UIFactory.docsUrls['storage:formats'];
-        const helpLink = docsUrl(<HelpLink url={url} />);
+        const helpLink = renderDocHelpLink({
+            docKey: fileType === 'xlsx' ? 'storage:excel' : 'storage:formats',
+        });
         if (!file) {
             return helpLink;
         }

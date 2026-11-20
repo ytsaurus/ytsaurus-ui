@@ -1,11 +1,11 @@
-import {docsUrl} from '../../../../config';
+import {whenDocsEnabled} from '../../../../config';
 
 import map_ from 'lodash/map';
 
 import UIFactory from '../../../../UIFactory';
 
 export function prepareFaqUrl(type: string) {
-    return docsUrl(UIFactory.docsUrls['faq'] + '#' + type.replace(/_/g, ''));
+    return whenDocsEnabled(UIFactory.docsUrls['faq'] + '#' + type.replace(/_/g, ''));
 }
 
 export function prepareAlerts(alerts?: Record<string, unknown>) {

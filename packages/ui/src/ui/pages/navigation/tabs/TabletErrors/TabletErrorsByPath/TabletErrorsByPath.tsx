@@ -1,18 +1,16 @@
 import React from 'react';
+import {renderDocHelpLink} from '../../../../../components/HelpLink/renderDocHelpLink';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import i18n from './i18n';
 
-import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import SimplePagination from '../../../../../components/Pagination/SimplePagination';
 import Select from '../../../../../components/Select/Select';
 import {YTTimeline, calcFromTo} from '../../../../../components/Timeline';
 import WithStickyToolbar from '../../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Toolbar} from '../../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import TextInputWithDebounce from '../../../../../components/TextInputWithDebounce/TextInputWithDebounce';
-
-import {docsUrl} from '../../../../../config';
 
 import {selectPath} from '../../../../../store/selectors/navigation';
 import {
@@ -26,7 +24,6 @@ import {
 import {tabletErrorsByPathActions} from '../../../../../store/reducers/navigation/tabs/tablet-errors/tablet-errors-by-path';
 import {loadTabletErrorsByTablePath} from '../../../../../store/actions/navigation/tabs/tablet-errors/tablet-errors-by-path';
 import {selectNavigationPathAttributes} from '../../../../../store/selectors/navigation/navigation';
-import UIFactory from '../../../../../UIFactory';
 
 import {TabletErrorsByPathTable} from './TabletErrorsByPathTable';
 
@@ -128,9 +125,7 @@ export function TabletErrorsRequestToolbar({className}: {className: string}) {
                         ),
                     },
                     {
-                        node: docsUrl(
-                            <HelpLink url={UIFactory.docsUrls['bundles:tablet-errors']} />,
-                        ),
+                        node: renderDocHelpLink({docKey: 'bundles:tablet-errors'}),
                     },
                 ]}
             />
