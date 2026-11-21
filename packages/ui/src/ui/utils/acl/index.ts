@@ -116,6 +116,16 @@ export type PreparedRole = TypedAclSubject & {
     types?: undefined;
 };
 
+export function getAclSubjectName(subject: Subject): string {
+    if ('user' in subject) {
+        return subject.user;
+    }
+    if ('group' in subject) {
+        return subject.group_name || subject.group;
+    }
+    return subject.tvm_id;
+}
+
 export function prepareAclSubject(item: ResponsibleType): Subject {
     switch (item.type) {
         case 'users':
