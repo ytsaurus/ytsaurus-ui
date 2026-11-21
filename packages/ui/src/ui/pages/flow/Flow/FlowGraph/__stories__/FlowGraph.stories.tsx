@@ -9,9 +9,11 @@ import {FlowMessagesDialogContext} from '../renderers/FlowMessagesDialogContext/
 import {
     backpressuredFlowGraphHandler,
     dataChannelFlowGraphHandler,
+    denseFlowGraphHandler,
     drainedFlowGraphHandler,
     emptyFlowGraphHandler,
     inputOnlyStreamFlowGraphHandler,
+    keyVisitorFlowGraphHandler,
     messagesFlowGraphHandler,
     mixedFlowGraphHandler,
     multipleSinksFlowGraphHandler,
@@ -81,4 +83,14 @@ export const DataChannel: Story = {
 export const MultipleSinks: Story = {
     render: renderGraph,
     parameters: {msw: {handlers: [multipleSinksFlowGraphHandler]}},
+};
+
+export const KeyVisitorStreams: Story = {
+    render: renderGraph,
+    parameters: {msw: {handlers: [keyVisitorFlowGraphHandler]}},
+};
+
+export const DenseComputation: Story = {
+    render: renderGraph,
+    parameters: {msw: {handlers: [denseFlowGraphHandler]}},
 };

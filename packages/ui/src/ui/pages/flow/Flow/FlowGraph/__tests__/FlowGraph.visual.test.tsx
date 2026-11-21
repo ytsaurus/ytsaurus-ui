@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {type Page} from '@playwright/test';
+import {type Locator, type Page} from '@playwright/test';
 
 import {expect, test} from '../../../../../playwright-components/core';
 
@@ -15,9 +15,11 @@ import {
     SOURCE_NAME,
     backpressuredFlowGraphHandler,
     dataChannelFlowGraphHandler,
+    denseFlowGraphHandler,
     drainedFlowGraphHandler,
     emptyFlowGraphHandler,
     inputOnlyStreamFlowGraphHandler,
+    keyVisitorFlowGraphHandler,
     messagesFlowGraphHandler,
     mixedFlowGraphHandler,
     multipleSinksFlowGraphHandler,
@@ -30,6 +32,18 @@ test.beforeEach(({browserName}) => {
 
 const anchor = 'yt-flow-graph-anchors__computation-anchor';
 const summary = 'yt-flow-graph-anchors__summary-inner';
+
+// Zooms out to the view of computation groups, where the blocks are not rendered as elements
+async function zoomOutToGroups(page: Page, graph: Locator) {
+    await graph.hover();
+    for (let i = 0; i < 5; ++i) {
+        await page.mouse.wheel(0, 700);
+    }
+    await expect(page.locator('.graph-block-wrapper')).toHaveCount(0);
+    await graph.hover({position: {x: 10, y: 10}});
+    await expect(page.locator('.yt-flow-graph__item-popup')).toHaveCount(0);
+    await page.waitForTimeout(500);
+}
 
 test('FlowGraph: drained anchor', async ({mount, expectScreenshot, page, router}) => {
     await router.use(drainedFlowGraphHandler);
@@ -195,14 +209,7 @@ test('FlowGraph: input-only stream does not overlap sink', async ({
             `sink ${JSON.stringify(sinkBox)}, overlap area ${overlapArea}px²`,
     ).toBe(0);
 
-    await graph.hover();
-    for (let i = 0; i < 5; ++i) {
-        await page.mouse.wheel(0, 700);
-    }
-    await expect(graphBlocks).toHaveCount(0);
-    await graph.hover({position: {x: 10, y: 10}});
-    await expect(page.locator('.yt-flow-graph__item-popup')).toHaveCount(0);
-    await page.waitForTimeout(500);
+    await zoomOutToGroups(page, graph);
     await expectScreenshot();
 });
 
@@ -340,11 +347,7 @@ test('FlowGraph: data-channel edge connects sink and source', async ({
     await expectScreenshot();
 
     // The edge stays in the zoomed-out view of computation groups
-    for (let i = 0; i < 5; ++i) {
-        await page.mouse.wheel(0, 700);
-    }
-    await graph.hover({position: {x: 10, y: 10}});
-    await page.waitForTimeout(500);
+    await zoomOutToGroups(page, graph);
     await expectScreenshot({nameSuffix: 'zoomed out'});
 
     // Close up, the blocks are rendered as elements: a dashed connection lies between the sink and the source
@@ -398,5 +401,39 @@ test('FlowGraph: sinks follow the order of their output streams', async ({
 
     expect(streamsTopDown).toEqual(MULTIPLE_SINKS.map(({streamName}) => streamName));
     expect(sinksTopDown).toEqual(streamsTopDown.map((name) => sinkByStream[name]));
+    await expectScreenshot();
+});
+
+test('FlowGraph: key-visitor streams are drawn inside their computation group', async ({
+    mount,
+    expectScreenshot,
+    page,
+    router,
+}) => {
+    test.slow();
+
+    await router.use(keyVisitorFlowGraphHandler);
+    await mount(<FlowGraphStories.KeyVisitorStreams />);
+
+    await page.getByText('Zoom to:').waitFor();
+    const graph = page.locator('.yt-flow-graph__graph');
+    await graph.hover({position: {x: 10, y: 10}});
+    await page.waitForTimeout(500);
+    await expectScreenshot();
+
+    // The blocks are gone in the view of computation groups
+    await zoomOutToGroups(page, graph);
+    await expectScreenshot({nameSuffix: 'zoomed out'});
+});
+
+test('FlowGraph: dense computation group', async ({mount, expectScreenshot, page, router}) => {
+    test.slow();
+
+    await router.use(denseFlowGraphHandler);
+    await mount(<FlowGraphStories.DenseComputation />);
+
+    await page.getByText('Zoom to:').waitFor();
+    await page.locator('.yt-flow-graph__graph').hover({position: {x: 10, y: 10}});
+    await page.waitForTimeout(500);
     await expectScreenshot();
 });

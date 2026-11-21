@@ -58,35 +58,12 @@ export class FlowGroupBlock implements YTGraphBlock<
     }
 
     recalcSize() {
-        const {stream, computation} = this.sizes;
-
-        const res = {
-            width: Math.max(600, computation.width + PADDING * 2),
-            height: computation.height + PADDING * 2,
-        };
-
-        const {source_streams, timer_streams, output_streams} = this.meta;
-
-        const extraHeight = Math.max(
-            0,
-            (source_streams?.length ?? 0) * (PADDING + stream.height),
-            (timer_streams?.length ?? 0) * (PADDING + stream.height),
-            (output_streams?.length ?? 0) * (PADDING + stream.height) - computation.height,
-        );
-
-        let extraWidth = 0;
-
-        if (source_streams?.length > 0) {
-            extraWidth += stream.width + PADDING;
-        }
-
-        if (output_streams?.length > 0) {
-            extraWidth += stream.width + PADDING;
-        }
-
+        const blocks = Object.values(this.layout()).flat();
+        // the computation with its paddings spans at least 600px
+        const minWidthExtra = Math.max(0, 600 - this.sizes.computation.width - PADDING * 2);
         return {
-            width: res.width + extraWidth,
-            height: res.height + extraHeight,
+            width: Math.max(...blocks.map(({x, width}) => x + width + PADDING)) + minWidthExtra,
+            height: Math.max(...blocks.map(({y, height}) => y + height + PADDING)),
         };
     }
 
@@ -107,8 +84,6 @@ export class FlowGroupBlock implements YTGraphBlock<
             );
             return block;
         }
-
-        const {width, height} = this.sizes.stream;
 
         let index = 0;
         if (type !== 'computation') {
@@ -132,35 +107,57 @@ export class FlowGroupBlock implements YTGraphBlock<
             }
         }
 
-        const {computation, stream} = this.sizes;
+        const layout = this.layout();
+        const {x, y} =
+            type === 'computation'
+                ? layout.computation[0]
+                : layout[type as keyof typeof layout][index];
 
-        const byIndex = {width: index * (width + PADDING), height: index * (height + PADDING)};
+        return {...block, x: x + this.x, y: y + this.y};
+    }
 
-        block.y =
-            type === 'output_streams' || type === 'computation'
-                ? PADDING + byIndex.height
-                : PADDING * 2 + computation.height + byIndex.height;
+    // Positions of the blocks relative to the group, the output streams are placed to the right
+    // of all other blocks except the source streams
+    private layout() {
+        const {stream, computation} = this.sizes;
+        const {
+            source_streams = [],
+            timer_streams = [],
+            key_visitor_streams = [],
+            output_streams = [],
+        } = this.meta;
 
-        if (type === 'source_streams') {
-            block.x = PADDING;
-        } else if (type === 'timer_streams') {
-            const hasSources = this.meta.source_streams?.length > 0;
-            block.x = hasSources ? PADDING * 2 + width + byIndex.width : PADDING;
-        } else if (type === 'output_streams') {
-            const hasSources = this.meta.source_streams?.length > 0;
-            block.x = 2 * PADDING + computation.width;
-            if (hasSources) {
-                block.x += PADDING + width;
-            }
-            block.y += (computation.height - stream.height) / 2;
-        } else if (type === 'computation') {
-            const hasSources = this.meta.source_streams?.length > 0;
-            block.x = PADDING;
-            if (hasSources) {
-                block.x += PADDING + width;
-            }
-        }
+        const hasSources = source_streams.length > 0;
+        const left = hasSources ? PADDING * 2 + stream.width : PADDING;
+        const bottom = PADDING * 2 + computation.height;
+        const step = {x: stream.width + PADDING, y: stream.height + PADDING};
 
-        return {...block, x: block.x + this.x, y: block.y + this.y};
+        // Key-visitor streams are placed in the column to the right of the timer streams,
+        // they take the place of the timer streams when there are none
+        const keyVisitorLeft = left + (timer_streams.length > 0 ? step.x : 0);
+
+        const column = (ids: Array<string>, x: number, top: number) =>
+            ids.map((_id, i) => ({x, y: top + i * step.y, ...stream}));
+
+        const res = {
+            computation: [{x: left, y: PADDING, ...computation}],
+            source_streams: column(source_streams, PADDING, bottom),
+            timer_streams: column(timer_streams, left, bottom),
+            key_visitor_streams: column(key_visitor_streams, keyVisitorLeft, bottom),
+        };
+
+        const right = Math.max(
+            ...[...res.computation, ...res.timer_streams, ...res.key_visitor_streams].map(
+                ({x, width}) => x + width,
+            ),
+        );
+
+        const outputs = column(
+            output_streams,
+            right + PADDING,
+            PADDING + (computation.height - stream.height) / 2,
+        );
+
+        return {...res, output_streams: outputs};
     }
 }

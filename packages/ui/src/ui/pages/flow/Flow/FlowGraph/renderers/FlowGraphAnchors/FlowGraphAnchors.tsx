@@ -5,6 +5,7 @@ import CircleInfoIcon from '@gravity-ui/icons/svgs/circle-info.svg';
 import FlagIcon from '@gravity-ui/icons/svgs/flag.svg';
 import {Icon, type IconProps} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
+import uniqBy_ from 'lodash/uniqBy';
 import React from 'react';
 import {type FlowComputationUIStreamsSummary} from '../../../../../../pages/flow/Flow/types';
 import {type FlowGraphBlock} from '../../FlowGraph';
@@ -25,7 +26,9 @@ const block = cn('yt-flow-graph-anchors');
 export function FlowGraphAnchors({graph, data}: {graph: Graph; data: FlowGraphBlock}) {
     const {anchors = []} = data;
 
-    return anchors.map((anchor) => {
+    // The type defines the position of an anchor, several anchors of the same type
+    // share the position and the summary is rendered only once
+    return uniqBy_(anchors, 'type').map((anchor) => {
         switch (anchor.type) {
             case COMPUTATION_IN:
             case COMPUTATION_OUT:

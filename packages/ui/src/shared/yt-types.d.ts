@@ -1065,7 +1065,9 @@ export type FlowDescribePipelineData = {
 export type FlowGraphEdge = {
     from: string;
     to: string;
-    // 'data_channel': the sink `from` writes and the source `to` reads the same external channel (e.g. a queue)
+    // 'data_channel': `from` (a sink or a computation) produces the data that `to` (a source or a key-visitor
+    // stream) reads, e.g. through a queue or a state table; when `from` is the computation of the key-visitor
+    // stream `to`, the stream visits the computation's own state
     kind: 'data_channel' | (string & {});
     // e.g. "yt:primary://home/queue"
     label?: string;
@@ -1123,22 +1125,25 @@ export type FlowComputationStreams = Record<FlowComputationStreamType, Array<Str
     Partial<Record<FlowComputationExtendedStreamTypes, Array<FlowExtendedStreamType>>>;
 
 /**
- * - Elements of sources_streams/timer_streams/output_streams should be groupped with their computation
+ * - Elements of sources_streams/timer_streams/key_visitor_streams/output_streams should be grouped with their computation
  *   - the elements should have specific relative postion inside the group:
  *     - source_streams should be placed on the left-bottom area
  *     - output_streams should be placed on the right area
  *     - timer_streams should be placed on the bottom area
- * - An item from input_streams is always an item of output_streams at least of one onother block
+ *     - key_visitor_streams should be placed on the bottom area in the column to the right of timer_streams,
+ *       or in place of timer_streams when there are none
+ * - An item from input_streams is always an item of output_streams at least of one another block
  */
 
 type FlowComputationStreamType =
-    'input_streams' | 'output_streams' | 'source_streams' | 'timer_streams';
+    'input_streams' | 'output_streams' | 'source_streams' | 'timer_streams' | 'key_visitor_streams';
 
 type FlowComputationExtendedStreamTypes =
     | 'extended_input_streams'
     | 'extended_output_streams'
     | 'extended_source_streams'
-    | 'extended_timer_streams';
+    | 'extended_timer_streams'
+    | 'extended_key_visitor_streams';
 
 export type FlowStream = FlowNodeBase & {
     bytes_per_second?: number;
