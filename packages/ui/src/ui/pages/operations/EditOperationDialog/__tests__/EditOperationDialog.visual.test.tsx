@@ -47,15 +47,30 @@ async function selectPoolTree(page: Page, tree: string) {
 }
 
 async function setJsonEditorValue(page: Page, value: object) {
-    const editor = page.locator('.monaco-editor').first();
-    const properties = JSON.stringify(value, null, 2).split('\n').slice(1, -1).join('\n');
-
-    await expect(editor).toBeVisible();
-    await editor.click();
-    await page.keyboard.press('ControlOrMeta+KeyA');
-    await page.keyboard.press('ArrowLeft');
-    await page.keyboard.press('ArrowRight');
-    await page.keyboard.type(`\n${properties}\n`);
+    const editor = page.getByRole('textbox', {name: 'Editor content'});
+    await editor.focus();
+    await expect(editor).toBeFocused();
+    const modifier = await page.evaluate(() =>
+        navigator.userAgent.includes('Macintosh') ? 'Meta' : 'Control',
+    );
+    await page.keyboard.press(`${modifier}+A`);
+    await editor.evaluate(
+        (element, text) => {
+            const clipboardData = new DataTransfer();
+            clipboardData.setData('text/plain', text);
+            element.dispatchEvent(
+                new ClipboardEvent('paste', {bubbles: true, cancelable: true, clipboardData}),
+            );
+        },
+        JSON.stringify(value, null, 2).slice(0, -1),
+    );
+    const error = page.getByRole('dialog').getByText(/^(Expected|Unexpected|JSON Parse error)/);
+    const editorErrors = page.getByRole('code').locator('.squiggly-error');
+    await expect(error).toBeVisible();
+    await expect(editorErrors).not.toHaveCount(0);
+    await page.keyboard.press('}');
+    await expect(error).toHaveCount(0);
+    await expect(editorErrors).toHaveCount(0);
 }
 
 async function getEncodedParameters(request: Request) {
