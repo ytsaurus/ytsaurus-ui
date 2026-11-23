@@ -15,6 +15,7 @@ import {
     requestParameters,
     snapshot,
     unsupportedHandler,
+    zeroDiffSnapshot,
 } from '../__stories__/mocks';
 
 test.beforeEach(async ({router}) => {
@@ -835,3 +836,95 @@ test('PipelineDynamicSpec: discovery failure does not enable legacy editing', as
     await expect(page.getByRole('button', {name: 'Edit dynamic specification'})).toBeDisabled();
     expect(legacyReads).toHaveLength(0);
 });
+
+for (const theme of ['light', 'dark'] as const) {
+    test(`PipelineDynamicSpec: Zero diff patches ${theme}`, async ({
+        mount,
+        page,
+        router,
+        expectScreenshot,
+    }) => {
+        await router.use(dynamicSpecHandler(zeroDiffSnapshot));
+        await page.emulateMedia({colorScheme: theme});
+        await mount(<PipelineDynamicSpecStories.ZeroDiff />);
+        await page.getByRole('radio', {name: 'Patches', exact: true}).click();
+        await page.evaluate((selectedTheme) => {
+            document.body.classList.remove('theme-light', 'theme-dark');
+            document.body.classList.add(`theme-${selectedTheme}`);
+        }, theme);
+        const warning = page.getByText(
+            'This patch does not change the current base specification.',
+            {
+                exact: true,
+            },
+        );
+        await expect(warning).toHaveCount(1);
+        const patch = page.getByRole('row').filter({has: warning});
+        await expect(patch).toContainText(PATCH_ID);
+        const cells = patch.getByRole('cell');
+        await expect(cells).toHaveCount(5);
+        const rowBackground = await cells
+            .first()
+            .evaluate((cell) => getComputedStyle(cell).backgroundColor);
+        await expect(
+            page.getByRole('row').filter({hasNot: warning}).getByRole('cell').first(),
+        ).not.toHaveCSS('background-color', rowBackground);
+        for (const cell of await cells.all()) {
+            await expect(cell).toHaveCSS('background-color', rowBackground);
+        }
+        const contrastRatios = await patch.evaluate((row) => {
+            const parse = (color: string) =>
+                Array.from(color.matchAll(/[\d.]+/g), ([value]) => Number(value));
+            const blend = (foreground: number[], background: number[]) => {
+                const alpha = foreground[3] ?? 1;
+                return background.map(
+                    (value, index) => foreground[index] * alpha + value * (1 - alpha),
+                );
+            };
+            const luminance = (color: number[]) =>
+                color
+                    .map((value) => {
+                        const channel = value / 255;
+                        return channel <= 0.04045
+                            ? channel / 12.92
+                            : ((channel + 0.055) / 1.055) ** 2.4;
+                    })
+                    .reduce(
+                        (sum, value, index) => sum + value * [0.2126, 0.7152, 0.0722][index],
+                        0,
+                    );
+            const ratios: number[] = [];
+            const walker = document.createTreeWalker(row, NodeFilter.SHOW_TEXT);
+            while (walker.nextNode()) {
+                const element = walker.currentNode.parentElement;
+                if (!walker.currentNode.textContent?.trim() || !element?.getClientRects().length) {
+                    continue;
+                }
+                const layers: number[][] = [];
+                for (let parent: Element | null = element; parent; parent = parent.parentElement) {
+                    layers.unshift(parse(getComputedStyle(parent).backgroundColor));
+                }
+                const background = layers.reduce(
+                    (back, front) => blend(front, back),
+                    [255, 255, 255],
+                );
+                const foreground = blend(parse(getComputedStyle(element).color), background);
+                const [darker, lighter] = [luminance(foreground), luminance(background)].sort(
+                    (left, right) => left - right,
+                );
+                ratios.push((lighter + 0.05) / (darker + 0.05));
+            }
+            return ratios;
+        });
+        expect(contrastRatios.length).toBeGreaterThan(0);
+        expect(Math.min(...contrastRatios)).toBeGreaterThanOrEqual(4.5);
+        await expect(page.getByRole('button', {name: 'Delete patch', exact: true})).toHaveCount(0);
+        await expect(
+            page.getByRole('button', {name: `Cancel ${PATCH_ID}`, exact: true}),
+        ).toBeEnabled();
+        await expect(
+            page.getByRole('button', {name: 'Reset all patches', exact: true}),
+        ).toBeEnabled();
+        await expectScreenshot({themes: [theme]});
+    });
+}

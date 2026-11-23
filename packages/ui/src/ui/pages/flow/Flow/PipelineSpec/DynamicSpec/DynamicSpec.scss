@@ -67,6 +67,29 @@
         overflow-wrap: anywhere;
     }
 
+    &__zero-diff-warning {
+        --g-alert-padding: 0;
+        --g-card-background-color: transparent;
+
+        margin-bottom: 12px;
+    }
+
+    &__patch_zero-diff &__cell {
+        background-color: var(--g-color-base-warning-light);
+    }
+
+    &__patch_zero-diff &__cell .unipika {
+        --color-unipika-default: var(--g-color-text-primary);
+        --color-unipika-key: var(--g-color-text-primary);
+        --color-unipika-string: var(--g-color-text-primary);
+        --color-unipika-null: var(--g-color-text-primary);
+        --color-unipika-int: var(--g-color-text-primary);
+        --color-unipika-uint: var(--g-color-text-primary);
+        --color-unipika-float: var(--g-color-text-primary);
+        --color-unipika-bool: var(--g-color-text-primary);
+        --color-unipika-escape-text: var(--g-color-text-primary);
+    }
+
     &__reset {
         margin-bottom: 12px;
     }
