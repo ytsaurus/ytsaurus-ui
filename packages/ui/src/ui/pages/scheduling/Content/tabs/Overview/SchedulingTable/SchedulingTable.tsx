@@ -115,7 +115,7 @@ export function SchedulingTable() {
             className={block()}
             table={table}
             virtualized
-            rowHeight={49}
+            rowHeight={50}
             scrollToIndex={scrollToIndex}
             isHighlightedRow={isHighlightedRow}
         />
