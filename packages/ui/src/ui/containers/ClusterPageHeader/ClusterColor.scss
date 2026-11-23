@@ -5,10 +5,10 @@
 
 .cluster-color {
     // when theme is undefined
-    --cluster-color: #cfd4e0;
+    --cluster-color: var(--cluster-default-color);
 
     &_theme_ytsaurus {
-        --cluster-color: #ffb23e;
+        --cluster-color: var(--ytsaurus-color);
     }
     &_theme_grapefruit {
         --cluster-color: var(--grapefruit-color);
