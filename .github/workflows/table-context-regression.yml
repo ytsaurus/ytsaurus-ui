@@ -1,0 +1,68 @@
+name: Table context regression
+
+on:
+  push:
+    branches: [timoninmaxim/table-context-reset-ci-v2-1123]
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Check the table context implementation
+        working-directory: packages/ui
+        run: |
+          npx eslint src/ui/store/actions/navigation/content/table/table.js src/ui/store/reducers/navigation/content/table/table.js src/ui/store/reducers/navigation/content/table/url-mapping.ts src/ui/store/reducers/navigation/index.ts src/ui/pages/navigation/content/Table/__stories__/TableNavigation.stories.tsx src/ui/pages/navigation/content/Table/__stories__/index.ts src/ui/pages/navigation/content/Table/__tests__/TableNavigation.component.test.tsx src/ui/pages/navigation/content/Table/__tests__/TableNavigation.visual.test.tsx
+          npx tsc -p src/ui --noEmit --declaration false
+      - name: Verify that the routing regression fails without the fix
+        working-directory: packages/ui
+        run: |
+          files='src/ui/store/actions/navigation/content/table/table.js src/ui/store/reducers/navigation/content/table/table.js src/ui/store/reducers/navigation/content/table/url-mapping.ts src/ui/store/reducers/navigation/index.ts'
+          for file in $files; do
+            git show 96057e73c8b6e66aedd70e0944894d2351fe7cb5:packages/ui/$file > "$file"
+          done
+          set +e
+          PW_OPTIONS='TableNavigation.component.test.tsx --grep=clears.old.data.before --project=chromium --workers=1 --retries=0' npm run test:components > /tmp/table-context-red.log 2>&1
+          result=$?
+          set -e
+          for file in $files; do
+            git restore --source=HEAD -- "$file"
+          done
+          tail -100 /tmp/table-context-red.log
+          test "$result" -ne 0
+          grep -F 'toMatchObject' /tmp/table-context-red.log
+          grep -F 'source-value' /tmp/table-context-red.log
+      - name: Check routing and refresh Linux snapshots
+        working-directory: packages/ui
+        env:
+          PW_OPTIONS: 'TableNavigation --workers=2 --retries=0 --update-snapshots'
+        run: npm run test:components
+      - name: Check routing against saved snapshots
+        working-directory: packages/ui
+        env:
+          PW_OPTIONS: 'TableNavigation --workers=2 --retries=0'
+        run: npm run test:components
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: table-context-snapshots
+          path: packages/ui/src/ui/pages/navigation/content/Table/__snapshots__/**/*.png
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: table-context-reports
+          path: |
+            packages/ui/src/ui/playwright-components/report
+            packages/ui/src/ui/playwright-components/test-results
+            /tmp/table-context-red.log
