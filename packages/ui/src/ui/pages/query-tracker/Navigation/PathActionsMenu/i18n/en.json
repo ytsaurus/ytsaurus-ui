@@ -7,5 +7,10 @@
   "value_select-yt-ql": "SELECT (YT QL)",
   "value_select-yql": "SELECT (YQL)",
   "value_select-chyt": "SELECT (CHYT)",
-  "value_select-spyt": "SELECT (SPYT)"
+  "value_select-spyt": "SELECT (SPYT)",
+  "value_path-chyt": "Path (CH over YT)",
+  "value_path-spyt": "Path (Spark over YT)",
+  "value_select-sql": "SELECT (SQL)",
+  "value_select-ch-over-yt": "SELECT (CH over YT)",
+  "value_select-spark-over-yt": "SELECT (Spark over YT)"
 }
