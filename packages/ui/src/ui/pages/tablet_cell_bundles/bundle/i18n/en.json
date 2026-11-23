@@ -2,6 +2,7 @@
   "alert_no-selected-bundles": "You don't have any selected bundles",
   "alert_load-bundle-controller-details-error": "Cannot load bundle controller details for \"{{bundle}}\".",
   "context_choose-bundle": "Please choose one to display charts",
+  "context_bundle-controller-alerts": "These alerts typically indicate issues with allocating new instances and do not affect overall bundle availability. To check availability, see the \"{{health}}\" indicator in the {{general}} section.",
   "context_failed-health": "Go to the Tablet cells tab to investigate the causes of tablet cell issues.",
   "title_general": "General",
   "title_bundle-configuration": "Bundle configuration",

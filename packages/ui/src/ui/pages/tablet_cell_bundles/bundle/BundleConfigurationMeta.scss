@@ -13,10 +13,19 @@
 
     &__health {
         &_value {
+            &_failed {
+                color: var(--warning-color);
+                background-color: var(--warning-background, var(--g-color-base-warning-light));
+            }
+
             &_changing {
                 color: var(--info-color);
             }
         }
+    }
+
+    &__alerts-description {
+        margin: 0 0 8px;
     }
 
     &__tooltip-list {

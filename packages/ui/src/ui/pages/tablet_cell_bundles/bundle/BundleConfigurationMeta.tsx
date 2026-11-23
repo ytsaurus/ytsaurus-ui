@@ -273,7 +273,7 @@ function getBundleStateField(orchidData: OrchidBundlesData) {
         key: i18n('field_state'),
         value: (
             <Tooltip
-                content={renderErrors(alerts)}
+                content={renderBundleControllerAlerts(alerts)}
                 placement={'bottom'}
                 className={block('state-with-icon')}
             >
@@ -300,16 +300,24 @@ function renderDetails(details: Array<[string, number]>) {
     );
 }
 
-function renderErrors(alerts: OrchidBundlesData['alerts']) {
+function renderBundleControllerAlerts(alerts: OrchidBundlesData['alerts']) {
     return (
-        <ol className={block('tooltip-list', {alerts: true})}>
-            {alerts.map((alert) => {
-                return (
-                    <li key={alert.id} className={block('tooltip-item')}>
-                        {alert.id} - {alert.description}
-                    </li>
-                );
-            })}
-        </ol>
+        <>
+            <p className={block('alerts-description')}>
+                {i18n('context_bundle-controller-alerts', {
+                    health: i18n('field_health'),
+                    general: i18n('title_general'),
+                })}
+            </p>
+            <ol className={block('tooltip-list', {alerts: true})}>
+                {alerts.map((alert) => {
+                    return (
+                        <li key={alert.id} className={block('tooltip-item')}>
+                            {alert.id} - {alert.description}
+                        </li>
+                    );
+                })}
+            </ol>
+        </>
     );
 }
