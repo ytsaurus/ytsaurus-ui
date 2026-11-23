@@ -1,13 +1,9 @@
 import React, {type FC, useCallback} from 'react';
 import {Button, Icon} from '@gravity-ui/uikit';
-import CopyIcon from '@gravity-ui/icons/svgs/copy.svg';
 import './HeaderActions.scss';
 import cn from 'bem-cn-lite';
 import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-from-square.svg';
-import {
-    copyPathToClipboard,
-    loadPath,
-} from '../../../../store/actions/query-tracker/queryNavigation';
+import {loadPath} from '../../../../store/actions/query-tracker/queryNavigation';
 import {
     selectNavigationCluster,
     selectNavigationClusterConfig,
@@ -36,10 +32,6 @@ export const HeaderActions: FC<Props> = ({className, groupedPathActions}) => {
     const {path} = pathActionsNode;
     const navigationUrl = makeNavigationLink({path, cluster});
 
-    const handlePathCopy = useCallback(() => {
-        dispatch(copyPathToClipboard(path));
-    }, [dispatch, path]);
-
     const handleFavoriteItemClick = useCallback(
         ({path: favoritePath}: FavouritesItem) => {
             if (!clusterConfig) return;
@@ -58,9 +50,6 @@ export const HeaderActions: FC<Props> = ({className, groupedPathActions}) => {
                 cluster={cluster}
                 onItemClick={handleFavoriteItemClick}
             />
-            <Button view="flat" href={navigationUrl} target="_blank">
-                <Icon data={ArrowUpRightFromSquareIcon} size={16} />
-            </Button>
             <PathActionsMenu
                 node={pathActionsNode}
                 open={pathMenuOpen}
@@ -68,8 +57,8 @@ export const HeaderActions: FC<Props> = ({className, groupedPathActions}) => {
                 engine={engine}
                 grouped={groupedPathActions}
             />
-            <Button view="flat" onClick={handlePathCopy}>
-                <Icon data={CopyIcon} size={16} />
+            <Button view="flat" href={navigationUrl} target="_blank">
+                <Icon data={ArrowUpRightFromSquareIcon} size={16} />
             </Button>
         </div>
     );
