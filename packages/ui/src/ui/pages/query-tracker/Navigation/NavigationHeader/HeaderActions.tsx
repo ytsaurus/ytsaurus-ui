@@ -23,7 +23,9 @@ import {type FavouritesItem} from '../../../../components/Favourites/Favourites'
 
 const b = cn('navigation-header-actions');
 
-export const HeaderActions: FC<{className?: string}> = ({className}) => {
+type Props = {className?: string; groupedPathActions?: boolean};
+
+export const HeaderActions: FC<Props> = ({className, groupedPathActions}) => {
     const dispatch = useDispatch();
     const pathActionsNode = useSelector(selectPathActionsNode);
     const cluster = useSelector(selectNavigationCluster);
@@ -64,6 +66,7 @@ export const HeaderActions: FC<{className?: string}> = ({className}) => {
                 open={pathMenuOpen}
                 onOpenToggle={togglePathMenuOpen}
                 engine={engine}
+                grouped={groupedPathActions}
             />
             <Button view="flat" onClick={handlePathCopy}>
                 <Icon data={CopyIcon} size={16} />
