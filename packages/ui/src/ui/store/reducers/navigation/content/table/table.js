@@ -44,11 +44,11 @@ const ephemeralState = {
 
     nextOffsetValue: null,
     moveBackward: false,
+    isDynamic: false,
+    isStrict: false,
 };
 
 const persistedState = {
-    isDynamic: false,
-    isStrict: false,
     /** @type {'row' | 'key'} */
     offsetMode: 'row',
     /** @type {number  | string} */
@@ -63,6 +63,13 @@ export const initialState = {
     ...ephemeralState,
     ...persistedState,
 };
+
+export function resetTableData(state) {
+    return {
+        ...state,
+        ...ephemeralState,
+    };
+}
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {

@@ -1,6 +1,9 @@
 import {produce} from 'immer';
 import {type RootState} from '../../../../../store/reducers';
-import {initialState} from '../../../../../store/reducers/navigation/content/table/table';
+import {
+    initialState,
+    resetTableData,
+} from '../../../../../store/reducers/navigation/content/table/table';
 import {updateIfChanged} from '../../../../../utils/utils';
 
 export const tableParams = {
@@ -30,6 +33,15 @@ export const tableParams = {
 
 export function getNavigationTablePreparedState(state: RootState, {query}: {query: RootState}) {
     return produce(state, (draft) => {
+        const previousNode = state.navigation.navigation;
+        const nextNode = query.navigation.navigation;
+        if (
+            previousNode.path !== nextNode.path ||
+            previousNode.transaction !== nextNode.transaction
+        ) {
+            draft.navigation.content.table = resetTableData(state.navigation.content.table);
+        }
+
         const draftTable = draft.navigation.content.table;
         const queryTable = query.navigation.content.table;
 
