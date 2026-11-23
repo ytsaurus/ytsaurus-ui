@@ -9,12 +9,10 @@ import {
     selectNavigationPath,
 } from '../../../../store/selectors/query-tracker/queryNavigation';
 import {
-    BodyType,
-    setCluster,
-    setNodeType,
-    setPath,
-} from '../../../../store/reducers/query-tracker/queryNavigationSlice';
-import {loadNodeByPath, loadPath} from '../../../../store/actions/query-tracker/queryNavigation';
+    loadNodeByPath,
+    loadPath,
+    showNavigationClusters,
+} from '../../../../store/actions/query-tracker/queryNavigation';
 import {EditableBreadcrumbs} from '../../../../components/EditableBreadcrumbs/EditableBreadcrumbs';
 import PathEditor from '../../../../containers/PathEditor/PathEditor';
 import {normalizePath} from '../helpers/normalizePath';
@@ -33,9 +31,7 @@ export const NavigationBreadcrumbs: FC = () => {
     const clusterConfig = useSelector(selectNavigationClusterConfig);
 
     const handleClusterChangeClick = useCallback(() => {
-        dispatch(setNodeType(BodyType.Cluster));
-        dispatch(setCluster(undefined));
-        dispatch(setPath(''));
+        dispatch(showNavigationClusters());
     }, [dispatch]);
 
     const handleBreadcrumbsClick = useCallback(

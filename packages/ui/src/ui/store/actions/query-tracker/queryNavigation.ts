@@ -12,6 +12,8 @@ import {
     receiveNodes,
     receiveTable,
     setCluster,
+    setNodeType,
+    setPath,
     startNavigation,
 } from '../../reducers/query-tracker/queryNavigationSlice';
 import {
@@ -148,6 +150,12 @@ export const loadPath =
             dispatch(failNavigation({requestId, error: error as YTError}));
         }
     };
+
+export const showNavigationClusters = (): AsyncAction => (dispatch) => {
+    dispatch(setNodeType(BodyType.Cluster));
+    dispatch(setCluster(undefined));
+    dispatch(setPath(''));
+};
 
 export const setNavigationCluster =
     (clusterId: string): AsyncAction =>
