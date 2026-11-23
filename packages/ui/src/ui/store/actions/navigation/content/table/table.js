@@ -80,6 +80,21 @@ import i18n from './i18n';
 
 const requests = new CancelHelper();
 
+let tableRequestVersion = 0;
+
+function beginTableRequest(state, getState) {
+    const version = ++tableRequestVersion;
+    return () => {
+        const current = getState();
+        return (
+            version === tableRequestVersion &&
+            selectCluster(state) === selectCluster(current) &&
+            selectPath(state) === selectPath(current) &&
+            selectTransaction(state) === selectTransaction(current)
+        );
+    };
+}
+
 function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPreload) {
     const {login} = state.global;
 
@@ -389,6 +404,7 @@ function restoreColumns(state) {
 export function updateTableData() {
     return (dispatch, getState) => {
         const state = getState();
+        const isCurrent = beginTableRequest(state, getState);
         const attributes = selectAttributes(state);
         const {offsetValue, moveBackward} = selectNextOffset(state);
         const requestedPageSize = selectRequestedPageSize(state);
@@ -399,6 +415,9 @@ export function updateTableData() {
 
         return loadTableRows(LOAD_TYPE.UPDATE, state)
             .then(({columns, omittedColumns, rows, yqlTypes}) => {
+                if (!isCurrent()) {
+                    return;
+                }
                 let updatedRows = rows;
                 // Scheme is always strict in dynamic tables. No new columns are expected.
                 if (!isDynamic) {
@@ -454,6 +473,9 @@ export function updateTableData() {
                 });
             })
             .catch((error) => {
+                if (!isCurrent()) {
+                    return;
+                }
                 if (error.code === yt.codes.CANCELLED) {
                     dispatch({type: GET_TABLE_DATA.CANCELLED});
                 } else {
@@ -469,10 +491,14 @@ export function updateTableData() {
 export function getTableData() {
     return (dispatch, getState) => {
         const state = getState();
+        const isCurrent = beginTableRequest(state, getState);
 
         const attributes = selectAttributes(state);
 
         return dispatch(loadColumnPresetIfDefined()).then(() => {
+            if (!isCurrent()) {
+                return undefined;
+            }
             const applyColumns = ({
                 rows,
                 columns,
@@ -516,6 +542,9 @@ export function getTableData() {
 
             return dispatch(waitForFontFamilies(restoreColumns(getState())))
                 .then(({columns, omittedColumns, storedColumns, ...rest}) => {
+                    if (!isCurrent()) {
+                        return undefined;
+                    }
                     if (columns) {
                         applyColumns({
                             rows: [],
@@ -528,6 +557,9 @@ export function getTableData() {
                     return dispatch(updateTableData());
                 })
                 .catch((error) => {
+                    if (!isCurrent()) {
+                        return;
+                    }
                     applyColumns({
                         rows: [],
                         columns: Columns.getSchemaColumns(attributes),
@@ -683,6 +715,7 @@ export function mountUnmountTable(action) {
 
 export function abortAndReset() {
     return (dispatch) => {
+        ++tableRequestVersion;
         requests.removeAllRequests();
         dispatch({type: GET_TABLE_DATA.CANCELLED});
     };
