@@ -1,45 +1,35 @@
-import React, {type FC, useMemo} from 'react';
-import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
-import {selectQueriesFilters} from '../../../../../store/selectors/query-tracker/queriesList';
+import React from 'react';
 import {DatePicker} from '@gravity-ui/date-components';
-import {type DateTime, dateTimeParse} from '../../../../../utils/date-utils';
 import {Flex} from '@gravity-ui/uikit';
-import {applyFilter} from '../../../../../store/actions/query-tracker/queriesList';
+import {dateTimeParse} from '../../../../../utils/date-utils';
+import {type QueriesListFilter} from '../../../../../types/query-tracker/queryList';
 import i18n from './i18n';
 
-export const QueryDateFilter: FC = () => {
-    const dispatch = useDispatch();
-    const {from, to} = useSelector(selectQueriesFilters);
+type Props = {
+    value: Pick<QueriesListFilter, 'from' | 'to'>;
+    onChange: (patch: Pick<QueriesListFilter, 'from' | 'to'>) => void;
+};
 
-    const setFilter = useMemo(
-        () => ({
-            from: (value?: DateTime | null) => {
-                dispatch(applyFilter({from: value ? value.valueOf() : undefined}));
-            },
-            to: (value?: DateTime | null) => {
-                dispatch(applyFilter({to: value ? value.endOf('day').valueOf() : undefined}));
-            },
-        }),
-        [dispatch],
-    );
-
+export function QueryDateFilter({value: {from, to}, onChange}: Props) {
     return (
         <Flex alignItems="center" gap={1}>
             <DatePicker
+                aria-label={i18n('context_start-date')}
                 placeholder={i18n('context_start-date')}
                 format="DD.MM.YYYY"
-                value={from ? dateTimeParse(from) : null}
-                onUpdate={setFilter.from}
+                value={from === undefined ? null : dateTimeParse(from)}
+                onUpdate={(value) => onChange({from: value?.valueOf()})}
                 hasClear
             />{' '}
             &mdash;
             <DatePicker
+                aria-label={i18n('context_end-date')}
                 placeholder={i18n('context_end-date')}
                 format="DD.MM.YYYY"
-                value={to ? dateTimeParse(to)?.startOf('day') : null}
-                onUpdate={setFilter.to}
+                value={to === undefined ? null : dateTimeParse(to)?.startOf('day')}
+                onUpdate={(value) => onChange({to: value?.endOf('day').valueOf()})}
                 hasClear
             />
         </Flex>
     );
-};
+}

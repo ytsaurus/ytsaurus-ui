@@ -63,7 +63,10 @@ export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterPr
         return (
             <div className={b(null, className)}>
                 <div className={b('row')}>
-                    <QueryEngineFilter />
+                    <QueryEngineFilter
+                        value={filter.engine}
+                        onUpdate={(engine) => dispatch(applyFilter({engine}))}
+                    />
                 </div>
             </div>
         );
@@ -72,8 +75,14 @@ export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterPr
     return (
         <div className={b(null, className)}>
             <Flex className={b('row')} alignItems="center" gap={2}>
-                <QueryFastUserFilter />
-                <QueryEngineFilter />
+                <QueryFastUserFilter
+                    value={filter.user}
+                    onUpdate={(user) => dispatch(applyFilter({user}))}
+                />
+                <QueryEngineFilter
+                    value={filter.engine}
+                    onUpdate={(engine) => dispatch(applyFilter({engine}))}
+                />
 
                 <Dropdown
                     trigger="click"
