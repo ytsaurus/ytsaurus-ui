@@ -24,7 +24,7 @@ export function CancelDynamicSpecPatchDialog({patch, version, onCancel, onClose}
             onClose={onClose}
             headerProps={{title: i18n('title_cancel-patch')}}
             footerProps={{
-                textApply: i18n('action_cancel-patch'),
+                textApply: i18n('action_confirm-cancel-patch'),
                 textCancel: i18n('action_keep-patch'),
                 propsButtonApply: {view: 'outlined-danger'},
             }}
