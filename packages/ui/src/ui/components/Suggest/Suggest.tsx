@@ -405,7 +405,16 @@ export default class Suggest extends Component<SuggestProps, State> {
                 <div className={className}>
                     {showNoItemsMsg &&
                         this.renderItem(i18n('alert_no-results'), -1, 'no_items', b('no-items'))}
-                    <ul className={listClassName} style={{minWidth: this.getInputWidth()}}>
+                    <ul
+                        className={listClassName}
+                        style={{minWidth: this.getInputWidth()}}
+                        onMouseDown={(event) => {
+                            // Keep the input focused when the list scrollbar is pressed.
+                            if (event.target === event.currentTarget) {
+                                event.preventDefault();
+                            }
+                        }}
+                    >
                         <ReactList
                             itemRenderer={itemRenderer}
                             length={items.length}
