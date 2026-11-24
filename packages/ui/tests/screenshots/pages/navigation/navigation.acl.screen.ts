@@ -57,13 +57,13 @@ test('Navigation/ACL: column_permissions', async ({page}) => {
 
     await test.step('Add a column for scheduler', async () => {
         await page.getByText('Add columns ACL').click();
+        await navigationPage(page).dfDialog.waitForFixedPosition();
         await page.locator('.df-dialog textarea').fill('column1\nКолонка1');
-        await page.waitForLoadState('networkidle');
 
         await page.getByText('Enter user name or login...').click({force: true});
 
         const schedulerOption = page.getByRole('option').getByText('scheduler');
-        schedulerOption.waitFor({state: 'visible'});
+        await schedulerOption.waitFor({state: 'visible'});
         await schedulerOption.click({force: true});
 
         await page.getByText('Current path').click({force: true});
