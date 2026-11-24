@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import moment from 'moment';
-import {Button, Flex, Icon, SegmentedRadioGroup, Text, Tooltip} from '@gravity-ui/uikit';
+import {Alert, Button, Flex, Icon, SegmentedRadioGroup, Text, Tooltip} from '@gravity-ui/uikit';
 import {type RenderRowExtraTools} from '@gravity-ui/react-unipika';
 
 import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
@@ -112,6 +112,13 @@ export function DynamicSpec({
             size: 420,
             cell: ({row: {original: patch}}) => (
                 <div className={block('diff')}>
+                    {patch.zero_diff === true && (
+                        <Alert
+                            className={block('zero-diff-warning')}
+                            theme="warning"
+                            title={i18n('alert_zero-diff')}
+                        />
+                    )}
                     <Yson
                         value={dynamicSpecPatchDiff(patch)}
                         settings={{...settings, format: 'json', compact: false, break: true}}
@@ -226,6 +233,9 @@ export function DynamicSpec({
                             <DataTableGravity
                                 table={table}
                                 className={block('patches-table')}
+                                rowClassName={(row) =>
+                                    block('patch', {'zero-diff': row?.original.zero_diff === true})
+                                }
                                 headerCellClassName={(header) =>
                                     header.column.id === 'diff' ? block('diff-column') : ''
                                 }

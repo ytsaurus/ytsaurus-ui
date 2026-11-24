@@ -554,6 +554,7 @@ export type FlowDynamicSpecPatch = {
     patch_id: Int64;
     timestamp: string;
     comment?: string;
+    zero_diff?: boolean | null;
     changes: Array<{path: string; value: unknown}>;
 };
 

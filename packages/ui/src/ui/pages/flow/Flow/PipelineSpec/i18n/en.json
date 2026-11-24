@@ -15,6 +15,7 @@
   "value_patches": "Patches",
   "context_patch-order": "Patches are applied from top to bottom: later rows can cover earlier changes.",
   "context_no-patches": "No active patches.",
+  "alert_zero-diff": "This patch does not change the current base specification.",
   "action_reset-patches": "Reset all patches",
   "context_reset-patches-confirm": "This will cancel every patch for this pipeline. The effective specification will return to the current base. This cannot be undone.",
   "action_keep-patches": "Keep patches",

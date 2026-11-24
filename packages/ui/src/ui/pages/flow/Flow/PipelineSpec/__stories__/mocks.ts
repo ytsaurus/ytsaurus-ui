@@ -39,6 +39,20 @@ export const snapshot: FlowDynamicSpecSnapshot = {
     ],
 };
 
+export const zeroDiffSnapshot: FlowDynamicSpecSnapshot = {
+    ...snapshot,
+    patches: [
+        {
+            ...snapshot.patches[0],
+            zero_diff: true,
+            changes: [{path: '/computations/noop/batch_duration', value: 1000}],
+        },
+        {...snapshot.patches[1], zero_diff: false},
+        {...snapshot.patches[0], patch_id: '1003', zero_diff: null},
+        {...snapshot.patches[0], patch_id: '1004'},
+    ],
+};
+
 export const largePatchSnapshot: FlowDynamicSpecSnapshot = {
     ...snapshot,
     patches: [

@@ -15,6 +15,7 @@ import {
     markdownHandler,
     snapshot,
     unsupportedHandler,
+    zeroDiffSnapshot,
 } from './mocks';
 
 yt.setup.setGlobalOption('proxy', 'test-cluster.yt.my-domain.com');
@@ -33,6 +34,9 @@ type Story = StoryObj<typeof PipelineDynamicSpec>;
 
 export const Patches: Story = {
     parameters: {msw: {handlers: [dynamicSpecHandler(), markdownHandler]}},
+};
+export const ZeroDiff: Story = {
+    parameters: {msw: {handlers: [dynamicSpecHandler(zeroDiffSnapshot), markdownHandler]}},
 };
 export const Blame: Story = {
     parameters: {msw: {handlers: [dynamicSpecHandler(blameSnapshot), markdownHandler]}},
