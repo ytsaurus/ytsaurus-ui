@@ -1,6 +1,5 @@
 import debounce_ from 'lodash/debounce';
 import {type RootState} from '../../reducers';
-import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {type ThunkAction} from 'redux-thunk';
 import {type Action} from 'redux';
 import {selectQueryDraft, selectQueryItem} from '../../selectors/query-tracker/query';
@@ -51,13 +50,12 @@ const saveChartConfig = (dispatch: AppDispatch, getState: () => RootState) => {
 
     const chartConfig = selectChartVisualization(state);
 
-    wrapApiPromiseByToaster(dispatch(saveQueryAnnotations(id, {chartConfig})), {
-        toasterName: 'saveQueryChartConfig',
-        skipSuccessToast: true,
-        errorContent: 'Failed to save query chart config',
-    }).then(() => {
-        dispatch(setSaved(true));
-    });
+    dispatch(saveQueryAnnotations(id, {chartConfig})).then(
+        () => dispatch(setSaved(true)),
+        () => {
+            // The action reports the error; keep the chart marked as unsaved.
+        },
+    );
 };
 
 const debouncedSaveQueryChartConfig = debounce_(saveChartConfig, DELAY);
