@@ -31,6 +31,7 @@ import BundleMetaTable from './bundle/BundleMetaTable';
 import {BundleInstancesTab} from './bundle/BundleInstancesTab';
 import {BundleProxiesTab} from './bundle/BundleProxiesTab';
 import Icon from '../../components/Icon/Icon';
+import Label from '../../components/Label';
 import {tabletCellBundleDashboardUrl} from '../../utils/tablet_cell_bundles';
 import {BundleEditorDialog as TabletBundleEditorDialog} from '../../pages/tablet_cell_bundles/bundles/BundleEditorDialog/BundleEditorDialog';
 import {showTabletCellBundleEditor} from '../../store/actions/tablet_cell_bundles/tablet-cell-bundle-editor';
@@ -42,7 +43,6 @@ import {
 import ChartLink from '../../components/ChartLink/ChartLink';
 import {Page} from '../../constants/index';
 import UIFactory, {type BundleExtraTab} from '../../UIFactory';
-import {type TabletBundle} from '../../store/reducers/tablet_cell_bundles';
 import {formatByParams} from '../../../shared/utils/format';
 import {UI_TAB_SIZE} from '../../constants/global';
 import {TabletErrorsLazy} from '../../pages/tablet-errors-by-bundle/lazy';
@@ -74,8 +74,10 @@ export default function TabletCellBundles() {
 
     const error = useSelector(selectTabletsError);
     const activeBundle = useSelector(selectTabletsActiveBundle);
-    const {enable_bundle_controller: enableBundleController = false} =
-        useSelector(selectTabletsActiveBundleData) || ({} as Partial<TabletBundle>);
+    const activeBundleData = useSelector(selectTabletsActiveBundleData);
+    const enableBundleController = activeBundleData?.enable_bundle_controller ?? false;
+    const isDrillsModeEnabled =
+        activeBundleData?.bundle_controller_target_config?.enable_drills_mode === true;
     const dispatch = useDispatch();
     const fetchFn = React.useCallback(() => {
         dispatch(fetchTabletsBundles());
@@ -134,6 +136,7 @@ export default function TabletCellBundles() {
                             allowEdit={allowEdit}
                             activeBundle={activeBundle}
                             cluster={cluster}
+                            isDrillsModeEnabled={isDrillsModeEnabled}
                         />
                         <div className={b('tabs')}>
                             <TabletsTabs
@@ -216,10 +219,12 @@ function ActiveBundleDetails({
     activeBundle,
     allowEdit,
     cluster,
+    isDrillsModeEnabled,
 }: {
     activeBundle?: string;
     allowEdit?: boolean;
     cluster: string;
+    isDrillsModeEnabled: boolean;
 }) {
     const dispatch = useDispatch();
     const allowAccounting = useSelector(selectClusterUiConfigEnablePerBundleTabletAccounting);
@@ -242,6 +247,13 @@ function ActiveBundleDetails({
                                 theme={'ghost'}
                                 url={tabletCellBundleDashboardUrl(cluster, activeBundle)}
                             />
+                            {isDrillsModeEnabled && (
+                                <Label
+                                    className={b('drills-mode-label')}
+                                    theme="warning"
+                                    text={i18n('alert_drills-mode-enabled')}
+                                />
+                            )}
                         </div>
                         {allowAccounting && allowEdit && (
                             <div className={b('tabs-edit-btn')}>

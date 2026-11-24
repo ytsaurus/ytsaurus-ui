@@ -42,6 +42,7 @@ export interface TabletsBundlesState {
 export type BundlesTableMode = 'default' | 'tablets' | 'tablets_memory';
 
 export interface BundleControllerConfig {
+    enable_drills_mode?: boolean;
     cpu_limits: CPULimits;
     memory_limits: MemoryLimits;
     tablet_node_count: number;
