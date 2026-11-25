@@ -27,7 +27,10 @@ export function GroupActions({className, groupname}: GroupActionsProps) {
 
     return (
         <div className={className}>
-            <ClickableAttributesButton title={groupname} path={`//sys/groups/${groupname}`} />
+            <ClickableAttributesButton
+                titleToDecode={groupname}
+                path={`//sys/groups/${groupname}`}
+            />
             <Button view="flat-secondary" size="m" onClick={onEdit}>
                 <Icon awesome="pencil-alt" />
             </Button>

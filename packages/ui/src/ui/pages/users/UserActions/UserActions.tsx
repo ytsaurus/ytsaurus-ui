@@ -52,7 +52,7 @@ export const UserActions: React.FC<UserActionsProps> = ({className, cluster, use
             <Link routed url={userOperationsLink(cluster, username)}>
                 &lt;/&gt;
             </Link>
-            <ClickableAttributesButton title={username} path={`//sys/users/${username}`} />
+            <ClickableAttributesButton titleToDecode={username} path={`//sys/users/${username}`} />
             <Button view="flat-secondary" size="m" onClick={onEditClick}>
                 <Icon awesome="pencil-alt" />
             </Button>
