@@ -80,14 +80,12 @@ import i18n from './i18n';
 
 const requests = new CancelHelper();
 
-let tableRequestVersion = 0;
-
 function beginTableRequest(state, getState) {
-    const version = ++tableRequestVersion;
+    const cancelToken = requests.removeAllAndGenerateNextToken();
     return () => {
         const current = getState();
         return (
-            version === tableRequestVersion &&
+            !cancelToken.reason &&
             selectCluster(state) === selectCluster(current) &&
             selectPath(state) === selectPath(current) &&
             selectTransaction(state) === selectTransaction(current)
@@ -411,7 +409,6 @@ export function updateTableData() {
         const isDynamic = selectIsDynamic(state);
 
         dispatch({type: GET_TABLE_DATA.REQUEST});
-        requests.removeAllRequests();
 
         return loadTableRows(LOAD_TYPE.UPDATE, state)
             .then(({columns, omittedColumns, rows, yqlTypes}) => {
@@ -531,7 +528,6 @@ export function getTableData() {
             };
 
             dispatch({type: GET_TABLE_DATA.REQUEST});
-            requests.removeAllRequests();
 
             // 1. call the restoreColumns function before loading table data
             // 2. Call loadTableRows function with specific requestOutputFormat and empty column_names to get all columns and return their and stored columns:
@@ -715,7 +711,6 @@ export function mountUnmountTable(action) {
 
 export function abortAndReset() {
     return (dispatch) => {
-        ++tableRequestVersion;
         requests.removeAllRequests();
         dispatch({type: GET_TABLE_DATA.CANCELLED});
     };

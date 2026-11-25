@@ -3,7 +3,13 @@ import {type Page} from '@playwright/test';
 import {type Store, type UnknownAction} from 'redux';
 import {type History} from 'history';
 
-import {CLEAR_TRANSACTION, SET_TRANSACTION, UPDATE_PATH} from '../../../../../constants/navigation';
+import {
+    CLEAR_TRANSACTION,
+    SET_TRANSACTION,
+    UPDATE_PATH,
+    UPDATE_VIEW,
+} from '../../../../../constants/navigation';
+import {SET_COLUMNS} from '../../../../../constants/navigation/content/table';
 import {RESET_STORE_BEFORE_CLUSTER_CHANGE} from '../../../../../constants/utils';
 import {expect, test} from '../../../../../playwright-components/core';
 import {type MountFixture} from '../../../../../playwright-components/core/types';
@@ -208,48 +214,99 @@ test('Navigation table: accepts a current source refresh', async ({mount, page})
     );
 });
 
-test('Navigation table: ignores a source read completing after the destination schema', async ({
+function deferred() {
+    let resolve!: () => void;
+    const promise = new Promise<void>((done) => {
+        resolve = done;
+    });
+    return {promise, resolve};
+}
+
+for (const outcome of ['success', 'error'] as const) {
+    test(`Navigation table: ignores an obsolete read ${outcome}`, async ({mount, page}) => {
+        const pending = deferred();
+        const started = deferred();
+        await page.route(/\/api\/v[34]\/select_rows(?:\?.*)?$/, async (route) => {
+            started.resolve();
+            await pending.promise;
+            await route.fulfill(
+                outcome === 'success'
+                    ? {json: sourceResponse('late-source-value')}
+                    : {status: 400, json: {code: 1, message: 'late-source-error'}},
+            );
+        });
+        await mountTable(mount, page);
+        await page.getByRole('button', {name: 'Refresh', exact: true}).click();
+        await started.promise;
+        await page.getByRole('button', {name: 'Open empty table', exact: true}).click();
+        await page.getByRole('button', {name: 'Complete empty table read', exact: true}).click();
+        pending.resolve();
+        await expect(page.getByText('Completed reads: 1', {exact: true})).toBeVisible();
+        const state = await tableState(page);
+        expect(state).toMatchObject({
+            loaded: true,
+            loading: false,
+            rows: [],
+            yqlTypes: [],
+            columns: ['destination_key'],
+        });
+        expect(state.error).toBeFalsy();
+        expect(state.readError).toBeFalsy();
+    });
+
+    test(`Navigation table: ignores an obsolete preload ${outcome}`, async ({mount, page}) => {
+        const pending = deferred();
+        const started = deferred();
+        let reads = 0;
+        await page.route(/\/api\/v[34]\/check_permission(?:\?.*)?$/, async (route) => {
+            await route.fulfill({json: {action: 'allow', columns: [{action: 'allow'}]}});
+        });
+        await page.route(/\/api\/v[34]\/select_rows(?:\?.*)?$/, async (route) => {
+            reads++;
+            if (reads === 1) {
+                started.resolve();
+                await pending.promise;
+                await route.fulfill(
+                    outcome === 'success'
+                        ? {json: {rows: [], all_column_names: ['source_key']}}
+                        : {status: 400, json: {code: 1, message: 'late-preload-error'}},
+                );
+            } else {
+                await route.fulfill({
+                    json: {rows: [], all_column_names: ['destination_key'], yql_type_registry: []},
+                });
+            }
+        });
+        await mountTable(mount, page);
+        await page.getByRole('button', {name: 'Load table', exact: true}).click();
+        await started.promise;
+        await page.getByRole('button', {name: 'Open empty table', exact: true}).click();
+        await page.getByRole('button', {name: 'Complete empty table read', exact: true}).click();
+        pending.resolve();
+        await expect(page.getByText('Completed reads: 1', {exact: true})).toBeVisible();
+        expect(reads).toBe(1);
+        const state = await tableState(page);
+        expect(state).toMatchObject({
+            loaded: true,
+            loading: false,
+            rows: [],
+            yqlTypes: [],
+            columns: ['destination_key'],
+        });
+        expect(state.error).toBeFalsy();
+        expect(state.readError).toBeFalsy();
+    });
+}
+
+test('Navigation table: keeps the new read active after returning to the same path', async ({
     mount,
     page,
 }) => {
-    let deliver!: () => void;
-    const pending = new Promise<void>((resolve) => {
-        deliver = resolve;
-    });
-    let notifyRequest!: () => void;
-    const started = new Promise<void>((resolve) => {
-        notifyRequest = resolve;
-    });
-    await page.route(/\/api\/v[34]\/select_rows(?:\?.*)?$/, async (route) => {
-        notifyRequest();
-        await pending;
-        await route.fulfill({json: sourceResponse('late-source-value')});
-    });
-    await mountTable(mount, page);
-    await page.getByRole('button', {name: 'Refresh', exact: true}).click();
-    await started;
-    await page.getByRole('button', {name: 'Open empty table', exact: true}).click();
-    await page.getByRole('button', {name: 'Complete empty table read', exact: true}).click();
-    deliver();
-    await expect(page.getByText('Completed reads: 1', {exact: true})).toBeVisible();
-    expect(await tableState(page)).toMatchObject({
-        loaded: true,
-        loading: false,
-        rows: [],
-        yqlTypes: [],
-        columns: ['destination_key'],
-    });
-});
-
-test('Navigation table: ignores columns from an obsolete preload', async ({mount, page}) => {
-    let deliver!: () => void;
-    const pending = new Promise<void>((resolve) => {
-        deliver = resolve;
-    });
-    let notifyRequest!: () => void;
-    const started = new Promise<void>((resolve) => {
-        notifyRequest = resolve;
-    });
+    const obsoletePending = deferred();
+    const obsoleteStarted = deferred();
+    const obsoleteDelivered = deferred();
+    const currentPending = deferred();
+    const currentStarted = deferred();
     let reads = 0;
     await page.route(/\/api\/v[34]\/check_permission(?:\?.*)?$/, async (route) => {
         await route.fulfill({json: {action: 'allow', columns: [{action: 'allow'}]}});
@@ -257,30 +314,73 @@ test('Navigation table: ignores columns from an obsolete preload', async ({mount
     await page.route(/\/api\/v[34]\/select_rows(?:\?.*)?$/, async (route) => {
         reads++;
         if (reads === 1) {
-            notifyRequest();
-            await pending;
-            await route.fulfill({
-                json: {rows: [], all_column_names: ['source_key']},
-            });
+            obsoleteStarted.resolve();
+            await obsoletePending.promise;
+            await route.fulfill({json: {rows: [], all_column_names: ['obsolete_key']}});
+            obsoleteDelivered.resolve();
         } else {
-            await route.fulfill({
-                json: {rows: [], all_column_names: ['destination_key'], yql_type_registry: []},
-            });
+            currentStarted.resolve();
+            await currentPending.promise;
+            await route.fulfill({json: sourceResponse('current-source-value')});
         }
     });
     await mountTable(mount, page);
     await page.getByRole('button', {name: 'Load table', exact: true}).click();
-    await started;
+    await obsoleteStarted.promise;
     await page.getByRole('button', {name: 'Open empty table', exact: true}).click();
     await page.getByRole('button', {name: 'Complete empty table read', exact: true}).click();
-    deliver();
+    await navigate(page, sourcePath);
+    await page.evaluate(
+        ({updateViewType, setColumnsType}) => {
+            const {store} = window as unknown as FixtureWindow;
+            store.dispatch({
+                type: updateViewType,
+                data: {
+                    attributes: {
+                        dynamic: true,
+                        sorted: true,
+                        key_columns: ['source_key'],
+                        schema: {
+                            $value: [{name: 'source_key', type: 'string', sort_order: 'ascending'}],
+                            $attributes: {strict: true},
+                        },
+                    },
+                },
+            });
+            store.dispatch({
+                type: setColumnsType,
+                data: {
+                    columns: [{name: 'source_key', checked: true, keyColumn: true}],
+                    omittedColumns: [],
+                    deniedKeyColumns: [],
+                },
+            });
+        },
+        {updateViewType: UPDATE_VIEW.SUCCESS, setColumnsType: SET_COLUMNS},
+    );
+    await page.getByRole('button', {name: 'Refresh', exact: true}).click();
+    await currentStarted.promise;
     await expect(page.getByText('Completed reads: 1', {exact: true})).toBeVisible();
-    expect(reads).toBe(1);
+    expect(reads).toBe(2);
     expect(await tableState(page)).toMatchObject({
+        path: sourcePath,
+        loaded: false,
+        loading: true,
+        rows: [],
+        columns: ['source_key'],
+    });
+    obsoletePending.resolve();
+    await obsoleteDelivered.promise;
+    expect(reads).toBe(2);
+    expect(await tableState(page)).toMatchObject({loaded: false, loading: true});
+    currentPending.resolve();
+    await expect(page.getByText('Completed reads: 2', {exact: true})).toBeVisible();
+    expect(reads).toBe(2);
+    expect(await tableState(page)).toMatchObject({
+        path: sourcePath,
         loaded: true,
         loading: false,
-        rows: [],
-        yqlTypes: [],
-        columns: ['destination_key'],
+        rows: sourceResponse('current-source-value').rows,
+        columns: ['source_key'],
     });
 });
