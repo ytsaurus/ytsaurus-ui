@@ -7,6 +7,7 @@ import {PipelineDynamicSpecStories} from '../__stories__';
 import {
     PATCH_ID,
     VERSION,
+    authorsSnapshot,
     blameSnapshot,
     dynamicSpecHandler,
     largePatchSnapshot,
@@ -31,6 +32,41 @@ async function replaceEditorContent(page: Page, text: string) {
     await page.keyboard.press(`${modifier}+A`);
     await page.keyboard.press('Backspace');
     await page.keyboard.insertText(text);
+}
+
+for (const theme of ['light', 'dark'] as const) {
+    for (const view of ['effective', 'patches'] as const) {
+        test(`PipelineDynamicSpec: patch authors ${view} ${theme}`, async ({
+            mount,
+            page,
+            router,
+            expectScreenshot,
+        }) => {
+            await router.use(dynamicSpecHandler(authorsSnapshot));
+            await mount(<PipelineDynamicSpecStories.Authors />);
+            const blame = page.locator('[data-qa="dynamic-spec-blame"]');
+            await expect(blame.filter({hasText: PATCH_ID})).toContainText('Author: alice');
+            await expect(blame.filter({hasText: PATCH_ID})).toHaveAttribute(
+                'title',
+                /Author: alice/,
+            );
+            await expect(blame.filter({hasText: VERSION})).toHaveCount(2);
+            await expect(blame.filter({hasText: VERSION}).first()).not.toContainText('Author:');
+            if (view === 'patches') {
+                await page.getByRole('radio', {name: 'Patches', exact: true}).click();
+                const first = page.getByRole('row').filter({hasText: PATCH_ID});
+                const second = page.getByRole('row').filter({hasText: VERSION});
+                await expect(first).toContainText('Author: alice');
+                await expect(first).toContainText('First patch');
+                await expect(second).not.toContainText('Author:');
+                await expect(second.getByRole('link', {name: 'YTFRONT-6091'})).toBeVisible();
+            }
+            await expectScreenshot({themes: [theme]});
+            await page.getByRole('radio', {name: 'Base', exact: true}).click();
+            await expect(blame).toHaveCount(0);
+            await expect(page.getByText('Author: alice', {exact: true})).toHaveCount(0);
+        });
+    }
 }
 
 test('PipelineDynamicSpec: effective patch blame', async ({mount, page, router}) => {

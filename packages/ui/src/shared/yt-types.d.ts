@@ -554,12 +554,13 @@ export type FlowDynamicSpecPatch = {
     patch_id: Int64;
     timestamp: string;
     comment?: string;
+    author?: string | null;
     changes: Array<{path: string; value: unknown}>;
 };
 
 export type FlowDynamicSpecBlame = Record<
     string,
-    Pick<FlowDynamicSpecPatch, 'patch_id' | 'timestamp' | 'comment'>
+    Pick<FlowDynamicSpecPatch, 'patch_id' | 'timestamp' | 'comment' | 'author'>
 >;
 
 export type ExpectedVersion = {

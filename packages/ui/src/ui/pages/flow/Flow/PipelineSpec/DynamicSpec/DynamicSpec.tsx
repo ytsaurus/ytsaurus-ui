@@ -77,8 +77,20 @@ export function DynamicSpec({
             <div
                 className={block('attribution')}
                 data-qa="dynamic-spec-blame"
-                title={`${source.comment ?? ''}\n${source.timestamp}\n${i18n('field_patch-id')}: ${patchId}`}
+                title={[
+                    source.author && `${i18n('field_author')}: ${source.author}`,
+                    source.comment,
+                    source.timestamp,
+                    `${i18n('field_patch-id')}: ${patchId}`,
+                ]
+                    .filter(Boolean)
+                    .join('\n')}
             >
+                {source.author && (
+                    <div>
+                        {i18n('field_author')}: {source.author}
+                    </div>
+                )}
                 {source.comment && (
                     <div className={block('comment')}>
                         <Markdown text={source.comment} errorMode="inline" />
@@ -123,8 +135,16 @@ export function DynamicSpec({
             id: 'comment',
             header: () => i18n('field_comment'),
             size: 300,
-            cell: ({row: {original: patch}}) =>
-                patch.comment ? <Markdown text={patch.comment} /> : '—',
+            cell: ({row: {original: patch}}) => (
+                <>
+                    {patch.author && (
+                        <div>
+                            {i18n('field_author')}: {patch.author}
+                        </div>
+                    )}
+                    {patch.comment ? <Markdown text={patch.comment} /> : '—'}
+                </>
+            ),
         },
         {
             id: 'time',
