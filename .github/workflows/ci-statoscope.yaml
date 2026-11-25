@@ -52,8 +52,7 @@ jobs:
           cache-from: |
             type=registry,ref=ghcr.io/ytsaurus/ui-nightly:buildcache-main
             type=registry,ref=ghcr.io/ytsaurus/ui-nightly:buildcache-statoscope-base
-            ${{ matrix.revision == 'current' && 'type=gha,scope=statoscope-current' || '' }}
-          cache-to: ${{ matrix.revision == 'base' && 'type=registry,ref=ghcr.io/ytsaurus/ui-nightly:buildcache-statoscope-base,mode=max' || 'type=gha,scope=statoscope-current,mode=max' }}
+          cache-to: ${{ matrix.revision == 'base' && 'type=registry,ref=ghcr.io/ytsaurus/ui-nightly:buildcache-statoscope-base,mode=max' || '' }}
       - name: Upload stats
         uses: actions/upload-artifact@v4
         with:
@@ -74,8 +73,11 @@ jobs:
         with:
           node-version: 24
           cache: "npm"
+          cache-dependency-path: packages/ui/statoscope/package-lock.json
+      - name: Check Statoscope dependencies
+        run: npm --prefix packages/ui/statoscope run deps:check
       - name: Install Packages
-        run: npm ci
+        run: npm --prefix packages/ui/statoscope ci
       - name: Download base stats
         uses: actions/download-artifact@v4
         with:
@@ -87,14 +89,14 @@ jobs:
           name: statoscope-current
           path: statoscope-current
       - name: Validate
-        working-directory: packages/ui
-        run: npx --no-install statoscope validate -i ../../statoscope-current/stats.json -r ../../statoscope-base/stats.json
+        working-directory: packages/ui/statoscope
+        run: npx --no-install statoscope validate -i ../../../statoscope-current/stats.json -r ../../../statoscope-base/stats.json
       - name: Upload statoscope results
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: report
-          path: packages/ui/report.html
+          path: packages/ui/statoscope/report.html
           retention-days: 7
   publish-and-comment:
     name: Publish results and create comment
