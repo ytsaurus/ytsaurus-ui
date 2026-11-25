@@ -1,4 +1,5 @@
 {
+  "action_show": "View",
   "balanced": "Balanced",
   "capacity": "Capacity",
   "charging": "Charging",
@@ -8,6 +9,10 @@
   "guarantee-type": "Guarantee type",
   "integral-guarantees": "Integral guarantees",
   "integral-guarantee": "Integral guarantee",
+  "meta_ephemeral-subpools": "Ephemeral subpools",
+  "field_create": "Allow create",
+  "field_config": "Configuration",
+  "title_ephemeral-subpool-config": "Ephemeral subpool config",
   "field_mode": "Mode",
   "operation-count": "Operations",
   "operation-count-max": "Max operations",

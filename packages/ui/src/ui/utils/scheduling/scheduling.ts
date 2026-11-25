@@ -298,11 +298,7 @@ export function getInitialValues(
         ephemeralSubpools: {
             createEphemeralSubpools: ypath.getBoolean(editItem, '/createEphemeralSubpools'),
             config: {
-                value: JSON.stringify(
-                    ypath.getValue(editItem, '/cypressAttributes/ephemeral_subpool_config'),
-                    null,
-                    2,
-                ),
+                value: JSON.stringify(editItem?.ephemeralSubpoolConfig, null, 2),
             },
         },
     };
