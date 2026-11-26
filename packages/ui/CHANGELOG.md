@@ -1,5 +1,36 @@
 # Changelog
 
+## [3.36.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.35.0...ui-v3.36.0) (2026-11-26)
+
+
+### Features
+
+* **Flow/Graph:** draw key-visitor streams in their computation group [YTFRONT-6152] ([273fdf8](https://github.com/ytsaurus/ytsaurus-ui/commit/273fdf89562884094424daf4705e02116039359a))
+* **Flow/Graph:** make edges follow the sides of their ports [YTFRONT-6161] ([16383b2](https://github.com/ytsaurus/ytsaurus-ui/commit/16383b22ae5cacc36fb9a1ff4018ae8ba5c1f9b0))
+* **QueryTracker:** integrate querieskit tutorials tab [YTFRONT-5935] ([f10401c](https://github.com/ytsaurus/ytsaurus-ui/commit/f10401cb0a319c75ca1ba3a470b8ced4d14bce5c))
+
+
+### Bug Fixes
+
+* **ActionModal:** show link after dumping job input context [YTFRONT-6057] ([63f59ac](https://github.com/ytsaurus/ytsaurus-ui/commit/63f59ac3779053ad894e1f4a299235d64c39ad9c))
+* **Flow:** clarify dynamic spec patch removal actions [YTFRONT-6164] ([7e7aaa1](https://github.com/ytsaurus/ytsaurus-ui/commit/7e7aaa1c6b0be04ab26ee0f6eb817e2e7818d53c))
+* **Flow:** refresh pipeline messages automatically [YTFRONT-6134] ([0e2b4c1](https://github.com/ytsaurus/ytsaurus-ui/commit/0e2b4c1f2af69a31c0cf8d6062f66f141d15a5ef))
+* **Job:** improve missing job and operation errors [YTFRONT-6138] ([c3e2149](https://github.com/ytsaurus/ytsaurus-ui/commit/c3e2149b60a24d57e3b810a9cb8c3c880f8ccc07))
+* **Navigation:** format frozen YSON keys safely [[#1979](https://github.com/ytsaurus/ytsaurus-ui/issues/1979)] ([96057e7](https://github.com/ytsaurus/ytsaurus-ui/commit/96057e73c8b6e66aedd70e0944894d2351fe7cb5))
+* **Navigation:** reset table data when navigation changes [[#1979](https://github.com/ytsaurus/ytsaurus-ui/issues/1979)] ([da2cdaa](https://github.com/ytsaurus/ytsaurus-ui/commit/da2cdaa916b5fd19365606b306d1ed79a6e032fc))
+* **Navigation:** show scion resource usage [YTFRONT-6137] ([68abb24](https://github.com/ytsaurus/ytsaurus-ui/commit/68abb24813049181b35d2c5e49d7a02850aebf2f))
+* **Operations:** complete operation page localization [YTFRONT-5069] ([e379ca9](https://github.com/ytsaurus/ytsaurus-ui/commit/e379ca9f114efe867f6f2551c1006f76ea051466))
+* review fixes [YTFRONT-5069] ([fb2f417](https://github.com/ytsaurus/ytsaurus-ui/commit/fb2f4175148ca43f11a7c84a441d4cb7b434a74e))
+* **Suggest:** keep dropdown open during scrollbar interaction [YTFRONT-5975] ([d823f46](https://github.com/ytsaurus/ytsaurus-ui/commit/d823f465ca60cb5fa61a639bb6ca76cbebdd4ac0))
+* **Yson:** show rendering errors with a UTF-8 hint [YTFRONT-6136] ([565254a](https://github.com/ytsaurus/ytsaurus-ui/commit/565254afec6350bc192ee3a8185f3f99ee3170d6))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @ytsaurus/components bumped from ^2.1.0 to ^2.1.1
+
 ## [3.35.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.34.0...ui-v3.35.0) (2026-11-18)
 
 
