@@ -49,6 +49,10 @@ async function strawberryProxyApiImpl(req: Request, res: Response) {
         return sendAndLogError(req.ctx, res, 400, new Error('api engine is not supported'));
     }
 
+    if (engine === 'chyt') {
+        ALLOWED_ACTIONS.add('list_materialized_views');
+    }
+
     if (!ALLOWED_ACTIONS.has(action)) {
         return sendAndLogError(
             req.ctx,

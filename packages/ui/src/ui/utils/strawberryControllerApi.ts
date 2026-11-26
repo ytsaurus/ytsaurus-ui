@@ -57,12 +57,39 @@ export type StrawberryApi =
           params: Record<string, never>;
           response: WithResult<StrawberryDescribeOptionsType>;
       }
+    | {
+          action: 'list_materialized_views';
+          params: {alias: string};
+          response: WithResult<ChytMaterializedViewsResponse>;
+      }
     | {action: 'get_speclet'; params: {alias: string}; response: WithResult<unknown>}
     | {
           action: 'get_brief_info';
           params: {alias: string};
           response: WithResult<StrawberryStatusResponse>;
       };
+
+export type ChytMaterializedView = {
+    name: string;
+    source_path: string;
+    target_path: string;
+    progress?: {
+        last_error?: string;
+        partitions: Array<{
+            partition_index?: number;
+            next_row_index: number;
+            total_row_count: number;
+            last_update?: string;
+            last_error?: string;
+        }>;
+    };
+};
+
+export type ChytMaterializedViewsResponse = {
+    enabled: boolean;
+    operation_running: boolean;
+    views: ChytMaterializedView[];
+};
 
 export type StrawberryStatusResponse = {
     ctl_attributes: {

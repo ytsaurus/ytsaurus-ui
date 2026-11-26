@@ -37,3 +37,32 @@
         padding-left: 1ex;
     }
 }
+
+.chyt-page-clique__mv-path {
+    display: inline-block;
+    vertical-align: bottom;
+    max-inline-size: clamp(7rem, 14vw, 14rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chyt-page-clique__mv-error-action {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--external-link);
+    font: inherit;
+    cursor: pointer;
+
+    &:hover {
+        color: var(--hover-link);
+        text-decoration: underline;
+    }
+}
+
+.chyt-page-clique__mv-tooltip-text {
+    max-inline-size: min(440px, 75vw);
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
