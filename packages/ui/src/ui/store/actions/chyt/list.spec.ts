@@ -1,21 +1,39 @@
 import {chytApiAction} from '../../../utils/strawberryControllerApi';
-import {chytCliqueCreate} from './list';
+import {selectCluster} from '../../../store/selectors/global';
+import {chytCliqueCreate, chytLoadList} from './list';
 
 jest.mock('../../../utils/strawberryControllerApi', () => ({chytApiAction: jest.fn()}));
 jest.mock('../../../utils/cancel-helper', () => ({
     __esModule: true,
-    default: jest.fn(),
+    default: jest.fn(() => ({removeAllAndGenerateNextToken: jest.fn()})),
     isCancelled: jest.fn(),
 }));
-jest.mock('../../../store/selectors/global', () => ({selectCluster: () => 'test-cluster'}));
+jest.mock('../../../store/selectors/global', () => ({selectCluster: jest.fn(() => 'test-cluster')}));
 jest.mock('../../../store/selectors/global/is-developer', () => ({selectIsAdmin: () => false}));
 jest.mock('../../../store/selectors/chyt', () => ({selectChytListVisibleColumns: () => []}));
 jest.mock('../settings', () => ({setSettingByKey: jest.fn()}));
 jest.mock('./i18n', () => ({__esModule: true, default: () => 'Clique created'}));
 
+describe('load CHYT cliques', () => {
+    it('uses the cluster from the route when the global cluster is empty', async () => {
+        jest.mocked(selectCluster).mockReturnValue('');
+        jest.mocked(chytApiAction).mockResolvedValue(undefined);
+
+        await chytLoadList('route-cluster')(jest.fn(), jest.fn(), undefined);
+
+        expect(chytApiAction).toHaveBeenCalledWith(
+            'list',
+            'route-cluster',
+            {attributes: expect.any(Array)},
+            expect.any(Object),
+        );
+    });
+});
+
 describe('create CHYT clique resources', () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        jest.mocked(selectCluster).mockReturnValue('test-cluster');
         jest.mocked(chytApiAction).mockResolvedValue(undefined);
     });
 

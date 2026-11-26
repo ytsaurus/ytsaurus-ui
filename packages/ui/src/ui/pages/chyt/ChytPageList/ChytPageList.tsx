@@ -10,11 +10,11 @@ import {chytLoadList} from '../../../store/actions/chyt/list';
 import ChytPageListToolbar from './ChytPageListToolbar/ChytPageListToolbar';
 import ChytPageListTable from './ChytPageListTable/ChytPageListTable';
 
-export function ChytPageList() {
+export function ChytPageList({cluster}: {cluster: string}) {
     const dispatch = useDispatch();
     const update = React.useCallback(() => {
-        dispatch(chytLoadList());
-    }, [dispatch]);
+        dispatch(chytLoadList(cluster));
+    }, [cluster, dispatch]);
 
     useUpdater(update);
 
