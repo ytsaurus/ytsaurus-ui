@@ -17,10 +17,10 @@ type ChytListThunkAction<T> = ThunkAction<Promise<T>, RootState, unknown, ChytLi
 
 const cancelHelper = new CancelHelper();
 
-export function chytLoadList(): ChytListThunkAction<void> {
+export function chytLoadList(routeCluster?: string): ChytListThunkAction<void> {
     return (dispatch, getState) => {
         const state = getState();
-        const cluster = selectCluster(state);
+        const cluster = routeCluster ?? selectCluster(state);
         const isAdmin = selectIsAdmin(state);
         const columns = selectChytListVisibleColumns(state);
 
