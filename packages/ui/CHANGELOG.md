@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.36.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.36.0...ui-v3.36.1) (2026-11-26)
+
+
+### Bug Fixes
+
+* **UI:** temporary downgrade ytsaurus/components ([060d1ea](https://github.com/ytsaurus/ytsaurus-ui/commit/060d1eaaa380057c4b762a08c19571d5114a61eb))
+* **UI:** ytsaurus components 2.1.1 ([3f64b52](https://github.com/ytsaurus/ytsaurus-ui/commit/3f64b5296dffecb0a3f6af1963a2b0218e3df3e1))
+
 ## [3.36.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.35.0...ui-v3.36.0) (2026-11-26)
 
 
