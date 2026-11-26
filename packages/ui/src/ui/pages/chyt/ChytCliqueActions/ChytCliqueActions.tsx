@@ -1,11 +1,11 @@
 import React from 'react';
-import {useDispatch, useSelector} from '../../../store/redux-hooks';
+import {useDispatch} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import {Button, DropdownMenu, type DropdownMenuItem} from '@gravity-ui/uikit';
 
 import Icon from '../../../components/Icon/Icon';
-import {selectCluster} from '../../../store/selectors/global';
+import {useClusterFromLocation} from '../../../hooks/use-cluster';
 import {updateQueryDraft} from '../../../store/actions/query-tracker/query';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import UIFactory from '../../../UIFactory';
@@ -19,7 +19,7 @@ import i18n from './i18n';
 const block = cn('chyt-clique-actions');
 
 export function useCliqueOnSqlAction(openWidget: () => void) {
-    const cluster = useSelector(selectCluster);
+    const cluster = useClusterFromLocation();
     const dispatch = useDispatch();
 
     return React.useCallback(

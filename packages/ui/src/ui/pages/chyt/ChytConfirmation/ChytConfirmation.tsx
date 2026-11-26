@@ -1,4 +1,5 @@
 import React from 'react';
+import {useClusterFromLocation} from '../../../hooks/use-cluster';
 import cn from 'bem-cn-lite';
 
 import {Text} from '@gravity-ui/uikit';
@@ -56,6 +57,7 @@ function ChytSimpleConfirmation({
     onConfirm,
 }: ConfirmationProps & {action: 'remove' | 'stop'}) {
     const dispatch = useDispatch();
+    const cluster = useClusterFromLocation();
 
     const [error, setError] = React.useState<YTError | undefined>();
 
@@ -75,10 +77,10 @@ function ChytSimpleConfirmation({
                 textApply: i18n(`action_${action}`),
             }}
             onAdd={() => {
-                return dispatch(chytListAction('stop', {alias}))
+                return dispatch(chytListAction(cluster, 'stop', {alias}))
                     .then(() => {
                         if (action === 'remove') {
-                            return dispatch(chytListAction('remove', {alias}));
+                            return dispatch(chytListAction(cluster, 'remove', {alias}));
                         } else {
                             return null;
                         }
@@ -119,6 +121,7 @@ function ChytStartConfirmation({
     onConfirm,
 }: Omit<ConfirmationProps, 'action'>) {
     const dispatch = useDispatch();
+    const cluster = useClusterFromLocation();
     const [error, setError] = React.useState();
 
     return (
@@ -140,7 +143,7 @@ function ChytStartConfirmation({
             initialValues={{pool}}
             onAdd={(form) => {
                 const {untracked} = form.getState().values;
-                return dispatch(chytListAction('start', {alias, untracked}))
+                return dispatch(chytListAction(cluster, 'start', {alias, untracked}))
                     .then(() => {
                         onConfirm();
                         setError(undefined);

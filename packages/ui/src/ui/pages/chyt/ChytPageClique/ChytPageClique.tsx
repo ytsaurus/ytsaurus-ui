@@ -26,7 +26,7 @@ import {
     selectChytCliqueInitialLoading,
     selectChytCliqueStartError,
 } from '../../../store/selectors/chyt/clique';
-import {selectCluster} from '../../../store/selectors/global';
+import {useClusterFromLocation} from '../../../hooks/use-cluster';
 import {Page} from '../../../../shared/constants/settings';
 
 import {CHYT_TABLE_TITLES} from '../helpers/chyt-list-columns';
@@ -42,12 +42,12 @@ const block = cn('chyt-page-clique');
 export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
     const dispatch = useDispatch();
     const history = useHistory();
-    const cluster = useSelector(selectCluster);
+    const cluster = useClusterFromLocation();
 
     const {alias} = props.match.params;
     const update = React.useCallback(() => {
-        dispatch(chytCliqueLoad(alias));
-    }, [alias, dispatch]);
+        dispatch(chytCliqueLoad(alias, cluster));
+    }, [alias, cluster, dispatch]);
 
     React.useEffect(() => {
         return () => {
@@ -129,7 +129,7 @@ function ChytCliqueErrors() {
 }
 
 function ChytCliqueMetaTable() {
-    const cluster = useSelector(selectCluster);
+    const cluster = useClusterFromLocation();
     const data = useSelector(selectChytCliqueData);
 
     const items: Array<Array<MetaTableItem>> = React.useMemo(() => {

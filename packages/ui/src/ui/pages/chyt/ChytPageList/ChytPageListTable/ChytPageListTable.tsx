@@ -17,7 +17,7 @@ import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
 import Label from '../../../../components/Label';
 
 import {chytToggleSortState} from '../../../../store/actions/chyt/list-fitlers';
-import {selectCluster} from '../../../../store/selectors/global';
+import {useClusterFromLocation} from '../../../../hooks/use-cluster';
 import {
     selectChytListTableItems,
     selectChytListTableSortStateByName,
@@ -304,7 +304,7 @@ function DateTimeCell({value}: {value?: string}) {
 
 function ChytPageListTable() {
     const items = useSelector(selectChytListTableItems);
-    const cluster = useSelector(selectCluster);
+    const cluster = useClusterFromLocation();
 
     const {openWidget, widgetContent} = useQueryWidgetSidePanel();
     const onSqlClick = useCliqueOnSqlAction(openWidget);
