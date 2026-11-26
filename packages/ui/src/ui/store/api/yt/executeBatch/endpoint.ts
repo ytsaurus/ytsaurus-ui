@@ -9,13 +9,14 @@ import {type YTEndpointApiArgs} from '../types';
 export type BatchApiArgs = YTEndpointApiArgs<BatchParameters> & {
     id: YTApiIdType;
     errorTitle: string;
+    allowPartialResults?: boolean;
     toaster?: WrapApiOptions<unknown, 'v3'>;
 };
 
 export type BatchApiResults<T = unknown> = Array<BatchResultsItem<T>>;
 
 export const executeBatchV3 = async (args: BatchApiArgs) => {
-    const {id, errorTitle, parameters, data, cancellation, toaster} = args;
+    const {id, errorTitle, parameters, data, cancellation, toaster, allowPartialResults} = args;
     try {
         const setup = 'setup' in args ? args.setup : undefined;
         const request = async () => {
@@ -26,8 +27,12 @@ export const executeBatchV3 = async (args: BatchApiArgs) => {
                 cancellation,
             });
 
-            const error = getBatchError(results, errorTitle);
-            if (error) throw error;
+            if (!allowPartialResults) {
+                const error = getBatchError(results, errorTitle);
+                if (error) {
+                    throw error;
+                }
+            }
 
             return results;
         };
@@ -35,13 +40,13 @@ export const executeBatchV3 = async (args: BatchApiArgs) => {
         let results;
 
         if (toaster) {
-            results = await wrapApiPromiseByToaster(request(), toaster);
+            results = await wrapApiPromiseByToaster(
+                request(),
+                allowPartialResults ? {...toaster, batchType: undefined} : toaster,
+            );
         } else {
             results = await request();
         }
-
-        const error = getBatchError(results, errorTitle);
-        if (error) throw error;
 
         return {data: results};
     } catch (error: unknown) {
