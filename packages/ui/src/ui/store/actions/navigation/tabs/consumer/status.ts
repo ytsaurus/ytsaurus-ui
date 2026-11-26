@@ -30,9 +30,6 @@ export function loadConsumerStatus(): ConsumerThunkAction {
                 requests.removeAllAndSave,
             )
             .then((data) => {
-                if (data.error) {
-                    throw data.error;
-                }
                 dispatch({
                     type: CONSUMER_STATUS_LOAD_SUCCESS,
                     data,

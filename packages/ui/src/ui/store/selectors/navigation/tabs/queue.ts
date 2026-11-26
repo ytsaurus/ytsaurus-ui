@@ -28,7 +28,8 @@ export const selectWriteRowCountRate = (state: RootState) =>
     state.navigation.tabs.queue.status.statusData?.write_row_count_rate ?? emptyRate;
 
 export const selectStatusError = (state: RootState) =>
-    state.navigation.tabs.queue.status.statusError;
+    state.navigation.tabs.queue.status.statusError ??
+    state.navigation.tabs.queue.status.statusData?.error;
 
 export const selectStatusLoading = (state: RootState) =>
     state.navigation.tabs.queue.status.statusLoading;

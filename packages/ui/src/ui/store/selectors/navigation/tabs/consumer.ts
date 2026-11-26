@@ -81,7 +81,11 @@ export const selectTargetQueueError = (state: RootState) => {
 };
 
 export const selectStatusError = (state: RootState) =>
-    state.navigation.tabs.consumer.status.statusError;
+    state.navigation.tabs.consumer.status.statusError ??
+    state.navigation.tabs.consumer.status.consumerData?.error;
+
+export const selectConsumerStatusDataAlerts = (state: RootState) =>
+    state.navigation.tabs.consumer.status.consumerData?.alerts;
 
 export const selectStatusLoading = (state: RootState) =>
     state.navigation.tabs.consumer.status.statusLoading;
