@@ -86,7 +86,7 @@ export type ChytMaterializedView = {
 };
 
 export type ChytMaterializedViewsResponse = {
-    enabled: boolean;
+    custom_storage?: boolean;
     operation_running: boolean;
     views: ChytMaterializedView[];
 };

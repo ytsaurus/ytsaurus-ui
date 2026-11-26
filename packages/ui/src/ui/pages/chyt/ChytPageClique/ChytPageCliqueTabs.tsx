@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {Loader} from '@gravity-ui/uikit';
+import {Alert, Button, Loader} from '@gravity-ui/uikit';
 import {Redirect, Route, Switch, useRouteMatch} from 'react-router';
 import {useSelector} from '../../../store/redux-hooks';
 
@@ -29,21 +29,30 @@ export function ChytPageCliqueTabs({className}: {className?: string}) {
     const isAdmin = useSelector(selectIsAdmin);
     const chytAlias = useSelector(selectChytCurrentAlias);
     const [logsExist, setLogsExist] = useState(false);
+    const [retryCount, setRetryCount] = useState(0);
     const [controllerSupport, setControllerSupport] = useState<{
         cluster: string;
         isAdmin: boolean;
-        materializedViews: boolean;
+        retryCount: number;
+        materializedViews: boolean | 'error';
     }>();
     const materializedViews =
-        controllerSupport?.cluster === ytCluster && controllerSupport.isAdmin === isAdmin
+        controllerSupport?.cluster === ytCluster &&
+        controllerSupport.isAdmin === isAdmin &&
+        controllerSupport.retryCount === retryCount
             ? controllerSupport.materializedViews
             : undefined;
 
     useEffect(() => {
         const cancel = axios.CancelToken.source();
-        const setSupport = (supported: boolean) => {
+        const setSupport = (supported: boolean | 'error') => {
             if (!cancel.token.reason) {
-                setControllerSupport({cluster: ytCluster, isAdmin, materializedViews: supported});
+                setControllerSupport({
+                    cluster: ytCluster,
+                    isAdmin,
+                    retryCount,
+                    materializedViews: supported,
+                });
             }
         };
 
@@ -60,10 +69,10 @@ export function ChytPageCliqueTabs({className}: {className?: string}) {
             .then(({commands}) =>
                 setSupport(commands.some(({name}) => name === 'list_materialized_views')),
             )
-            .catch(() => setSupport(false));
+            .catch(() => setSupport('error'));
 
         return () => cancel.cancel();
-    }, [ytCluster, isAdmin]);
+    }, [ytCluster, isAdmin, retryCount]);
 
     const chytMonitoring = UIFactory.getMonitoringComponentForChyt();
 
@@ -100,7 +109,7 @@ export function ChytPageCliqueTabs({className}: {className?: string}) {
                       }
                     : {show: Boolean(component)},
                 [ChytCliquePageTab.MATERIALIZED_VIEWS]: {
-                    show: materializedViews === true,
+                    show: materializedViews === true || materializedViews === 'error',
                 },
                 [ChytCliquePageTab.QUERY_LOGS]: {
                     show: logsExist,
@@ -146,6 +155,19 @@ export function ChytPageCliqueTabs({className}: {className?: string}) {
                     render={() => {
                         if (materializedViews === undefined) {
                             return <Loader size="s" />;
+                        }
+                        if (materializedViews === 'error') {
+                            return (
+                                <Alert
+                                    theme="danger"
+                                    title={i18n('mv_capability_error')}
+                                    actions={
+                                        <Button onClick={() => setRetryCount((count) => count + 1)}>
+                                            {i18n('mv_retry')}
+                                        </Button>
+                                    }
+                                />
+                            );
                         }
                         return materializedViews ? (
                             <ChytPageCliqueMaterializedViews alias={match.params.alias} />

@@ -245,7 +245,7 @@ function MaterializedViews({cluster, alias}: {cluster: string; alias: string}) {
                         setPage(1);
                     }}
                     hasClear
-                    disabled={!response?.enabled}
+                    disabled={!response}
                 />
                 <Flex>
                     <Button
@@ -296,15 +296,17 @@ function MaterializedViews({cluster, alias}: {cluster: string; alias: string}) {
                 )}
             </Flex>
             {error && <Alert theme="danger" title={i18n('mv_load_error')} />}
-            {response?.enabled === false && <Alert theme="info" title={i18n('mv_disabled')} />}
-            {response?.enabled && !response.operation_running && (
+            {response?.custom_storage && (
+                <Alert theme="warning" title={i18n('mv_custom_storage')} />
+            )}
+            {response && response.views.length > 0 && !response.operation_running && (
                 <Alert theme="warning" title={i18n('mv_saved_progress')} />
             )}
-            {response?.enabled &&
+            {response &&
                 (rows.length ? (
                     <Table data={rows} columns={columns} width="max" wordWrap />
                 ) : (
-                    i18n('mv_empty')
+                    i18n(response.views.length ? 'mv_empty' : 'mv_no_views')
                 ))}
         </Flex>
     );
