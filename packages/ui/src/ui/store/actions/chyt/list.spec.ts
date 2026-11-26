@@ -8,7 +8,9 @@ jest.mock('../../../utils/cancel-helper', () => ({
     default: jest.fn(() => ({removeAllAndGenerateNextToken: jest.fn()})),
     isCancelled: jest.fn(),
 }));
-jest.mock('../../../store/selectors/global', () => ({selectCluster: jest.fn(() => 'test-cluster')}));
+jest.mock('../../../store/selectors/global', () => ({
+    selectCluster: jest.fn(() => 'test-cluster'),
+}));
 jest.mock('../../../store/selectors/global/is-developer', () => ({selectIsAdmin: () => false}));
 jest.mock('../../../store/selectors/chyt', () => ({selectChytListVisibleColumns: () => []}));
 jest.mock('../settings', () => ({setSettingByKey: jest.fn()}));
