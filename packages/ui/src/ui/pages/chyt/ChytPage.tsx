@@ -14,10 +14,7 @@ export default function ChytPage() {
             <ErrorBoundary>
                 <Switch>
                     <Route path={`/:cluster/${Page.CHYT}/:alias`} component={ChytPageClique} />
-                    <Route<{cluster: string}>
-                        path={`/:cluster/${Page.CHYT}`}
-                        render={({match}) => <ChytPageList cluster={match.params.cluster} />}
-                    />
+                    <Route path={`/:cluster/${Page.CHYT}`} component={ChytPageList} />
                 </Switch>
             </ErrorBoundary>
         </div>
