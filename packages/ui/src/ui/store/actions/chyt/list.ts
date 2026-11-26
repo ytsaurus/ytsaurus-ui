@@ -17,10 +17,9 @@ type ChytListThunkAction<T> = ThunkAction<Promise<T>, RootState, unknown, ChytLi
 
 const cancelHelper = new CancelHelper();
 
-export function chytLoadList(routeCluster?: string): ChytListThunkAction<void> {
+export function chytLoadList(cluster: string): ChytListThunkAction<void> {
     return (dispatch, getState) => {
         const state = getState();
-        const cluster = routeCluster ?? selectCluster(state);
         const isAdmin = selectIsAdmin(state);
         const columns = selectChytListVisibleColumns(state);
 
@@ -62,22 +61,30 @@ export function chytLoadList(routeCluster?: string): ChytListThunkAction<void> {
     };
 }
 
+function refreshChytList(cluster: string): ChytListThunkAction<void> {
+    return async (dispatch, getState) => {
+        if (getState().global.paramsCluster === cluster) {
+            await dispatch(chytLoadList(cluster));
+        }
+    };
+}
+
 export function chytListAction<
     T extends StrawberryApi['action'],
     ApiItem extends StrawberryApi & {action: T} = StrawberryApi & {action: T},
 >(
+    cluster: string,
     action: T,
     params: ApiItem['params'],
     {skipLoadList}: {skipLoadList?: boolean} = {},
 ): ChytListThunkAction<ApiItem['response']> {
     return (dispatch, getState) => {
         const state = getState();
-        const cluster = selectCluster(state);
         const isAdmin = selectIsAdmin(state);
 
         return chytApiAction(action, cluster, params, {isAdmin}).then((d) => {
             if (!skipLoadList) {
-                dispatch(chytLoadList());
+                dispatch(refreshChytList(cluster));
             }
             return d;
         });
@@ -85,6 +92,7 @@ export function chytListAction<
 }
 
 export function chytCliqueCreate(params: {
+    cluster?: string;
     alias: string;
     instance_count: number;
     instance_cpu?: number;
@@ -94,7 +102,7 @@ export function chytCliqueCreate(params: {
 }): ChytListThunkAction<void> {
     return (dispatch, getState) => {
         const state = getState();
-        const cluster = selectCluster(state);
+        const cluster = params.cluster ?? selectCluster(state);
         const isAdmin = selectIsAdmin(state);
 
         const {alias, runAfterCreation, pool, instance_count, instance_cpu, instance_total_memory} =
@@ -114,15 +122,18 @@ export function chytCliqueCreate(params: {
             },
             {isAdmin, successTitle: i18n('alert_clique-created', {alias})},
         ).finally(() => {
-            dispatch(chytLoadList());
+            dispatch(refreshChytList(cluster));
         });
     };
 }
 
-export function chytSetVisibleColumns(columns: Array<string>): SettingsThunkAction {
+export function chytSetVisibleColumns(
+    cluster: string,
+    columns: Array<string>,
+): SettingsThunkAction {
     return (dispatch) => {
         return dispatch(setSettingByKey('global::chyt::list_columns', columns)).then(() => {
-            dispatch(chytLoadList());
+            dispatch(refreshChytList(cluster));
         });
     };
 }

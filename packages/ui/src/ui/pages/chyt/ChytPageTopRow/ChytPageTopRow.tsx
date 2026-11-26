@@ -22,7 +22,7 @@ import {
     selectIsActiveCliqueInFavourites,
 } from '../../../store/selectors/favourites';
 import {selectChytCurrentAlias} from '../../../store/selectors/chyt';
-import {selectCluster} from '../../../store/selectors/global';
+import {useClusterFromLocation} from '../../../hooks/use-cluster';
 import {selectIsAdmin} from '../../../store/selectors/global/is-developer';
 import {chytApiAction} from '../../../utils/strawberryControllerApi';
 import {chytCliqueCreate} from '../../../store/actions/chyt/list';
@@ -52,7 +52,7 @@ export default function ChytPageTopRow() {
 
 function ChytFavourites() {
     const history = useHistory();
-    const cluster = useSelector(selectCluster);
+    const cluster = useClusterFromLocation();
     const isActiveInFavourites = useSelector(selectIsActiveCliqueInFavourites);
     const favourites = useSelector(selectFavouriteChyt);
     const dispatch = useDispatch();
@@ -83,7 +83,7 @@ function ChytFavourites() {
 
 function ChytBreadcrumbs() {
     const history = useHistory();
-    const cluster = useSelector(selectCluster);
+    const cluster = useClusterFromLocation();
     const alias = useSelector(selectChytCurrentAlias);
 
     const handleBreadcrumbClick = React.useCallback(
@@ -206,7 +206,7 @@ type FormValues = {
 function CreateChytButton() {
     const dispatch = useDispatch();
     const history = useHistory();
-    const cluster = useSelector(selectCluster);
+    const cluster = useClusterFromLocation();
     const [visible, setVisible] = React.useState(false);
     const isAdmin = useSelector(selectIsAdmin);
     const unipikaSettings = useErrorYsonSettings();
@@ -245,6 +245,7 @@ function CreateChytButton() {
                                 const {values} = form.getState();
                                 return dispatch(
                                     chytCliqueCreate({
+                                        cluster,
                                         alias: values.alias,
                                         pool: values.pool,
                                         runAfterCreation: values.runAfterCreation,

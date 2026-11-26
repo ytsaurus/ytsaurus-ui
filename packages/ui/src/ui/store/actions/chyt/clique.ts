@@ -12,11 +12,11 @@ type ChytCliqueThunkAction<T = void> = ThunkAction<T, RootState, unknown, ChytCl
 
 const cancelHelper = new CancelHelper();
 
-export function chytCliqueLoad(alias: string): ChytCliqueThunkAction {
+export function chytCliqueLoad(alias: string, routeCluster?: string): ChytCliqueThunkAction {
     return (dispatch, getState) => {
         dispatch({type: CHYT_CLIQUE.REQUEST, data: {currentClique: alias}});
         const state = getState();
-        const cluster = selectCluster(state);
+        const cluster = routeCluster ?? selectCluster(state);
         const isAdmin = selectIsAdmin(state);
         return chytApiAction(
             'get_brief_info',

@@ -1,4 +1,5 @@
 import React from 'react';
+import {useClusterFromLocation} from '../../../../hooks/use-cluster';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
@@ -164,6 +165,7 @@ function StateFilter({onUpdate}: {onUpdate: (value: {state?: string}) => void}) 
 
 function ChytListColumnsButton() {
     const dispatch = useDispatch();
+    const cluster = useClusterFromLocation();
 
     const [visible, setVisible] = React.useState(false);
     const columns = useSelector(selectChytListColumns);
@@ -182,7 +184,7 @@ function ChytListColumnsButton() {
             })}
             onConfirm={(value) => {
                 const newColumns = value.filter((i) => i.checked).map((i) => i.data.column);
-                dispatch(chytSetVisibleColumns(newColumns));
+                dispatch(chytSetVisibleColumns(cluster, newColumns));
                 setVisible(false);
             }}
             onCancel={() => setVisible(false)}
