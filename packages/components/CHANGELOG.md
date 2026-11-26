@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v2.1.0...components-v2.1.1) (2026-11-26)
+
+
+### Bug Fixes
+
+* **Navigation:** format frozen YSON keys safely [[#1979](https://github.com/ytsaurus/ytsaurus-ui/issues/1979)] ([96057e7](https://github.com/ytsaurus/ytsaurus-ui/commit/96057e73c8b6e66aedd70e0944894d2351fe7cb5))
+
 ## [2.1.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v2.0.3...components-v2.1.0) (2026-11-13)
 
 
