@@ -11,12 +11,10 @@ import {
 } from '../../../../store/reducers/navigation/description';
 
 import {selectCluster} from '../../../../store/selectors/global';
-import {
-    udpateAnnotationExternal,
-    useAnnotationQuery,
-} from '../../../../store/api/navigation/tabs/description';
+import {udpateAnnotationExternal} from '../../../../store/api/navigation/tabs/description';
 import {selectPath} from '../../../../store/selectors/navigation';
 
+import {trackDescriptionEdit} from '../metrics';
 import {useUpdateAnnotation} from './use-update-annotaton';
 import {useExternalAnnotation} from './use-external-annotation';
 import {useYTAnnotation} from './use-yt-annotation';
@@ -33,31 +31,40 @@ export function useDescriptionActions() {
     const isSaving = useSelector(getIsSaving);
 
     const [updateFn, {isLoading}] = useUpdateAnnotation();
-    const {data} = useAnnotationQuery({path, cluster});
 
     const externalDescription = useExternalAnnotation();
     const {ytAnnotation} = useYTAnnotation();
 
-    const edit = useCallback(() => {
-        dispatch(startEdit({externalDescription, annotation: ytAnnotation}));
-    }, [type, externalDescription, ytAnnotation, dispatch]);
+    const edit = useCallback(
+        (location: 'tab' | 'empty_state') => {
+            trackDescriptionEdit(type, location);
+            dispatch(startEdit({externalDescription, annotation: ytAnnotation}));
+        },
+        [type, externalDescription, ytAnnotation, dispatch],
+    );
 
     const cancel = useCallback(() => {
         dispatch(stopEdit());
-    }, [data, dispatch]);
+    }, [dispatch]);
 
     const save = useCallback(async () => {
         dispatch(setSaving({isSaving: true}));
-        if (type === 'yt') {
-            await updateFn(edittingAnnotation || '');
-        } else {
-            await dispatch(
-                udpateAnnotationExternal({cluster, path, value: edittingAnnotation ?? ''}),
-            );
+        try {
+            if (type === 'yt') {
+                await updateFn(edittingAnnotation || '');
+            } else {
+                await dispatch(
+                    udpateAnnotationExternal({cluster, path, value: edittingAnnotation ?? ''}),
+                );
+            }
+            dispatch(stopEdit());
+        } catch {
+            // Both save paths display the error; keep the draft open for another attempt.
+            return;
+        } finally {
+            dispatch(setSaving({isSaving: false}));
         }
-        dispatch(setSaving({isSaving: false}));
-        dispatch(stopEdit());
-    }, [updateFn, edittingAnnotation, type, dispatch]);
+    }, [updateFn, edittingAnnotation, type, dispatch, cluster, path]);
 
     return {edit, cancel, save, isLoading, isSaving};
 }

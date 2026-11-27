@@ -44,11 +44,13 @@ test('Navigation: table - Content', async ({page}) => {
         await replaceInnerHtml(page, {
             '.df-editable-list__item-content': tablePath,
         });
-        await page.evaluate((tablePath) => {
+        await page.evaluate((outputPath) => {
             const input = document.querySelector<HTMLInputElement>(
                 'input[placeholder="Enter path for output"]',
             );
-            if (input) input.value = tablePath;
+            if (input) {
+                input.value = outputPath;
+            }
         }, tablePath);
 
         await page.waitForLoadState('networkidle');
@@ -60,9 +62,8 @@ test('Navigation: table - Schema', async ({page}) => {
     await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/dynamic-table&navmode=schema`));
 
-    await waitForStoreWithoutActions(page);
-
     await table(page).waitForTable('.navigation-schema', 3);
+    await waitForStoreWithoutActions(page);
     await table(page).replaceBreadcrumbsTestDir();
     page.getByTestId('');
 
@@ -168,14 +169,14 @@ test('Navigation: table - userColumnPresets', async ({page, context}) => {
         shareBtn.click();
 
         await context.waitForEvent('page', {
-            predicate: async (page) => {
-                await table(page).waitForTableContent('.navigation-table', 10);
-                await waitForStoreWithoutActions(page);
-                await table(page).replaceTableMeta();
+            predicate: async (presetPage) => {
+                await table(presetPage).waitForTableContent('.navigation-table', 10);
+                await waitForStoreWithoutActions(presetPage);
+                await table(presetPage).replaceTableMeta();
 
-                await page.getByText('key0').waitFor();
+                await presetPage.getByText('key0').waitFor();
 
-                await expect(page).toHaveScreenshot();
+                await expect(presetPage).toHaveScreenshot();
 
                 return true;
             },
@@ -196,8 +197,8 @@ test('Navigation: yql-v3-types', async ({page}) => {
     });
 
     await test.step('Allow raw string', async () => {
-        await page.mouse.wheel(500, 0);
         await page.locator('.navigation-table').getByTitle('settings').click();
+        await page.evaluate(() => window.scrollTo(document.documentElement.scrollWidth, 0));
         await expect(page).toHaveScreenshot();
         await page.getByText('Allow raw strings').click();
         await expect(page).toHaveScreenshot();
@@ -218,8 +219,8 @@ test('Navigation: yql-v3-types', async ({page}) => {
     });
 
     await test.step('Allow raw string', async () => {
-        await page.mouse.wheel(500, 0);
         await page.locator('.navigation-table').getByTitle('settings').click();
+        await page.evaluate(() => window.scrollTo(document.documentElement.scrollWidth, 0));
         await expect(page).toHaveScreenshot();
         await page.getByText('Allow raw strings').click();
         await expect(page).toHaveScreenshot();

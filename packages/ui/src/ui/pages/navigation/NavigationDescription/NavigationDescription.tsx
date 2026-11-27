@@ -1,27 +1,14 @@
-import cn from 'bem-cn-lite';
-import React, {useCallback, useRef} from 'react';
+import React, {useEffect} from 'react';
+import {useHistory, useLocation} from 'react-router';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
-
-import {
-    getEditMode,
-    getEdittingAnnotation,
-    setEdittingAnnotation,
-} from '../../../store/reducers/navigation/description';
-
-import CollapsibleSection from '../../../components/CollapsibleSection/CollapsibleSection';
-import {EditAnnotationWithPreview} from '../../../components/EditAnnotationWithPreview/EditAnnotationWithPreview';
-
-import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
-
-import {useDescription} from './hooks/use-description';
-import {useDescriptionCollapse} from './hooks/use-description-collapse';
+import {selectPath} from '../../../store/selectors/navigation';
+import {selectCluster} from '../../../store/selectors/global';
+import {setDescriptionType, startEdit} from '../../../store/reducers/navigation/description';
 import {useYTAnnotation} from './hooks/use-yt-annotation';
-
-import {AnnotationWithPartial} from './AnnotationWithPartial';
-import {NavigationDescriptionOverview} from './NavigationDescriptionOverview/NavigationDescriptionOverview';
-
-import useResizeObserver from '../../../hooks/useResizeObserver';
-import i18n from './i18n';
+import cn from 'bem-cn-lite';
+import {Flex} from '@gravity-ui/uikit';
+import {NavigationDescriptionToolbar} from './NavigationDescriptionToolbar/NavigationDescriptionToolbar';
+import {NavigationDescriptionContent} from './NavigationDescriptionContent/NavigationDescriptionContent';
 import './NavigationDescription.scss';
 
 const block = cn('navigation-description');
@@ -32,59 +19,47 @@ type Props = {
 
 function NavigationDescription({className}: Props) {
     const dispatch = useDispatch();
-    const wrapperRef = useRef<HTMLDivElement>(null);
+    const history = useHistory();
+    const location = useLocation<{editDescription?: {path: string; cluster: string}}>();
+    const path = useSelector(selectPath);
+    const cluster = useSelector(selectCluster);
+    const {ytAnnotation, isAnnotationLoading, annotationError} = useYTAnnotation();
+    const editDescription = location.state?.editDescription;
 
-    const edittingAnnotation = useSelector(getEdittingAnnotation);
-    const editMode = useSelector(getEditMode);
+    useEffect(() => {
+        if (
+            !editDescription ||
+            editDescription.path !== path ||
+            editDescription.cluster !== cluster ||
+            isAnnotationLoading
+        ) {
+            return;
+        }
 
-    const {expanded, toggleExpanded} = useDescriptionCollapse();
-
-    const {description, visible} = useDescription();
-    const {ytAnnotationPath} = useYTAnnotation();
-
-    const handleResize = useCallback(() => {
-        setTimeout(() => {
-            window.dispatchEvent(new Event('resize'));
-        }, 0);
-    }, []);
-
-    useResizeObserver({element: wrapperRef.current, onResize: handleResize});
-
-    if (!visible) {
-        return null;
-    }
+        history.replace({...location, state: {...location.state, editDescription: undefined}});
+        dispatch(setDescriptionType({descriptionType: 'yt'}));
+        if (!annotationError && ytAnnotation?.annotation_path === path) {
+            dispatch(startEdit({annotation: ytAnnotation}));
+        }
+    }, [
+        editDescription,
+        path,
+        cluster,
+        isAnnotationLoading,
+        annotationError,
+        ytAnnotation,
+        history,
+        location,
+        dispatch,
+    ]);
 
     return (
-        <div ref={wrapperRef} className={block(null, className)}>
-            <CollapsibleSection
-                className={block('collapsible', {expanded})}
-                name={i18n('title_description')}
-                collapsed={false}
-                size={UI_COLLAPSIBLE_SIZE}
-                overview={<NavigationDescriptionOverview />}
-            >
-                <div className={block('content')}>
-                    {editMode ? (
-                        <EditAnnotationWithPreview
-                            valuePath={ytAnnotationPath}
-                            value={{value: edittingAnnotation || ''}}
-                            initialValue={{value: edittingAnnotation || ''}}
-                            onChange={({value}) =>
-                                dispatch(setEdittingAnnotation({edittingAnnotation: value}))
-                            }
-                            className={block('edit-block')}
-                            hideReset
-                        />
-                    ) : (
-                        <AnnotationWithPartial
-                            annotation={description}
-                            expanded={expanded}
-                            onToggle={toggleExpanded}
-                        />
-                    )}
-                </div>
-            </CollapsibleSection>
-        </div>
+        <Flex direction="column" grow={1} gap={3} className={block(null, className)}>
+            <NavigationDescriptionToolbar />
+            <Flex direction="column" grow={1} className={block('content')}>
+                <NavigationDescriptionContent />
+            </Flex>
+        </Flex>
     );
 }
 

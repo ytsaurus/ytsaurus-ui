@@ -1,0 +1,6 @@
+{
+  "title_replace-panel": "Close the side panel?",
+  "confirm_replace-panel": "The side panel may contain unsaved changes. Closing it will discard them. Close the panel and continue?",
+  "action_close-and-continue": "Close and continue",
+  "action_cancel": "Cancel"
+}

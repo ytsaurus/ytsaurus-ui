@@ -59,7 +59,6 @@ const defaultUserSettings: Partial<DescribedSettings> = {
     'global::navigation::enableTableSimilarity': false,
     'global::navigation::defaultChytAlias': '*ch_public',
     'global::navigation::sqlService': [],
-    'global::navigation::annotationVisibility': 'partial',
     'global::navigation::clusterPagePaneSizes': undefined,
     'global::navigation::queuePartitionsVisibility': [],
     'global::navigation::queueConsumersVisibility': [],

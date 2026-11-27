@@ -101,6 +101,7 @@ export const selectSupportedTabs = createSelector(
         const mountConfigVisible = mountConfigHasData || isDynamic;
         const alwaysSupportedTabs = compact_([
             Tab.CONTENT,
+            Tab.ANNOTATION,
             isPipeline && Tab.FLOW,
             Tab.ATTRIBUTES,
             Tab.USER_ATTRIBUTES,
@@ -214,6 +215,18 @@ export const selectTabs = createSelector(
                 ],
             },
             {
+                value: Tab.ANNOTATION,
+                title: i18n('title_go-to-annotation'),
+                text: i18n('title_annotation'),
+                hotkey: [
+                    {
+                        keys: 'alt+n',
+                        tab: Tab.ANNOTATION,
+                        scope: 'all',
+                    },
+                ],
+            },
+            {
                 value: Tab.QUEUE,
                 title: i18n('title_go-to-queue'),
                 text: i18n('title_queue'),
@@ -302,18 +315,6 @@ export const selectTabs = createSelector(
                     },
                 ],
                 counter: ypath.getValue(attributes, '/lock_count'),
-            },
-            {
-                value: Tab.ANNOTATION,
-                title: i18n('title_go-to-annotation'),
-                text: i18n('title_annotation'),
-                hotkey: [
-                    {
-                        keys: 'alt+n',
-                        tab: Tab.ACL,
-                        scope: 'all',
-                    },
-                ],
             },
             {
                 value: Tab.SCHEMA,

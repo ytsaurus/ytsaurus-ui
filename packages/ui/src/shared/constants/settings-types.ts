@@ -74,7 +74,6 @@ interface NavigationSettings {
     'global::navigation::defaultChytAlias': string;
     'global::navigation::tableDisplayRawStrings': boolean;
     'global::navigation::sqlService': Array<'qtkit' | 'yqlkit'>;
-    'global::navigation::annotationVisibility': 'partial' | 'visible';
 
     'global::navigation::queuePartitionsVisibility': Array<string>;
     'global::navigation::queueConsumersVisibility': Array<string>;
