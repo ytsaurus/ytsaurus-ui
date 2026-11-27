@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {Button} from '@gravity-ui/uikit';
 import {type RenderRowExtraTools} from '@gravity-ui/react-unipika';
@@ -6,9 +6,11 @@ import {type RenderRowExtraTools} from '@gravity-ui/react-unipika';
 import {type YTError} from '../../../../../@types/types';
 
 import {useUpdater} from '../../../../hooks/use-updater';
+import CancelHelper, {isCancelled} from '../../../../utils/cancel-helper';
 
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
+    cancelFlowSpecRequests,
     loadFlowDynamicSpec,
     loadFlowDynamicSpecForEdit,
     loadFlowStaticSpec,
@@ -147,7 +149,7 @@ export function FlowStaticSpec({pipeline_path: path}: {pipeline_path: string}) {
     const updateFn = React.useCallback(() => {
         dispatch(loadFlowStaticSpec(path));
     }, [dispatch, path]);
-    useUpdater(updateFn);
+    useUpdater(updateFn, {destructFn: cancelFlowSpecRequests});
 
     const onEdit = React.useCallback(
         (newData: typeof data, options: {force?: boolean}) => {
@@ -187,20 +189,18 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
     const updateFn = React.useCallback(() => {
         dispatch(loadFlowDynamicSpec(path, view));
     }, [dispatch, path, view]);
-    useUpdater(updateFn);
+    useUpdater(updateFn, {destructFn: cancelFlowSpecRequests});
 
     const [editDraft, setEditDraft] = React.useState<FlowDynamicSpecEditDraft & {path: string}>();
     const [editLoading, setEditLoading] = React.useState(false);
     const [editError, setEditError] = React.useState<YTError>();
-    const editRequest = React.useRef(0);
+    const [editRequests] = useState(() => new CancelHelper());
     React.useEffect(() => {
         setEditDraft(undefined);
         setEditError(undefined);
         setEditLoading(false);
-        return () => {
-            editRequest.current += 1;
-        };
-    }, [path]);
+        return editRequests.removeAllRequests;
+    }, [path, editRequests]);
     const editorSpec = React.useMemo(
         () =>
             editDraft?.createPatch
@@ -209,16 +209,22 @@ export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) 
         [editDraft],
     );
     const openEdit = async () => {
-        const request = ++editRequest.current;
+        const cancelToken = editRequests.removeAllAndGenerateNextToken();
         setEditError(undefined);
         setEditLoading(true);
         try {
-            const draft = await dispatch(loadFlowDynamicSpecForEdit(path));
-            if (request === editRequest.current) setEditDraft({...draft, path});
+            const draft = await dispatch(
+                loadFlowDynamicSpecForEdit(path, editRequests.saveCancelToken),
+            );
+            setEditDraft({...draft, path});
         } catch (cause) {
-            if (request === editRequest.current) setEditError(cause as YTError);
+            if (!isCancelled(cause)) {
+                setEditError(cause as YTError);
+            }
         } finally {
-            if (request === editRequest.current) setEditLoading(false);
+            if (!cancelToken.reason) {
+                setEditLoading(false);
+            }
         }
     };
     const renderEffective = (renderRowExtraTools?: RenderRowExtraTools) => (
