@@ -1,0 +1,13 @@
+{
+  "name": "@ytsaurus/statoscope",
+  "private": true,
+  "scripts": {
+    "deps:check": "node check-deps.js"
+  },
+  "dependencies": {
+    "@statoscope/cli": "^5.29.0",
+    "@statoscope/stats-validator-plugin-webpack": "^5.29.0",
+    "@statoscope/stats-validator-reporter-stats-report": "^5.29.0"
+  },
+  "version": "0.0.0"
+}

@@ -74,20 +74,24 @@ COPY deploy/nginx /etc/nginx
 COPY deploy/supervisor /etc/supervisor
 COPY . .
 ARG ANALYZE_BUNDLE
-RUN ANALYZE_BUNDLE="$ANALYZE_BUNDLE" npm run build && npm run deps:truncate
+RUN ANALYZE_BUNDLE="$ANALYZE_BUNDLE" npm run build
 
 # Export only bundle stats for Statoscope CI via --target statoscope-output.
 FROM scratch AS statoscope-output
 
 COPY --from=builder /opt/app/dist/public/build/stats.json /stats.json
 
+FROM builder AS production
+
+RUN npm run deps:truncate
+
 FROM base
 
 WORKDIR /opt/app
 
-COPY --from=builder /opt/app ./
-COPY --from=builder /etc/nginx /etc/nginx
-COPY --from=builder /etc/supervisor /etc/supervisor
+COPY --from=production /opt/app ./
+COPY --from=production /etc/nginx /etc/nginx
+COPY --from=production /etc/supervisor /etc/supervisor
 
 EXPOSE 80
 
