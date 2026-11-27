@@ -122,6 +122,7 @@ export type PoolData<T extends 'pool' | 'operation'> = {
     abc?: {id?: number; slug?: string};
     forbidImmediateOperations?: boolean;
     createEphemeralSubpools?: boolean;
+    ephemeralSubpoolConfig?: Record<string, unknown>;
 
     dominantResource?: 'cpu' | 'gpu';
 
@@ -340,6 +341,10 @@ export function updatePoolChild<T extends 'pool' | 'operation'>(
             ypath.getBoolean(cypressAttributes, '/forbid_immediate_operations') || false;
         data.createEphemeralSubpools =
             ypath.getBoolean(cypressAttributes, '/create_ephemeral_subpools') || false;
+        data.ephemeralSubpoolConfig = ypath.getValue(
+            cypressAttributes,
+            '/ephemeral_subpool_config',
+        );
 
         // Resources
         data.dominantResource = ypath.getValue(attributes, '/dominant_resource');

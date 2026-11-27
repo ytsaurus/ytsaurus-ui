@@ -1,6 +1,7 @@
 import {type ThunkAction} from 'redux-thunk';
 
 import isEmpty_ from 'lodash/isEmpty';
+import isEqual_ from 'lodash/isEqual';
 import map_ from 'lodash/map';
 import mapKeys_ from 'lodash/mapKeys';
 import mapValues_ from 'lodash/mapValues';
@@ -12,7 +13,6 @@ import {type BatchSubRequest} from '../../../../shared/yt-types';
 
 import {type RootState} from '../../../store/reducers';
 import {splitBatchResults} from '../../../../shared/utils/error';
-import {type YTError} from '../../../../@types/types';
 
 import {selectSchedulingNS} from '../../../store/selectors/settings';
 import {toggleFavourite} from '../../../store/actions/favourites';
@@ -37,7 +37,6 @@ import {
     CHANGE_POOL_CHILDREN_FILTER,
     CHANGE_TABLE_TREE_STATE,
     CHANGE_TREE,
-    SCHEDULING_DATA_FAILURE,
     SCHEDULING_DATA_PARTITION,
     SCHEDULING_EDIT_POOL_CANCELLED,
     SCHEDULING_EDIT_POOL_FAILURE,
@@ -82,6 +81,26 @@ const makeOtherAttributesCommands = (
         });
     }
 
+    if (initialSortParamsString !== newSortParamsString) {
+        commands.push({
+            command: 'set',
+            parameters: {
+                path: `${path}/@fifo_sort_parameters`,
+            },
+            input: values.fifoSortParams,
+        });
+    }
+
+    return commands;
+};
+
+const makeEphemeralSubpoolsCommands = (
+    path: string,
+    values: PoolEditorFormValues['ephemeralSubpools'],
+    initialValues: PoolEditorFormValues['ephemeralSubpools'],
+) => {
+    const commands: Array<BatchSubRequest> = [];
+
     if (initialValues.createEphemeralSubpools !== values.createEphemeralSubpools) {
         commands.push({
             command: 'set',
@@ -92,13 +111,22 @@ const makeOtherAttributesCommands = (
         });
     }
 
-    if (initialSortParamsString !== newSortParamsString) {
+    if (!values.createEphemeralSubpools) {
+        return commands;
+    }
+
+    const config: unknown = values.config.value ? JSON.parse(values.config.value) : undefined;
+    const initialConfig: unknown = initialValues.config.value
+        ? JSON.parse(initialValues.config.value)
+        : undefined;
+
+    if (!isEqual_(config, initialConfig)) {
         commands.push({
-            command: 'set',
+            command: config === undefined ? 'remove' : 'set',
             parameters: {
-                path: `${path}/@fifo_sort_parameters`,
+                path: `${path}/@ephemeral_subpool_config`,
             },
-            input: values.fifoSortParams,
+            input: config,
         });
     }
 
@@ -229,6 +257,11 @@ export function editPool(
         const requests = [
             ...makeGeneralCommands(path, values.general, initialValues.general),
             ...makeOtherAttributesCommands(path, values.otherSettings, initialValues.otherSettings),
+            ...makeEphemeralSubpoolsCommands(
+                path,
+                values.ephemeralSubpools,
+                initialValues.ephemeralSubpools,
+            ),
         ];
 
         return Promise.all([
@@ -383,14 +416,5 @@ export function schedulingClearOperationRef(): SchedulingAction {
     return {
         type: SCHEDULING_DATA_PARTITION,
         data: {operationRefId: undefined},
-    };
-}
-
-export function schedulingDataFailure(error: YTError): SchedulingAction {
-    return {
-        type: SCHEDULING_DATA_FAILURE,
-        data: {
-            error,
-        },
     };
 }

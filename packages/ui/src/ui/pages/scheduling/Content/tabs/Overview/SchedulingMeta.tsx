@@ -1,6 +1,5 @@
 import cn from 'bem-cn-lite';
 import React, {type ReactNode} from 'react';
-import {useSelector} from 'react-redux';
 
 import {CircleInfo, TriangleExclamation} from '@gravity-ui/icons';
 import {Flex, Icon, Progress} from '@gravity-ui/uikit';
@@ -8,9 +7,12 @@ import {Flex, Icon, Progress} from '@gravity-ui/uikit';
 import format from '../../../../../common/hammer/format';
 
 import {ChargeLevel} from '../../../../../components/ChargeLevel/ChargeLevel';
+import {ClickableText} from '../../../../../components/ClickableText/ClickableText';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 import {ColorCircle} from '../../../../../components/ColorCircle/ColorCircle';
 import {MetaTable, type MetaTableItem, Tooltip, YTText} from '@ytsaurus/components';
+import {openAttributesModal} from '../../../../../store/actions/modals/attributes-modal';
+import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {ROOT_POOL_NAME} from '../../../../../constants/scheduling';
 import {
     selectCurrentPool,
@@ -31,6 +33,7 @@ import './SchedulingMeta.scss';
 const block = cn('yt-scheduling-meta');
 
 export function SchedulingMeta() {
+    const dispatch = useDispatch();
     const pool = useSelector(selectCurrentPool);
 
     const guarantees = useSelector(selectCurrentPoolGuarantees);
@@ -136,8 +139,35 @@ export function SchedulingMeta() {
             ]);
             res.subTitles.push(i18n('integral-guarantees'));
         }
+        const config = pool?.ephemeralSubpoolConfig;
+        const configTitle = i18n('title_ephemeral-subpool-config');
+        res.items.push([
+            {
+                key: 'create-ephemeral-subpools',
+                label: i18n('field_create'),
+                value: pool?.createEphemeralSubpools ?? false,
+            },
+            {
+                key: 'ephemeral-subpool-config',
+                label: i18n('field_config'),
+                value: config ? (
+                    <ClickableText
+                        onClick={() =>
+                            dispatch(openAttributesModal({title: configTitle, attributes: config}))
+                        }
+                    >
+                        {i18n('action_show')}
+                    </ClickableText>
+                ) : (
+                    format.NO_VALUE
+                ),
+                visible: Boolean(pool?.createEphemeralSubpools),
+            },
+        ]);
+        res.subTitles.push(i18n('meta_ephemeral-subpools'));
+
         return res;
-    }, [pool, guarantees, mainResource]);
+    }, [dispatch, pool, guarantees, mainResource]);
 
     if (!pool?.name || pool?.name === ROOT_POOL_NAME) {
         return null;

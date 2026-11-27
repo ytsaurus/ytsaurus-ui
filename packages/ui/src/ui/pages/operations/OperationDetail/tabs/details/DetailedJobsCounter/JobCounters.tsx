@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import {Checkbox} from '@gravity-ui/uikit';
 
-import {docsUrl} from '../../../../../../config';
+import {whenDocsEnabled} from '../../../../../../config';
 import {MetaTable, type MetaTableItem, type MetaTableProps} from '@ytsaurus/components';
 import Link from '../../../../../../containers/Link/Link';
 import Icon from '../../../../../../components/Icon/Icon';
@@ -43,7 +43,7 @@ export function JobCounters({
                     />
                 );
             })}
-            {docsUrl(
+            {whenDocsEnabled(
                 <div className="elements-section">
                     <Link url={helpUrl}>
                         <Icon awesome="book" /> {i18n('action_help')}

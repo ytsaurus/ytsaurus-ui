@@ -1,4 +1,5 @@
 import React from 'react';
+import {renderDocHelpLink} from '../../../../../../components/HelpLink/renderDocHelpLink';
 import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
 
 import {
@@ -8,10 +9,6 @@ import {
 import {useCreateConsumerMutation} from '../../../../../../store/api/navigation/tabs/queue/queue';
 
 import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../../../containers/Dialog';
-
-import {docsUrl} from '../../../../../../config';
-import UIFactory from '../../../../../../UIFactory';
-import {makeLink} from '../../../../../../utils/utils';
 
 import {type YTError} from '../../../../../../../@types/types';
 
@@ -72,12 +69,11 @@ export function CreateConsumerDialog() {
                     caption: i18n('field_vital'),
                     tooltip: (
                         <div>
-                            {docsUrl(
-                                makeLink(
-                                    UIFactory.docsUrls['dynamic-tables:queues#creating-a-consumer'],
-                                    i18n('action_docs'),
-                                ),
-                            )}
+                            {renderDocHelpLink({
+                                docKey: 'dynamic-tables:queues#creating-a-consumer',
+                                text: i18n('action_docs'),
+                                hideIcon: true,
+                            })}
                         </div>
                     ),
                     visibilityCondition: {

@@ -21,6 +21,7 @@ export function ClickableAttributesButtonBase(props: Props) {
         <AttributesButton
             {...omit_(props, [
                 'title',
+                'titleToDecode',
                 'path',
                 'exactPath',
                 'attribute',

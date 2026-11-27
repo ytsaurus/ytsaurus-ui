@@ -1,4 +1,5 @@
 import React from 'react';
+import {renderDocHelpLink} from '../HelpLink/renderDocHelpLink';
 import unipika from '../../common/thor/unipika';
 import cn from 'bem-cn-lite';
 
@@ -15,12 +16,11 @@ import Filter from '../Filter/Filter';
 import Button from '../Button/Button';
 import Modal from '../Modal/Modal';
 import Icon from '../Icon/Icon';
-import Link from '../../containers/Link/Link';
 import Tabs from '../Tabs/Tabs';
 
 import {type WithVisibleProps} from '../../hocs/withVisible';
 
-import {docsUrl} from '../../config';
+import {whenDocsEnabled} from '../../config';
 import i18n from './i18n';
 import {SeparatorInput} from './SeparatorInput';
 import UIFactory from '../../UIFactory';
@@ -285,7 +285,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
     }
 
     private makeDocsUrl(path = '') {
-        return docsUrl(UIFactory.docsUrls['storage:formats'] + path);
+        return whenDocsEnabled(UIFactory.docsUrls['storage:formats'] + path);
     }
 
     private get formats() {
@@ -340,7 +340,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
                 name: 'excel' as const,
                 caption: 'Excel',
                 description: '',
-                doc: docsUrl(UIFactory.docsUrls['storage:excel#skachivanie']),
+                doc: whenDocsEnabled(UIFactory.docsUrls['storage:excel#skachivanie']),
                 show: excelExporter && isSchematicTable,
             },
         };
@@ -792,10 +792,11 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
 
     private renderContent() {
         const {format} = this.state;
-        const faqLink = (
-            <Link url={UIFactory.docsUrls['faq:web_interface_table_download']}>FAQ</Link>
-        );
-        const cliLink = <Link url={UIFactory.docsUrls['api:cli']}>CLI</Link>;
+        const faqLink = renderDocHelpLink({
+            docKey: 'faq:web_interface_table_download',
+            text: 'FAQ',
+            hideIcon: true,
+        });
 
         const {description, doc} = this.formats[format];
 
@@ -803,7 +804,7 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
             <div className={block('content')}>
                 <div className={messageBlock({theme: 'warning'})}>
                     {i18n('alert_download-error-appended')}{' '}
-                    {docsUrl(
+                    {whenDocsEnabled(
                         <>
                             {i18n('alert_see-faq-for-details')} {faqLink}{' '}
                             {i18n('alert_see-faq-for-details-after')}
@@ -811,7 +812,13 @@ export abstract class DownloadManager<ExtraProps extends object = object> extend
                     )}
                 </div>
                 <div className={messageBlock({theme: 'warning'})}>
-                    {i18n('alert_not-production-ready')} {docsUrl(cliLink, 'CLI')}{' '}
+                    {i18n('alert_not-production-ready')}{' '}
+                    {renderDocHelpLink({
+                        docKey: 'api:cli',
+                        text: 'CLI',
+                        fallback: 'CLI',
+                        hideIcon: true,
+                    })}{' '}
                     {i18n('alert_not-production-ready-after')}
                 </div>
 

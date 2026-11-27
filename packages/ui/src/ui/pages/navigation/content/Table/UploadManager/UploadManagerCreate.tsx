@@ -1,4 +1,5 @@
 import React from 'react';
+import {renderDocHelpLink} from '../../../../../components/HelpLink/renderDocHelpLink';
 import axios, {type AxiosProgressEvent} from 'axios';
 import cn from 'bem-cn-lite';
 
@@ -23,10 +24,8 @@ import {type RootState} from '../../../../../store/reducers';
 import {getXsrfCookieName} from '../../../../../utils';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
 import Link from '../../../../../containers/Link/Link';
-import {docsUrl, getConfigUploadTable} from '../../../../../config';
-import HelpLink from '../../../../../components/HelpLink/HelpLink';
+import {getConfigUploadTable} from '../../../../../config';
 import CancelHelper from '../../../../../utils/cancel-helper';
-import UIFactory from '../../../../../UIFactory';
 import {selectSortedNodesNames} from '../../../../../store/selectors/navigation/content/map-node';
 import FileUploadProgress from '../../../../../components/FileUploadProgress/FileUploadProgress';
 import FileDropZone from '../../../../../components/FileDropZone/FileDropZone';
@@ -204,7 +203,7 @@ class UploadManagerCreateImpl extends React.Component<Props, State> {
     renderFooterContent() {
         const {file} = this.state;
         const inProgress = this.inProgress();
-        const helpLink = docsUrl(<HelpLink url={UIFactory.docsUrls['storage:excel']} />);
+        const helpLink = renderDocHelpLink({docKey: 'storage:excel'});
 
         if (!file) {
             return helpLink;

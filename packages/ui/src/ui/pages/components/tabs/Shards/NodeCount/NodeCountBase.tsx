@@ -33,7 +33,7 @@ type NodeCountProps = OwnProps & DispatchProps;
 export function NodeCountBase({id, name, count, className, openAttributesModal}: NodeCountProps) {
     const handleClick = () =>
         openAttributesModal({
-            title: name,
+            titleToDecode: name,
             path: `//sys/cypress_shards/${id}`,
             attribute: 'account_statistics',
         });

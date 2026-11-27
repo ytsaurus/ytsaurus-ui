@@ -20,10 +20,8 @@ import {
     tableSortModalLoadColumns,
 } from '../../../../store/actions/navigation/modals/table-merge-sort-modal';
 import {selectCurrentUserName} from '../../../../store/selectors/global';
-import {makeLink} from '../CreateTableModal/CreateTableModal';
+import {makeTableHelpLink} from '../makeTableHelpLink';
 import {parseBytes} from '../../../../utils/parse/parse-bytes';
-import {docsUrl} from '../../../../config';
-import UIFactory from '../../../../UIFactory';
 import {WaitForDefaultPoolTree} from '../../../../hooks/global-pool-trees';
 import {getAlterOutputToDynamicFields} from '../fields/alter-output-to-dynamic/alter-output-to-dynamic';
 import i18n from './i18n';
@@ -131,7 +129,7 @@ export default function TableMergeModal() {
                             name: 'mode',
                             type: 'radio',
                             caption: i18n('field_mode'),
-                            tooltip: docsUrl(makeLink(UIFactory.docsUrls['operations:merge'])),
+                            tooltip: makeTableHelpLink('operations:merge'),
                             extras: {
                                 options: [
                                     {value: 'unordered', label: i18n('value_unordered')},
@@ -192,12 +190,8 @@ export default function TableMergeModal() {
                             name: 'pool',
                             type: 'pool',
                             caption: i18n('field_pool'),
-                            tooltip: docsUrl(
-                                makeLink(
-                                    UIFactory.docsUrls[
-                                        'operations:operations_options#obshie-opcii-dlya-vseh-tipov-operacij'
-                                    ],
-                                ),
+                            tooltip: makeTableHelpLink(
+                                'operations:operations_options#obshie-opcii-dlya-vseh-tipov-operacij',
                             ),
                             extras: ({poolTree}: FormValues) => {
                                 return {

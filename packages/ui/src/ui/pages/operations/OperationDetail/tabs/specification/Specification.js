@@ -1,4 +1,5 @@
 import React from 'react';
+import {renderDocHelpLink} from '../../../../../components/HelpLink/renderDocHelpLink';
 import {connect} from 'react-redux';
 import {useSelector} from '../../../../../store/redux-hooks';
 import unipika from '../../../../../common/thor/unipika';
@@ -11,7 +12,6 @@ import cn from 'bem-cn-lite';
 
 import {CollapsibleSectionStateLess} from '../../../../../components/CollapsibleSection/CollapsibleSection';
 import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary';
-import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
 
 import {
@@ -26,8 +26,7 @@ import {useAppRumMeasureStart} from '../../../../../rum/rum-app-measures';
 import './Specification.scss';
 import ExperimentAssignments from '../../ExperimentAssignments/ExperimentAssignments';
 import i18n from './i18n';
-import {docsUrl} from '../../../../../config';
-import UIFactory from '../../../../../UIFactory';
+import {whenDocsEnabled} from '../../../../../config';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
 import {YsonDownloadButton} from '../../../../../components/DownloadAttributesButton';
 import {selectIsCumulativeSpecPatchSupported} from '../../../../../store/selectors/global/supported-features';
@@ -43,8 +42,6 @@ const onResize = throttle_(
 );
 
 function Specification({operation, operationId, isCumulativeSpecPatchSupported}) {
-    const helpUrl = UIFactory.docsUrls['operations:operations_options'];
-
     const providedSpec = operation.typedProvidedSpec || operation.typedSpec;
 
     const unrecognizedSpec = operation.typedUnrecognizedSpec || {};
@@ -82,9 +79,9 @@ function Specification({operation, operationId, isCumulativeSpecPatchSupported})
     return (
         <ErrorBoundary>
             <div className={block()}>
-                {docsUrl(
+                {whenDocsEnabled(
                     <div className={block('help', 'elements-section')}>
-                        <HelpLink url={helpUrl} />
+                        {renderDocHelpLink({docKey: 'operations:operations_options'})}
                     </div>,
                 )}
 

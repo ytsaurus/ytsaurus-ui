@@ -1,6 +1,5 @@
 import React from 'react';
 
-import {docsUrl} from '../../../config';
 import {DialogError, type FormApi, YTDFDialog} from '../../../containers/Dialog';
 import {
     hideTableEraseModal,
@@ -12,8 +11,7 @@ import {
     selectNavigationTableEraseModalPath,
     selectNavigationTableEraseModalVisible,
 } from '../../../store/selectors/navigation/modals/table-erase-modal';
-import UIFactory from '../../../UIFactory';
-import {makeLink} from './CreateTableModal/CreateTableModal';
+import {makeTableHelpLink} from './makeTableHelpLink';
 import {getAlterOutputToDynamicFields} from './fields/alter-output-to-dynamic/alter-output-to-dynamic';
 import i18n from './i18n';
 
@@ -87,7 +85,7 @@ export default function TableEraseModal() {
                     caption: i18n('field_range'),
                     tooltip: (
                         <span>
-                            {docsUrl(makeLink(UIFactory.docsUrls['operations:erase']))}
+                            {makeTableHelpLink('operations:erase')}
                             {i18n('context_range-tooltip')}
                             <br />
                             {i18n('context_range-examples')}

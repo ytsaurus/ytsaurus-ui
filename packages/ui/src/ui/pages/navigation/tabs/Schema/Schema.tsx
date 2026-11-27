@@ -1,4 +1,5 @@
 import React, {Component, Fragment} from 'react';
+import {renderDocHelpLink} from '../../../../components/HelpLink/renderDocHelpLink';
 import {connect} from 'react-redux';
 import {useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
@@ -8,7 +9,6 @@ import omit_ from 'lodash/omit';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import {type ColumnInfo} from '../../../../components/ElementsTable/ElementsTableHeader';
 import {MetaTable, SchemaDataType} from '@ytsaurus/components';
-import HelpLink from '../../../../components/HelpLink/HelpLink';
 import Link from '../../../../containers/Link/Link';
 import {FormattedText} from '../../../../components/formatters';
 import Filter from '../../../../components/Filter/Filter';
@@ -39,7 +39,7 @@ import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
 import {selectAttributesPath, selectLoadState} from '../../../../store/selectors/navigation';
 import {isFinalLoadingStatus, wrapApiPromiseByToaster} from '../../../../utils/utils';
-import {docsUrl} from '../../../../config';
+import {whenDocsEnabled} from '../../../../config';
 import {type YTError} from '../../../../../@types/types';
 import {type RootState} from '../../../../store/reducers';
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
@@ -279,9 +279,9 @@ class Schema extends Component<SchemaProps> {
 
         return (
             <div className={block()}>
-                {docsUrl(
+                {whenDocsEnabled(
                     <div className={block('help')}>
-                        <HelpLink url={UIFactory.docsUrls['storage:static_schema']} />
+                        {renderDocHelpLink({docKey: 'storage:static_schema'})}
                     </div>,
                 )}
 

@@ -1,4 +1,5 @@
 import React, {useMemo} from 'react';
+import {renderDocHelpLink} from '../../../../../../components/HelpLink/renderDocHelpLink';
 import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
 
 import {
@@ -10,9 +11,6 @@ import {selectCluster} from '../../../../../../store/selectors/global';
 
 import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../../../containers/Dialog';
 
-import {docsUrl} from '../../../../../../config';
-import UIFactory from '../../../../../../UIFactory';
-import {makeLink} from '../../../../../../utils/utils';
 import {makeClusterSelectOptionsSameEnv} from '../../../../../../utils/navigation/tabs/make-cluster-select-options-same-env';
 
 import i18n from './i18n';
@@ -82,12 +80,11 @@ export function RegisterConsumerDialog() {
                     caption: i18n('field_vital'),
                     tooltip: (
                         <div>
-                            {docsUrl(
-                                makeLink(
-                                    UIFactory.docsUrls['dynamic-tables:queues#creating-a-consumer'],
-                                    i18n('action_docs'),
-                                ),
-                            )}
+                            {renderDocHelpLink({
+                                docKey: 'dynamic-tables:queues#creating-a-consumer',
+                                text: i18n('action_docs'),
+                                hideIcon: true,
+                            })}
                         </div>
                     ),
                 },

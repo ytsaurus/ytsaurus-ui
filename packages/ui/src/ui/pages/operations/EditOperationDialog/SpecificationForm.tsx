@@ -1,11 +1,9 @@
 import React from 'react';
+import {renderDocHelpLink} from '../../../components/HelpLink/renderDocHelpLink';
 
 import {Alert} from '@gravity-ui/uikit';
 
 import {type DialogField} from '../../../containers/Dialog';
-import {docsUrl} from '../../../config';
-import UIFactory from '../../../UIFactory';
-import HelpLink from '../../../components/HelpLink/HelpLink';
 import {
     type KnownOperationSpecPatchValues,
     type OperationSpecPatchInput,
@@ -214,13 +212,7 @@ export function makeSpecificationPatchFields(
                         message={
                             <div>
                                 {i18n('context_supported-patch-paths')}{' '}
-                                {docsUrl(
-                                    <HelpLink
-                                        url={
-                                            UIFactory.docsUrls['api:commands#patch_operation_spec']
-                                        }
-                                    />,
-                                )}
+                                {renderDocHelpLink({docKey: 'api:commands#patch_operation_spec'})}
                             </div>
                         }
                     />

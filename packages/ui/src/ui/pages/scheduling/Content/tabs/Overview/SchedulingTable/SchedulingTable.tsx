@@ -906,7 +906,7 @@ function RowActions({item}: {item: RowData}) {
                     action: () => {
                         if (type === 'pool') {
                             const exactPath = dispatch(getPoolPathsByName(item.name)).orchidPath;
-                            dispatch(openAttributesModal({title: item.name, exactPath}));
+                            dispatch(openAttributesModal({titleToDecode: item.name, exactPath}));
                         } else {
                             dispatch(
                                 openAttributesModal({

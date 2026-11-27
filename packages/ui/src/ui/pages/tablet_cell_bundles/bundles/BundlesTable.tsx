@@ -270,7 +270,7 @@ class BundlesTable extends React.Component<ReduxProps> {
                     <ClickableAttributesButton
                         size="m"
                         view="flat-secondary"
-                        title={path}
+                        titleToDecode={path}
                         path={path}
                     />
                 </div>

@@ -10,6 +10,7 @@ import pickBy_ from 'lodash/pickBy';
 
 import {type DialogField, type FormApi, YTDFDialog} from '../../../../containers/Dialog';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
+import {renderDocHelpLink} from '../../../../components/HelpLink/renderDocHelpLink';
 
 import {closeEditModal, editPool} from '../../../../store/actions/scheduling/scheduling';
 import {
@@ -108,8 +109,14 @@ export function PoolEditorDialog() {
     const editConfirmHandler = useCallback(
         async (form: FormApi<PoolEditorFormValues>) => {
             const {values} = form.getState();
-            const {general, resourceGuarantee, integralGuarantee, resourceLimits, otherSettings} =
-                values;
+            const {
+                general,
+                resourceGuarantee,
+                integralGuarantee,
+                resourceLimits,
+                otherSettings,
+                ephemeralSubpools,
+            } = values;
             const data = {
                 general: {
                     ...pick_(general, ['name', 'mode']),
@@ -156,8 +163,8 @@ export function PoolEditorDialog() {
                 otherSettings: pick_(otherSettings, [
                     'forbidImmediateOperations',
                     'fifoSortParams',
-                    'createEphemeralSubpools',
                 ]),
+                ephemeralSubpools,
             };
             await dispatch(editPool(editItem!, data, initialFormValues));
         },
@@ -489,6 +496,42 @@ export function PoolEditorDialog() {
                 },
                 {
                     type: 'tab-vertical',
+                    name: 'ephemeralSubpools',
+                    title: i18n('title_ephemeral-subpools'),
+                    fields: [
+                        {
+                            name: 'createEphemeralSubpools',
+                            type: 'tumbler',
+                            caption: i18n('field_create-ephemeral-subpools'),
+                        },
+                        {
+                            name: 'config',
+                            type: 'json',
+                            caption: i18n('field_ephemeral-subpool-config'),
+                            tooltip: (
+                                <>
+                                    <code>ephemeral_subpool_config</code>:{' '}
+                                    {i18n('context_ephemeral-subpool-config')}{' '}
+                                    {renderDocHelpLink({docKey: 'scheduler:pool_settings'})}
+                                </>
+                            ),
+                            visibilityCondition: {
+                                when: 'ephemeralSubpools.createEphemeralSubpools',
+                                isActive: (value) => Boolean(value),
+                            },
+                            fullWidth: true,
+                            extras: {
+                                minHeight: 250,
+                                initialShowPreview: false,
+                            },
+                        },
+                        warningField,
+                        poolErrorDataField,
+                        checkPermErrorField,
+                    ],
+                },
+                {
+                    type: 'tab-vertical',
                     name: 'otherSettings',
                     title: i18n('title_other-settings'),
                     fields: [
@@ -504,11 +547,6 @@ export function PoolEditorDialog() {
                             extras: {
                                 axis: 'x',
                             },
-                        },
-                        {
-                            name: 'createEphemeralSubpools',
-                            type: 'tumbler',
-                            caption: i18n('field_create-ephemeral-subpools'),
                         },
                         warningField,
                         poolErrorDataField,

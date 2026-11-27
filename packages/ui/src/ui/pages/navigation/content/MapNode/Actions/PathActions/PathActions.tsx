@@ -41,7 +41,7 @@ interface Props {
         dynamic: boolean;
         path: string;
         $attributes: Record<string, unknown>;
-        $value: unknown;
+        $value?: string;
         tabletState: TabletStateType;
     };
 
@@ -95,9 +95,9 @@ function PathActions(props: Props) {
 
                 dispatch(
                     openAttributesModal({
-                        title: item.$value,
+                        titleToDecode: item.$value ?? '',
                         path: item.path,
-                    } as any),
+                    }),
                 );
                 evt.stopPropagation();
             },

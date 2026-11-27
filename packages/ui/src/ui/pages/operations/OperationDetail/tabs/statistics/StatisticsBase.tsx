@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {renderDocHelpLink} from '../../../../../components/HelpLink/renderDocHelpLink';
 import cn from 'bem-cn-lite';
 
 import format from '../../../../../common/hammer/format';
@@ -6,7 +7,6 @@ import format from '../../../../../common/hammer/format';
 import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary';
 import ElementsTable from '../../../../../components/ElementsTable/ElementsTable';
 import RadioButton from '../../../../../components/RadioButton/RadioButton';
-import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import Button from '../../../../../components/Button/Button';
 import Filter from '../../../../../components/Filter/Filter';
 import Icon from '../../../../../components/Icon/Icon';
@@ -20,8 +20,7 @@ import {
 import {statisticsTableProps} from '../../../../../utils/operations/tabs/statistics/statisticsTableProps';
 import {makeRadioButtonProps} from '../../../../../utils';
 import {type selectOperationStatisticsFiltered} from '../../../../../store/selectors/operations/statistics-v2';
-import {docsUrl} from '../../../../../config';
-import UIFactory from '../../../../../UIFactory';
+import {whenDocsEnabled} from '../../../../../config';
 import {WaitForFont} from '../../../../../containers/WaitForFont/WaitForFont';
 
 import {OperationStatisticName, OperationStatisticValue} from './OperationStatisticName';
@@ -227,9 +226,9 @@ export class StatisticsBase extends Component<Props> {
                             </Button>
                         </span>
                     </div>
-                    {docsUrl(
+                    {whenDocsEnabled(
                         <div className={toolbarBlock('component', statisticsBlock('help'))}>
-                            <HelpLink url={UIFactory.docsUrls['problems:jobstatistics']} />
+                            {renderDocHelpLink({docKey: 'problems:jobstatistics'})}
                         </div>,
                     )}
                 </div>

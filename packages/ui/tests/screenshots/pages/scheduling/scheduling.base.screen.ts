@@ -1,4 +1,4 @@
-import {Page, expect, test} from '@playwright/test';
+import {type Page, expect, test} from '@playwright/test';
 import {MOCK_DATE, makeClusterUrl} from '../../../utils';
 import {BasePage} from '../../../widgets/BasePage';
 import {replaceInnerHtml} from '../../../utils/dom';
@@ -131,7 +131,7 @@ test('Scheduling - Editor', async ({page}) => {
 
     await test.step('Other settings', async () => {
         await scheduling(page).dfDialog.showTab('Other settings');
-        await scheduling(page).dfDialog.waitForField('Create ephemeral subpools');
+        await scheduling(page).dfDialog.waitForField('Forbid immediate operations');
 
         await expect(page).toHaveScreenshot();
     });

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {type RootState} from '../../store/reducers';
+import {type AttributesModalTitle} from '../../store/reducers/modals/attributes-modal';
 import cn from 'bem-cn-lite';
 import unipika from '../../common/thor/unipika';
 
@@ -22,7 +23,7 @@ interface Props {
     loading: boolean;
     error: boolean;
     errorData: unknown;
-    title: string;
+    heading: AttributesModalTitle;
     attributes: unknown;
     ysonSettings: YsonSettings;
     closeAttributesModal: () => void;
@@ -42,6 +43,7 @@ export class AttributesModal extends Component<Props> {
     }
 
     renderDownloadButton() {
+        const {title, titleToDecode} = this.props.heading;
         const convertedValue = attributesToString(this.props.attributes, this.props.ysonSettings);
         if (!convertedValue) {
             return null;
@@ -50,19 +52,20 @@ export class AttributesModal extends Component<Props> {
         return (
             <DownloadFileButton
                 content={convertedValue}
-                name={`${this.props.title}.txt`}
+                name={`${title ?? titleToDecode}.txt`}
                 type="application/txt"
             />
         );
     }
 
     override render() {
-        const {visible, title, loading} = this.props;
+        const {visible, heading, loading} = this.props;
+        const {title, titleToDecode} = heading;
 
         return (
             visible && (
                 <SimpleModal
-                    title={<FormattedText text={title} />}
+                    title={title ?? <FormattedText text={titleToDecode} />}
                     footerContent={this.renderDownloadButton()}
                     visible={visible}
                     loading={loading}
@@ -78,7 +81,7 @@ export class AttributesModal extends Component<Props> {
 }
 
 const mapStateToProps = ({modals}: RootState) => {
-    const {visible, loading, error, errorData, title, attributes} = modals.attributesModal;
+    const {visible, loading, error, errorData, heading, attributes} = modals.attributesModal;
     const ysonSettings = unipika.prepareSettings();
 
     return {
@@ -86,7 +89,7 @@ const mapStateToProps = ({modals}: RootState) => {
         loading,
         error,
         errorData,
-        title,
+        heading,
         attributes,
         ysonSettings,
     };

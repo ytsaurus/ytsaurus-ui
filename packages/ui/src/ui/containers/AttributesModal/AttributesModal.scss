@@ -1,5 +1,6 @@
 .yt-attributes-modal {
     &__content {
+        min-width: min(400px, 80vw);
         max-width: 80vw;
     }
 }

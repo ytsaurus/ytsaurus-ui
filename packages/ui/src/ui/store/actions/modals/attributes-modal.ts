@@ -7,16 +7,23 @@ import {TYPED_OUTPUT_FORMAT} from '../../../constants';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {type ThunkAction} from 'redux-thunk';
 import {type RootState} from '../../reducers';
-import {type AttributesModalAction} from '../../reducers/modals/attributes-modal';
+import {
+    type AttributesModalAction,
+    type AttributesModalTitle,
+} from '../../reducers/modals/attributes-modal';
 
 type ModalThunkAction = ThunkAction<void, RootState, null, AttributesModalAction>;
 
 export const openModal =
-    ({title, promise}: {title: string; promise: Promise<unknown>}): ModalThunkAction =>
+    ({
+        title,
+        titleToDecode,
+        promise,
+    }: AttributesModalTitle & {promise: Promise<unknown>}): ModalThunkAction =>
     async (dispatch) => {
         dispatch({
             type: OPEN_ATTRIBUTES_MODAL,
-            data: {title},
+            data: title !== undefined ? {title} : {titleToDecode},
         });
 
         dispatch({type: LOAD_ATTRIBUTES.REQUEST});
@@ -36,26 +43,25 @@ export const openModal =
             });
     };
 
-export type OpenAttributesModalParams = {
-    title: string;
+export type OpenAttributesModalParams = AttributesModalTitle & {
     attribute?: string;
 } & (
-    | {attributes: object; path?: string; exactPath?: string}
-    | {attributes?: undefined; path: string; exactPath?: string}
-    | {attributes?: undefined; path?: string; exactPath: string}
-);
+        | {attributes: object; path?: string; exactPath?: string}
+        | {attributes?: undefined; path: string; exactPath?: string}
+        | {attributes?: undefined; path?: string; exactPath: string}
+    );
 
 export const openAttributesModal =
     ({
-        title,
         path,
         exactPath,
         attribute,
         attributes,
+        ...heading
     }: OpenAttributesModalParams): ModalThunkAction =>
     (dispatch) => {
         if (attributes) {
-            dispatch(openModal({title, promise: Promise.resolve(attributes)}));
+            dispatch(openModal({...heading, promise: Promise.resolve(attributes)}));
             return;
         }
 
@@ -69,7 +75,7 @@ export const openAttributesModal =
 
         dispatch(
             openModal({
-                title,
+                ...heading,
                 promise: ytApiV3Id.get(YTApiId.openAttributesModal, {
                     path: exactPath ? exactPath : `${path}/@${attribute ? attribute : ''}`,
                     output_format: TYPED_OUTPUT_FORMAT,
