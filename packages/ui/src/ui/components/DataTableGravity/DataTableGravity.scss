@@ -1,4 +1,13 @@
 .yt-gravity-table {
+    > .gt-table_with-row-virtualization > .gt-table__body {
+        // Gravity UI removes the top border from the first mounted row, which changes on scroll.
+        // Reserve that pixel to keep the row height stable and avoid scroll corrections.
+        > .gt-styled-table__row:first-of-type
+            > .gt-styled-table__cell:not(.gt-styled-table__cell_no-border) {
+            border-block-start: 1px solid transparent;
+        }
+    }
+
     .gt-table__header {
         top: calc(
             var(--yt-sticky-container-top-offset) + var(--yt-with-sticky-toolbar-toolbar-height)
