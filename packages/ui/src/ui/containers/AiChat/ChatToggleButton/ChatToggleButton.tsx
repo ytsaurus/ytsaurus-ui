@@ -15,7 +15,12 @@ export const ChatToggleButton: FC<Props> = ({hideText}) => {
 
     return (
         <Tooltip content={i18n('context_tooltip')}>
-            <Button view="outlined-utility" size="l" onClick={toggle}>
+            <Button
+                view="outlined-utility"
+                size="l"
+                onClick={toggle}
+                aria-label={i18n('action_button')}
+            >
                 <Icon data={AiIcon} size={16} />
                 {!hideText && i18n('action_button')}
             </Button>
