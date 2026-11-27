@@ -1,4 +1,5 @@
 import type React from 'react';
+import {type CancelToken} from 'axios';
 import {
     type ManageAclFieldsNames,
     type ManageInheritanceFieldNames,
@@ -133,6 +134,8 @@ export interface GetResponsibleParams {
 }
 
 export interface RequestPermissionParams {
+    simulate?: boolean;
+    cancelToken?: CancelToken;
     cluster: string;
     path: string;
     sysPath: string;
