@@ -23,6 +23,14 @@ export default class CancelHelper {
         return this.generateNextToken();
     }
 
+    wrap<T>(promise: Promise<T>): Promise<T> {
+        const cancelToken = this.generateNextToken();
+
+        return promise.finally(() => {
+            cancelToken.throwIfRequested();
+        });
+    }
+
     generateNextToken() {
         const source = axios.CancelToken.source();
         this.saveCancelToken(source);
