@@ -6,8 +6,6 @@ import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
 
 import {
-    abortAndReset,
-    loadReplicas,
     performReplicaAction,
     toggleReplicatedTableSortOrder,
     updateEnableReplicatedTableTracker,
@@ -28,6 +26,7 @@ import {
 import './ReplicatedTable.scss';
 
 import {ReplicatedTableBase} from './ReplicatedTableBase';
+import {useReplicaStatuses} from '../../../../store/api/navigation/replica-statuses';
 const mapStateToProps = (state) => {
     const {loading, loaded, error, errorData, replicas} = selectReplicatedTableData(state);
     const allowEnableReplicatedTracker = selectAllowEnableReplicatedTracker(state);
@@ -56,8 +55,6 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    loadReplicas,
-    abortAndReset,
     performReplicaAction,
     updateEnableReplicatedTableTracker,
     toggleReplicatedTableSortOrder,
@@ -67,6 +64,7 @@ const ReplicatedTableConnected = connect(mapStateToProps, mapDispatchToProps)(Re
 
 export default function ReplicatedTableWithRum() {
     useDisableMaxContentWidth();
+    const {diagnostics} = useReplicaStatuses();
 
     const replicatedTableLoadState = useSelector(selectNavigationReplicatedTableLoadingStatus);
 
@@ -86,5 +84,5 @@ export default function ReplicatedTableWithRum() {
         },
     });
 
-    return <ReplicatedTableConnected />;
+    return <ReplicatedTableConnected diagnostics={diagnostics} />;
 }

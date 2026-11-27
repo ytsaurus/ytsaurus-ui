@@ -8,6 +8,7 @@ import {
 } from '../../../../constants/navigation/content/replicated-table';
 
 export interface ReplicatedTableState {
+    requestKey?: string;
     loading: boolean;
     loaded: boolean;
     error: boolean;
@@ -46,7 +47,11 @@ export default function replicatedTable(
 ): ReplicatedTableState {
     switch (action.type) {
         case LOAD_REPLICAS_REQUEST:
-            return {...state, loading: true};
+            return {
+                ...(state.requestKey === action.data.requestKey ? state : initialState),
+                requestKey: action.data.requestKey,
+                loading: true,
+            };
 
         case LOAD_REPLICAS_SUCCESS: {
             const {replicas} = action.data;
@@ -57,6 +62,7 @@ export default function replicatedTable(
                 loaded: true,
                 loading: false,
                 error: false,
+                errorData: undefined,
             };
         }
 
@@ -77,7 +83,7 @@ export default function replicatedTable(
 }
 
 export type ReplicatedTableAction =
-    | Action<typeof LOAD_REPLICAS_REQUEST>
+    | ActionD<typeof LOAD_REPLICAS_REQUEST, {requestKey: string}>
     | ActionD<typeof LOAD_REPLICAS_SUCCESS, Pick<ReplicatedTableState, 'replicas'>>
     | ActionD<typeof LOAD_REPLICAS_FAILURE, {error: ReplicatedTableState['errorData']}>
     | Action<typeof LOAD_REPLICAS_CANCELLED>;
