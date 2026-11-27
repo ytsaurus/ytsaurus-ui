@@ -32,11 +32,13 @@ import {useQueryWidgetSidePanel} from '../../../../pages/query-tracker/QueryWidg
 import {CliqueState} from '../../components/CliqueState';
 
 import {ChytCliqueActions, useCliqueOnSqlAction} from '../../ChytCliqueActions/ChytCliqueActions';
+import {useChytRestartCapability} from '../../ChytCliqueActions/use-chyt-restart-capability';
 import './ChytPageListTable.scss';
 
 const block = cn('chyt-page-list-table');
 
 function useChytListColumns(cluster: string, onSqlClick: (alias: string) => void) {
+    const restartCapability = useChytRestartCapability(cluster);
     const checkedColumns = useSelector(selectChytListVisibleColumns);
 
     const columns: Array<Column<ChytInfo>> = React.useMemo(() => {
@@ -249,6 +251,8 @@ function useChytListColumns(cluster: string, onSqlClick: (alias: string) => void
                             <ChytCliqueActions
                                 alias={row.alias}
                                 pool={row.pool}
+                                state={row.state}
+                                restartCapability={restartCapability}
                                 onSqlClick={onSqlClick}
                                 color="secondary"
                             />
@@ -259,7 +263,7 @@ function useChytListColumns(cluster: string, onSqlClick: (alias: string) => void
                 width: 60,
             } as Column<ChytInfo>,
         ];
-    }, [cluster, checkedColumns, onSqlClick]);
+    }, [cluster, checkedColumns, onSqlClick, restartCapability]);
 
     return columns;
 }

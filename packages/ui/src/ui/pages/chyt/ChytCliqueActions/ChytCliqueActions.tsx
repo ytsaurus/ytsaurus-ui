@@ -2,7 +2,8 @@ import React from 'react';
 import {useDispatch} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
-import {Button, DropdownMenu, type DropdownMenuItem} from '@gravity-ui/uikit';
+import ArrowsRotateRightIcon from '@gravity-ui/icons/svgs/arrows-rotate-right.svg';
+import {Button, DropdownMenu, type DropdownMenuItem, Icon as GravityIcon} from '@gravity-ui/uikit';
 
 import Icon from '../../../components/Icon/Icon';
 import {useClusterFromLocation} from '../../../hooks/use-cluster';
@@ -10,7 +11,9 @@ import {updateQueryDraft} from '../../../store/actions/query-tracker/query';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import UIFactory from '../../../UIFactory';
 
-import {ChytConfirmation} from '../ChytConfirmation/ChytConfirmation';
+import {type StrawberryCliqueStateType} from '../../../utils/strawberryControllerApi';
+import {type ChytRestartCapability} from './use-chyt-restart-capability';
+import {ChytConfirmation, type ChytConfirmationProps} from '../ChytConfirmation/ChytConfirmation';
 
 import './ChytCliqueActions.scss';
 
@@ -46,6 +49,8 @@ export function useCliqueOnSqlAction(openWidget: () => void) {
 export function ChytCliqueActions({
     alias,
     pool,
+    state,
+    restartCapability,
     showAllButtons,
     allButtonsClassName,
     onAction,
@@ -56,12 +61,14 @@ export function ChytCliqueActions({
     allButtonsClassName?: string;
     alias: string;
     pool?: string;
+    state?: StrawberryCliqueStateType;
+    restartCapability?: ChytRestartCapability;
     onSqlClick: (alias: string) => void;
-    onAction?: (action: 'remove' | 'start' | 'stop') => void;
+    onAction?: ChytConfirmationProps['onAction'];
     color?: 'secondary';
 }) {
     const [visibleConfirmation, setVisibleConirmation] = React.useState<
-        undefined | 'remove' | 'start' | 'stop'
+        ChytConfirmationProps['action'] | undefined
     >();
 
     const start = {
@@ -86,7 +93,16 @@ export function ChytCliqueActions({
         },
     };
 
-    const menuItems: Array<Array<DropdownMenuItem>> = [[start, stop], [remove]];
+    const canRestart = Boolean(restartCapability && (state === 'active' || state === 'untracked'));
+    const restart = {
+        icon: <GravityIcon data={ArrowsRotateRightIcon} size="1em" />,
+        text: i18n('action_restart'),
+        action: () => setVisibleConirmation('restart'),
+    };
+    const menuItems: Array<Array<DropdownMenuItem>> = [
+        [start, stop, ...(canRestart ? [restart] : [])],
+        [remove],
+    ];
 
     const sqlButton = (
         <Button
@@ -104,6 +120,7 @@ export function ChytCliqueActions({
                     alias={alias}
                     pool={pool}
                     action={visibleConfirmation}
+                    allowForceRestart={state === 'untracked' && restartCapability?.force}
                     onClose={() => setVisibleConirmation(undefined)}
                     onAction={onAction}
                 />
@@ -135,6 +152,14 @@ export function ChytCliqueActions({
                             <Icon awesome="stop-circle" />
                         </Button>
                     </span>
+
+                    {canRestart && (
+                        <span className={block('item')}>
+                            <Button title={restart.text} view="outlined" onClick={restart.action}>
+                                {restart.icon}
+                            </Button>
+                        </span>
+                    )}
 
                     <Button
                         title={i18n('action_remove')}

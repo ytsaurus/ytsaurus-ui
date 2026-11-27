@@ -35,6 +35,7 @@ async function strawberryProxyApiImpl(req: Request, res: Response) {
         'create',
         'remove',
         'start',
+        'restart',
         'stop',
         'get_brief_info',
         'describe_options',

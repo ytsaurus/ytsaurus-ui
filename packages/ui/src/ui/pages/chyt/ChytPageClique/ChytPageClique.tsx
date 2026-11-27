@@ -1,6 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
-import {type RouteComponentProps, useHistory} from 'react-router';
+import {type RouteComponentProps, matchPath, useHistory} from 'react-router';
 import moment from 'moment';
 import cn from 'bem-cn-lite';
 
@@ -32,6 +32,7 @@ import {Page} from '../../../../shared/constants/settings';
 import {CHYT_TABLE_TITLES} from '../helpers/chyt-list-columns';
 import {CliqueState} from '../components/CliqueState';
 import {ChytCliqueActions, useCliqueOnSqlAction} from '../ChytCliqueActions/ChytCliqueActions';
+import {useChytRestartCapability} from '../ChytCliqueActions/use-chyt-restart-capability';
 import {ChytPageCliqueTabs} from './ChytPageCliqueTabs';
 import {ChytSpecletEditButton} from './ChytPageCliqueSpeclet';
 
@@ -55,7 +56,8 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
         };
     }, [alias, dispatch]);
 
-    const {pool} = useSelector(selectChytCliqueData) ?? {};
+    const {pool, state} = useSelector(selectChytCliqueData) ?? {};
+    const restartCapability = useChytRestartCapability(cluster);
     const initialLoading = useSelector(selectChytCliqueInitialLoading);
 
     useUpdater(update);
@@ -76,13 +78,20 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
                 <span className={block('spacer')} />
 
                 <ChytCliqueActions
+                    key={JSON.stringify([cluster, alias])}
                     alias={alias}
                     pool={pool}
+                    state={state}
+                    restartCapability={restartCapability}
                     showAllButtons
                     onAction={(action) => {
                         if (action === 'remove') {
                             history.push(`/${cluster}/${Page.CHYT}`);
-                        } else {
+                        } else if (
+                            action !== 'restart' ||
+                            matchPath(history.location.pathname, props.match.path)?.url ===
+                                props.match.url
+                        ) {
                             update();
                         }
                     }}
