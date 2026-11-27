@@ -305,7 +305,11 @@ function ValueControl({
             {...{pin, disabled}}
         >
             <span className={block('control-value')}>
-                {label && <Text className={block('control-label')}>{label}</Text>}
+                {label && (
+                    <Text className={block('control-label')} color="secondary">
+                        {label}
+                    </Text>
+                )}
                 {!value?.length ? (
                     <Text color="hint" variant="inherit">
                         {placeholder ?? hammer.format.NO_VALUE}
