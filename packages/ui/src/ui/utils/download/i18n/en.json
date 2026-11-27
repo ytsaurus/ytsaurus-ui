@@ -1,0 +1,8 @@
+{
+  "title_downloading": "Downloading",
+  "title_success": "Success",
+  "title_failure": "Failure",
+  "alert_unexpected-download-error": "An unexpected error occurred while downloading the file",
+  "alert_failed-to-download": "Failed to download file",
+  "action_show-details": "Details"
+}

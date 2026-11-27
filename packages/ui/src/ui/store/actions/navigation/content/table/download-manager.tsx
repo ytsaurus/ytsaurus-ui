@@ -1,8 +1,6 @@
 import React from 'react';
 import {type ThunkAction} from 'redux-thunk';
 import {type UnknownAction} from 'redux';
-import {Text} from '@gravity-ui/uikit';
-import axios, {AxiosError} from 'axios';
 import {v4 as uuidv4} from 'uuid';
 
 import {DownloadShortInfo} from '../../../../../pages/navigation/content/Table/DownloadManager/DownloadShortInfo/DownloadShortInfo';
@@ -10,29 +8,12 @@ import {DownloadShortInfo} from '../../../../../pages/navigation/content/Table/D
 import {type RootState} from '../../../../reducers';
 import {downloadManagerActions} from '../../../../reducers/navigation/content/table/download-manager';
 
-import {downloadFileFromResponse} from '../../../../../utils/download-file';
-import {copyFileToClipboard} from '../../../../../utils/copy-file-to-clipboard';
-import {showErrorPopup} from '../../../../../utils/utils';
-import {type YTError} from '../../../../../types';
-import {toaster} from '../../../../../utils/toaster';
-import i18n from './i18n';
-
-const requestDownloadFile = async (url: string) => {
-    return axios<Blob>({
-        method: 'get',
-        url,
-        responseType: 'blob',
-        withCredentials: true,
-    });
-};
-
-const HIDING_TIMING = 5000;
-
-const fallbackError = {
-    get message() {
-        return i18n('alert_unexpected-download-error');
-    },
-};
+import {
+    TOAST_HIDE_TIMEOUT,
+    copyFileToClipboard,
+    downloadFileFromResponse,
+    downloadFileWithToast,
+} from '../../../../../utils/download';
 
 export const downloadFile = (
     url: string,
@@ -42,77 +23,32 @@ export const downloadFile = (
     const id = uuidv4();
 
     return async (dispatch, _getState) => {
-        try {
-            dispatch(downloadManagerActions.onRequest({id}));
-            updateToaster(id, 'loading', {filename});
+        dispatch(downloadManagerActions.onRequest({id}));
 
-            const response = await requestDownloadFile(url);
-
-            if (copy) {
-                await copyFileToClipboard(response);
-            } else {
-                downloadFileFromResponse(filename, response);
-            }
-
-            dispatch(downloadManagerActions.onSuccess({id}));
-            updateToaster(id, 'success');
-        } catch (e: unknown) {
-            let error = fallbackError;
-            if (e instanceof AxiosError && e.response) {
-                error = JSON.parse(await e.response.data.text());
-            }
-
-            dispatch(downloadManagerActions.onFailure({id, error}));
-            updateToaster(id, 'failure', {error});
-        }
-
-        setTimeout(() => {
-            dispatch(downloadManagerActions.onCleanup({id}));
-        }, HIDING_TIMING * 2);
+        await downloadFileWithToast({
+            toast: {
+                name: `downloadingFile_${id}`,
+                content: <DownloadShortInfo id={id} filename={filename} />,
+            },
+            request: {url, withCredentials: true},
+            download: async (response) => {
+                if (copy) {
+                    await copyFileToClipboard(response);
+                } else {
+                    downloadFileFromResponse(response, {filename});
+                }
+            },
+            onSuccess: () => {
+                dispatch(downloadManagerActions.onSuccess({id}));
+            },
+            onError: (error) => {
+                dispatch(downloadManagerActions.onFailure({id, error}));
+            },
+            onComplete: () => {
+                setTimeout(() => {
+                    dispatch(downloadManagerActions.onCleanup({id}));
+                }, TOAST_HIDE_TIMEOUT * 2);
+            },
+        });
     };
 };
-
-function updateToaster(
-    id: string,
-    status: 'loading' | 'success' | 'failure',
-    options?: {
-        filename?: string;
-        error?: YTError | AxiosError;
-    },
-) {
-    if (status === 'loading') {
-        toaster.add({
-            title: i18n('title_downloading'),
-            name: `downloadingFile_${id}`,
-            theme: 'info',
-            content: <DownloadShortInfo id={id} filename={options?.filename || ''} />,
-            autoHiding: false,
-        });
-    }
-
-    if (status === 'success') {
-        toaster.update(`downloadingFile_${id}`, {
-            title: i18n('title_success'),
-            theme: 'success',
-            autoHiding: HIDING_TIMING,
-        });
-    }
-
-    if (status === 'failure') {
-        toaster.update(`downloadingFile_${id}`, {
-            title: i18n('title_failure'),
-            theme: 'danger',
-            content: <Text>{options?.error?.message || i18n('alert_failed-to-download')}</Text>,
-            autoHiding: false,
-            actions: [
-                {
-                    label: i18n('action_show-details'),
-                    onClick: () =>
-                        showErrorPopup(options?.error || fallbackError, {
-                            hideOopsMsg: true,
-                        }),
-                },
-            ],
-        });
-    }
-}
