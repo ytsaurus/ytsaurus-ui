@@ -260,18 +260,48 @@ export function orderSinksLikeOutputStreams<
     return orderBlocksLikeStreams(data, sinkIdsByGroupId, 'sink');
 }
 
+type GroupEdgeDirection = 'source' | 'sink';
+
+const edgeKey = (source?: TBlockId, target?: TBlockId) => `${source}->${target}`;
+
+const groupEdgeKey = (direction: GroupEdgeDirection, id: TBlockId, groupId: TBlockId) =>
+    direction === 'source' ? edgeKey(id, groupId) : edgeKey(groupId, id);
+
+// The reorder moves only the `source -> own group` and `own group -> sink` edges,
+// so it can't keep any other edge of a source or a sink.
+export function hasEdgesBesidesOwnGroupEdges(
+    connections: Array<LaidOutConnection>,
+    sourceIdsByGroupId: Map<TBlockId, Array<TBlockId>>,
+    sinkIdsByGroupId: Map<TBlockId, Array<TBlockId>>,
+) {
+    const externalIds = new Set<TBlockId | undefined>();
+    const ownGroupEdgeKeys = new Set<string>();
+    const collect = (idsByGroupId: Map<TBlockId, Array<TBlockId>>, direction: GroupEdgeDirection) =>
+        idsByGroupId.forEach((blockIds, groupId) =>
+            blockIds.forEach((id) => {
+                externalIds.add(id);
+                ownGroupEdgeKeys.add(groupEdgeKey(direction, id, groupId));
+            }),
+        );
+    collect(sourceIdsByGroupId, 'source');
+    collect(sinkIdsByGroupId, 'sink');
+
+    return connections.some(
+        ({sourceBlockId, targetBlockId}) =>
+            (externalIds.has(sourceBlockId) || externalIds.has(targetBlockId)) &&
+            !ownGroupEdgeKeys.has(edgeKey(sourceBlockId, targetBlockId)),
+    );
+}
+
 function orderBlocksLikeStreams<
     B extends Pick<TBlock, 'id' | 'x' | 'y'>,
     C extends LaidOutConnection,
 >(
     {blocks, connections}: {blocks: Array<B>; connections: Array<C>},
     blockIdsByGroupId: Map<TBlockId, Array<TBlockId>>,
-    direction: 'source' | 'sink',
+    direction: GroupEdgeDirection,
 ) {
     const blockById = new Map(blocks.map((item) => [item.id, item]));
-    const edgeKey = (source?: TBlockId, target?: TBlockId) => `${source}->${target}`;
-    const groupEdgeKey = (id: TBlockId, groupId: TBlockId) =>
-        direction === 'source' ? edgeKey(id, groupId) : edgeKey(groupId, id);
     const edgeByKey = new Map(
         connections.map((item) => [edgeKey(item.sourceBlockId, item.targetBlockId), item]),
     );
@@ -282,7 +312,7 @@ function orderBlocksLikeStreams<
     blockIdsByGroupId.forEach((blockIds, groupId) => {
         const slots = blockIds.flatMap((id) => {
             const block = blockById.get(id);
-            const edge = edgeByKey.get(groupEdgeKey(id, groupId));
+            const edge = edgeByKey.get(groupEdgeKey(direction, id, groupId));
             return block && edge ? [{block, edge}] : [];
         });
         if (slots.length < 2 || slots.length !== blockIds.length) {
@@ -292,7 +322,7 @@ function orderBlocksLikeStreams<
         sortBy_(slots, ({block}) => block.y).forEach(({block, edge}, index) => {
             const id = blockIds[index];
             positionById.set(id, {x: block.x, y: block.y});
-            routeByEdgeKey.set(groupEdgeKey(id, groupId), {
+            routeByEdgeKey.set(groupEdgeKey(direction, id, groupId), {
                 points: edge.points,
                 labels: edge.labels,
             });

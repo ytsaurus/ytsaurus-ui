@@ -56,6 +56,7 @@ import {
     applyConnectionStyle,
     collapseConnectionEndpoints,
     getStreamsSummaryByAnchorType,
+    hasEdgesBesidesOwnGroupEdges,
     isComputationAnchorType,
     isFlowComputationOrGroup,
     makeBlock,
@@ -598,7 +599,6 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                 }),
             ]),
         );
-        const orderedSources = orderSourcesLikeSourceStreams(elkRes.data, sourceIdsByGroupId);
 
         const sinkIdsByStreamId = new Map<string, Array<string>>();
         Object.values(loadedData?.sinks ?? {}).forEach(({id, stream_id}) => {
@@ -614,7 +614,17 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                 ),
             ]),
         );
-        const {blocks, connections} = orderSinksLikeOutputStreams(orderedSources, sinkIdsByGroupId);
+        const keepElkLayout = hasEdgesBesidesOwnGroupEdges(
+            elkRes.data.connections,
+            sourceIdsByGroupId,
+            sinkIdsByGroupId,
+        );
+        const {blocks, connections} = keepElkLayout
+            ? elkRes.data
+            : orderSinksLikeOutputStreams(
+                  orderSourcesLikeSourceStreams(elkRes.data, sourceIdsByGroupId),
+                  sinkIdsByGroupId,
+              );
 
         blocks.forEach(({id, x, y}) => {
             const group = data.groupById.get(id);

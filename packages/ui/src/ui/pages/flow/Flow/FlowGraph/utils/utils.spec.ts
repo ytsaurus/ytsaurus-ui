@@ -3,6 +3,7 @@ import {type TConnection} from '@gravity-ui/graph';
 import {
     applyConnectionStyle,
     collapseConnectionEndpoints,
+    hasEdgesBesidesOwnGroupEdges,
     makeComputationGroupId,
     mergeConnectionStreamStatus,
     orderSinksLikeOutputStreams,
@@ -219,6 +220,22 @@ describe('orderSinksLikeOutputStreams', () => {
             'sink-c': route(200),
             other: route(500),
         });
+    });
+
+    it('finds the edges that the reorder would leave behind', () => {
+        const sinkIds = new Map([['group', ['sink-a', 'sink-b', 'sink-c']]]);
+        const sourceIds = new Map([['computation', ['source']]]);
+        const has = (sourceBlockId: string, targetBlockId: string) =>
+            hasEdgesBesidesOwnGroupEdges(
+                [...connections, {sourceBlockId, targetBlockId}],
+                sourceIds,
+                sinkIds,
+            );
+
+        expect(has('source', 'computation')).toBe(false);
+        expect(has('group', 'source')).toBe(true);
+        expect(has('computation', 'sink-a')).toBe(true);
+        expect(has('sink-a', 'visitor')).toBe(true);
     });
 
     it('keeps the layout when a sink is not laid out', () => {
