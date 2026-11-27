@@ -1,4 +1,4 @@
-import {configureStore} from '@reduxjs/toolkit';
+import {type Middleware, configureStore} from '@reduxjs/toolkit';
 import {setupListeners} from '@reduxjs/toolkit/query';
 // @ts-ignore
 import {listenForHistoryChange} from 'redux-location-state';
@@ -13,18 +13,27 @@ export const createMainEntryStore = () => {
     const rootReducer = makeRootReducer();
     const {locationMiddleware, reducersWithLocation} = getLocationMiddleware(history, rootReducer);
 
+    // RTK Query dispatches a registration action before the first location action reaches
+    // the reducer. Keep the incoming URL intact until the store has read it.
+    let locationReady = false;
+    const syncLocation: Middleware = (api) => (next) => {
+        const sync = locationMiddleware(api)(next);
+        return (action) => (locationReady ? sync(action) : next(action));
+    };
+
     const store = configureStore({
         reducer: reducersWithLocation as ReturnType<typeof makeRootReducer>,
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware({serializableCheck: false, immutableCheck: false})
-                .concat(locationMiddleware)
+                .concat(syncLocation)
                 .concat(rootApi.middleware),
         devTools: process.env.NODE_ENV !== 'production',
     });
 
+    listenForHistoryChange(store, history);
+    locationReady = true;
     setupListeners(store.dispatch);
 
-    listenForHistoryChange(store, history);
     setWindowStoreAndHistory(store, history);
     return {store, history};
 };

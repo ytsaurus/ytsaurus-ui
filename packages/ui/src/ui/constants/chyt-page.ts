@@ -10,6 +10,7 @@ export const ChytCliquePageTab = {
     MONITORING: 'monitoring',
     SPECLET: 'speclet',
     ACL: 'acl',
+    MATERIALIZED_VIEWS: 'materialized_views',
     QUERY_LOGS: 'query_logs',
 };
 
