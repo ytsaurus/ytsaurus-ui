@@ -9,5 +9,10 @@
   "field_pool": "Pool",
   "field_untracked": "Untracked",
   "context_untracked": "YT Operation for a clique in untracked mode is started using the current user's credentials in the user's default pool. Such clique is not tracked by the controller and will not be restarted in case of any failures or speclet updates.",
-  "alert_untracked-discouraged": "Usage of untracked cliques is strictly discouraged."
+  "alert_untracked-discouraged": "Usage of untracked cliques is strictly discouraged.",
+  "title_restart": "Restart clique",
+  "action_restart": "Restart",
+  "confirm_restart": "Restart the clique {{alias}}?",
+  "field_force-restart": "Restart as me",
+  "context_force-restart": "Use this if another user started the current operation. The clique will restart using your credentials."
 }

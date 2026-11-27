@@ -14,7 +14,10 @@ export type StrawberryApi =
     | {
           action: 'describe';
           params: Record<string, never>;
-          response: {commands: Array<{name: string}>; clusters: Array<string>};
+          response: {
+              commands: Array<{name: string; parameters?: Array<{name: string}> | null}>;
+              clusters: Array<string>;
+          };
       }
     | {
           action: 'list';
@@ -22,6 +25,11 @@ export type StrawberryApi =
           response: StrawberryListResponse;
       }
     | {action: 'start'; params: {alias: string; untracked?: boolean}; response: void}
+    | {
+          action: 'restart';
+          params: {alias: string; force?: boolean};
+          response: WithResult<StrawberryStatusResponse>;
+      }
     | {action: 'stop'; params: {alias: string}; response: void}
     | {action: 'remove'; params: {alias: string}; response: void}
     | {

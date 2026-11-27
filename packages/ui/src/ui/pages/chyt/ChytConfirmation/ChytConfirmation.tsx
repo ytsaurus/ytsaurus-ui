@@ -19,14 +19,22 @@ import i18n from './i18n';
 const block = cn('chyt-confirmation');
 
 export type ChytConfirmationProps = {
-    action: 'remove' | 'start' | 'stop';
+    action: 'remove' | 'start' | 'stop' | 'restart';
+    allowForceRestart?: boolean;
     alias: string;
     pool?: string;
     onClose: () => void;
     onAction?: (action: ChytConfirmationProps['action']) => void;
 };
 
-export function ChytConfirmation({action, alias, pool, onClose, onAction}: ChytConfirmationProps) {
+export function ChytConfirmation({
+    action,
+    alias,
+    pool,
+    allowForceRestart,
+    onClose,
+    onAction,
+}: ChytConfirmationProps) {
     const onConfirm = () => {
         if (action) {
             onAction?.(action);
@@ -36,6 +44,8 @@ export function ChytConfirmation({action, alias, pool, onClose, onAction}: ChytC
         case 'stop':
         case 'remove':
             return <ChytSimpleConfirmation {...{alias, action, onClose, onConfirm}} />;
+        case 'restart':
+            return <ChytRestartConfirmation {...{alias, allowForceRestart, onClose, onConfirm}} />;
         case 'start':
             return <ChytStartConfirmation {...{alias, onClose, onConfirm, pool}} />;
         default:
@@ -105,6 +115,56 @@ function ChytSimpleConfirmation({
                 ...makeErrorFields([error]),
             ]}
             onClose={onClose}
+        />
+    );
+}
+
+function ChytRestartConfirmation({
+    alias,
+    allowForceRestart,
+    onClose,
+    onConfirm,
+}: ConfirmationProps & {allowForceRestart?: boolean}) {
+    const cluster = useClusterFromLocation();
+    const dispatch = useDispatch();
+    const [error, setError] = React.useState<YTError>();
+
+    return (
+        <YTDFDialog<{force?: boolean}>
+            visible
+            size="s"
+            pristineSubmittable
+            headerProps={{title: i18n('title_restart')}}
+            footerProps={{textApply: i18n('action_restart')}}
+            onClose={onClose}
+            isApplyDisabled={(form) => Boolean(allowForceRestart && !form.values.force)}
+            onAdd={(form) => {
+                const force = allowForceRestart && form.getState().values.force;
+                return dispatch(chytListAction(cluster, 'restart', {alias, ...(force && {force})}))
+                    .then(onConfirm)
+                    .catch((cause: YTError) => {
+                        setError(cause);
+                        throw cause;
+                    });
+            }}
+            fields={[
+                {
+                    type: 'block',
+                    name: 'text',
+                    extras: {children: i18n('confirm_restart', {alias})},
+                },
+                ...(allowForceRestart
+                    ? [
+                          {
+                              type: 'tumbler' as const,
+                              name: 'force',
+                              caption: i18n('field_force-restart'),
+                              tooltip: i18n('context_force-restart'),
+                          },
+                      ]
+                    : []),
+                ...makeErrorFields([error]),
+            ]}
         />
     );
 }
