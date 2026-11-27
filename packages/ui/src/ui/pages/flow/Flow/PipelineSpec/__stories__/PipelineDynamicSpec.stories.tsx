@@ -8,6 +8,7 @@ import {FlowDynamicSpec} from '../PipelineSpec';
 import {FlowTabs} from '../../Flow';
 import {
     PIPELINE_PATH,
+    authorsSnapshot,
     blameSnapshot,
     dynamicSpecHandler,
     largePatchSnapshot,
@@ -36,6 +37,9 @@ export const Patches: Story = {
 };
 export const Blame: Story = {
     parameters: {msw: {handlers: [dynamicSpecHandler(blameSnapshot), markdownHandler]}},
+};
+export const Authors: Story = {
+    parameters: {msw: {handlers: [dynamicSpecHandler(authorsSnapshot), markdownHandler]}},
 };
 export const LargePatch: Story = {
     parameters: {

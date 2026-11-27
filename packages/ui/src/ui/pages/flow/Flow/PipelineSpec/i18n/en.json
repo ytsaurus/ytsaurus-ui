@@ -12,6 +12,7 @@
   "field_time": "Time",
   "field_version": "Version",
   "field_comment": "Comment",
+  "field_author": "Author",
   "value_patches": "Patches",
   "context_patch-order": "Patches are applied from top to bottom: later rows can cover earlier changes.",
   "context_no-patches": "No active patches.",

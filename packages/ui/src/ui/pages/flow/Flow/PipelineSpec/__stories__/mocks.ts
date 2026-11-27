@@ -96,6 +96,20 @@ export const blameSnapshot: FlowDynamicSpecSnapshot = {
     ],
 };
 
+export const authorsSnapshot: FlowDynamicSpecSnapshot = {
+    ...blameSnapshot,
+    patches: [{...blameSnapshot.patches[0], author: 'alice'}, blameSnapshot.patches[1]],
+    blame: {
+        ...blameSnapshot.blame,
+        '/computations/noop/options/changed': {
+            patch_id: snapshot.patches[0].patch_id,
+            timestamp: snapshot.patches[0].timestamp,
+            comment: snapshot.patches[0].comment,
+            author: 'alice',
+        },
+    },
+};
+
 export function requestParameters(request: Request) {
     const encoded = [...request.headers.entries()]
         .filter(([name]) => name.startsWith('x-yt-parameters-'))
