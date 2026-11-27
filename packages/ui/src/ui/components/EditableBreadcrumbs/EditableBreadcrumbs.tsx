@@ -29,6 +29,7 @@ export function EditableBreadcrumbs(props: Props) {
         cancelButtonView,
         renderEditor,
         onModeChange,
+        onChange,
         children,
         beforeEditorContent,
         afterEditorContent,
@@ -40,7 +41,7 @@ export function EditableBreadcrumbs(props: Props) {
         <EditableAsText
             className={block(null, className)}
             text={text}
-            onChange={() => {}}
+            onChange={onChange ?? (() => {})}
             disableEdit={disableEdit}
             withControls={withControls}
             cancelOnClose={cancelOnClose}
