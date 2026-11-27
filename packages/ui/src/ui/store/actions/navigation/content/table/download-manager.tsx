@@ -10,8 +10,7 @@ import {DownloadShortInfo} from '../../../../../pages/navigation/content/Table/D
 import {type RootState} from '../../../../reducers';
 import {downloadManagerActions} from '../../../../reducers/navigation/content/table/download-manager';
 
-import {downloadFileFromResponse} from '../../../../../utils/download-file';
-import {copyFileToClipboard} from '../../../../../utils/copy-file-to-clipboard';
+import {copyFileToClipboard, downloadFileFromResponse} from '../../../../../utils/download';
 import {showErrorPopup} from '../../../../../utils/utils';
 import {type YTError} from '../../../../../types';
 import {toaster} from '../../../../../utils/toaster';
