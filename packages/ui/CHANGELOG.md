@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.37.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.36.1...ui-v3.37.0) (2026-11-27)
+
+
+### Features
+
+* **QueryTracker:** integrate querieskit navigation tab [YTFRONT-5935] ([6550f24](https://github.com/ytsaurus/ytsaurus-ui/commit/6550f24bd8458ce9b29c346e5ed37fa7d24660af))
+
+
+### Bug Fixes
+
+* **Bundles:** clarify bundle controller alerts [YTFRONT-6155] ([b6042a9](https://github.com/ytsaurus/ytsaurus-ui/commit/b6042a9916fd34a9cca54f0477b30ab002b11548))
+* **CHYT:** open the selected clique from the breadcrumb dropdown [YTFRONT-6171] ([57a1d90](https://github.com/ytsaurus/ytsaurus-ui/commit/57a1d9055d9e469da69374cdc1bd752d4cb68ab5))
+* **CHYT:** preserve the cluster when returning to the clique list [YTFRONT-6165] ([100d678](https://github.com/ytsaurus/ytsaurus-ui/commit/100d67829c3c9e65150126b3f8c8d507798ff4a3))
+
 ## [3.36.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.36.0...ui-v3.36.1) (2026-11-26)
 
 
