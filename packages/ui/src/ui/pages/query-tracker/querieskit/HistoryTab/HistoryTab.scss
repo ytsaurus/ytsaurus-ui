@@ -1,0 +1,17 @@
+.yt-querieskit-history-tab {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+
+    &__list {
+        flex: 1;
+        min-height: 0;
+    }
+
+    // QueriesHistory has no error slot. Request failures use the existing toaster;
+    // do not show its empty-success message before a successful response.
+    &_unloaded .qp-queries-list__body {
+        visibility: hidden;
+    }
+}

@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../containers/Dialog';
+import {type FormApi, YTDFDialog} from '../../../../containers/Dialog';
 import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 
@@ -19,18 +19,11 @@ interface FormValues {
 
 export default function EditQueryNameModal({query: {state, annotations, id}, className}: Props) {
     const dispatch = useDispatch();
-    const [error, setError] = useState<Error | undefined>(undefined);
     const [visible, setVisible] = useState(false);
 
     const handleSubmit = async (form: FormApi<FormValues>) => {
         const {name} = form.getState().values;
-        setError(undefined);
-        try {
-            await dispatch(setQueryName(id, name));
-        } catch (err) {
-            setError(err as Error);
-            throw err;
-        }
+        await dispatch(setQueryName(id, name));
     };
 
     const initialValues = useMemo(() => {
@@ -63,7 +56,6 @@ export default function EditQueryNameModal({query: {state, annotations, id}, cla
                     headerProps={{title: i18n('title_edit-query-name')}}
                     footerProps={{textApply: i18n('action_save')}}
                     onClose={() => {
-                        setError(undefined);
                         setVisible(false);
                     }}
                     onAdd={handleSubmit}
@@ -78,7 +70,6 @@ export default function EditQueryNameModal({query: {state, annotations, id}, cla
                                 placeholder: i18n('field_enter-query-name'),
                             },
                         },
-                        ...makeErrorFields([error]),
                     ]}
                 />
             ) : null}

@@ -1,52 +1,28 @@
-import React, {type FC, useCallback} from 'react';
+import React from 'react';
 import {Select} from '@gravity-ui/uikit';
 import {Engines} from '../../../../../types/query-tracker/api';
 import {type QueryEngine, QueryEnginesNames} from '../../../../../../shared/constants/engines';
-import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
-import {selectQueriesFilters} from '../../../../../store/selectors/query-tracker/queriesList';
-import {applyFilter} from '../../../../../store/actions/query-tracker/queriesList';
 import i18n from './i18n';
 
 const ALL_ENGINE_KEY = '__all';
-
 const getEnginesList = () => [
-    {
-        value: ALL_ENGINE_KEY,
-        content: i18n('value_all'),
-    },
-    ...Engines.map((engine) => {
-        return {
-            value: engine,
-            content: QueryEnginesNames[engine],
-        };
-    }),
+    {value: ALL_ENGINE_KEY, content: i18n('value_all')},
+    ...Engines.map((value) => ({value, content: QueryEnginesNames[value]})),
 ];
 
-export const QueryEngineFilter: FC = () => {
-    const dispatch = useDispatch();
-    const {engine} = useSelector(selectQueriesFilters);
+type Props = {
+    value?: QueryEngine;
+    onUpdate: (value: QueryEngine | undefined) => void;
+};
 
-    const onChangeEngineFilter = useCallback(
-        (values: string[]) => {
-            const selectedEngine = values[0];
-            dispatch(
-                applyFilter({
-                    engine:
-                        selectedEngine === ALL_ENGINE_KEY
-                            ? undefined
-                            : (selectedEngine as QueryEngine),
-                }),
-            );
-        },
-        [dispatch],
-    );
-
+export function QueryEngineFilter({value, onUpdate}: Props) {
     return (
         <Select
             options={getEnginesList()}
-            value={[engine || ALL_ENGINE_KEY]}
-            onUpdate={onChangeEngineFilter}
+            value={[value || ALL_ENGINE_KEY]}
+            onUpdate={([engine]) => onUpdate(Engines.find((item) => item === engine))}
             placeholder={i18n('context_select-engine')}
+            aria-label={i18n('context_select-engine')}
         />
     );
-};
+}

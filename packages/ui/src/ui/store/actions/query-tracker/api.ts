@@ -155,6 +155,7 @@ const QUERIES_LIST_ATTRIBUTES = [
     'annotations',
     'is_tutorial',
     'access_control_objects',
+    'settings',
 ];
 
 export function loadQueriesList({

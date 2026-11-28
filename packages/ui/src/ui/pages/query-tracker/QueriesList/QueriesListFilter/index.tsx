@@ -17,6 +17,7 @@ import {
     selectHasCustomHistoryFilters,
     selectQueriesFilters,
     selectQueriesListMode,
+    selectQueryListHistoryColumns,
 } from '../../../../store/selectors/query-tracker/queriesList';
 import {selectQueryListColumns} from '../QueriesHistoryList/Columns/selectQueryListColumns';
 import {applyFilter} from '../../../../store/actions/query-tracker/queriesList';
@@ -38,6 +39,7 @@ export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterPr
     const dispatch = useDispatch();
     const filter = useSelector(selectQueriesFilters);
     const filterViewMode = useSelector(selectQueriesListMode);
+    const storedColumns = useSelector(selectQueryListHistoryColumns);
     const {allowedColumns} = useSelector(selectQueryListColumns);
     const customFilterChanged = useSelector(selectHasCustomHistoryFilters);
     const hasFullTextSearch = useSelector(selectFullTextSearchSupported);
@@ -46,10 +48,12 @@ export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterPr
         items: Array<{checked: boolean; name: string}>;
     }) => {
         dispatch(
-            setSettingByKey(
-                `global::queryTracker::history::Columns`,
-                selectedColumns.items.filter(({checked}) => checked).map(({name}) => name),
-            ),
+            setSettingByKey(`global::queryTracker::history::Columns`, [
+                ...(storedColumns ?? []).filter(
+                    (name) => !selectedColumns.items.some((item) => item.name === name),
+                ),
+                ...selectedColumns.items.filter(({checked}) => checked).map(({name}) => name),
+            ]),
         );
     };
 
@@ -63,7 +67,10 @@ export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterPr
         return (
             <div className={b(null, className)}>
                 <div className={b('row')}>
-                    <QueryEngineFilter />
+                    <QueryEngineFilter
+                        value={filter.engine}
+                        onUpdate={(engine) => dispatch(applyFilter({engine}))}
+                    />
                 </div>
             </div>
         );
@@ -72,8 +79,14 @@ export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterPr
     return (
         <div className={b(null, className)}>
             <Flex className={b('row')} alignItems="center" gap={2}>
-                <QueryFastUserFilter />
-                <QueryEngineFilter />
+                <QueryFastUserFilter
+                    value={filter.user}
+                    onUpdate={(user) => dispatch(applyFilter({user}))}
+                />
+                <QueryEngineFilter
+                    value={filter.engine}
+                    onUpdate={(engine) => dispatch(applyFilter({engine}))}
+                />
 
                 <Dropdown
                     trigger="click"

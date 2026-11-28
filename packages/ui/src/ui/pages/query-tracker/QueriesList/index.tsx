@@ -21,6 +21,7 @@ import i18n from './i18n';
 import {selectSettingsQueryTrackerNewQueriesView} from '../../../store/selectors/settings/settings-queries';
 import {TutorialsTab} from '../querieskit/TutorialsTab/TutorialsTab';
 import {NavigationTab} from '../querieskit/NavigationTab/NavigationTab';
+import {HistoryTab} from '../querieskit/HistoryTab/HistoryTab';
 
 const b = block('queries-list');
 
@@ -53,6 +54,7 @@ const TabContent: Record<QueriesListMode, React.ReactNode> = {
 };
 
 const QueriesKitTabContent: Partial<Record<QueriesListMode, React.ReactNode>> = {
+    [QueriesListMode.History]: <HistoryTab />,
     [QueriesListMode.Tutorials]: <TutorialsTab />,
     [QueriesListMode.Navigation]: <NavigationTab />,
 };

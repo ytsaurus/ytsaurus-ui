@@ -18,6 +18,7 @@ import {
 } from '../../reducers/query-tracker/query-tracker-contants';
 import {getQTApiSetup} from './api';
 import {updateQueryInList} from './queriesList';
+import {wrapApiPromiseByToaster} from '../../../utils/utils';
 
 const pendingUpdates = new Map<string, Promise<void>>();
 
@@ -87,7 +88,10 @@ export function saveQueryAnnotations(
             });
         }
 
-        const request = persistAnnotations();
+        const request = wrapApiPromiseByToaster(persistAnnotations(), {
+            toasterName: 'save_query_annotations',
+            skipSuccessToast: true,
+        });
         pendingUpdates.set(key, request);
         const cleanup = () => {
             if (pendingUpdates.get(key) === request) pendingUpdates.delete(key);

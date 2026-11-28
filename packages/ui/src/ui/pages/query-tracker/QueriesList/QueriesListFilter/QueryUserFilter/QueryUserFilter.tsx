@@ -1,51 +1,36 @@
-import React, {type FC, useCallback, useMemo} from 'react';
-import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
+import React, {useMemo} from 'react';
+import {Select, type SelectOption} from '@gravity-ui/uikit';
+import {useSelector} from '../../../../../store/redux-hooks';
 import {selectAllUserNames, selectCurrentUserName} from '../../../../../store/selectors/global';
 import {useAllUserNamesFiltered} from '../../../../../hooks/global';
-import {Select, type SelectOption} from '@gravity-ui/uikit';
-import {selectQueriesFilters} from '../../../../../store/selectors/query-tracker/queriesList';
 import {QueriesListAuthorFilter} from '../../../../../types/query-tracker/queryList';
-import {applyFilter} from '../../../../../store/actions/query-tracker/queriesList';
+import i18n from '../QueryFastUserFilter/i18n';
 
-const ALL_STATUS_KEY = '__all';
+type Props = {
+    value?: string;
+    onUpdate: (value: string) => void;
+};
 
-export const QueryUserFilter: FC = () => {
+export function QueryUserFilter({value, onUpdate}: Props) {
     useAllUserNamesFiltered();
-    const dispatch = useDispatch();
     const userNames = useSelector(selectAllUserNames);
     const login = useSelector(selectCurrentUserName);
-    const {user} = useSelector(selectQueriesFilters);
-
-    const values = useMemo<SelectOption[]>(() => {
-        return [
-            {
-                value: ALL_STATUS_KEY,
-                content: 'All',
-            },
-            ...userNames.map((userName) => ({
-                value: userName,
-                content: userName,
-            })),
-        ];
-    }, [userNames]);
-
-    const value = useMemo(() => {
-        let result = user;
-        if (!result) {
-            result = ALL_STATUS_KEY;
-        }
-        if (result === QueriesListAuthorFilter.My) {
-            result = login;
-        }
-        return [result];
-    }, [login, user]);
-
-    const handleOnChange = useCallback(
-        (items: string[]) => {
-            dispatch(applyFilter({user: items[0]}));
-        },
-        [dispatch],
+    const options = useMemo<SelectOption[]>(
+        () => [
+            {value: QueriesListAuthorFilter.All, content: i18n('value_all')},
+            ...userNames.map((userName) => ({value: userName, content: userName})),
+        ],
+        [userNames],
     );
+    const selectedUser =
+        value === QueriesListAuthorFilter.My ? login : value || QueriesListAuthorFilter.All;
 
-    return <Select options={values} value={value} onUpdate={handleOnChange} filterable />;
-};
+    return (
+        <Select
+            options={options}
+            value={[selectedUser]}
+            onUpdate={([user]) => onUpdate(user)}
+            filterable
+        />
+    );
+}
