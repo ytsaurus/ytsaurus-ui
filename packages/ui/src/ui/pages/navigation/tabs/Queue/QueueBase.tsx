@@ -50,7 +50,12 @@ export const QueueBase: React.VFC<PropsFromRedux> = ({
     const items = useSelector(selectQueueStatusDataAlerts);
 
     if (statusError) {
-        return <QueueError error={statusError} topMargin="none" />;
+        return (
+            <React.Fragment>
+                <Alerts items={items} />
+                <QueueError error={statusError} topMargin="none" />
+            </React.Fragment>
+        );
     }
 
     return (
@@ -83,6 +88,6 @@ type PropsFromRedux = {
     writeDataWeightRate: TPerformanceCounters;
     writeRowCountRate: TPerformanceCounters;
     queueMode: QUEUE_MODE;
-    statusError: YTError | null;
+    statusError: YTError | undefined;
     loadQueueStatus: () => void;
 };

@@ -24,9 +24,6 @@ export function loadQueueStatus(): QueueThunkAction {
         return ytApiV3Id
             .get(YTApiId.queueStatus, prepareRequest('/@queue_status', {path, transaction}))
             .then((data: YtQueueStatus) => {
-                if (data.error) {
-                    throw data.error;
-                }
                 dispatch({
                     type: QUEUE_STATUS_LOAD_SUCCESS,
                     data,

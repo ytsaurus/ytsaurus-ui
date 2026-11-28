@@ -20,6 +20,7 @@ import {StickyContainer} from '../../../../components/StickyContainer/StickyCont
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {Page} from '../../../../constants/index';
 import {ReplicatedTableSettingsButton} from './ReplicatedTableSettings';
+import {ReplicaStatusesCell} from './ReplicaStatusesCell/ReplicaStatusesCell';
 import {NAVIGATION_REPLICATED_TABLE_ID} from '../../../../constants/navigation/content/replicated-table';
 import {CypressNodeTypes} from '../../../../utils/cypress-attributes';
 import i18n from './i18n';
@@ -34,6 +35,7 @@ const tableSets = {
             'content_type',
             'mode',
             'error_count',
+            'diagnostics',
             'replication_lag_time',
             'state',
             'actions',
@@ -46,6 +48,7 @@ const tableSets = {
             'content_type',
             'mode',
             'error_count',
+            'diagnostics',
             'replication_lag_time',
             'automatic_mode_switch',
             'state',
@@ -66,8 +69,7 @@ export class ReplicatedTableBase extends Component {
         replicas: PropTypes.array.isRequired,
         attributes: PropTypes.object.isRequired,
 
-        loadReplicas: PropTypes.func.isRequired,
-        abortAndReset: PropTypes.func.isRequired,
+        diagnostics: PropTypes.object,
         performReplicaAction: PropTypes.func.isRequired,
         type: PropTypes.string.isRequired,
         sortState: PropTypes.object,
@@ -128,15 +130,10 @@ export class ReplicatedTableBase extends Component {
                 return i18n('field_error-count');
             },
         },
-        errors: {
+        diagnostics: {
             align: 'left',
-            sort: true,
-            allowUnordered: true,
-            get(replica) {
-                return ypath.getValue(replica, '/@errors');
-            },
             get caption() {
-                return i18n('field_errors');
+                return i18n('field_alerts-errors');
             },
         },
         replication_lag_time: {
@@ -238,10 +235,6 @@ export class ReplicatedTableBase extends Component {
         );
     }
 
-    static renderErrors() {
-        return hammer.format.NO_VALUE; // No more supported by server
-    }
-
     static renderState(item, columnName) {
         const state = ReplicatedTableBase.tableItems[columnName].get(item);
 
@@ -270,20 +263,6 @@ export class ReplicatedTableBase extends Component {
             </Tooltip>
         );
     }
-    componentDidMount() {
-        this.props.loadReplicas();
-    }
-
-    componentDidUpdate(prevProps) {
-        if (prevProps.path !== this.props.path) {
-            this.props.loadReplicas();
-        }
-    }
-
-    componentWillUnmount() {
-        this.props.abortAndReset();
-    }
-
     getSortedReplicas() {
         const {replicas, sortState} = this.props;
 
@@ -365,7 +344,9 @@ export class ReplicatedTableBase extends Component {
                 cluster: ReplicatedTableBase.renderField,
                 content_type: ReplicatedTableBase.renderField,
                 mode: ReplicatedTableBase.renderField,
-                errors: ReplicatedTableBase.renderErrors,
+                diagnostics: (replica) => (
+                    <ReplicaStatusesCell result={this.props.diagnostics?.[replica.$value]} />
+                ),
                 error_count: ReplicatedTableBase.renderAsReadableField,
                 state: ReplicatedTableBase.renderState,
                 automatic_mode_switch: ReplicatedTableBase.renderAutomaticModeSwitch.bind(

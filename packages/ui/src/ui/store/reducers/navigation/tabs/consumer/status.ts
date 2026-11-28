@@ -26,6 +26,7 @@ export interface ConsumerQueueInfo {
 
 export interface ConsumerStatusData {
     error?: YTError;
+    alerts?: Record<string, YTError>;
     queue_agent_host?: string;
     queues?: Record<string, YtConsumerStatus>;
     registrations?: Array<ConsumerQueueInfo>;

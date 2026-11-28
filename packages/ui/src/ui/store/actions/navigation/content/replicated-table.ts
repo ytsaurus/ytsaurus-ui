@@ -1,9 +1,9 @@
 import {type ThunkAction} from 'redux-thunk';
+import {type CancelToken} from 'axios';
 import {getMetrics} from '../../../../common/utils/metrics';
 // @ts-expect-error
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import sortBy_ from 'lodash/sortBy';
-import {updateView} from '..';
 import hammer from '../../../../common/hammer';
 import {TYPED_OUTPUT_FORMAT} from '../../../../constants/index';
 import {
@@ -24,7 +24,10 @@ import {
 } from '../../../reducers/navigation/content/replicated-table';
 import {setSettingByKey} from '../../settings/settings-base';
 import i18n from './i18n';
-import {selectReplicatedTableSortSettings} from '../../../selectors/navigation/content/replicated-table';
+import {
+    selectReplicatedTableRequestKey,
+    selectReplicatedTableSortSettings,
+} from '../../../selectors/navigation/content/replicated-table';
 import {
     nextSortOrderValue,
     oldSortStateToOrderType,
@@ -40,13 +43,22 @@ type ReplicatedTableThunkAction<T = void> = ThunkAction<
     ReplicatedTableAction
 >;
 
-export function loadReplicas(): ReplicatedTableThunkAction<Promise<void>> {
+export function loadReplicas(
+    expectedRequestKey?: string,
+): ReplicatedTableThunkAction<Promise<void>> {
     return (dispatch, getState) => {
         const state = getState();
         const path = selectPath(state);
         const transaction = selectTransaction(state);
+        const requestKey = selectReplicatedTableRequestKey(state);
+        if (expectedRequestKey !== undefined && expectedRequestKey !== requestKey) {
+            return Promise.resolve();
+        }
+        let cancelToken: CancelToken | undefined;
+        const isCurrent = () =>
+            !cancelToken?.reason && requestKey === selectReplicatedTableRequestKey(getState());
 
-        dispatch({type: LOAD_REPLICAS_REQUEST});
+        dispatch({type: LOAD_REPLICAS_REQUEST, data: {requestKey}});
         requests.removeAllRequests();
 
         return ytApiV3Id
@@ -58,9 +70,15 @@ export function loadReplicas(): ReplicatedTableThunkAction<Promise<void>> {
                     }),
                     output_format: TYPED_OUTPUT_FORMAT,
                 },
-                cancellation: requests.saveCancelToken,
+                cancellation: (source) => {
+                    cancelToken = source.token;
+                    requests.saveCancelToken(source);
+                },
             })
             .then((data) => {
+                if (!isCurrent()) {
+                    return;
+                }
                 const replicas = hammer.utils.mapToYSONList(data);
                 dispatch({
                     type: LOAD_REPLICAS_SUCCESS,
@@ -70,6 +88,9 @@ export function loadReplicas(): ReplicatedTableThunkAction<Promise<void>> {
                 });
             })
             .catch((error: YTError) => {
+                if (!isCurrent()) {
+                    return;
+                }
                 if (isCancelled(error)) {
                     dispatch({type: LOAD_REPLICAS_CANCELLED});
                 } else {
@@ -142,7 +163,8 @@ export function updateEnableReplicatedTableTracker({
     type: string;
     value?: boolean;
 }): ReplicatedTableThunkAction<Promise<void>> {
-    return (dispatch) => {
+    return async (dispatch) => {
+        const {updateView} = await import(/* webpackChunkName: "navigation-actions" */ '..');
         if (type === 'chaos_replicated_table') {
             const attrPath = path + '/@replication_card_id';
             return ytApiV3Id

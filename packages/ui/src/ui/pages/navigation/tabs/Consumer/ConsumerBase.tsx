@@ -1,4 +1,7 @@
 import React, {type ComponentType, useEffect} from 'react';
+import {useSelector} from '../../../../store/redux-hooks';
+import {selectConsumerStatusDataAlerts} from '../../../../store/selectors/navigation/tabs/consumer';
+import {Alerts} from '../../../../containers/Alerts/Alerts';
 
 import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
@@ -42,13 +45,20 @@ export const ConsumerBase: React.VFC<PropsFromRedux> = ({
     }, []);
 
     const {ExtraControls, View} = VIEWS[consumerMode] ?? emptyView;
+    const alerts = useSelector(selectConsumerStatusDataAlerts);
 
     if (statusError) {
-        return <QueueError error={statusError} topMargin="none" />;
+        return (
+            <React.Fragment>
+                <Alerts items={alerts} />
+                <QueueError error={statusError} topMargin="none" />
+            </React.Fragment>
+        );
     }
 
     return (
         <ErrorBoundary>
+            <Alerts items={alerts} />
             <TargetQueue />
             <Meta
                 owner={owner}
@@ -78,6 +88,6 @@ type PropsFromRedux = {
     readDataWeightRate: TPerformanceCounters;
     readRowCountRate: TPerformanceCounters;
     consumerMode: CONSUMER_MODE;
-    statusError: YTError | null;
+    statusError: YTError | undefined;
     loadConsumerStatus: () => void;
 };

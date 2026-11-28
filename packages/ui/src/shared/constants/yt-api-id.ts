@@ -94,6 +94,7 @@ export const enum YTApiId {
     navigationResourceUsage = 'navigationResourceUsage',
     navigationRestorePath = 'navigationRestorePath',
     navigationRTReplicas = 'navigationRTReplicas',
+    navigationReplicaStatuses = 'navigationReplicaStatuses',
     navigationTableSortLoadColumns = 'navigationTableSortLoadColumns',
     navigationTabletErrors = 'navigationTabletErrors',
     navigationTabletErrorsCountDynTable = 'navigationTabletErrorsCountDynTable',

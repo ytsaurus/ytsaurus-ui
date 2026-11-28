@@ -7,6 +7,12 @@ import ypath from '../../../../common/thor/ypath';
 import {type RootState} from '../../../../store/reducers';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 import {selectSettingsData} from '../../settings/settings-base';
+import {selectCluster} from '../../global';
+import {selectPath, selectTransaction} from '..';
+import {initialState} from '../../../reducers/navigation/content/replicated-table';
+
+export const selectReplicatedTableRequestKey = (state: RootState) =>
+    JSON.stringify([selectCluster(state), selectPath(state), selectTransaction(state)]);
 
 export const selectNavigationReplicatedTableLoadingStatus = createSelector(
     [
@@ -19,11 +25,13 @@ export const selectNavigationReplicatedTableLoadingStatus = createSelector(
     },
 );
 
-export const selectReplicatedTableReplicas = (state: RootState) =>
-    state.navigation.content.replicatedTable.replicas;
+export const selectReplicatedTableData = (state: RootState) => {
+    const data = state.navigation.content.replicatedTable;
+    return data.requestKey === selectReplicatedTableRequestKey(state) ? data : initialState;
+};
 
-export const selectReplicatedTableData = (state: RootState) =>
-    state.navigation.content.replicatedTable;
+export const selectReplicatedTableReplicas = (state: RootState) =>
+    selectReplicatedTableData(state).replicas;
 
 export const selectAllowEnableReplicatedTracker = createSelector(
     [selectReplicatedTableReplicas],
