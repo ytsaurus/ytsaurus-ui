@@ -1,7 +1,6 @@
 import ypath from '../../../common/thor/ypath';
 
 import filter_ from 'lodash/filter';
-import isEqual_ from 'lodash/isEqual';
 
 import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
 
@@ -57,15 +56,17 @@ const MAX_SELECTED_ACCOUNTS_BATCH_SIZE = 300;
 
 const cancelHelper = new CancelHelper();
 
+export const cancelFetchAccounts = cancelHelper.removeAllRequests;
+
 function parseAccounts(rumId, accounts, parseData = parseAccountsData) {
     const items = filter_(
         ypath.getValue(accounts),
         (item) => ypath.getValue(item) !== ROOT_ACCOUNT_NAME,
     );
-    return rumId.parse(YTApiId.accountsData, () => parseData(items));
+    return cancelHelper.wrap(rumId.parse(YTApiId.accountsData, () => parseData(items)));
 }
 
-function fetchAccountsList({params, isCurrentRequest}) {
+function fetchAccountsList(params) {
     return (dispatch) => {
         dispatch({
             type: FETCH_ACCOUNTS_RESOURCE.REQUEST,
@@ -88,9 +89,6 @@ function fetchAccountsList({params, isCurrentRequest}) {
             )
             .then((accounts) => parseAccounts(rumId, accounts, parseAccountsListData))
             .then((accounts) => {
-                if (!isCurrentRequest()) {
-                    return null;
-                }
                 dispatch({
                     type: FETCH_ACCOUNTS_RESOURCE.SUCCESS,
                     data: {accounts},
@@ -98,12 +96,13 @@ function fetchAccountsList({params, isCurrentRequest}) {
                 return accounts;
             })
             .catch((error) => {
-                if (!isCancelled(error) && isCurrentRequest()) {
-                    dispatch({
-                        type: FETCH_ACCOUNTS_RESOURCE.FAILURE,
-                        data: {error},
-                    });
+                if (isCancelled(error)) {
+                    throw error;
                 }
+                dispatch({
+                    type: FETCH_ACCOUNTS_RESOURCE.FAILURE,
+                    data: {error},
+                });
                 return undefined;
             });
     };
@@ -155,15 +154,12 @@ async function fetchSelectedAccountsData(rumId, accountNames) {
     return {data, error};
 }
 
-async function fetchAccountSubtreeData({params, isCurrentRequest}, rumId) {
+async function fetchAccountSubtreeData(params, rumId) {
     const path = await ytApiV3Id.get(
         YTApiId.accountPath,
         {path: `//sys/accounts/${params.activeAccount}/@path`},
         cancelHelper.saveCancelToken,
     );
-    if (!isCurrentRequest()) {
-        return undefined;
-    }
 
     const response = await rumId.fetch(
         YTApiId.accountsSubtreeMetadata,
@@ -180,8 +176,7 @@ async function fetchAccountSubtreeData({params, isCurrentRequest}, rumId) {
     return {data, error: undefined};
 }
 
-function fetchAccountsMetadata(request, accountNames) {
-    const {params, isCurrentRequest} = request;
+function fetchAccountsMetadata(params, accountNames) {
     return async (dispatch) => {
         const rumId = new RumWrapper(params.cluster, RumMeasureTypes.ACCOUNTS);
         const loadSubtree = params.mode !== 'all' && Boolean(params.activeAccount);
@@ -196,35 +191,30 @@ function fetchAccountsMetadata(request, accountNames) {
         try {
             let result;
             if (loadSubtree) {
-                result = await fetchAccountSubtreeData(request, rumId);
+                result = await fetchAccountSubtreeData(params, rumId);
             } else if (loadAllAccounts) {
                 result = await fetchAllAccountsData(rumId);
             } else {
                 result = await fetchSelectedAccountsData(rumId, accountNames);
             }
-            if (!isCurrentRequest()) {
-                return;
-            }
 
             const {data, error} = result;
             const accounts = await parseAccounts(rumId, data);
-            if (isCurrentRequest()) {
-                dispatch({
-                    type: FETCH_ACCOUNTS_METADATA.SUCCESS,
-                    data: {accounts, error, allAccounts: loadAllAccounts},
-                });
-            }
+            dispatch({
+                type: FETCH_ACCOUNTS_METADATA.SUCCESS,
+                data: {accounts, error, allAccounts: loadAllAccounts},
+            });
         } catch (error) {
-            if (!isCancelled(error) && isCurrentRequest()) {
-                dispatch({type: FETCH_ACCOUNTS_METADATA.FAILURE, data: {error}});
+            if (isCancelled(error)) {
+                throw error;
             }
+            dispatch({type: FETCH_ACCOUNTS_METADATA.FAILURE, data: {error}});
         }
     };
 }
 
-function fetchAccountsTotals(request) {
+function fetchAccountsTotals() {
     return fetchAccountsResource(
-        request,
         YTApiId.accountsTotals,
         FETCH_ACCOUNTS_TOTAL_USAGE,
         '//sys/accounts/@',
@@ -232,9 +222,8 @@ function fetchAccountsTotals(request) {
     );
 }
 
-function fetchAccountsNodes(request) {
+function fetchAccountsNodes() {
     return fetchAccountsResource(
-        request,
         YTApiId.accountsNodes,
         FETCH_ACCOUNTS_NODES,
         '//sys/cluster_nodes/@',
@@ -242,12 +231,11 @@ function fetchAccountsNodes(request) {
     );
 }
 
-function fetchUsableAccounts(request) {
+function fetchUsableAccounts() {
     return (dispatch, getState) => {
         const userName = selectCurrentUserName(getState());
         return dispatch(
             fetchAccountsResource(
-                request,
                 YTApiId.listUsableAccounts,
                 FETCH_ACCOUNTS_USABLE,
                 '//sys/users/' + userName + '/@usable_accounts',
@@ -256,36 +244,30 @@ function fetchUsableAccounts(request) {
     };
 }
 
-function fetchAccountsResource({isCurrentRequest}, apiId, actionType, path, attributes) {
+function fetchAccountsResource(apiId, actionType, path, attributes) {
     return (dispatch) => {
         return ytApiV3Id
             .get(apiId, {path, ...(attributes ? {attributes} : {})}, cancelHelper.saveCancelToken)
             .then((data) => {
-                if (isCurrentRequest()) {
-                    dispatch({type: actionType.SUCCESS, data});
-                    return data;
-                }
-                return undefined;
+                dispatch({type: actionType.SUCCESS, data});
+                return data;
             })
             .catch((error) => {
-                if (!isCancelled(error) && isCurrentRequest()) {
-                    dispatch({type: actionType.FAILURE, data: {error}});
+                if (isCancelled(error)) {
+                    throw error;
                 }
+                dispatch({type: actionType.FAILURE, data: {error}});
             });
     };
 }
 
-function fetchAccountsDetails(request) {
-    const {params, isCurrentRequest} = request;
+function fetchAccountsDetails(params) {
     return (dispatch, getState) => {
-        const usable = dispatch(fetchUsableAccounts(request));
+        const usable = dispatch(fetchUsableAccounts());
         const metadata = (async () => {
             let usableFailed = false;
             if (params.mode === 'usable' && !params.activeAccount) {
                 const accounts = await usable;
-                if (!isCurrentRequest()) {
-                    return undefined;
-                }
                 usableFailed = accounts === undefined;
             }
 
@@ -293,35 +275,31 @@ function fetchAccountsDetails(request) {
                 ? new Set()
                 : selectAccountsRequestedNames(getState(), params);
 
-            return dispatch(fetchAccountsMetadata(request, accountNames));
+            return dispatch(fetchAccountsMetadata(params, accountNames));
         })();
 
         return Promise.all([
             metadata,
-            dispatch(fetchAccountsTotals(request)),
-            dispatch(fetchAccountsNodes(request)),
+            dispatch(fetchAccountsTotals()),
+            dispatch(fetchAccountsNodes()),
             usable,
         ]);
     };
 }
 
 export function fetchAccounts(params) {
-    return (dispatch, getState) => {
-        const cancelToken = cancelHelper.removeAllAndGenerateNextToken();
-        const isCurrentRequest = () =>
-            !cancelToken.reason && isEqual_(selectAccountsRequestParams(getState()), params);
-        const request = {params, isCurrentRequest};
+    return (dispatch) => {
+        cancelHelper.removeAllRequests();
         return wrapApiPromiseByToaster(
-            dispatch(fetchAccountsList(request)).then((accounts) => {
-                if (!accounts || !isCurrentRequest()) {
+            dispatch(fetchAccountsList(params)).then((accounts) => {
+                if (!accounts) {
                     return undefined;
                 }
-                return dispatch(fetchAccountsDetails(request)).then(() => accounts);
+                return dispatch(fetchAccountsDetails(params)).then(() => accounts);
             }),
             {
                 toasterName: 'fetch-accounts',
                 skipSuccessToast: true,
-                skipErrorFn: () => !isCurrentRequest(),
             },
         ).catch(() => undefined);
     };

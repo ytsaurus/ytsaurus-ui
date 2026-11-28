@@ -3,7 +3,7 @@ import isEqual_ from 'lodash/isEqual';
 import {selectAccountsRequestParams} from '../../../store/selectors/accounts/request-params';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
-import {fetchAccounts} from '../../../store/actions/accounts/accounts';
+import {cancelFetchAccounts, fetchAccounts} from '../../../store/actions/accounts/accounts';
 import {useUpdater} from '../../../hooks/use-updater';
 
 export default function AccountsUpdater() {
@@ -13,7 +13,7 @@ export default function AccountsUpdater() {
 
     const update = useCallback(() => dispatch(fetchAccounts(params)), [dispatch, params]);
 
-    useUpdater(update);
+    useUpdater(update, {destructFn: cancelFetchAccounts});
 
     return null;
 }

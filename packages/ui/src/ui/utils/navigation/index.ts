@@ -1,4 +1,3 @@
-import {type CancelTokenSource} from 'axios';
 // @ts-ignore
 import ypath from '../../common/thor/ypath';
 
@@ -7,6 +6,7 @@ import {type ClusterConfig} from '../../../shared/yt-types';
 import unipika from '../../common/thor/unipika';
 import {Page} from '../../constants/index';
 import {SUPPRESS_REDIRECT} from '../../constants/navigation/modals/delete-object';
+import CancelHelper from '../cancel-helper';
 
 export function autoCorrectPath(path: string) {
     // 1) Strip slash from the end
@@ -21,17 +21,10 @@ export function autoCorrectPath(path: string) {
     return path;
 }
 
-const requests: Array<CancelTokenSource> = [];
+const requests = new CancelHelper();
 
-export function saveRequestCancellation(cancellation: CancelTokenSource) {
-    requests.push(cancellation);
-}
-
-export function cancelRequests() {
-    while (requests.length) {
-        requests.pop()?.cancel();
-    }
-}
+export const saveRequestCancellation = requests.saveCancelToken;
+export const cancelRequests = requests.removeAllRequests;
 
 interface RelativePath {
     path: string;

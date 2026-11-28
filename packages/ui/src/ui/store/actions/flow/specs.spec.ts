@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {ytApiV4} from '../../../rum/rum-wrap-api';
 import {
     dynamicSpec,
@@ -295,9 +296,11 @@ describe('dynamic spec feature discovery', () => {
         ),
     )('ignores obsolete $phase after switching to $target spec', async ({index, target}) => {
         let complete!: (response: (typeof responses)[number]) => void;
+        let reject!: (error: unknown) => void;
         let reached!: () => void;
-        const pending = new Promise<(typeof responses)[number]>((resolve) => {
+        const pending = new Promise<(typeof responses)[number]>((resolve, rejectPromise) => {
             complete = resolve;
+            reject = rejectPromise;
         });
         const started = new Promise<void>((resolve) => {
             reached = resolve;
@@ -305,7 +308,10 @@ describe('dynamic spec feature discovery', () => {
         responses
             .slice(0, index)
             .forEach((response) => flowExecute.mockResolvedValueOnce(response));
-        flowExecute.mockImplementationOnce(() => {
+        flowExecute.mockImplementationOnce(({cancellation}) => {
+            const source = axios.CancelToken.source();
+            cancellation?.(source);
+            source.token.promise.then(reject);
             reached();
             return pending;
         });
@@ -316,7 +322,10 @@ describe('dynamic spec feature discovery', () => {
             flowExecute.mockResolvedValueOnce(features).mockResolvedValueOnce({spec, version});
             await loadFlowDynamicSpec(pipelinePath)(dispatch, jest.fn(), undefined);
         } else {
-            jest.mocked(ytApiV4.getPipelineSpec).mockResolvedValue({spec, version});
+            jest.mocked(ytApiV4.getPipelineSpec).mockImplementationOnce(({cancellation}) => {
+                cancellation?.(axios.CancelToken.source());
+                return Promise.resolve({spec, version});
+            });
             await loadFlowStaticSpec(pipelinePath)(dispatch, jest.fn(), undefined);
         }
         complete(responses[index]);
@@ -361,7 +370,7 @@ describe('dynamic specification root editing', () => {
     it('captures patch mode and reads effective with its version without replacing the selected view', async () => {
         jest.mocked(ytApiV4.flowExecute).mockResolvedValue({spec, version});
         const dispatch = jest.fn();
-        const draft = await loadFlowDynamicSpecForEdit(pipelinePath)(
+        const draft = await loadFlowDynamicSpecForEdit(pipelinePath, jest.fn())(
             dispatch,
             (() => ({features: ['dynamic_spec_patches']})) as never,
             undefined,
@@ -374,12 +383,13 @@ describe('dynamic specification root editing', () => {
                 flow_command: 'get-pipeline-dynamic-spec',
             },
             data: {view: 'effective'},
+            cancellation: expect.any(Function),
         });
         expect(dispatch).not.toHaveBeenCalled();
     });
     it('keeps the legacy read when patches are unsupported', async () => {
         jest.mocked(ytApiV4.getPipelineDynamicSpec).mockResolvedValue({spec, version});
-        const draft = await loadFlowDynamicSpecForEdit(pipelinePath)(
+        const draft = await loadFlowDynamicSpecForEdit(pipelinePath, jest.fn())(
             jest.fn(),
             (() => ({features: []})) as never,
             undefined,

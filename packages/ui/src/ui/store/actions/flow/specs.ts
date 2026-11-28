@@ -3,7 +3,7 @@ import {type ThunkAction} from 'redux-thunk';
 import {type FlowExecuteTypes} from '../../../../shared/yt-types';
 
 import {type YTError, type YTErrorRaw} from '../../../../@types/types';
-import {ytApiV4} from '../../../rum/rum-wrap-api';
+import {type SaveCancellationCb, ytApiV4} from '../../../rum/rum-wrap-api';
 import ypath from '../../../common/thor/ypath';
 import unipika from '../../../common/thor/unipika';
 import {type RootState} from '../../../store/reducers';
@@ -24,14 +24,12 @@ import {
 } from '../../../store/selectors/flow/specs';
 
 const cancelHelper = new CancelHelper();
-let specRequestId = 0;
+export const cancelFlowSpecRequests = cancelHelper.removeAllRequests;
 
 type AsyncAction<R = void> = ThunkAction<R, RootState, unknown, any>;
 
 export function loadFlowStaticSpec(pipeline_path: string): AsyncAction {
     return (dispatch) => {
-        const requestId = ++specRequestId;
-        const isCurrentRequest = () => requestId === specRequestId;
         dispatch(staticSpecActions.onRequest({pipeline_path}));
         return ytApiV4
             .getPipelineSpec({
@@ -40,12 +38,10 @@ export function loadFlowStaticSpec(pipeline_path: string): AsyncAction {
             })
             .then(
                 (data: FlowSpecState['data']) => {
-                    if (isCurrentRequest()) {
-                        dispatch(staticSpecActions.onSuccess({data}));
-                    }
+                    dispatch(staticSpecActions.onSuccess({data}));
                 },
                 (error: any) => {
-                    if (isCurrentRequest() && !isCancelled(error)) {
+                    if (!isCancelled(error)) {
                         dispatch(staticSpecActions.onError({error}));
                     }
                 },
@@ -83,8 +79,7 @@ export function loadFlowDynamicSpec(
     view: FlowDynamicSpecView = 'effective',
 ): AsyncAction {
     return async (dispatch) => {
-        const requestId = ++specRequestId;
-        const isCurrentRequest = () => requestId === specRequestId;
+        cancelHelper.removeAllRequests();
         const parameters = {pipeline_path, output_format: 'web_json' as const};
         dispatch(dynamicSpecActions.onRequest({pipeline_path, view}));
         try {
@@ -93,10 +88,12 @@ export function loadFlowDynamicSpec(
                 supported_features = await ytApiV4.flowExecute<'get-supported-features'>({
                     parameters: {...parameters, flow_command: 'get-supported-features'},
                     data: {},
-                    cancellation: cancelHelper.removeAllAndSave,
+                    cancellation: cancelHelper.saveCancelToken,
                 });
             } catch (error: unknown) {
-                if (!isCurrentRequest() || isCancelled(error)) return;
+                if (isCancelled(error)) {
+                    throw error;
+                }
                 let unsupported = false;
                 forEachYTError([error as YTErrorRaw], (inner) => {
                     const message = ypath.getValue(inner.message);
@@ -107,17 +104,16 @@ export function loadFlowDynamicSpec(
                         unsupported = true;
                     }
                 });
-                if (!unsupported) throw error;
+                if (!unsupported) {
+                    throw error;
+                }
             }
-            if (!isCurrentRequest()) return;
             if (!supported_features.includes('dynamic_spec_patches')) {
                 const data = await ytApiV4.getPipelineDynamicSpec({
                     parameters,
-                    cancellation: cancelHelper.removeAllAndSave,
+                    cancellation: cancelHelper.saveCancelToken,
                 });
-                if (isCurrentRequest()) {
-                    dispatch(dynamicSpecActions.onSuccess({data, supported_features}));
-                }
+                dispatch(dynamicSpecActions.onSuccess({data, supported_features}));
                 return;
             }
             const data =
@@ -128,14 +124,13 @@ export function loadFlowDynamicSpec(
                               flow_command: 'get-pipeline-dynamic-spec-patches',
                           },
                           data: {},
-                          cancellation: cancelHelper.removeAllAndSave,
+                          cancellation: cancelHelper.saveCancelToken,
                       })
                     : await ytApiV4.flowExecute<'get-pipeline-dynamic-spec'>({
                           parameters: {...parameters, flow_command: 'get-pipeline-dynamic-spec'},
                           data: {view, ...(view === 'effective' ? {blame: true} : {})},
-                          cancellation: cancelHelper.removeAllAndSave,
+                          cancellation: cancelHelper.saveCancelToken,
                       });
-            if (!isCurrentRequest()) return;
             dispatch(
                 dynamicSpecActions.onSuccess({
                     supported_features,
@@ -173,7 +168,7 @@ export function loadFlowDynamicSpec(
                 }),
             );
         } catch (error: unknown) {
-            if (isCurrentRequest() && !isCancelled(error)) {
+            if (!isCancelled(error)) {
                 dispatch(dynamicSpecActions.onError({error: error as YTError}));
             }
         }
@@ -209,6 +204,7 @@ export type FlowDynamicSpecEditDraft = {
 
 export function loadFlowDynamicSpecForEdit(
     path: string,
+    cancellation: SaveCancellationCb,
 ): AsyncAction<Promise<FlowDynamicSpecEditDraft>> {
     return async (_dispatch, getState) => {
         const createPatch = Boolean(
@@ -222,9 +218,11 @@ export function loadFlowDynamicSpecForEdit(
                       flow_command: 'get-pipeline-dynamic-spec',
                   },
                   data: {view: 'effective'},
+                  cancellation,
               })
             : await ytApiV4.getPipelineDynamicSpec({
                   parameters: {pipeline_path: path, output_format: 'web_json'},
+                  cancellation,
               });
         return {data, createPatch};
     };
